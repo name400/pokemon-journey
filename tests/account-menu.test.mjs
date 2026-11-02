@@ -1,0 +1,4 @@
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';import {build} from 'esbuild';import React from 'react';import {renderToStaticMarkup} from 'react-dom/server';
+await fs.mkdir('.sites-runtime/tests',{recursive:true});await build({entryPoints:['components/account-menu.tsx'],outfile:'.sites-runtime/tests/account-menu.mjs',bundle:true,format:'esm',platform:'node',external:['react','react/jsx-runtime']});const {default:AccountMenu}=await import('../.sites-runtime/tests/account-menu.mjs');
+const html=a=>renderToStaticMarkup(React.createElement(AccountMenu,{account:a,onProfile(){}}));
+assert.ok(html({authenticated:false}).includes('>로그인<'));const signed=html({authenticated:true,profile:{nickname:'테스트트레이너',friendCode:'ABCDEF0123'}});assert.ok(!signed.includes('>로그인<'));assert.ok(signed.includes('테스트트레이너'));assert.ok(signed.includes('>로그아웃<'));assert.ok(!html(null).includes('>로그인<'));console.log('Login header regression: passed');

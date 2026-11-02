@@ -1,23 +1,21 @@
+import {hasOwnKey} from '@/lib/record-key.mjs';
+import {sameOriginRequest} from '@/lib/request-origin.mjs';
 import { env } from 'cloudflare:workers';
 import { getChatGPTUser } from '@/app/chatgpt-auth';
+import {GACHA,weighted} from '@/lib/world.mjs';
+import {makeMon} from '@/lib/game.mjs';
+import {inventoryFor,inventoryKey,shopItems} from '@/lib/inventory';
 export const dynamic='force-dynamic';
 const db=()=>env.DB!;
-const goods:any={potion:{column:'potions',price:100},super:{column:'super_potions',price:180},antidote:{column:'antidotes',price:80}};
-async function account(id:string){await db().prepare('INSERT OR IGNORE INTO wallets (user_id) VALUES (?)').bind(id).run();return db().prepare('SELECT coins,potions,super_potions,antidotes,last_claim FROM wallets WHERE user_id=?').bind(id).first();}
-export async function GET(){const u=await getChatGPTUser();if(!u)return Response.json({error:'로그인이 필요합니다.'},{status:401});try{return Response.json(await account(u.userId));}catch{return Response.json({error:'상점 정보를 불러오지 못했습니다.'},{status:500})}}
-export async function POST(req:Request){const u=await getChatGPTUser();if(!u)return Response.json({error:'로그인이 필요합니다.'},{status:401});try{const {action,revision,item}=await req.json();await account(u.userId);let result;
+const goods:any={potion:{column:'potions',price:100},super:{column:'super_potions',price:180},antidote:{column:'antidotes',price:80},ball:{column:'balls',price:100},hyper:{column:'hyper_potions',price:600},max:{column:'max_potions',price:1200},fullrestore:{column:'full_restores',price:1500}};
+async function account(id:string){await db().prepare('INSERT OR IGNORE INTO wallets (user_id) VALUES (?)').bind(id).run();return db().prepare('SELECT coins,potions,super_potions,antidotes,balls,hyper_potions,max_potions,full_restores,last_claim FROM wallets WHERE user_id=?').bind(id).first();}
+export async function GET(){const u=await getChatGPTUser();if(!u)return Response.json({error:'로그인이 필요합니다.'},{status:401});try{return Response.json({...await account(u.userId),inventory:await inventoryFor(u.userId),catalog:shopItems});}catch{return Response.json({error:'상점 정보를 불러오지 못했습니다.'},{status:500})}}
+export async function POST(req:Request){if(!sameOriginRequest(req))return Response.json({error:'올바른 사이트에서 다시 요청하세요.'},{status:403});const u=await getChatGPTUser();if(!u)return Response.json({error:'로그인이 필요합니다.'},{status:401});try{const {action,revision,item,quantity=1}=await req.json() as any;await account(u.userId);let result;
+ if(action==='buyHeld'){const product=shopItems.find(p=>p.id===item);if(!product)return Response.json({error:'상품을 확인하세요.'},{status:400});const qty=Number(quantity);if(!Number.isInteger(qty)||qty<1||qty>99)return Response.json({error:'수량은 1–99개입니다.'},{status:400});const key=inventoryKey(u.userId,item),total=product.price*qty,results=await db().batch([db().prepare('UPDATE wallets SET coins=coins-? WHERE user_id=? AND coins>=? AND COALESCE((SELECT quantity FROM inventory WHERE key=?),0)+?<=999').bind(total,u.userId,total,key,qty),db().prepare('INSERT INTO inventory(key,user_id,item,quantity) SELECT ?,?,?,? WHERE changes()=1 ON CONFLICT(key) DO UPDATE SET quantity=quantity+excluded.quantity').bind(key,u.userId,item,qty)]);if(!results[0].meta.changes)return Response.json({error:'코인이 부족하거나 보관 한도에 도달했습니다.'},{status:409});return Response.json({ok:true,...await account(u.userId),inventory:await inventoryFor(u.userId),catalog:shopItems});}
+ if(action==='gacha'){const pack=hasOwnKey(GACHA,item)?(GACHA as any)[item]:null;if(!pack)return Response.json({error:'캡슐 종류를 확인하세요.'},{status:400});const roll=crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;const id=weighted(pack.pool,pack.weights,roll),mon={...makeMon(id,5),experience:0};const results=await db().batch([db().prepare('UPDATE wallets SET coins=coins-? WHERE user_id=? AND coins>=?').bind(pack.price,u.userId,pack.price),db().prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) SELECT ?,?,?,?,?,? WHERE changes()=1').bind(crypto.randomUUID(),u.userId,id,JSON.stringify(mon),'gacha',Date.now())]);if(!results[0].meta.changes)return Response.json({error:'코인이 부족합니다.'},{status:409});return Response.json({ok:true,received:mon,...await account(u.userId),inventory:await inventoryFor(u.userId),catalog:shopItems});}
  if(action==='claim'){const day=new Date().toISOString().slice(0,10);result=await db().prepare('UPDATE wallets SET coins=coins+100,last_claim=? WHERE user_id=? AND last_claim<>?').bind(day,u.userId,day).run()}
- else if(action==='buy'||action==='buyPotion'){const g=goods[action==='buyPotion'?'potion':item];if(!g)return Response.json({error:'상품을 확인하세요.'},{status:400});result=await db().prepare(`UPDATE wallets SET coins=coins-?,${g.column}=${g.column}+1 WHERE user_id=? AND coins>=? AND ${g.column}<99`).bind(g.price,u.userId,g.price).run()}
- else if(action==='usePotion'||action==='use'){const key=action==='usePotion'?'potion':item;const g=goods[key];if(!g)return Response.json({error:'아이템을 확인하세요.'},{status:400});
- const row=await db().prepare('SELECT data,revision FROM saves WHERE user_id=?').bind(u.userId).first<any>();
- if(!row||!Number.isInteger(revision)||row.revision!==revision)return Response.json({error:'저장이 변경되었습니다. 새로고침하세요.'},{status:409});
- const data=JSON.parse(row.data);if(data.screen!=='battle'||!data.run?.mon)return Response.json({error:'전투 중에만 사용할 수 있습니다.'},{status:409});
- if(key==='potion'){if(data.run.potions>=99)return Response.json({error:'회복약 한도에 도달했습니다.'},{status:409});data.run.potions++}
- if(key==='super'){if(data.run.mon.hp>=data.run.mon.maxHp)return Response.json({error:'이미 HP가 가득 찼습니다.'},{status:409});data.run.mon.hp=Math.min(data.run.mon.maxHp,data.run.mon.hp+60)}
- if(key==='antidote'){if(data.run.mon.status!=='독')return Response.json({error:'독 상태일 때만 사용할 수 있습니다.'},{status:409});data.run.mon.status=null}
- const results=await db().batch([db().prepare(`UPDATE wallets SET ${g.column}=${g.column}-1 WHERE user_id=? AND ${g.column}>0 AND EXISTS(SELECT 1 FROM saves WHERE user_id=? AND revision=?)`).bind(u.userId,u.userId,revision),db().prepare('UPDATE saves SET data=?,revision=revision+1,updated_at=? WHERE user_id=? AND revision=? AND changes()=1').bind(JSON.stringify(data),Date.now(),u.userId,revision)]);
- if(!results[0].meta.changes||!results[1].meta.changes)return Response.json({error:'아이템이 없거나 저장이 변경되었습니다.'},{status:409});return Response.json({ok:true,data,revision:revision+1,...await account(u.userId)});
- }
+ else if(action==='buy'||action==='buyPotion'){const goodsKey=action==='buyPotion'?'potion':item;const g=hasOwnKey(goods,goodsKey)?goods[goodsKey]:null;if(!g)return Response.json({error:'상품을 확인하세요.'},{status:400});result=await db().prepare(`UPDATE wallets SET coins=coins-?,${g.column}=${g.column}+1 WHERE user_id=? AND coins>=? AND ${g.column}<99`).bind(g.price,u.userId,g.price).run()}
+ else if(action==='usePotion'||action==='use')return Response.json({error:'탐험 도구는 탐험 화면에서 사용하세요.'},{status:410});
  else return Response.json({error:'알 수 없는 요청입니다.'},{status:400});
  if(!result.meta.changes)return Response.json({error:action==='claim'?'오늘의 보상을 이미 받았습니다.':'코인이 부족하거나 보관 한도에 도달했습니다.'},{status:409});return Response.json({ok:true,...await account(u.userId)});
  }catch{return Response.json({error:'상점 요청을 처리하지 못했습니다.'},{status:500})}}

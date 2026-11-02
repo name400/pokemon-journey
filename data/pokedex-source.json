@@ -1,0 +1,11 @@
+{
+  "source": "PokeAPI/pokeapi",
+  "revision": "6b8db7f3cb31cfaa37cb74e5c3edff124bcba5ce",
+  "importedAt": "2026-11-02T05:51:43.325Z",
+  "speciesCount": 1025,
+  "formCount": 1579,
+  "limitations": [
+    "Some cosmetic forms share their species artwork.",
+    "Battle mechanics are implemented separately with @pkmn/sim; import coverage is not game completion."
+  ]
+}

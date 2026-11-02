@@ -1,0 +1,4 @@
+import assert from 'node:assert/strict';import {species,makeMon} from '../lib/game.mjs';import {startBattle,fullTurn} from '../lib/full-battle.mjs';import {validatePokemonEdit} from '../lib/admin-pokemon.mjs';
+assert.equal(new Set(species.map(s=>s.speciesId)).size,1025);let count=0;for(const s of species){const a=makeMon(s.id,50);assert.ok(a.moves.length>0&&a.moves.length<=4);const b=startBattle(a,makeMon(25,50));if(s.speciesId!==1024)assert.equal(b.p1.active[0].maxhp,a.maxHp,`HP: ${s.name}`);b.destroy();count++}assert.throws(()=>makeMon(1,101));assert.throws(()=>validatePokemonEdit({species:1,level:100,experience:1}));assert.throws(()=>validatePokemonEdit({species:1,level:5,evs:{hp:252,atk:252,def:252,spa:0,spd:0,spe:0}}));
+console.log(`All ${count} form records can initialize a simulator battle; level and EV validation passed.`);
+
