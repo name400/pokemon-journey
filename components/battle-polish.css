@@ -168,3 +168,12 @@
 .battle-screen .bs-move-tooltip{max-height:min(42dvh,22rem);overflow:auto;overscroll-behavior:contain;overflow-wrap:anywhere;pointer-events:auto}
 .battle-screen .bs-move-wrap[data-detail-open=true]{z-index:49}
 .battle-screen .bs-move-info:active{background:#e2efd9;box-shadow:inset 0 0 0 2px #276b57}
+
+/* Readable secondary combat text on default, hovered and selected light cards. */
+.battle-screen .bs-move-stats,.battle-screen .bs-move-stats small,
+.battle-screen .bs-effectiveness,
+.battle-screen .bs-party-grid small,
+.battle-screen .bs-item-grid small,.battle-screen .bs-ball-grid small{color:#435d4d}
+.battle-screen .bs-effectiveness.strong{color:#226652}
+.battle-screen .bs-effectiveness.weak{color:#8a4936}
+@media(max-width:600px){.battle-screen .bs-move-stats,.battle-screen .bs-effectiveness{font-size:12px}}
