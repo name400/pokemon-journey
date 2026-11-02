@@ -5,7 +5,7 @@ import { ArrowRight, Check, ChevronDown, ChevronRight, Coins, HeartPulse, Loader
 import PokemonImage from './pokemon-image';
 import './rogue-classic-rewards.css';
 
-export type ClassicRewardMove = { index: number; name: string; pp: number; maxPp: number };
+export type ClassicRewardMove = { index: number; name: string; pp: number; maxPp: number; canIncreasePp?: boolean; ppUps?: number };
 export type ClassicRewardTarget = {
   boxId: string;
   name: string;
@@ -25,6 +25,7 @@ export type RewardChoice = {
   quantity?: number;
   requiresTarget?: boolean;
   requiresMove?: boolean;
+  moveSelection?: 'pp-boost';
   requiresReplace?: boolean;
   requiresNewMove?: boolean;
   targets?: ClassicRewardTarget[];
@@ -86,8 +87,9 @@ export function automaticRewardTarget(targets: readonly ClassicRewardTarget[] = 
   const eligible = targets.filter(target => target.eligible);
   return eligible.length === 1 ? eligible[0].boxId : undefined;
 }
-export function eligibleRewardMoves(target?: ClassicRewardTarget): ClassicRewardMove[] {
-  return (target?.moves || []).filter(move => move.pp < move.maxPp);
+export function eligibleRewardMoves(target?: ClassicRewardTarget, choice?: ActionChoice): ClassicRewardMove[] {
+  const increase = choice && 'moveSelection' in choice && choice.moveSelection === 'pp-boost';
+  return (target?.moves || []).filter(move => increase ? move.canIncreasePp === true : move.pp < move.maxPp);
 }
 export function rewardTargetBlockReason(choice: ActionChoice): string | null {
   if (!requiresRewardTarget(choice)) return null;
@@ -103,7 +105,7 @@ export function rewardActionError(choice: ActionChoice, configuration: Configura
     if (!target) return '아이템을 사용할 포켓몬을 선택하세요.';
     if (!target.eligible) return target.reason || '이 포켓몬에게는 사용할 수 없습니다.';
   }
-  if (choice.requiresMove && !eligibleRewardMoves(target).some(move => move.index === configuration.moveIndex)) return 'PP가 줄어든 기술을 선택하세요.';
+  if (choice.requiresMove && !eligibleRewardMoves(target, choice).some(move => move.index === configuration.moveIndex)) return 'moveSelection' in choice && choice.moveSelection === 'pp-boost' ? '최대 PP를 늘릴 수 있는 기술을 선택하세요.' : 'PP가 줄어든 기술을 선택하세요.';
   if (choice.requiresNewMove && (!configuration.moveName || !target?.learnableMoves?.includes(configuration.moveName))) return '다시 배울 수 있는 기술을 선택하세요.';
   if (requiresReplacement(choice) && (target?.moves?.length ?? 4) >= 4 && (!Number.isInteger(configuration.replaceIndex) || Number(configuration.replaceIndex) < 0 || Number(configuration.replaceIndex) > 3)) return '배울 기술의 자리 또는 빈 자리를 선택하세요.';
   return null;
@@ -146,7 +148,8 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
   const active = selection?.kind === 'reward' ? choices.find(choice => choice.id === selection.id) : selection?.kind === 'service' ? services.find(service => service.id === selection.id) : undefined;
   const targets = active?.targets || [];
   const selectedTarget = targets.find(target => target.boxId === targetId) || targets.find(target => target.boxId === automaticRewardTarget(targets));
-  const ppMoves = eligibleRewardMoves(selectedTarget);
+  const ppBoost = !!active && 'moveSelection' in active && active.moveSelection === 'pp-boost';
+  const ppMoves = eligibleRewardMoves(selectedTarget, active);
   const selectedMoveIndex = moveIndex ?? (ppMoves.length === 1 ? ppMoves[0].index : undefined);
   const configuration: Configuration = {
     ...(active && requiresRewardTarget(active) && selectedTarget ? { boxId: selectedTarget.boxId } : {}),
@@ -239,7 +242,7 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
         return <button key={target.boxId} className={`rcr-target ${isSelected ? 'is-selected' : ''}`} disabled={locked || !target.eligible} aria-pressed={isSelected} aria-label={`${target.name}, HP ${target.hp}/${target.maxHp}${!target.eligible ? `, ${target.reason || '사용 불가'}` : ''}`} onClick={() => chooseTarget(target)}><PokemonImage mon={mon || null} variant="sprite" alt=""/><span className="rcr-target-data"><b>{target.name}{isSelected && <Check size={15} aria-hidden="true"/>}</b><span className="rcr-target-hp">HP {target.hp} / {target.maxHp}</span><span className="rcr-target-bar" aria-hidden="true"><i style={{ transform: `scaleX(${Math.min(1, Math.max(0, target.hp / Math.max(1, target.maxHp)))})` }}/></span>{!target.eligible && <small>{target.reason || '사용할 수 없는 대상'}</small>}</span></button>;
       })}</div>{!targets.length && <p className="rcr-inline-reason">사용할 대상 정보가 없습니다.</p>}</div>}
       {active.requiresNewMove && selectedTarget && <div className="rcr-move-section rcr-learn-section"><div className="rcr-section-heading"><h4>다시 배울 기술</h4><span>배울 기술을 선택하세요. 빈 칸이 없다면 교체할 기술도 선택합니다.</span></div><label className="rcr-learn-field" htmlFor={`${uniqueId}-new-move`}><span>배울 기술</span><select id={`${uniqueId}-new-move`} value={newMoveName} disabled={locked || !selectedTarget.eligible || !selectedTarget.learnableMoves?.length} onChange={event => { setNewMoveName(event.target.value); setReplaceIndex(undefined); setLocalError(''); }}><option value="">기억할 기술을 선택하세요</option>{[...new Set(selectedTarget.learnableMoves || [])].map(move => <option key={move} value={move}>{move}</option>)}</select></label>{!selectedTarget.learnableMoves?.length && <p className="rcr-inline-reason">이 포켓몬이 다시 배울 수 있는 기술이 없습니다.</p>}</div>}
-      {active.requiresMove && selectedTarget && <div className="rcr-move-section"><div className="rcr-section-heading"><h4>PP를 회복할 기술</h4><span>PP가 줄어든 기술만 선택할 수 있습니다.</span></div><div className="rcr-moves" onKeyDown={event => focusWithin(event, '.rcr-move')}>{(selectedTarget.moves || []).map(move => <button key={move.index} className={`rcr-move ${selectedMoveIndex === move.index ? 'is-selected' : ''}`} disabled={locked || !selectedTarget.eligible || move.pp >= move.maxPp} aria-pressed={selectedMoveIndex === move.index} onClick={() => setMoveIndex(move.index)}><span><small>0{move.index + 1}</small><b>{move.name}</b></span><span>PP <b>{move.pp}</b> / {move.maxPp}{move.pp >= move.maxPp && <small>회복할 PP 없음</small>}</span></button>)}</div>{!selectedTarget.moves?.length && <p className="rcr-inline-reason">선택 가능한 기술 정보가 없습니다.</p>}</div>}
+      {active.requiresMove && selectedTarget && <div className="rcr-move-section"><div className="rcr-section-heading"><h4>{ppBoost ? '최대 PP를 늘릴 기술' : 'PP를 회복할 기술'}</h4><span>{ppBoost ? '최대 PP를 늘릴 수 있는 기술을 선택하세요.' : 'PP가 줄어든 기술만 선택할 수 있습니다.'}</span></div><div className="rcr-moves" onKeyDown={event => focusWithin(event, '.rcr-move')}>{(selectedTarget.moves || []).map(move => <button key={move.index} className={`rcr-move ${selectedMoveIndex === move.index ? 'is-selected' : ''}`} disabled={locked || !selectedTarget.eligible || !ppMoves.some(candidate => candidate.index === move.index)} aria-pressed={selectedMoveIndex === move.index} onClick={() => setMoveIndex(move.index)}><span><small>0{move.index + 1}</small><b>{move.name}</b></span><span>PP <b>{move.pp}</b> / {move.maxPp}{ppBoost ? <small>{move.canIncreasePp ? `PP 증가 ${move.ppUps || 0} / 3` : '최대 PP 증가 불가'}</small> : move.pp >= move.maxPp && <small>회복할 PP 없음</small>}</span></button>)}</div>{!selectedTarget.moves?.length && <p className="rcr-inline-reason">선택 가능한 기술 정보가 없습니다.</p>}</div>}
       {requiresReplacement(active) && selectedTarget && (selectedTarget.moves?.length ?? 4) < 4 && <p className="rcr-inline-reason">빈 기술 칸에 자동으로 배웁니다.</p>}
       {requiresReplacement(active) && selectedTarget && (selectedTarget.moves?.length ?? 4) >= 4 && <div className="rcr-move-section"><div className="rcr-section-heading"><h4>배울 기술의 자리</h4><span>빈 자리를 선택하거나 기존 기술 하나를 교체하세요.</span></div><div className="rcr-moves rcr-replace-moves" onKeyDown={event => focusWithin(event, '.rcr-move')}>{[0, 1, 2, 3].map(index => {
         const current = selectedTarget.moves?.find(move => move.index === index);
