@@ -1,14 +1,7 @@
 import { getChatGPTUser } from '@/app/chatgpt-auth';
-import { getDb } from '@/db';
-import { saves } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { env } from 'cloudflare:workers';
 export const dynamic = 'force-dynamic';
-export async function GET() {
- const user = await getChatGPTUser(); if (!user) return Response.json({error:'로그인이 필요합니다.'},{status:401});
- try { const row = await getDb().select().from(saves).where(eq(saves.userId,user.userId)).get(); return Response.json({data:row ? JSON.parse(row.data) : null}); } catch { return Response.json({error:'저장 데이터를 불러오지 못했습니다.'},{status:500}); }
-}
-export async function PUT(request: Request) {
- const user = await getChatGPTUser(); if (!user) return Response.json({error:'로그인이 필요합니다.'},{status:401});
- try { const data = await request.json(); const raw = JSON.stringify(data); if (!data || data.version !== 1 || raw.length > 150000) return Response.json({error:'저장 형식이 올바르지 않습니다.'},{status:400});
- await getDb().insert(saves).values({userId:user.userId,data:raw,updatedAt:Date.now()}).onConflictDoUpdate({target:saves.userId,set:{data:raw,updatedAt:Date.now()}}); return Response.json({ok:true}); } catch {return Response.json({error:'저장하지 못했습니다.'},{status:500});}
-}
+const db=()=>env.DB!;
+async function register(user:any){await db().prepare('INSERT INTO players(user_id,email,name,last_seen) VALUES(?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET email=excluded.email,name=excluded.name,last_seen=excluded.last_seen').bind(user.userId,user.email,user.displayName,Date.now()).run()}
+export async function GET() {const user=await getChatGPTUser();if(!user)return Response.json({error:'로그인이 필요합니다.'},{status:401});try{await register(user);const row=await db().prepare('SELECT data,revision FROM saves WHERE user_id=?').bind(user.userId).first<any>();return Response.json({data:row?JSON.parse(row.data):null,revision:row?.revision??0});}catch{return Response.json({error:'저장 데이터를 불러오지 못했습니다.'},{status:500})}}
+export async function PUT(request:Request){const user=await getChatGPTUser();if(!user)return Response.json({error:'로그인이 필요합니다.'},{status:401});try{const body=await request.json();const data=body.data;const raw=JSON.stringify(data);const revision=body.revision;if(!data||data.version!==1||raw.length>150000||!Number.isInteger(revision)||revision<0)return Response.json({error:'저장 형식이 올바르지 않습니다.'},{status:400});await register(user);await db().prepare('INSERT OR IGNORE INTO saves(user_id,data,updated_at,revision) VALUES(?,?,?,0)').bind(user.userId,JSON.stringify({version:1,screen:'home',dex:[],wins:0,run:null}),Date.now()).run();const result=await db().prepare('UPDATE saves SET data=?,updated_at=?,revision=revision+1 WHERE user_id=? AND revision=?').bind(raw,Date.now(),user.userId,revision).run();if(!result.meta.changes)return Response.json({error:'다른 기기 또는 관리자가 저장을 변경했습니다. 새로고침하세요.'},{status:409});return Response.json({ok:true,revision:revision+1})}catch{return Response.json({error:'저장하지 못했습니다.'},{status:500})}}
