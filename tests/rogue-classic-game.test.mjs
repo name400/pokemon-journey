@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {applyClassicAction,classicGameView,activeClassicRun} from '../lib/rogue-classic-game.mjs';
 import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
-import {starterCatalog,registerStarterCaught} from '../lib/rogue-starter-system.mjs';
+import {starterCatalog,registerStarterCaught,starterProgress} from '../lib/rogue-starter-system.mjs';
 import {createClassicCombat} from '../lib/rogue-battle-engine.mjs';
-import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {makeReferenceMon,rogueSpecies} from '../lib/rogue-reference.mjs';
 import {classicCaptureOdds,attemptClassicCapture} from '../lib/rogue-classic-capture.mjs';
 import {generateClassicRewards,classicRewardView,chooseClassicReward} from '../lib/rogue-classic-rewards.mjs';
 
@@ -30,6 +30,11 @@ assert.equal(run.screen,'advance');applyClassicAction(document,{action:'next'});
 // All five slots hold separate party objects and run currency.
 applyClassicAction(document,{action:'prepare',slot:1});applyClassicAction(document,{action:'start',slot:1,selection:team});assert.equal(activeClassicRun(document).money,1000);assert.notEqual(activeClassicRun(document).id,run.id);
 applyClassicAction(document,{action:'selectSlot',slot:0});assert.equal(activeClassicRun(document).wave,2);
+// Boss captures award boss candy without keeping enemy-only boss status on the owned Pokémon.
+const bossDoc=structuredClone(document),bossRun=activeClassicRun(bossDoc),bossState=ensureClassicState(bossDoc),family=rogueSpecies.get(10).starterId;
+const candyBefore=starterProgress(bossState.system,family).candies;
+bossRun.combat=createClassicCombat(bossRun,[makeReferenceMon(10,2,{boxId:'boss-candy-target',moves:['Splash'],rogueBoss:true,rogueBossSegments:4})]);bossRun.encounter={kind:'wild',trainer:null};bossRun.balls.masterball=1;bossRun.screen='battle';
+applyClassicAction(bossDoc,{action:'capture',ballId:'masterball'});assert.equal(starterProgress(bossState.system,family).candies-candyBefore,2);assert.equal(bossRun.party.at(-1).rogueBoss,false);assert.equal(bossRun.party.at(-1).rogueBossSegments,0);
 const target={hp:20,maxHp:20,captureRate:255,status:null,shiny:false};assert.equal(classicCaptureOdds(target,'rogueball').value,255);assert.equal(attemptClassicCapture(target,'rogueball',{},()=>.99).caught,true);
 const sleeping={...target,hp:1,captureRate:45,status:'잠듦'};assert.ok(classicCaptureOdds(sleeping,'pokeball').value>classicCaptureOdds({...sleeping,status:null},'pokeball').value);
 assert.equal(classicCaptureOdds(target,'pokeball',{caughtSpecies:101}).criticalChance,Math.floor(.5*85/6));
