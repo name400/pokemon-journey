@@ -163,3 +163,8 @@
 }
 .battle-screen.bs-no-motion .bs-boss-announcement,.battle-screen .bs-boss-announcement[data-reduced-motion=true],.battle-screen.bs-no-motion .bs-boss-intro-rule,.battle-screen .bs-boss-announcement[data-reduced-motion=true] .bs-boss-intro-rule{animation:none!important}
 @media(prefers-reduced-motion:reduce){.battle-screen .bs-boss-announcement,.battle-screen .bs-boss-intro-rule{animation:none!important}.battle-screen .bs-dynamax-aura,.battle-screen .bs-dynamax-clouds{animation:none!important}.battle-screen button{transition:none!important}}
+
+/* Keep long move details usable on small screens and with large system text. */
+.battle-screen .bs-move-tooltip{max-height:min(42dvh,22rem);overflow:auto;overscroll-behavior:contain;overflow-wrap:anywhere;pointer-events:auto}
+.battle-screen .bs-move-wrap[data-detail-open=true]{z-index:49}
+.battle-screen .bs-move-info:active{background:#e2efd9;box-shadow:inset 0 0 0 2px #276b57}
