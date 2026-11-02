@@ -51,6 +51,8 @@ assert.ok(buffed.events.every(event=>event.hit!==true),'Self buffs must never tr
 const ended={...view,ended:true,winner:1,events:[],before:undefined,beforeActive:undefined};
 const finishedHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:ended,battleKey:'finished:1',title:'종료 검증',busy:false,onCommand(){},onContinue(){},continueLabel:'보상으로 가기'}));
 assert.ok(finishedHTML.includes('보상으로 가기'));
+// A trainer's hidden bench boss must only be announced once it enters the field.
+const bossBench={...makeMon(143,50),boxId:'hidden-boss',rogueBoss:true,rogueBossSegments:2};const benchBattle=combatView(createCombat([a],[b,bossBench]));benchBattle.events=[];const hiddenHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:benchBattle,battleKey:'boss-bench',title:'보스 검증',busy:false,onCommand(){}}));assert.ok(!hiddenHTML.includes('보스 등장'));const activeBoss={...benchBattle,active:[0,1]};const activeHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:activeBoss,battleKey:'boss-active',title:'보스 검증',busy:false,onCommand(){}}));assert.ok(activeHTML.includes('보스 등장'));
 const protocol=Battle.fromJSON(before.snapshot),firstActor=`p1a: ${protocol.p1.active[0].name}`,secondActor=`p2a: ${protocol.p2.active[0].name}`;
 protocol.log=[`|move|${firstActor}|Tackle|${secondActor}`,`|-crit|${secondActor}`,`|-damage|${secondActor}|30/40`,`|-damage|${secondActor}|17/40`,`|-heal|${secondActor}|22/40|[from] item: Leftovers`,`|-miss|${firstActor}|${secondActor}`,`|-immune|${secondActor}`,`|move|${firstActor}|Swords Dance|${firstActor}`,`|-boost|${firstActor}|atk|2`];
 const visual=battleVisuals(protocol,0,[[{...a,hp:40,maxHp:40}],[{...b,hp:40,maxHp:40}]]),damage=visual.filter(event=>event.kind==='damage');
