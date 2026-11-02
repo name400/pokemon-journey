@@ -7,6 +7,8 @@ import {makeMon} from '../lib/game.mjs';
 import {createCombat,playCpu,playDuel,combatView} from '../lib/party-battle.mjs';
 import {Battle} from '@pkmn/sim';
 import {battleVisuals} from '../lib/full-battle.mjs';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {createClassicCombat,classicCombatView,restoreClassicNativeBattle,snapshotClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
 
 await fs.mkdir('.sites-runtime/tests',{recursive:true});
 await build({entryPoints:['components/battle-panel.tsx'],outfile:'.sites-runtime/tests/battle-panel.mjs',bundle:true,format:'esm',platform:'node',external:['react','react/jsx-runtime','lucide-react'],loader:{'.css':'empty'}});
@@ -53,6 +55,8 @@ const finishedHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:
 assert.ok(finishedHTML.includes('보상으로 가기'));
 // A trainer's hidden bench boss must only be announced once it enters the field.
 const bossBench={...makeMon(143,50),boxId:'hidden-boss',rogueBoss:true,rogueBossSegments:2};const benchBattle=combatView(createCombat([a],[b,bossBench]));benchBattle.events=[];const hiddenHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:benchBattle,battleKey:'boss-bench',title:'보스 검증',busy:false,onCommand(){}}));assert.ok(!hiddenHTML.includes('보스 등장'));const activeBoss={...benchBattle,active:[0,1]};const activeHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:activeBoss,battleKey:'boss-active',title:'보스 검증',busy:false,onCommand(){}}));assert.ok(activeHTML.includes('보스 등장'));
+// The first doubles slot may be empty while the second Pokémon is still active.
+const doubleRun={id:'empty-first-slot',wave:30,biome:0,rng:42,party:[makeReferenceMon(1,10,{boxId:'empty',moves:['Splash']}),makeReferenceMon(7,10,{boxId:'survivor',moves:['Splash']})],modifiers:[],tools:{},encounter:{kind:'wild'}};doubleRun.combat=createClassicCombat(doubleRun,[makeReferenceMon(19,5,{boxId:'foe-a',moves:['Splash']}),makeReferenceMon(25,5,{boxId:'foe-b',moves:['Splash']})],{doubles:true});const nativeDouble=restoreClassicNativeBattle(doubleRun.combat,doubleRun);nativeDouble.p1.active[0]=null;doubleRun.combat.snapshot=snapshotClassicNativeBattle(nativeDouble);const doubleView=classicCombatView(doubleRun.combat);doubleView.events=[];assert.equal(doubleView.activeBySide[0][0],-1);const doubleHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:doubleView,battleKey:'empty-first-slot',title:'더블 빈 슬롯',busy:false,onCommand(){}}));assert.ok(!doubleHTML.includes('전투 장면을 불러오고 있습니다.'));assert.ok(doubleHTML.includes('data-battle-boxid="survivor"'));assert.ok(!doubleHTML.includes('data-battle-boxid="empty"'));
 const protocol=Battle.fromJSON(before.snapshot),firstActor=`p1a: ${protocol.p1.active[0].name}`,secondActor=`p2a: ${protocol.p2.active[0].name}`;
 protocol.log=[`|move|${firstActor}|Tackle|${secondActor}`,`|-crit|${secondActor}`,`|-damage|${secondActor}|30/40`,`|-damage|${secondActor}|17/40`,`|-heal|${secondActor}|22/40|[from] item: Leftovers`,`|-miss|${firstActor}|${secondActor}`,`|-immune|${secondActor}`,`|move|${firstActor}|Swords Dance|${firstActor}`,`|-boost|${firstActor}|atk|2`];
 const visual=battleVisuals(protocol,0,[[{...a,hp:40,maxHp:40}],[{...b,hp:40,maxHp:40}]]),damage=visual.filter(event=>event.kind==='damage');
