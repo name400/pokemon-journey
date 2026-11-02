@@ -45,7 +45,7 @@ const categoryName = (category: string) => ({physical:'물리',special:'특수',
 export function moveLearnFacts(move: MoveInfo) {
   return {
     power: move.category.toLowerCase() === 'status' ? '—' : move.power === 0 ? '변동' : move.power ?? '—',
-    accuracy: typeof move.accuracy === 'number' ? `${move.accuracy}%` : '—',
+    accuracy: move.accuracy === true ? '판정 없음' : typeof move.accuracy === 'number' ? `${move.accuracy}%` : '—',
     category: categoryName(move.category),
   };
 }
