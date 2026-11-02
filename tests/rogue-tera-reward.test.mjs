@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {createClassicCombat,playClassicCombat,continueClassicWild,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+import {CLASSIC_REWARD_REGISTRY,chooseClassicReward} from '../lib/rogue-classic-rewards.mjs';
+
+const run={id:'tera-reward',wave:1,biome:0,rng:42,party:[makeReferenceMon(151,100,{boxId:'player',moves:['Tackle'],teraType:'Psychic'})],modifiers:[],tools:{teraOrb:false},teraCharged:false,screen:'reward',encounter:{kind:'wild'}};
+run.combat=createClassicCombat(run,[{...makeReferenceMon(19,1,{boxId:'first',moves:['Splash']}),hp:1}]);run.combat=playClassicCombat(run,{type:'move',move:'tackle'});assert.equal(run.combat.winner,0);run.party=run.combat.teams[0];run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(item=>item.id==='teraorb'),rewardId:'orb'}];chooseClassicReward(run,{rewardId:'orb'},{});assert.equal(run.tools.teraOrb,true);assert.equal(run.teraCharged,true);
+run.wave++;run.combat=continueClassicWild(run,[{...makeReferenceMon(19,1,{boxId:'second',moves:['Splash']}),hp:1}]);assert.ok(run.combat.requests[0].specials.some(s=>s.key==='terastallize'));run.party=run.combat.teams[0];const next=playClassicCombat(run,{type:'move',move:'tackle',special:'terastallize'});assert.equal(next.teams[0][0].terastallized,'Psychic');assert.equal(restoreClassicNativeBattle(next,run).p1.active[0].getTypes()[0],'Psychic');assert.equal(run.teraCharged,false);assert.equal(next.winner,0);run.party=next.teams[0];run.combat=next;run.wave++;run.combat=continueClassicWild(run,[makeReferenceMon(19,2,{boxId:'third',moves:['Splash']})]);assert.equal(run.combat.teams[0][0].terastallized,'Psychic');assert.ok(!run.combat.requests[0].specials.some(s=>s.key==='terastallize'));
+console.log('A newly rewarded Tera Orb enables real Terastallization in the next continuous wild battle.');
