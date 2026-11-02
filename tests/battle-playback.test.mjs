@@ -8,7 +8,7 @@ await build({
   outfile: '.sites-runtime/tests/battle-playback.mjs',
   bundle: true, format: 'esm', platform: 'node', external: ['react'],
 });
-const { BattlePlaybackController, BattleSubmissionGate, battleDisplay, applyBattleEvent } = await import('../.sites-runtime/tests/battle-playback.mjs');
+const { BattlePlaybackController, BattleSubmissionGate, battleDisplay, applyBattleEvent, battleEventLocation } = await import('../.sites-runtime/tests/battle-playback.mjs');
 const event = { side: 0, type: 'water', category: 'special', hit: true };
 
 let frames = [];
@@ -74,4 +74,6 @@ display = applyBattleEvent(display, {side:1,targetSide:1,boxId:'c',kind:'switch'
 assert.equal(display.active[1],1);
 display = applyBattleEvent(display, {side:1,targetSide:0,boxId:'a',kind:'damage',hp:10,maxHp:30,amount:20});
 assert.equal(display.teams[0][0].hp,10,'Absolute side numbers must remain correct for side=1 viewers');
+const doubles={teams:[[{boxId:'hero0',hp:10,maxHp:10},{boxId:'hero1',hp:10,maxHp:10}],[{boxId:'wild-a',hp:10,maxHp:10},{boxId:'wild-b',hp:10,maxHp:10}]],active:[0,0],activeBySide:[[0,1],[0,1]]};
+const captured={kind:'capture',side:1,actorSide:0,actorBoxId:'hero0',actorSlot:0,targetSide:1,targetBoxId:'wild-b'};assert.deepEqual(battleEventLocation(doubles,captured,'actor'),{side:0,index:0,slot:0,boxId:'hero0'});assert.deepEqual(battleEventLocation(doubles,captured,'target'),{side:1,index:1,slot:1,boxId:'wild-b'});
 console.log('Battle playback cancellation, revision deduplication, unique FX keys, and reduced motion: passed');
