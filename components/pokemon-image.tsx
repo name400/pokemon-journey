@@ -6,6 +6,7 @@ import appearanceData from '@/data/pokemon-appearance.json';
 type ImagePokemon = {
   id: number | string;
   sourceImage?:string|null;
+  rogueFormKey?:string|null;
   sourceBackImage?:string|null;
   sourceShinyImage?:string|null;
   sourceAppearanceMissing?:boolean;
@@ -38,7 +39,7 @@ const reducedSnapshot = () => reducedMotionQuery()?.matches ?? true;
 const staticSnapshot = () => true;
 
 export function pokemonArtId(mon: ImagePokemon | null | undefined): number | string {
-  if (!mon||mon.sourceAppearanceMissing) return 0;
+  if (!mon||mon.sourceAppearanceMissing||mon.rogueFormKey?.endsWith('-starmobile')) return 0;
   if (mon.battleAppearance) return mon.battleArtId || appearances.artByBattleKey[mon.battleAppearance] || 0;
   return appearances.artById[mon.id] || mon.artId || mon.id;
 }
