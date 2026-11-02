@@ -19,7 +19,7 @@ assert.equal(r.combat.requests[0].specials.some(s=>s.key==='terastallize'),false
 for(let i=0;i<4&&!r.combat.ended;i++){r.combat=playClassicCombat(r,{type:'move',move:'flamethrower'});r.party=r.combat.teams[0];}
 assert.equal(r.combat.teams[0][0].gigantamax,true,'G-Max stays beyond three turns and JSON restores');
 
-r=run([mon(6,50,'mega')],{wave:70,formItems:{mega:['charizarditex']}});r.party[0]=applyClassicForm(r.party[0],r,'charizarditex');r.combat=createClassicCombat(r,[mon(143,50,'foe')]);
+r=run([mon(6,50,'mega',{sourceImage:'stale-base-front',sourceBackImage:'stale-base-back'})],{wave:70,formItems:{mega:['charizarditex']}});r.party[0]=applyClassicForm(r.party[0],r,'charizarditex');assert.notEqual(r.party[0].sourceImage,'stale-base-front');assert.notEqual(r.party[0].sourceBackImage,'stale-base-back');r.combat=createClassicCombat(r,[mon(143,50,'foe')]);
 assert.equal(r.combat.teams[0][0].battleAppearance,'charizardmegax');assert.equal(r.combat.teams[0][0].mega,true);assert.equal(r.combat.teams[0][0].currentAbility,'toughclaws');
 
 r=run([mon(7,5,'squirtle',{moves:['물대포'],teraType:'물'})]);r.combat=createClassicCombat(r,[mon(143,30,'foe',{moves:['튀어오르기']})]);
