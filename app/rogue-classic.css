@@ -11,3 +11,9 @@
 @media(min-width:1150px){.rc-slot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.rc-slot{padding:16px}.rc-slot-party{min-height:70px}.rc-slot-party .rc-sprite-sm{width:43px;height:43px}.rc-slot-actions{gap:7px}.rc-slot-actions .rogue-button{font-size:12px;min-height:40px;padding:8px 10px}}
 
 .rc-hatch-result .rc-refund{display:flex;align-items:center;gap:7px;color:#f8d887;font-size:14px;font-weight:750}
+/* Evolution readiness uses server-provided conditions and never evolves automatically. */
+.rc-evolution-notice{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 18px;padding:16px 18px;border:1px solid #d2b85e;border-radius:12px;background:#213e45;color:#fff7d8}
+.rc-evolution-notice strong{font-size:15px}.rc-evolution-notice p{margin:4px 0 0;font-size:14px;line-height:1.5;color:#f4e8bb}.rc-evolution-notice button{min-height:44px}
+.rc-evolution-badge,.rc-evolution-ready{display:inline-block;margin-left:6px;padding:3px 7px;border-radius:99px;background:#f4d778;color:#253c35;font-size:12px;font-weight:700;line-height:1.3;white-space:normal}
+.rc-evolution-notice button:focus-visible{outline:3px solid #fff1a6;outline-offset:3px}
+@media(max-width:600px){.rc-evolution-notice{align-items:stretch}.rc-evolution-notice button{width:100%;justify-content:center}}
