@@ -1,0 +1,168 @@
+# Classic v3 재구현 — 이어서 작업할 상태
+
+## 최종 사용자 방향
+- 포켓로그 모드부터 완성. 원본 시스템을 똑같이, UI는 복제가 아니라 더 높은 품질.
+- 직접 원본 플레이 조사는 중단하고 공개 플레이 영상 참고. 참고 영상은 음소거 상태 유지.
+- 최대 레벨100 / 자동 진화 금지 / 별도 게임 데이터 / 고가 다양한 포켓몬 가챠 / 넓은 관리자 지급·수정은 명시 예외로 유지.
+- 변신은 실제 형태: 메가·G-Max 런 지속, 테라 결정화/왕관과 실제 상태. 일반3턴Dynamax를원본이라고활성화하지않음.
+- 완성·검증 전 새 버전 배포 금지. 운영 v4 그대로, 지금 파일은 로컬 개발본.
+
+## 검증한 사실과 구조
+원본 기준 v1.12.2.3 / 29441f7aa7482d9e816b253d324293788936dc3e. `work/pokerogue-reference`는 공식 저장소의 해당 태그 clone(원본 앱 실행 안함,ignored). Agent 감사문서:
+- outputs/pokerogue-system-audit.md
+- outputs/pokerogue-economy-growth.md
+- outputs/pokerogue-battle-carry.md
+
+원본 사실:
+- 시작27종 모두해금, IV15/EV0/레벨5, 파티6/비용총10. **27종이 전부3점인 것은 아님**(Torchic/Froakie/Gen9 등4점).
+- source starterCost 선언된selectable종572, DTO기본+선택형태611개 매핑완료. species source1084→현재PokeAPI/Dex1084모두매핑(0누락).
+- 원본base1084종baseStats는현재Dex데이터와전부동일. G-Max같은일부변신폼은커스텀BST/특성/타입으로별도적용필요.
+- 원본모든base/passiveAbility는현재NativeDex.exists=true(Dragonize312/FireMane316/AuraGuard319 포함). 패시브배정192종; 모든조합완료라고주장하지않음.
+- 새런돈1000/몬스터볼5/수정자[]/영구돈·레벨·도구carry안함.5개의런slot/영구Dex분리.
+- Capture caught등록은actual→prevo전부. IV는첫selectable부터prevo까지최대값전파(Raichu26IV자체X,25→172). Candy는babyfamily172. **Pika25 costReduction/passive/candyrow는172와독립,prevo있어Candy메뉴도없음;getStarter25=25이지172아님.** Own eggMoves25=[]이며familyfallback하면틀림.
+- wild XP=(폼baseExp*실제적레벨)/5+1. trainer먼저floor1.5. 참가자분배/기절·cap제외, 초기Share0/8라이벌Share1+SuperCharm1/25Share1.벤치Share없으면0.
+- wild승리기본돈0. Trainer/돈보상/관련특성·수정자에서돈. Shop치료는즉시효과,영구재고X. firstPotion36/firstReroll250.10층은일반보상·유료상점생략하고고정성장보상→biome/heal.
+- 같은구간야생은boosts/volatiles/임시특성·타입/PP/field/hazards보존. FakeOut은waveTurnCount라새wave첫턴가능.
+- 일반승리턴residual은수행,10층Interlude는tag/heal/status스킵+fieldduration만lapse. incomingTrainer/Mystery/final/prev10경계의reset과무기한weather다르게처리.
+- Champion190/Elite182,184,186,188/Rival8,25,55,95,145,195/Eternatus200.6gymstart20or30 이후30간격.
+
+## 실제 구현된 새 코어(아직 전체 API/UI 미연동)
+- data/rogue-reference.json (1.42MBserver-only): source1084/forms609/starter572/egg571/default27,정적진화544/formChange291,함수41/호출6은marker,Minun TM filter1은누락. 원본code라이선스AGPL-source고지포함,독립AST추출/코드실행X.
+- scripts/import-rogue-reference.mjs :고정태그 ASTparser.
+- lib/rogue-reference.mjs :Native/PokeAPI/source ID·enum·regional/form매핑. unmapped0,GenotypeMoveMapping.
+- lib/rogue-starter-system.mjs :기본27/IV15,catch/IV/nature/ability/gender/shiny해금,candy,point10×6서버검증,새party레벨5/EV0/gear초기화. PikaCandyrow독립수정완료. 기본natures는중립cycle(원본seed순서와완전같다고주장X).
+- lib/rogue-classic-state.mjs :5개독립run slots/영구자원분리/1000·볼5·레벨5·수정자초기화/시드RNG. startClassicRun은아직 **screen=prepared**인기초모델;완성실행루프아님.
+- lib/rogue-classic-rules.mjs :원본레벨/cap/trainerstrength/money/tier·luckUpgrade/reroll/story스케줄/기초EXP분배. sourcecap·enemyLvl은마지막min100. EXP복수Charmfloor/Balance는후속progression모듈필요.
+- lib/rogue-classic-services.mjs :즉시치료14종,동적가격/대상/PPbase용량(물대포25)/약품해금/기억버섯·learnableMoves/실패시무차감. 아직run API미연동.
+- 위각 test*.test.mjs 통과. old legacyNatural601decisions관리자없이fresh짜랑꼬200완주도통과했으나**원본시스템동등증거아님**.
+
+## 새 UI/시각 기반
+- app/rogue.tsx+rogue-ui.css :v5 UI프로토타입,아직기존v2/RogueAPI. actorHP최종스포일러부모HUD/로그숨김.팝업전투제거.
+- components/rogue-starter-select.tsx+css :611DTO용10포인트·6slot·세대/검색·유전설정·사탕UI. 아직메인미연동.
+- components/rogue-classic-rewards.tsx+css :3랜덤무료/즉시유료정비/리롤/target/PP/TM/Memory버섯 선택UI. 아직미연동.
+- BattlePanel/배경/앞뒤GIF/타격HP동기화/crown·결정화/Gmax오라/trueformfallback구현.
+- lib/party-battle.mjs :표시필드 terastallized/dynamaxed/gigantamax/mega/primal/ultra/battleAppearance,before/beforeActive 추가. gen9에서nativeDmax요청없음정상. originalRogue고유룰은아직반영안됨.
+- HMR영구잠금수정/2.8초재생budget/3.2초안전종료. `.sites-runtime/react-effects/check.mjs` 대조군으로버그재현/수정검증. global.empty padding80가거대원만들던CSS충돌도고침.
+- PokemonImage 경량데이터39KB/동일폼artfallback/unknown폼은base가장X. scripts/verify-display-data 검사통과.
+- Neo둥근모44KB공식OFL,public/fonts; 원본code-native battleSVG3종public/game/battle,CC0Kenney assets(후속탐험)public/game/town.
+- VanillaRogueClient staticJSgzip407117→128346bytes(약68%감소),raw2661487→375595;outputs/rogue-performance.json. localWarmGET11–23ms(인터넷지연아님).
+
+## 연구용 Native 어댑터 프로토타입(앱에 아직 승격 X)
+1. `.sites-runtime/rogue-hooks-prototype/adapter.mjs` 및component-abilities.mjs, PHASE2.md:
+   - BP스택/먹밥2/기본위협+패시브부유/개별억제/Gas/MoldBreaker/Trace/SkillSwap/스냅샷별프로세스복원/격리통과.
+   - b.events Format callback은snapshot직전제거+restore필수; AI clone도같은serializer필수.
+   - fromJSON은bind전에getRequests하므로activeRequestnulltombstone→bind→원래활성요청복구필요.
+   - 현검증allowlist7개,192모두완료아님.
+2. `.sites-runtime/wild-carry-prototype/README.md` +check.mjs:
+   - 같은NativeBattle/p2에새Pokemon+side.team추가,oldfainted는refs용graveyard,10×double20개로24위치내snapshot가능.
+   - boosts/PP/status/field/tags/seedSlot유지,p1Intimidate재발동X/p2발동,FakeOut첫턴허용,privatecurrentEnemy범위,RevivalBlessing과SupremeOverlord과거묘지영향격리.
+   - 새battle부터win을residual완료까지유예하는instance훅필수. 추적없는legacyresidualKOsnapshot은남은효과정보없어거절해야함.
+   - trainerfreshReset은HP/status/PP보존하고stage/태그/설치물·유한fieldreset;무기한환경재주입정책추가필요.
+
+## 바로 다음 할 일
+1. 검증된프로토타입을정식lib로리뷰/승격:직렬화·component능력·statefulheld스택·sourceStats/customGmax·기초PP·AIclone경로·wildcontinuity/승리residual/EXP시점.
+2. source35biomes/NPC/라이벌/템플릿데이터어댑터:pixel_assets가data/rogue-world-reference.json과importer작성중(중간이미있음). callback1331marker는실제NPC생성구현이아님.
+3. modifier registry/eligibility/가중보상·스택·즉시치료·캔디·TM·장비·gimmick·돈·route map/10층fixedgift를구현.
+4. 전체phase state machine(각KO XP→새기술결정→turnResidual→capture교체→보상→biome→다음전투),wild기본돈0/런0carry,5slots+메타capsule분리.
+5. doubles (랜덤쌍전/최종Eternamax2단계),typedtarget·각active선택지원. 현재party-battle는single하드코딩이어서아직필요.
+6. 카드35biome비주얼/NPCsource파티/일정,목표원본core에맞춰UI붙이기. 기존고정+2level/heal/recruit보상은새core에서폐기.
+7. adminRogue새starterDex와현재runparty선택·편집·감사반영,기존비밀값/사용자데이터유지.
+8. 이전v2저장보관/명확한마이그레이션정책,교체중파일을완료라고오인배포하지않기.
+9. PC/모바일/실제전체경로검증후테스트모의인증원복→빌드/sourcehelper/publicdeploy.
+
+## 환경과 세션
+- root path C:/Users/USER/Documents/Codex/2026-11-02/pc-ui-ai-ai-sites-ai/pokemon-roguelike
+- D1로컬세션64141 npmdev5173, .dev.vars dummyADMIN. 원복백업 .sites-runtime/sites-vite-plugin.original.ts.
+- mock1=local_seedy(127사용자프리뷰),2=local_second(localhostcookie1도2로격리),3=local_fresh(자동검증). 실제데이터아님. local_second에QAcoins50000, local_fresh naturaltest종료.
+- browser2 / handles releaseTab3prod, researchTab4원본(더조작하지말것), roguePreviewTab5 127사용자, videoTab6음소거YouTube, qaRogueTab7localhostQA. 새컴팩션이면cua.rewriteDocumentation필수.
+- viewportoverride1440×900설정했으나DOM은한호출늦게반영됨. 종료전reset.
+- 운영프로젝트appgprj_6ae805126fcc81919e2957e973c8955a,v4,HEAD7b9de08d0903f054be19d8ae7592a529571e85bb. 새소스uncommitted,전부우리작업. credential세션만료되므로게시시새로get_site+credential+sourcehelper。
+- 기존코블버스/전설급게임변경금지,다른Sites배포금지. 실제adminpassword클라이언트/파일출력금지.
+
+## 최신 이어서 상태 (22:40경) — 위 미연동 상태는 이제 일부 오래된 기록
+
+### 새 사용자 변경 (이 부분이 우선)
+- 새 스타터 등록은 포획이 아니라 **상점에서 구매한 알을 부화**해야 한다. 기본27종은 그대로. 포획한 포켓몬은 현재 런 파티에 들어가고 관찰/포획/IV 기록은 남지만 신규 starter registered는 false. 관리자 명시 지급은 예외.
+- 알 가격은 비싸게. 현재 common12,000 / rare48,000 / epic160,000 / legendary650,000 / shiny240,000 도전 코인. 후보 스타터cost구간별풀, 확률·풀크기표시. 런 소지금과 별도인 기존document.coins를상점지갑으로사용, 매wave/트레이너/구간/완주에서 서버지급(coinRewards로중복방지).
+- 게임이 너무 쉬움: 실제 AI가 Growl 같은 음수 boosts를 자기 setup으로 판단해 반복하던 버그 수정. 아직 source 보스segments/관장고유후처리/랜덤트레이너/상세난이도 검증은 남음.
+- 기술 hover 설명 + 모바일 i 버튼 요청: Korean826설명(pinnedPokéAPI) + 최신주요기술한글 + nativeShortDesc영어fallback, tooltip 구현. UI 동작 실제검증 더필요.
+- 관장 사진 깨짐: server fullURL을client가다시URL템플릿으로감싼것이원인. normalize/fallback수정, 아래로컬PNG로교체. 상대 base스프라이트 폭20%/210px→15%/160px 축소;own25%/260→22%/230. 변형폼확대효과유지.
+- 관리자 상단에 잘보이게: 상단관리자버튼 + 사이드바. 서버owner+비밀번호검증유지. UI는로그인된계정에진입보이되서버403은명시.
+- 관리자 비밀번호 새 값은 **가장최근사용자메시지** 기준. 로컬ignored .dev.vars에만서버용저장(출력/클라이언트포함금지), ADMIN_EMAIL=second@sites.test 로QAidentity2를로컬테스트관리자로선택. **운영Sites환경의비밀번호는아직새값으로변경안함**. 최종출시시ADMIN_PASSWORD만nativeenvupdate하고기존ADMIN_EMAIL/다른Sites그대로.
+- 틀리면 '비밀번호가 틀렸습니다.' 표시. API401/codeINVALID_ADMIN_PASSWORD 및UIinvalid-feedback rolealert실검증,맞으면200/HttpOnlySecurecookie/UI메뉴열림실검증.
+- Bootstrap 적극활용: bootstrap@5.3.8 exact 설치, fullCSS를postcss로 .bootstrap-ui 안으로scope. script build-bootstrap-scoped.mjs/generated app/bootstrap-scoped.css/MITnotice보관. admin·eggshop적용,게임전투css격리. bootstrapJS는미사용.
+- 되도록 한화면: 새 AdminConsole 3열+상단대상선택+하단savebar+기록별도탭. 1440x900에서 documentHeight900,saveBottom852,각panelclientHeight=scrollHeight=460(내부scroll0) 실제확인. outputs/admin-one-screen-1440x900.png. **viewport reset 완료**.
+
+### 현재 앱 실제 연결
+- app/rogue.tsx default는 app/rogue-classic.tsx로reexport. 구 v2 UI는 named LegacyRogue로보관(삭제안함). 새 /api/rogue-classic route 사용. 기존 /api/rogue legacy 보관. app/admin-panel.tsx default는새 app/admin-console.tsx로reexport,구 LegacyAdminPanel도보관.
+- 새 RogueClassic UI: 5개슬롯/편성689DTO(종572+선택형태117)/실전/새기술결정/포획파티교체/3랜덤무료보상/유료즉시서비스/리롤/10웨이브interlude/route map/파티폼변화/알상점까지 연결.
+- 새 lib/rogue-classic-game.mjs: actions.prepare/start/selectSlot/turn/capture/acceptCapture/learn/buyService/reroll/reward/skipReward/next/route/form/abandon/buyEgg/hatchEgg. document.classic만새코어저장. 구document.run/collection/inventory/coins 보관 (coins는이제meta상점지갑겸용).
+- 시작:27종,고정default성격(실제원본 seed'default'배열),IV15EV0Lv5,10point6party,돈1000볼5. 성격23/27차이수정. 기본 moves가 last4이던것 first4로수정.
+- ensureStarterSystem dexVersion3: .registered 필드로알/관리자등록과wild caught 분리. version1/2는기존관찰/포획데이터보관하며등록정책만명시마이그레이션. 기존origin gacha/admin은재등록보존. adminMoves예외허용.
+- lib/rogue-egg-shop.mjs: 가격서버계산/재화서버차감/hiddeneggcontents/serverhatch/유전기bit+사탕+등록. 재부화거부. 즉시부화방식(사용자알구매요구에따름),원본의부화대기wave카운터와는다름(남은원본동등범위에기록).
+- lib/rogue-classic-world.mjs:35바이옴정적풀,시간대,일부기후/연결,고정story스케줄,gym/rival/Elite/champ/evil 기본template/종/레벨생성. **원본동등완료아님**:랜덤트레이너없음,템플릿함수/후처리/라이벌finalreferencebalancing/evo강등&지연/전설reroll/luck등필수보완.
+
+### 실제 새 native 엔진
+- lib/rogue-battle-engine.mjs: source스탯/타입/PP초기화,스냅샷save/restore시sourceSpecies+baseSpecies재주입,커스텀instance이벤트callback복원,AI도동일clone. source영구Mega/Gmax,tera gating,더블actors/target/단일호환,KO직후XP/참가자,야생승리residual,포획코어.
+- lib/rogue-ability-components.mjs,rogue-battle-continuity.mjs,rogue-battle-lifecycle.mjs,rogue-encounter-guards.mjs 연구코드를검토승격. 선택능력은Dex존재여부가드확장했으나 **192패시브모든고유효과동등검증완료아님**. 실제검증allowlist7과나머지구분필요. phase복합 suppressed/hardcoded rawAbility경계남음.
+- continuity blockWaves와globalwave분리,새native적만add/team등록/입장,fakeoutwave첫턴/PP/boost/field/temporaryabilitytags유지. HP/PP/새기술boundary재동기화. trainer/비움변경은새B로리셋(현재순수source정책추가보완필요).
+- lib/rogue-classic-growth.mjs:SourceXP곡선.325species+.675cubic(100도source식),EXPshare/Balance/Charm그룹별floor,KO즉시레벨업및후속새기술선택큐,friendship3/기절-5/candyfriendship3배. sourcepositiveNatureceil,WonderGuardHP1반영은pokemon-config에서rogueSourceId 있을때만.
+- lib/rogue-transformations.mjs: sourceformdata&gatedtools/items로영구폼적용. GmaxCharizardHP118SpA134/Berserk,BlastoiseWaterSteel. Mega/Primal/Ultra/Gmax와Tera동시불가request+server가드. 폼옵션함수condition동적인것은아직미지원,비어있는condition정적변화위주.
+- lib/rogue-classic-capture.mjs:sourceGen6 .1875 shake공식3checks,criticaldexchance/잠듦2.5/3xRogueball/shiny2/masterguarantee. native포획은ball1개소모/실패상대턴,야생한마리남을때,trainer/final포획불가. sourcebosssegment플레이아직부족.
+- Capture직접XP후native성장stats재동기화는한번더검토필요(onFaint경로는구현/검증).
+- **현재200층1단계승리후screen=finalphase에멈춤:2단계Eternamax action/UI/더블전환 미구현**. 새v3전체완주통과라고절대보고/배포하지말것.
+- lib/rogue-classic-rewards.mjs:실제효과연결된지원registry 약50개,가중무료3/paid14서비스/리롤/道具스택/XP/PP/TM/formtools/돈. **원본모든보상/중첩/berries/TM등등가완료아님**. 소스전체poolweight/specialsystems 확장필수.
+- 새 move-description.mjs/data826/script,power/accuracy/PP/priority/contact/targetDTO. MoveCard hover/focus/i tooltip. 신기술영어fallbackactualshortDesc.
+
+### 관리자 새 파이프라인
+- lib/rogue-admin.mjs: destination='starter'|'run' 필수,runSlot0..4. starter관리자등록(알등록예외)+adminCollection에실제편집레코드. run지급/수정은실제party/native전투rebuild,별도audit/revision. 파티6이면신규거절하고기존수정안내. 다른slot/탐험/legacy보호.
+- lib/admin-mutations.ts Rogue분기는mutateRogueAdmin 호출. app/api/admin GET box+runSlots/destination/runSlot지원. auth오류메시지구분.
+- 새 AdminConsole Bootstrap3열viewport그리드,새target모드/지급위치/slot선택. 서버종/폼/레벨/EXP/성격/ability/item/IV/EV/기술검증기존유지. 아직새파이프라인실API지급+수정/audit회귀테스트필요(순수unit통과).
+
+### 자산 신규
+- data/rogue-form-appearance.json + scripts/build-rogue-form-appearance.mjs:source선택폼202행(0포함)/nonbase117모두appID매핑. sourceform0shellosEast→app30039,scatterbugMeadow→app30276역전포함.
+- pinnedSmogon실spritefilekeys201/202,nonbase116/117. **SpikyPichu확실한frontsprite 1누락**(metadata.omissions);임의base이미지가장안함. agent rogue_ui마지막턴capacity에러지만위파일은작성완료,root가읽고연결해서689catalog검증함. 재생성검증/저작권고지끝내야함.
+- rogue-reference가crosswalk읽어nativeSpecies/sourceImage/sourceBack/shiny/SpriteKey주입. PokemonImage direct정확폼sourceImage지원,대체색상기본이미지오인방지. source이미지들의reducedmotion정지GIF처리검토필요.
+- data/rogue-trainer-appearance.json363KB,script build-rogue-trainer-appearance.mjs. localPNG241개/191900bytes/80x80/HTTP200+SHA256검증. source272types중252매핑;gym74/E442/champ16전부. 미확인20개srcnull. root worldgenerator는selectedsrc+artist만DTO,클라이언트전체import없음. credit기본경로UI연결. **작가/권리조건종합출처페이지추가필요**.
+- public/game/eggs/*.svg5개 owncodevector. trainerfallback.svg owngenericicon(실제원작얼굴이라고가장안함).
+
+### 검증된 결과와 환경
+- 최신 npm run typecheck통과. npmtest전체27개통과(rogue-admin추가후전체28개재실행은아직,관련3개지속통과).
+- 새tests/rogue-classic-engine.test,rogue-classic-game.test,rogue-egg-shop.test,rogue-admin.test 존재.
+- tests/release-classic-api.mjs 실제localDummy3 API로27초기등록→3party/10pt/Lv5/PP35→34/한국어설명/저장재조회/알구매부화/CSRF403 통과. slot5는이fixture사용. 재실행시이미알부화등록있으므로초기27절대assert는완화/독립신규fixture필요.
+- 추가실증 .sites-runtime/integration-prototype/check.mjs 현재native7필수회귀통과:sourceGmax193HP/Berserk,source재주입,WaterSteel,레벨업직후PerishSong기절레벨rollback없음,SDPPHP유지→FakeOut→새상대패시브Levitate실면역.
+- outputs/rogue-trainer-generation.md199줄,rogue-starter-gaps.md163줄 정확한sourcefacts. defaultPhaserRNG25줄/UTC일일Pokerus5 sourceID선정참조있음. **Pokerus현재앱미구현**.
+- dev session64141은정상종료. 새 **session29643 npm run dev5173**,신규ignored .dev.vars서버바인딩반영됨. mockauth플러그인원복백업그대로(.sites-runtime/sites-vite-plugin.original.ts),최종패키징전mock원복+ignoredvars삭제 필수. 새pw파일존재하므로cat/GetContent출력금지.
+- browser2/qaRogueTab7 localhostadmin 현재모드rogue/destinationrun/targetlocal_fresh/slot5선택,실제지급클릭안함. admin쿠키정상인증UI실증. 사용자다른localhost탭으로조작할수있으므로자동테스트는profile3고정·현재개인playDB변경주의.
+- viewport는마지막CUA에서reset함. YouTube음소거유지(원본PokéRogue계정조작금지).
+- 운영v4아직그대로. 이새코어는로컬개발본,이번변경은전혀배포하지않음. 원본동등/최종boss/모든능력아이템AI/관리자실API/PC모바일/자산licensesource고지완료후에만패키지/배포.
+
+### 22:55 이후 추가 완료 (이전 finalphase/진화 미구현 메모 일부 대체)
+- rogue-admin 실제 HTTP QA통과: 로컬dummyadmin2→dummyfresh3의slot5만PikaLv31지급→Lv67수정,nature/IV/EV/item/shiny/moves/nativebattle 재빌드/감사destination=run 검증. 운영데이터무변경. slot5party이제4마리.
+- lib/rogue-evolution.mjs source544진화/15종정적condition 해석,수동진화API/partyUI/도구보상(일반·희귀) 연결. 자동진화안함,IV/HP/PP/스택소유자보존,새source종이native연속야생에서도실제반영(forceSpecies). Nincada→Ninjask시빈자리+normalball조건으로Shedinja생성·modifier복제/HP1/Wonderguard검증(원본은볼보유검사만,미소모).
+- 진화후패시브종별변경반영. 여전히RandomForm시드가personality%value라originalPhaserseedoffset와완전같은seed재현아님;TreasureTracker보상/일부held조건관련registry나머지확장필요. nativeSleep등일부evo시상태세부보존은회귀확장필요.
+- lib/rogue-boss.mjs 실제source지수식damagegate/4→5방벽/가중statboost,회복시shield재생안함. native엔진Pokemon.damage instancewrapper로실제적용(처음시도AfterDamage는native이벤트없어수정). bossboost는ignoreAbilities=true이므로직접단계증가+native로그. 원본수식테스트통과.
+- lib/rogue-final-battle.mjs 최종200층이제같은적개체Eternatus4구간마지막index0→Eternamax5구간실전전환. phase1HP1이하기절방지,적회복/태그정리/상태치료/새기술Recover1PP,playerHP/PP/boost/field유지,기존lead재입장안함/newpartner만입장. 원본처럼pendingenemyMove만취소,파트너입장은residual끝에. format참조gen9doublescustomgame·activePerHalf2·p1.active2,p2.active1(빈enemy slotPadding은native크래시). snapshot왕복+2v1실턴+마지막KO승리까지syntheticfixture 테스트통과.
+- 최종전Moves phase1Eternabeam5/SludgeBomb10/Flamethrower15/CosmicPower20,phase2DynamaxCannon5/CrossPoison20/Flamethrower15/Recover1. IV31level100explicitoverrideHP421→651,기본Pressure·NeutralGaspassiveOFF. MiniBlackHolemod1 지급,Residual도구1stack흡수/StickyHold/최대중첩가드/실제nativehelditem take&set 구현. **멀티nativehelditem은수신자가이미nativeitem을가진경우아직제한**,추가registry검증필요.
+- 아직최종전PerishSong/DestinyBond직접faint/멀티히트세부phase/턴잔여치유순서등전체원본동등경계 추가검증필요. 전체완료배포허용아님.
+- Source최종boss포획게이트:572starter중571caught기록,마스터볼은challenge없을때shield우회+phase1에서도가능. API/UIcaptureAllowed구현. 일반boss도masterballshield우회,WonderGuard예외/sourceIndex gate. egg-only등록정책과caught기록은별도.
+- `classicMaxPP`가서버NPC roguePPMax.recover1지원. partner2대1AI signedtarget요청도실제activePerHalf로판정.
+- 보스HPUI구간tick/남은shield수,적폼데이터바뀜에맞춘finalsnapshot반영. Eternamax라벨/거대배율 등시각전용세부마무리남음.
+- lib/korean-text.mjs subject/object/topic/direction 추가. full-battle로그이름조사/능력치조사와p2'야생/상대'접두어개선. 전체전투메시지극본완료는아님.
+- tests추가 rogue-boss.test.mjs,rogue-evolution.test.mjs,rogue-final-battle.test.mjs 통과. 최종전fixture는불법능력접근가능성/밸런스주장이아닌synthetic mechanics 검증임(코멘트명시),natural200완주검증은미완료.
+- source조사추가 outputs/rogue-final-boss-rules.md142줄, .sites-runtime/final-transition-prototype/{README,transition,check,resume,results}. agentown프로토타입rawAPI통합은rootproduction에독립반영함.
+- 최근typecheck통과. CSS/logic변경후전체npmtest+실브라우저regression다시필요. bootstrapOneScreen최종1440x900 body900/panel460=content460/savebar852검증스크린샷첨부commentary완료. viewportreset완료.
+
+### 2026-11-03 이후 최우선 최신 상태
+- 사용자 최신 기본 해금 변경: 초기 스타팅 27종 중 플레이어별 랜덤 1종만 등록. dexVersion4로 기존 egg/admin 획득은 보존, 이전 기본 26종만 잠금. 계정 기준 결정적 seed로 미저장 GET/새로고침에도 동일, 초기화는 새 random seed. 기본 종 1마리만 IV15/EV0/Lv5. 사용자 이전요청(포획은 스타터해금 아님, 알 부화/관리자지급으로해금) 유지.
+- 새 탐험전용 채팅을 같은 포켓몬 프로젝트에 실제 생성: 01a19cdc-65e0-7ab1-b73b-3eda873a3a07. ADVENTURE_HANDOFF.md와 소유범위를 초기에 전달. 여기서는 로그라이크 및 공통시스템 작업 계속.
+- 관리자 초기화/복구: db/schema.ts와 drizzle/0010_polite_jackpot.sql 추가, 로컬에만 마이그레이션 적용. lib/admin-player-reset.ts, components/admin-player-reset.tsx, admin API/UI 연결. 게임·닉네임 확인, 스냅샷 CAS, 트랜잭션 백업, 감사기록, 초기화 후 진행이 바뀌면 복구차단. 탐험은 온라인대전/미완료교환 중 차단. 실제 로컬 dummy3만 초기화→복구/오류/감사/계정프로필보존 양쪽게임 테스트통과. 운영DB에는 미적용.
+- 알 상점은 사이드바·상단 '알 뽑기'로 직접 접근. 동일 종·폼·색상 중복 부화는 구매가25% 서버환급,중복에도 사탕·유전기·IV 갱신; 첫 신종/폼/색상은 환급없음. 단위테스트통과.
+- 기술3개 이하일 때 빈 슬롯에 자동학습,4개가 차야 교체선택. 이전에대기중인저장도repair. native실전요청에도새기술반영.
+- 더블배틀 기절한 슬롯은 대기, 벤치있으면 강제교체, 벤치없으면 살아있는 포켓몬만 행동. 교체 후 stale CPU명령 실행오류도 수정. 빈/기절 Pokemon과 HP바는 연출 종료 후 숨김. 실제 native전투테스트통과.
+- 더블야생 적 둘 중 포획대상선택/볼 종류별 원본 atlas/서버 대상검증, 한 마리포획 후 남은적과 전투 유지. 빈파티공간이면새고유ID로자동추가;6마리면선택후교체/놓아주기. 강제교체/남은상대턴/스냅샷 검증. 관련 `tests/rogue-double-capture.test.mjs` 통과. 코드최근연결이므로 실제브라우저/전체200층 회귀는 아직 필요.
+- BattlePanel 설명툴팁중복방지, 포획결과·승리패널 개선, boss-announcement/battle-polish CSS연결. 포켓몬 기절후sprite/HP HUD 숨김. 새기술비교 rogue-move-learn 및 웨이브완료 rogue-wave-clear UI를부모에연결.
+- 원본 볼 atlas `public/game/balls/pb.png`/json은원본무수정, 전용metadata에권리조건(LicenseRef-FAIR-USE) 기록. Spiky-eared Pichu HGSS front/back/shiny4개의공식PokeAPI PNG가추가검증되어 202개명시적선택폼에실제front/back/shiny 식별경로 있음.
+- Pokerus UTC일일5스타터 및 party전파/기본희귀도+행운 기록, Minun TM 원본정적필터 보정. 관장/트레이너 272종 template정적규칙,272종 species filter,561 member callback IR을독립AST추출. template일부연결했으나 species filter/member 1082 opcode/Rival후처리 전체런타임연결은미완성.
+- 2026-11-03 latest: `npm run typecheck` 통과, `npm test` 34개 통과. 실제200층 자연완주/모바일/모든특성·중첩아이템·트레이너 고유효과와자산라이선스/운영관리자암호변경은 미완료. 공개사이트는 여전히기존 v4. 미완성출시 금지라는사용자조건 준수.
+- dev server session 29643/port5173, 임시mockauth와무시된 .dev.vars에사용자지정신규관리자암호(출력금지) 포함. 최종패키징전 mock플러그인을 `.sites-runtime/sites-vite-plugin.original.ts`로복원, .dev.vars 제거. 출시때만 지정 Sites 프로젝트의 ADMIN_PASSWORD를사용자최신값으로native environment update하고 ADMIN_EMAIL/기존다른Sites보존.

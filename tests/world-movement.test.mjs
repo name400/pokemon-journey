@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {worldStep,validatePath} from '../lib/world-movement.mjs';
+const map=['#####','#...E','W.~.#','#####'];
+assert.equal(worldStep({x:1,y:1,area:0},'up',map).blocked,true);
+assert.equal(worldStep({x:1,y:1,area:0},'right',map).x,2);
+assert.equal(worldStep({x:3,y:1,area:1},'right',map,false).blocked,true);
+assert.deepEqual(worldStep({x:3,y:1,area:1},'right',map,true),{x:1,y:5,area:2,tile:'E',transitioned:true});
+assert.equal(worldStep({x:1,y:2,area:0},'left',map).blocked,true);
+assert.equal(worldStep({x:1,y:2,area:1},'left',map).area,0);
+assert.equal(worldStep({x:1,y:2,area:1},'right',map).blocked,true);
+assert.equal(worldStep({x:1,y:1,area:0},'constructor',map).blocked,true);
+for(const input of [[],Array(9).fill('up'),['bad'],['__proto__']])assert.throws(()=>validatePath(input));
+assert.deepEqual(validatePath(['up','down']),['up','down']);
+console.log('Shared movement collision, water, badge gates, region transitions and bounded batch validation: passed');

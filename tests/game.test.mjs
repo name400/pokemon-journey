@@ -1,0 +1,4 @@
+import assert from 'node:assert/strict';import {species,moves,stages,makeMon,effectiveness} from '../lib/game.mjs';import {fullTurn} from '../lib/full-battle.mjs';
+assert.equal(new Set(species.map(s=>s.id)).size,species.length);assert.equal(new Set(species.map(s=>s.speciesId)).size,1025);for(const stage of stages)for(const id of stage.ids)assert.ok(makeMon(id,20));assert.equal(effectiveness('노말',['고스트','독']),0);assert.equal(effectiveness('물',['바위','땅']),4);
+let a=makeMon(7,50),b=makeMon(4,50);a.moves=['물대포'];b.moves=['튀어오르기'];const original=a.hp;let r=fullTurn(a,b,'물대포');assert.equal(a.hp,original);assert.ok(r.enemy.hp<b.hp);assert.ok(r.log.some(l=>l.includes('굉장')));assert.ok(r.events.some(e=>e.side===0&&e.type==='water'&&e.hit));
+assert.ok(Object.keys(moves).length>=900);console.log('Roster uniqueness, route opponents, dual types and full-engine hit events: passed');
