@@ -95,7 +95,9 @@ export default function BattlePanel({battle,battleKey,title,trainer,biome,busy,o
   const side=battle.side===1?1:0,opponent=1-side,baseReq=battle.requests?.[0]||{kind:'wait',moves:[],switches:[],specials:[]},multiple=hasMultiBattleDTO(battle);
   const actors:BattleActor[]=multiple?baseReq.actors:[],requiredActors=actors.filter(actor=>actor.kind==='move'||actor.kind==='switch'),currentActor=requiredActors.find(actor=>actor.slot===actorSlot)||requiredActors[0];
   const req=multiple?(currentActor||{kind:'wait',moves:[],switches:[],specials:[],active:baseReq.active}):baseReq,currentSpecial=multiple?actorSpecials[currentActor?.slot??0]||'':special;
-  const teams=display.teams,own=teams[side]?.[display.active[side]]||battle.teams[side]?.[battle.active[side]],foe=teams[opponent]?.[display.active[opponent]]||battle.teams[opponent]?.[battle.active[opponent]];
+  // In doubles the current request may target an empty slot. Keep the scene
+  // available while the player chooses a replacement for that slot.
+  const teams=display.teams,own=teams[side]?.[display.active[side]]||battle.teams[side]?.[battle.active[side]]||(multiple?teams[side]?.find((mon:any)=>mon.hp>0)||teams[side]?.[0]:undefined),foe=teams[opponent]?.[display.active[opponent]]||battle.teams[opponent]?.[battle.active[opponent]]||(multiple?teams[opponent]?.find((mon:any)=>mon.hp>0)||teams[opponent]?.[0]:undefined);
   const shownActive=multiple?display.activeBySide:display.active.map(index=>[index]),turnCheck=multiple?buildBattleTurnCommand(actors,turnDraft,side):null;
   const replayPending=!!battle.events?.length&&finishedKey!==battleKey,playing=(playback.playing&&playback.sourceKey===battleKey)||replayPending,showResult=!!battle.ended||!!battle.actionResult,locked=busy||!!submitted||playing||showResult;
   const availableBalls:Ball[]=balls||[{id:'',name:'몬스터볼',count:items?.balls||0,description:'야생 포켓몬을 포획합니다.'}];
