@@ -1,3 +1,10 @@
+## 2026-11-03 티켓포인트와 랭크 Y → X
+
+- 첫 세 상대 Erica·Daniel·Jean의 확인된 각 350포인트를 기존 `zaRoyaleZWins` 기록에서 계산해 1,000점 한도로 표시한다. 기존 Z/Y 저장을 초기화하거나 소급 지급하지 않는다. 자료: [사무원 배틀](https://bulbapedia.bulbagarden.net/wiki/Office_Worker_(Trainer_class)), [배낭여행자 배틀](https://bulbapedia.bulbagarden.net/wiki/Backpacker).
+- 랭크 Y에서는 밤의 시범 배틀 존에서 Hugo·Chloé·Charlotte와 대결한다. 확인된 상대 구성과 각 400포인트를 적용하고, 저장된 `zaRoyaleYPoints`가 3,000점에 도달하면 광장에서 Yvon(슈쁘·나룸퍼프 Lv.15, 비비용 Lv.16)에게 도전해 승리 시 960코인과 랭크 X를 얻는다. [랭크 Y 상대 구성](https://www.serebii.net/legendsz-a/z-aroyale/ranky.shtml), [스쿨키드 획득 점수](https://bulbapedia.bulbagarden.net/wiki/Grade-Schooler_(Trainer_class)), [사무원 획득 점수](https://bulbapedia.bulbagarden.net/wiki/Office_Worker_(Trainer_class)), [승급 보상](https://bulbapedia.bulbagarden.net/wiki/Z-A_Royale). 티켓포인트는 종류별 상한까지만 기록하며, 패배·중복 요청은 적립하지 않는다.
+- 이 세 상대는 시범 맵의 기존 세 자리에 배치했으며 각 방문에서 한 번씩 이길 수 있다. 광장에 나갔다 다시 들어가면 재등장하는 임시 방식은 원작의 실제 등장 위치·시간·재등장 조건을 재현하지 않는다. 원작 임무 05, 실시간 전투·기습·보너스 카드·메달·밤 종료 보상, X 이후 승급은 미구현이다. 원작의 나머지 모든 포인트 조건을 구현했다고 주장하지 않는다. Y 랭크 기존 저장은 새 포인트가 없으면 0으로 표시하고 기존 승급을 유지한다.
+- 실제 탐험 API와 메모리 SQLite에서 Z → Y → 포인트 0에서 3,000까지 8회 승리·방문당 중복 거절·재조회·상한·Yvon 팀·X 승급과 960코인 1회 지급을 검증했다. 기존 탐험 회귀 25개와 별도 로열 경계 시험 및 타입 검사 통과. 실제 D1·PC/모바일 브라우저와 이전 모든 클라이언트 왕복은 미검증이다. 공통 전투·로그라이크, 사용자 보유 데이터, 사용자 답변 대기 중인 토중몬·껍질몬 정책은 변경하지 않았고 운영 배포하지 않았다.
+
 ## 2026-11-03 이동 가능한 첫 로열 배틀 존 (초안)
 
 - 밤에 미르시티 광장의 접수처에서 시범 배틀 존으로 들어가 타일맵을 직접 이동하고 Erica·Daniel·Jean을 찾아 각각 대화·배틀한다. 세 명을 이기고 남쪽 출구로 광장에 돌아와 Zach 승급전을 치른다. 패배/기권하면 광장 센터로 돌아가고 이미 이긴 상대 기록은 유지한다. 낮에는 존 입장과 새 배틀을 거절하며, 존에 있는 상태에서 낮이 되어도 출구는 이용할 수 있다. 원작의 [첫 배틀 존 진행](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_4)을 참고하되 이 배치는 자체 초안이다.
