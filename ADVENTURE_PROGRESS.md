@@ -1,3 +1,9 @@
+## 2026-11-03 · 임무 09 AZ 첫 만남 (부분 구현)
+
+- V 랭크에서 옥상의 앱솔 기척을 찾은 뒤 AZ와 이야기할 수 있다. AZ가 루카리오와 메가링을 빌려주겠다는 설명만 저장하며 실제 배틀·대여·아이템 지급과 임무 완료는 하지 않는다. [원작 사건 순서](https://www.serebii.net/legendsz-a/mainmissions/chasethatmysteriouspokemon.shtml)를 참고했고 NPC·장소·대사는 초안이다. 사용자 파티와 재화는 바꾸지 않는다.
+- 전투 구현에 필요한 폭주 메가앱솔 레벨은 자료가 충돌한다: [Gamerant](https://gamerant.com/pokemon-legends-z-a-rogue-mega-evolutions-weaknesses/)와 [별도 공략](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/rank-v-zygarde-absol-mega-evolution/)은 Lv.25, [다른 공략](https://www.pokemythology.net/detonados/detonado-legends-z-a/)은 Lv.34로 표기한다. 원작 실기나 신뢰 가능한 추가 근거 확인 전 값을 확정하지 않는다. [루카리오 자료](https://bulbapedia.bulbagarden.net/wiki/List_of_in-game_event_Pok%C3%A9mon_in_Pok%C3%A9mon_Legends:_Z-A)는 임시 대여 사실과 기술을 설명하지만 해당 표의 Lv.50이 임무 당시에도 동일한지는 별도 확인이 필요하다. 배틀과 대여 데이터는 구현·지급하지 않았다.
+- 실제 탐험 API·메모리 SQLite에서 AZ 대화 조건과 중복 방지, 파티·재화 보존과 저장을 검사했다. 실제 D1·PC·모바일 실조작과 원작 실기는 미검증이다. 이 변경은 로컬에만 있으며 게시된 원격 HEAD `bb3f7ba0156d3ccbca7090234d4ab449bcedacc8`에는 포함되지 않는다.
+
 ## 2026-11-03 · 탐험 개발 브랜치 게시
 
 - 사용자의 명시적 승인 후 `name400/pokemon-journey`의 새 `codex/adventure-continuation-20261103` 브랜치를 게시했다. 게시 직전 원격에 같은 브랜치가 없음을 확인했고 강제 푸시하지 않았다. GitHub 참조에서 원격 HEAD `bb3f7ba0156d3ccbca7090234d4ab449bcedacc8`를 확인했다. 게시 직후 로컬 미커밋 변경은 없었다.
