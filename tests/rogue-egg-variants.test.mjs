@@ -12,3 +12,5 @@ for(const [roll,variant] of [[.1,1],[.4,0]]){
  const next={},s=ensureClassicState(next,{initialStarterId:1}).system;grantClassicVoucher(s,'regular');let calls=0;const rng=()=>++calls===1?0:calls===2?roll:.2;
  drawClassicEggs(next,{machineId:'move',voucherType:'regular'},rng);const selected=s.eggs[0].pokemon;assert.equal(selected.variant,variant);if(variant)assert.ok(supportsShinyVariants(selected.rogueSourceId));
 }
+// Normal eggs do not roll a shiny variant or filter species by variant assets.
+{const doc={},s=ensureClassicState(doc,{initialStarterId:1}).system;grantClassicVoucher(s,'regular');let calls=0;const rng=()=>{calls++;return .2;};drawClassicEggs(doc,{machineId:'move',voucherType:'regular'},rng);const egg=s.eggs[0];assert.equal(egg.pokemon.shiny,false);assert.equal(egg.pokemon.variant,0);const restored=JSON.parse(JSON.stringify(doc));const hatch=hatchClassicEgg(restored,egg.id);assert.equal(hatch.pokemon.shiny,false);assert.equal(hatch.pokemon.variant,0);}
