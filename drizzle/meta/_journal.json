@@ -85,6 +85,13 @@
       "when": 1793670000000,
       "tag": "0011_classic_leaderboard",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1793688000000,
+      "tag": "0012_admin_grant_requests",
+      "breakpoints": true
     }
   ]
 }

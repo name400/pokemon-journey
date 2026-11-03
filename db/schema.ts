@@ -24,3 +24,5 @@ export const adminPlayerBackups=sqliteTable('admin_player_backups',{id:text('id'
 
 
 export const classicLeaderboard=sqliteTable('classic_leaderboard',{userId:text('user_id').primaryKey(),bestWave:integer('best_wave').notNull(),achievedAt:integer('achieved_at').notNull(),runId:text('run_id').notNull()},t=>[index('classic_leaderboard_wave_idx').on(t.bestWave,t.achievedAt)]);
+
+export const adminGrantRequests=sqliteTable('admin_grant_requests',{id:text('id').primaryKey(),actor:text('actor').notNull(),target:text('target').notNull(),mode:text('mode').notNull(),signature:text('signature').notNull(),result:text('result').notNull(),createdAt:integer('created_at').notNull()});

@@ -10,8 +10,8 @@ const template=makeMon(150,100);mutateRogueAdmin(document,{action:'grantPokemon'
 assert.equal(starterCatalog(state.system).find(p=>p.sourceId===150).unlocked,true);assert.equal(rogueAdminView(document).box[0].boxId,'admin-template');
 const selected=starterCatalog(state.system).find(p=>p.sourceId===1),choice={id:1,ability:selected.abilities[0].key,nature:selected.natures[0].key,gender:selected.genders[0],shiny:false,moves:selected.defaultMoves};applyClassicAction(document,{action:'start',selection:[choice]});
 const run=activeClassicRun(document),level=makeMon(25,40);const result=mutateRogueAdmin(document,{action:'grantPokemon',destination:'run',runSlot:0},level,'admin-run');
-assert.equal(result.battleRebuilt,true);assert.equal(run.rankingEligible,false,'admin-edited runs are not eligible for new global records');assert.equal(run.party.find(p=>p.boxId==='admin-run').level,40);assert.equal(run.combat.teams[0].find(p=>p.boxId==='admin-run').level,40);
-assert.equal(rogueAdminView(document,{destination:'run',runSlot:0}).box.length,2);
+assert.equal(result.battleRebuilt,true);assert.notEqual(run.rankingEligible,false,'admin grants do not disqualify the run');assert.equal(run.party.find(p=>p.boxId==='admin-run').level,40);assert.equal(run.combat.teams[0].find(p=>p.boxId==='admin-run').level,40);
+assert.equal(rogueAdminView(document,{destination:'run',runSlot:0}).box.length,2);mutateRogueAdmin(document,{action:'editPokemon',destination:'run',runSlot:0},level,'admin-run');assert.equal(run.rankingEligible,false,'explicit edits remain excluded');
 assert.equal(rogueAdminView(document,{destination:'run',runSlot:1}).box.length,0);
 assert.throws(()=>mutateRogueAdmin(document,{action:'grantPokemon',destination:'run',runSlot:1},level,'empty-run'),/진행 중/);
 assert.equal(document.coins,original.coins);assert.deepEqual(document.run,original.run);
