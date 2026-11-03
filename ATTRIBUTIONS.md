@@ -45,3 +45,5 @@ Zygarde's complete-form animated models and Gen 5-style static sprites use the s
 Palafin's zero and hero animated models and Gen 5-style static sprites use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.
 
 Terapagos's normal, terastal and stellar front/back Gen 5-style static sprites use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status; animated models were not located in the pinned tree.
+
+Ogerpon's four mask forms and their Terastallized front/back Gen 5-style static sprites use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status; animated models were not located in the pinned tree.
