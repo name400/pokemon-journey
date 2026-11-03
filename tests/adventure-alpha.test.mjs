@@ -6,8 +6,8 @@ import {makeAdventureAlpha} from '../lib/adventure-alpha.mjs';
 test('new alpha preserves existing wild IV policy and gets 252 HP EVs at full HP',()=>{
  const base=makeMon(16,24),alpha=makeAdventureAlpha(base);
  assert.ok(Object.values(alpha.ivs).filter(value=>value===31).length>=3);
- assert.equal(alpha.evs.hp,252);assert.ok(alpha.maxHp>base.maxHp);assert.equal(alpha.hp,alpha.maxHp);assert.equal(alpha.adventureAlpha,true);
- assert.equal(base.evs.hp,0);assert.ok(Object.values(base.ivs).every(value=>value===31));
+ assert.equal(alpha.evs.hp,252);assert.equal(alpha.adventureAlphaMove,'유턴');assert.equal(alpha.moves[0],'유턴');assert.equal(new Set(alpha.moves).size,alpha.moves.length);assert.ok(alpha.maxHp>base.maxHp);assert.equal(alpha.hp,alpha.maxHp);assert.equal(alpha.adventureAlpha,true);
+ assert.ok(!base.moves.includes('유턴'));assert.equal(base.evs.hp,0);assert.ok(Object.values(base.ivs).every(value=>value===31));
 });
 
 test('wild alpha doubles four battle stats in the serialized battle only',async()=>{

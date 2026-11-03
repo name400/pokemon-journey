@@ -1,3 +1,10 @@
+## 2026-11-03 · 우두머리 구구 기술 및 포획 기회 자료 검토
+
+- 새로 생성되는 우두머리 구구가 특유 기술 유턴을 첫 칸에 갖도록 했다. [우두머리별 전용 기술 목록](https://bulbapedia.bulbagarden.net/wiki/List_of_alpha_Pok%C3%A9mon_in_Legends%3A_Z-A_by_exclusive_move)과 [Z-A 유턴 학습 목록](https://pkproject.net/dex/legends-za/move/u-turn)이 구구의 유턴을 명시한다. 이미 포획한 개체와 진행 중인 배틀은 변경하지 않는다. 포획 후 기술 관리에 특유 기술과 교체 시 재학습 제한을 안내한다. 실제 플러스 기술과 Z-A 실시간 기술 효과는 아직 미구현이며 현재는 기존 턴제 유턴이다.
+- 자료 차이: [한 공략](https://www.gamerbraves.com/guide-pokemon-legends-z-a-alpha-pokemon-and-where-to-find-them/)은 구구의 특유 기술을 스피드스타로 표기한다. 위 두 독립 목록은 유턴으로 일치하므로 유턴을 적용했으며, 원본 실기 플레이 검증은 아직 하지 않았다. 차이를 사용자 검수 및 후속 실기 검증 대상으로 남긴다.
+- 포획 기회 시간과 포획 직후 HP를 추가 조사했다. [포켓몬 공식 발표](https://asia-press.portal-pokemon.com/press-release/pokemon-legends-z-a_20250722/)는 짧은 기회와 한 번 투척을 확인하지만 정확한 초수와 포획 직후 HP는 기재하지 않는다. [한 공략](https://blog.xarkas.com/how-to-use-the-catch-window-in-pokemon-legends-z-a-mega-dimension-dlc/)은 대체로 2.3초라고 하나 동시에 [다른 포획식 자료](https://bulbapedia.bulbagarden.net/wiki/Catch_rate#Pok%C3%A9mon_Legends:_Z-A)와 달리 해당 기회의 등 뒤 보너스를 주장하므로 정확한 시간의 독립 검증으로 보지 않았다. 따라서 임의 타이머를 넣지 않았고 HP 0 보존도 시범 상태로 유지한다. 다른 신뢰 자료나 원작 실측이 필요하다.
+- 단위 검사와 실제 탐험 API·메모리 SQLite에서 신규 조우와 포획 개체에 유턴이 유지되고 기존 입력 개체가 변하지 않는 것을 확인했다. 실제 D1과 PC·모바일 브라우저, 원작 실기는 미검증이며 운영 배포하지 않았다. 기존 보유 데이터·로그라이크와 보류 중인 Rintaro 보상·토중몬 정책은 변경하지 않았다.
+
 ## 2026-11-03 · 야생전 종료 후 포획 기회 (시범)
 
 - 야생 포켓몬을 쓰러뜨리면 승리 경험치·코인을 먼저 한 번 저장한 뒤, 볼을 한 번 던지거나 지나갈 수 있는 포획 기회를 제공한다. 일반 개체는 1.2배, 우두머리는 3배 상태 보정을 쓰고 기존 상태이상 보정은 대신 적용하지 않는다. 등 뒤·미발견 보정은 이 기회에 적용하지 않는다. [Z-A 포획식](https://bulbapedia.bulbagarden.net/wiki/Catch_rate#Pok%C3%A9mon_Legends:_Z-A), [한 번의 투척 기회](https://insider-gaming.com/pokemon-legends-z-a-use-the-catch-window/)를 참고했다. 소모와 포획·월드 기록은 기존 트랜잭션으로 묶으며 중복 투척을 거절한다.
