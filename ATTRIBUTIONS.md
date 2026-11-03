@@ -35,3 +35,5 @@ The three Castform weather models and static dex images are also linked from the
 Wishiwashi's solo and school models and static dex images likewise use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.
 
 Morpeko's full-belly and hangry animated models and Gen 5-style static sprites also use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.
+
+Mimikyu's disguised and busted animated models and Gen 5-style static sprites use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.

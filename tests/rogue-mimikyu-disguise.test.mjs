@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon,rogueSpecies} from '../lib/rogue-reference.mjs';
+import {rogueFormArt} from '../lib/rogue-form-art.mjs';
+import {createClassicCombat,playClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle,continueClassicWild} from '../lib/rogue-battle-engine.mjs';
+for(const shiny of [false,true]){
+ const forms=rogueSpecies.get(778).formList,base=forms.find(f=>f.formKey==='disguised'),busted=forms.find(f=>f.formKey==='busted'),mon=makeReferenceMon(778,50,{boxId:'mimikyu',moves:['Splash','Seismic Toss'],shiny,...rogueFormArt(base,shiny)}),run={id:'disguise',wave:4,biome:1,rng:42,party:[mon],modifiers:[],tools:{},encounter:{kind:'wild'},teraCharged:false};
+ run.combat=createClassicCombat(run,[makeReferenceMon(4,50,{boxId:'foe',moves:['Ember']})]);run.combat=playClassicCombat(run,{type:'move',move:'splash'});run.party=run.combat.teams[0];let native=restoreClassicNativeBattle(JSON.parse(JSON.stringify(run.combat)),run),p=native.p1.active[0];assert.equal(p.species.id,'mimikyubusted');assert.equal(run.party[0].sourceImage,rogueFormArt(busted,shiny).sourceImage);assert.equal(run.party[0].sourceBackImage,rogueFormArt(busted,shiny).sourceBackImage);const firstHp=p.hp;
+ run.combat=playClassicCombat(run,{type:'move',move:'splash'});run.party=run.combat.teams[0];native=restoreClassicNativeBattle(run.combat,run);assert.equal(native.p1.active[0].species.id,'mimikyubusted');assert.ok(native.p1.active[0].hp<firstHp,'the second hit is not blocked by disguise again');
+ native.p2.active[0].hp=1;run.combat.snapshot=snapshotClassicNativeBattle(native);run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});run.party=run.combat.teams[0];assert.equal(run.combat.winner,0);run.wave++;run.combat=continueClassicWild(run,[makeReferenceMon(19,1,{boxId:'next',moves:['Splash']})]);native=restoreClassicNativeBattle(run.combat,run);assert.equal(native.p1.active[0].species.id,'mimikyubusted');assert.equal(run.combat.teams[0][0].sourceImage,rogueFormArt(busted,shiny).sourceImage);
+}
