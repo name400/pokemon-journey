@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {battleMoveForSpecial,buildBattleTurnCommand} from '../components/battle-logic.ts';
+const base={id:'surf',name:'파도타기',pp:10,maxPp:10,targets:[],variants:{dynamax:{name:'다이스트림',target:'normal',targets:[{side:1,index:0,slot:0,name:'상대 1',target:1},{side:1,index:1,slot:1,name:'상대 2',target:2}]}}};
+const actor={slot:0,kind:'move',active:0,moves:[base],specials:[{key:'dynamax',label:'다이맥스'}]};
+assert.equal(battleMoveForSpecial(base,'dynamax').name,'다이스트림');assert.equal(battleMoveForSpecial(base,'dynamax').id,'surf');
+assert.ok(buildBattleTurnCommand([actor],{0:{actor:0,type:'move',move:'surf',special:'dynamax'}}).error);
+assert.equal(buildBattleTurnCommand([actor],{0:{actor:0,type:'move',move:'surf',special:'dynamax',target:2}}).command.actions[0].target,2);
+assert.ok(buildBattleTurnCommand([actor,{...actor,slot:1}],{0:{actor:0,type:'move',move:'surf',special:'dynamax',target:1},1:{actor:1,type:'move',move:'surf',special:'dynamax',target:2}}).error);
+console.log('Dynamax previews and doubles target validation passed.');
+const zMove={...base,variants:{zmove:{name:'울트라대시어택',target:'normal',targets:[{side:1,index:1,slot:1,name:'상대 2',target:2}]}}},zActor={...actor,moves:[zMove],specials:[{key:'zmove',label:'Z기술'}]};assert.equal(battleMoveForSpecial(zMove,'zmove').id,'surf');assert.equal(buildBattleTurnCommand([zActor],{0:{actor:0,type:'move',move:'surf',special:'zmove',target:2}}).command.actions[0].target,2);assert.ok(buildBattleTurnCommand([zActor,{...zActor,slot:1}],{0:{actor:0,type:'move',move:'surf',special:'zmove',target:2},1:{actor:1,type:'move',move:'surf',special:'zmove',target:2}}).error);

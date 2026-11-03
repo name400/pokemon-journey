@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {rogueSpecies,makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {classicEggFormIndex,applyClassicEggForm} from '../lib/rogue-egg-forms.mjs';
+import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
+import {registerStarterCaught,starterDexEntry} from '../lib/rogue-starter-system.mjs';
+const flower=rogueSpecies.get(669),indeedee=rogueSpecies.get(876),pichu=rogueSpecies.get(172),tea=rogueSpecies.get(854);
+assert.equal(classicEggFormIndex(indeedee,()=>.5,'F'),1);assert.equal(classicEggFormIndex(indeedee,()=>.5,'M'),0);
+assert.equal(classicEggFormIndex(pichu,()=>0),1);assert.equal(classicEggFormIndex(pichu,()=>.125),0);assert.equal(classicEggFormIndex(tea,()=>0),1);assert.equal(classicEggFormIndex(tea,()=>.063),0);
+const base=makeReferenceMon(669,5,{boxId:'flower',shiny:true,variant:2,ivs:{hp:20,atk:10,def:10,spa:10,spd:10,spe:10}}),white=applyClassicEggForm(base,flower,()=>.99);
+assert.equal(white.rogueFormIndex,4);assert.equal(white.rogueSourceId,669);assert.equal(white.shiny,true);assert.equal(white.variant,2);assert.equal(white.boxId,'flower');assert.equal(white.ivs.hp,20);assert.equal(base.rogueFormIndex,undefined);
+const doc={},system=ensureClassicState(doc,{initialStarterId:1}).system;registerStarterCaught(system,white,{kind:'hatch'});assert.ok(starterDexEntry(system,669).forms.includes(4));assert.equal(starterDexEntry(system,669).shinyVariantMask,4);
+assert.equal(JSON.parse(JSON.stringify(white)).rogueFormIndex,4);
+console.log('Egg form rolls, form identity, stats, shiny and dex serialization passed.');
+const {starterProgress,SAME_SPECIES_EGG_COSTS}=await import('../lib/rogue-starter-system.mjs');const {buyClassicSpeciesEgg,hatchClassicEgg}=await import('../lib/rogue-egg-shop.mjs');
+const candyDoc={},candySys=ensureClassicState(candyDoc,{initialStarterId:1}).system;registerStarterCaught(candySys,makeReferenceMon(172,5),{kind:'capture'});const pichuCost=SAME_SPECIES_EGG_COSTS[pichu.starterCost-1];starterProgress(candySys,172).candies=pichuCost;
+const pulled=buyClassicSpeciesEgg(candyDoc,{sourceId:172,expectedCost:pichuCost},()=>0);const egg=candySys.eggs.find(e=>e.id===pulled.eggId);assert.equal(egg.pokemon.rogueFormIndex,1);const saved=JSON.parse(JSON.stringify(candyDoc));const hatched=hatchClassicEgg(saved,pulled.eggId);assert.equal(hatched.pokemon.rogueFormIndex,1);assert.ok(ensureClassicState(saved).system.dex[172].forms.includes(1));

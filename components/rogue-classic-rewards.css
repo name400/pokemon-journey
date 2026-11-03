@@ -1,0 +1,333 @@
+.rogue-classic-rewards {
+  --rcr-ink: #27394b;
+  --rcr-muted: #65736c;
+  --rcr-paper: #f5f0e3;
+  --rcr-line: #d2d5c7;
+  --rcr-teal: #277864;
+  --rcr-teal-light: #e2eee3;
+  --rcr-navy: #182b40;
+  --rcr-gold: #c99a43;
+  --rcr-error: #984a37;
+  width: 100%;
+  min-width: 0;
+  color: var(--rcr-ink);
+  background: var(--rcr-paper);
+  border: 1px solid #aab7ae;
+  border-radius: 9px;
+  box-shadow: 0 6px 24px #0d1b2824, inset 0 1px #fffdf6;
+  font-family: 'Noto Sans KR', system-ui, sans-serif;
+  font-synthesis: none;
+  font-size: 15px;
+  line-height: 1.65;
+  overflow: hidden;
+}
+.rogue-classic-rewards *, .rogue-classic-rewards *::before, .rogue-classic-rewards *::after { box-sizing: border-box; }
+.rogue-classic-rewards h2, .rogue-classic-rewards h3, .rogue-classic-rewards h4, .rogue-classic-rewards p { margin: 0; }
+.rogue-classic-rewards button { font: inherit; font-size: 14px; min-height: 44px; cursor: pointer; touch-action: manipulation; }
+.rogue-classic-rewards button:disabled { cursor: not-allowed; opacity: .55; }
+.rogue-classic-rewards button:focus-visible, .rogue-classic-rewards .rcr-detail-heading h3:focus-visible { outline: 3px solid #d5a443; outline-offset: 3px; z-index: 3; }
+.rogue-classic-rewards button:active:not(:disabled) { filter: brightness(.96); }
+.rogue-classic-rewards svg { flex-shrink: 0; }
+.rogue-classic-rewards .rcr-eyebrow { display: block; color: var(--rcr-teal); font-family: ui-monospace,monospace; font-size: 11px; font-weight: 800; letter-spacing: 1.4px; line-height: 1.8; }
+.rogue-classic-rewards .rcr-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 48px; padding: 11px 18px; border: 1px solid #113f33; border-radius: 7px; background: var(--rcr-teal); color: #fff9eb; box-shadow: 0 3px 0 #174f3e, inset 0 1px #ffffff22; font-size: 14px; font-weight: 700; line-height: 1.6; text-align: center; transition: background .14s ease,box-shadow .14s ease; }
+.rogue-classic-rewards .rcr-button:not(:disabled):hover { background: #358b73; box-shadow: 0 3px 0 #174f3e, 0 3px 12px #27786420; }
+.rogue-classic-rewards .rcr-button-outline { background: #faf8ef; color: #47634f; border-color: #a6b7a4; box-shadow: 0 2px 0 #ccd4c1, inset 0 1px #fffef7; }
+.rogue-classic-rewards .rcr-button-outline:not(:disabled):hover { background: #eaf0e1; box-shadow: 0 2px 0 #aebfa6; }
+.rogue-classic-rewards .rcr-spin { animation: rcr-spin .9s linear infinite; }
+@keyframes rcr-spin { to { transform: rotate(360deg); } }
+.rogue-classic-rewards .rcr-header { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 26px; color: #eef3df; background: var(--rcr-navy); border-bottom: 1px solid #405a61; }
+.rogue-classic-rewards .rcr-clear { display: flex; align-items: center; gap: 12px; }
+.rogue-classic-rewards .rcr-clear-mark { display: grid; place-items: center; width: 43px; height: 43px; border: 1px solid #7ead98; border-radius: 50%; background: #2c5c51; color: #b8edcc; box-shadow: 0 0 0 5px #a3d9b709; }
+.rogue-classic-rewards .rcr-header .rcr-eyebrow { color: #acd2bb; font-size: 10px; }
+.rogue-classic-rewards .rcr-header h2 { color: #f7f3df; font-family: NeoDunggeunmo,'Noto Sans KR',sans-serif; font-size: 27px; letter-spacing: 0; line-height: 1.25; margin-top: 1px; }
+.rogue-classic-rewards .rcr-header-tools { display: flex; align-items: center; gap: 25px; }
+.rogue-classic-rewards .rcr-party-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 8px 12px; border: 1px solid #627c78; border-radius: 6px; background: #263d4e; color: #d3e1cf; font-size: 13px; }
+.rogue-classic-rewards .rcr-party-button:not(:disabled):hover { background: #35514f; }
+.rogue-classic-rewards .rcr-money { font-variant-numeric: tabular-nums; text-align: right; }
+.rogue-classic-rewards .rcr-money>span { display: flex; justify-content: end; align-items: center; gap: 5px; color: #bdcfc4; font-size: 12px; }
+.rogue-classic-rewards .rcr-money>b { display: block; color: #f0cd83; font-size: 24px; line-height: 1.35; font-weight: 800; letter-spacing: -.7px; }
+.rogue-classic-rewards .rcr-money small { color: #d3ccab; font-size: 13px; margin-left: 5px; font-weight: 500; }
+.rogue-classic-rewards .rcr-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 26px 28px 22px; }
+.rogue-classic-rewards .rcr-heading h3 { font-size: 25px; line-height: 1.4; letter-spacing: -.7px; font-weight: 800; margin-top: 4px; }
+.rogue-classic-rewards .rcr-heading p { color: var(--rcr-muted); font-size: 14px; line-height: 1.8; margin-top: 8px; }
+.rogue-classic-rewards .rcr-choice-count { color: #748173; font-size: 12px; padding-bottom: 3px; flex-shrink: 0; }
+.rogue-classic-rewards .rcr-choice-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 17px; padding: 0 28px; align-items: stretch; }
+.rogue-classic-rewards .rcr-choice { --rcr-tier: #788a70; display: flex; flex-direction: column; align-items: stretch; min-width: 0; padding: 0; background: #fcfaf1; border: 1px solid #bdc6b6; border-top: 3px solid var(--rcr-tier); border-radius: 9px; box-shadow: 0 4px 0 #c9cfbd88, 0 7px 18px #243b3910; color: var(--rcr-ink); text-align: left; position: relative; transition: border-color .14s ease,background .14s ease,box-shadow .14s ease; }
+.rogue-classic-rewards .rcr-choice.tier-1 { --rcr-tier: #4d967c; }
+.rogue-classic-rewards .rcr-choice.tier-2 { --rcr-tier: #5f8aa9; }
+.rogue-classic-rewards .rcr-choice.tier-3 { --rcr-tier: #8b76a4; }
+.rogue-classic-rewards .rcr-choice.tier-4 { --rcr-tier: #b3924f; background: #fdf9e9; }
+.rogue-classic-rewards .rcr-choice:not(:disabled):hover, .rogue-classic-rewards .rcr-choice.is-selected { border-color: var(--rcr-teal); border-top-color: var(--rcr-tier); background: #f5f8eb; box-shadow: 0 4px 0 #8dad91, 0 8px 20px #245e461a; }
+.rogue-classic-rewards .rcr-choice.is-selected::after { content: ''; position: absolute; inset: 4px; border: 1px solid #7fa888; border-radius: 6px; pointer-events: none; }
+.rogue-classic-rewards .rcr-choice-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 17px 3px; }
+.rogue-classic-rewards .rcr-tier { display: inline-flex; align-items: center; gap: 6px; color: #657461; font-size: 12px; font-weight: 700; }
+.rogue-classic-rewards .rcr-tier>i { display: block; width: 6px; height: 6px; border-radius: 2px; background: var(--rcr-tier); }
+.rogue-classic-rewards .rcr-choice-number { color: #929887; font-family: ui-monospace,monospace; font-size: 11px; }
+.rogue-classic-rewards .rcr-choice-art { display: flex; justify-content: center; align-items: center; min-height: 125px; position: relative; padding: 7px 15px 10px; }
+.rogue-classic-rewards .rcr-choice-art::before { content: ''; display: block; position: absolute; left: calc(50% - 47px); top: 19px; width: 94px; height: 85px; border-radius: 50%; background: #e9eddb; border: 1px solid #d5ddc7; }
+.rogue-classic-rewards .rcr-item-image { display: block; width: 48px; height: 48px; object-fit: contain; image-rendering: pixelated; flex-shrink: 0; position: relative; }
+.rogue-classic-rewards .rcr-item-image.is-large { width: 96px; height: 96px; }
+.rogue-classic-rewards .rcr-image-fallback { display: grid; place-items: center; color: #819174; }
+.rogue-classic-rewards .rcr-choice-art>b { position: absolute; bottom: 15px; left: calc(50% + 25px); background: #fffaf0; border: 1px solid #abbc9c; border-radius: 5px; padding: 1px 7px; color: #576b45; font-size: 13px; box-shadow: 0 2px 4px #304b3110; }
+.rogue-classic-rewards .rcr-choice-copy { display: flex; flex-direction: column; gap: 9px; flex: 1; padding: 3px 19px 21px; }
+.rogue-classic-rewards .rcr-choice-copy>b { color: #2c433a; font-size: 19px; font-weight: 800; line-height: 1.5; }
+.rogue-classic-rewards .rcr-choice-copy>span { color: #607263; font-size: 14px; line-height: 1.85; }
+.rogue-classic-rewards .rcr-choice-copy>small { color: #68825d; font-size: 12px; line-height: 1.7; border-top: 1px solid #dce2cd; padding-top: 9px; }
+.rogue-classic-rewards .rcr-choice-action { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 51px; padding: 12px 19px; border-top: 1px solid #d7dfca; background: #f0f3e4; border-radius: 0 0 8px 8px; color: var(--rcr-teal); font-size: 13px; font-weight: 700; line-height: 1.65; }
+.rogue-classic-rewards .rcr-choice:disabled .rcr-choice-action { color: #826954; }
+.rogue-classic-rewards .rcr-empty { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 13px; min-height: 170px; color: var(--rcr-muted); padding: 25px; text-align: center; }
+.rogue-classic-rewards .rcr-empty p { font-size: 14px; }
+.rogue-classic-rewards .rcr-reroll { display: flex; align-items: center; justify-content: space-between; gap: 22px; margin: 25px 28px 0; padding: 18px 0 20px; border-top: 1px solid #ccd3c3; }
+.rogue-classic-rewards .rcr-reroll>div:first-child { min-width: 0; flex: 1; }
+.rogue-classic-rewards .rcr-reroll b { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; color: #526d54; }
+.rogue-classic-rewards .rcr-reroll p { color: #74816f; font-size: 13px; line-height: 1.8; margin-top: 5px; }
+.rogue-classic-rewards .rcr-reroll p>span { display: block; font-size: 12px; color: #7d826e; }
+.rogue-classic-rewards .rcr-reroll-action { display: flex; flex-direction: column; align-items: end; gap: 7px; flex-shrink: 0; }
+.rogue-classic-rewards .rcr-reroll-action>span { color: #9d6849; font-size: 12px; font-weight: 600; }
+.rogue-classic-rewards .rcr-reroll-action .rcr-button { gap: 8px; }
+.rogue-classic-rewards .rcr-reroll-action .rcr-button>b { font-size: 14px; }
+
+.rogue-classic-rewards .rcr-detail { margin: 2px 28px 26px; background: #fbfaf0; border: 1px solid #9fbaa1; border-radius: 8px; box-shadow: 0 4px 14px #2c4e3b0d; overflow: hidden; scroll-margin-top: 16px; animation: rcr-reveal .16s ease both; }
+@keyframes rcr-reveal { from { opacity: .45; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+.rogue-classic-rewards .rcr-detail.is-service { border-color: #a7b6bd; }
+.rogue-classic-rewards .rcr-detail-heading { display: flex; align-items: start; gap: 15px; padding: 21px 22px; border-bottom: 1px solid #cdd9c4; background: #eaf0e1; }
+.rogue-classic-rewards .rcr-detail-heading>.rcr-item-image { margin-top: 5px; }
+.rogue-classic-rewards .rcr-detail-heading>div { min-width: 0; flex: 1; }
+.rogue-classic-rewards .rcr-detail-heading h3 { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; font-size: 21px; font-weight: 800; color: #31563d; line-height: 1.5; }
+.rogue-classic-rewards .rcr-detail-heading h3:focus { outline: none; }
+.rogue-classic-rewards .rcr-detail-heading h3>small { color: #836b3a; font-size: 15px; font-weight: 700; }
+.rogue-classic-rewards .rcr-detail-heading p { color: #63785f; font-size: 14px; line-height: 1.8; margin-top: 5px; }
+.rogue-classic-rewards .rcr-learning-move { display: inline-block; margin-top: 10px; padding: 3px 9px; border: 1px solid #a1b797; border-radius: 4px; background: #f8f6e7; color: #527345; font-size: 13px; font-weight: 700; }
+.rogue-classic-rewards .rcr-close-detail { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; padding: 0; border: 1px solid #b6c5ab; border-radius: 6px; background: #f9f7e9; color: #7c8e71; }
+.rogue-classic-rewards .rcr-close-detail:not(:disabled):hover { border-color: #678962; color: #45663e; }
+.rogue-classic-rewards .rcr-target-section, .rogue-classic-rewards .rcr-move-section { padding: 21px 22px 4px; }
+.rogue-classic-rewards .rcr-section-heading { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: 6px 15px; margin-bottom: 13px; }
+.rogue-classic-rewards .rcr-section-heading h4 { color: #3b5a42; font-size: 16px; font-weight: 800; }
+.rogue-classic-rewards .rcr-section-heading>span { color: #77866e; font-size: 12px; }
+.rogue-classic-rewards .rcr-targets { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.rogue-classic-rewards .rcr-target { display: flex; align-items: center; gap: 8px; min-width: 0; min-height: 88px; padding: 11px 12px 11px 5px; border: 1px solid #bdcdb2; border-radius: 6px; background: #f8f8e9; color: #34543e; text-align: left; box-shadow: 0 2px 0 #e2e7d6; }
+.rogue-classic-rewards .rcr-target:not(:disabled):hover { background: #e8f0dc; border-color: #7b9f71; }
+.rogue-classic-rewards .rcr-target.is-selected { background: #e0edd6; border-color: var(--rcr-teal); box-shadow: inset 0 0 0 1px #519d77,0 2px 0 #bed2b0; }
+.rogue-classic-rewards .rcr-target>img { width: 58px; height: 58px; image-rendering: pixelated; flex-shrink: 0; }
+.rogue-classic-rewards .rcr-target-data { display: block; min-width: 0; flex: 1; }
+.rogue-classic-rewards .rcr-target-data>b { display: flex; align-items: center; justify-content: space-between; gap: 5px; font-size: 14px; font-weight: 800; line-height: 1.5; }
+.rogue-classic-rewards .rcr-target-data>b>svg { color: #2e7e56; }
+.rogue-classic-rewards .rcr-target-hp { display: block; color: #728368; font-size: 12px; font-variant-numeric: tabular-nums; margin-top: 5px; }
+.rogue-classic-rewards .rcr-target-bar { display: block; width: 100%; height: 4px; margin-top: 4px; background: #cbd7bd; border-radius: 2px; overflow: hidden; }
+.rogue-classic-rewards .rcr-target-bar>i { display: block; width: 100%; height: 100%; background: #508f67; transform-origin: left; }
+.rogue-classic-rewards .rcr-target-data>small { display: block; color: #8c735c; font-size: 12px; line-height: 1.6; margin-top: 5px; }
+.rogue-classic-rewards .rcr-learn-field { display: block; width: min(100%,460px); }
+.rogue-classic-rewards .rcr-learn-field>span { display: block; font-size: 13px; color: #6a7f60; margin-bottom: 6px; }
+.rogue-classic-rewards .rcr-learn-field>select { width: 100%; min-height: 46px; padding: 10px 12px; background: #fffaf0; border: 1px solid #a5b79b; border-radius: 5px; color: #35543c; font-family: inherit; font-size: 15px; }
+.rogue-classic-rewards .rcr-learn-field>select:focus-visible { outline: 3px solid #d5a443; outline-offset: 3px; }
+.rogue-classic-rewards .rcr-learn-field>select:disabled { opacity: .55; cursor: not-allowed; }
+.rogue-classic-rewards .rcr-moves { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+.rogue-classic-rewards .rcr-move { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 68px; padding: 11px 15px; border: 1px solid #bdcbb1; border-radius: 5px; background: #f9f8ec; color: #406045; text-align: left; box-shadow: 0 2px 0 #e3e8d6; }
+.rogue-classic-rewards .rcr-move:not(:disabled):hover { border-color: #749569; background: #edf2df; }
+.rogue-classic-rewards .rcr-move.is-selected { border-color: var(--rcr-teal); background: #e2eed8; box-shadow: inset 0 0 0 1px #78aa7a; }
+.rogue-classic-rewards .rcr-move>span:first-child { display: flex; align-items: center; gap: 9px; }
+.rogue-classic-rewards .rcr-move>span:first-child>small { color: #8b977e; font-family: ui-monospace,monospace; font-size: 11px; }
+.rogue-classic-rewards .rcr-move b { font-size: 14px; font-weight: 700; }
+.rogue-classic-rewards .rcr-move>span:last-child { font-size: 12px; color: #7b866d; text-align: right; font-variant-numeric: tabular-nums; }
+.rogue-classic-rewards .rcr-move>span:last-child>small { display: block; font-size: 11px; margin-top: 2px; }
+.rogue-classic-rewards .rcr-replace-moves .rcr-move>span:last-child { display: flex; align-items: center; gap: 3px; }
+.rogue-classic-rewards .rcr-move.is-empty-slot { border-style: dashed; background: #eef1e2; }
+.rogue-classic-rewards .rcr-inline-reason { color: #966643; font-size: 14px; line-height: 1.8; }
+.rogue-classic-rewards .rcr-target-section>.rcr-inline-reason, .rogue-classic-rewards .rcr-move-section>.rcr-inline-reason { margin-top: 11px; }
+.rogue-classic-rewards .rcr-confirm { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 21px 22px 24px; margin-top: 18px; border-top: 1px solid #d2dec7; background: #f0f3e5; }
+.rogue-classic-rewards .rcr-confirm>div { flex: 1; min-width: 0; }
+.rogue-classic-rewards .rcr-confirm p { font-size: 14px; line-height: 1.8; color: #5c7857; }
+.rogue-classic-rewards .rcr-confirm p.rcr-inline-reason { color: #966643; }
+.rogue-classic-rewards .rcr-confirm>div>span { display: block; font-size: 12px; color: #7a8168; margin-top: 4px; }
+.rogue-classic-rewards .rcr-confirm>.rcr-button { min-height: 51px; flex-shrink: 0; }
+.rogue-classic-rewards .rcr-notice { display: flex; align-items: start; gap: 10px; margin: 0 28px 22px; padding: 14px 17px; background: #e3f0da; border: 1px solid #aac59a; border-radius: 6px; color: #42764c; font-size: 14px; line-height: 1.8; }
+.rogue-classic-rewards .rcr-notice>svg { margin-top: 4px; }
+.rogue-classic-rewards .rcr-error { margin: 0 28px 22px; padding: 14px 17px; background: #f5e6d5; border: 1px solid #d8b499; border-radius: 6px; color: var(--rcr-error); font-size: 14px; line-height: 1.8; }
+.rogue-classic-rewards .rcr-services { background: #e9eade; border-top: 1px solid #c8d1c1; }
+.rogue-classic-rewards .rcr-services-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 19px 28px; background: transparent; border: 0; border-radius: 0; color: #48664e; text-align: left; }
+.rogue-classic-rewards .rcr-services-toggle>span { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.rogue-classic-rewards .rcr-services-toggle b { font-size: 16px; font-weight: 800; }
+.rogue-classic-rewards .rcr-services-toggle small { font-size: 12px; color: #78866f; font-weight: 400; margin-left: 5px; }
+.rogue-classic-rewards .rcr-services-toggle>svg { transform: rotate(-90deg); transition: transform .15s ease; }
+.rogue-classic-rewards .rcr-services-toggle>svg.is-open { transform: none; }
+.rogue-classic-rewards .rcr-services-note { padding: 0 28px; color: #6c7c64; font-size: 14px; line-height: 1.85; }
+.rogue-classic-rewards .rcr-service-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 16px 28px 26px; }
+.rogue-classic-rewards .rcr-service { display: flex; align-items: center; gap: 13px; min-width: 0; min-height: 105px; padding: 15px 17px 15px 12px; border: 1px solid #c2cdb8; border-radius: 7px; background: #faf8ed; color: #3a5a42; box-shadow: 0 2px 0 #d7dfca; text-align: left; transition: background .12s ease,border-color .12s ease; }
+.rogue-classic-rewards .rcr-service:not(:disabled):hover, .rogue-classic-rewards .rcr-service.is-selected { background: #eaf2e0; border-color: #5b9a70; }
+.rogue-classic-rewards .rcr-service-copy { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+.rogue-classic-rewards .rcr-service-copy>b { font-size: 15px; font-weight: 800; }
+.rogue-classic-rewards .rcr-service-copy>span { color: #6f8066; font-size: 14px; line-height: 1.85; }
+.rogue-classic-rewards .rcr-service-copy>small { color: #9b6a48; font-size: 12px; line-height: 1.7; }
+.rogue-classic-rewards .rcr-service-price { display: flex; align-items: baseline; justify-content: end; gap: 3px; flex-shrink: 0; color: #857044; font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.rogue-classic-rewards .rcr-service-price>small { font-size: 12px; font-weight: 500; }
+.rogue-classic-rewards .rcr-service-price>svg { align-self: center; color: #849779; margin-left: 4px; }
+.rogue-classic-rewards .rcr-key-help { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 13px 20px; border-top: 1px solid #c6d1bd; background: #e2e8d8; color: #687e61; font-size: 12px; line-height: 1.85; text-align: center; }
+@media (max-width: 1000px) {
+  .rogue-classic-rewards .rcr-header { padding: 17px 20px; }
+  .rogue-classic-rewards .rcr-heading { padding: 23px 21px 20px; }
+  .rogue-classic-rewards .rcr-heading h3 { font-size: 23px; }
+  .rogue-classic-rewards .rcr-choice-grid { gap: 12px; padding: 0 21px; }
+  .rogue-classic-rewards .rcr-choice-top { padding: 13px 14px 3px; }
+  .rogue-classic-rewards .rcr-choice-copy { padding: 3px 15px 18px; }
+  .rogue-classic-rewards .rcr-choice-copy>b { font-size: 17px; }
+  .rogue-classic-rewards .rcr-choice-action { padding: 11px 15px; }
+  .rogue-classic-rewards .rcr-reroll { margin-left: 21px; margin-right: 21px; }
+  .rogue-classic-rewards .rcr-detail { margin-left: 21px; margin-right: 21px; }
+  .rogue-classic-rewards .rcr-targets { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .rogue-classic-rewards .rcr-target { gap: 10px; }
+  .rogue-classic-rewards .rcr-services-toggle { padding-left: 21px; padding-right: 21px; }
+  .rogue-classic-rewards .rcr-services-note { padding-left: 21px; padding-right: 21px; }
+  .rogue-classic-rewards .rcr-service-grid { padding-left: 21px; padding-right: 21px; }
+  .rogue-classic-rewards .rcr-service { gap: 9px; padding: 14px 12px 14px 8px; flex-wrap: wrap; }
+  .rogue-classic-rewards .rcr-service-copy { min-width: calc(100% - 62px); }
+  .rogue-classic-rewards .rcr-service-price { margin-left: auto; }
+  .rogue-classic-rewards .rcr-notice, .rogue-classic-rewards .rcr-error { margin-left: 21px; margin-right: 21px; }
+}
+@media (max-width: 700px) {
+  .rogue-classic-rewards .rcr-header { padding: 17px; gap: 15px; }
+  .rogue-classic-rewards .rcr-header h2 { font-size: 25px; }
+  .rogue-classic-rewards .rcr-header-tools { gap: 13px; }
+  .rogue-classic-rewards .rcr-party-button { padding: 7px 9px; font-size: 12px; }
+  .rogue-classic-rewards .rcr-money>b { font-size: 22px; }
+  .rogue-classic-rewards .rcr-heading { padding: 23px 17px 19px; }
+  .rogue-classic-rewards .rcr-heading h3 { font-size: 23px; }
+  .rogue-classic-rewards .rcr-choice-count { display: none; }
+  .rogue-classic-rewards .rcr-choice-grid { grid-template-columns: 1fr; gap: 13px; padding: 0 17px; }
+  .rogue-classic-rewards .rcr-choice { display: grid; grid-template-columns: 100px minmax(0,1fr); grid-template-rows: auto minmax(74px,auto) auto; border-top-width: 1px; border-left: 3px solid var(--rcr-tier); min-height: 185px; }
+  .rogue-classic-rewards .rcr-choice-top { grid-column: 1 / -1; padding: 12px 16px 3px; }
+  .rogue-classic-rewards .rcr-choice-art { grid-column: 1; grid-row: 2 / 4; padding: 2px 6px 15px; min-height: 110px; align-self: center; }
+  .rogue-classic-rewards .rcr-choice-art::before { width: 77px; height: 75px; left: calc(50% - 38px); top: 15px; }
+  .rogue-classic-rewards .rcr-item-image.is-large { width: 84px; height: 84px; }
+  .rogue-classic-rewards .rcr-choice-art>b { bottom: 13px; left: calc(50% + 12px); }
+  .rogue-classic-rewards .rcr-choice-copy { grid-column: 2; grid-row: 2; padding: 8px 16px 13px 4px; gap: 6px; }
+  .rogue-classic-rewards .rcr-choice-copy>b { font-size: 18px; }
+  .rogue-classic-rewards .rcr-choice-copy>span { font-size: 14px; line-height: 1.8; }
+  .rogue-classic-rewards .rcr-choice-copy>small { font-size: 12px; padding-top: 6px; }
+  .rogue-classic-rewards .rcr-choice-action { grid-column: 2; grid-row: 3; padding: 10px 15px 11px 4px; margin-right: 12px; border-radius: 0; border-top: 1px solid #d7dfca; background: transparent; font-size: 13px; min-height: 44px; }
+  .rogue-classic-rewards .rcr-reroll { margin: 23px 17px 0; gap: 13px; padding-bottom: 23px; align-items: start; }
+  .rogue-classic-rewards .rcr-reroll>div:first-child { flex-basis: 55%; }
+  .rogue-classic-rewards .rcr-reroll-action { max-width: 45%; }
+  .rogue-classic-rewards .rcr-reroll-action .rcr-button { flex-wrap: wrap; padding: 10px 12px; gap: 4px 7px; font-size: 13px; }
+  .rogue-classic-rewards .rcr-reroll-action .rcr-button>b { font-size: 14px; }
+  .rogue-classic-rewards .rcr-reroll p { font-size: 13px; }
+  .rogue-classic-rewards .rcr-detail { margin: 0 17px 23px; }
+  .rogue-classic-rewards .rcr-detail-heading { gap: 10px; padding: 18px 16px; }
+  .rogue-classic-rewards .rcr-detail-heading>.rcr-item-image { width: 41px; height: 41px; }
+  .rogue-classic-rewards .rcr-detail-heading h3 { font-size: 19px; }
+  .rogue-classic-rewards .rcr-detail-heading p { font-size: 14px; }
+  .rogue-classic-rewards .rcr-detail-heading .rcr-eyebrow { font-size: 10px; }
+  .rogue-classic-rewards .rcr-close-detail { width: 44px; min-height: 44px; border: 0; background: transparent; }
+  .rogue-classic-rewards .rcr-target-section, .rogue-classic-rewards .rcr-move-section { padding: 19px 15px 3px; }
+  .rogue-classic-rewards .rcr-learn-field>select { font-size: 16px; }
+  .rogue-classic-rewards .rcr-targets { gap: 9px; }
+  .rogue-classic-rewards .rcr-target { flex-direction: column; gap: 3px; padding: 9px 11px 12px; align-items: stretch; }
+  .rogue-classic-rewards .rcr-target>img { width: 54px; height: 54px; align-self: center; }
+  .rogue-classic-rewards .rcr-target-data>b { font-size: 14px; }
+  .rogue-classic-rewards .rcr-target-hp { margin-top: 4px; }
+  .rogue-classic-rewards .rcr-moves { gap: 8px; }
+  .rogue-classic-rewards .rcr-move { flex-direction: column; align-items: stretch; gap: 7px; padding: 12px; }
+  .rogue-classic-rewards .rcr-move>span:last-child { text-align: left; padding-left: 22px; }
+  .rogue-classic-rewards .rcr-move b { font-size: 14px; }
+  .rogue-classic-rewards .rcr-replace-moves .rcr-move>span:last-child { justify-content: space-between; padding-left: 0; }
+  .rogue-classic-rewards .rcr-confirm { flex-direction: column; align-items: stretch; padding: 19px 15px 21px; gap: 16px; }
+  .rogue-classic-rewards .rcr-confirm>.rcr-button { min-height: 52px; }
+  .rogue-classic-rewards .rcr-services-toggle { padding: 19px 17px; }
+  .rogue-classic-rewards .rcr-services-toggle b { font-size: 16px; }
+  .rogue-classic-rewards .rcr-services-toggle small { margin-left: 0; }
+  .rogue-classic-rewards .rcr-services-note { padding-left: 17px; padding-right: 17px; font-size: 14px; }
+  .rogue-classic-rewards .rcr-service-grid { grid-template-columns: 1fr; padding: 16px 17px 23px; }
+  .rogue-classic-rewards .rcr-service { flex-wrap: nowrap; gap: 12px; padding: 15px 13px; }
+  .rogue-classic-rewards .rcr-service-copy { min-width: 0; }
+  .rogue-classic-rewards .rcr-service-copy>span { font-size: 14px; }
+  .rogue-classic-rewards .rcr-service-price { font-size: 17px; }
+  .rogue-classic-rewards .rcr-notice, .rogue-classic-rewards .rcr-error { margin-left: 17px; margin-right: 17px; }
+  .rogue-classic-rewards .rcr-key-help { padding: 12px 17px max(12px,env(safe-area-inset-bottom)); align-items: start; font-size: 11px; }
+  .rogue-classic-rewards .rcr-key-help>svg { margin-top: 3px; }
+}
+@media (max-width: 430px) {
+  .rogue-classic-rewards .rcr-header { flex-wrap: wrap; gap: 12px; padding: 16px; }
+  .rogue-classic-rewards .rcr-clear { gap: 10px; }
+  .rogue-classic-rewards .rcr-clear-mark { width: 37px; height: 37px; }
+  .rogue-classic-rewards .rcr-header-tools { margin-left: auto; gap: 10px; }
+  .rogue-classic-rewards .rcr-party-button { width: 44px; height: 44px; padding: 0; font-size: 0; gap: 0; }
+  .rogue-classic-rewards .rcr-party-button>svg { width: 20px; height: 20px; }
+  .rogue-classic-rewards .rcr-money>b { font-size: 20px; }
+  .rogue-classic-rewards .rcr-header h2 { font-size: 24px; }
+  .rogue-classic-rewards .rcr-heading { padding: 22px 15px 18px; }
+  .rogue-classic-rewards .rcr-heading h3 { font-size: 22px; }
+  .rogue-classic-rewards .rcr-choice-grid { padding: 0 15px; }
+  .rogue-classic-rewards .rcr-choice { grid-template-columns: 83px minmax(0,1fr); }
+  .rogue-classic-rewards .rcr-choice-art { padding-left: 1px; padding-right: 1px; }
+  .rogue-classic-rewards .rcr-choice-art::before { width: 68px; height: 68px; left: calc(50% - 34px); top: 17px; }
+  .rogue-classic-rewards .rcr-choice-art>.rcr-item-image.is-large { width: 78px; height: 78px; }
+  .rogue-classic-rewards .rcr-choice-top { padding-left: 13px; padding-right: 13px; }
+  .rogue-classic-rewards .rcr-choice-copy { padding-right: 13px; }
+  .rogue-classic-rewards .rcr-choice-copy>b { font-size: 17px; }
+  .rogue-classic-rewards .rcr-choice-action { padding-right: 4px; font-size: 13px; }
+  .rogue-classic-rewards .rcr-reroll { margin-left: 15px; margin-right: 15px; flex-wrap: wrap; }
+  .rogue-classic-rewards .rcr-reroll>div:first-child { flex-basis: 100%; }
+  .rogue-classic-rewards .rcr-reroll-action { max-width: 100%; flex-direction: row; align-items: center; gap: 12px; }
+  .rogue-classic-rewards .rcr-reroll-action .rcr-button { flex-wrap: nowrap; padding: 11px 13px; }
+  .rogue-classic-rewards .rcr-detail { margin-left: 15px; margin-right: 15px; }
+  .rogue-classic-rewards .rcr-detail-heading { padding-left: 13px; padding-right: 10px; gap: 7px; }
+  .rogue-classic-rewards .rcr-detail-heading h3 { font-size: 18px; }
+  .rogue-classic-rewards .rcr-detail-heading>.rcr-item-image { width: 35px; height: 35px; }
+  .rogue-classic-rewards .rcr-detail-heading h3>small { font-size: 14px; }
+  .rogue-classic-rewards .rcr-detail-heading .rcr-eyebrow { font-size: 9px; }
+  .rogue-classic-rewards .rcr-detail-heading p { font-size: 14px; }
+  .rogue-classic-rewards .rcr-section-heading h4 { font-size: 15px; }
+  .rogue-classic-rewards .rcr-target-section, .rogue-classic-rewards .rcr-move-section { padding-left: 12px; padding-right: 12px; }
+  .rogue-classic-rewards .rcr-target { padding-left: 9px; padding-right: 9px; }
+  .rogue-classic-rewards .rcr-target-hp { font-size: 11px; }
+  .rogue-classic-rewards .rcr-target-data>small { font-size: 11px; }
+  .rogue-classic-rewards .rcr-move { padding: 11px 9px; }
+  .rogue-classic-rewards .rcr-move>span:first-child { gap: 6px; }
+  .rogue-classic-rewards .rcr-move>span:last-child { padding-left: 0; }
+  .rogue-classic-rewards .rcr-move b { font-size: 14px; }
+  .rogue-classic-rewards .rcr-service { flex-wrap: wrap; gap: 10px; }
+  .rogue-classic-rewards .rcr-service-copy { min-width: calc(100% - 64px); }
+  .rogue-classic-rewards .rcr-service-price { margin-left: auto; }
+  .rogue-classic-rewards .rcr-services-note { padding-left: 15px; padding-right: 15px; }
+  .rogue-classic-rewards .rcr-service-grid { padding-left: 15px; padding-right: 15px; }
+  .rogue-classic-rewards .rcr-notice, .rogue-classic-rewards .rcr-error { margin-left: 15px; margin-right: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rogue-classic-rewards *, .rogue-classic-rewards *::before, .rogue-classic-rewards *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+/* Keep the three reward choices together on a phone; details remain readable. */
+@media (max-width: 700px) {
+  .rogue-classic-rewards .rcr-header { padding: 9px 12px; gap: 8px; }
+  .rogue-classic-rewards .rcr-clear-mark { width: 32px; height: 32px; }
+  .rogue-classic-rewards .rcr-header h2 { font-size: 19px; }
+  .rogue-classic-rewards .rcr-money>b { font-size: 18px; }
+  .rogue-classic-rewards .rcr-heading { padding: 12px 12px 10px; }
+  .rogue-classic-rewards .rcr-heading h3 { font-size: 18px; line-height: 1.35; }
+  .rogue-classic-rewards .rcr-heading p { font-size: 12px; line-height: 1.45; margin-top: 4px; }
+  .rogue-classic-rewards .rcr-choice-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; padding: 0 10px; }
+  .rogue-classic-rewards .rcr-choice { display: flex; min-height: 0; border-top: 3px solid var(--rcr-tier); border-left: 1px solid #bdc6b6; border-radius: 8px; }
+  .rogue-classic-rewards .rcr-choice-top { padding: 7px 7px 0; }
+  .rogue-classic-rewards .rcr-tier { font-size: 10px; gap: 3px; }
+  .rogue-classic-rewards .rcr-choice-art { min-height: 55px; padding: 3px; }
+  .rogue-classic-rewards .rcr-choice-art::before { width: 48px; height: 48px; left: calc(50% - 24px); top: 5px; }
+  .rogue-classic-rewards .rcr-choice-art>.rcr-item-image.is-large { width: 52px; height: 52px; }
+  .rogue-classic-rewards .rcr-choice-art>b { bottom: 0; left: calc(50% + 8px); font-size: 10px; }
+  .rogue-classic-rewards .rcr-choice-copy { padding: 5px 7px 8px; gap: 4px; }
+  .rogue-classic-rewards .rcr-choice-copy>b { font-size: 13px; line-height: 1.35; overflow-wrap: anywhere; }
+  .rogue-classic-rewards .rcr-choice-copy>span { font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+  .rogue-classic-rewards .rcr-choice-copy>small { font-size: 10px; line-height: 1.35; padding-top: 4px; }
+  .rogue-classic-rewards .rcr-choice-action { margin: 0; padding: 6px 7px; min-height: 44px; font-size: 10px; line-height: 1.3; background: #f0f3e4; border-radius: 0 0 7px 7px; }
+  .rogue-classic-rewards .rcr-choice-action svg { width: 13px; flex: none; }
+  .rogue-classic-rewards .rcr-reroll { margin: 10px 12px 0; padding: 10px 0; gap: 8px; flex-wrap: nowrap; align-items: center; }
+  .rogue-classic-rewards .rcr-reroll>div:first-child { flex: 1; min-width: 0; }
+  .rogue-classic-rewards .rcr-reroll b { font-size: 11px; }
+  .rogue-classic-rewards .rcr-reroll p { font-size: 10px; line-height: 1.4; margin-top: 3px; }
+  .rogue-classic-rewards .rcr-reroll p>span { font-size: 10px; }
+  .rogue-classic-rewards .rcr-reroll-action { max-width: 55%; flex-shrink: 0; }
+  .rogue-classic-rewards .rcr-reroll-action .rcr-button { font-size: 11px; padding: 7px; min-height: 44px; }
+  .rogue-classic-rewards .rcr-reroll-action .rcr-button>b { font-size: 11px; }
+  .rogue-classic-rewards .rcr-services-toggle { padding: 10px 12px; }
+  .rogue-classic-rewards .rcr-services-toggle b { font-size: 13px; }
+  .rogue-classic-rewards .rcr-key-help { padding: 8px 12px max(8px,env(safe-area-inset-bottom)); font-size: 10px; }
+}
+.rogue-classic-rewards .rcr-learning-detail{display:flex;flex-direction:column;gap:4px;margin-top:7px;color:#435e54;font-size:12px;line-height:1.45}.rogue-classic-rewards .rcr-learning-detail b{color:#254a3b}.rogue-classic-rewards .rcr-learning-detail span{overflow-wrap:anywhere}

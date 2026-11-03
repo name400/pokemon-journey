@@ -1,0 +1,689 @@
+{
+  "image": "/game/town/tilemap.png",
+  "tileSize": 16,
+  "columns": 12,
+  "rows": 11,
+  "spacing": 0,
+  "coordinateUnit": "source pixels; x/y are pixel origins, w/h are pixel sizes",
+  "sheets": {
+    "town": {
+      "image": "/game/town/tilemap.png",
+      "width": 192,
+      "height": 176,
+      "columns": 12,
+      "rows": 11
+    },
+    "terrain": {
+      "image": "/game/town/terrain.png",
+      "width": 288,
+      "height": 176,
+      "columns": 18,
+      "rows": 11
+    }
+  },
+  "palette": {
+    "grass": "#84c669",
+    "ground": "#eaa56c",
+    "water": "#75e3ff",
+    "outline": "#493d4c"
+  },
+  "tiles": {
+    "grass": {
+      "x": 0,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "grassDetail": {
+      "x": 16,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "flower": {
+      "x": 32,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "path": {
+      "x": 16,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "pathNorthWest": {
+      "x": 0,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "pathNorth": {
+      "x": 16,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "pathNorthEast": {
+      "x": 32,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "pathWest": {
+      "x": 0,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "pathEast": {
+      "x": 32,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "pathSouthWest": {
+      "x": 0,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "pathSouth": {
+      "x": 16,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "pathSouthEast": {
+      "x": 32,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "pathSmallNorthWest": {
+      "x": 48,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "pathSmallNorthEast": {
+      "x": 64,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "pathSmallSouthWest": {
+      "x": 80,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "pathSmallSouthEast": {
+      "x": 96,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "stonePath": {
+      "x": 112,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "tree": {
+      "x": 64,
+      "y": 0,
+      "w": 16,
+      "h": 32
+    },
+    "treeAutumn": {
+      "x": 48,
+      "y": 0,
+      "w": 16,
+      "h": 32
+    },
+    "treeRound": {
+      "x": 80,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "bush": {
+      "x": 64,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "bushAutumn": {
+      "x": 48,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "mushroom": {
+      "x": 80,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "forest": {
+      "x": 96,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "forestAutumn": {
+      "x": 144,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "roofBlueLeft": {
+      "x": 0,
+      "y": 64,
+      "w": 16,
+      "h": 16
+    },
+    "roofBlueMiddle": {
+      "x": 16,
+      "y": 64,
+      "w": 16,
+      "h": 16
+    },
+    "roofBlueRight": {
+      "x": 32,
+      "y": 64,
+      "w": 16,
+      "h": 16
+    },
+    "roofBlueBottomLeft": {
+      "x": 0,
+      "y": 80,
+      "w": 16,
+      "h": 16
+    },
+    "roofBlueGable": {
+      "x": 48,
+      "y": 80,
+      "w": 16,
+      "h": 16
+    },
+    "roofBlueBottomRight": {
+      "x": 32,
+      "y": 80,
+      "w": 16,
+      "h": 16
+    },
+    "roof": {
+      "x": 0,
+      "y": 64,
+      "w": 48,
+      "h": 32
+    },
+    "roofRedLeft": {
+      "x": 64,
+      "y": 64,
+      "w": 16,
+      "h": 16
+    },
+    "roofRedMiddle": {
+      "x": 80,
+      "y": 64,
+      "w": 16,
+      "h": 16
+    },
+    "roofRedRight": {
+      "x": 96,
+      "y": 64,
+      "w": 16,
+      "h": 16
+    },
+    "roofRedBottomLeft": {
+      "x": 64,
+      "y": 80,
+      "w": 16,
+      "h": 16
+    },
+    "roofRedGable": {
+      "x": 112,
+      "y": 80,
+      "w": 16,
+      "h": 16
+    },
+    "roofRedBottomRight": {
+      "x": 96,
+      "y": 80,
+      "w": 16,
+      "h": 16
+    },
+    "wallWoodLeft": {
+      "x": 0,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "wallWoodMiddle": {
+      "x": 16,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "wallWoodDoorTop": {
+      "x": 32,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "wallWoodRight": {
+      "x": 48,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "windowWood": {
+      "x": 0,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "doorWood": {
+      "x": 16,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "wallWoodDark": {
+      "x": 32,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "windowWoodRight": {
+      "x": 48,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "wallGrayLeft": {
+      "x": 64,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "wallGrayMiddle": {
+      "x": 80,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "wallGrayDoorTop": {
+      "x": 96,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "wallGrayRight": {
+      "x": 112,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "windowGray": {
+      "x": 64,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "door": {
+      "x": 80,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "wallGrayDark": {
+      "x": 96,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "windowGrayRight": {
+      "x": 112,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "wall": {
+      "x": 80,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "fenceLeft": {
+      "x": 128,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "fence": {
+      "x": 144,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "fenceRight": {
+      "x": 160,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "fenceVertical": {
+      "x": 176,
+      "y": 48,
+      "w": 16,
+      "h": 16
+    },
+    "fenceBottomLeft": {
+      "x": 128,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "fenceBottom": {
+      "x": 144,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "fenceBottomRight": {
+      "x": 160,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "crate": {
+      "x": 144,
+      "y": 64,
+      "w": 16,
+      "h": 16
+    },
+    "sign": {
+      "x": 176,
+      "y": 96,
+      "w": 16,
+      "h": 16
+    },
+    "coin": {
+      "x": 144,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "bag": {
+      "x": 160,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "target": {
+      "x": 176,
+      "y": 112,
+      "w": 16,
+      "h": 16
+    },
+    "well": {
+      "x": 128,
+      "y": 112,
+      "w": 16,
+      "h": 32
+    },
+    "rock": {
+      "image": "/game/town/rock.svg",
+      "x": 0,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "log": {
+      "x": 160,
+      "y": 128,
+      "w": 16,
+      "h": 16
+    },
+    "barrel": {
+      "x": 176,
+      "y": 128,
+      "w": 16,
+      "h": 16
+    },
+    "bucket": {
+      "x": 176,
+      "y": 160,
+      "w": 16,
+      "h": 16
+    },
+    "castleWall": {
+      "x": 16,
+      "y": 144,
+      "w": 16,
+      "h": 16
+    },
+    "castleBattlement": {
+      "x": 16,
+      "y": 128,
+      "w": 16,
+      "h": 16
+    },
+    "castleWindow": {
+      "x": 80,
+      "y": 128,
+      "w": 16,
+      "h": 16
+    },
+    "castleDoor": {
+      "x": 112,
+      "y": 144,
+      "w": 16,
+      "h": 16
+    },
+    "water": {
+      "x": 16,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterSingle": {
+      "x": 48,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterNorthWest": {
+      "x": 0,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterNorth": {
+      "x": 16,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterNorthEast": {
+      "x": 32,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterWest": {
+      "x": 0,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterEast": {
+      "x": 32,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterSouthWest": {
+      "x": 0,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterSouth": {
+      "x": 16,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "waterSouthEast": {
+      "x": 32,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "riverNorth": {
+      "x": 48,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "riverVertical": {
+      "x": 48,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    },
+    "riverSouth": {
+      "x": 48,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "image": "/game/town/terrain.png"
+    }
+  },
+  "buildings": {
+    "center": {
+      "width": 3,
+      "height": 4,
+      "anchor": {
+        "x": 1,
+        "y": 3
+      },
+      "layout": [
+        [
+          "roofBlueLeft",
+          "roofBlueMiddle",
+          "roofBlueRight"
+        ],
+        [
+          "roofBlueBottomLeft",
+          "roofBlueGable",
+          "roofBlueBottomRight"
+        ],
+        [
+          "wallGrayLeft",
+          "wallGrayDoorTop",
+          "wallGrayRight"
+        ],
+        [
+          "windowGray",
+          "door",
+          "windowGrayRight"
+        ]
+      ]
+    },
+    "shop": {
+      "width": 3,
+      "height": 4,
+      "anchor": {
+        "x": 1,
+        "y": 3
+      },
+      "layout": [
+        [
+          "roofRedLeft",
+          "roofRedMiddle",
+          "roofRedRight"
+        ],
+        [
+          "roofRedBottomLeft",
+          "roofRedGable",
+          "roofRedBottomRight"
+        ],
+        [
+          "wallWoodLeft",
+          "wallWoodDoorTop",
+          "wallWoodRight"
+        ],
+        [
+          "windowWood",
+          "doorWood",
+          "windowWoodRight"
+        ]
+      ]
+    },
+    "compactHouse": {
+      "width": 3,
+      "height": 3,
+      "anchor": {
+        "x": 1,
+        "y": 2
+      },
+      "layout": [
+        [
+          "roofRedLeft",
+          "roofRedMiddle",
+          "roofRedRight"
+        ],
+        [
+          "roofRedBottomLeft",
+          "roofRedGable",
+          "roofRedBottomRight"
+        ],
+        [
+          "windowWood",
+          "doorWood",
+          "windowWoodRight"
+        ]
+      ]
+    }
+  },
+  "sources": [
+    {
+      "name": "Tiny Town",
+      "version": "1.1",
+      "author": "Kenney",
+      "source": "https://kenney.nl/assets/tiny-town",
+      "license": "CC0-1.0",
+      "notice": "LICENSE.txt",
+      "image": "tilemap.png",
+      "sha256": "3a54d99ecde790d4fdea207a3644cf130fc56fa838f1beb1507c185a95b8e902"
+    },
+    {
+      "name": "Tiny Battle",
+      "version": "1.0",
+      "author": "Kenney",
+      "source": "https://kenney.nl/assets/tiny-battle",
+      "license": "CC0-1.0",
+      "notice": "TERRAIN-LICENSE.txt",
+      "image": "terrain.png",
+      "sha256": "d8b164ef0e8db6429407dca2e68669c76f57df08ddb3e8ec4278eb26556f5656"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+import fs from 'node:fs';import {Dex} from '@pkmn/sim';import {rules} from '../lib/pokemon-config.mjs';
+const byKey=Object.fromEntries(Dex.species.all().filter(x=>Number.isFinite(x.heightm)&&x.heightm>0).map(x=>[x.id,x.heightm]));const byId=Object.fromEntries(Object.entries(rules.species).map(([id,info])=>[id,byKey[info.key]]).filter(([,h])=>h));fs.writeFileSync(new URL('../data/battle-heights.json',import.meta.url),JSON.stringify({byKey,byId})+'\n');
