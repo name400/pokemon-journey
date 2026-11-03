@@ -8,6 +8,7 @@ type ImagePokemon = {
   sourceImage?:string|null;
   rogueFormKey?:string|null;
   sourceBackImage?:string|null;
+  sourceStaticImage?:string|null;
   sourceShinyImage?:string|null;
   sourceAppearanceMissing?:boolean;
   artId?: number | string;
@@ -78,7 +79,7 @@ export default function PokemonImage({ mon, className = '', alt, eager = false, 
     staticSnapshot,
   );
   const staticImage = reducedMotion || frozen;
-  const direct=mon?.sourceAppearanceMissing?null:facing==='back'?mon?.sourceBackImage||mon?.sourceImage:shiny?mon?.sourceShinyImage||mon?.sourceImage:mon?.sourceImage;
+  const direct=mon?.sourceAppearanceMissing?null:staticImage&&mon?.sourceStaticImage?mon.sourceStaticImage:facing==='back'?mon?.sourceBackImage||mon?.sourceImage:shiny?mon?.sourceShinyImage||mon?.sourceImage:mon?.sourceImage;
   const resourceKey = `${direct||''}:${id}:${shiny}:${variant}:${facing}:${staticImage}`;
   const [failed, setFailed] = useState({ key: '', index: 0 });
   // A form, transformation, shiny toggle, or variant change immediately starts its own
