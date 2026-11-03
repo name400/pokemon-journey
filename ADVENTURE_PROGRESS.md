@@ -1,3 +1,10 @@
+## 2026-11-03 원작 임무 08: Lida의 물건과 배틀
+
+- 새로 랭크 W에 오른 플레이어는 호텔에서 Lida의 물건을 맡고, 정원 지구에서 이를 전하며 Lida와 배틀한다. 승리하면 확인된 1,288코인을 한 번 받고 다음 승급 상대 Rintaro와 5,000점 조건을 안내한다. Lida의 완철포·바닐프티 Lv.22와 별가사리 Lv.23 및 기술은 [Serebii 임무 자료](https://www.serebii.net/legendsz-a/mainmissions/reachingrankv.shtml), 보상은 [Lida 자료](https://bulbapedia.bulbagarden.net/wiki/Lida)를 확인했다. 현재 호텔 안내원·정원 지구의 위치와 연출은 임시다.
+- `zaLidaRequired`는 이번 변경 이후 새로 W 승급한 저장에만 설정한다. 기존 W 저장의 랭크와 기존 진행을 건드리지 않으며 물건 전달을 선택형으로 진행할 수 있다. 패배·기권하면 광장으로 돌아가고 맡은 물건 상태는 유지해 재도전한다. 승리 후에는 같은 보상을 다시 받을 수 없다. 기존 서식지 조사·호텔 회복과 정원 안내도 유지한다.
+- **후속 검증 필요:** Rintaro 승급전 보상에 대해 [로열 전체 승급 표](https://bulbapedia.bulbagarden.net/wiki/Z-A_Royale)는 1,140, [원작 공략의 개별 대전](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_8)은 1,260으로 서로 다르다. 개별 공략은 같은 전투의 레벨 설명에도 26과 24가 혼재한다. 팀은 [Serebii](https://www.serebii.net/legendsz-a/z-aroyale/rankw.shtml)의 세 마리 Lv.24와 대조되지만, 보상은 추가 검증 또는 사용자 검수가 필요해 임의로 정하지 않았다. W 티켓 집계와 승급전, 실시간 전투·댄스·낮 전환 및 실제 도시 위치는 미구현이다.
+- 실제 탐험 API와 메모리 SQLite에서 물건 선행 조건·저장·위치 검증·기권 후 재도전·Lida 팀·승리 보상 1회 및 W 랭크 보존을 검증했다. 탐험 회귀 26개와 타입 검사 통과. 실제 D1과 PC·모바일 브라우저 실조작은 미검증이다. 로그라이크·공통 전투 코드와 기존 플레이어 데이터 및 답변 대기 중인 토중몬·껍질몬 정책을 변경하지 않았고 운영 배포하지 않았다.
+
 ## 2026-11-03 원작 선행 장면: 호텔 앞 Naveen 배틀
 
 - Yvon에게 이겨 새로 랭크 X가 된 플레이어는 호텔 앞에서 팀 MZ Naveen과 배틀한다. 다음 로열 배틀 존에 들어가기 전에 이기면 Naveen이 패션 디자이너를 꿈꾼다는 사실을 기록하고 952코인을 지급한다. 페이검·깜까미 Lv.16, 곤율랭 Lv.17과 기술은 [원작 임무 자료](https://www.serebii.net/legendsz-a/mainmissions/reachingrankw.shtml), 보상과 이야기 요지는 [공략 자료](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_7)를 확인했다. 패배나 포기는 장면 완료와 보상을 주지 않으며 재도전할 수 있다.
