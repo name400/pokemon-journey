@@ -33,3 +33,5 @@ The front/back animated models and static dex images for the 17 type forms of ea
 The three Castform weather models and static dex images are also linked from the same pinned Smogon sprite repository and have the same unresolved rights and attribution status. Reduced-motion rendering uses the front-facing static image.
 
 Wishiwashi's solo and school models and static dex images likewise use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.
+
+Morpeko's full-belly and hangry animated models and Gen 5-style static sprites also use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.
