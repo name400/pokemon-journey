@@ -29,3 +29,5 @@ The five 966 `*-starmobile.png` front images are linked unchanged from [PokéRog
 ### Arceus and Silvally type-form sprites
 
 The front/back animated models and static dex images for the 17 type forms of each species are linked unchanged from [Smogon / Pokémon Showdown sprites](https://github.com/smogon/sprites/tree/d98f9e5b35e23500bdffdd1237d5482bdee9be49/src), commit `d98f9e5b35e23500bdffdd1237d5482bdee9be49`. The repository identifies the sprite collection but does not establish a blanket license or permission from Pokémon rights holders for these assets. Individual rights and attribution remain to be verified before release. The static dex image is front-facing even when motion is reduced for the player's side; remote links require network access.
+
+The three Castform weather models and static dex images are also linked from the same pinned Smogon sprite repository and have the same unresolved rights and attribution status. Reduced-motion rendering uses the front-facing static image.
