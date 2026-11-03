@@ -39,3 +39,5 @@ Morpeko's full-belly and hangry animated models and Gen 5-style static sprites a
 Mimikyu's disguised and busted animated models and Gen 5-style static sprites use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.
 
 Eiscue's ice-face and no-ice animated models and Gen 5-style static sprites use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.
+
+Zygarde's complete-form animated models and Gen 5-style static sprites use the same pinned Smogon sprite repository, with the same unresolved rights and attribution status.
