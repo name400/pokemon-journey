@@ -64,7 +64,16 @@ export default function Adventure(){
    if(direction&&d?.world&&!d.battle&&!screenRef.current&&!dialogueRef.current&&!lock.current){
     const step=stepField(d.world,direction);
     if(step.blocked){pathQueue.current=[];if(lastFacing.current!==direction||d.world.facing!==direction){lastFacing.current=direction;await act('face',{direction});}setHint(step.reason);}
-    else{if(pathQueue.current[0]===direction)pathQueue.current.shift();lastFacing.current=direction;const r=await act('move',{direction});if(r?.battle||r?.world?.area!==d.world.area)stop();}
+    else{
+     // A selected route can be sent in small batches; held controls remain one step
+     // at a time so releasing a key or touch never queues extra movement.
+     const path=heldDirection.current?[direction]:pathQueue.current.splice(0,4);
+     if(heldDirection.current&&pathQueue.current[0]===direction)pathQueue.current.shift();
+     lastFacing.current=path.at(-1)||direction;
+     const r=await act('move',{path});
+     // The server may stop early for an encounter, transition, or obstacle.
+     if(r&&(r.battle||r.world?.area!==d.world.area||(r.world?.steps||0)-(d.world.steps||0)<path.length))stop();
+    }
    }
    if(alive)timer=setTimeout(tick,65);
   };timer=setTimeout(tick,0);

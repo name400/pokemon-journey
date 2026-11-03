@@ -59,6 +59,9 @@ test('world route: save migration, atomic purchases, actual battle/capture/growt
  await walkTo('H');await call('heal');assert.equal(rawMon(owned).hp,rawMon(owned).maxHp);assert.equal(rawMon(owned).status,null);
  // The server interrupts a path at the first wild encounter.
  seedWorld({x:6,y:3,area:0});await get();globalThis.__adventureRandom=()=>0;await call('move',{path:['right','right','right']});globalThis.__adventureRandom=()=>.999;assert.equal(state.world.x,7);assert.ok(state.battle);await call('flee');
+ // Batched routes stop at a wall or regional exit without applying later steps.
+ seedWorld({x:3,y:8,area:0});await get();let steps=state.world.steps;await call('move',{path:['up','up','up','up']});assert.deepEqual([state.world.x,state.world.y],[3,5]);assert.equal(state.world.steps,steps+3);
+ seedWorld({x:20,y:8,area:0});await get();steps=state.world.steps;await call('move',{path:['right','right','right','right']});assert.equal(state.world.area,1);assert.equal(state.world.steps,steps+2);
  // One-time pickup cannot mint currency twice.
  await walkTo('I');const coins=state.wallet.coins;await call('pickup');assert.equal(state.wallet.coins,coins+200);await call('pickup',{},409);
  // Full 8-gym / Elite Four / Champion run uses the unchanged actual battle engine.
