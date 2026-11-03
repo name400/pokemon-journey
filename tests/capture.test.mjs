@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';import {BALLS,ballMultiplier,captureAttempt,afterCapture,friendshipGain} from '../lib/capture.mjs';
+assert.equal(BALLS.length,10);assert.equal(new Set(BALLS.map(b=>b.id)).size,10);
+assert.equal(ballMultiplier('greatball'),1.5);assert.equal(ballMultiplier('ultraball'),2);
+assert.equal(ballMultiplier('quickball',{turn:1}),5);assert.equal(ballMultiplier('quickball',{turn:2}),1);
+assert.equal(ballMultiplier('timerball',{turn:1}),1);assert.equal(ballMultiplier('timerball',{turn:11}),4);
+assert.equal(ballMultiplier('netball',{types:['물','벌레']}),3.5);assert.equal(ballMultiplier('netball',{types:['불꽃']}),1);
+assert.equal(ballMultiplier('duskball',{night:true}),3);assert.equal(ballMultiplier('duskball',{cave:true}),3);
+const mon={hp:10,maxHp:100,captureRate:3,status:'독',types:['불꽃'],currentTypes:['물'],friendship:70};
+assert.equal(captureAttempt(mon,'masterball',{},()=>.99999).caught,true);
+assert.equal(captureAttempt(mon,'netball',{},()=>.99999).multiplier,3.5);
+assert.deepEqual(afterCapture(mon,'healball'),{...mon,originBall:'healball',hp:100,status:null,pp:{}});
+assert.equal(friendshipGain({...mon,originBall:'luxuryball'},3),74);assert.equal(friendshipGain({...mon,originBall:'luxuryball'},0),70);
+assert.throws(()=>captureAttempt(mon,'constructor'));console.log('Ten ball types, live type/turn/night modifiers, guaranteed capture, healing and Luxury friendship effects: passed');

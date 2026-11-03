@@ -1,0 +1,79 @@
+/* Egg exchange: a compact, game-native counter with the machines as the focus. */
+.rc-shell:has(.rc-gacha){--egg-ink:#17324a;--egg-edge:#233d59;--egg-paper:#fff5d7;--egg-gold:#f6c950;border:4px solid #11283d;border-radius:8px;background:#183550;box-shadow:0 0 0 2px #8ba9b1,0 10px 0 #102338,0 22px 45px #061b2c66}
+.rc-shell:has(.rc-gacha) .rogue-hud{background:linear-gradient(180deg,#274e69,#17354f);border-bottom:3px solid #0d253b}
+.rc-shell:has(.rc-gacha) .rc-nav{background:#193b56;border-bottom:3px solid #10283f}
+.rc-shell:has(.rc-gacha) .rc-nav button{color:#c5dce1;border-radius:5px}
+.rc-shell:has(.rc-gacha) .rc-nav button.selected{background:#fff2c5;color:#18334b;border-color:#102c43;box-shadow:inset 0 -3px #d3b36b}
+.rc-shell:has(.rc-gacha) .rc-content{padding:clamp(5px,1vw,12px);background:#244c65}
+.rc-gacha{position:relative;gap:clamp(5px,1.1dvh,12px);padding:clamp(8px,1.3vw,18px);border:3px solid var(--egg-edge);border-radius:5px;color:var(--egg-ink);background:repeating-linear-gradient(135deg,#a8d2d4 0 18px,#b7dedb 18px 36px);box-shadow:inset 0 0 0 3px #eaf5de;overscroll-behavior:contain}
+.rc-gacha-head{min-height:45px;padding:5px 10px;background:#fdf2ce;border:3px solid var(--egg-edge);border-radius:5px;box-shadow:inset 0 -3px #dccb9d,0 3px 0 #527c89}
+.rc-gacha-head h2{color:#17334d;font-size:clamp(20px,2vw,29px);line-height:1.15}
+.rc-gacha-head>div>span{color:#ad6156;font-size:9px;letter-spacing:.14em}
+.rc-voucher-counts>div{background:#fff9e7;border:2px solid #91a5a3;border-radius:4px;box-shadow:inset 0 -2px #e2d5b2;color:#223b4c}
+.rc-voucher-counts b{font-size:14px;font-variant-numeric:tabular-nums}
+.rc-gacha-machines{gap:clamp(5px,1vw,14px);align-items:stretch}
+.rc-machine{justify-content:flex-end;gap:5px;padding:8px 4px;border:3px solid #537b87;border-radius:7px;background:linear-gradient(#e5f2dc,#c3e1d7);box-shadow:inset 0 0 0 2px #eff9e6,0 3px 0 #507b86}
+.rc-machine:not(:disabled):hover{background:linear-gradient(#f4f8dc,#d7eadd);border-color:#345b73}
+.rc-machine.selected{background:linear-gradient(#fff3c5,#e8e8be);border-color:#a56828;box-shadow:inset 0 0 0 2px #fff4ca,0 3px 0 #855425}
+.rc-machine.selected::before{content:'▼';position:absolute;top:4px;right:8px;color:#cb7138;font-size:13px}
+.rc-machine-label{order:0;padding:3px 10px;color:#fff9e4;background:#345c75;border:2px solid #1d3b55;box-shadow:inset 0 1px #87acb4;border-radius:4px;font-size:clamp(12px,1.5vw,17px);line-height:1.3}
+.rc-machine.selected .rc-machine-label{color:#352d24;background:#ffd66c;border-color:#a8702f;box-shadow:inset 0 2px #fff0aa}
+.rc-machine-body{position:relative;width:min(82%,150px);height:clamp(85px,21dvh,180px);overflow:hidden;border:4px solid #24455e;border-radius:44% 44% 15% 15%;background:linear-gradient(#d9f0eb 0 53%,var(--machine) 53%);box-shadow:inset 0 0 0 4px #fff9,0 4px 0 #15354e}
+.rc-machine.selected .rc-machine-body{box-shadow:inset 0 0 0 4px #fff9,0 4px 0 #15354e,0 0 0 3px #f5ca5b}
+.rc-machine-body:after{content:'';position:absolute;bottom:5px;width:37%;height:8%;border:2px solid #23445a;border-radius:3px;background:#34495d;pointer-events:none}
+.rc-machine-glass{height:57%;width:78%;background:radial-gradient(circle at 28% 14%,#fff,#c0dedd 80%);border:3px solid #7ea5a6}
+.rc-machine-glass img{filter:drop-shadow(0 2px 1px #3b5b5360)}
+.rc-machine-slot{z-index:1;margin:3px 0 10%;background:#ebc96f;border:3px solid #28465a;color:#28465a;box-shadow:inset 0 1px #fff1aa}
+.rc-machine small{max-width:96%;min-height:2.4em;color:#2a4a59;font-size:clamp(10px,1vw,12px);line-height:1.2;text-align:center}
+.rc-gacha-bottom{grid-template-columns:minmax(0,1fr) minmax(0,1.7fr);gap:8px}
+.rc-gacha-message,.rc-gacha-actions{border:3px solid var(--egg-edge);border-radius:5px;outline:2px solid #fdf7de;outline-offset:-7px;background:#fff6dc;box-shadow:0 3px 0 #527c89}
+.rc-gacha-message{padding:10px 12px;color:#243b4b}
+.rc-gacha-message b{font-size:clamp(12px,1.3vw,16px);line-height:1.35}
+.rc-gacha-message span,.rc-gacha-message small{color:#526b6c;line-height:1.35}
+.rc-gacha-actions{padding:8px;gap:5px}
+.rc-gacha-actions button{border:2px solid #8a9782;border-radius:4px;color:#1f3d50;background:linear-gradient(#fffcf0,#e6e6cf);box-shadow:0 2px 0 #728b83}
+.rc-gacha-actions button:not(:disabled):hover,.rc-gacha-actions button:focus-visible{border-color:#af742a;background:linear-gradient(#fff5be,#f7d577)}
+.rc-gacha-actions button:disabled{opacity:.55;filter:saturate(.65)}
+.rc-gacha-eggs{border:3px solid #34556b;border-radius:5px;background:#ebf1dc;color:#234455;box-shadow:inset 0 0 0 2px #fff9e6}
+.rc-gacha-eggs b{color:#1a3a4f}.rc-gacha-eggs strong{color:#9c5b36}
+.rc-gacha-hatch{border:3px solid #34556b;background:#fff6dc;color:#243b4b}
+@media(max-width:680px){
+ .rc-shell:has(.rc-gacha) .rc-content{padding:4px}.rc-gacha{padding:5px;gap:5px;max-height:calc(100dvh - 158px)}
+ .rc-gacha-head{padding:3px 6px;min-height:39px}.rc-gacha-head h2{font-size:19px}.rc-gacha-head>div>span{font-size:8px}
+ .rc-voucher-counts>div{min-height:29px}.rc-voucher-counts b{font-size:12px}
+ .rc-machine{gap:3px;padding:5px 2px}.rc-machine-label{font-size:11px;padding:2px 3px}.rc-machine-body{height:clamp(74px,15dvh,126px);width:86%;border-width:3px}.rc-machine small{font-size:9px;min-height:2.3em}
+ .rc-gacha-bottom{grid-template-columns:1fr;gap:4px}.rc-gacha-message{padding:7px 9px}.rc-gacha-actions{padding:6px;gap:3px}.rc-gacha-actions button{min-height:44px}.rc-gacha-eggs{min-height:40px;padding:3px 5px}
+}
+@media(max-height:600px){.rc-gacha{gap:4px}.rc-gacha-head{min-height:36px}.rc-gacha-machines{min-height:105px}.rc-machine-body{height:70px}.rc-gacha-actions button{min-height:44px}}
+@media(prefers-reduced-motion:reduce){.rc-machine,.rc-gacha-actions button{transition:none}}
+/* Reference layout: machines above a message window; voucher choices at right. */
+@media(min-width:681px){
+ .rc-gacha{display:grid;grid-template-columns:minmax(0,1fr) minmax(185px,26%);grid-template-areas:'head head' 'machines actions' 'message actions' 'eggs eggs';grid-template-rows:auto minmax(120px,1fr) auto auto}
+ .rc-gacha-head{grid-area:head}.rc-gacha-machines{grid-area:machines}.rc-gacha-bottom{display:contents}.rc-gacha-message{grid-area:message}.rc-gacha-actions{grid-area:actions;display:grid;grid-template-columns:1fr;align-content:center}.rc-gacha-eggs{grid-area:eggs}.rc-gacha-hatch{grid-column:1/-1;grid-row:2/5}
+ .rc-gacha-actions button{min-height:44px;flex-direction:row;justify-content:flex-start;padding:4px 10px;gap:8px;text-align:left}.rc-gacha-actions button small{margin-left:auto;text-align:right}
+}
+.rc-machine-timer{display:inline-flex;align-items:center;justify-content:center;min-height:19px;padding:1px 6px;border:1px solid #a5844c;border-radius:3px;background:#fff1c7;color:#5c4a2a;font-size:10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:680px){.rc-machine-timer{font-size:9px;padding:0 3px;min-height:17px}}
+.rc-draw-summary{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px,1.2dvh,14px);min-height:0;padding:clamp(8px,1.5vw,18px);border:3px solid #24455b;border-radius:5px;background:#fff6dc;box-shadow:inset 0 0 0 3px #efe3bd;color:#203c4f;text-align:center}
+.rc-draw-summary-heading span{font-family:ui-monospace,monospace;font-weight:800;font-size:10px;letter-spacing:.14em;color:#77948a}.rc-draw-summary-heading h3{margin:2px 0;font-size:clamp(18px,2.4vw,27px)}.rc-draw-summary-heading p{font-size:12px;line-height:1.35;color:#56716b}
+.rc-draw-summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(3px,.7vw,9px);width:min(100%,440px);min-height:0}
+.rc-draw-summary-grid>div{position:relative;display:grid;place-items:center;min-height:0;aspect-ratio:1.35;border:2px solid #93aca0;border-radius:4px;background:linear-gradient(#edf5df,#d9e9d9);box-shadow:inset 0 1px #fff9e5;animation:rc-egg-arrive .24s ease-out both}
+.rc-draw-summary-grid img{width:58%;height:85%;object-fit:contain;image-rendering:pixelated}.rc-draw-summary-grid small{position:absolute;left:4px;top:2px;color:#718a7b;font-size:9px}.rc-draw-summary-grid>div:nth-child(5n+2){animation-delay:.04s}.rc-draw-summary-grid>div:nth-child(5n+3){animation-delay:.08s}.rc-draw-summary-grid>div:nth-child(5n+4){animation-delay:.12s}.rc-draw-summary-grid>div:nth-child(5n){animation-delay:.16s}
+.rc-draw-summary .rogue-button{min-height:44px;padding:7px 24px;font-size:14px}@keyframes rc-egg-arrive{from{opacity:0;transform:translateY(-8px) scale(.85)}to{opacity:1;transform:none}}
+@media(min-width:681px){.rc-draw-summary{grid-column:1/-1;grid-row:2/5}}
+@media(max-width:680px){.rc-draw-summary{flex:1;gap:5px;padding:6px}.rc-draw-summary-heading h3{font-size:18px}.rc-draw-summary-heading p{font-size:10px}.rc-draw-summary-grid{width:min(100%,280px);gap:3px}.rc-draw-summary-grid>div{aspect-ratio:1.5}.rc-draw-summary .rogue-button{min-height:44px}}
+@media(prefers-reduced-motion:reduce){.rc-draw-summary-grid>div{animation:none}}
+.rc-gacha-eggs{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 10px;align-items:center;text-align:center}.rc-egg-inventory-heading{display:grid;gap:2px;text-align:left}.rc-egg-inventory-heading span{font-size:10px;color:#617e76}.rc-egg-inventory-row{display:flex;align-items:center;gap:3px;min-width:0}.rc-egg-inventory-row>button{flex:none;min-width:40px;min-height:44px;border:0;background:transparent;color:#30586a}.rc-egg-inventory-row>button:disabled{opacity:.3}.rc-egg-inventory-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;flex:1;min-width:0}.rc-egg-inventory-grid>button{position:relative;display:grid;place-items:center;min-width:0;min-height:44px;padding:2px;border:2px solid #9eb8a6;border-radius:4px;background:#f9f8e8}.rc-egg-inventory-grid>button[aria-pressed=true]{border-color:#af762c;background:#ffe7a0;box-shadow:inset 0 0 0 1px #fff9df}.rc-egg-inventory-grid>button img{width:100%;height:35px;object-fit:contain}.rc-egg-inventory-grid>button small{position:absolute;right:1px;bottom:0;padding:0 2px;background:#eff5e2;color:#45605d;font-size:9px;line-height:1.2}.rc-gacha-eggs>strong{max-width:200px;font-size:11px;line-height:1.3}
+@media(max-width:680px){.rc-gacha-eggs{grid-template-columns:1fr auto;gap:2px 6px}.rc-egg-inventory-heading{display:flex;gap:6px}.rc-egg-inventory-row{grid-column:1/-1;grid-row:2}.rc-egg-inventory-row>button{min-width:35px}.rc-egg-inventory-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}.rc-egg-inventory-grid>button{min-height:44px;padding:0}.rc-egg-inventory-grid>button img{height:29px}.rc-gacha-eggs>strong{font-size:10px;text-align:right}}
+.rc-draw-animation{display:flex;align-items:center;justify-content:center;gap:clamp(12px,4vw,42px);min-height:220px;padding:12px;border:3px solid #27485d;border-radius:5px;background:radial-gradient(circle,#fff9dc,#d3ecdf 70%);color:#234156}.rc-draw-animation>div:last-child{text-align:center}.rc-draw-animation h3{font-size:clamp(16px,2vw,24px);margin:0 0 6px}.rc-draw-animation p{font-size:12px;margin:0 0 12px}.rc-draw-animation button{min-height:44px;padding:8px 12px;font-size:12px}
+.rc-draw-machine{--machine:#5fa6ce;position:relative;display:flex;align-items:center;flex-direction:column;width:clamp(100px,16vw,155px);height:clamp(155px,25vh,225px);border:5px solid #25475d;border-radius:38% 38% 9% 9%;background:linear-gradient(#d4efea 0 49%,var(--machine) 49%);box-shadow:inset 0 0 0 5px #fff8,0 5px #153449;animation:rc-gacha-shake .22s ease-in-out 4}.rc-draw-machine.machine-legendary{--machine:#d39843}.rc-draw-machine.machine-shiny{--machine:#d987aa}.rc-draw-machine-glass{display:flex;justify-content:center;align-items:center;width:78%;height:44%;margin-top:10%;border:3px solid #82aaa9;border-radius:50%;background:radial-gradient(circle at 28% 20%,#fff,#bedfdb)}.rc-draw-machine-glass img{width:31%;height:75%;object-fit:contain;animation:rc-gacha-eggs .35s ease-in-out 4 alternate}.rc-draw-machine-glass img:nth-child(2){animation-delay:.12s}.rc-draw-machine-glass img:nth-child(3){animation-delay:.22s}.rc-draw-machine-dial{display:grid;place-items:center;width:33px;height:33px;margin-top:5px;border:3px solid #315166;border-radius:50%;background:#ffe290;color:#315166;animation:rc-gacha-turn .6s ease-in-out 2}.rc-draw-machine-chute{width:36%;height:12%;margin-top:7%;border:3px solid #25475d;border-radius:3px;background:#19364b}.rc-draw-egg{position:absolute;z-index:3;bottom:-18%;width:39%;height:36%;object-fit:contain;opacity:0;animation:rc-gacha-drop .65s .9s ease-out forwards}
+@keyframes rc-gacha-shake{25%{transform:rotate(-2deg)}75%{transform:rotate(2deg)}}@keyframes rc-gacha-eggs{to{transform:translateY(-8px) rotate(10deg)}}@keyframes rc-gacha-turn{to{transform:rotate(180deg)}}@keyframes rc-gacha-drop{0%{opacity:0;transform:translateY(-50px) scale(.65)}40%{opacity:1}75%{transform:translateY(5px) scale(1)}100%{opacity:1;transform:translateY(0)}}
+@media(min-width:681px){.rc-draw-animation{grid-column:1/-1;grid-row:2/5}}@media(max-width:680px){.rc-draw-animation{flex:1;min-height:150px;padding:7px;gap:14px}.rc-draw-machine{height:135px;width:88px}.rc-draw-machine-dial{width:24px;height:24px;margin-top:2px}.rc-draw-animation p{font-size:10px;margin:0 0 6px}}
+@media(prefers-reduced-motion:reduce){.rc-draw-machine,.rc-draw-machine-glass img,.rc-draw-machine-dial,.rc-draw-egg{animation:none}.rc-draw-egg{opacity:1}}
+/* Three distinct machines with a dial, nameplate and delivery hatch. */
+.rc-machine-body{border-radius:28% 28% 9% 9%;background:linear-gradient(#cde9df 0 53%,var(--machine) 53% 100%);box-shadow:inset 0 0 0 4px #fff9,inset -8px 0 #183b4b22,0 4px 0 #15354e}
+.rc-machine-body::before{content:'';position:absolute;top:4%;left:30%;width:40%;height:6%;border:2px solid #285066;border-radius:3px;background:#ffe096;box-shadow:inset 0 1px #fff4c9}
+.rc-machine-glass{height:51%;margin-top:7%;box-shadow:inset -5px -8px #79a9a640,inset 4px 4px #fff9}
+.rc-machine-slot{position:relative;display:grid;place-items:center;min-width:31px;min-height:31px;border-radius:50%;box-shadow:inset 0 2px #fff4c0,0 2px #274d5b;color:#34546a}
+.rc-machine-body::after{height:9%;bottom:4%;border-width:3px;background:linear-gradient(#152f45 0 70%,#466274 70%)}
+@media(max-width:680px){.rc-machine-slot{min-width:22px;min-height:22px;border-width:2px}.rc-machine-body::before{border-width:1px}.rc-machine-body::after{border-width:2px}}

@@ -1,0 +1,16 @@
+/* Classic mode shares a compact cartridge-inspired frame across screens. */
+main[data-mode="rogue"]{--shell-dark:#102b40;--shell-mid:#1b425b;--shell-light:#f8edce;--shell-gold:#f3c759}
+main[data-mode="rogue"] .workspace{background:radial-gradient(ellipse at 50% 0,#416d7d 0,#1c4057 56%,#102c40 100%)}
+main[data-mode="rogue"] .sidebar{background:linear-gradient(180deg,#1e4860,#102b40);border-right:3px solid #0b2338;box-shadow:inset -2px 0 #547889}
+main[data-mode="rogue"] .brandmark{border-color:#f8efd0;background:linear-gradient(#eb695c 0 43%,#18384f 43% 57%,#fbf4d9 57%);box-shadow:0 0 0 3px #0c283c;color:#163b52}
+main[data-mode="rogue"] .sidebar .nav{border-radius:7px;color:#b5d4db;transition:background-color .15s,color .15s}
+main[data-mode="rogue"] .sidebar .nav.active{background:linear-gradient(#fbe9ad,#dfc173);color:#17374d;border-color:#17374d;box-shadow:inset 0 2px #fff8d4,0 3px 0 #0d273c}
+main[data-mode="rogue"] .sidebar .nav:hover:not(.active){background:#315c70;color:#fff9de}
+main[data-mode="rogue"] .topbar{background:linear-gradient(#285168,#183b52);border-bottom:3px solid #102c41;box-shadow:inset 0 -2px #567b87;color:#fff5d7}
+main[data-mode="rogue"] .topbar h1{color:#fff4d6;text-shadow:0 2px #10283c}
+main[data-mode="rogue"] .topbar .fullscreen-toggle,main[data-mode="rogue"] .topbar .admin-entry,main[data-mode="rogue"] .topbar .egg-entry{border:2px solid #17384e;border-radius:5px;background:linear-gradient(#fff6d4,#ecd89b);color:#254057;box-shadow:inset 0 2px #fffae8,0 2px #112c3d}
+main[data-mode="rogue"] .topbar .fullscreen-toggle:hover,main[data-mode="rogue"] .topbar .admin-entry:hover,main[data-mode="rogue"] .topbar .egg-entry:hover{background:linear-gradient(#fff8d9,#f7d271)}
+main[data-mode="rogue"] .account-name{border:2px solid #0e2b40;border-radius:5px;background:#254c62;box-shadow:inset 0 1px #5e8793;color:#fff3d8}
+main[data-mode="rogue"] .workspace>footer{background:#102a3d;color:#b5ced0}
+@media(max-width:520px){main[data-mode="rogue"] .sidebar{border-top:3px solid #0b2338;box-shadow:inset 0 2px #547889;background:#173c53}main[data-mode="rogue"] .sidebar .nav.active{box-shadow:inset 0 1px #fff8d4,0 2px #0d273c}}
+@media(prefers-reduced-motion:reduce){main[data-mode="rogue"] .sidebar .nav{transition:none}}
