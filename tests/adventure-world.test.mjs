@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 
 test('all ten fields have reachable services, trainers, pickups and gated exits',()=>{
@@ -33,4 +33,11 @@ test('lab has reachable researcher and exit, with collision and a return to the 
  assert.ok(fieldPath(map,start,researcher).length);assert.ok(fieldPath(map,start,exit).length);
  assert.equal(stepField({area:0,interior:'lab',x:4,y:6},'up').blocked,true);
  const back=stepField({area:0,interior:'lab',x:11,y:14},'down');assert.deepEqual([back.area,back.x,back.y,back.interior,back.transitioned],[0,18,5,null,true]);
+});
+test('interior storage keeps a safe legacy position and detects an older client write',()=>{
+ const inside={area:0,interior:'lab',x:11,y:6,facing:'up',custom:'preserve'};
+ const stored=storeAdventurePosition(inside,7);assert.deepEqual([stored.x,stored.y,stored.facing],[18,5,'down']);assert.deepEqual([inside.x,inside.y],[11,6]);
+ const restored=restoreAdventurePosition(structuredClone(stored),7);assert.deepEqual([restored.x,restored.y,restored.facing],[11,6,'up']);
+ const oldWrite=restoreAdventurePosition({...stored,x:19,y:5},8);assert.equal(oldWrite.interior,null);assert.deepEqual([oldWrite.x,oldWrite.y],[19,5]);assert.equal(oldWrite.custom,'preserve');
+ const samePlaceOldWrite=restoreAdventurePosition(structuredClone(stored),8);assert.equal(samePlaceOldWrite.interior,null);assert.deepEqual([samePlaceOldWrite.x,samePlaceOldWrite.y],[18,5]);
 });
