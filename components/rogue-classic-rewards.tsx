@@ -65,12 +65,15 @@ export type RogueClassicRewardsProps = {
   services: ServiceChoice[];
   rerollCost: number;
   rerolls: number;
+  canLockTiers?: boolean;
+  lockTiers?: boolean;
   busy: boolean;
   error?: string;
   notice?: string;
   onChoose: (payload: RewardPayload) => Promise<unknown> | void;
   onService: (payload: ServicePayload) => Promise<unknown> | void;
   onReroll: () => Promise<unknown> | void;
+  onSetLockTiers?: (locked: boolean) => Promise<unknown> | void;
   onOpenParty?: () => void;
 };
 
@@ -130,7 +133,7 @@ export default function RogueClassicRewards(props: RogueClassicRewardsProps) {
   return <ClassicRewardScreen key={version} {...props}/>;
 }
 
-function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost, rerolls, busy, error, notice, onChoose, onService, onReroll, onOpenParty }: RogueClassicRewardsProps) {
+function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost, rerolls, canLockTiers, lockTiers, busy, error, notice, onChoose, onService, onReroll, onSetLockTiers, onOpenParty }: RogueClassicRewardsProps) {
   const [selection, setSelection] = useState<Selection | null>(null);
   const [targetId, setTargetId] = useState<string | undefined>();
   const [moveIndex, setMoveIndex] = useState<number | undefined>();
@@ -234,7 +237,7 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
     })}</div>
     {!choices.length && <div className="rcr-empty"><Package size={28} aria-hidden="true"/><p>선택 가능한 보상 정보를 기다리고 있습니다.</p></div>}
 
-    <div className="rcr-reroll"><div><b><RefreshCw size={16} aria-hidden="true"/>다른 보상 찾아보기</b><p>새로고침할 때마다 비용이 2배가 됩니다.<span>현재 {rerolls}회 · 다음 비용 {moneyText(rerollCost * 2)}원</span></p></div><div className="rcr-reroll-action"><button className="rcr-button rcr-button-outline" disabled={locked || !!rerollShortfall || !choices.length} onClick={reroll}>{pending === 'reroll' ? <LoaderCircle className="rcr-spin" size={16} aria-hidden="true"/> : <RefreshCw size={16} aria-hidden="true"/>}새로고침 <b>{moneyText(rerollCost)}원</b></button>{rerollShortfall > 0 && <span>{moneyText(rerollShortfall)}원 부족</span>}</div></div>
+    <div className="rcr-reroll"><div><b><RefreshCw size={16} aria-hidden="true"/>다른 보상 찾아보기</b><p>새로고침할 때마다 비용이 2배가 됩니다.<span>현재 {rerolls}회</span></p>{canLockTiers && <button className="rcr-button rcr-button-outline" aria-pressed={!!lockTiers} disabled={locked} onClick={()=>void request('tier-lock',()=>onSetLockTiers?.(!lockTiers))}>보상 등급 잠금 {lockTiers?'켜짐':'꺼짐'}</button>}</div><div className="rcr-reroll-action"><button className="rcr-button rcr-button-outline" disabled={locked || !!rerollShortfall || !choices.length} onClick={reroll}>{pending === 'reroll' ? <LoaderCircle className="rcr-spin" size={16} aria-hidden="true"/> : <RefreshCw size={16} aria-hidden="true"/>}새로고침 <b>{moneyText(rerollCost)}원</b></button>{rerollShortfall > 0 && <span>{moneyText(rerollShortfall)}원 부족</span>}</div></div>
 
     {active && selection && <section className={`rcr-detail ${selection.kind === 'service' ? 'is-service' : ''}`} ref={detail} aria-labelledby={`${uniqueId}-detail`}><div className="rcr-detail-heading"><RewardImage image={active.image} name={active.name}/><div><span className="rcr-eyebrow">{selection.kind === 'service' ? 'USE IMMEDIATELY' : 'REWARD SETUP'}</span><h3 id={`${uniqueId}-detail`} ref={detailTitle} tabIndex={-1}>{active.name}{activeService && <small>{moneyText(activeService.price)}원</small>}</h3><p>{active.description}</p>{'moveName' in active && active.moveName && <span className="rcr-learning-move">배울 기술 · {active.moveName}</span>}</div><button className="rcr-close-detail" disabled={locked} onClick={dismissDetail} aria-label="선택 상세 닫기"><X size={18} aria-hidden="true"/></button></div>
       {requiresRewardTarget(active) && <div className="rcr-target-section"><div className="rcr-section-heading"><h4>사용할 포켓몬</h4>{automaticRewardTarget(targets) === selectedTarget?.boxId && !!selectedTarget && <span>적용 가능한 한 마리 자동 선택</span>}</div><div className="rcr-targets" onKeyDown={event => focusWithin(event, '.rcr-target')}>{targets.map(target => {
