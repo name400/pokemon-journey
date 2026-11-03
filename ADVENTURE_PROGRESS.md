@@ -1,3 +1,10 @@
+## 2026-11-03 · 야생 구역 4 조사와 출현 보정
+
+- 묘지의 일반 포켓몬 아보·고오스·페이검·보르쥐·분떠도리·단칼빙 여섯 종을 도감에 기록하면 [원작 구역 4 조사](https://www.serebii.net/legendsz-a/mablesresearch.shtml)의 1,000 연구 포인트를 더한다. 이미 여섯 종을 기록한 기존 저장도 표시 연구 레벨과 받을 수 있는 보상이 올라갈 수 있다. 보상은 자동 지급하지 않고 기존 포켓몬·재화는 수정하지 않는다. 의뢰 깜까미는 여섯 종 조사와 별개다.
+- 새 조우에 [종별 원작 레벨 범위](https://bulbapedia.bulbagarden.net/wiki/Wild_Zone_4)를 적용하고 [단칼빙은 밤, 분떠도리는 낮](https://game8.co/games/Pokemon-Legends-Z-A/archives/557820)에만 나오도록 했다. 균등 종 선택·레벨 선택, 출현 좌표와 풀숲 랜덤 조우는 여전히 초안이다. 이미 잡은 개체는 바꾸지 않는다.
+- 아보의 시간은 [주간으로 보는 자료](https://insider-gaming.com/pokemon-legends-z-a-wild-zone-4-spawns/)와 [야간 위주로 보는 자료](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-4/)가 다르고, 보르쥐도 [야간 전용](https://esports.gg/news/pokemon/pokemon-legends-z-a-wild-zone-4-guide/)과 [낮·밤](https://sportsrant.indiatimes.com/gaming/every-pokmon-in-wild-zone-4-pokemon-legends-z-a/articleshow/126644922.html) 표기가 달라 두 종은 확인 전 시간 제한을 바꾸지 않았다. 묘지 지형·우두머리·도구와 실제 필드 행동은 미구현이다.
+- 단위 검사에서 5/6·6/6 경계와 중복 기록, 낮·밤 선택 및 종별 레벨 범위를 검사했다. 실제 API·메모리 SQLite에서 낮 분떠도리와 밤 단칼빙의 조우를 확인했다. 실제 D1·PC·모바일 실조작과 원작 실기는 미검증이다. 이 변경은 로컬 브랜치에만 있고 Sites 버전 5나 운영을 변경하지 않았다.
+
 ## 2026-11-03 · 옥상 동료 이동 (초안)
 
 - 옥상에서 동료의 안내를 들은 뒤 첫 야생 구역 2 이동을 마칠 때까지 동료가 플레이어의 이전 타일을 따라온다. 서버가 각 이동 단계의 위치를 기록해 연속 이동과 새로고침 후에도 표시한다. 막힌 이동에서는 움직이지 않고 광장으로 나가면 위치를 정리하며 다시 들어오면 동료가 합류한다. 기존에 통과한 저장은 진행을 되돌리지 않는다.
