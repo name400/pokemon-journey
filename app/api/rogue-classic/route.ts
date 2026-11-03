@@ -14,5 +14,5 @@ export async function POST(req:Request){if(!sameOriginRequest(req))return Respon
  const update=env.DB!.prepare('UPDATE saves SET data=?,updated_at=?,revision=revision+1 WHERE user_id=? AND revision=?').bind(encoded,now,user.userId,saved.revision),record=verifiedClassicWin(saved.data.classic);
  const statements=[update];if(record)statements.push(env.DB!.prepare(`INSERT INTO classic_leaderboard(user_id,best_wave,achieved_at,run_id) SELECT ?,?,?,? WHERE changes()=1 ON CONFLICT(user_id) DO UPDATE SET best_wave=excluded.best_wave,achieved_at=excluded.achieved_at,run_id=excluded.run_id WHERE excluded.best_wave>classic_leaderboard.best_wave`).bind(user.userId,record.wave,now,record.runId));
  const result=await env.DB!.batch(statements);if(!result[0].meta.changes)throw Error('다른 화면에서 저장이 변경됐습니다. 다시 불러오세요.');
- return Response.json({...classicGameView(saved.data,{includeStarters:['prepare','reduceCost','cancelSelection','hatchEgg'].includes(payload.action)}),...extra,revision:saved.revision+1});
+ return Response.json({...classicGameView(saved.data,{includeStarters:['prepare','reduceCost','cancelSelection','hatchEgg','pullEgg'].includes(payload.action)}),...extra,revision:saved.revision+1});
  }catch(e){return Response.json({error:e instanceof Error?e.message:'클래식 요청 실패'},{status:409});}}
