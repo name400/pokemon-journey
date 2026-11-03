@@ -29,6 +29,7 @@ export default function Adventure(){
  const [data,setData]=useState<any>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false),[selected,setSelected]=useState(1);
  const [screen,setScreen]=useState<Screen>(null),[dialogue,setDialogue]=useState<any>(null),[teamEdit,setTeamEdit]=useState(false),[team,setTeam]=useState<string[]>([]);
  const [query,setQuery]=useState(''),[page,setPage]=useState(0),[hint,setHint]=useState('방향키 / WASD로 걷고 E로 대화하세요.');
+ const [battleResult,setBattleResult]=useState<any>(null),resultRef=useRef<any>(null);
  const lock=useRef(false),mounted=useRef(true),revision=useRef(-1),snapshot=useRef<any>(null),screenRef=useRef<Screen>(null),dialogueRef=useRef<any>(null);
  const heldDirection=useRef(''),pathQueue=useRef<string[]>([]),lastFacing=useRef('');
  snapshot.current=data;screenRef.current=screen;dialogueRef.current=dialogue;
@@ -41,7 +42,7 @@ export default function Adventure(){
  const load=useCallback(async(light=false)=>{try{accept(await api(undefined,light));setError('');}catch(e){if(mounted.current)setError(e instanceof Error?e.message:'불러오기 실패');}},[accept]);
  const act=useCallback(async(action:string,extra:any={})=>{
   if(lock.current)return null;lock.current=true;setBusy(true);setError('');
-  try{const result=await api({action,revision:revision.current,...extra});accept(result);return result;}
+  try{const result=await api({action,revision:revision.current,...extra});if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result);return result;}
   catch(e){stop();if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load();return null;}
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  },[accept,load,stop]);
@@ -50,7 +51,7 @@ export default function Adventure(){
  useEffect(()=>{
   const dirs:Record<string,string>={arrowup:'up',w:'up',arrowdown:'down',s:'down',arrowleft:'left',a:'left',arrowright:'right',d:'right'};
   const keydown=(e:KeyboardEvent)=>{
-   if(!snapshot.current?.world||snapshot.current.battle||screenRef.current||dialogueRef.current||/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||''))return;
+   if(!snapshot.current?.world||snapshot.current.battle||resultRef.current||screenRef.current||dialogueRef.current||/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||''))return;
    const key=e.key.toLowerCase();if(dirs[key]){e.preventDefault();if(!e.repeat)pathQueue.current=[dirs[key]];heldDirection.current=dirs[key];}
    else if(key==='e'||(key===' '&&document.activeElement?.tagName!=='BUTTON')){e.preventDefault();if(!e.repeat)interact();}
    else if(key==='j'||key==='b'){stop();setScreen(key==='j'?'journal':'bag');}
@@ -61,7 +62,7 @@ export default function Adventure(){
   let alive=true,timer:ReturnType<typeof setTimeout>;
   const tick=async()=>{
    if(!alive)return;const d=snapshot.current,direction=heldDirection.current||pathQueue.current[0];
-   if(direction&&d?.world&&!d.battle&&!screenRef.current&&!dialogueRef.current&&!lock.current){
+   if(direction&&d?.world&&!d.battle&&!resultRef.current&&!screenRef.current&&!dialogueRef.current&&!lock.current){
     const step=stepField(d.world,direction);
     if(step.blocked){pathQueue.current=[];if(lastFacing.current!==direction||d.world.facing!==direction){lastFacing.current=direction;await act('face',{direction});}setHint(step.reason);}
     else{
@@ -79,7 +80,7 @@ export default function Adventure(){
   };timer=setTimeout(tick,0);
   return()=>{alive=false;clearTimeout(timer);window.removeEventListener('keydown',keydown);window.removeEventListener('keyup',keyup);window.removeEventListener('blur',stop);document.removeEventListener('visibilitychange',hide);};
  },[act,interact,stop]);
- useEffect(()=>{if(!data?.world?.inUnion||screen||dialogue||data.battle)return;const timer=setInterval(()=>{if(!lock.current)load(true);},4000);return()=>clearInterval(timer);},[data?.world?.inUnion,screen,dialogue,!!data?.battle,load]);
+ useEffect(()=>{if(!data?.world?.inUnion||screen||dialogue||data.battle||battleResult)return;const timer=setInterval(()=>{if(!lock.current)load(true);},4000);return()=>clearInterval(timer);},[data?.world?.inUnion,screen,dialogue,!!data?.battle,battleResult,load]);
  const roster=useMemo(()=>{const q=query.trim().toLowerCase();return (data?.box||[]).filter((p:any)=>!q||`${p.name} ${p.id} ${p.types?.join(' ')}`.toLowerCase().includes(q));},[data?.box,query]);
  const close=()=>{setScreen(null);setTeamEdit(false);setQuery('');setPage(0);};
  const open=(s:Screen)=>{stop();setScreen(s);setDialogue(null);setTeam(data?.world?.teamIds||[]);};
@@ -87,7 +88,7 @@ export default function Adventure(){
  if(!data.world)return <div className="content adv-intro"><span className="kicker">첫 번째 모험</span><h2>너와 함께 여행하고 싶어!</h2><p>첫 파트너를 선택하세요. 풀숲 너머로 8개의 체육관과 포켓몬 리그가 기다립니다.</p><div className="adv-starters">{STARTERS.map(id=>{const p=species.find(s=>s.id===id)!;return <button className={selected===id?'selected':''} aria-pressed={selected===id} onClick={()=>setSelected(id)} key={id}><PokemonImage mon={p} variant="sprite" eager/><b>{p.name}</b><span>{p.types.join(' / ')}</span></button>;})}</div><button className="primary" disabled={busy} onClick={()=>act('start',{species:selected})}>{busy?'출발 준비 중…':'이 파트너와 출발하기'}<ChevronRight size={18}/></button><p className="adv-note">계정에 자동 저장 · 최대 Lv.100 · 직접 선택하는 진화</p>{error&&<p className="feedback" role="alert">{error}</p>}</div>;
  const w=data.world,mon=data.box.find((p:any)=>p.boxId===w.activeId),area=w.areaInfo,spot=w.interaction;
  if(!mon)return <div className="content"><p role="alert">파트너 정보를 다시 불러와 주세요.</p><button onClick={()=>load()}>다시 불러오기</button></div>;
- const inBattle=!!data.battle,party=w.teamIds.map((id:string)=>data.box.find((p:any)=>p.boxId===id)).filter(Boolean),ready=mon.evolutions?.some((e:any)=>e.ready);
+ const inBattle=!!data.battle||!!battleResult,party=w.teamIds.map((id:string)=>data.box.find((p:any)=>p.boxId===id)).filter(Boolean),ready=mon.evolutions?.some((e:any)=>e.ready);
  const titles={party:'포켓몬 · 파티와 보유함',manage:`${mon.name} · 기술과 성장`,bag:'가방',shop:'프렌들리숍',journal:'여행 수첩'};
  return <div className={`content adventure-game biome-${area.biome}`}>
   <header className="adv-heading"><div><span className="kicker">나의 포켓몬 여행</span><h2><MapPin size={20}/>{area.name}</h2></div><div className="adv-wallet"><span><Coins size={17}/>{(data.wallet?.coins||0).toLocaleString()}<small>코인</small></span><span className="adv-ball-count"><i/>{data.wallet?.balls||0}<small>볼</small></span></div></header>
@@ -109,7 +110,7 @@ export default function Adventure(){
    {screen==='journal'&&<AdventureJournal data={data} busy={busy} act={act} close={close}/>}
    {error&&<p className="feedback" role="alert">{error}</p>}
   </Sheet>}
-  <RewardScene revision={data.revision} events={w.events||[]} box={data.box} activeId={w.activeId} log={w.log}/>
-  {inBattle&&<BattlePanel error={error} battle={data.battle} battleKey={`world:${data.revision}`} biome={area.biome} title={w.trainer?`${w.trainer.name}와의 배틀`:'야생 포켓몬과 배틀'} trainer={w.trainer} onForfeit={()=>{if(window.confirm('배틀을 포기하고 센터로 돌아가시겠습니까?'))act('forfeit');}} busy={busy} onCommand={command=>act('battle',{command})} onItem={item=>act('use',{item})} onBall={w.trainer?undefined:()=>act('ball')} onFlee={w.trainer?undefined:()=>act('flee')} items={data.wallet}/>}
+  {!battleResult&&<RewardScene revision={data.revision} events={w.events||[]} box={data.box} activeId={w.activeId} log={w.log}/>}
+  {inBattle&&<BattlePanel error={error} battle={battleResult?.battle||data.battle} battleKey={`world:${data.revision}`} biome={battleResult?.biome||area.biome} title={(battleResult?.trainer||w.trainer)?`${(battleResult?.trainer||w.trainer).name}와의 배틀`:'야생 포켓몬과 배틀'} trainer={battleResult?.trainer||w.trainer} onForfeit={battleResult?undefined:()=>{if(window.confirm('배틀을 포기하고 센터로 돌아가시겠습니까?'))act('forfeit');}} busy={busy} onCommand={command=>act('battle',{command})} onItem={item=>act('use',{item})} onBall={w.trainer?undefined:()=>act('ball')} onFlee={w.trainer?undefined:()=>act('flee')} items={data.wallet} onContinue={battleResult?()=>{resultRef.current=null;setBattleResult(null);}:undefined}/>}
  </div>;
 }
