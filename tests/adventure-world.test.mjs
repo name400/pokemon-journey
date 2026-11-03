@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseGardenMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -58,4 +58,15 @@ test('city district has reachable services and stores a compatible port position
  assert.deepEqual([saved.area,saved.x,saved.y],[3,5,9]);const restored=restoreAdventurePosition(structuredClone(saved),9);assert.deepEqual([restored.x,restored.y,restored.district],[11,9,'lumiose']);
  const oldWrite=restoreAdventurePosition({...saved,x:5,y:8},10);assert.equal(oldWrite.district,null);assert.deepEqual([oldWrite.x,oldWrite.y],[5,8]);assert.deepEqual(oldWrite.badges,['a']);
  const back=stepField({area:3,district:'lumiose',x:11,y:14},'down');assert.deepEqual([back.area,back.x,back.y,back.district,back.transitioned],[3,5,9,null,true]);
+});
+test('garden and hotel connect to the plaza and preserve compatible positions',()=>{
+ const garden=lumioseGardenMap(),hotel=hotelMap();
+ for(const tile of ['Q','K','Y','W'])assert.ok(fieldPath(garden,{x:1,y:8},findTile(garden,tile)).length,`${tile} reachable`);
+ for(const tile of ['F','X'])assert.ok(fieldPath(hotel,{x:11,y:13},findTile(hotel,tile)).length,`${tile} reachable`);
+ const east=stepField({area:3,district:'lumiose',x:21,y:8},'right');assert.deepEqual([east.district,east.x,east.y],['lumiose-garden',1,8]);
+ const west=stepField({area:3,district:'lumiose-garden',x:1,y:8},'left');assert.deepEqual([west.district,west.x,west.y],['lumiose',21,8]);
+ const saved=storeAdventurePosition({area:3,district:'lumiose',interior:'hotel',x:11,y:6,facing:'up',regionId:6,districtReturnRegion:1},17);
+ assert.deepEqual([saved.x,saved.y,saved.regionId,saved.interior],[5,9,1,null]);const loaded=restoreAdventurePosition(structuredClone(saved),17);assert.deepEqual([loaded.district,loaded.interior,loaded.x,loaded.y,loaded.regionId],['lumiose','hotel',11,6,6]);
+ const old=restoreAdventurePosition({...saved,x:5,y:8},18);assert.equal(old.district,null);assert.equal(old.interior,null);assert.deepEqual([old.x,old.y,old.regionId],[5,8,1]);
+ const discarded=restoreAdventurePosition({area:3,district:'lumiose-garden',x:5,y:8,regionId:1},18);assert.equal(discarded.district,null);assert.deepEqual([discarded.x,discarded.y],[5,8]);
 });

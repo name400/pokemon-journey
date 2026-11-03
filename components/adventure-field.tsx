@@ -34,17 +34,20 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
    const buildings:Array<{x:number;y:number;kind:string}>=[];
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{
     const px=x*tile,py=y*tile;ctx.fillStyle=palette[0];ctx.fillRect(px,py,tile,tile);
-    if(w.interior==='lab'){
-     ctx.fillStyle=c==='#'?'#64817e':(x+y)%2?'#e6e2cc':'#f0ecd9';ctx.fillRect(px,py,tile,tile);
-     if(c==='#'){ctx.fillStyle='#a3bcb1';ctx.fillRect(px+3,py+4,tile-6,tile-8);}
+    if(w.interior==='lab'||w.interior==='hotel'){
+     ctx.fillStyle=c==='#'?(w.interior==='hotel'?'#a78375':'#64817e'):(x+y)%2?'#e6e2cc':'#f0ecd9';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){ctx.fillStyle=w.interior==='hotel'?'#ddc0a1':'#a3bcb1';ctx.fillRect(px+3,py+4,tile-6,tile-8);}
      if(c==='X'){ctx.fillStyle='#a95850';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+21);}
      return;
     }
-    if(w.district==='lumiose'){
+    if(w.district==='lumiose'||w.district==='lumiose-garden'){
      ctx.fillStyle=(x+y)%2?'#e7dfce':'#ded7c5';ctx.fillRect(px,py,tile,tile);
      if(c==='#'){ctx.fillStyle='#8e9c91';ctx.fillRect(px,py,tile,tile);}
+     if(c==='k'||c==='K'){ctx.fillStyle=c==='K'?'#79a36d':'#a6c692';ctx.fillRect(px+2,py+2,tile-4,tile-4);if(c==='K'){ctx.fillStyle='#fff3be';ctx.fillRect(px+8,py+10,5,5);ctx.fillRect(px+20,py+16,5,5);}}
      if('HMJ'.includes(c))buildings.push({x,y,kind:c});
      if(c==='T'){ctx.fillStyle='#769b88';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('광장',px+tile/2,py+20);}
+     if(c==='Y'){ctx.fillStyle='#8d684d';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('안내',px+tile/2,py+20);}
+     if(c==='E'||c==='W'){ctx.fillStyle='#537b85';ctx.font='bold 23px sans-serif';ctx.textAlign='center';ctx.fillText(c==='E'?'›':'‹',px+tile/2,py+25);}
      if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('항구',px+tile/2,py+20);}
      return;
     }
@@ -75,7 +78,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
     trainerRows.forEach((row,ry)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=face==='up'&&ry>2&&ry<6?(ry===3?color:'#60473b'):colors[p];ctx!.fillRect(px+rx*2,py+ry*2+(ry>10?(rx<6?step:-step):0),2,2);}));
     if(face==='left'||face==='right'){ctx!.fillStyle='#263e51';ctx!.fillRect(px+(face==='left'?7:15),py+9,3,3);}
    }
-   w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='N'||c==='Q'||c==='R')trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':'#cf9254','down');}));
+   w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='N'||c==='Q'||c==='R'||c==='F')trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':'#cf9254','down');}));
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
    trainer(s.x,s.y,'#d95250',w.facing||'down',moving);
    ctx.restore();
