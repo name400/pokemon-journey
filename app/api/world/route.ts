@@ -11,7 +11,8 @@ import {inventoryFor,inventoryKey,inventoryWrites,shopItems} from '@/lib/invento
 import {applyAdventureLevelMoves,applyAdventureEvolutionMoves,teachAdventureMove} from '@/lib/adventure-growth.mjs';
 import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from '@/lib/adventure-battle.mjs';
 import {evolveAdventurePokemon,createAdventureShedinja} from '@/lib/adventure-evolution.mjs';
-import {ballById,captureAttempt,afterCapture,friendshipGain} from '@/lib/capture.mjs';
+import {afterCapture,friendshipGain} from '@/lib/capture.mjs';
+import {adventureBall,adventureCaptureAttempt} from '@/lib/adventure-balls.mjs';
 export const dynamic='force-dynamic';const db=()=>env.DB!;const random=()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;
 const columns:any={potion:'potions',super:'super_potions',antidote:'antidotes',ball:'balls',hyper:'hyper_potions',max:'max_potions',fullrestore:'full_restores'};
 // Battle order follows the selected lead, while the saved party order remains intact.
@@ -19,7 +20,7 @@ const columns:any={potion:'potions',super:'super_potions',antidote:'antidotes',b
 function createAdventureCombat(s:any,mons:Map<string,any>,foes:any[],options:any={}){
  const ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)];
  const team=ids.map((id:string)=>mons.get(id));
- const combat=createCombat(team,foes,options);combat.adventureBattleBase=adventureBattleBase([team,foes]);
+ const combat=createCombat(team,foes,options);combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
  const lead=combat.teams[0][combat.requests[0].active];if(lead)s.activeId=lead.boxId;
  return combat;
 }
@@ -43,8 +44,8 @@ if(b.action==='resolveAdventureMove'){
  else s.log=[m&&typeof next?.move==='string'?`${m.name}은(는) ${next.move}을(를) 배우지 않았다.`:'확인할 수 없는 기술 선택을 건너뛰었다.'];
  s.adventurePendingMoves=pending.slice(1);
 }
-else if(b.action==='team'){if(s.combat)throw Error('전투 후 파티를 편성하세요.');if(!Array.isArray(b.ids)||b.ids.length<1||b.ids.length>6||new Set(b.ids).size!==b.ids.length||b.ids.some((id:any)=>!mons.has(id)))throw Error('보유 포켓몬 1–6마리를 선택하세요.');s.teamIds=b.ids;s.activeId=b.ids[0];s.log=['파티를 편성했다.'];}
-else if(b.action==='switch'&&!s.combat){if(!mons.has(b.id))throw Error('보유한 포켓몬이 아닙니다.');s.teamIds=[b.id,...s.teamIds.filter((id:string)=>id!==b.id)].slice(0,6);s.activeId=b.id;s.log=['선두 포켓몬을 바꿨다.'];}
+else if(b.action==='team'){if(s.combat)throw Error('전투 후 파티를 편성하세요.');if(!Array.isArray(b.ids)||b.ids.length<1||b.ids.length>6||new Set(b.ids).size!==b.ids.length||b.ids.some((id:any)=>!mons.has(id)))throw Error('보유 포켓몬 1–6마리를 선택하세요.');if(!b.ids.some((id:string)=>mons.get(id).hp>0))throw Error('파티에 싸울 수 있는 포켓몬을 한 마리 이상 넣으세요.');s.teamIds=b.ids;s.activeId=b.ids[0];s.log=['파티를 편성했다.'];}
+else if(b.action==='switch'&&!s.combat){if(!mons.has(b.id))throw Error('보유한 포켓몬이 아닙니다.');const nextTeam=[b.id,...s.teamIds.filter((id:string)=>id!==b.id)].slice(0,6);if(!nextTeam.some((id:string)=>mons.get(id)?.hp>0))throw Error('파티에 싸울 수 있는 포켓몬을 한 마리 이상 넣으세요.');s.teamIds=nextTeam;s.activeId=b.id;s.log=['선두 포켓몬을 바꿨다.'];}
 else if(b.action==='move'){
  if(s.combat)throw Error('전투를 먼저 마치세요.');
  const path=validateAdventurePath(b.path||[b.direction]);
@@ -95,24 +96,25 @@ else if(b.action==='buy'){
 }
 else if(b.action==='buyBall'){
  if(s.combat||cell()!=='M')throw Error('프렌들리숍 입구에서 구매하세요.');
- const ball=ballById(String(b.ball||'')),quantity=b.quantity??1;
- if(!ball||ball.id==='pokeball')throw Error('상품을 확인하세요.');
+ const ball=adventureBall(String(b.ball||'')),quantity=b.quantity??1;
+ if(!ball||!ball.sale||ball.id==='pokeball')throw Error('판매하지 않는 볼입니다.');
+ if(ball.id!=='greatball'&&(s.area!==3||s.district!=='lumiose'||s.interior))throw Error('미르시티의 볼 코너에서 구매하세요.');
  if(!Number.isInteger(quantity)||quantity<1||quantity>99)throw Error('수량은 1–99개입니다.');
  const stock=s.adventureBalls?.[ball.id]||0;if(!Number.isInteger(stock)||stock<0||stock+quantity>99)throw Error('볼은 종류별 99개까지 보관할 수 있습니다.');
  s.adventureBalls={...(s.adventureBalls||{}),[ball.id]:stock+quantity};reward=-ball.price*quantity;s.log=[`${ball.name} ${quantity}개를 샀다.`];
 }
 else if(b.action==='challenge'){if(s.combat)throw Error('전투를 먼저 마치세요.');let trainer:any;if(cell()==='G'&&s.area>=1&&s.area<=8){trainer=TRAINERS[s.area-1];if(s.badges.length<s.area-1)throw Error('앞선 체육관의 배지를 획득하세요.');}else if(s.area===9&&['L','C'].includes(cell()||'')){const index=leagueIndex(s);if(index!==(s.league>=5?0:s.league))throw Error('사천왕을 순서대로 돌파하세요.');if(s.badges.length<8)throw Error('배지 8개가 필요합니다.');if(s.league>=5)s.league=0;trainer=TRAINERS[8+s.league];}else if(cell()==='B'&&s.district==='lumiose-observation'&&!s.interior&&wildStudyStage(s)===3){trainer={id:'lumiose-observer',name:'관측 정원 트레이너',title:'관측 배틀',sprite:'youngster-gen3',team:[[16,24],[25,26]],strategy:'balanced'};}else if(cell()==='N'){const a=AREAS[s.area];const incident=!s.expedition&&s.area===4&&habitatStage(s)===2;trainer={id:incident?'habitat-worker-4':`route-${s.area}`,name:incident?'현장 트레이너':'길목의 트레이너',title:'트레이너 배틀',sprite:'youngster-gen3',team:[[encounterPool(s.area)[s.area%encounterPool(s.area).length].id,a.max],[encounterPool(s.area)[(s.area+3)%encounterPool(s.area).length].id,a.max]],strategy:'balanced'};}else throw Error('관장이나 트레이너 앞에서 대화하세요.');s.combat=createAdventureCombat(s,mons,trainerTeam(trainer),{heals:trainer.id.startsWith('route-')||trainer.id==='habitat-worker-4'||trainer.id==='lumiose-observer'?0:2,strategy:trainer.strategy,weather:s.weather==='rain'?'raindance':undefined});s.trainer={id:trainer.id,name:trainer.name,title:trainer.title,sprite:trainer.sprite};s.encounter=null;s.log=[`${trainer.name}와(과)의 배틀이 시작됐다!`];}
-else if(['attack','switch','battle','use'].includes(b.action)&&s.combat){let command:any;if(b.action==='use'){consume=hasOwnKey(columns,b.item)?columns[b.item]:'';if(!consume||consume==='balls')throw Error('도구를 선택하세요.');command={type:'item',item:b.item};}else if(b.action==='switch')command={type:'switch',slot:b.slot};else command=b.command||{type:'move',move:b.move,special:b.special};if(b.action!=='use')validateCombatCommand(s.combat,0,command);s.combat=playCpu(s.combat,command);if(s.combat.ended)battleResult=combatView(s.combat);reward=finish(s,mons,changed);if(battleResult)battleResult.log=s.log;}
+else if(['attack','switch','battle','use'].includes(b.action)&&s.combat){let command:any;if(b.action==='use'){consume=hasOwnKey(columns,b.item)?columns[b.item]:'';if(!consume||consume==='balls')throw Error('도구를 선택하세요.');command={type:'item',item:b.item};}else if(b.action==='switch')command={type:'switch',slot:b.slot};else command=b.command||{type:'move',move:b.move,special:b.special};if(b.action!=='use')validateCombatCommand(s.combat,0,command);const moveCount=s.combat.adventureMoveCount;s.combat=playCpu(s.combat,command);if(Number.isInteger(moveCount))s.combat.adventureMoveCount=moveCount+s.combat.events.filter((e:any)=>e.kind==='move').length;if(s.combat.ended)battleResult=combatView(s.combat);reward=finish(s,mons,changed);if(battleResult)battleResult.log=s.log;}
 else if(b.action==='forfeit'){if(!s.combat)throw Error('진행 중인 배틀이 없습니다.');s.combat.ended=true;s.combat.winner=1;s.combat.log=['배틀을 포기했다.'];s.combat.events=[];reward=finish(s,mons,changed);}
 else if(b.action==='ball'){
  if(!s.combat||s.trainer)throw Error('야생 포켓몬만 포획할 수 있습니다.');
  if(s.combat.requests[0].kind!=='move')throw Error('먼저 포켓몬을 교체하세요.');
- const ball=ballById(String(b.ball||'pokeball'));if(!ball)throw Error('볼 종류를 확인하세요.');
+ const ball=adventureBall(String(b.ball||'pokeball'));if(!ball)throw Error('볼 종류를 확인하세요.');
  if(ball.id==='pokeball')consume='balls';else {const stock=s.adventureBalls?.[ball.id]||0;if(!Number.isInteger(stock)||stock<1)throw Error('보유한 볼을 선택하세요.');s.adventureBalls={...s.adventureBalls,[ball.id]:stock-1};}
- const foe=s.combat.teams[1][s.combat.requests[1].active],attempt=captureAttempt(foe,ball.id,{turn:s.combat.turn,night:gameTime().period==='night',cave:AREAS[s.area]?.biome==='cave'},random);
+ const foe=s.combat.teams[1][s.combat.requests[1].active],attempt=adventureCaptureAttempt(foe,ball.id,{turn:s.combat.turn,moveCount:s.combat.adventureMoveCount,night:gameTime().period==='night',cave:AREAS[s.area]?.biome==='cave'},random);
  const ballEvent={kind:attempt.caught?'capture':'captureAttempt',side:0,targetSide:1,type:'normal',category:'status',hit:false,ball:ball.id,shakes:attempt.shakes,caught:attempt.caught,targetBoxId:foe.boxId};s.captureShakes=attempt.shakes;
  if(attempt.caught){battleResult=combatView(s.combat);syncCombat(s,mons,changed);if(s.district==='lumiose-wild'&&wildStudyStage(s)===1)s.wildStudy={...(s.wildStudy||{}),stage:2};const foeBase=adventureBattleBaseFor(s.combat,1,foe)??(s.encounter?adventureBattleBase([[s.encounter]])[0][0].fields:undefined);captured={...afterCapture(restoreAdventurePokemon(foe,foeBase),ball.id),boxId:crypto.randomUUID(),origin:'capture',experience:0};if(s.teamIds.length<6)s.teamIds.push(captured.boxId);s.combat=null;s.encounter=null;s.log=[`${foe.name}을(를) 포획했다! 보유함에 저장했다.`];s.events=[ballEvent];battleResult={...battleResult,ended:true,winner:null,log:s.log,events:[ballEvent]};}
- else{s.combat=playCpu(s.combat,{type:'item',item:'ball'});s.combat.events=[ballEvent,...s.combat.events];if(s.combat.ended)battleResult=combatView(s.combat);reward=finish(s,mons,changed);s.log.unshift(`${ball.name}에서 빠져나왔다!`);if(battleResult)battleResult.log=s.log;}
+ else{const moveCount=s.combat.adventureMoveCount;s.combat=playCpu(s.combat,{type:'item',item:'ball'});if(Number.isInteger(moveCount))s.combat.adventureMoveCount=moveCount+s.combat.events.filter((e:any)=>e.kind==='move').length;s.combat.events=[ballEvent,...s.combat.events];if(s.combat.ended)battleResult=combatView(s.combat);reward=finish(s,mons,changed);s.log.unshift(`${ball.name}에서 빠져나왔다!`);if(battleResult)battleResult.log=s.log;}
 }
 else if(b.action==='flee'){if(!s.combat||s.trainer)throw Error('트레이너 배틀에서는 도망갈 수 없습니다.');syncCombat(s,mons,changed);s.combat=null;s.encounter=null;s.log=['야생 포켓몬에게서 도망쳤다.'];}
 else if(b.action==='heal'){if(s.combat||cell()!=='H'||(s.area===9&&s.league>0&&s.league<5))throw Error('리그 도전 중에는 도구로 회복하세요. 센터에서는 도전 전에 회복할 수 있습니다.');for(const id of s.teamIds){const m=heal(mons.get(id));mons.set(id,m);changed.set(id,m);}s.log=['파티의 HP·상태·PP를 모두 회복했다!'];}
