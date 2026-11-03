@@ -1,3 +1,10 @@
+## 2026-11-03 원작 선행 장면: 호텔 앞 Naveen 배틀
+
+- Yvon에게 이겨 새로 랭크 X가 된 플레이어는 호텔 앞에서 팀 MZ Naveen과 배틀한다. 다음 로열 배틀 존에 들어가기 전에 이기면 Naveen이 패션 디자이너를 꿈꾼다는 사실을 기록하고 952코인을 지급한다. 페이검·깜까미 Lv.16, 곤율랭 Lv.17과 기술은 [원작 임무 자료](https://www.serebii.net/legendsz-a/mainmissions/reachingrankw.shtml), 보상과 이야기 요지는 [공략 자료](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_7)를 확인했다. 패배나 포기는 장면 완료와 보상을 주지 않으며 재도전할 수 있다.
+- `zaNaveenRequired`는 이번 변경 이후 새로 X로 승급할 때만 설정한다. 이미 X로 진행한 예전 저장은 포인트·파티·배지·기존 경기 접근을 그대로 유지하며, X/W 랭크에서 호텔의 선택형 배틀로 놓친 장면을 경험할 수 있다. 이전 W 이상 진행은 되돌리지 않는다. 완료 기록과 952코인은 재시도·중복 요청으로 다시 지급하지 않는다.
+- 원작의 Team MZ 대화·호텔 주변 지형·카메라 연출과 낮으로 바뀌는 장면은 아직 재현하지 않았고 현재 호텔 건물과 턴제 전투는 시범 구현이다. 실시간 전투, 원작의 특성/플러스 기술과 정확한 타이밍도 미완성이다. 사용자 답변 대기 중인 토중몬·껍질몬 정책, 로그라이크·공통 전투 및 기존 데이터를 변경하지 않았다.
+- 실제 탐험 API와 메모리 SQLite에서 신규 X의 선행 조건, 패배 후 재도전, 종·레벨, 보상 1회, X 포인트 미변경과 4,000점 승급 흐름을 검증했다. 기존 X 저장에 플래그가 없고 900점이 있을 때도 접근과 점수가 유지되는 경우를 시험했다. 탐험 관련 검사 26개 및 타입 검사 통과. 실제 D1·PC/모바일과 모든 이전 클라이언트는 미검증이며 운영 배포는 하지 않았다.
+
 ## 2026-11-03 로열 랭크 X → W
 
 - 기존 랭크 X 저장을 유지하며, 밤의 시범 배틀 존에서 Lenny·Lilou·Logan과 대결해 각 450 티켓포인트를 모을 수 있다. 4,000점에서 Xavi 승급전이 열리고, 확인된 팀 마디네·로젤리아 Lv.20, 윤겔라·트리미앙 Lv.21을 이기면 1,260코인과 랭크 W를 받는다. 포인트와 매 방문 상대 완료 상태는 별도 필드에 저장하며, 이전 X 저장에 필드가 없으면 0에서 시작한다. [랭크 X 팀](https://www.serebii.net/legendsz-a/z-aroyale/rankx.shtml), [사무원 점수](https://bulbapedia.bulbagarden.net/wiki/Office_Worker_(Trainer_class)), [배낭여행자 점수](https://bulbapedia.bulbagarden.net/wiki/Backpacker), [승급 보상](https://bulbapedia.bulbagarden.net/wiki/Z-A_Royale).

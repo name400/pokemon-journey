@@ -13,7 +13,7 @@ import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from
 import {evolveAdventurePokemon,createAdventureShedinja} from '@/lib/adventure-evolution.mjs';
 import {afterCapture,friendshipGain} from '@/lib/capture.mjs';
 import {adventureBall,adventureCaptureAttempt} from '@/lib/adventure-balls.mjs';
-import {ROYALE_Z_TRAINERS,ROYALE_Z_PROMOTION,ROYALE_Y_TRAINERS,ROYALE_Y_PROMOTION,ROYALE_X_TRAINERS,ROYALE_X_PROMOTION,royaleXPoints,royaleXWins,royaleXReady,royaleZWins,royaleZReady,royaleZPoints,royaleYPoints,royaleYWins,royaleYReady} from '@/lib/adventure-royale.mjs';
+import {ROYALE_Z_TRAINERS,ROYALE_Z_PROMOTION,ROYALE_Y_TRAINERS,ROYALE_Y_PROMOTION,ROYALE_X_TRAINERS,ROYALE_X_PROMOTION,ROYALE_NAVEEN,naveenRequired,naveenAction,royaleXPoints,royaleXWins,royaleXReady,royaleZWins,royaleZReady,royaleZPoints,royaleYPoints,royaleYWins,royaleYReady} from '@/lib/adventure-royale.mjs';
 export const dynamic='force-dynamic';const db=()=>env.DB!;const random=()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;
 const columns:any={potion:'potions',super:'super_potions',antidote:'antidotes',ball:'balls',hyper:'hyper_potions',max:'max_potions',fullrestore:'full_restores'};
 // Battle order follows the selected lead, while the saved party order remains intact.
@@ -37,9 +37,10 @@ function finish(s:any,mons:Map<string,any>,changed:Map<string,any>){const c=s.co
  else if(ROYALE_Z_TRAINERS.some(t=>t.id===id)&&!royaleZWins(s).includes(id)){s.zaRoyaleZWins=[...royaleZWins(s),id];coins=0;s.log.push(royaleZReady(s)?'첫 도전권을 얻었다! 광장에서 승급전에 도전하자.':`티켓포인트 ${royaleZPoints(s)}/1000.`);}
  }
  if(s.trainer.id.startsWith('royale-y-')&&s.zaRoyaleRank==='Y'){
- const id=s.trainer.id;if(id===ROYALE_Y_PROMOTION.id&&royaleYReady(s)){s.zaRoyaleRank='X';s.zaRoyaleXPoints=0;coins=960;s.log.push('승급전에서 이겨 Z-A 로열 랭크 X가 되었다!');}
+ const id=s.trainer.id;if(id===ROYALE_Y_PROMOTION.id&&royaleYReady(s)){s.zaRoyaleRank='X';s.zaRoyaleXPoints=0;s.zaNaveenRequired=true;coins=960;s.log.push('승급전에서 이겨 Z-A 로열 랭크 X가 되었다!');}
  else if(ROYALE_Y_TRAINERS.some(t=>t.id===id)&&!royaleYWins(s).includes(id)&&!royaleYReady(s)){s.zaRoyaleYSessionWins=[...royaleYWins(s),id];s.zaRoyaleYPoints=Math.min(3000,royaleYPoints(s)+400);coins=0;s.log.push(royaleYReady(s)?'티켓포인트를 모아 도전권을 얻었다!':`티켓포인트 ${s.zaRoyaleYPoints}/3000.`);}
  }
+ if(s.trainer.id===ROYALE_NAVEEN.id&&['X','W'].includes(s.zaRoyaleRank)&&s.zaNaveenComplete!==true){s.zaNaveenComplete=true;s.zaNaveenRequired=false;coins=952;s.log.push('Naveen과 배틀을 마쳤다. 패션 디자이너가 되고 싶은 그의 꿈을 들었다. 다음 로열 경기에 도전할 수 있다.');}
  if(s.trainer.id.startsWith('royale-x-')&&s.zaRoyaleRank==='X'){
  const id=s.trainer.id;if(id===ROYALE_X_PROMOTION.id&&royaleXReady(s)){s.zaRoyaleRank='W';coins=1260;s.log.push('승급전에서 이겨 Z-A 로열 랭크 W가 되었다!');}
  else if(ROYALE_X_TRAINERS.some(t=>t.id===id)&&!royaleXWins(s).includes(id)&&!royaleXReady(s)){s.zaRoyaleXSessionWins=[...royaleXWins(s),id];s.zaRoyaleXPoints=Math.min(4000,royaleXPoints(s)+450);coins=0;s.log.push(royaleXReady(s)?'티켓포인트를 모아 도전권을 얻었다!':`티켓포인트 ${s.zaRoyaleXPoints}/4000.`);}
@@ -119,8 +120,13 @@ else if(b.action==='royaleJoin'){
  if(s.combat||s.district!=='lumiose'||s.interior||cell()!=='T'||s.zaRoyaleRank)throw Error('미르시티 광장의 로열 접수처를 확인하세요.');
  s.zaRoyaleRank='Z';s.zaRoyaleZWins=[];s.log=['Z-A 로열에 랭크 Z로 참가했다. 밤에 광장의 임시 접수처를 찾자.'];
 }
+else if(b.action==='battleNaveen'){
+ if(s.combat||s.district!=='lumiose'||s.interior||cell()!=='J'||!naveenAction(s))throw Error('미르시티 호텔 앞에서 Naveen을 만나세요.');
+ const trainer=ROYALE_NAVEEN,team=trainerTeam({...trainer,strategy:'balanced'});team.forEach((m:any,i:number)=>{m.moves=trainer.moves[i];m.pp={};});
+ s.combat=createAdventureCombat(s,mons,team,{heals:0,strategy:'balanced'});s.trainer={id:trainer.id,name:trainer.name,title:'팀 MZ 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=['Naveen과의 배틀이 시작됐다!'];
+}
 else if(b.action==='enterRoyaleZone'){
- if(s.combat||s.district!=='lumiose'||s.interior||cell()!=='T'||!['Z','Y','X'].includes(s.zaRoyaleRank)||royaleZReady(s)||royaleYReady(s)||royaleXReady(s))throw Error('광장의 로열 접수처를 확인하세요.');
+ if(s.combat||s.district!=='lumiose'||s.interior||cell()!=='T'||!['Z','Y','X'].includes(s.zaRoyaleRank)||royaleZReady(s)||royaleYReady(s)||royaleXReady(s)||naveenRequired(s))throw Error(naveenRequired(s)?'먼저 호텔 앞에서 Naveen과 배틀하세요.':'광장의 로열 접수처를 확인하세요.');
  if(gameTime().period!=='night')throw Error('로열 배틀 존은 밤에 열립니다.');
  if(s.zaRoyaleRank==='Y')s.zaRoyaleYSessionWins=[];if(s.zaRoyaleRank==='X')s.zaRoyaleXSessionWins=[];s.district='lumiose-royale';s.x=11;s.y=14;s.facing='up';s.log=['밤의 배틀 존에 들어왔다. 트레이너를 찾아 대화하자.'];
 }
@@ -128,6 +134,7 @@ else if(['royaleBattle','royaleZach','royaleYvon','royaleXavi','royaleErica','ro
  const promo=['royaleZach','royaleYvon','royaleXavi'].includes(b.action),legacy=b.action==='royaleBattle';
  if(s.combat||s.interior||!['Z','Y','X'].includes(s.zaRoyaleRank)||(promo||legacy?(s.district!=='lumiose'||cell()!=='T'):(s.district!=='lumiose-royale'||cell()!==({royaleErica:'O',royaleDaniel:'U',royaleJean:'V'} as any)[b.action])))throw Error('배틀 존의 트레이너를 찾아가세요.');
  if(gameTime().period!=='night')throw Error('로열 배틀은 밤에 열립니다.');
+ if(naveenRequired(s))throw Error('먼저 호텔 앞에서 Naveen과 배틀하세요.');
  if((b.action==='royaleZach'&&!royaleZReady(s))||(b.action==='royaleYvon'&&!royaleYReady(s))||(b.action==='royaleXavi'&&!royaleXReady(s)))throw Error('티켓포인트를 모아 도전권을 얻으세요.');
  const id=({royaleErica:'royale-z-erica',royaleDaniel:'royale-z-daniel',royaleJean:'royale-z-jean'} as any)[b.action];
  const slot=({royaleErica:0,royaleDaniel:1,royaleJean:2} as any)[b.action];const trainer=promo?(b.action==='royaleZach'?ROYALE_Z_PROMOTION:b.action==='royaleYvon'?ROYALE_Y_PROMOTION:ROYALE_X_PROMOTION):s.zaRoyaleRank==='X'?(legacy?undefined:ROYALE_X_TRAINERS[slot]):s.zaRoyaleRank==='Y'?(legacy?undefined:ROYALE_Y_TRAINERS[slot]):legacy?ROYALE_Z_TRAINERS.find(t=>!royaleZWins(s).includes(t.id)):ROYALE_Z_TRAINERS.find(t=>t.id===id);if(!trainer||(!promo&&(s.zaRoyaleRank==='X'?(royaleXReady(s)||royaleXWins(s).includes(trainer.id)):s.zaRoyaleRank==='Y'?(royaleYReady(s)||royaleYWins(s).includes(trainer.id)):royaleZWins(s).includes(trainer.id))))throw Error('이미 마친 배틀입니다.');
