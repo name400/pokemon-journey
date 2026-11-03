@@ -1,0 +1,18 @@
+// Local in-memory heuristic run. This does not modify a user account or prove full balance.
+import {applyClassicAction,classicGameView} from '../lib/rogue-classic-game.mjs';
+let doc={__classicOwnerSeed:'classic-natural-20261103',coins:0,collection:[]},decisions=0,lastWave=0;
+let initial=classicGameView(doc,{includeStarters:true}),p=initial.starters.find(x=>x.unlocked);
+console.log('Initial starter:',p.name);
+function act(action,extra={}){decisions++;applyClassicAction(doc,{action,...extra});doc=JSON.parse(JSON.stringify(doc));}
+act('start',{selection:[{id:p.id,ability:p.abilities[0].key,nature:p.natures[0].key,gender:p.genders[0],shiny:false,moves:p.defaultMoves}]});
+try{while(decisions<5000){let v=classicGameView(doc),r=v.run;if(r.wave!==lastWave){lastWave=r.wave;console.log('wave',r.wave,'party',r.party.map(x=>`${x.name}:${x.level}:${x.hp}`).join(','));}
+ if(['defeat','victory','abandoned'].includes(r.screen)){console.log('RESULT',r.screen,'wave',r.wave,'decisions',decisions);break;}
+ if(r.screen==='battle'){let b=v.battle,req=b.requests[0];let foe=b.teams[1].filter(x=>x.hp>0&&!x.captured);let balls=['rogueball','ultraball','greatball','pokeball'].find(x=>r.balls[x]>0);if(!r.encounter?.trainer&&r.captureAllowed&&balls&&r.party.length<6&&foe.length&&foe[0].hp/foe[0].maxHp<.65){act('capture',{ballId:balls,boxId:foe[0].boxId});continue;}
+ let used=new Set(),actions=req.actors.filter(a=>a.kind!=='wait').map(a=>{if(a.kind==='switch'){let x=a.switches.find(s=>!used.has(s.slot));if(!x)throw Error('no valid switch');used.add(x.slot);return {actor:a.slot,type:'switch',slot:x.slot};}let own=b.teams[0][a.active];let ranked=a.moves.map(m=>({m,score:(m.power||0)*(m.accuracy===true?1:(m.accuracy||100)/100)*(m.effectiveness??1)*(own?.types?.includes(m.type)?1.5:1)})).sort((a,b)=>b.score-a.score),m=ranked[0].m;return {actor:a.slot,type:'move',move:m.id,...(m.targets?.length?{target:(m.targets.find(t=>t.side===1)||m.targets[0]).target}:{})};});act('turn',{command:actions.length===1?actions[0]:{type:'turn',actions}});continue;}
+ if(r.screen==='learn'){let q=r.pendingMoves[0];act('learn',{...q,slot:0});continue;}
+ if(r.screen==='capture'){act('acceptCapture',{release:true});continue;}
+ if(r.screen==='wildswitch'){let q=r.pendingWildSwitch;let x=r.party.find(x=>x.hp>0&&!q.reservedBoxIds.includes(x.boxId)&&!Object.values(q.choices).includes(x.boxId));if(!x)throw Error('no wild switch');act('chooseWildReplacement',{boxId:x.boxId});continue;}
+ if(r.screen==='route'){act('route',{biomeId:r.routeChoices[0].id});continue;}
+ if(r.screen==='reward'){let service=r.services.find(s=>['potion','superpotion','hyperpotion','maxpotion','revive','maxrevive'].includes(s.id)&&s.price<=r.money&&!s.disabledReason&&s.targets.some(t=>t.eligible&&(t.hp<=0||t.hp/t.maxHp<.55)));if(service){let target=service.targets.find(t=>t.eligible&&(t.hp<=0||t.hp/t.maxHp<.55));act('buyService',{itemId:service.id,boxId:target.boxId,expectedPrice:service.price});continue;}let evo=r.party.flatMap(x=>x.evolutions.filter(e=>e.ready).map(e=>({boxId:x.boxId,evolutionKey:e.key})))[0];if(evo){act('evolve',evo);continue;}let candy=r.rewards.find(x=>x.name==='이상한사탕'&&x.targets?.some(t=>t.eligible));if(candy){act('reward',{rewardId:candy.id,boxId:candy.targets.find(t=>t.eligible).boxId});continue;}let choice=r.rewards.find(x=>!x.requiresTarget&&!x.requiresMove&&!x.requiresNewMove&&!x.requiresReplace);if(choice){act('reward',{rewardId:choice.id});continue;}act('skipReward');continue;}
+ if(['advance','interlude'].includes(r.screen)){act('next');continue;}throw Error('unexpected screen '+r.screen);
+}}catch(e){console.error('ERROR wave',lastWave,'decision',decisions,e.stack);process.exitCode=1;}
