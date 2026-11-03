@@ -12,6 +12,7 @@ import {species,moves} from '@/lib/game.mjs';
 import {STARTERS} from '@/lib/world.mjs';
 import {TRAINERS} from '@/lib/campaign.mjs';
 import {fieldPath,stepField} from '@/lib/adventure-world.mjs';
+import {BALLS} from '@/lib/capture.mjs';
 import './adventure.css';
 
 type Screen='party'|'manage'|'bag'|'shop'|'journal'|null;
@@ -118,6 +119,6 @@ export default function Adventure(){
    </div>
   </Sheet>}
   {!battleResult&&!pendingMove&&<RewardScene revision={data.revision} events={w.events||[]} box={data.box} activeId={w.activeId} log={w.log}/>}
-  {inBattle&&<BattlePanel error={error} battle={battleResult?.battle||data.battle} battleKey={`world:${data.revision}`} biome={battleResult?.biome||area.biome} title={(battleResult?.trainer||w.trainer)?`${(battleResult?.trainer||w.trainer).name}와의 배틀`:'야생 포켓몬과 배틀'} trainer={battleResult?.trainer||w.trainer} onForfeit={battleResult?undefined:()=>{if(window.confirm('배틀을 포기하고 센터로 돌아가시겠습니까?'))act('forfeit');}} busy={busy} onCommand={command=>act('battle',{command})} onItem={item=>act('use',{item})} onBall={w.trainer?undefined:()=>act('ball')} onFlee={w.trainer?undefined:()=>act('flee')} items={data.wallet} onContinue={battleResult?()=>{resultRef.current=null;setBattleResult(null);}:undefined}/>}
+  {inBattle&&<BattlePanel error={error} battle={battleResult?.battle||data.battle} battleKey={`world:${data.revision}`} biome={battleResult?.biome||area.biome} title={(battleResult?.trainer||w.trainer)?`${(battleResult?.trainer||w.trainer).name}와의 배틀`:'야생 포켓몬과 배틀'} trainer={battleResult?.trainer||w.trainer} onForfeit={battleResult?undefined:()=>{if(window.confirm('배틀을 포기하고 센터로 돌아가시겠습니까?'))act('forfeit');}} busy={busy} onCommand={command=>act('battle',{command})} onItem={item=>act('use',{item})} onBall={w.trainer?undefined:(ballId)=>act('ball',{ball:ballId||'pokeball'})} balls={BALLS.map(ball=>({...ball,count:ball.id==='pokeball'?data.wallet.balls:(w.adventureBalls?.[ball.id]||0)}))} onFlee={w.trainer?undefined:()=>act('flee')} items={data.wallet} onContinue={battleResult?()=>{resultRef.current=null;setBattleResult(null);}:undefined}/>}
  </div>;
 }
