@@ -9,6 +9,7 @@ import ts from 'typescript';
 import {makeMon,moves,effectiveness} from '../lib/game.mjs';
 import {configure} from '../lib/pokemon-config.mjs';
 import {createCombat} from '../lib/party-battle.mjs';
+import {expToNext} from '../lib/growth.mjs';
 import {fieldPath,findTile} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 
@@ -74,6 +75,15 @@ test('world route: save migration, atomic purchases, actual battle/capture/growt
  // Older saves can contain an encounter without a native battle snapshot.
  seedMon(owned,{...rawMon(owned),hp:0});seedWorld({area:0,x:3,y:8,activeId:owned,combat:null,trainer:null,encounter:{...makeMon(10,3),boxId:'wild'}});await get();assert.equal(state.battle.teams[0][state.battle.active[0]].boxId,second);assert.equal(state.world.activeId,second);await call('flee');assert.equal(rawWorld().activeId,second);assert.equal(rawMon(owned).hp,0);
  await walkTo('H');await call('heal');assert.equal(rawMon(owned).hp,rawMon(owned).maxHp);assert.equal(rawMon(owned).status,null);
+ // A real victory fills an empty move slot; teaching another move preserves PP
+ // into the next native battle and does not trigger automatic evolution.
+ const savedGrowthMon=rawMon(owned),savedGrowthParty=[...state.world.teamIds],savedGrowthLead=state.world.activeId;
+ const grower={...makeMon(1,5),boxId:owned,moves:['몸통박치기','울음소리']};grower.experience=expToNext(grower)-1;seedMon(owned,grower);
+ const growthFoe={...makeMon(10,2),boxId:'wild'};seedWorld({teamIds:[owned],activeId:owned,combat:createCombat([grower],[growthFoe]),encounter:growthFoe,trainer:null});await get();const initialTacklePP=state.battle.requests[0].moves.find(m=>m.id==='tackle').pp;await battle();
+ assert.equal(rawMon(owned).id,1);assert.ok(rawMon(owned).level>=6);assert.ok(rawMon(owned).moves.includes('성장'));const retainedPP=rawMon(owned).pp.tackle;assert.ok(retainedPP<initialTacklePP);
+ await call('learn',{move:'덩굴채찍',slot:1});assert.equal(rawMon(owned).pp.tackle,retainedPP);assert.equal(rawMon(owned).pp.growl,undefined);assert.equal(rawMon(owned).pp.vinewhip,undefined);
+ seedWorld({area:0,x:6,y:3});await get();globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});assert.equal(state.battle.requests[0].moves.find(m=>m.id==='tackle').pp,retainedPP);const newMove=state.battle.requests[0].moves.find(m=>m.id==='vinewhip');assert.equal(newMove.pp,newMove.maxPp);await call('flee');globalThis.__adventureRandom=()=>.999;
+ seedMon(owned,savedGrowthMon);seedWorld({teamIds:savedGrowthParty,activeId:savedGrowthLead,area:0,x:3,y:8});await get();
  // The server interrupts a path at the first wild encounter.
  seedWorld({x:6,y:3,area:0});await get();globalThis.__adventureRandom=()=>0;await call('move',{path:['right','right','right']});globalThis.__adventureRandom=()=>.999;assert.equal(state.world.x,7);assert.ok(state.battle);await call('flee');
  // Batched routes stop at a wall or regional exit without applying later steps.
