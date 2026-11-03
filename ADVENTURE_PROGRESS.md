@@ -1,3 +1,9 @@
+## 2026-11-03 로열 랭크 X → W
+
+- 기존 랭크 X 저장을 유지하며, 밤의 시범 배틀 존에서 Lenny·Lilou·Logan과 대결해 각 450 티켓포인트를 모을 수 있다. 4,000점에서 Xavi 승급전이 열리고, 확인된 팀 마디네·로젤리아 Lv.20, 윤겔라·트리미앙 Lv.21을 이기면 1,260코인과 랭크 W를 받는다. 포인트와 매 방문 상대 완료 상태는 별도 필드에 저장하며, 이전 X 저장에 필드가 없으면 0에서 시작한다. [랭크 X 팀](https://www.serebii.net/legendsz-a/z-aroyale/rankx.shtml), [사무원 점수](https://bulbapedia.bulbagarden.net/wiki/Office_Worker_(Trainer_class)), [배낭여행자 점수](https://bulbapedia.bulbagarden.net/wiki/Backpacker), [승급 보상](https://bulbapedia.bulbagarden.net/wiki/Z-A_Royale).
+- 원작의 임무 07에는 먼저 Naveen과 싸우는 장면이 있지만 현재 구현에는 없다. 트레이너 재등장은 시범 존 재입장으로 대체되며 실제 존 위치·재등장 시점, 보너스 카드·메달, 실시간 전투와 Xavi의 플러스 기술은 미구현이다. 시범 흐름은 원작 전체 스토리 또는 전투 재현을 의미하지 않는다. 랭크 W 이후는 미구현으로 표시한다.
+- 실제 탐험 API·메모리 SQLite에서 Z → Y → X 이후 9승으로 4,000점 상한, 동일 방문 중복 거절, 저장 재조회, 승급전 상대·포기 후 재도전, W 승급과 1,260코인 1회 지급을 검증했다. 전체 탐험 관련 검사 26개 및 타입 검사 통과. 실제 D1과 PC·모바일 브라우저는 미검증이다. 로그라이크·공통 전투 코드와 기존 소유 데이터, 사용자 답변 대기 중인 토중몬·껍질몬 정책은 변경하지 않았으며 운영 배포하지 않았다.
+
 ## 2026-11-03 티켓포인트와 랭크 Y → X
 
 - 첫 세 상대 Erica·Daniel·Jean의 확인된 각 350포인트를 기존 `zaRoyaleZWins` 기록에서 계산해 1,000점 한도로 표시한다. 기존 Z/Y 저장을 초기화하거나 소급 지급하지 않는다. 자료: [사무원 배틀](https://bulbapedia.bulbagarden.net/wiki/Office_Worker_(Trainer_class)), [배낭여행자 배틀](https://bulbapedia.bulbagarden.net/wiki/Backpacker).
