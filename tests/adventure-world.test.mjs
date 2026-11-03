@@ -167,6 +167,7 @@ test('bureau map has reachable Emma and exits to the provisional third zone',()=
 
 
 test('cemetery draft connects to the third zone and preserves its location',()=>{
+ assert.equal(findTile(lumioseZone4Map(),'p'),null);assert.ok(findTile(lumioseZone4Map({zaBunnelbyQuest:3}),'p'));assert.equal(findTile(lumioseZone4Map({zaBunnelbyQuest:3,zaZone4AlphaSpent:true}),'p'),null);
  const source={area:3,district:'lumiose-zone3',x:1,y:8,zaEmmaMet:true};
  const entered=stepField(source,'left');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone4',21,8]);
  assert.ok(fieldPath(lumioseZone4Map(),{x:21,y:8},findTile(lumioseZone4Map(),'z')).length);
