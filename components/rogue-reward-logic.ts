@@ -29,6 +29,7 @@ export type RewardChoice = {
   moveAccuracy?: number | boolean;
   moveType?: string;
   stackText?: string;
+  disabledReason?: string;
 };
 export type ServiceChoice = {
   id: string;
