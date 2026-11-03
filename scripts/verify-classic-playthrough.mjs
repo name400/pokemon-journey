@@ -1,6 +1,7 @@
 // Local in-memory heuristic run. This does not modify a user account or prove full balance.
 import {applyClassicAction,classicGameView} from '../lib/rogue-classic-game.mjs';
 import {Dex} from '@pkmn/sim';
+import {writeFileSync} from 'node:fs';
 import {moves} from '../lib/game.mjs';
 const seed=process.argv[2]||'classic-natural-20261103';
 let doc={__classicOwnerSeed:seed,coins:0,collection:[]},decisions=0,lastWave=0;
@@ -19,5 +20,5 @@ try{while(decisions<5000){let v=classicGameView(doc),r=v.run;if(r.wave!==lastWav
  if(r.screen==='route'){act('route',{biomeId:r.routeChoices[0].id});continue;}
  if(r.screen==='reward'){let ether=r.services.find(s=>['ether','maxether'].includes(s.id)&&s.price<=r.money&&!s.disabledReason&&s.targets.some(t=>t.eligible&&t.moves.some(m=>m.pp===0)));if(ether){let target=ether.targets.find(t=>t.eligible&&t.moves.some(m=>m.pp===0)),move=target.moves.find(m=>m.pp===0);act('buyService',{itemId:ether.id,boxId:target.boxId,moveIndex:move.index,expectedPrice:ether.price});continue;}let service=r.services.find(s=>['potion','superpotion','hyperpotion','maxpotion','revive','maxrevive'].includes(s.id)&&s.price<=r.money&&!s.disabledReason&&s.targets.some(t=>t.eligible&&(t.hp<=0||t.hp/t.maxHp<.55)));if(service){let target=service.targets.find(t=>t.eligible&&(t.hp<=0||t.hp/t.maxHp<.55));act('buyService',{itemId:service.id,boxId:target.boxId,expectedPrice:service.price});continue;}let evo=r.party.flatMap(x=>x.evolutions.filter(e=>e.ready).map(e=>({boxId:x.boxId,evolutionKey:e.key})))[0];if(evo){act('evolve',evo);continue;}let candy=r.rewards.find(x=>x.name==='이상한사탕'&&x.targets?.some(t=>t.eligible));if(candy){act('reward',{rewardId:candy.id,boxId:candy.targets.find(t=>t.eligible).boxId});continue;}let candidates=r.rewards.filter(x=>!x.requiresMove&&!x.requiresNewMove&&!x.requiresReplace&&(!x.requiresTarget||x.targets?.some(t=>t.eligible)));candidates.sort((a,b)=>{let score=x=>/경험|학습장치|행복의알|황금알/.test(x.name)?10:/몬스터볼|슈퍼볼|하이퍼볼|로그볼|마스터볼/.test(x.name)?8:/폼 변화|메가|거다이맥스/.test(x.name)?6:1;return score(b)-score(a);});let choice=candidates[0];if(choice){let target=choice.requiresTarget?choice.targets.filter(t=>t.eligible).sort((a,b)=>(r.party.find(p=>p.boxId===b.boxId)?.level||0)-(r.party.find(p=>p.boxId===a.boxId)?.level||0))[0]:null;act('reward',{rewardId:choice.id,...(target?{boxId:target.boxId}:{})});continue;}act('skipReward');continue;}
  if(['advance','interlude'].includes(r.screen)){act('next');continue;}throw Error('unexpected screen '+r.screen);
-}}catch(e){console.error('ERROR wave',lastWave,'decision',decisions,e.stack);process.exitCode=1;}
+}}catch(e){console.error('ERROR wave',lastWave,'decision',decisions,e.stack);if(process.env.CLASSIC_FAILURE_PATH)writeFileSync(process.env.CLASSIC_FAILURE_PATH,JSON.stringify(doc));process.exitCode=1;}
 if(decisions>=5000){console.error('Decision limit reached without victory');process.exitCode=1;}

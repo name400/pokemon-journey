@@ -12,3 +12,12 @@ run.combat=continueClassicWild(run,[makeReferenceMon(19,2,{boxId:'second',moves:
 const native=restoreClassicNativeBattle(run.combat,run),pokemon=native.p1.pokemon.find(p=>p.set.trainerToken==='bench');assert.equal(pokemon.hp,expected);assert.equal(pokemon.fainted,false);assert.equal(native.p1.pokemonLeft,2);assert.equal(native.p1.active[0].status,'');assert.equal(native.p1.active[0].hp,healed.maxHp);assert.ok(run.combat.requests[0].switches.some(option=>option.name===actual.name));
 run.party=run.combat.teams[0];const switchSlot=run.combat.requests[0].switches.find(option=>option.name===actual.name).slot;const switched=playClassicCombat(run,{type:'switch',slot:switchSlot});assert.equal(restoreClassicNativeBattle(switched,run).p1.active[0].set.trainerToken,'bench');
 console.log('A revived bench Pokémon remains alive and switchable across consecutive wild battles.');
+
+// The winning attack can also KO the active Pokémon through recoil. Reviving
+// that active member at the reward screen must clear its old faint switch flag.
+const recoilHero=makeReferenceMon(151,50,{boxId:'recoil-hero',moves:['Double-Edge']});recoilHero.hp=1;
+const recoilRun={id:'active-revive',wave:1,biome:0,rng:42,party:[recoilHero,makeReferenceMon(25,50,{boxId:'healthy-bench',moves:['Splash']})],modifiers:[],tools:{},seed:'fixture',encounter:{kind:'wild'},teraCharged:false};
+const fragile=makeReferenceMon(19,1,{boxId:'fragile',moves:['Splash']});fragile.hp=1;
+recoilRun.combat=createClassicCombat(recoilRun,[fragile]);recoilRun.combat=playClassicCombat(recoilRun,{type:'move',move:'doubleedge'});assert.equal(recoilRun.combat.winner,0);recoilRun.party=recoilRun.combat.teams[0];assert.equal(recoilRun.party.find(p=>p.boxId==='recoil-hero').hp,0);assert.equal(restoreClassicNativeBattle(recoilRun.combat,recoilRun).p1.active[0].switchFlag,true);
+recoilRun.screen='reward';recoilRun.money=10000;const revive=classicServices(recoilRun).find(x=>x.id==='revive');buyClassicService(recoilRun,{itemId:'revive',boxId:'recoil-hero',expectedPrice:revive.price});const recovered=recoilRun.party.find(p=>p.boxId==='recoil-hero').hp;recoilRun.wave++;
+recoilRun.combat=continueClassicWild(recoilRun,[makeReferenceMon(19,2,{boxId:'new-enemy',moves:['Splash']})]);const resumed=restoreClassicNativeBattle(recoilRun.combat,recoilRun);assert.equal(resumed.p1.active[0].set.trainerToken,'recoil-hero');assert.equal(resumed.p1.active[0].hp,recovered);assert.equal(resumed.p1.active[0].switchFlag,false);assert.equal(recoilRun.combat.requests[0].kind,'move');
