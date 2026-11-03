@@ -3,13 +3,13 @@ import {useEffect,useRef,useState} from 'react';
 import manifest from '@/public/game/town/tiles.json';
 import {fieldPath} from '@/lib/adventure-world.mjs';
 
-type Props={world:any;disabled:boolean;onPath:(path:string[])=>void;onInteract:()=>void};
+type Props={world:any;disabled:boolean;onPath:(path:string[])=>void;onInteract:()=>void;onAimAlpha:()=>void};
 const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 const trainerRows=['...RRRRR....','..RRRRRRR...','..RRWWWWRR..','...SSSSS....','...SKSKS....','....SSS.....','..BBBBBBB...','.SBBBBBBBS..','.SBBYYYBBS..','..BBYYYBB...','...KKKKK....','...KK.KK....','...KK.KK....','..DDD.DDD...'];
 
-export default function AdventureField({world:w,disabled,onPath,onInteract}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),props=useRef({w,disabled,onPath,onInteract}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
- props.current={w,disabled,onPath,onInteract};
+export default function AdventureField({world:w,disabled,onPath,onInteract,onAimAlpha}:Props){
+ const canvas=useRef<HTMLCanvasElement>(null),props=useRef({w,disabled,onPath,onInteract,onAimAlpha}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
+ props.current={w,disabled,onPath,onInteract,onAimAlpha};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,frame=0,last=0,width=736,height=544;
@@ -89,5 +89,5 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
   }
   frame=requestAnimationFrame(draw);return()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();};
  },[]);
- return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. 방향키 또는 WASD로 이동, E로 대화. 현재 위치 ${w.x}, ${w.y}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile);if(x===w.x&&y===w.y){onInteract();return;}onPath(fieldPath(w.map,{x:w.x,y:w.y},{x,y}));}}/><div className="adv-field-hint">필드를 누르면 그곳까지 걷습니다</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
+ return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. 방향키 또는 WASD로 이동, E로 대화. 현재 위치 ${w.x}, ${w.y}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile);if(w.map[y]?.[x]==='a'&&!w.zaWildAlphaSpent){onAimAlpha();return;}if(x===w.x&&y===w.y){onInteract();return;}onPath(fieldPath(w.map,{x:w.x,y:w.y},{x,y}));}}/><div className="adv-field-hint">필드를 누르면 그곳까지 걷습니다</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
 }
