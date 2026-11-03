@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -92,4 +92,12 @@ test('observation garden opens after reporting and returns to the wild district'
  const next=stepField({...gate,wildStudy:{stage:3}},'right');assert.deepEqual([next.district,next.x,next.y],['lumiose-observation',1,8]);
  const back=stepField({area:3,district:'lumiose-observation',x:1,y:8},'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-wild',21,8]);
  const saved=storeAdventurePosition({area:3,district:'lumiose-observation',x:12,y:8,regionId:6,districtReturnRegion:1},10);assert.deepEqual([saved.x,saved.y,saved.regionId],[5,9,1]);assert.equal(restoreAdventurePosition(structuredClone(saved),10).district,'lumiose-observation');
+});
+
+test('provisional Royale zone connects to plaza and keeps the legacy safe position',()=>{
+ const map=lumioseRoyaleMap();for(const tile of ['O','U','V','X'])assert.ok(fieldPath(map,{x:11,y:14},findTile(map,tile)).length,`${tile} reachable`);
+ const state={area:3,district:'lumiose-royale',x:5,y:11,regionId:6,districtReturnRegion:1,zaRoyaleRank:'Z',zaRoyaleZWins:['royale-z-erica']};
+ const saved=storeAdventurePosition(state,19);assert.deepEqual([saved.x,saved.y,saved.regionId],[5,9,1]);const loaded=restoreAdventurePosition(structuredClone(saved),19);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-royale',5,11]);
+ const old=restoreAdventurePosition({...saved,x:5,y:8},20);assert.equal(old.district,null);assert.deepEqual(old.zaRoyaleZWins,['royale-z-erica']);
+ const exit=stepField({area:3,district:'lumiose-royale',x:11,y:14},'down');assert.deepEqual([exit.district,exit.x,exit.y],['lumiose',11,10]);
 });
