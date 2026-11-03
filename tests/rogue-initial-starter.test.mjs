@@ -4,7 +4,7 @@ import {ensureStarterSystem,starterCatalog,registerStarterCaught} from '../lib/r
 import {makeMon} from '../lib/game.mjs';
 import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
 const a=ensureStarterSystem({},[],{seed:'player-a'}),again=ensureStarterSystem({},[],{seed:'player-a'}),b=ensureStarterSystem({},[],{seed:'player-b'});
-assert.ok(DEFAULT_STARTER_IDS.includes(a.initialStarterId));assert.equal(a.initialStarterId,again.initialStarterId);assert.notEqual(a.initialStarterId,b.initialStarterId);assert.equal(starterCatalog(a).filter(p=>p.unlocked).length,1);
+assert.ok(DEFAULT_STARTER_IDS.includes(a.initialStarterId));assert.equal(a.initialStarterId,again.initialStarterId);assert.notEqual(a.initialStarterId,b.initialStarterId);assert.equal(starterCatalog(a).filter(p=>p.unlocked).length,27);
 const earned=DEFAULT_STARTER_IDS.find(id=>id!==a.initialStarterId);registerStarterCaught(a,makeMon(earned,5),{kind:'hatch'});assert.ok(starterCatalog(a).find(p=>p.sourceId===earned).unlocked);assert.equal(a.dex[earned].eggRegistered,true);
 // Existing default unlocks and dex details must survive migration.
 a.dexVersion=3;for(const id of DEFAULT_STARTER_IDS){a.dex[id]||={caught:true,seen:true,registered:true,ivs:{hp:15,atk:15,def:15,spa:15,spd:15,spe:15},natures:['hardy'],abilitySlots:['primary'],genders:['M','F'],forms:[0],caughtCount:0,hatchedCount:0};a.dex[id].registered=true;a.dex[id].forms=[0];}
@@ -12,9 +12,9 @@ const existing=DEFAULT_STARTER_IDS.find(id=>id!==a.initialStarterId&&id!==earned
 ensureStarterSystem(a,[],{seed:'player-a'});assert.equal(starterCatalog(a).filter(p=>p.unlocked).length,27);assert.deepEqual(a.dex[existing],saved);assert.ok(starterCatalog(a).find(p=>p.sourceId===earned).unlocked);
 const older=structuredClone(a);older.dexVersion=2;const extra=Object.keys(older.dex).find(id=>!DEFAULT_STARTER_IDS.includes(Number(id)));older.dex[extra].registered=true;older.dex[extra].forms=[0];ensureStarterSystem(older,[],{seed:'player-a'});assert.equal(older.dex[extra].registered,true);
 const oldest=structuredClone(a);oldest.dexVersion=1;oldest.dex[existing].natures=['adamant'];ensureStarterSystem(oldest,[],{seed:'player-a'});assert.ok(oldest.dex[existing].natures.includes('adamant'));
-// Old collections can lack a recognizable origin; keep their dex evidence without inventing an egg unlock.
+// Old collections can lack a recognizable origin; keep their dex evidence while preserving its IV data.
 const unmarked=makeMon(DEFAULT_STARTER_IDS[1],5);unmarked.origin='legacy';unmarked.ivs={hp:31,atk:31,def:31,spa:31,spd:31,spe:31};
-const oldCollection=ensureStarterSystem({},[unmarked],{seed:'player-a'});assert.notEqual(oldCollection.initialStarterId,DEFAULT_STARTER_IDS[1]);assert.equal(oldCollection.dex[DEFAULT_STARTER_IDS[1]].caught,true);assert.equal(oldCollection.dex[DEFAULT_STARTER_IDS[1]].ivs.hp,31);assert.equal(oldCollection.dex[DEFAULT_STARTER_IDS[1]].registered,false);
+const oldCollection=ensureStarterSystem({},[unmarked],{seed:'player-a'});assert.notEqual(oldCollection.initialStarterId,DEFAULT_STARTER_IDS[1]);assert.equal(oldCollection.dex[DEFAULT_STARTER_IDS[1]].caught,true);assert.equal(oldCollection.dex[DEFAULT_STARTER_IDS[1]].ivs.hp,31);assert.equal(oldCollection.dex[DEFAULT_STARTER_IDS[1]].registered,true);
 // Legacy egg origin is equivalent to the old gacha origin, including non-default species.
 const oldEgg=makeMon(25,5);oldEgg.origin='egg';for(const legacy of [{},{dexVersion:2,dex:{},starterData:{}},{dexVersion:3,dex:{},starterData:{}},{dex:{},starterData:{}}]){const migrated=ensureStarterSystem(legacy,[oldEgg],{seed:'player-a'});assert.equal(migrated.dex[25].registered,true);assert.equal(migrated.dex[25].eggRegistered,true);}
 // A version-4 account affected by the old import bug can recover from retained egg evidence without duplicate rewards.
@@ -22,4 +22,7 @@ const broken=ensureStarterSystem({},[],{seed:'player-a'});const eggDocument={col
 // Partial unversioned records and future schema versions must never be reset.
 const partial=structuredClone(a);delete partial.dexVersion;partial.starterData[existing]={candies:47,friendshipPoints:11,costReduction:1,passiveUnlocked:true,eggMask:3};const beforePartial=structuredClone(partial.dex[existing]);ensureStarterSystem(partial,[],{seed:'player-a'});assert.deepEqual(partial.dex[existing],beforePartial);assert.equal(partial.starterData[existing].candies,47);
 const future=structuredClone(partial);future.dexVersion=999;const beforeFuture=structuredClone(future);assert.throws(()=>ensureStarterSystem(future),/지원하지 않는/);assert.deepEqual(future,beforeFuture);
-console.log('One stable random starter per player, new egg unlock, and non-destructive migration of existing starters passed');
+console.log('Source default starters, capture unlock, and non-destructive migration of existing starters passed');
+// Version 4 save: unlocks are additive, caught non-default species become
+// starters, and unrelated ownership/progress is not rewritten or consumed.
+const legacyV4={dexVersion:4,initialStarterId:1,dex:{150:{caught:true,registered:false,seen:true,ivs:{hp:31,atk:21,def:20,spa:19,spd:18,spe:17},natures:['timid'],abilitySlots:['primary'],genders:['N'],forms:[0],caughtCount:1,hatchedCount:0}},starterData:{150:{candies:17,friendshipPoints:2,costReduction:1,passiveUnlocked:true,eggMask:3}},eggs:[{id:'keep-egg'}],other:'keep'};const preserved=structuredClone(legacyV4);ensureStarterSystem(legacyV4);assert.equal(legacyV4.dexVersion,5);assert.equal(legacyV4.dex[150].registered,true);assert.deepEqual(legacyV4.dex[150].ivs,preserved.dex[150].ivs);assert.deepEqual(legacyV4.starterData,preserved.starterData);assert.deepEqual(legacyV4.eggs,preserved.eggs);assert.equal(legacyV4.other,'keep');const once=structuredClone(legacyV4);ensureStarterSystem(legacyV4);assert.deepEqual(legacyV4,once);
