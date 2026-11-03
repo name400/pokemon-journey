@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -118,4 +118,12 @@ test('targeted alpha aiming accepts diagonal positions and rejects blocked rays'
  assert.deepEqual(wildAlphaTarget({...s,x:5,y:5}),{x:3,y:5,distance:2,back:false});
  assert.equal(wildAlphaTarget({...s,x:1,y:1}),null);assert.equal(wildAlphaTarget({...s,zaWildAlphaSpent:true}),null);
  const blocked=lumioseWildMap().map(row=>row.split(''));blocked[4][2]='#';assert.equal(wildAlphaTarget(s,blocked),null);
+});
+
+test('alert alpha pursues over saved tiles and aiming follows its new direction',()=>{
+ const s={area:3,district:'lumiose-wild',x:1,y:5,zaWildAlphaAlert:true};
+ assert.equal(stepWildAlphaPursuit(s),true);assert.deepEqual(s.zaWildAlphaPosition,{x:2,y:5,facing:'left'});
+ assert.equal(stepWildAlphaPursuit(s),false);assert.deepEqual(wildAlphaPosition({zaWildAlphaPosition:{x:99,y:5,facing:'left'}}),{x:3,y:5,facing:'down'});
+ const target=wildAlphaTarget({area:3,district:'lumiose-wild',x:4,y:5,zaWildAlphaPosition:{x:2,y:5,facing:'left'}});
+ assert.deepEqual(target,{x:2,y:5,distance:2,back:true});
 });
