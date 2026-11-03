@@ -177,3 +177,5 @@
 .battle-screen .bs-effectiveness.strong{color:#226652}
 .battle-screen .bs-effectiveness.weak{color:#8a4936}
 @media(max-width:600px){.battle-screen .bs-move-stats,.battle-screen .bs-effectiveness{font-size:12px}}
+
+.battle-screen .bs-capture-note{margin:10px 0;padding:10px 12px;border:1px solid #8b7650;border-radius:6px;background:#fff4d4;color:#4c3b1e;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
