@@ -21,6 +21,9 @@ assert.equal(tampered.level,5);assert.equal(tampered.ivs.hp,10);assert.equal(tam
 // A previously registered red shiny must retain its variant as well as its luck.
 const variants=structuredClone(system);registerStarterCaught(variants,{...makeMon(1,5),shiny:true,variant:2},{kind:'capture'});
 const red=buildStarterParty(variants,[{...choose(1),shiny:true}]).party[0];assert.equal(red.variant,2);assert.equal(red.luck,3);
+registerStarterCaught(variants,{...makeMon(1,5),shiny:true,variant:0},{kind:'capture'});assert.deepEqual(starterCatalog(variants).find(p=>p.id===1).shinyVariants,[0,2]);
+const yellow=buildStarterParty(variants,[{...choose(1),shiny:true,variant:0}]).party[0];assert.equal(yellow.luck,1);assert.equal(yellow.variant,0);assert.throws(()=>buildStarterParty(variants,[{...choose(1),shiny:true,variant:1}]),/변종/);
+const legacyVariants=structuredClone(variants);delete legacyVariants.dex[1].shinyVariantMask;assert.deepEqual(starterCatalog(legacyVariants).find(p=>p.id===1).shinyVariants,[2]);registerStarterCaught(legacyVariants,{...makeMon(1,5),shiny:true,variant:0},{kind:'capture'});assert.deepEqual(starterCatalog(legacyVariants).find(p=>p.id===1).shinyVariants,[0,2]);
 const normal=buildStarterParty(variants,[choose(1)]).party[0];assert.equal(normal.variant,0);assert.equal(normal.luck,0);
 assert.equal(JSON.parse(JSON.stringify(red)).variant,2);
 const oldHp=started.party[0].maxHp;

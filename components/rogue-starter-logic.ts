@@ -3,6 +3,8 @@ export type StarterStats = Record<StarterStat, number>;
 export type StarterEntry = {
   id: number;
   speciesId: number;
+  sourceId?: number;
+  formIndex?: number;
   artId: number;
   name: string;
   types: string[];
@@ -19,6 +21,7 @@ export type StarterEntry = {
   defaultNature?: string | null;
   genders: Array<'M' | 'F' | 'N'>;
   shinyUnlocked: boolean;
+  shinyVariants?: number[];
   luck?: number;
   passive?: {key: string | null; name: string; unlocked: boolean; cost: number | null};
   moves: string[];
@@ -34,6 +37,7 @@ export type StarterSelection = {
   nature: string;
   gender: string;
   shiny: boolean;
+  variant?: number;
   passive?: boolean;
   moves: string[];
 };
@@ -72,6 +76,7 @@ export function defaultStarterSelection(entry: StarterEntry): StarterSelection {
     nature: entry.natures.find(nature => nature.key === entry.defaultNature)?.key || entry.natures.find(nature => nature.key === 'hardy')?.key || entry.natures[0]?.key || 'hardy',
     gender: entry.genders[0] || 'N',
     shiny: false,
+    variant: entry.shinyVariants?.at(-1) ?? 0,
     passive: !!entry.passive?.unlocked,
     moves: defaultMoves.length ? defaultMoves : [...new Set(entry.moves)].slice(0, 4),
   };
@@ -89,6 +94,7 @@ export function starterSelectionError(entry: StarterEntry, selection: StarterSel
   if (!entry.natures.some(nature => nature.key === selection.nature)) return '선택 가능한 성격을 골라주세요.';
   if (!entry.genders.some(gender => gender === selection.gender)) return '선택 가능한 성별을 골라주세요.';
   if (selection.shiny && !entry.shinyUnlocked) return '색이 다른 모습을 먼저 해금해야 합니다.';
+  if (selection.shiny && selection.variant !== undefined && entry.shinyVariants && !entry.shinyVariants.includes(selection.variant)) return '해금한 이로치 변종을 선택하세요.';
   if (selection.passive && (!entry.passive?.unlocked || !entry.passive.key)) return '해금한 패시브 특성을 선택하세요.';
   if (selection.moves.length < 1 || selection.moves.length > 4) return '기술을 1개에서 4개까지 선택하세요.';
   if (new Set(selection.moves).size !== selection.moves.length) return '같은 기술을 두 번 선택할 수 없습니다.';
