@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {royaleWPoints,royaleWWins,royaleWReady,royaleZPoints,royaleZWins,royaleZReady,royaleYPoints,royaleYReady,royaleYWins,royaleXPoints,royaleXReady,royaleXWins,naveenRequired,naveenAction,lidaStage,lidaRequired,lidaBagAction,lidaBattleAction,royaleDialogue} from '../lib/adventure-royale.mjs';
+import {royaleWPoints,royaleWWins,royaleWReady,royaleZPoints,royaleZWins,royaleZReady,royaleYPoints,royaleYReady,royaleYWins,royaleXPoints,royaleXReady,royaleXWins,naveenRequired,naveenAction,joseeRequired,joseeAction,lidaStage,lidaRequired,lidaBagAction,lidaBattleAction,royaleDialogue} from '../lib/adventure-royale.mjs';
 
 test('Royale ticket progress derives legacy Z victories and caps confirmed points',()=>{
  const z={zaRoyaleRank:'Z',zaRoyaleZWins:['royale-z-erica','royale-z-daniel','royale-z-jean','royale-z-erica','unexpected']};
@@ -13,6 +13,7 @@ test('Royale ticket progress derives legacy Z victories and caps confirmed point
  const x={zaRoyaleRank:'X',zaRoyaleXPoints:4000,zaRoyaleXSessionWins:['royale-x-lenny','royale-x-lenny','unexpected']};
  assert.equal(royaleXReady(x),true);assert.deepEqual(royaleXWins(x),['royale-x-lenny']);assert.equal(royaleDialogue(x).action,'royaleXavi');
  assert.equal(lidaRequired({zaRoyaleRank:'W'}),false);assert.equal(lidaRequired({zaRoyaleRank:'W',zaLidaRequired:true}),true);assert.equal(lidaBagAction({zaRoyaleRank:'W'}).action,'takeLidaBag');assert.equal(lidaStage({zaLidaStage:1}),1);assert.equal(lidaBattleAction({zaRoyaleRank:'W',zaLidaStage:1}).action,'battleLida');
+ assert.equal(joseeRequired({zaRoyaleRank:'Y'}),false);assert.equal(joseeRequired({zaRoyaleRank:'Y',zaJoseeRequired:true}),true);assert.equal(joseeRequired({zaRoyaleRank:'Y',zaJoseeRequired:true,zaJoseeComplete:true}),false);assert.equal(joseeAction({zaRoyaleRank:'Y'}).action,'battleJosee');
  assert.equal(naveenRequired({zaRoyaleRank:'X'}),false);assert.equal(naveenRequired({zaRoyaleRank:'X',zaNaveenRequired:true}),true);assert.equal(naveenAction({zaRoyaleRank:'W'}).action,'battleNaveen');
  assert.equal(royaleXPoints({zaRoyaleRank:'X'}),0);assert.equal(royaleXPoints({zaRoyaleXPoints:9999}),4000);
 });

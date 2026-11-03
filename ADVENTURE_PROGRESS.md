@@ -1,3 +1,10 @@
+## 2026-11-03 · 임무 05 Josée 배틀 연결 (부분 구현)
+
+- 첫 로열 승급으로 새로 랭크 Y에 도달하면 야생 구역 2의 임시 위치에서 Josée에게 도전할 수 있다. 알통몬 암컷 Lv.10과 요가랑 암컷 Lv.11의 기술·528원 승리 보상은 [임무 자료](https://www.serebii.net/legendsz-a/mainmissions/thecityintheshadowofprismtower.shtml)와 [Josée 기록](https://bulbapedia.bulbagarden.net/wiki/Jos%C3%A9e)을 참고했다. 패배 시 재도전하고 승리 보상은 한 번만 받는다. 현재 구현은 이 배틀 후 Y 랭크 로열에 들어간다.
+- 원작은 동료와 지붕을 건너 구역 2 근처로 간 뒤 Josée를 만나고 구역 3과 탐정 사무소로 이어진다. [임무 순서](https://www.thonky.com/pokemon-legends-z-a/main-mission-05-the-city-in-the-shadow-of-prism-tower)를 참고했지만, 동행·지붕·프리즘타워·구역 3·탐정 사무소 및 임무의 나머지는 아직 구현되지 않았다. 구역 2 안의 트레이너 위치와 로열 입장 조건은 임시 연결이며 임무 05 완료를 뜻하지 않는다. 실제 Z-A 실시간 전투 대신 기존 턴제 엔진을 쓴다.
+- 이미 Y 랭크에 도달한 기존 저장은 새 배틀을 필수로 소급하지 않고 기존 포인트와 진행을 유지한다. Y 랭크에서는 선택적으로 도전할 수 있다. 기존 X 이상 저장의 진행·보상은 변경하지 않는다.
+- 실제 API·메모리 SQLite에서 Y 승급 후 제한, 기존 Y 저장의 포인트 유지·입장, 팀과 성별, 패배 후 재도전, 승리 후 중복 보상 방지 및 다음 랭크 진행을 확인했다. 실제 D1·원작 실기와 PC·모바일 실조작은 미검증이며 운영 배포는 하지 않았다. 토중몬 제공 범위와 Rintaro 보상은 그대로 보류한다.
+
 ## 2026-11-03 · 야생 구역 2와 도감 조사 (초안 지형)
 
 - 야생 구역 1 서쪽에서 별도의 야생 구역 2로 이동하고 동쪽으로 돌아올 수 있다. 원작에서 구역 2가 임무 05에 열리고 그 임무가 첫 로열 승급 다음에 시작되는 점을 참고해 현재 구현에서는 랭크 Y 이상을 요구한다. 원작 임무 05의 동행·탑·탐정 장면은 아직 없으므로 이 조건은 **대체 구현**이다. [구역별 개방·종](https://www.serebii.net/legendsz-a/wildzones.shtml), [임무 순서](https://www.thonky.com/pokemon-legends-z-a/main-mission-05-the-city-in-the-shadow-of-prism-tower)를 확인했다.
