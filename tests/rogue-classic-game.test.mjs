@@ -26,7 +26,7 @@ assert.equal(run.screen,'reward');assert.equal(classicGameView(document).run.ser
 const reward=classicRewardView(run,ensureClassicState(document).system).find(r=>!r.requiresTarget)||classicRewardView(run,ensureClassicState(document).system)[0];
 if(!reward.requiresTarget)applyClassicAction(document,{action:'reward',rewardId:reward.id});
 else applyClassicAction(document,{action:'skipReward'});
-assert.equal(run.screen,'advance');applyClassicAction(document,{action:'next'});assert.equal(run.wave,2);assert.equal(run.screen,'battle');
+assert.equal(run.screen,'advance');run.seed='fixed-115';run.party.forEach((p,i)=>p.pokerus=i===1);applyClassicAction(document,{action:'next'});assert.equal(run.wave,2);assert.deepEqual(run.party.map(p=>!!p.pokerus),[true,true,true,false]);assert.equal(run.screen,'battle');
 // All five slots hold separate party objects and run currency.
 applyClassicAction(document,{action:'prepare',slot:1});applyClassicAction(document,{action:'start',slot:1,selection:team});assert.equal(activeClassicRun(document).money,1000);assert.notEqual(activeClassicRun(document).id,run.id);
 applyClassicAction(document,{action:'selectSlot',slot:0});assert.equal(activeClassicRun(document).wave,2);
