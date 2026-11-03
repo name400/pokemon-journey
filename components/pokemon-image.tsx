@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import appearanceData from '@/data/pokemon-appearance.json';
+import variantForms from '@/data/rogue-variant-forms.json';
+import {variantFrames} from './rogue-variant-frames';
 
 type ImagePokemon = {
   id: number | string;
@@ -10,6 +12,11 @@ type ImagePokemon = {
   sourceShinyImage?:string|null;
   sourceShinyBackImage?:string|null;
   rogueSourceId?:number;
+  sourceId?:number;
+  rogueFormIndex?:number;
+  formIndex?:number;
+  variant?:number;
+  rogueBaseBattleAppearance?:string|null;
   sourceAppearanceMissing?:boolean;
   artId?: number | string;
   battleAppearance?: string | null;
@@ -103,6 +110,15 @@ export default function PokemonImage({ mon, className = '', alt, eager = false, 
     staticSnapshot,
   );
   const staticImage = reducedMotion || frozen;
+  const sourceId=mon?.rogueSourceId??(mon?.formIndex!=null?mon.sourceId:undefined),formIndex=mon?.rogueFormIndex??mon?.formIndex??0;
+  const assetKey=sourceId==null?null:formIndex===0?String(sourceId):(variantForms as Record<string,string>)[`${sourceId}:${formIndex}`]||null;
+  const changedForm=!!mon?.battleAppearance&&(!mon?.rogueBaseBattleAppearance||mon.battleAppearance!==mon.rogueBaseBattleAppearance);
+  const customKey=shiny&&mon?.variant&&assetKey&&!changedForm?`${assetKey}:${mon.variant}:${facing}`:'';
+  const [custom,setCustom]=useState<{key:string;frames:string[]}|null>(null);
+  const [frame,setFrame]=useState(0);
+  const [unavailable,setUnavailable]=useState('');
+  useEffect(()=>{if(!customKey||!assetKey||!mon?.variant)return;let live=true;setFrame(0);void variantFrames(assetKey,mon.variant,facing).then(frames=>{if(live){if(frames?.length)setCustom({key:customKey,frames});else setUnavailable(customKey);}});return()=>{live=false;};},[customKey,assetKey,mon?.variant,facing]);
+  useEffect(()=>{if(staticImage||variant!=='battle'||!custom||custom.key!==customKey||custom.frames.length<2)return;const timer=window.setInterval(()=>setFrame(index=>(index+1)%custom.frames.length),125);return()=>window.clearInterval(timer);},[staticImage,variant,custom,customKey]);
   const direct=mon?.sourceAppearanceMissing?null:shiny&&mon?.rogueSourceId!=null?(facing==='back'?mon.sourceShinyBackImage:mon.sourceShinyImage):facing==='back'?mon?.sourceBackImage||mon?.sourceImage:shiny?mon?.sourceShinyImage||mon?.sourceImage:mon?.sourceImage;
   const resourceKey = `${direct||''}:${id}:${shiny}:${variant}:${facing}:${staticImage}`;
   const [failed, setFailed] = useState({ key: '', index: 0 });
@@ -112,7 +128,8 @@ export default function PokemonImage({ mon, className = '', alt, eager = false, 
   // fallback chain. No effect/extra render is needed to reset an old image's error state.
   const fallback = failed.key === resourceKey ? failed.index : 0;
   const sources = [...(direct?[direct]:[]),...pokemonImageSources(id, shiny, variant, facing, staticImage)];
-  const currentSource = sources[Math.min(fallback, sources.length - 1)];
+  const customSource=customKey&&custom?.key===customKey?custom.frames[staticImage||variant!=='battle'?0:frame%custom.frames.length]:null;
+  const currentSource = customSource||sources[Math.min(fallback, sources.length - 1)];
   useEffect(()=>{if(!normalizeSprite||!imageRef.current?.complete)return;let active=true;void spriteFit(currentSource).then(value=>{if(active&&value)setFit(previous=>previous.src===currentSource?previous:{src:currentSource,value});});return()=>{active=false;};},[normalizeSprite,currentSource]);
 
   return <img
@@ -124,11 +141,13 @@ export default function PokemonImage({ mon, className = '', alt, eager = false, 
     fetchPriority={eager ? 'high' : 'auto'}
     decoding="async"
     className={className}
+    title={shiny&&mon?.variant&&sourceId!=null&&(!assetKey||changedForm||unavailable===customKey)?'변종 이미지를 불러올 수 없어 기본 이로치 이미지로 표시합니다.':undefined}
     src={currentSource}
-    style={normalizeSprite&&fit.src===currentSource&&fit.value?{transform:`scale(${fit.value.scale}) translate(${fit.value.x}%, ${fit.value.y}%)`}:undefined}
+    style={{...(customSource?{imageRendering:'pixelated' as const}:{}),...(normalizeSprite&&fit.src===currentSource&&fit.value?{transform:`scale(${fit.value.scale}) translate(${fit.value.x}%, ${fit.value.y}%)`}:{})}}
     alt={alt ?? `${mon?.name || '포켓몬'}${shiny ? ' · 색이 다른 모습' : ''}`}
     onLoad={event=>{if(!normalizeSprite)return;const element=event.currentTarget,src=element.getAttribute('src')||'';void spriteFit(src).then(value=>{if(value&&element.isConnected&&element.getAttribute('src')===src)setFit(previous=>previous.src===src?previous:{src,value});});}}
     onError={() => {
+      if(customSource){setCustom(null);return;}
       if (fallback >= sources.length - 1) return;
       setFailed(previous => ({
         key: resourceKey,
