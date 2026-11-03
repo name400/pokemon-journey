@@ -8,7 +8,7 @@ export function signedBattleTarget(target:BattleMoveTarget,side:number):number{r
 export function selectableBattleTargets(move:BattleMove):BattleMoveTarget[]{return !move.target||['normal','adjacentFoe','adjacentAlly','adjacentAllyOrSelf','any'].includes(move.target)?move.targets||[]:[];}
 export function buildBattleTurnCommand(actors:readonly BattleActor[],drafts:Record<number,BattleTurnAction>,side=0):{command:{type:'turn';actions:BattleTurnAction[]}|null;error:string|null}{
   const required=actors.filter(actor=>actor.kind==='move'||actor.kind==='switch'),actions:BattleTurnAction[]=[],switched=new Set<number>();
-  if(['terastallize','dynamax'].some(kind=>required.filter(actor=>{const action=drafts[actor.slot];return action?.type==='move'&&action.special===kind;}).length>1))return {command:null,error:'같은 특수 변화는 한 턴에 한 번만 사용할 수 있습니다.'};
+  if(['terastallize','dynamax','zmove'].some(kind=>required.filter(actor=>{const action=drafts[actor.slot];return action?.type==='move'&&action.special===kind;}).length>1))return {command:null,error:'같은 특수 변화는 한 턴에 한 번만 사용할 수 있습니다.'};
   if(!required.length)return {command:null,error:'지금 선택할 행동이 없습니다.'};
   for(const actor of required){const action=drafts[actor.slot];if(!action)return {command:null,error:`${actor.slot+1}번 포켓몬의 행동을 선택하세요.`};
     if(action.type==='switch'){if(!actor.switches?.some(option=>option.slot===action.slot))return {command:null,error:'교체할 수 있는 포켓몬을 선택하세요.'};if(switched.has(action.slot))return {command:null,error:'두 포켓몬이 같은 파티 자리로 교체할 수 없습니다.'};switched.add(action.slot);actions.push({...action,actor:actor.slot});continue;}
