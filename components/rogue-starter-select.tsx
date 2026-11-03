@@ -28,6 +28,8 @@ export type StarterEntry = {
   moves: string[];
   defaultMoves: string[];
   candies?: number;
+  sameEggCandies?: number;
+  sameEggCost?: number;
   reductionCost?: number;
   costReduction?: number;
   formName?: string;
@@ -49,6 +51,7 @@ export type RogueStarterSelectProps = {
   onStart: (team: StarterSelection[]) => Promise<unknown> | void;
   onCancel: () => void;
   onReduceCost?: (id: number) => Promise<unknown> | void;
+  onBuyEgg?: (id: number, cost: number) => Promise<unknown> | void;
 };
 
 const PAGE_SIZE = 48;
@@ -136,7 +139,7 @@ export function starterStatsForNature(stats: StarterStats, nature: string): Star
   return { ...stats, [effect[0]]: Math.floor(stats[effect[0]] * 1.1), [effect[1]]: Math.floor(stats[effect[1]] * .9) };
 }
 
-export default function RogueStarterSelect({ starters, budget = 10, busy, error, onStart, onCancel, onReduceCost }: RogueStarterSelectProps) {
+export default function RogueStarterSelect({ starters, budget = 10, busy, error, onStart, onCancel, onReduceCost, onBuyEgg }: RogueStarterSelectProps) {
   const [team, setTeam] = useState<StarterSelection[]>([]);
   const [drafts, setDrafts] = useState<Record<number, StarterSelection>>({});
   const [focusedId, setFocusedId] = useState<number | null>(null);
@@ -225,6 +228,13 @@ export default function RogueStarterSelect({ starters, budget = 10, busy, error,
     catch (cause) { if (mounted.current) setLocalError(cause instanceof Error ? cause.message : '비용을 감소시키지 못했습니다.'); }
     finally { actionLock.current = false; if (mounted.current) setReducing(false); }
   }
+  async function buyEgg() {
+    if (!focused || !onBuyEgg || !focused.sameEggCost || locked || actionLock.current) return;
+    actionLock.current = true; setReducing(true); setLocalError('');
+    try { await onBuyEgg(focused.id, focused.sameEggCost); if (mounted.current) setStatus('같은 종의 알을 보관함에 추가했습니다.'); }
+    catch (cause) { if (mounted.current) setLocalError(cause instanceof Error ? cause.message : '알을 얻지 못했습니다.'); }
+    finally { actionLock.current = false; if (mounted.current) setReducing(false); }
+  }
   function returnToList() {
     setPane('catalog');
     requestAnimationFrame(() => { grid.current?.querySelector<HTMLElement>(`[data-starter-id="${rovingId || focused?.id || ''}"]`)?.focus(); });
@@ -271,6 +281,7 @@ export default function RogueStarterSelect({ starters, budget = 10, busy, error,
           <div className="rss-stats"><div className="rss-section-heading"><h4>능력치와 영구 IV</h4><span>Lv.5 · EV 0</span></div><table><thead><tr><th scope="col">능력</th><th scope="col">능력치</th><th scope="col">IV / 31</th></tr></thead><tbody>{STAT_NAMES.map(([stat, name]) => <tr key={stat}><th scope="row">{name}{natureEffect?.[0] === stat ? <span className="rss-nature-up" aria-label="성격으로 상승">↑</span> : natureEffect?.[1] === stat ? <span className="rss-nature-down" aria-label="성격으로 하락">↓</span> : null}</th><td>{selectedStats[stat]}</td><td><span className="rss-iv-track" aria-hidden="true"><i style={{ transform: `scaleX(${Math.max(0, Math.min(1, focused.ivs[stat] / 31))})` }}/></span><b>{focused.ivs[stat]}</b></td></tr>)}</tbody></table><p>포획한 개체 중 능력별로 가장 높은 IV가 유지됩니다.</p></div>
           <fieldset className="rss-moves" disabled={locked || !focused.unlocked}><legend>출발 기술 <span>고유 기술 1–4개</span></legend>{[0, 1, 2, 3].map(slot => <label key={slot} className="rss-move"><span>0{slot + 1}</span><select aria-label={`${slot + 1}번 출발 기술`} value={draft.moves[slot] || ''} onChange={event => updateMove(slot, event.target.value)}><option value="">선택하지 않음</option>{[...new Set(focused.moves)].map(move => <option key={move} value={move} disabled={draft.moves.some((chosen, index) => index !== slot && chosen === move)}>{move}</option>)}</select></label>)}</fieldset>
           {onReduceCost && focused.unlocked && (focused.reductionCost || 0) > 0 && <div className="rss-candy"><div><b>스타터 비용 감소</b><span>보유 사탕 {focused.candies || 0}개</span></div><button className="rss-button rss-button-outline" disabled={locked || (focused.candies || 0) < (focused.reductionCost || 0)} onClick={() => void reduceCost()}><Minus size={15} aria-hidden="true"/>{reducing ? '적용 중…' : `사탕 ${focused.reductionCost}개 사용`}</button>{(focused.candies || 0) < (focused.reductionCost || 0) && <p>사탕 {(focused.reductionCost || 0) - (focused.candies || 0)}개가 더 필요합니다.</p>}</div>}
+          {onBuyEgg && focused.unlocked && !!focused.sameEggCost && <div className="rss-candy"><div><b>같은 종의 알</b><span>보유 사탕 {focused.sameEggCandies || 0}개</span></div><button className="rss-button rss-button-outline" disabled={locked || (focused.sameEggCandies || 0) < focused.sameEggCost} onClick={() => void buyEgg()}>사탕 {focused.sameEggCost}개로 알 받기</button></div>}
           <div className="rss-add-area">{selected ? <><p><Check size={16} aria-hidden="true"/>파티에 편성됨 · 설정 변경은 바로 적용됩니다.</p><button className="rss-button rss-button-outline" disabled><Check size={18} aria-hidden="true"/>파티 편성 완료</button><button className="rss-remove-link" disabled={locked} onClick={() => remove(focused.id)}>이 포켓몬을 파티에서 제외</button></> : <><button className="rss-button rss-button-primary" disabled={locked || !!addReason || !!draftError} onClick={addFocused}><Plus size={19} aria-hidden="true"/>파티에 추가<span>{points(focused.cost)} PT</span></button>{(addReason || draftError) && <p className="rss-add-reason">{addReason || draftError}</p>}</>}</div>
         </div></> : <div className="rss-detail-empty"><Users size={34} aria-hidden="true"/><h3>첫 파트너를 찾아보세요.</h3><p>목록에서 포켓몬을 고르면 능력과 출발 기술을 확인할 수 있습니다.</p></div>}</aside>
     </div>
