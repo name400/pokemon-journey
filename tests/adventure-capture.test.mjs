@@ -59,3 +59,11 @@ test('Z-A species and explicitly recorded Royale rank adjust only adventure capt
  assert.equal(adventureCaptureAttempt(beldum,'pokeball',{royaleRank:'Z'},()=>.0005).caught,false);
  assert.equal(adventureCaptureAttempt(beldum,'pokeball',{alpha:true},()=>.0005).caught,false);
 });
+
+test('ZA back strike and unnoticed bonuses apply only outside battle',async()=>{
+ const {adventureCaptureAttempt}=await import('../lib/adventure-balls.mjs');
+ const m={hp:20,maxHp:20,captureRate:45,types:['노말'],level:24};const rng=()=>.004;
+ assert.equal(adventureCaptureAttempt(m,'pokeball',{alpha:true},rng).caught,false);
+ assert.equal(adventureCaptureAttempt(m,'pokeball',{alpha:true,unaware:true,backstrike:true},rng).caught,false);
+ assert.equal(adventureCaptureAttempt(m,'pokeball',{alpha:true,overworld:true,unaware:true,backstrike:true},rng).caught,true);
+});
