@@ -200,3 +200,7 @@
 - Z링/크리스탈/기술 타입·PP 조건, 전투당 1회, 싱글·더블 대상, 공격과 변화 Z기술, JSON 복원, 야생전 사이 장착·이동, 기존 도구 보존을 검사했다. 변화 Z기술의 native 로그가 공통 화면 이벤트 생성에서 오류를 내던 것도 수정했다.
 - 다이맥스가 활성화된 상태에서 200층 최종전이 싱글에서 2대1 더블로 전환된 뒤 실제 턴을 실행하는 합성 fixture를 추가했다. 자연 200층 완주와 동일한 검증은 아니다.
 - `npm test` 78개와 `npm run typecheck` 통과. 공통 `lib/full-battle.mjs`의 로그 파서와 앞서 변경한 `components/battle-panel.tsx`는 탐험/PvP 공유 파일이므로 병렬 스레드 통합 전에 반드시 비교·회귀 확인한다. 운영 배포는 하지 않았다.
+
+### 자연 진행 재현 도구
+- 탐색 플레이어가 새로 배울 공격 기술을 기존 기술과 비교하도록 개선했다. 10회 실행은 8층 전후부터 18층까지 도달 후 모두 패배했고 실행 예외는 없었다. 자동 전략의 한계가 있으므로 게임의 완주 불가능성을 뜻하지 않는다.
+- `node scripts/classic-natural-probe.mjs --save-start /tmp/classic-start.json`과 `node scripts/classic-natural-probe.mjs --resume /tmp/classic-start.json`으로 테스트용 초기 저장을 재실행할 수 있다. 동일 초기 저장 두 실행의 출력이 일치했다. 이 도구는 실제 계정이나 운영 DB를 사용하지 않는다.
