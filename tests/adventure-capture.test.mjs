@@ -68,3 +68,10 @@ test('ZA back strike and unnoticed bonuses apply only outside battle',async()=>{
  assert.equal(adventureCaptureAttempt(m,'pokeball',{alpha:true,overworld:true,unaware:false,backstrike:true},rng).caught,false);
  assert.equal(adventureCaptureAttempt(m,'pokeball',{alpha:true,overworld:true,unaware:true,backstrike:true},rng).caught,true);
 });
+
+test('ZA catch window overrides status and has alpha-specific bonus without back strike',async()=>{
+ const {adventureCaptureAttempt}=await import('../lib/adventure-balls.mjs');const m={hp:0,maxHp:20,captureRate:45,types:['노말'],level:24,status:'얼음'};
+ const rng=()=>.06;assert.equal(adventureCaptureAttempt(m,'pokeball',{catchWindow:true},rng).caught,false);
+ assert.equal(adventureCaptureAttempt(m,'pokeball',{catchWindow:true,alpha:true},rng).caught,true);
+ assert.equal(adventureCaptureAttempt(m,'pokeball',{catchWindow:true,overworld:true,unaware:true,backstrike:true},rng).caught,false);
+});

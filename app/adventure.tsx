@@ -31,7 +31,7 @@ export default function Adventure(){
  const [data,setData]=useState<any>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false),[selected,setSelected]=useState(1);
  const [screen,setScreen]=useState<Screen>(null),[dialogue,setDialogue]=useState<any>(null),[teamEdit,setTeamEdit]=useState(false),[team,setTeam]=useState<string[]>([]);
  const [query,setQuery]=useState(''),[page,setPage]=useState(0),[hint,setHint]=useState('방향키 / WASD로 걷고 E로 대화하세요.');
- const [alphaAimKey,setAlphaAimKey]=useState('');
+ const [alphaAimKey,setAlphaAimKey]=useState(''),[catchBall,setCatchBall]=useState('pokeball');
  const [battleResult,setBattleResult]=useState<any>(null),resultRef=useRef<any>(null);
  const lock=useRef(false),mounted=useRef(true),revision=useRef(-1),snapshot=useRef<any>(null),screenRef=useRef<Screen>(null),dialogueRef=useRef<any>(null);
  const heldDirection=useRef(''),pathQueue=useRef<string[]>([]),lastFacing=useRef('');
@@ -40,7 +40,7 @@ export default function Adventure(){
  const accept=useCallback((d:any)=>{
   if(!mounted.current||d.revision<revision.current)return;revision.current=d.revision;
   setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()]};});
-  setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventurePendingMoves?.length)stop();
+  setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();
  },[stop]);
  const load=useCallback(async(light=false)=>{try{accept(await api(undefined,light));setError('');}catch(e){if(mounted.current)setError(e instanceof Error?e.message:'불러오기 실패');}},[accept]);
  const act=useCallback(async(action:string,extra:any={})=>{
@@ -55,7 +55,7 @@ export default function Adventure(){
  useEffect(()=>{
   const dirs:Record<string,string>={arrowup:'up',w:'up',arrowdown:'down',s:'down',arrowleft:'left',a:'left',arrowright:'right',d:'right'};
   const keydown=(e:KeyboardEvent)=>{
-   if(!snapshot.current?.world||snapshot.current.battle||snapshot.current.world.adventurePendingMoves?.length||resultRef.current||screenRef.current||dialogueRef.current||/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||''))return;
+   if(!snapshot.current?.world||snapshot.current.battle||snapshot.current.world.adventurePendingMoves?.length||snapshot.current.world.adventureCatchWindow||resultRef.current||screenRef.current||dialogueRef.current||/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||''))return;
    const key=e.key.toLowerCase();if(dirs[key]){e.preventDefault();if(!e.repeat)pathQueue.current=[dirs[key]];heldDirection.current=dirs[key];}
    else if(key==='e'||(key===' '&&document.activeElement?.tagName!=='BUTTON')){e.preventDefault();if(!e.repeat)interact();}
    else if(key==='j'||key==='b'){stop();setScreen(key==='j'?'journal':'bag');}
@@ -66,7 +66,7 @@ export default function Adventure(){
   let alive=true,timer:ReturnType<typeof setTimeout>;
   const tick=async()=>{
    if(!alive)return;const d=snapshot.current,direction=heldDirection.current||pathQueue.current[0];
-   if(direction&&d?.world&&!d.battle&&!d.world.adventurePendingMoves?.length&&!resultRef.current&&!screenRef.current&&!dialogueRef.current&&!lock.current){
+   if(direction&&d?.world&&!d.battle&&!d.world.adventurePendingMoves?.length&&!d.world.adventureCatchWindow&&!resultRef.current&&!screenRef.current&&!dialogueRef.current&&!lock.current){
     const step=stepField(d.world,direction);
     if(step.blocked){pathQueue.current=[];if(lastFacing.current!==direction||d.world.facing!==direction){lastFacing.current=direction;await act('face',{direction});}setHint(step.reason);}
     else{
@@ -92,7 +92,7 @@ export default function Adventure(){
  if(!data.world)return <div className="content adv-intro"><span className="kicker">첫 번째 모험</span><h2>너와 함께 여행하고 싶어!</h2><p>첫 파트너를 선택하세요. 풀숲 너머로 8개의 체육관과 포켓몬 리그가 기다립니다.</p><div className="adv-starters">{STARTERS.map(id=>{const p=species.find(s=>s.id===id)!;return <button className={selected===id?'selected':''} aria-pressed={selected===id} onClick={()=>setSelected(id)} key={id}><PokemonImage mon={p} variant="sprite" eager/><b>{p.name}</b><span>{p.types.join(' / ')}</span></button>;})}</div><button className="primary" disabled={busy} onClick={()=>act('start',{species:selected})}>{busy?'출발 준비 중…':'이 파트너와 출발하기'}<ChevronRight size={18}/></button><p className="adv-note">계정에 자동 저장 · 최대 Lv.100 · 직접 선택하는 진화</p>{error&&<p className="feedback" role="alert">{error}</p>}</div>;
  const w=data.world,aim=wildAlphaTarget(data.world),aimKey=`${data.world.district}:${data.world.x}:${data.world.y}`,mon=data.box.find((p:any)=>p.boxId===w.activeId),area=w.areaInfo,spot=w.interaction;
  if(!mon)return <div className="content"><p role="alert">파트너 정보를 다시 불러와 주세요.</p><button onClick={()=>load()}>다시 불러오기</button></div>;
- const inBattle=!!data.battle||!!battleResult,party=w.teamIds.map((id:string)=>data.box.find((p:any)=>p.boxId===id)).filter(Boolean),ready=mon.evolutions?.some((e:any)=>e.ready),pendingEntries=Array.isArray(w.adventurePendingMoves)?w.adventurePendingMoves:[],rawPending=pendingEntries[0],pendingMove=pendingEntries.length?{boxId:rawPending?.boxId,move:typeof rawPending?.move==='string'?rawPending.move:'알 수 없는 기술'}:null,pendingMon=pendingMove&&data.box.find((p:any)=>p.boxId===pendingMove.boxId);
+ const inBattle=!!data.battle||!!battleResult||!!w.adventureCatchWindow,party=w.teamIds.map((id:string)=>data.box.find((p:any)=>p.boxId===id)).filter(Boolean),ready=mon.evolutions?.some((e:any)=>e.ready),pendingEntries=Array.isArray(w.adventurePendingMoves)?w.adventurePendingMoves:[],rawPending=pendingEntries[0],pendingMove=pendingEntries.length?{boxId:rawPending?.boxId,move:typeof rawPending?.move==='string'?rawPending.move:'알 수 없는 기술'}:null,pendingMon=pendingMove&&data.box.find((p:any)=>p.boxId===pendingMove.boxId);
  const titles={party:'포켓몬 · 파티와 보유함',manage:`${mon.name} · 기술과 성장`,bag:'가방',shop:'프렌들리숍',journal:'여행 수첩'};
  return <div className={`content adventure-game biome-${area.biome}`}>
   <header className="adv-heading"><div><span className="kicker">나의 포켓몬 여행</span><h2><MapPin size={20}/>{area.name}</h2></div><div className="adv-wallet"><span><Coins size={17}/>{(data.wallet?.coins||0).toLocaleString()}<small>코인</small></span><span className="adv-ball-count"><i/>{data.wallet?.balls||0}<small>볼</small></span></div></header>
@@ -121,7 +121,9 @@ export default function Adventure(){
     <button disabled={busy} onClick={()=>act('resolveAdventureMove',{slot:null})}>배우지 않기</button><p>남은 선택 {pendingEntries.length}개</p>{error&&<p role="alert">{error}</p>}
    </div>
   </Sheet>}
-  {!battleResult&&!pendingMove&&<RewardScene revision={data.revision} events={w.events||[]} box={data.box} activeId={w.activeId} log={w.log}/>}
-  {inBattle&&<BattlePanel error={error} battle={battleResult?.battle||data.battle} battleKey={`world:${data.revision}`} biome={battleResult?.biome||area.biome} title={(battleResult?.trainer||w.trainer)?`${(battleResult?.trainer||w.trainer).name}와의 배틀`:w.encounter?.adventureAlpha?'우두머리 포켓몬과 배틀':'야생 포켓몬과 배틀'} trainer={battleResult?.trainer||w.trainer} onForfeit={battleResult?undefined:()=>{if(window.confirm('배틀을 포기하고 센터로 돌아가시겠습니까?'))act('forfeit');}} busy={busy} onCommand={command=>act('battle',{command})} onItem={item=>act('use',{item})} onBall={w.trainer?undefined:(ballId)=>act('ball',{ball:ballId||'pokeball'})} balls={ADVENTURE_BALLS.map(ball=>({...ball,count:ball.id==='pokeball'?data.wallet.balls:(w.adventureBalls?.[ball.id]||0)}))} onFlee={w.trainer?undefined:()=>act('flee')} items={data.wallet} onContinue={battleResult?()=>{resultRef.current=null;setBattleResult(null);}:undefined}/>}
+  {!battleResult&&!pendingMove&&!w.adventureCatchWindow&&<RewardScene revision={data.revision} events={w.events||[]} box={data.box} activeId={w.activeId} log={w.log}/>}
+  {(data.battle||battleResult)&&<BattlePanel error={error} battle={battleResult?.battle||data.battle} battleKey={`world:${data.revision}`} biome={battleResult?.biome||area.biome} title={(battleResult?.trainer||w.trainer)?`${(battleResult?.trainer||w.trainer).name}와의 배틀`:w.encounter?.adventureAlpha?'우두머리 포켓몬과 배틀':'야생 포켓몬과 배틀'} trainer={battleResult?.trainer||w.trainer} onForfeit={battleResult?undefined:()=>{if(window.confirm('배틀을 포기하고 센터로 돌아가시겠습니까?'))act('forfeit');}} busy={busy} onCommand={command=>act('battle',{command})} onItem={item=>act('use',{item})} onBall={w.trainer?undefined:(ballId)=>act('ball',{ball:ballId||'pokeball'})} balls={ADVENTURE_BALLS.map(ball=>({...ball,count:ball.id==='pokeball'?data.wallet.balls:(w.adventureBalls?.[ball.id]||0)}))} onFlee={w.trainer?undefined:()=>act('flee')} items={data.wallet} onContinue={battleResult?()=>{resultRef.current=null;setBattleResult(null);}:undefined}/>}
+  {!!w.adventureCatchWindow&&<Sheet title="쓰러진 포켓몬의 포획 기회" close={()=>{}} dismissible={false}><p>볼을 한 번 던지거나 포획하지 않고 지나갈 수 있습니다. 현재 기회는 선택할 때까지 유지되는 시범 방식입니다.</p><label>사용할 볼<select value={catchBall} onChange={e=>setCatchBall(e.target.value)}>{ADVENTURE_BALLS.map(ball=>{const count=ball.id==='pokeball'?data.wallet.balls:(w.adventureBalls?.[ball.id]||0);return <option key={ball.id} value={ball.id} disabled={count<=0}>{ball.name} · {count}개</option>;})}</select></label><div className="adv-sheet-actions"><button className="primary" disabled={busy||(catchBall==='pokeball'?data.wallet.balls:(w.adventureBalls?.[catchBall]||0))<=0} onClick={()=>act('catchWindowBall',{ball:catchBall})}>한 번 던지기</button><button disabled={busy} onClick={()=>act('skipCatchWindow')}>지나가기</button></div>{error&&<p role="alert">{error}</p>}</Sheet>}
+
  </div>;
 }
