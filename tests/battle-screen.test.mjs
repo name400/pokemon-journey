@@ -61,3 +61,4 @@ assert.equal(visual.find(event=>event.kind==='heal').amount,5);
 assert.ok(visual.filter(event=>['immune','miss','heal'].includes(event.kind)).every(event=>!event.hit));
 assert.equal(visual.find(event=>event.moveId==='swordsdance').hit,false);
 console.log('Inline RPG battle screen, side-1 facing, pre-impact HP, switch timeline and self-buff events: passed');
+const classicOwned=renderToStaticMarkup(React.createElement(BattlePanel,{classicLayout:true,classicTools:{zRing:true},classicItems:[{key:'native:normaliumz:hero',name:'노말Z',count:1,owner:'꼬부기'}],battle:view,battleKey:'classic:items',title:'도구 표시',busy:false,onCommand(){}}));assert.match(classicOwned,/Z링/);assert.match(classicOwned,/노말Z/);assert.match(classicOwned,/꼬부기 보유/);
