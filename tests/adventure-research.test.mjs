@@ -11,3 +11,14 @@ test('trainer research counts new wins and awards documented milestone points on
  assert.deepEqual(researchTrainerProgress({zaResearchTrainerWins:1000}),{wins:1000,completed:15,points:5100,next:null});
  assert.equal(researchTrainerWins({zaResearchTrainerWins:-2}),0);assert.equal(researchTrainerWins({zaResearchTrainerWins:1.5}),0);
 });
+
+test('capture types, evolution milestones and level thresholds combine without double counting',async()=>{
+ const {recordResearchCapture,researchCaptureProgress,recordResearchEvolution,researchEvolutionProgress,researchSummary}=await import('../lib/adventure-research.mjs');
+ const s={};for(let i=0;i<3;i++)recordResearchCapture(s,['풀','독','풀']);
+ assert.equal(researchCaptureProgress(s).find(x=>x.type==='풀').count,3);assert.equal(researchCaptureProgress(s).find(x=>x.type==='독').points,300);
+ assert.deepEqual(researchSummary(s),{points:600,level:3,next:1400});
+ recordResearchEvolution(s,true);recordResearchEvolution(s,false);recordResearchEvolution(s,false);
+ assert.equal(researchEvolutionProgress(s).all.points,500);assert.equal(researchEvolutionProgress(s).item.points,500);
+ assert.deepEqual(researchSummary(s),{points:1600,level:4,next:2400});
+ assert.deepEqual(researchSummary({}),{points:0,level:1,next:100});
+});
