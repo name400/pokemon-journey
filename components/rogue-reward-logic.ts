@@ -1,4 +1,4 @@
-export type ClassicRewardMove = { index: number; name: string; pp: number; maxPp: number };
+export type ClassicRewardMove = { index: number; name: string; pp: number; maxPp: number; canBoostPP?: boolean };
 export type ClassicRewardTarget = {
   boxId: string;
   name: string;
@@ -18,6 +18,7 @@ export type RewardChoice = {
   quantity?: number;
   requiresTarget?: boolean;
   requiresMove?: boolean;
+  moveSelectionMode?: 'ppup';
   requiresReplace?: boolean;
   requiresNewMove?: boolean;
   targets?: ClassicRewardTarget[];
@@ -84,8 +85,8 @@ export function automaticRewardTarget(targets: readonly ClassicRewardTarget[] = 
   const eligible = targets.filter(target => target.eligible);
   return eligible.length === 1 ? eligible[0].boxId : undefined;
 }
-export function eligibleRewardMoves(target?: ClassicRewardTarget): ClassicRewardMove[] {
-  return (target?.moves || []).filter(move => move.pp < move.maxPp);
+export function eligibleRewardMoves(target?: ClassicRewardTarget, choice?: ActionChoice): ClassicRewardMove[] {
+  return (target?.moves || []).filter(move => choice && 'moveSelectionMode' in choice && choice.moveSelectionMode === 'ppup' ? !!move.canBoostPP : move.pp < move.maxPp);
 }
 export function rewardTargetBlockReason(choice: ActionChoice): string | null {
   if (!requiresRewardTarget(choice)) return null;
@@ -101,7 +102,7 @@ export function rewardActionError(choice: ActionChoice, configuration: Configura
     if (!target) return '아이템을 사용할 포켓몬을 선택하세요.';
     if (!target.eligible) return target.reason || '이 포켓몬에게는 사용할 수 없습니다.';
   }
-  if (choice.requiresMove && !eligibleRewardMoves(target).some(move => move.index === configuration.moveIndex)) return 'PP가 줄어든 기술을 선택하세요.';
+  if (choice.requiresMove && !eligibleRewardMoves(target, choice).some(move => move.index === configuration.moveIndex)) return 'moveSelectionMode' in choice && choice.moveSelectionMode === 'ppup' ? '최대 PP를 늘릴 수 있는 기술을 선택하세요.' : 'PP가 줄어든 기술을 선택하세요.';
   if (choice.requiresNewMove && (!configuration.moveName || !target?.learnableMoves?.includes(configuration.moveName))) return '다시 배울 수 있는 기술을 선택하세요.';
   const replacement=emptyMoveSlot(target) ?? configuration.replaceIndex;
   if (requiresReplacement(choice) && (!Number.isInteger(replacement) || Number(replacement) < 0 || Number(replacement) > 3)) return '잊을 기술을 선택하세요.';
