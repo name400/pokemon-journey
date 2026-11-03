@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 
 test('all ten fields have reachable services, trainers, pickups and gated exits',()=>{
@@ -27,4 +27,10 @@ test('water and structures block movement; paths stop at exits and batches are b
  assert.equal(interactionAt({area:1,x:18,y:5,facing:'up'}).tile,'G');
  for(const path of [[],['constructor'],['__proto__'],Array(9).fill('up'),[null]])assert.throws(()=>validateAdventurePath(path));
  assert.deepEqual(validateAdventurePath(['up','down']),['up','down']);
+});
+test('lab has reachable researcher and exit, with collision and a return to the field',()=>{
+ const map=labMap(),start={x:11,y:13},researcher=findTile(map,'R'),exit=findTile(map,'X');
+ assert.ok(fieldPath(map,start,researcher).length);assert.ok(fieldPath(map,start,exit).length);
+ assert.equal(stepField({area:0,interior:'lab',x:4,y:6},'up').blocked,true);
+ const back=stepField({area:0,interior:'lab',x:11,y:14},'down');assert.deepEqual([back.area,back.x,back.y,back.interior,back.transitioned],[0,18,5,null,true]);
 });

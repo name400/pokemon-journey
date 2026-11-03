@@ -8,7 +8,7 @@ const palettes:Record<string,string[]>={meadow:['#82bd68','#b5da82','#e5d0a0'],r
 const trainerRows=['...RRRRR....','..RRRRRRR...','..RRWWWWRR..','...SSSSS....','...SKSKS....','....SSS.....','..BBBBBBB...','.SBBBBBBBS..','.SBBYYYBBS..','..BBYYYBB...','...KKKKK....','...KK.KK....','...KK.KK....','..DDD.DDD...'];
 
 export default function AdventureField({world:w,disabled,onPath,onInteract}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),props=useRef({w,disabled,onPath,onInteract}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
+ const canvas=useRef<HTMLCanvasElement>(null),props=useRef({w,disabled,onPath,onInteract}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
  props.current={w,disabled,onPath,onInteract};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
@@ -17,8 +17,8 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
   const observer=new ResizeObserver(([entry])=>{width=Math.max(280,Math.round(entry.contentRect.width));height=Math.round(width*(width<560?.87:17/23));el.width=width*2;el.height=height*2;});observer.observe(el);
   function draw(time:number){
    if(disposed||!ctx||!el)return;const {w}=props.current,s=scene.current,dt=Math.min(48,time-last||16);last=time;
-   const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0);
-   if(movedArea){s.x=w.x;s.y=w.y;s.area=w.area;s.expedition=w.locationId||0;}
+   const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0)||s.interior!==(w.interior||null);
+   if(movedArea){s.x=w.x;s.y=w.y;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;}
    const moving=Math.abs(s.x-w.x)+Math.abs(s.y-w.y)>.025;
    const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
    s.x=reduce?w.x:s.x+(w.x-s.x)*Math.min(1,dt/72);s.y=reduce?w.y:s.y+(w.y-s.y)*Math.min(1,dt/72);
@@ -34,6 +34,12 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
    const buildings:Array<{x:number;y:number;kind:string}>=[];
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{
     const px=x*tile,py=y*tile;ctx.fillStyle=palette[0];ctx.fillRect(px,py,tile,tile);
+    if(w.interior==='lab'){
+     ctx.fillStyle=c==='#'?'#64817e':(x+y)%2?'#e6e2cc':'#f0ecd9';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){ctx.fillStyle='#a3bcb1';ctx.fillRect(px+3,py+4,tile-6,tile-8);}
+     if(c==='X'){ctx.fillStyle='#a95850';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+21);}
+     return;
+    }
     if(c==='.'||'EW HMGNLCPQSI'.includes(c)){ctx.fillStyle=palette[2];ctx.fillRect(px,py,tile,tile);sprite('path',px,py);}
     else sprite((x*7+y*3)%11===0?'grassDetail':'grass',px,py);
     if(c==='g'){sprite('bush',px,py);sprite('grassDetail',px,py);ctx.fillStyle=palette[1];for(let i=0;i<3;i++)ctx.fillRect(px+4+i*9,py+tile-9-(i%2)*4,3,7);}
@@ -61,7 +67,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
     trainerRows.forEach((row,ry)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=face==='up'&&ry>2&&ry<6?(ry===3?color:'#60473b'):colors[p];ctx!.fillRect(px+rx*2,py+ry*2+(ry>10?(rx<6?step:-step):0),2,2);}));
     if(face==='left'||face==='right'){ctx!.fillStyle='#263e51';ctx!.fillRect(px+(face==='left'?7:15),py+9,3,3);}
    }
-   w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='N'||c==='Q')trainer(x,y,c==='N'?'#8d5ca8':'#cf9254','down');}));
+   w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='N'||c==='Q'||c==='R')trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':'#cf9254','down');}));
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
    trainer(s.x,s.y,'#d95250',w.facing||'down',moving);
    ctx.restore();

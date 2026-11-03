@@ -73,7 +73,7 @@ export default function Adventure(){
      lastFacing.current=path.at(-1)||direction;
      const r=await act('move',{path});
      // The server may stop early for an encounter, transition, or obstacle.
-     if(r&&(r.battle||r.world?.area!==d.world.area||(r.world?.steps||0)-(d.world.steps||0)<path.length))stop();
+     if(r&&(r.battle||r.world?.area!==d.world.area||r.world?.interior!==d.world.interior||(r.world?.steps||0)-(d.world.steps||0)<path.length))stop();
     }
    }
    if(alive)timer=setTimeout(tick,65);
@@ -94,7 +94,7 @@ export default function Adventure(){
   <header className="adv-heading"><div><span className="kicker">나의 포켓몬 여행</span><h2><MapPin size={20}/>{area.name}</h2></div><div className="adv-wallet"><span><Coins size={17}/>{(data.wallet?.coins||0).toLocaleString()}<small>코인</small></span><span className="adv-ball-count"><i/>{data.wallet?.balls||0}<small>볼</small></span></div></header>
   <div className="adv-route-bar"><p><span className="adv-dot"/>{w.objective}</p><button onClick={()=>open('journal')} aria-label={`여행 수첩 열기. 배지 ${w.badges.length}개`}>배지 <b>{w.badges.length}/8</b><span className="adv-mini-badges" aria-hidden="true">{TRAINERS.slice(0,8).map(t=><i key={t.id} className={w.badges.includes(t.id)?'earned':''}/>)}</span><ChevronRight size={16}/></button></div>
   <div className="adv-game-layout"><section className="adv-field-section" aria-label="필드 탐험">
-   <div className="adv-field-top"><span><span className="adv-dot"/> {inBattle?'배틀 중':busy?'저장 중…':'필드 탐험'}</span><span>야생 Lv.{area.min||40}–{area.max||65} · {data.gameTime?.period==='night'?'밤':'낮'}</span></div>
+   <div className="adv-field-top"><span><span className="adv-dot"/> {inBattle?'배틀 중':busy?'저장 중…':w.interior?'실내 탐험':'필드 탐험'}</span><span>{w.interior?'남쪽 출구로 나가기':<>야생 Lv.{area.min||40}–{area.max||65} · {data.gameTime?.period==='night'?'밤':'낮'}</>}</span></div>
    <AdventureField world={w} disabled={inBattle||!!screen||!!dialogue} onPath={path=>{if(!path.length){setHint('이곳까지 걸어갈 길이 없습니다.');return;}heldDirection.current='';pathQueue.current=path.slice(0,240);}} onInteract={interact}/>
    <div className="adv-field-bottom"><span>지역 {w.area+1}/10</span><span>KENNEY CC0 타일 · <a href="/game/town/README.md" target="_blank" rel="noreferrer">자산 출처</a></span></div>
    <div className="adv-console"><div className="adv-message" role="status" aria-live="polite"><b>{spot?`${spot.name} 앞`:'여행 기록'}</b><p>{error||w.log?.at(-1)||hint}</p><small>{hint}</small></div><div className="adv-inputs"><div className="adv-dpad" aria-label="이동 버튼">{[['up',ArrowUp,'위'],['left',ArrowLeft,'왼쪽'],['down',ArrowDown,'아래'],['right',ArrowRight,'오른쪽']].map(([direction,Icon,label]:any)=><button key={direction} className={`adv-dir-${direction}`} aria-label={`${label}로 이동`} disabled={inBattle||!!screen||!!dialogue} onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);pathQueue.current=[direction];heldDirection.current=direction;}} onPointerUp={()=>{heldDirection.current='';}} onPointerCancel={stop} onLostPointerCapture={()=>{heldDirection.current='';}} onClick={e=>{if(e.detail===0)pathQueue.current=[direction];}}><Icon size={21} aria-hidden="true"/></button>)}</div><button className="adv-talk" disabled={inBattle||busy} onClick={interact}><MessageCircle size={23}/><b>대화</b><kbd>E</kbd></button></div></div>
