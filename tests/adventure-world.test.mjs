@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseZone1Map,lumioseZone2Map,lumioseZone3Map,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseZone1Map,lumioseZone2Map,lumioseZone3Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -154,4 +154,13 @@ test('provisional zone three respects story and older saves, and round-trips its
  assert.ok(fieldPath(lumioseZone3Map(),{x:21,y:8},findTile(lumioseZone3Map(),'g')).length);
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone3',x:17,y:8,regionId:6,districtReturnRegion:1},10),loaded=restoreAdventurePosition(structuredClone(saved),10);
  assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone3',17,8]);
+});
+
+
+test('bureau map has reachable Emma and exits to the provisional third zone',()=>{
+ const map=lumioseBureauMap();assert.ok(fieldPath(map,{x:11,y:13},findTile(map,'e')).length);
+ const entry=findTile(lumioseZone3Map(),'b');assert.deepEqual(entry,{x:19,y:6});
+ const back=stepField({area:3,district:'lumiose-bureau',x:11,y:14},'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone3',19,7]);
+ const state={area:3,district:'lumiose-bureau',x:11,y:6,regionId:6,districtReturnRegion:1,zaEmmaMet:true};
+ const saved=storeAdventurePosition(state,10),loaded=restoreAdventurePosition(structuredClone(saved),10);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaEmmaMet],['lumiose-bureau',11,6,true]);
 });
