@@ -1,3 +1,10 @@
+## 2026-11-03 · Rintaro 승급전과 임무 09 도입 (부분 구현)
+
+- 랭크 W에서 5,000점을 모으면 Rintaro와 승급전을 치러 랭크 V가 된다. [원작 배틀 자료](https://www.serebii.net/legendsz-a/mainmissions/reachingrankv.shtml)의 야나키·앗차키·바오키 Lv.24와 기술을 적용했다. 기존 W 랭크 저장의 티켓포인트를 유지하고, 패배하면 재도전할 수 있다. 현재 배틀 장소는 광장 접수처이며 원작 식당과 실시간 전투·방어의 플러스 기술은 미구현이다.
+- 승리 보상은 [Bulbapedia 1,140원](https://bulbapedia.bulbagarden.net/wiki/Promotion_match)과 [일본 공략 1,440원](https://gamepedia.jp/pokemon-legends-z-a/archives/16823)이 상충하므로 지급하지 않고 `zaRintaroRewardPending`으로 보존한다. 금액 확인 후 기존 대기 저장에도 안전하게 지급해야 한다. 승급은 보상 확인과 독립해 진행된다.
+- V 승급 후 광장의 정체불명 포켓몬을 만나 옥상까지 따라가는 임무 09 도입을 추가했다. 원작의 [지가르데 추적과 폭주 메가앱솔 사건](https://www.serebii.net/legendsz-a/mainmissions/chasethatmysteriouspokemon.shtml)을 참고했지만 위치·이동·정적 표식은 초안이다. 현재 옥상에서 기척을 확인하는 단계까지만 가능하며 폭주 메가앱솔 배틀, AZ의 루카리오·임시 메가링, 앱솔 합류·앱솔나이트와 임무 10의 플레이어 메가링은 미구현이다. 메가조각 교환소도 여전히 잠겨 있다.
+- 실제 탐험 API·메모리 SQLite에서 W 포인트 조건, 상대 종·레벨, 패배 후 재도전, 승급 후 중복 요청 거부, 보상 대기 및 광장→옥상 도입 저장을 확인했다. 실제 D1·PC·모바일 실조작과 원작 실기는 미검증이며 운영 배포하지 않았다. 원격 브랜치 게시 요청은 자동 심사 거부 후 승인 대기 상태로 우회하지 않았다.
+
 ## 2026-11-03 · Emma의 메가진화 설명과 메가조각 교환 준비
 
 - Emma 배틀 승리 후 사무소에서 전룡과 메가전룡 설명을 들을 수 있고, 수첩에 두 모습을 표시한다. [원작 장면](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/The_City_in_the_Shadow_of_Prism_Tower)은 실외 시연과 동료 대화가 포함되나 현재는 사무소의 정적인 그림·설명이다. 메가링 획득, 연출 애니메이션, Z-A식 실시간 메가진화와 임무 05 전체 완료는 미구현이다.

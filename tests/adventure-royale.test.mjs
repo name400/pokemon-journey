@@ -21,5 +21,5 @@ test('Royale ticket progress derives legacy Z victories and caps confirmed point
 test('W rank preserves old saves and caps session points',()=>{
  const w={zaRoyaleRank:'W',zaRoyaleWPoints:5000,zaRoyaleWSessionWins:['royale-w-mathis','royale-w-mathis','unexpected']};
  assert.equal(royaleWReady(w),true);assert.deepEqual(royaleWWins(w),['royale-w-mathis']);assert.equal(royaleWPoints({zaRoyaleWPoints:9000}),5000);
- assert.equal(royaleWPoints({zaRoyaleRank:'W'}),0);assert.equal(royaleDialogue({zaRoyaleRank:'W'}).action,'enterRoyaleZone');assert.equal(royaleDialogue(w).action,undefined);
+ assert.equal(royaleWPoints({zaRoyaleRank:'W'}),0);assert.equal(royaleDialogue({zaRoyaleRank:'W'}).action,'enterRoyaleZone');assert.equal(royaleDialogue(w).action,'royaleRintaro');
 });
