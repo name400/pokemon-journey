@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import manifest from '@/data/cloud-town-tiles.json';
-import {fieldPath,wildAlphaPosition} from '@/lib/cloud-adventure/adventure-world.mjs';
+import {fieldPath,wildAlphaPosition,cloudNpcTile} from '@/lib/cloud-adventure/adventure-world.mjs';
 
 type Props={world:any;disabled:boolean;onPath:(path:string[])=>void;onInteract:()=>void;onAimAlpha:()=>void};
 const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
@@ -13,7 +13,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,frame=0,last=0,width=736,height=544;
-  for(const src of ['/game/town/tilemap.png','/game/town/terrain.png']){const img=new Image();img.onload=()=>images.set(src,img);img.onerror=()=>setAssetError(true);img.src=src;}
+  for(const src of [...new Set([manifest.image,...Object.values(manifest.tiles).map((t:any)=>t.image||manifest.image)])]){const img=new Image();img.onload=()=>images.set(src,img);img.onerror=()=>setAssetError(true);img.src=src;}
   const observer=new ResizeObserver(([entry])=>{width=Math.max(280,Math.round(entry.contentRect.width));height=Math.round(width*(width<560?.87:17/23));el.width=width*2;el.height=height*2;});observer.observe(el);
   function draw(time:number){
    if(disposed||!ctx||!el)return;const {w}=props.current,s=scene.current,dt=Math.min(48,time-last||16);last=time;
@@ -86,7 +86,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
     trainerRows.forEach((row,ry)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=face==='up'&&ry>2&&ry<6?(ry===3?color:'#60473b'):colors[p];ctx!.fillRect(px+rx*2,py+ry*2+(ry>10?(rx<6?step:-step):0),2,2);}));
     if(face==='left'||face==='right'){ctx!.fillStyle='#263e51';ctx!.fillRect(px+(face==='left'?7:15),py+9,3,3);}
    }
-   w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='N'||c==='Q'||c==='R'||c==='F'||c==='D'||c==='A'||c==='B'||c==='O'||c==='U'||c==='V'||c==='j'||c==='e'||c==='t'||c==='m'||c==='v'||c==='u'||c==='n')trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
+   w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
    trainer(s.x,s.y,'#d95250',w.facing||'down',moving);

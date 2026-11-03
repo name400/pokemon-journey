@@ -32,3 +32,5 @@ Runtime images currently depend on the remote repositories above. `components/po
 - `public/game/battle/biomes/*.svg`: 프로젝트에서 직접 생성한 35종 바이옴 배경. 생성 코드: `scripts/build-rogue-biome-backgrounds.mjs`; 원작 게임 이미지가 아닙니다.
 
 - 전투 크기 보정: 설치된 @pkmn/sim 종 데이터의 키(heightm)를 `scripts/build-battle-heights.mjs`로 추출. 실제 키 그대로 비례하지 않고 화면 가독성을 위해 범위를 제한해 표시한다.
+
+- public/game/town/rock.svg: 프로젝트 제작 바위 타일. 잘못 참조한 Tiny Town 소품 좌표를 대체한다.

@@ -14,6 +14,7 @@ import {TRAINERS} from '@/lib/campaign.mjs';
 import {fieldPath,stepField,wildAlphaTarget} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {ADVENTURE_BALLS} from '@/lib/cloud-adventure/adventure-balls.mjs';
 import './cloud-adventure.css';
+import {predictCloudStep} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 
 type Screen='party'|'manage'|'bag'|'shop'|'journal'|null;
 async function api(body?:any,light=false){
@@ -28,6 +29,7 @@ function Sheet({title,close,children,dismissible=true}:{title:string;close:()=>v
 }
 
 export default function Adventure(){
+ const [prediction,setPrediction]=useState<{revision:number;x:number;y:number;facing:string}|null>(null);
  const [data,setData]=useState<any>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false),[selected,setSelected]=useState(1);
  const [screen,setScreen]=useState<Screen>(null),[dialogue,setDialogue]=useState<any>(null),[teamEdit,setTeamEdit]=useState(false),[team,setTeam]=useState<string[]>([]);
  const [query,setQuery]=useState(''),[page,setPage]=useState(0),[hint,setHint]=useState('방향키 / WASD로 걷고 E로 대화하세요.');
@@ -38,7 +40,7 @@ export default function Adventure(){
  snapshot.current=data;screenRef.current=screen;dialogueRef.current=dialogue;
  const stop=useCallback(()=>{heldDirection.current='';pathQueue.current=[];},[]);
  const accept=useCallback((d:any)=>{
-  if(!mounted.current||d.revision<revision.current)return;revision.current=d.revision;
+  if(!mounted.current||d.revision<revision.current)return;revision.current=d.revision;setPrediction(null);
   setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()].filter((p:any)=>p.boxId!==d.world?.zaTradedPikachuId)};});
   setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();
  },[stop]);
@@ -46,12 +48,12 @@ export default function Adventure(){
  const act=useCallback(async(action:string,extra:any={})=>{
   if(lock.current)return null;lock.current=true;setBusy(true);setError('');
   try{const result=await api({action,revision:revision.current,...extra});if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result);return result;}
-  catch(e){stop();if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load();return null;}
+  catch(e){stop();setPrediction(null);if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load();return null;}
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  },[accept,load,stop]);
  useEffect(()=>{mounted.current=true;load();return()=>{mounted.current=false;stop();};},[load,stop]);
  useEffect(()=>{setAlphaAimKey('');},[data?.world?.x,data?.world?.y,data?.world?.district,data?.world?.zaWildAlphaSpent,!!data?.battle]);
- const interact=useCallback(()=>{stop();const spot=snapshot.current?.world?.interaction;if(!spot){setHint('NPC나 건물 입구로 다가가 바라본 뒤 대화하세요.');return;}setDialogue(spot);},[stop]);
+ const interact=useCallback(()=>{stop();if(lock.current)return;const spot=snapshot.current?.world?.interaction;if(!spot){setHint('NPC나 건물 입구로 다가가 바라본 뒤 대화하세요.');return;}setDialogue(spot);},[stop]);
  useEffect(()=>{
   const dirs:Record<string,string>={arrowup:'up',w:'up',arrowdown:'down',s:'down',arrowleft:'left',a:'left',arrowright:'right',d:'right'};
   const keydown=(e:KeyboardEvent)=>{
@@ -65,7 +67,7 @@ export default function Adventure(){
   window.addEventListener('keydown',keydown);window.addEventListener('keyup',keyup);window.addEventListener('blur',stop);document.addEventListener('visibilitychange',hide);
   let alive=true,timer:ReturnType<typeof setTimeout>;
   const tick=async()=>{
-   if(!alive)return;const d=snapshot.current,direction=heldDirection.current||pathQueue.current[0];
+   if(!alive)return;const started=performance.now();let moved=false;const d=snapshot.current,direction=heldDirection.current||pathQueue.current[0];
    if(direction&&d?.world&&!d.battle&&!d.world.adventurePendingMoves?.length&&!d.world.adventureCatchWindow&&!resultRef.current&&!screenRef.current&&!dialogueRef.current&&!lock.current){
     const step=stepField(d.world,direction);
     if(step.blocked){pathQueue.current=[];if(lastFacing.current!==direction||d.world.facing!==direction){lastFacing.current=direction;await act('face',{direction});}setHint(step.reason);}
@@ -75,12 +77,12 @@ export default function Adventure(){
      const path=heldDirection.current?[direction]:pathQueue.current.splice(0,4);
      if(heldDirection.current&&pathQueue.current[0]===direction)pathQueue.current.shift();
      lastFacing.current=path.at(-1)||direction;
-     const r=await act('move',{path});
+     const projected=predictCloudStep(d.world,path[0]);if(projected)setPrediction({revision:d.revision,...projected});moved=true;const r=await act('move',{path});
      // The server may stop early for an encounter, transition, or obstacle.
      if(r&&(r.battle||r.world?.area!==d.world.area||r.world?.interior!==d.world.interior||r.world?.district!==d.world.district||(r.world?.steps||0)-(d.world.steps||0)<path.length))stop();
     }
    }
-   if(alive)timer=setTimeout(tick,65);
+   if(alive)timer=setTimeout(tick,moved?Math.max(0,100-(performance.now()-started)):16);
   };timer=setTimeout(tick,0);
   return()=>{alive=false;clearTimeout(timer);window.removeEventListener('keydown',keydown);window.removeEventListener('keyup',keyup);window.removeEventListener('blur',stop);document.removeEventListener('visibilitychange',hide);};
  },[act,interact,stop]);
@@ -99,7 +101,7 @@ export default function Adventure(){
   <div className="adv-route-bar"><p><span className="adv-dot"/>{w.objective}</p><button onClick={()=>open('journal')} aria-label={`여행 수첩 열기. 배지 ${w.badges.length}개`}>배지 <b>{w.badges.length}/8</b><span className="adv-mini-badges" aria-hidden="true">{TRAINERS.slice(0,8).map(t=><i key={t.id} className={w.badges.includes(t.id)?'earned':''}/>)}</span><ChevronRight size={16}/></button></div>
   <div className="adv-game-layout"><section className="adv-field-section" aria-label="필드 탐험">
    <div className="adv-field-top"><span><span className="adv-dot"/> {inBattle?'배틀 중':busy?'저장 중…':w.interior?'실내 탐험':'필드 탐험'}</span><span>{w.interior?'남쪽 출구로 나가기':w.district==='lumiose-royale'?'배틀 존 · 남쪽 광장':w.district==='lumiose-zone1'?'야생 구역 1 초안 · 동쪽 광장 · 서쪽 야생 구역 2':w.district==='lumiose-zone2'?'야생 구역 2 초안 · 별가사리는 밤 · 동쪽 구역 1':w.district==='lumiose-observation'?`야생 Lv.${area.min}–${area.max} · 서쪽 야생 구역`:w.district==='lumiose-wild'?`야생 Lv.${area.min}–${area.max} · 서쪽 현장 · 동쪽 관측 정원`:w.district==='lumiose-site'?'서쪽 정원 · 동쪽 야생 구역':w.district==='lumiose-garden'?'서쪽 광장 · 동쪽 공사 현장':w.district?'서쪽 야생 구역 1 · 동쪽 정원 · 남쪽 항구':<>야생 Lv.{area.min||40}–{area.max||65} · {data.gameTime?.period==='night'?'밤':'낮'}</>}</span></div>
-   <AdventureField world={w} disabled={inBattle||!!screen||!!dialogue} onAimAlpha={()=>{stop();if(aim)setAlphaAimKey(aimKey);else setHint('가까운 거리에서 장애물 없이 구구를 조준하세요.');}} onPath={path=>{if(!path.length){setHint('이곳까지 걸어갈 길이 없습니다.');return;}heldDirection.current='';pathQueue.current=path.slice(0,240);}} onInteract={interact}/>
+   <AdventureField world={prediction&&prediction.revision===data.revision?{...w,...prediction}:w} disabled={inBattle||!!screen||!!dialogue} onAimAlpha={()=>{stop();if(aim)setAlphaAimKey(aimKey);else setHint('가까운 거리에서 장애물 없이 구구를 조준하세요.');}} onPath={path=>{if(!path.length){setHint('이곳까지 걸어갈 길이 없습니다.');return;}heldDirection.current='';pathQueue.current=path.slice(0,240);}} onInteract={interact}/>
    <div className="adv-field-bottom"><span>{w.district?area.name:`지역 ${w.area+1}/10`}</span><span>KENNEY CC0 타일 · <a href="/game/town/README.md" target="_blank" rel="noreferrer">자산 출처</a></span></div>
    <div className="adv-console"><div className="adv-message" role="status" aria-live="polite"><b>{spot?`${spot.name} 앞`:'여행 기록'}</b><p>{error||w.log?.at(-1)||hint}</p><small>{hint}</small></div><div className="adv-inputs"><div className="adv-dpad" aria-label="이동 버튼">{[['up',ArrowUp,'위'],['left',ArrowLeft,'왼쪽'],['down',ArrowDown,'아래'],['right',ArrowRight,'오른쪽']].map(([direction,Icon,label]:any)=><button key={direction} className={`adv-dir-${direction}`} aria-label={`${label}로 이동`} disabled={inBattle||!!screen||!!dialogue} onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);pathQueue.current=[direction];heldDirection.current=direction;}} onPointerUp={()=>{heldDirection.current='';}} onPointerCancel={stop} onLostPointerCapture={()=>{heldDirection.current='';}} onClick={e=>{if(e.detail===0)pathQueue.current=[direction];}}><Icon size={21} aria-hidden="true"/></button>)}</div><button className="adv-talk" disabled={inBattle||busy} onClick={interact}><MessageCircle size={23}/><b>대화</b><kbd>E</kbd></button></div></div>
    {aim&&<div className="adv-sheet-actions"><p>우두머리 구구 · {aim.distance}칸 {aim.back&&w.zaWildAlphaAlert!==true?'· 미발견 뒤쪽':'· 조심해서 접근'} (시범)</p>{alphaAimKey===aimKey?<><button className="primary" disabled={inBattle||busy||!!screen||!!dialogue||!data.wallet.balls} onClick={async()=>{setAlphaAimKey('');await act('throwWildAlpha',{targeted:true});}}>기본 볼 던지기</button><button disabled={busy} onClick={()=>setAlphaAimKey('')}>조준 취소</button></>:<button disabled={inBattle||busy||!!screen||!!dialogue} onClick={()=>{stop();setAlphaAimKey(aimKey);}}>구구 조준하기</button>}</div>}
