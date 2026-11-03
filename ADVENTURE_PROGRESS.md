@@ -1,3 +1,10 @@
+## 2026-11-03 · 사이드 미션 003: 묘지의 깜까미 (부분 재현)
+
+- Emma를 만난 뒤 Moire의 의뢰를 받고 야생 구역 4 묘지의 Lv.10 깜까미를 이기거나 포획하면 반지 기록을 얻는다. 돌려주면 4,000코인을 한 번 받는다. 도망 후 재도전이 가능하다. [구역 4 자료](https://bulbapedia.bulbagarden.net/wiki/Wild_Zone_4)는 상대의 레벨과 몸통박치기·야습·째려보기를, [공략](https://www.thonky.com/pokemon-legends-z-a/side-mission-003-sableye-in-the-cemetery)은 사건 순서를 확인한다. 원작의 실시간 전투와 다른 기존 턴제 모델을 사용한다.
+- **기력의조각 지급 수량은 보류**했다. [Serebii](https://www.serebii.net/legendsz-a/sidemissions/sableyeinthecemetery.shtml)와 [상세 공략](https://www.thonky.com/pokemon-legends-z-a/side-mission-003-sableye-in-the-cemetery)은 2개이나 [Bulbapedia의 임무 목록](https://bulbapedia.bulbagarden.net/wiki/Side_Mission)은 1개로 표기한다. 수량을 임의로 확정하지 않고 보상 대기 상태를 저장·표시한다. 추후 확인해 대기 저장에 안전하게 지급해야 한다. 필드에서 기절한 포켓몬에게 기력의조각을 쓰는 기능은 구현했으나 이 의뢰는 아직 도구를 지급하지 않는다.
+- 구역 4 묘지와 구역 3과의 직접 연결, 임시 의뢰인 위치, 균등 출현·고정 Lv.9은 초안이다. 원작 묘지의 지형·시간·종별 위치와 확률·우두머리·기술머신·구역 4 도감 조사 점수는 미구현이다. 소유 개체를 교환해야 하는 두 번째 의뢰도 아직 미구현이며, 그 상처약 보상도 [Serebii](https://www.serebii.net/legendsz-a/sidemissions/auseforanevolutionstone.shtml)는 3개, 위 임무 목록은 1개로 달라 확인이 필요하다. 세 의뢰 후 Emma 배틀 및 임무 05 완료는 미구현이다.
+- 실제 탐험 API·메모리 SQLite에서 수주, 도망, 승리와 포획, 반지 보고, 중복 보상 거부, 도구 보상 대기와 별도로 주입한 기력의조각 사용을 검사했다. 직전 월드 코드 왕복 시 안전 좌표와 의뢰·도감 보존도 확인했다. 실제 D1·PC·모바일 실조작과 원작 실기는 미검증이고 운영 배포하지 않았다. 토중몬 제공 범위와 Rintaro 보상은 바꾸지 않았다.
+
 ## 2026-11-03 · 사이드 미션 001: 큰 파르빗 (부분 재현)
 
 - Emma를 만난 뒤 Trevelle에게 의뢰를 받고 골목의 Lv.10 우두머리 파르빗을 이기거나 포획한 다음 보고하면 400코인과 맛있는물 2개를 한 번 받는다. 의뢰·상대·레벨·해결 방식은 [Serebii](https://www.serebii.net/legendsz-a/sidemissions/abigol%27bunnelby.shtml), 보상은 [사이드 미션 목록](https://bulbapedia.bulbagarden.net/wiki/Side_Mission)을 참고했다. 도망이나 패배 후에는 재도전할 수 있다.

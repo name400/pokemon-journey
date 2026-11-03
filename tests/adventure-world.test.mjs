@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseZone1Map,lumioseZone2Map,lumioseZone3Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseZone1Map,lumioseZone2Map,lumioseZone3Map,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -163,4 +163,14 @@ test('bureau map has reachable Emma and exits to the provisional third zone',()=
  const back=stepField({area:3,district:'lumiose-bureau',x:11,y:14},'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone3',19,7]);
  const state={area:3,district:'lumiose-bureau',x:11,y:6,regionId:6,districtReturnRegion:1,zaEmmaMet:true};
  const saved=storeAdventurePosition(state,10),loaded=restoreAdventurePosition(structuredClone(saved),10);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaEmmaMet],['lumiose-bureau',11,6,true]);
+});
+
+
+test('cemetery draft connects to the third zone and preserves its location',()=>{
+ const source={area:3,district:'lumiose-zone3',x:1,y:8,zaEmmaMet:true};
+ const entered=stepField(source,'left');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone4',21,8]);
+ assert.ok(fieldPath(lumioseZone4Map(),{x:21,y:8},findTile(lumioseZone4Map(),'z')).length);
+ assert.equal(stepField({area:3,district:'lumiose-zone4',x:21,y:8},'right').district,'lumiose-zone3');
+ const saved=storeAdventurePosition({area:3,district:'lumiose-zone4',x:18,y:6,regionId:6,districtReturnRegion:1,zaSableyeQuest:1},8),loaded=restoreAdventurePosition(structuredClone(saved),8);
+ assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaSableyeQuest],['lumiose-zone4',18,6,1]);
 });
