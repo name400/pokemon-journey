@@ -325,3 +325,9 @@
 - 원본 [pokemon.ts](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/field/pokemon.ts)와 [game-data.ts](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/system/game-data.ts)를 대조해 사탕 9,999개에 이미 도달한 상태에서 친밀도가 다음 사탕 문턱을 넘으면 진행도를 문턱 직전으로 유지하도록 고쳤다. 이전에는 나머지만 남겨 진행도가 사라졌다. 사탕이 직전 획득으로 처음 9,999개에 도달한 경우 원본처럼 실제 나머지를 유지한다. 저장된 잔액·과거 진행도는 소급 변경하지 않고 다음 친밀도 획득부터 반영한다.
 - 합성 165층 실제 전투 승리, 잠금 전환·가격 확인·오래된 가격 거부·등급 유지·저장 복원 및 기존 저장 미소급, 실제 전투의 만액 사탕 진행과 저장 복원 후 비용 감소·다음 사탕 지급을 검사했다. 실제 브라우저 클릭, 운영 D1 및 자연 200층 완주는 미검증이며 운영 배포는 하지 않았다.
 - 전체 `npm test` 90개와 `npm run typecheck`가 통과했다.
+
+### 사탕단지와 파티 전체 사탕 — 2026-11-03
+- 원본 `7c088125`의 [init-modifier-pools.ts](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/modifier/init-modifier-pools.ts), [modifier.ts](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/modifier/modifier.ts), [modifier-type.ts](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/modifier/modifier-type.ts)를 확인했다. 기존에는 이상한사탕으로 한 마리의 레벨만 1 올릴 수 있었다. 이제 하이퍼 등급 보상에 사탕단지와 파티 전체를 올리는 더이상한사탕을 추가했다. 사탕단지는 최대 99개 중첩되고 사탕 사용 시 중첩당 레벨 상승량을 1 늘린다. 원본처럼 199층 보상에서는 사탕단지가 나오지 않는다.
+- 기존 이상한사탕도 사탕단지 효과를 받으며 기절한 포켓몬에게 사용할 수 있게 했다. 더이상한사탕은 기절한 포켓몬을 포함한 파티에 적용하되 부활시키지 않는다. **영향:** 새 보상이 등장하면서 기존 진행 도전을 포함해 향후 보상 구성과 난수 결과가 달라질 수 있다. 사용자의 기존 100레벨 한도는 유지하여 원본의 100 초과 성장 전체를 재현하지 않는다. 기존 도구·포켓몬·계정 데이터를 초기화하거나 소급 지급하지 않는다.
+- 사탕단지 2중첩의 단일 사탕 3레벨, 새 기술 및 진화 대기·JSON 복원, 취소 후 파티 전체 사탕, 기절 상태 유지, 친밀도 1회 증가와 레벨 100 상한을 검사했다. 여러 레벨 상승의 진화·기술 처리 순서는 현재 기존 대기열을 재사용하므로 모든 복합 조건이 원본과 동일하다고 보장하지 않는다. 보상 전체 확률·동일 시드 재현, 실제 브라우저와 자연 200층 완주는 미검증이며 운영 배포는 하지 않았다. 클래식 공통 보상 코드의 탐험 병렬 변경은 통합 전 비교한다.
+- 전체 `npm test` 91개와 `npm run typecheck`가 통과했고, 이후 기술 습득 확인을 추가한 해당 테스트도 개별 통과했다.
