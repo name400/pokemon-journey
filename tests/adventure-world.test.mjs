@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -100,4 +100,14 @@ test('provisional Royale zone connects to plaza and keeps the legacy safe positi
  const saved=storeAdventurePosition(state,19);assert.deepEqual([saved.x,saved.y,saved.regionId],[5,9,1]);const loaded=restoreAdventurePosition(structuredClone(saved),19);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-royale',5,11]);
  const old=restoreAdventurePosition({...saved,x:5,y:8},20);assert.equal(old.district,null);assert.deepEqual(old.zaRoyaleZWins,['royale-z-erica']);
  const exit=stepField({area:3,district:'lumiose-royale',x:11,y:14},'down');assert.deepEqual([exit.district,exit.x,exit.y],['lumiose',11,10]);
+});
+
+test('provisional alpha aiming requires a clear aligned ray within three tiles',()=>{
+ const s={area:3,district:'lumiose-wild',x:3,y:2,facing:'down'};
+ assert.deepEqual(wildAlphaAim(s),{x:3,y:5,distance:3,back:true});
+ assert.equal(wildAlphaAim({...s,y:1}),null);assert.equal(wildAlphaAim({...s,facing:'up'}),null);
+ assert.equal(wildAlphaAim({...s,zaWildAlphaSpent:true}),null);assert.equal(wildAlphaAim({...s,facing:'__proto__'}),null);
+ assert.deepEqual(wildAlphaAim({...s,x:6,y:5,facing:'left'}),{x:3,y:5,distance:3,back:false});
+ const blocked=lumioseWildMap().map(row=>row.split(''));blocked[3][3]='#';assert.equal(wildAlphaAim(s,blocked),null);
+ assert.equal(wildAlphaAim({...s,interior:'hotel'}),null);
 });

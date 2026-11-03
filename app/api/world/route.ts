@@ -1,6 +1,6 @@
 import {makeAdventureAlpha,applyAdventureAlphaBattleStats} from '@/lib/adventure-alpha.mjs';
 import {recordResearchTrainerWin,recordResearchCapture,recordResearchEvolution,researchSummary,researchTm,hasResearchTm,canLearnResearchTm} from '@/lib/adventure-research.mjs';
-import {FIELD_GOODS,MAP_VERSION,normalizeField,fieldMap,stepField,validateAdventurePath,interactionAt,wildAlphaSees,fieldDialogue,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '@/lib/adventure-world.mjs';
+import {FIELD_GOODS,MAP_VERSION,normalizeField,fieldMap,stepField,validateAdventurePath,interactionAt,wildAlphaSees,wildAlphaAim,fieldDialogue,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '@/lib/adventure-world.mjs';
 import {advanceSurvey,habitatStage,habitatLabAction,cityProjectStage,wildStudyStage} from '@/lib/adventure-story.mjs';
 import {hasOwnKey} from '@/lib/record-key.mjs';
 import {sameOriginRequest} from '@/lib/request-origin.mjs';
@@ -173,8 +173,8 @@ else if(b.action==='flee'){if(!s.combat||s.trainer)throw Error('트레이너 배
 else if(b.action==='heal'){if(s.combat||cell()!=='H'||(s.area===9&&s.league>0&&s.league<5))throw Error('리그 도전 중에는 도구로 회복하세요. 센터에서는 도전 전에 회복할 수 있습니다.');for(const id of s.teamIds){const m=heal(mons.get(id));mons.set(id,m);changed.set(id,m);}s.log=['파티의 HP·상태·PP를 모두 회복했다!'];}
 else if(b.action==='use'){consume=hasOwnKey(columns,b.item)?columns[b.item]:'';if(!consume||consume==='balls')throw Error('도구를 선택하세요.');const m=mons.get(b.boxId||s.activeId);if(!m)throw Error('보유 포켓몬이 아닙니다.');if(b.item==='antidote'){if(!['독','맹독'].includes(m.status))throw Error('독 상태가 아닙니다.');m.status=null;}else{if(m.hp<=0)throw Error('기절한 포켓몬은 센터에서 회복하세요.');if(m.hp===m.maxHp&&!(b.item==='fullrestore'&&m.status))throw Error('HP가 가득 찼습니다.');m.hp=Math.min(m.maxHp,m.hp+(b.item==='max'||b.item==='fullrestore'?m.maxHp:b.item==='hyper'?120:b.item==='super'?60:20));}if(b.item==='fullrestore')m.status=null;changed.set(m.boxId,m);s.log=['도구를 사용했다.'];}
 else if(b.action==='throwWildAlpha'){
- if(s.combat||s.interior||s.district!=='lumiose-wild'||s.zaWildAlphaSpent===true)throw Error('필드의 우두머리 구구를 조준하세요.');const spot=interactionAt(s);if(spot?.tile!=='a'||Math.abs(s.x-spot.x)+Math.abs(s.y-spot.y)!==1)throw Error('구구 옆에서 구구를 바라보세요.');
- const back=s.x===spot.x&&s.y===spot.y-1&&s.facing==='down',foe={...makeAdventureAlpha(makeMon(16,24)),boxId:'wild',adventureAlphaId:'wild-zone-pidgey'};consume='balls';
+ if(s.combat||s.interior||s.district!=='lumiose-wild'||s.zaWildAlphaSpent===true)throw Error('필드의 우두머리 구구를 조준하세요.');const target=wildAlphaAim(s);if(!target)throw Error('구구를 가까운 직선 방향으로 조준하세요.');
+ const back=target.back,foe={...makeAdventureAlpha(makeMon(16,24)),boxId:'wild',adventureAlphaId:'wild-zone-pidgey'};consume='balls';
  const attempt=adventureCaptureAttempt(foe,'pokeball',{overworld:true,unaware:back&&s.zaWildAlphaAlert!==true,backstrike:back,moveCount:0,royaleRank:s.zaRoyaleRank,alpha:true,night:gameTime().period==='night'},random);
  if(attempt.caught){s.zaWildAlphaSpent=true;captured={...afterCapture(foe,'pokeball'),boxId:crypto.randomUUID(),origin:'capture',experience:0};recordResearchCapture(s,captured.types);if(s.teamIds.length<6)s.teamIds.push(captured.boxId);if(wildStudyStage(s)===1)s.wildStudy={...(s.wildStudy||{}),stage:2};s.log=[`${back?'뒤에서 던진 볼로 ':'볼로 '}우두머리 구구를 포획했다!`];s.events=[{kind:'capture',side:0,targetSide:1,type:'normal',category:'status',hit:false,ball:'pokeball',shakes:attempt.shakes,caught:true,targetBoxId:'wild'}];}
  else{s.zaWildAlphaAlert=true;s.combat=applyAdventureAlphaBattleStats(createAdventureCombat(s,mons,[foe]));s.encounter=foe;s.trainer=null;s.log=['볼에서 빠져나온 우두머리 구구가 배틀을 시작했다!'];}
