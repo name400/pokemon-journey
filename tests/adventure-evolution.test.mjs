@@ -32,7 +32,7 @@ test('evolution moves fill vacancies or wait for a choice when full',()=>{
 test('Shedinja is a separate one-HP Pokémon with inherited traits and Wonder Guard',()=>{
  const parent={...makeMon(290,20),boxId:'parent',item:'leftovers',shiny:true,teraType:'Ground',pp:{scratch:4},custom:{keep:true}};
  const child=createAdventureShedinja(parent,'child');
- assert.equal(child.id,292);assert.equal(child.boxId,'child');assert.equal(child.origin,'evolution');assert.equal(child.hp,1);assert.equal(child.maxHp,1);assert.equal(child.ability,'wonderguard');assert.equal(child.item,'leftovers');assert.equal(child.gender,'N');assert.equal(child.teraType,'Bug');assert.equal(child.originBall,'pokeball');
+ assert.equal(child.id,292);assert.equal(child.boxId,'child');assert.equal(child.origin,'evolution');assert.equal(child.hp,1);assert.equal(child.maxHp,1);assert.equal(child.ability,'wonderguard');assert.equal(child.item,'');assert.equal(child.status,null);assert.equal(child.gender,'N');assert.equal(child.teraType,'Bug');assert.equal(child.originBall,'pokeball');
  assert.equal(child.personality,parent.personality);assert.equal(child.shiny,true);assert.deepEqual(child.ivs,parent.ivs);assert.deepEqual(child.evs,parent.evs);assert.deepEqual(child.moves,parent.moves);assert.deepEqual(child.pp,parent.pp);assert.equal(parent.item,'leftovers');
  assert.equal(createAdventureShedinja({...parent,hp:0},'fainted').hp,0);
  const defender={...child,moves:['단단해지기']},foe={...makeMon(19,20),boxId:'foe',moves:['몸통박치기','물기']};
