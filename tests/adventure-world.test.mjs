@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {adventureMap,labMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
+import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
 test('all ten fields have reachable services, trainers, pickups and gated exits',()=>{
  for(let area=0;area<10;area++){
@@ -40,4 +41,13 @@ test('interior storage keeps a safe legacy position and detects an older client 
  const restored=restoreAdventurePosition(structuredClone(stored),7);assert.deepEqual([restored.x,restored.y,restored.facing],[11,6,'up']);
  const oldWrite=restoreAdventurePosition({...stored,x:19,y:5},8);assert.equal(oldWrite.interior,null);assert.deepEqual([oldWrite.x,oldWrite.y],[19,5]);assert.equal(oldWrite.custom,'preserve');
  const samePlaceOldWrite=restoreAdventurePosition(structuredClone(stored),8);assert.equal(samePlaceOldWrite.interior,null);assert.deepEqual([samePlaceOldWrite.x,samePlaceOldWrite.y],[18,5]);
+});
+test('habitat incident follows the completed survey, badges and designated field',()=>{
+ assert.equal(habitatLabAction({badges:['a','b','c']}),null);
+ assert.equal(habitatLabAction({citySurvey:{stage:3},badges:['a','b']}),null);
+ assert.equal(habitatLabAction({citySurvey:{stage:3},badges:['a','b','c']}).action,'habitatStart');
+ assert.equal(habitatGuideDialogue({habitatIncident:{stage:1},area:3,expedition:{id:1}}),null);
+ assert.equal(habitatGuideDialogue({habitatIncident:{stage:1},area:3}).action,'habitatClue');
+ assert.equal(habitatLabAction({habitatIncident:{stage:3}}).action,'habitatReport');
+ assert.match(habitatSummary({habitatIncident:{stage:4}}),/전달/);
 });
