@@ -4,11 +4,11 @@ import manifest from '@/public/game/town/tiles.json';
 import {fieldPath} from '@/lib/adventure-world.mjs';
 
 type Props={world:any;disabled:boolean;onPath:(path:string[])=>void;onInteract:()=>void};
-const palettes:Record<string,string[]>={meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
+const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 const trainerRows=['...RRRRR....','..RRRRRRR...','..RRWWWWRR..','...SSSSS....','...SKSKS....','....SSS.....','..BBBBBBB...','.SBBBBBBBS..','.SBBYYYBBS..','..BBYYYBB...','...KKKKK....','...KK.KK....','...KK.KK....','..DDD.DDD...'];
 
 export default function AdventureField({world:w,disabled,onPath,onInteract}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),props=useRef({w,disabled,onPath,onInteract}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
+ const canvas=useRef<HTMLCanvasElement>(null),props=useRef({w,disabled,onPath,onInteract}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
  props.current={w,disabled,onPath,onInteract};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
@@ -17,8 +17,8 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
   const observer=new ResizeObserver(([entry])=>{width=Math.max(280,Math.round(entry.contentRect.width));height=Math.round(width*(width<560?.87:17/23));el.width=width*2;el.height=height*2;});observer.observe(el);
   function draw(time:number){
    if(disposed||!ctx||!el)return;const {w}=props.current,s=scene.current,dt=Math.min(48,time-last||16);last=time;
-   const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0)||s.interior!==(w.interior||null);
-   if(movedArea){s.x=w.x;s.y=w.y;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;}
+   const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0)||s.interior!==(w.interior||null)||s.district!==(w.district||null);
+   if(movedArea){s.x=w.x;s.y=w.y;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;s.district=w.district||null;}
    const moving=Math.abs(s.x-w.x)+Math.abs(s.y-w.y)>.025;
    const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
    s.x=reduce?w.x:s.x+(w.x-s.x)*Math.min(1,dt/72);s.y=reduce?w.y:s.y+(w.y-s.y)*Math.min(1,dt/72);
@@ -40,6 +40,14 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
      if(c==='X'){ctx.fillStyle='#a95850';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+21);}
      return;
     }
+    if(w.district==='lumiose'){
+     ctx.fillStyle=(x+y)%2?'#e7dfce':'#ded7c5';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){ctx.fillStyle='#8e9c91';ctx.fillRect(px,py,tile,tile);}
+     if('HMJ'.includes(c))buildings.push({x,y,kind:c});
+     if(c==='T'){ctx.fillStyle='#769b88';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('광장',px+tile/2,py+20);}
+     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('항구',px+tile/2,py+20);}
+     return;
+    }
     if(c==='.'||'EW HMGNLCPQSI'.includes(c)){ctx.fillStyle=palette[2];ctx.fillRect(px,py,tile,tile);sprite('path',px,py);}
     else sprite((x*7+y*3)%11===0?'grassDetail':'grass',px,py);
     if(c==='g'){sprite('bush',px,py);sprite('grassDetail',px,py);ctx.fillStyle=palette[1];for(let i=0;i<3;i++)ctx.fillRect(px+4+i*9,py+tile-9-(i%2)*4,3,7);}
@@ -55,8 +63,8 @@ export default function AdventureField({world:w,disabled,onPath,onInteract}:Prop
     const layout=b.kind==='H'?manifest.buildings.center.layout:manifest.buildings.shop.layout;
     for(let y=0;y<4;y++)for(let x=0;x<3;x++)sprite(layout[y][x],(b.x+x-1)*tile,(b.y+y-3)*tile);
     // Red clinic / blue shop signs, independent of the source sheet roof colors.
-    ctx.fillStyle=b.kind==='H'?'#d44e4c':b.kind==='M'?'#417fae':b.kind==='G'?'#bd8c37':'#6e7d8c';ctx.fillRect((b.x-1)*tile,(b.y-3)*tile,3*tile,4);
-    const label=b.kind==='H'?'포켓몬 센터':b.kind==='M'?'프렌들리숍':b.kind==='G'?'GYM':'연구소';
+    ctx.fillStyle=b.kind==='H'?'#d44e4c':b.kind==='M'?'#417fae':b.kind==='G'?'#bd8c37':b.kind==='J'?'#ad8865':'#6e7d8c';ctx.fillRect((b.x-1)*tile,(b.y-3)*tile,3*tile,4);
+    const label=b.kind==='H'?'포켓몬 센터':b.kind==='M'?'프렌들리숍':b.kind==='G'?'GYM':b.kind==='J'?'호텔 안내소':'연구소';
     ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillStyle='#253e3c';ctx.fillRect(b.x*tile-24,(b.y+1)*tile-2,80,19);ctx.fillStyle='#ffffff';ctx.fillText(label,b.x*tile+16,(b.y+1)*tile+11);
    }
    if(w.area===9&&!w.expedition){for(let y=1;y<=4;y++)for(let x=7;x<=21;x++)sprite(y===1?'castleBattlement':y===3?'castleWindow':'castleWall',x*tile,y*tile);[8,11,14,17,20].forEach((x,i)=>{sprite('castleDoor',x*tile,4*tile);ctx.fillStyle='#fff4bc';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText(i===4?'챔피언':`${i+1} 사천왕`,x*tile+16,6*tile-8);});}

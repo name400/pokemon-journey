@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -50,4 +50,12 @@ test('habitat incident follows the completed survey, badges and designated field
  assert.equal(habitatGuideDialogue({habitatIncident:{stage:1},area:3}).action,'habitatClue');
  assert.equal(habitatLabAction({habitatIncident:{stage:3}}).action,'habitatReport');
  assert.match(habitatSummary({habitatIncident:{stage:4}}),/전달/);
+});
+test('city district has reachable services and stores a compatible port position',()=>{
+ const map=lumioseMap(),start={x:11,y:13};
+ for(const tile of ['H','M','J','T','Q','X'])assert.ok(fieldPath(map,start,findTile(map,tile)).length,`${tile} reachable`);
+ const inside={area:3,district:'lumiose',x:11,y:9,facing:'up',badges:['a']};const saved=storeAdventurePosition(inside,9);
+ assert.deepEqual([saved.area,saved.x,saved.y],[3,5,9]);const restored=restoreAdventurePosition(structuredClone(saved),9);assert.deepEqual([restored.x,restored.y,restored.district],[11,9,'lumiose']);
+ const oldWrite=restoreAdventurePosition({...saved,x:5,y:8},10);assert.equal(oldWrite.district,null);assert.deepEqual([oldWrite.x,oldWrite.y],[5,8]);assert.deepEqual(oldWrite.badges,['a']);
+ const back=stepField({area:3,district:'lumiose',x:11,y:14},'down');assert.deepEqual([back.area,back.x,back.y,back.district,back.transitioned],[3,5,9,null,true]);
 });
