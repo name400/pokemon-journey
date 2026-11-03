@@ -1,0 +1,1 @@
+Adventure work handoff. Selected files and patches only; not a standalone application. The patches compare the saved local baseline with the active adventure copy and require integration review. Economy and gacha changes remain unfinished and are not included. Natural progression and integration are not yet verified.
