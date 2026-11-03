@@ -44,3 +44,18 @@ test('adventure Z-A modifiers and catalog do not change shared rogue rules',asyn
  assert.equal(ADVENTURE_BALLS.find(x=>x.id==='ultraball').sale,false);
  assert.equal(ballMultiplier('quickball',{turn:1}),5);
 });
+
+test('Z-A species and explicitly recorded Royale rank adjust only adventure captures',async()=>{
+ const {adventureCaptureRate,adventureRankPenalty,adventureCaptureAttempt}=await import('../lib/adventure-balls.mjs');
+ const beldum={speciesId:374,captureRate:3,level:16,hp:20,maxHp:20,types:['강철']};
+ assert.equal(adventureCaptureRate(beldum),20);
+ assert.equal(adventureCaptureRate({speciesId:25,captureRate:190}),190);
+ assert.equal(adventureCaptureRate({speciesId:718,captureRate:3}),255);
+ assert.equal(adventureRankPenalty('Z',15),1);assert.equal(adventureRankPenalty('Z',16),.7);
+ assert.equal(adventureRankPenalty('Z',66),.1);assert.equal(adventureRankPenalty('G',26),1);
+ assert.equal(adventureRankPenalty('D',51),.5);assert.equal(adventureRankPenalty('A',100),1);
+ assert.equal(adventureRankPenalty(undefined,90),1);
+ assert.equal(adventureCaptureAttempt(beldum,'pokeball',{},()=>.0005).caught,true);
+ assert.equal(adventureCaptureAttempt(beldum,'pokeball',{royaleRank:'Z'},()=>.0005).caught,false);
+ assert.equal(adventureCaptureAttempt(beldum,'pokeball',{alpha:true},()=>.0005).caught,false);
+});
