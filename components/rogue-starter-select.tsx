@@ -275,7 +275,7 @@ export default function RogueStarterSelect({ starters, budget = 10, busy, error,
         </div></> : <div className="rss-detail-empty"><Users size={34} aria-hidden="true"/><h3>첫 파트너를 찾아보세요.</h3><p>목록에서 포켓몬을 고르면 능력과 출발 기술을 확인할 수 있습니다.</p></div>}</aside>
     </div>
 
-    <div className="rss-run-note"><Flag size={20} aria-hidden="true"/><p><b>새 도전은 모두 Lv.5 · EV 0으로 출발합니다.</b> 이전 도전의 레벨과 도구는 초기화되고, 영구 IV와 포획·부화 등록 기록은 유지됩니다. 기본 스타팅 포켓몬 27종을 선택할 수 있습니다.</p></div>
+    <div className="rss-run-note"><Flag size={20} aria-hidden="true"/><p><b>새 도전은 모두 Lv.5 · EV 0으로 출발합니다.</b> 이전 도전의 레벨과 도구는 초기화되고, 영구 IV와 포획·부화 등록 기록은 유지됩니다. 기본 스타팅 포켓몬 27종 중 무작위 한 마리가 처음 등록됩니다.</p></div>
     <div className="rss-status" role="status" aria-live="polite" aria-atomic="true">{status}</div>
     {(error || localError) && <p className="rss-error" role="alert">{error || localError}</p>}
     <div className="rss-launchbar"><div><span className="rss-eyebrow">READY FOR FLOOR 1?</span><b>{team.length ? `${team.length}마리와 출발 준비` : '파트너를 기다리고 있습니다.'}</b><p>{validation.error || `${points(validation.cost)} / ${points(budget)}포인트 · Lv.5로 출발합니다.`}</p></div><button className="rss-button rss-button-start" disabled={locked || !validation.valid} onClick={() => void start()}>{submitting || busy ? '팀을 준비하는 중…' : '이 파티로 도전 시작'}<ArrowRight size={21} aria-hidden="true"/></button></div>

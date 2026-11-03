@@ -27,3 +27,4 @@
 .rc-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:7px;margin:12px 0 0}.rc-stat-grid>div{min-width:0;padding:7px 8px;border:1px solid #718d81;border-radius:6px;background:#203b44}.rc-stat-grid dt{color:#cbdccf;font-size:12px;line-height:1.5}.rc-stat-grid dd{margin:2px 0 0;color:#fff4cc;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
 .rc-mon .rc-stat-note{margin:12px 0 0;color:#d1e1d2;font-size:12px;line-height:1.5}
 .rc-form-label{display:inline-block;margin:3px 5px;padding:3px 7px;border:1px solid #c5aee9;border-radius:6px;background:#493d68;color:#fff3ff;font-size:12px;line-height:1.4;vertical-align:middle}
+.rc-ranking-list{list-style:none;margin:0;padding:0;border-top:1px solid #c7cbb6}.rc-ranking-list li{display:flex;gap:1rem;align-items:center;padding:.8rem;border-bottom:1px solid #c7cbb6}.rc-ranking-list li span{flex:1}.rc-ranking-list li strong{white-space:nowrap}

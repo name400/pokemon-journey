@@ -78,6 +78,13 @@
       "when": 1793630711740,
       "tag": "0010_polite_jackpot",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1793670000000,
+      "tag": "0011_classic_leaderboard",
+      "breakpoints": true
     }
   ]
 }

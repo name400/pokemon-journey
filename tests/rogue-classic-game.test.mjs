@@ -8,7 +8,7 @@ import {classicCaptureOdds,attemptClassicCapture} from '../lib/rogue-classic-cap
 import {generateClassicRewards,classicRewardView,chooseClassicReward} from '../lib/rogue-classic-rewards.mjs';
 
 const old={coins:55555,run:{wave:190,party:[]},inventory:{masterball:99},collection:[]},document=structuredClone(old);
-const initialState=ensureClassicState(document,{initialStarterId:1});let view=classicGameView(document,{includeStarters:true});assert.equal(view.starters.filter(p=>p.unlocked).length,27);
+const initialState=ensureClassicState(document,{initialStarterId:1});let view=classicGameView(document,{includeStarters:true});assert.equal(view.starters.filter(p=>p.unlocked).length,1);
 assert.equal(view.starters.find(p=>p.id===1).natures[0].key,'docile');
 for(const id of [4,7])registerStarterCaught(initialState.system,makeReferenceMon(id,5),{kind:'admin',increment:false});view=classicGameView(document,{includeStarters:true});
 const team=[1,4,7].map(id=>{const p=view.starters.find(s=>s.id===id);return {id,ability:p.abilities[0].key,nature:p.natures[0].key,gender:p.genders[0],shiny:false,moves:p.defaultMoves};});
@@ -38,4 +38,4 @@ applyClassicAction(bossDoc,{action:'capture',ballId:'masterball'});assert.equal(
 const target={hp:20,maxHp:20,captureRate:255,status:null,shiny:false};assert.equal(classicCaptureOdds(target,'rogueball').value,255);assert.equal(attemptClassicCapture(target,'rogueball',{},()=>.99).caught,true);
 const sleeping={...target,hp:1,captureRate:45,status:'잠듦'};assert.ok(classicCaptureOdds(sleeping,'pokeball').value>classicCaptureOdds({...sleeping,status:null},'pokeball').value);
 assert.equal(classicCaptureOdds(target,'pokeball',{caughtSpecies:101}).criticalChance,Math.floor(.5*85/6));
-console.log('Classic connected flow: source default starters → 10-point party → real attack → save/reload → capture/meta unlock → random reward/services → continuous wave 2, five slots and legacy isolation passed');
+console.log('Classic connected flow: one random default starter → 10-point party → real attack → save/reload → capture/meta unlock → random reward/services → continuous wave 2, five slots and legacy isolation passed');
