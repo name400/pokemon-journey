@@ -27,6 +27,8 @@ export type StarterEntry = {
   moves: string[];
   defaultMoves: string[];
   candies?: number;
+  sameEggCandies?: number;
+  sameEggCost?: number | null;
   reductionCost?: number;
   costReduction?: number;
   formName?: string;
@@ -50,6 +52,7 @@ export type RogueStarterSelectProps = {
   onStart: (team: StarterSelection[]) => Promise<unknown> | void;
   onCancel: () => void;
   onReduceCost?: (id: number) => Promise<unknown> | void;
+  onBuySpeciesEgg?: (id:number,cost:number) => Promise<unknown> | void;
   onUnlockPassive?: (id: number, cost: number) => Promise<unknown> | void;
 };
 
