@@ -29,3 +29,5 @@ console.log('Exploratory player: evolution, services, PP, rewards, team replacem
 
 // A legacy entry-victory save is recovered instead of issuing an impossible turn.
 {const {doc,r}=fixture([mon(151,'hero',30,['Seismic Toss'])],'battle'),enemy=mon(19,'fallen',1,['Splash']);enemy.hp=1;r.combat=createClassicCombat(r,[enemy]);r.combat=playClassicCombat(r,{type:'move',move:'seismictoss'});r.party=r.combat.teams[0];assert.equal(r.combat.ended,true);r.waveLog=[...r.combat.log];const action=chooseClassicProbeAction(doc);assert.equal(action.action,'recoverBattle');applyClassicAction(doc,action);assert.equal(r.screen,'reward');}
+// An available revive seed is favored over ordinary money for long runs.
+{const {doc,r}=fixture([mon(7,'seed-hero')]);const seed=CLASSIC_REWARD_REGISTRY.find(x=>x.id==='reviverseed'),nugget=CLASSIC_REWARD_REGISTRY.find(x=>x.id==='nugget');r.rewards=[{...nugget,rewardId:'money'},{...seed,rewardId:'seed'}];const action=chooseClassicProbeAction(doc);assert.equal(action.action,'reward');assert.equal(action.rewardId,'seed');applyClassicAction(doc,action);assert.equal(r.modifiers.find(m=>m.id==='reviverseed').boxId,'seed-hero');}
