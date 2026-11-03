@@ -1,3 +1,10 @@
+## 2026-11-03 · 피카츄 교환과 Emma 배틀 (부분 재현)
+
+- Emma를 만난 뒤 구역 3 임시 위치의 Tracie에게 의뢰를 받고 여행 수첩에서 피카츄를 직접 선택·확인하면 Lv.12 헤라크로스와 800코인·몬스터볼 5개를 받는다. [Serebii](https://www.serebii.net/legendsz-a/sidemissions/auseforanevolutionstone.shtml)와 [공략](https://www.thonky.com/pokemon-legends-z-a/side-mission-002-a-use-for-an-evolution-stone)을 참고해 교환 대상, 레벨과 기술을 적용했다. 볼 보관량 상한을 넘기면 교환을 수행하지 않는다. [상처약 수량은 자료별 1개/3개 차이](https://bulbapedia.bulbagarden.net/wiki/Side_Mission)가 있어 지급을 보류하고 미수령 상태를 저장한다.
+- 선택한 피카츄는 탐험 파티와 탐험 보유함에서 제외하고, 같은 공유 보유함의 원본 레코드는 유지하여 다른 모드와 기존 데이터를 보호한다. 따라서 실제 원작처럼 공유 데이터에서 완전히 사라지는 교환은 아니며 이전 버전 탐험 코드는 제외 기록을 이해하지 못해 해당 개체를 다시 표시할 수 있다. 현재 버전은 재선택·도감 동기화에서 제외한다. 교환 상대의 라이츄 현장 연출, 교환 포켓몬 경험치 보너스와 Bois 별명 표시는 아직 미구현이다.
+- 세 의뢰를 끝낸 뒤 Emma와 Lv.15 메리프 배틀을 할 수 있고 이기면 900코인과 파티 회복을 한 번 얻는다. [원작 배틀과 기술](https://bulbapedia.bulbagarden.net/wiki/Walkthrough%3APok%C3%A9mon_Legends%3A_Z-A/Part_5)을 참고했다. 현재는 사무소 실내와 턴제 엔진으로 대체했고 동행·지붕·프리즘타워·메가전룡 소개 등은 미구현이므로 **임무 05 전체 완료로 기록하지 않는다**. 기존 Y 이상 저장에 새 선행 조건을 소급하지 않는다.
+- 실제 탐험 API·메모리 SQLite에서 선택·확인 거부, 잘못된 종·가득 찬 볼 가방 차단, 보유함 및 파티 선두 교환, 원본 데이터 보존, 지급·중복 거부, Emma 패배·재도전·승리와 회복을 확인했다. 실제 D1·PC·모바일 실조작과 원작 실기는 미검증이다. Sites 통합·배포는 지정된 별도 로그라이크 작업에서 수행하며 이 탐험 브랜치는 배포하지 않았다. 토중몬 제공 정책과 Rintaro 보상, 깜까미 의뢰의 보류 보상은 변경하지 않았다.
+
 ## 2026-11-03 · 사이드 미션 003: 묘지의 깜까미 (부분 재현)
 
 - Emma를 만난 뒤 Moire의 의뢰를 받고 야생 구역 4 묘지의 Lv.10 깜까미를 이기거나 포획하면 반지 기록을 얻는다. 돌려주면 4,000코인을 한 번 받는다. 도망 후 재도전이 가능하다. [구역 4 자료](https://bulbapedia.bulbagarden.net/wiki/Wild_Zone_4)는 상대의 레벨과 몸통박치기·야습·째려보기를, [공략](https://www.thonky.com/pokemon-legends-z-a/side-mission-003-sableye-in-the-cemetery)은 사건 순서를 확인한다. 원작의 실시간 전투와 다른 기존 턴제 모델을 사용한다.

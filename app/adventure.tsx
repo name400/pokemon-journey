@@ -39,7 +39,7 @@ export default function Adventure(){
  const stop=useCallback(()=>{heldDirection.current='';pathQueue.current=[];},[]);
  const accept=useCallback((d:any)=>{
   if(!mounted.current||d.revision<revision.current)return;revision.current=d.revision;
-  setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()]};});
+  setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()].filter((p:any)=>p.boxId!==d.world?.zaTradedPikachuId)};});
   setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();
  },[stop]);
  const load=useCallback(async(light=false)=>{try{accept(await api(undefined,light));setError('');}catch(e){if(mounted.current)setError(e instanceof Error?e.message:'불러오기 실패');}},[accept]);
