@@ -1,19 +1,21 @@
 import assert from 'node:assert/strict';
 import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
-import {starterCatalog,registerStarterCaught} from '../lib/rogue-starter-system.mjs';
+import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
-import {eggShopView,buyClassicEgg,hatchClassicEgg} from '../lib/rogue-egg-shop.mjs';
-const document={coins:1000000,collection:[]},state=ensureClassicState(document,{initialStarterId:1}),before=starterCatalog(state.system).filter(p=>p.unlocked).length;
-registerStarterCaught(state.system,makeReferenceMon(150,100,{boxId:'wild-mewtwo'}),{kind:'capture'});
-assert.equal(starterCatalog(state.system).find(p=>p.sourceId===150).unlocked,false,'wild catches never register a new starter');
-assert.equal(starterCatalog(state.system).filter(p=>p.unlocked).length,before);
-const products=eggShopView(document).products;assert.ok(products.every(p=>p.price>=12000));assert.ok(products.find(p=>p.id==='legendary').price>products.find(p=>p.id==='rare').price);
-assert.throws(()=>buyClassicEgg(document,{productId:'legendary',expectedPrice:1}),/가격/);assert.equal(document.coins,1000000);
-const purchase=buyClassicEgg(document,{productId:'legendary',expectedPrice:650000},()=>.1);assert.equal(document.coins,350000);
-const publicEgg=eggShopView(document).eggs[0];assert.equal(publicEgg.id,purchase.eggId);assert.equal(publicEgg.pokemon,undefined,'the unhatched Pokemon stays server-side');
-const hatched=hatchClassicEgg(document,purchase.eggId);assert.ok(hatched.pokemon.id);assert.ok(hatched.unlocked.length);assert.equal(eggShopView(document).eggs.length,0);assert.throws(()=>hatchClassicEgg(document,purchase.eggId),/부화/);
-assert.ok(state.system.starterData[state.system.hatchHistory[0].unlocked[0]].eggMask>0);
-const poor={coins:0};assert.throws(()=>buyClassicEgg(poor,{productId:'common',expectedPrice:12000}),/부족/);assert.equal(eggShopView(poor).eggs.length,0);
-const repeat=buyClassicEgg(document,{productId:'common',expectedPrice:12000},()=>.1);let egg=state.system.eggs.find(e=>e.id===repeat.eggId);egg.pokemon=makeReferenceMon(1,5,{boxId:'duplicate',shiny:false});const beforeRefund=document.coins,repeated=hatchClassicEgg(document,repeat.eggId);assert.equal(repeated.duplicate,true);assert.equal(repeated.refund,3000);assert.equal(document.coins,beforeRefund+3000);assert.throws(()=>hatchClassicEgg(document,repeat.eggId));assert.equal(document.coins,beforeRefund+3000);
-const shiny=buyClassicEgg(document,{productId:'common',expectedPrice:12000},()=>.1);egg=state.system.eggs.find(e=>e.id===shiny.eggId);egg.pokemon=makeReferenceMon(1,5,{boxId:'first-shiny',shiny:true});const firstShiny=hatchClassicEgg(document,shiny.eggId);assert.equal(firstShiny.duplicate,false);assert.equal(firstShiny.refund,0);
-console.log('Egg-only starter registration, expensive tiered candidate pools, server prices/wallet, hidden egg contents, hatch+egg-move+candies and replay protection passed');
+import {eggShopView,grantClassicVoucher,drawClassicEggs,hatchClassicEgg} from '../lib/rogue-egg-shop.mjs';
+
+const document={coins:1000000,collection:[]},system=ensureClassicState(document,{initialStarterId:1}).system;
+grantClassicVoucher(system,'regular');
+const draw=drawClassicEggs(document,{machineId:'move',voucherType:'regular'},()=>.2);
+assert.equal(draw.count,1);assert.equal(document.coins,1000000);assert.equal(eggShopView(document).vouchers.regular,0);
+assert.equal(eggShopView(document).eggs[0].pokemon,undefined);
+assert.throws(()=>drawClassicEggs(document,{machineId:'move',voucherType:'regular'},()=>.2),/부족/);
+// Voucher eggs preserve the explicit duplicate refund rule.
+const egg=system.eggs[0];egg.pokemon=makeReferenceMon(1,5,{boxId:'duplicate',shiny:false});
+registerStarterCaught(system,egg.pokemon,{kind:'capture'});
+const before=document.coins,result=hatchClassicEgg(document,egg.id);
+assert.equal(result.duplicate,true);assert.equal(result.refund,3000);assert.equal(document.coins,before+3000);
+assert.throws(()=>hatchClassicEgg(document,egg.id),/부화/);assert.equal(document.coins,before+3000);
+console.log('Voucher spend, hidden contents, duplicate refund and replay guard passed.');
+
+const legacy={id:'legacy-paid',productId:'rare',paidPrice:48000,pokemon:makeReferenceMon(1,5,{boxId:'legacy-mon',shiny:false})};system.eggs.push(legacy);const prior=document.coins;assert.equal(hatchClassicEgg(document,legacy.id).refund,12000);assert.equal(document.coins,prior+12000);

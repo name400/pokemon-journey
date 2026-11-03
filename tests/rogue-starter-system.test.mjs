@@ -18,6 +18,11 @@ assert.throws(()=>buildStarterParty(system,[{...choose(1),shiny:true}]),/해금/
 assert.throws(()=>buildStarterParty(system,[{...choose(1),moves:['파괴광선']}]),/기술/);
 const tampered=buildStarterParty(system,[{...choose(1),level:100,ivs:{hp:31},evs:{atk:252},item:'leftovers'}]).party[0];
 assert.equal(tampered.level,5);assert.equal(tampered.ivs.hp,10);assert.equal(tampered.evs.atk,0);assert.equal(tampered.item,'');
+// A previously registered red shiny must retain its variant as well as its luck.
+const variants=structuredClone(system);registerStarterCaught(variants,{...makeMon(1,5),shiny:true,variant:2},{kind:'capture'});
+const red=buildStarterParty(variants,[{...choose(1),shiny:true}]).party[0];assert.equal(red.variant,2);assert.equal(red.luck,3);
+const normal=buildStarterParty(variants,[choose(1)]).party[0];assert.equal(normal.variant,0);assert.equal(normal.luck,0);
+assert.equal(JSON.parse(JSON.stringify(red)).variant,2);
 const oldHp=started.party[0].maxHp;
 registerStarterCaught(system,{...makeMon(1,30),ivs:{hp:31,atk:9,def:20,spa:15,spd:30,spe:4},nature:'jolly',gender:'F',shiny:true},{kind:'capture'});
 assert.equal(starterDexEntry(system,1).ivs.hp,31);assert.equal(starterDexEntry(system,1).ivs.atk,10);assert.equal(starterProgress(system,1).candies,5);
