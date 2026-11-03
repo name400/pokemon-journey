@@ -1,4 +1,5 @@
 import {FIELD_GOODS,MAP_VERSION,normalizeField,fieldMap,stepField,validateAdventurePath,interactionAt,fieldDialogue,leagueIndex} from '@/lib/adventure-world.mjs';
+import {advanceSurvey} from '@/lib/adventure-story.mjs';
 import {hasOwnKey} from '@/lib/record-key.mjs';
 import {sameOriginRequest} from '@/lib/request-origin.mjs';
 import {normalizeStoredPokemon} from '@/lib/normalize-pokemon.mjs';
@@ -42,6 +43,7 @@ else if(b.action==='move'){
 }
 else if(b.action==='face'){if(s.combat)throw Error('전투 후 방향을 바꾸세요.');validateAdventurePath([b.direction]);s.facing=b.direction;}
 else if(b.action==='talk'){if(s.combat)throw Error('전투를 먼저 마치세요.');const dialogue=fieldDialogue(s);if(!dialogue)throw Error('NPC나 입구를 바라보고 대화하세요.');s.dialogue=dialogue;s.log=[dialogue.text];}
+else if(b.action==='survey'){if(s.combat||cell()!=='Q')throw Error('안내원 앞에서 조사해 주세요.');const result=advanceSurvey(s);reward=result.reward;s.log=[result.text];}
 else if(b.action==='pickup'){if(s.combat)throw Error('전투를 먼저 마치세요.');const spot=interactionAt(s);if(spot?.tile!=='I')throw Error('물건 앞에서 선택하세요.');const key=`${s.area}:${spot.x}:${spot.y}`;if(s.fieldPickups?.includes(key))throw Error('이미 챙긴 물건입니다.');s.fieldPickups=[...(s.fieldPickups||[]),key];reward=200;s.log=['200코인을 주웠다!'];}
 else if(b.action==='buy'){
  if(s.combat||cell()!=='M')throw Error('프렌들리숍 입구에서 구매하세요.');
