@@ -3,52 +3,10 @@
 import {useEffect, useRef, useState, type KeyboardEvent} from 'react';
 import {ArrowDown, ArrowRight, Check, ChevronRight, LoaderCircle, Sparkles, X} from 'lucide-react';
 import PokemonImage from './pokemon-image';
+import {moveLearnFacts,type RogueMoveLearnProps} from './rogue-move-logic';
+export {moveLearnFacts} from './rogue-move-logic';
+export type {MoveInfo,MoveLearnMon,RogueMoveLearnProps} from './rogue-move-logic';
 import './rogue-move-learn.css';
-
-export type MoveInfo = {
-  id: string;
-  name: string;
-  type: string;
-  typeKey: string;
-  category: string;
-  power: number | null;
-  accuracy: number | boolean | null;
-  pp: number;
-  maxPp: number;
-  description: string;
-  priority: number;
-  targetLabel: string;
-};
-export type MoveLearnMon = {
-  id: number | string;
-  boxId?: string;
-  artId?: number | string;
-  name: string;
-  level: number;
-  hp: number;
-  maxHp: number;
-  shiny?: boolean;
-  moves: string[];
-  sourceImage?: string | null;
-  sourceBackImage?: string | null;
-  sourceShinyImage?: string | null;
-};
-export type RogueMoveLearnProps = {
-  mon: MoveLearnMon;
-  currentMoves: MoveInfo[];
-  newMove: MoveInfo;
-  busy: boolean;
-  error?: string;
-  onLearn: (slot: number | null) => Promise<unknown> | void;
-};
-const categoryName = (category: string) => ({physical:'물리',special:'특수',status:'변화'} as Record<string,string>)[category.toLowerCase()] || category;
-export function moveLearnFacts(move: MoveInfo) {
-  return {
-    power: move.category.toLowerCase() === 'status' ? '—' : move.power === 0 ? '변동' : move.power ?? '—',
-    accuracy: move.accuracy === true ? '판정 없음' : typeof move.accuracy === 'number' ? `${move.accuracy}%` : '—',
-    category: categoryName(move.category),
-  };
-}
 
 export default function RogueMoveLearn(props: RogueMoveLearnProps) {
   const key = `${props.mon.boxId || props.mon.id}:${props.mon.level}:${props.newMove.id}:${props.currentMoves.map(move => move.id).join('|')}`;

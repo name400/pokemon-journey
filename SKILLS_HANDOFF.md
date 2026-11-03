@@ -1,16 +1,26 @@
-# 클라우드 작업용 스킬
+# 작업 스킬 인계
 
-Codex 환경에서 저장소 루트의 `.agents/skills/`를 확인하고 작업에 맞는 스킬을 사용한다. 새로운 실행 환경에서 스킬을 실제로 인식하는지는 작업 시작 시 확인한다. ChatGPT Work 자체의 스킬 선택에는 플러그인 설치 등 별도의 환경 설정이 필요할 수 있다.
+이 프로젝트에서 UI·게임 작업 시 다음 스킬을 활용한다. 사용 가능 여부는 각 Codex 환경에서 확인한다. 기존 환경의 설치 여부가 다른 환경에도 자동으로 이전되는 것은 아니다.
 
-- `ui-ux-pro-max`: UI/UX 디자인·접근성·반응형 검토. [원본](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill), MIT. 스크립트 사용에는 Python 3이 필요할 수 있다. 라이선스는 해당 스킬 폴더에 포함했다.
-- `game-ui-ux`: 게임 HUD, 메뉴, 포커스와 반응형 게임 인터페이스. [원본](https://github.com/gamedev-skills/awesome-gamedev-agent-skills), Apache-2.0. 라이선스와 NOTICE를 해당 폴더에 포함했다. 설치된 로컬 사본을 전달한 것이며 최신 원본과 동일하다고 보장하지 않는다.
+- `game-ui-frontend`: 게임 화면·HUD·메뉴와 반응형 배치
+- `ui-ux-pro-max`: 가독성·접근성·PC/모바일 인터페이스
+- `game-ui-ux`: 게임 UI 탐색, 화면 크기 대응, 입력 및 메뉴 흐름
+- `motion`: 웹 인터랙션 및 애니메이션
+- `web-design-guidelines`: 웹 UI 접근성 및 설계 검토
+- `frontend-design`: 화면의 시각적 구성과 일관성
+- `game-engine`: 웹 게임 루프·전투 렌더링 등 게임 구현
+- `vercel-react-best-practices`: React 렌더링과 성능
 
-이 스킬은 해당 컴퓨터에 설치된 사본으로부터 복사했다. 원본과 다른 로컬 수정이 있을 수 있으며 버전이 고정되어 있다고 가정하지 않는다. 게임 실행에 반드시 필요한 종속성은 아니다.
+사용자가 제공한 설치 명령:
 
-추가로 요청했던 아래 스킬은 설치된 사본의 재배포에 필요한 라이선스 고지를 확인하지 못해 이 저장소에 복사하지 않았다. 해당 환경에서 원본의 조건과 설치 방법을 확인한 뒤 사용할 수 있다.
+```sh
+npx skills add openai/plugins --skill game-ui-frontend -a codex
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max -a codex
+npx skills add gamedev-skills/awesome-gamedev-agent-skills --skill game-ui-ux -a codex
+npx skills add oakoss/agent-skills --skill motion -a codex
+npx skills add vercel-labs/agent-skills --skill web-design-guidelines -a codex
+```
 
-- [game-ui-frontend](https://github.com/openai/plugins)
-- [motion](https://github.com/oakoss/agent-skills)
-- [web-design-guidelines](https://github.com/vercel-labs/agent-skills)
+설치 후 새 세션에서 스킬 목록과 각 SKILL.md를 확인한다. 스킬 라이선스와 원본 저장소의 이용 조건을 따른다.
 
-스킬 사용 가능 여부와 도구·네트워크·실행 환경 제한은 작업 시 확인한다. 스킬은 참고 지침이며 실제 구현과 검증을 대신하지 않는다.
+요청한 추가 스킬 5종의 파일은 portable-skills/에 보관한다. 별도 개발 환경에서는 각 SKILL.md와 원본 고지문을 확인하고 해당 환경의 스킬 경로에 설치한다. 앱·계정 도구 연결은 이 파일만으로 이전되지 않는다.

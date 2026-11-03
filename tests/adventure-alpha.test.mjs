@@ -10,6 +10,11 @@ test('new alpha preserves existing wild IV policy and gets 252 HP EVs at full HP
  assert.ok(!base.moves.includes('유턴'));assert.equal(base.evs.hp,0);assert.ok(Object.values(base.ivs).every(value=>value===31));
 });
 
+test('new Spinarak alpha knows its documented special move without changing input',()=>{
+ const base=makeMon(167,20),before=[...base.moves],alpha=makeAdventureAlpha(base);
+ assert.equal(alpha.adventureAlphaMove,'구멍파기');assert.equal(alpha.moves[0],'구멍파기');assert.deepEqual(base.moves,before);assert.equal(alpha.evs.hp,252);
+});
+
 test('wild alpha doubles four battle stats in the serialized battle only',async()=>{
  const {Battle,Dex}=await import('@pkmn/sim');const {createCombat,playCpu}=await import('../lib/party-battle.mjs');const {applyAdventureAlphaBattleStats}=await import('../lib/adventure-alpha.mjs');
  const own={...makeMon(1,30),boxId:'mine'},alpha={...makeAdventureAlpha(makeMon(16,24)),boxId:'wild'},combat=createCombat([own],[alpha]);

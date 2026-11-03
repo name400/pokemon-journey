@@ -294,3 +294,40 @@
 @media (prefers-reduced-motion: reduce) {
   .rogue-classic-rewards *, .rogue-classic-rewards *::before, .rogue-classic-rewards *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Keep the three reward choices together on a phone; details remain readable. */
+@media (max-width: 700px) {
+  .rogue-classic-rewards .rcr-header { padding: 9px 12px; gap: 8px; }
+  .rogue-classic-rewards .rcr-clear-mark { width: 32px; height: 32px; }
+  .rogue-classic-rewards .rcr-header h2 { font-size: 19px; }
+  .rogue-classic-rewards .rcr-money>b { font-size: 18px; }
+  .rogue-classic-rewards .rcr-heading { padding: 12px 12px 10px; }
+  .rogue-classic-rewards .rcr-heading h3 { font-size: 18px; line-height: 1.35; }
+  .rogue-classic-rewards .rcr-heading p { font-size: 12px; line-height: 1.45; margin-top: 4px; }
+  .rogue-classic-rewards .rcr-choice-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; padding: 0 10px; }
+  .rogue-classic-rewards .rcr-choice { display: flex; min-height: 0; border-top: 3px solid var(--rcr-tier); border-left: 1px solid #bdc6b6; border-radius: 8px; }
+  .rogue-classic-rewards .rcr-choice-top { padding: 7px 7px 0; }
+  .rogue-classic-rewards .rcr-tier { font-size: 10px; gap: 3px; }
+  .rogue-classic-rewards .rcr-choice-art { min-height: 55px; padding: 3px; }
+  .rogue-classic-rewards .rcr-choice-art::before { width: 48px; height: 48px; left: calc(50% - 24px); top: 5px; }
+  .rogue-classic-rewards .rcr-choice-art>.rcr-item-image.is-large { width: 52px; height: 52px; }
+  .rogue-classic-rewards .rcr-choice-art>b { bottom: 0; left: calc(50% + 8px); font-size: 10px; }
+  .rogue-classic-rewards .rcr-choice-copy { padding: 5px 7px 8px; gap: 4px; }
+  .rogue-classic-rewards .rcr-choice-copy>b { font-size: 13px; line-height: 1.35; overflow-wrap: anywhere; }
+  .rogue-classic-rewards .rcr-choice-copy>span { font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+  .rogue-classic-rewards .rcr-choice-copy>small { font-size: 10px; line-height: 1.35; padding-top: 4px; }
+  .rogue-classic-rewards .rcr-choice-action { margin: 0; padding: 6px 7px; min-height: 44px; font-size: 10px; line-height: 1.3; background: #f0f3e4; border-radius: 0 0 7px 7px; }
+  .rogue-classic-rewards .rcr-choice-action svg { width: 13px; flex: none; }
+  .rogue-classic-rewards .rcr-reroll { margin: 10px 12px 0; padding: 10px 0; gap: 8px; flex-wrap: nowrap; align-items: center; }
+  .rogue-classic-rewards .rcr-reroll>div:first-child { flex: 1; min-width: 0; }
+  .rogue-classic-rewards .rcr-reroll b { font-size: 11px; }
+  .rogue-classic-rewards .rcr-reroll p { font-size: 10px; line-height: 1.4; margin-top: 3px; }
+  .rogue-classic-rewards .rcr-reroll p>span { font-size: 10px; }
+  .rogue-classic-rewards .rcr-reroll-action { max-width: 55%; flex-shrink: 0; }
+  .rogue-classic-rewards .rcr-reroll-action .rcr-button { font-size: 11px; padding: 7px; min-height: 44px; }
+  .rogue-classic-rewards .rcr-reroll-action .rcr-button>b { font-size: 11px; }
+  .rogue-classic-rewards .rcr-services-toggle { padding: 10px 12px; }
+  .rogue-classic-rewards .rcr-services-toggle b { font-size: 13px; }
+  .rogue-classic-rewards .rcr-key-help { padding: 8px 12px max(8px,env(safe-area-inset-bottom)); font-size: 10px; }
+}
+.rogue-classic-rewards .rcr-learning-detail{display:flex;flex-direction:column;gap:4px;margin-top:7px;color:#435e54;font-size:12px;line-height:1.45}.rogue-classic-rewards .rcr-learning-detail b{color:#254a3b}.rogue-classic-rewards .rcr-learning-detail span{overflow-wrap:anywhere}

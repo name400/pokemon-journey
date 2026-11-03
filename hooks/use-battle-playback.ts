@@ -24,12 +24,12 @@ export function battleAnimationClass(event: BattleVisualEvent): string {
 }
 
 export type BattleDisplay = { teams: any[][]; active: number[]; activeBySide: number[][] };
-export function battleDisplay(battle: any, before = false): BattleDisplay {
+export function battleDisplay(battle: any, before = false, normalizeFainted = false): BattleDisplay {
   const teams = before && Array.isArray(battle.before) ? battle.before : battle.teams;
   const active = before && Array.isArray(battle.beforeActive) ? battle.beforeActive : battle.active;
   const multiple = before && Array.isArray(battle.beforeActiveBySide) ? battle.beforeActiveBySide : battle.activeBySide;
   const activeBySide = [0, 1].map(side => Array.isArray(multiple?.[side]) ? multiple[side].map((index: number) => Number.isInteger(index) ? index : -1) : [active?.[side] ?? 0]);
-  return { teams: (teams || [[], []]).map((team: any[]) => team.map(mon => ({ ...mon }))), active: [...(active || [0, 0])], activeBySide };
+  return { teams: (teams || [[], []]).map((team: any[]) => team.map(mon => ({ ...mon, ...(normalizeFainted ? { fainted: Number.isFinite(mon.hp) && mon.hp <= 0 } : {}) }))), active: [...(active || [0, 0])], activeBySide };
 }
 export type BattleEventLocation = { side: number; index: number; slot: number; boxId?: string };
 /** Explicit identity wins over side/slot hints, including friendly fire and switches. */
@@ -54,7 +54,7 @@ export function battleEventLocation(display: BattleDisplay, event: BattleVisualE
 }
 /** Apply explicit server state only; damage is never inferred from move power. */
 export function applyBattleEvent(display: BattleDisplay, event: BattleVisualEvent): BattleDisplay {
-  if (!['damage', 'heal', 'status', 'switch', 'faint', 'form'].includes(event.kind || '')) return display;
+  if (!['damage', 'heal', 'status', 'switch', 'faint', 'form'].includes(event.kind || '') && !(event.kind === 'effect' && event.pokemon?.boosts)) return display;
   const location = battleEventLocation(display, event);
   if (!location) return display;
   const { side, index } = location, team = display.teams[side] || [];
@@ -63,7 +63,7 @@ export function applyBattleEvent(display: BattleDisplay, event: BattleVisualEven
   if (Number.isFinite(event.maxHp)) changed.maxHp = Math.max(1, event.maxHp!);
   if (Number.isFinite(event.hp)) changed.hp = Math.max(0, Math.min(changed.maxHp, event.hp!));
   if (event.kind === 'faint') { changed.hp = 0; changed.fainted = true; }
-  else if (Number.isFinite(event.hp) && event.hp! > 0) changed.fainted = false;
+  else if ((Number.isFinite(event.hp) && event.hp! > 0) || (event.kind === 'switch' && Number.isFinite(changed.hp) && changed.hp > 0)) changed.fainted = false;
   if (Object.prototype.hasOwnProperty.call(event, 'status')) changed.status = event.status;
   const teams = [...display.teams]; teams[side] = [...team]; teams[side][index] = changed;
   const active = [...display.active], activeBySide = (display.activeBySide || display.active.map(index => [index])).map(indices => [...indices]);

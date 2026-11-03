@@ -87,6 +87,7 @@ export function sites({ mockAuth = true } = {}): Plugin {
         const signInCookies = cookies
           .filter((cookie) => cookie.startsWith(`${localCookieName}=`))
           .map((cookie) => cookie.slice(localCookieName.length + 1));
+        if(url.hostname === "localhost" && signInCookies[0] === "1") signInCookies[0] = "2";
         const applicationCookies = cookies.filter(
           (cookie) => !cookie.startsWith(`${localCookieName}=`),
         );
@@ -105,13 +106,13 @@ export function sites({ mockAuth = true } = {}): Plugin {
         const signIn = url.pathname === "/signin-with-chatgpt";
         const signOut = url.pathname === "/signout-with-chatgpt";
         if (!signIn && !signOut) {
-          if (signInCookies.length === 1 && signInCookies[0] === "1") {
-            setHeader(request, "oai-authenticated-user-id", localUserId);
-            setHeader(request, "oai-authenticated-user-email", localEmail);
+          if (signInCookies.length === 1 && ["1", "2", "3"].includes(signInCookies[0])) {
+            setHeader(request, "oai-authenticated-user-id", signInCookies[0] === "3" ? "local_fresh" : signInCookies[0] === "2" ? "local_second" : localUserId);
+            setHeader(request, "oai-authenticated-user-email", signInCookies[0] === "3" ? "fresh@sites.test" : signInCookies[0] === "2" ? "second@sites.test" : localEmail);
             setHeader(
               request,
               "oai-authenticated-user-full-name",
-              localFullName,
+              signInCookies[0] === "3" ? "Fresh" : signInCookies[0] === "2" ? "Second" : localFullName,
             );
             setHeader(
               request,
