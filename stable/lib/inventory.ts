@@ -1,0 +1,5 @@
+import {env} from 'cloudflare:workers';import {rules} from './pokemon-config.mjs';import {evolutionItems} from './evolution.mjs';import local from '../data/localization.json';
+export const inventoryKey=(userId:string,item:string)=>JSON.stringify([userId,item]);
+export {shopItems} from './shop-catalog.mjs';
+export async function inventoryFor(id:string){const rows=await env.DB!.prepare('SELECT item,quantity FROM inventory WHERE user_id=? AND quantity>0').bind(id).all<{item:string;quantity:number}>();return Object.fromEntries(rows.results.map(r=>[r.item,r.quantity]));}
+export function inventoryWrites(id:string,changes:Record<string,number>){return Object.entries(changes).filter(([,q])=>q!==0).map(([item,quantity])=>quantity<0?env.DB!.prepare('UPDATE inventory SET quantity=quantity+? WHERE key=? AND quantity>=? AND changes()=1').bind(quantity,inventoryKey(id,item),-quantity):env.DB!.prepare('INSERT INTO inventory(key,user_id,item,quantity) SELECT ?,?,?,? WHERE changes()=1 ON CONFLICT(key) DO UPDATE SET quantity=quantity+excluded.quantity').bind(inventoryKey(id,item),id,item,quantity));}

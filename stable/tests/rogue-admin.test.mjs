@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {makeMon} from '../lib/game.mjs';
+import {mutateRogueAdmin,rogueAdminView} from '../lib/rogue-admin.mjs';
+import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
+import {starterCatalog} from '../lib/rogue-starter-system.mjs';
+import {applyClassicAction,activeClassicRun} from '../lib/rogue-classic-game.mjs';
+const document={coins:123,collection:[],run:{wave:160,party:[]}},original=structuredClone(document),state=ensureClassicState(document);
+assert.throws(()=>mutateRogueAdmin(document,{action:'grantPokemon'},makeMon(150,100),'missing'),/위치/);
+const template=makeMon(150,100);mutateRogueAdmin(document,{action:'grantPokemon',destination:'starter'},template,'admin-template');
+assert.equal(starterCatalog(state.system).find(p=>p.sourceId===150).unlocked,true);assert.equal(rogueAdminView(document).box[0].boxId,'admin-template');
+const selected=starterCatalog(state.system).find(p=>p.sourceId===1),choice={id:1,ability:selected.abilities[0].key,nature:selected.natures[0].key,gender:selected.genders[0],shiny:false,moves:selected.defaultMoves};applyClassicAction(document,{action:'start',selection:[choice]});
+const run=activeClassicRun(document),level=makeMon(25,40);const result=mutateRogueAdmin(document,{action:'grantPokemon',destination:'run',runSlot:0},level,'admin-run');
+assert.equal(result.battleRebuilt,true);assert.equal(run.party.find(p=>p.boxId==='admin-run').level,40);assert.equal(run.combat.teams[0].find(p=>p.boxId==='admin-run').level,40);
+assert.equal(rogueAdminView(document,{destination:'run',runSlot:0}).box.length,2);
+assert.equal(rogueAdminView(document,{destination:'run',runSlot:1}).box.length,0);
+assert.throws(()=>mutateRogueAdmin(document,{action:'grantPokemon',destination:'run',runSlot:1},level,'empty-run'),/진행 중/);
+assert.equal(document.coins,original.coins);assert.deepEqual(document.run,original.run);
+console.log('Admin destinations: permanent registration vs selected run party, native battle rebuild/level reflection, five-slot and legacy isolation passed');

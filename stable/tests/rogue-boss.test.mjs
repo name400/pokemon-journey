@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {classicBossSegments,classicBossDamage,classicBossBoosts} from '../lib/rogue-boss.mjs';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {createClassicCombat,playClassicCombat,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+assert.equal(classicBossSegments(10,7,400),2);assert.equal(classicBossSegments(200,100,690),4);assert.equal(classicBossSegments(11,10,300),0);
+assert.deepEqual(classicBossDamage(150,300,300,3),{damage:100,cleared:2});assert.deepEqual(classicBossDamage(300,300,300,3),{damage:200,cleared:1});assert.deepEqual(classicBossDamage(500,300,300,3),{damage:300,cleared:0});
+assert.equal(classicBossDamage(1e9,400,400,4,{minimumIndex:1}).damage,300);
+const stages=classicBossBoosts(3,2,1,{atk:1,def:1,spa:1,spd:1,spe:1},{atk:0,def:0,spa:0,spd:0,spe:0},()=>0);assert.equal(stages.index,0);assert.equal(stages.boosts.atk,3);
+const run={id:'boss-test',wave:50,biome:1,rng:100,party:[makeReferenceMon(150,25,{boxId:'hero',moves:['Psychic']})],modifiers:[],tools:{},encounter:{kind:'wild'},teraCharged:false};
+const foe=makeReferenceMon(143,10,{boxId:'boss',moves:['Splash'],rogueBoss:true,rogueBossSegments:3});run.combat=createClassicCombat(run,[foe]);run.combat=playClassicCombat(run,{type:'move',move:'psychic'});
+const native=restoreClassicNativeBattle(run.combat);assert.ok(native.p2.active[0].m.rogueBossIndex<2);assert.ok(run.combat.log.some(line=>line.includes('올랐다'))||native.p2.active[0].hp===0);
+console.log('Boss shield math, exponential multi-segment damage thresholds, weighted segment stat boosts and native snapshot integration passed');

@@ -1,0 +1,21 @@
+/* Adventure-only shell: shares the user's existing game palette without
+   changing the separate roguelike screens or their saved state. */
+main[data-mode="adventure"]{background:#192c38;--ink:#213342;--muted:#617078;--border:#c3c5af;--green:#1b8174}
+main[data-mode="adventure"] .workspace{background:radial-gradient(ellipse at 50% 0,#2d4854,#142832 90%);min-height:100dvh}
+main[data-mode="adventure"] .sidebar{width:190px;padding:24px 14px;background:#122630;border-color:#3e5860;z-index:10}
+main[data-mode="adventure"] .brand{margin:4px 2px 40px;gap:10px;color:#f5edda}
+main[data-mode="adventure"] .brandmark{background:#dbb45d;border:3px solid #122630;box-shadow:0 0 0 2px #dbb45d;color:#122630;border-radius:50%;width:40px;height:40px;flex:none}
+main[data-mode="adventure"] .brand small,main[data-mode="adventure"] .side-label,main[data-mode="adventure"] .sidebar-bottom{color:#a8beb9}
+main[data-mode="adventure"] .sidebar .nav{padding:12px 10px;margin:0 0 6px;border:2px solid transparent;border-radius:6px;color:#c5d6d0;min-height:46px}
+main[data-mode="adventure"] .sidebar .nav.active{border-color:#e2c36f;background:#29434b;color:#ffe9a1;box-shadow:0 3px #0b1f28}
+main[data-mode="adventure"] .sidebar .nav:hover{background:#2a444d;color:#fff}
+main[data-mode="adventure"] .topbar{min-height:68px;padding:0 28px;background:#152d37;border-color:#3c555b;color:#f5efd9}
+main[data-mode="adventure"] .topbar h1{font-size:18px;letter-spacing:0;margin:0;font-family:NeoDunggeunmo,'Noto Sans KR',sans-serif}
+main[data-mode="adventure"] .eyebrow,main[data-mode="adventure"] .avatar,main[data-mode="adventure"] .status-dot,main[data-mode="adventure"] .account-cloud{display:none}
+main[data-mode="adventure"] .account-name{background:#29434c;color:#f2efd8;border:1px solid #58736f;border-radius:4px;padding:8px 12px;font-size:13px}
+main[data-mode="adventure"] .signin{margin-left:14px;color:#d0d9c4;font-size:12px}
+main[data-mode="adventure"] .workspace>footer{padding:10px 28px;background:#10242d;color:#9bb2b1;border:0;font-size:10px}
+main[data-mode="adventure"] .session-error{background:#fff2cf;color:#6b321e}
+main[data-mode="adventure"] .content:not(.adventure-game):not(.adventure-shop){background:#f5edda;color:#142238;border:1px solid #b7c4b8;border-radius:10px;margin:22px auto 38px}
+@media(max-width:800px){main[data-mode="adventure"] .sidebar{width:64px;padding:16px 6px}main[data-mode="adventure"] .brand{justify-content:center;margin:4px auto 30px}main[data-mode="adventure"] .brand>div:last-child,main[data-mode="adventure"] .side-label,main[data-mode="adventure"] .sidebar-bottom,main[data-mode="adventure"] .nav-label{display:none}main[data-mode="adventure"] .sidebar .nav{justify-content:center;padding:12px 5px}main[data-mode="adventure"] .topbar{padding:0 18px}}
+@media(max-width:520px){main[data-mode="adventure"] .sidebar{width:52px;padding:12px 4px}main[data-mode="adventure"] .brandmark{width:36px;height:36px}main[data-mode="adventure"] .sidebar .nav{min-height:44px;padding:10px 4px;margin-bottom:4px}main[data-mode="adventure"] .topbar{min-height:56px;padding:0 12px}main[data-mode="adventure"] .topbar h1{font-size:16px}main[data-mode="adventure"] .account-name{font-size:11px;padding:6px 8px;max-width:95px;overflow:hidden;text-overflow:ellipsis}main[data-mode="adventure"] .signin{font-size:10px;margin-left:4px}main[data-mode="adventure"] .workspace>footer{display:none}main[data-mode="adventure"] .content:not(.adventure-game):not(.adventure-shop){width:calc(100% - 16px);margin:10px 8px 20px}}

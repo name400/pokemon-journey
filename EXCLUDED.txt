@@ -1,0 +1,4 @@
+stable/tests/integration-admin-modes.mjs
+stable/tests/integration-first.mjs
+stable/tests/release-client.mjs
+stable/.openai/hosting.json

@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {classicEvolutionOptions,evolveClassicPokemon,classicEvolutionItemCandidates} from '../lib/rogue-evolution.mjs';
+import {createClassicCombat,playClassicCombat,continueClassicWild,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+const ivs={hp:15,atk:15,def:15,spa:15,spd:15,spe:15};
+let run={id:'evolution',rng:123,wave:31,biome:1,screen:'reward',party:[makeReferenceMon(1,16,{boxId:'evolve',ivs,moves:['Tackle']})],modifiers:[],tools:{},evolutionItems:{},teraCharged:false};
+run.combat=createClassicCombat(run,[makeReferenceMon(19,1,{boxId:'defeated',moves:['Splash']})]);run.combat=playClassicCombat(run,{type:'move',move:'tackle'});run.party=run.combat.teams[0];assert.equal(run.combat.ended,true);assert.equal(run.party[0].id,1,'level never evolves automatically');
+const option=classicEvolutionOptions(run.party[0],run,{}).find(e=>e.sourceId===2);assert.equal(option.ready,true);const hp=run.party[0].hp,max=run.party[0].maxHp;
+const result=evolveClassicPokemon(run,{}, {boxId:'evolve',evolutionKey:option.key});assert.equal(result.after.id,2);assert.deepEqual(result.after.ivs,ivs);assert.equal(result.after.hp,hp+result.after.maxHp-max);
+run.wave++;run.combat=continueClassicWild(run,[makeReferenceMon(143,30,{boxId:'new',moves:['Splash']})]);const native=restoreClassicNativeBattle(run.combat);assert.equal(native.p1.active[0].species.id,'ivysaur','evolution changes the actual persistent native species');
+run.party=[makeReferenceMon(133,20,{boxId:'eevee',friendship:50})];run.screen='reward';const fire=classicEvolutionOptions(run.party[0],run,{}).find(e=>e.sourceId===136);assert.equal(fire.ready,false);assert.equal(fire.readyWithoutItem,true);assert.ok(classicEvolutionItemCandidates(run,{}).some(e=>e.item==='firestone'));
+run.evolutionItems.firestone=1;evolveClassicPokemon(run,{}, {boxId:'eevee',evolutionKey:fire.key});assert.equal(run.party[0].rogueSourceId,136);assert.equal(run.evolutionItems.firestone,0);
+const pichu=makeReferenceMon(172,10,{boxId:'pichu',friendship:89});run.party=[pichu];assert.equal(classicEvolutionOptions(pichu,run,{}).some(e=>e.ready),false);pichu.friendship=90;assert.equal(classicEvolutionOptions(pichu,run,{}).some(e=>e.ready),true);
+run.screen='battle';assert.throws(()=>evolveClassicPokemon(run,{}, {boxId:'pichu',evolutionKey:'172:0'}),/전투/);
+run.party=[makeReferenceMon(290,20,{boxId:'nincada',moves:['Scratch']})];run.screen='reward';run.balls={pokeball:1};run.modifiers=[{id:'luckyegg',boxId:'nincada',count:1}];const ninjask=classicEvolutionOptions(run.party[0],run,{}).find(e=>e.sourceId===291);const duo=evolveClassicPokemon(run,{}, {boxId:'nincada',evolutionKey:ninjask.key});assert.equal(run.party.length,2);assert.equal(duo.extra.rogueSourceId,292);assert.equal(duo.extra.maxHp,1);assert.equal(duo.extra.ability,'wonderguard');assert.ok(run.modifiers.some(m=>m.boxId===duo.extra.boxId&&m.id==='luckyegg'));assert.equal(run.balls.pokeball,1,'Pinned source requires but does not consume the normal ball');
+console.log('Manual source evolution: level/item/friendship requirements, no automatic evolution, IV/HP preservation and actual native species change on continuous wild battle passed');

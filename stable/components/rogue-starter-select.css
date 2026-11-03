@@ -1,0 +1,382 @@
+.rogue-starters-screen {
+  --rss-navy: var(--rg-navy, #142238);
+  --rss-deep: #0d192b;
+  --rss-cream: var(--rg-cream, #f5edda);
+  --rss-paper: #e7e1cc;
+  --rss-ink: #26374a;
+  --rss-muted: #647164;
+  --rss-teal: #247b69;
+  --rss-mint: #7bc7a2;
+  --rss-amber: #e8bb61;
+  --rss-border: #adb8a2;
+  --rss-red: #a3443e;
+  color: var(--rss-ink);
+  background: var(--rss-cream);
+  border: 3px solid var(--rss-deep);
+  box-shadow: inset 0 0 0 2px #faf7e9, 0 4px 0 #0d192b;
+  font-family: NeoDunggeunmo, 'Noto Sans KR', sans-serif;
+  font-synthesis: none;
+  font-size: 16px;
+  line-height: 1.5;
+  width: 100%;
+  min-width: 0;
+}
+.rogue-starters-screen *, .rogue-starters-screen *::before, .rogue-starters-screen *::after { box-sizing: border-box; }
+.rogue-starters-screen h2, .rogue-starters-screen h3, .rogue-starters-screen h4, .rogue-starters-screen p { margin: 0; }
+.rogue-starters-screen h2, .rogue-starters-screen h3 { letter-spacing: -.4px; line-height: 1.4; }
+.rogue-starters-screen button, .rogue-starters-screen input, .rogue-starters-screen select { font: inherit; touch-action: manipulation; }
+.rogue-starters-screen button { cursor: pointer; border-radius: 3px; min-height: 44px; }
+.rogue-starters-screen button:disabled { cursor: not-allowed; opacity: .5; }
+.rogue-starters-screen button:focus-visible, .rogue-starters-screen input:focus-visible, .rogue-starters-screen select:focus-visible, .rogue-starters-screen .rss-detail-heading h3:focus-visible { outline: 3px solid var(--rss-amber); outline-offset: 3px; z-index: 3; }
+.rogue-starters-screen button:active:not(:disabled) { filter: brightness(.92); }
+.rogue-starters-screen img { image-rendering: pixelated; object-fit: contain; }
+.rogue-starters-screen svg { flex-shrink: 0; }
+.rogue-starters-screen .rss-eyebrow { display: block; color: #5a7666; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 800; letter-spacing: 1px; line-height: 1.6; }
+.rogue-starters-screen .rss-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 10px 16px; border: 2px solid var(--rss-deep); border-radius: 3px; background: var(--rss-navy); color: #fff8e5; box-shadow: inset 0 1px #ffffff1a, 0 3px 0 var(--rss-deep); font-size: 15px; font-weight: 700; line-height: 1.5; text-align: center; transition: background .12s ease; }
+.rogue-starters-screen .rss-button:not(:disabled):hover { background: #2a4560; }
+.rogue-starters-screen .rss-button-primary { color: #f9f9e8; background: var(--rss-teal); border-color: #175548; box-shadow: inset 0 1px #85c4a2, 0 3px 0 #175548; }
+.rogue-starters-screen .rss-button-primary:not(:disabled):hover { background: #358d76; }
+.rogue-starters-screen .rss-button-outline { color: var(--rss-ink); background: #f9f6e8; border-color: #97a38d; box-shadow: 0 2px 0 #b8beaa; }
+.rogue-starters-screen .rss-button-outline:not(:disabled):hover { background: #e5ebd6; }
+.rogue-starters-screen .rss-button-remove { color: #78453a; background: #f3e7d7; border-color: #b79b85; box-shadow: 0 2px 0 #c4b198; }
+.rogue-starters-screen .rss-button-remove:not(:disabled):hover { background: #ecdbc5; }
+
+.rogue-starters-screen .rss-header { display: flex; align-items: center; gap: 16px; padding: 22px 25px; background: var(--rss-navy); border-bottom: 3px solid var(--rss-deep); color: var(--rss-cream); }
+.rogue-starters-screen .rss-header>.rss-back { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; padding: 0; border: 2px solid #75908d; background: #243c50; color: var(--rss-cream); }
+.rogue-starters-screen .rss-header>div:nth-child(2) { flex: 1; min-width: 0; }
+.rogue-starters-screen .rss-header .rss-eyebrow { color: #a9ccba; }
+.rogue-starters-screen .rss-header h2 { font-size: 29px; margin-top: 2px; color: #fff8e5; }
+.rogue-starters-screen .rss-header p { font-size: 14px; margin-top: 6px; color: #bdcfc7; }
+.rogue-starters-screen .rss-budget { flex-shrink: 0; padding: 0 0 0 24px; border-left: 1px solid #536872; text-align: right; font-variant-numeric: tabular-nums; }
+.rogue-starters-screen .rss-budget>small { display: block; color: #b6c9c3; font-size: 12px; }
+.rogue-starters-screen .rss-budget>b { display: block; color: var(--rss-amber); font-size: 32px; font-weight: 700; line-height: 1.3; }
+.rogue-starters-screen .rss-budget>b>span { color: #c7d5ce; font-size: 19px; }
+.rogue-starters-screen .rss-budget>span { display: block; color: #b6c9c3; font-size: 12px; margin-top: 2px; }
+.rogue-starters-screen .rss-budget.is-over>b { color: #ffb197; }
+.rogue-starters-screen .rss-party { padding: 16px 23px 17px; border-bottom: 3px solid #9dac98; background: #e4e5cf; }
+.rogue-starters-screen .rss-party-label { display: flex; align-items: center; gap: 8px; color: #426b55; font-size: 14px; margin-bottom: 11px; }
+.rogue-starters-screen .rss-party-label>span { margin-left: auto; font-size: 13px; color: #657361; font-variant-numeric: tabular-nums; }
+.rogue-starters-screen .rss-slots { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 8px; list-style: none; padding: 0; margin: 0; }
+.rogue-starters-screen .rss-slots>li { display: flex; align-items: stretch; position: relative; min-width: 0; border: 2px dashed #9eaf96; background: #e9ebda; border-radius: 3px; min-height: 88px; }
+.rogue-starters-screen .rss-slots>li.is-filled { border: 2px solid #608b72; background: #fcf8e8; box-shadow: inset 0 -3px #c7d6b9; }
+.rogue-starters-screen .rss-slot-main { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; flex: 1; min-width: 0; padding: 5px 16px 9px; border: 0; background: transparent; color: var(--rss-ink); text-align: center; }
+.rogue-starters-screen .rss-slot-main>img { width: 48px; height: 48px; margin-top: -3px; }
+.rogue-starters-screen .rss-slot-main>span { min-width: 0; max-width: 100%; }
+.rogue-starters-screen .rss-slot-main b { display: block; font-size: 13px; line-height: 1.3; overflow-wrap: anywhere; }
+.rogue-starters-screen .rss-slot-main small { display: block; color: #55775d; font-size: 11px; margin-top: 3px; }
+.rogue-starters-screen .rss-slot-remove { display: grid; place-items: center; position: absolute; top: -4px; right: -4px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: #8a6253; }
+.rogue-starters-screen .rss-slot-remove>svg { width: 15px; height: 15px; padding: 1px; background: #f9f3e4; border: 1px solid #bda98d; border-radius: 2px; }
+.rogue-starters-screen .rss-slot-remove:not(:disabled):hover { color: #b13f3e; }
+.rogue-starters-screen .rss-slot-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; width: 100%; padding: 9px 5px; border: 0; background: transparent; color: #788e72; }
+.rogue-starters-screen .rss-slot-empty>span { position: absolute; top: 5px; left: 7px; font-family: ui-monospace,monospace; font-size: 10px; color: #8b9d81; }
+.rogue-starters-screen .rss-slot-empty>small { font-size: 12px; }
+.rogue-starters-screen .rss-slot-empty:not(:disabled):hover { background: #dce5cb; color: var(--rss-teal); }
+.rogue-starters-screen .rss-slot-missing { align-self: center; padding: 14px 8px; font-size: 12px; color: var(--rss-red); }
+.rogue-starters-screen .rss-point-track { height: 5px; margin-top: 14px; background: #c1cbb3; border: 1px solid #a5b49b; overflow: hidden; }
+.rogue-starters-screen .rss-point-track>i { display: block; width: 100%; height: 100%; background: #488565; transform-origin: left; transition: transform .16s ease; }
+.rogue-starters-screen .rss-point-track>i.is-over { background: var(--rss-red); }
+.rogue-starters-screen .rss-pane-nav { display: none; }
+.rogue-starters-screen .rss-layout { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(320px,1fr); align-items: start; }
+.rogue-starters-screen .rss-catalog { min-width: 0; background: #d5e0cc; }
+.rogue-starters-screen .rss-catalog-controls { padding: 20px 18px 12px; border-bottom: 2px solid #9eb196; background: #e5e8d5; }
+.rogue-starters-screen .rss-search-row { display: flex; align-items: center; gap: 14px; }
+.rogue-starters-screen .rss-search { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; min-height: 46px; padding: 0 11px; border: 2px solid #879d82; background: #fffbef; border-radius: 3px; color: #648064; }
+.rogue-starters-screen .rss-search>input { width: 100%; min-width: 0; min-height: 44px; padding: 9px 0; margin: 0; border: 0; border-radius: 0; background: transparent; color: var(--rss-ink); font-size: 14px; outline-offset: 5px; }
+.rogue-starters-screen .rss-search>input::placeholder { color: #798674; opacity: 1; }
+.rogue-starters-screen .rss-search:focus-within { border-color: var(--rss-teal); }
+.rogue-starters-screen .rss-unlocked-filter { display: flex; align-items: center; gap: 7px; flex-shrink: 0; min-height: 44px; font-size: 13px; color: #4b6750; cursor: pointer; }
+.rogue-starters-screen .rss-unlocked-filter>input { width: 18px; height: 18px; min-height: 18px; padding: 0; margin: 0; accent-color: var(--rss-teal); flex-shrink: 0; }
+.rogue-starters-screen .rss-generations { display: grid; grid-template-columns: repeat(10,minmax(0,1fr)); gap: 3px; margin-top: 13px; }
+.rogue-starters-screen .rss-generations>button { min-width: 0; min-height: 44px; padding: 5px 1px; border: 1px solid #a2b198; border-radius: 2px; color: #667a60; background: #f2f1df; font-size: 12px; line-height: 1.3; white-space: nowrap; }
+.rogue-starters-screen .rss-generations>button.is-active { background: #355f4f; color: #fff6dd; border-color: #244a3d; box-shadow: inset 0 -3px #173c31; }
+.rogue-starters-screen .rss-generations>button:not(:disabled):hover { border-color: #315d4d; }
+.rogue-starters-screen .rss-list-caption { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 11px; color: #597154; font-size: 12px; }
+.rogue-starters-screen .rss-mon-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(90px,1fr)); grid-auto-rows: minmax(135px,auto); gap: 8px; align-content: start; padding: 15px; max-height: 750px; min-height: 360px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #708f70 #d1dcc3; background-image: linear-gradient(#c6d3bc55 1px,transparent 1px),linear-gradient(90deg,#c6d3bc55 1px,transparent 1px); background-size: 18px 18px; }
+.rogue-starters-screen .rss-mon { display: flex; align-items: center; flex-direction: column; position: relative; min-width: 0; min-height: 135px; padding: 5px 4px 9px; background: #f7f5e4; border: 2px solid #91a489; color: var(--rss-ink); box-shadow: 0 2px 0 #adbda0; overflow: visible; }
+.rogue-starters-screen .rss-mon.is-focused { border-color: #a0803e; box-shadow: inset 0 0 0 2px var(--rss-amber),0 2px 0 #a0803e; }
+.rogue-starters-screen .rss-mon.is-chosen { background: #e8f0d8; border-color: var(--rss-teal); }
+.rogue-starters-screen .rss-mon:not(:disabled):hover { border-color: var(--rss-teal); background: #edf3dc; }
+.rogue-starters-screen .rss-mon:focus-visible { outline: 3px solid var(--rss-navy); outline-offset: 1px; }
+.rogue-starters-screen .rss-mon-meta { display: flex; align-items: center; justify-content: space-between; gap: 4px; width: 100%; padding: 0 1px; }
+.rogue-starters-screen .rss-mon-meta>span { display: inline-flex; align-items: center; justify-content: center; gap: 2px; min-height: 20px; color: #71826b; font-size: 10px; font-family: ui-monospace,monospace; }
+.rogue-starters-screen .rss-mon.is-chosen .rss-mon-meta>span { color: #1d6e53; font-weight: 800; }
+.rogue-starters-screen .rss-mon-meta>b { display: grid; place-items: center; min-width: 26px; height: 23px; padding: 0 4px; border: 1px solid #b59b5d; border-radius: 2px; background: #f1d78f; color: #615021; font-size: 13px; font-variant-numeric: tabular-nums; }
+.rogue-starters-screen .rss-mon>img { width: 70px; height: 70px; }
+.rogue-starters-screen .rss-mon-name { display: block; font-size: 14px; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
+.rogue-starters-screen .rss-mon-form { font-size: 11px; line-height: 1.3; margin-top: 2px; color: #68765e; }
+.rogue-starters-screen .rss-mon.is-locked { background: #dce0d2; border-color: #b0b8a6; box-shadow: 0 2px #b9c3ad; color: #62715f; }
+.rogue-starters-screen .rss-mon.is-locked>img { filter: grayscale(1); opacity: .45; }
+.rogue-starters-screen .rss-mon.is-locked .rss-mon-meta>b { color: #7d7c67; background: #dedbc4; border-color: #b8b6a2; }
+.rogue-starters-screen .rss-locked-label { display: block; color: #707968; font-size: 11px; line-height: 1.5; margin-top: 3px; }
+.rogue-starters-screen .rss-pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-top: 2px solid #a3b49a; background: #e5e8d5; }
+.rogue-starters-screen .rss-pagination>button { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 84px; min-height: 44px; padding: 8px 12px; border: 1px solid #94a68b; background: #f7f5e5; color: #4e6e50; font-size: 14px; }
+.rogue-starters-screen .rss-pagination>span { color: #73816a; font-size: 14px; font-variant-numeric: tabular-nums; }
+.rogue-starters-screen .rss-pagination>span>b { color: var(--rss-teal); }
+.rogue-starters-screen .rss-no-results { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 360px; padding: 35px 22px; color: #5f7d5d; text-align: center; }
+.rogue-starters-screen .rss-no-results h3 { font-size: 18px; }
+.rogue-starters-screen .rss-no-results p { font-size: 14px; }
+.rogue-starters-screen .rss-no-results>.rss-button { margin-top: 10px; }
+
+.rogue-starters-screen .rss-detail { min-width: 0; border-left: 3px solid #879e86; background: var(--rss-cream); align-self: stretch; }
+.rogue-starters-screen .rss-detail-heading { position: relative; padding: 19px 20px 18px; border-bottom: 2px solid #b5bda6; background: #edead5; }
+.rogue-starters-screen .rss-detail-back { display: none; }
+.rogue-starters-screen .rss-detail-identity { display: flex; align-items: center; gap: 16px; margin-top: 10px; }
+.rogue-starters-screen .rss-detail-sprite { display: grid; place-items: center; width: 116px; height: 116px; flex-shrink: 0; background: #dce4c9; border: 2px solid #a9b99c; box-shadow: inset 0 0 0 3px #f8f5e7; }
+.rogue-starters-screen .rss-detail-sprite>img { width: 110px; height: 110px; }
+.rogue-starters-screen .rss-detail-identity>div:nth-child(2) { min-width: 0; flex: 1; }
+.rogue-starters-screen .rss-detail-heading h3 { font-size: 25px; font-weight: 700; }
+.rogue-starters-screen .rss-detail-heading h3:focus { outline: none; }
+.rogue-starters-screen .rss-detail-identity p { color: #63735e; font-size: 12px; margin-top: 2px; }
+.rogue-starters-screen .rss-type-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.rogue-starters-screen .rss-type-row>span { display: block; padding: 2px 8px; background: #6c8270; border: 1px solid #566f5c; border-radius: 2px; color: #fff9e9; font-size: 12px; }
+.rogue-starters-screen .rss-detail-cost { display: flex; align-items: baseline; flex-wrap: wrap; gap: 5px; margin-top: 8px; color: #916e28; font-size: 24px; line-height: 1.25; font-variant-numeric: tabular-nums; }
+.rogue-starters-screen .rss-detail-cost>small { color: #7f7759; font-size: 13px; }
+.rogue-starters-screen .rss-detail-cost>span { font-size: 11px; color: #71826a; margin-left: auto; }
+.rogue-starters-screen .rss-lock-note { display: flex; align-items: start; gap: 10px; padding: 14px 19px; border-bottom: 1px solid #b8b69f; background: #e5ddc5; color: #7c6144; }
+.rogue-starters-screen .rss-lock-note>svg { margin-top: 3px; }
+.rogue-starters-screen .rss-lock-note b { font-size: 14px; }
+.rogue-starters-screen .rss-lock-note p { font-size: 13px; line-height: 1.7; margin-top: 4px; }
+.rogue-starters-screen .rss-detail-body { padding: 20px; }
+.rogue-starters-screen .rss-config-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px 12px; }
+.rogue-starters-screen .rss-field { display: block; min-width: 0; }
+.rogue-starters-screen .rss-field>span { display: block; color: #64765f; font-size: 13px; margin-bottom: 5px; }
+.rogue-starters-screen select { width: 100%; min-width: 0; min-height: 44px; padding: 9px 10px; border: 2px solid #a2af96; border-radius: 3px; background: #fffaf0; color: var(--rss-ink); font-size: 14px; }
+.rogue-starters-screen select:disabled { opacity: .55; cursor: not-allowed; }
+.rogue-starters-screen .rss-shiny-controls { display: flex; min-height: 44px; gap: 4px; }
+.rogue-starters-screen .rss-shiny-controls>button { display: flex; align-items: center; justify-content: center; gap: 3px; flex: 1; min-height: 44px; min-width: 0; padding: 6px 4px; background: #faf6e8; color: #758269; border: 2px solid #a8b29b; font-size: 14px; }
+.rogue-starters-screen .rss-shiny-controls>button.is-active { color: #23664d; border-color: #5b8d70; background: #dcebd0; }
+.rogue-starters-screen .rss-stats { margin-top: 22px; padding-top: 17px; border-top: 2px solid #bdc4ac; }
+.rogue-starters-screen .rss-section-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+.rogue-starters-screen .rss-section-heading h4 { font-size: 15px; font-weight: 700; }
+.rogue-starters-screen .rss-section-heading>span { color: #748168; font-size: 12px; }
+.rogue-starters-screen .rss-stats table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.rogue-starters-screen .rss-stats thead { color: #6c7a61; font-size: 12px; background: #e2e4cf; }
+.rogue-starters-screen .rss-stats th, .rogue-starters-screen .rss-stats td { padding: 6px 7px; border-bottom: 1px solid #c7cbb6; text-align: right; }
+.rogue-starters-screen .rss-stats th:first-child { text-align: left; font-weight: 400; }
+.rogue-starters-screen .rss-stats tbody td:nth-child(2) { font-weight: 700; }
+.rogue-starters-screen .rss-stats tbody td:last-child { white-space: nowrap; }
+.rogue-starters-screen .rss-stats tbody td:last-child>b { display: inline-block; width: 21px; font-weight: 400; }
+.rogue-starters-screen .rss-iv-track { display: inline-block; width: 38px; height: 5px; background: #cbd3ba; overflow: hidden; vertical-align: middle; margin-right: 7px; }
+.rogue-starters-screen .rss-iv-track>i { display: block; width: 100%; height: 100%; background: #71905d; transform-origin: left; }
+.rogue-starters-screen .rss-nature-up { color: #a44d3d; padding-left: 4px; font-weight: 700; }
+.rogue-starters-screen .rss-nature-down { color: #4d7c9a; padding-left: 4px; font-weight: 700; }
+.rogue-starters-screen .rss-stats>p { color: #748168; font-size: 12px; line-height: 1.7; margin-top: 10px; }
+.rogue-starters-screen .rss-moves { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; min-width: 0; margin: 20px 0 0; padding: 15px 0 0; border: 0; border-top: 2px solid #bdc4ac; }
+.rogue-starters-screen .rss-moves>legend { display: flex; align-items: baseline; gap: 9px; width: 100%; padding: 0; color: var(--rss-ink); font-size: 15px; font-weight: 700; }
+.rogue-starters-screen .rss-moves>legend>span { color: #748168; font-size: 12px; font-weight: 400; }
+.rogue-starters-screen .rss-move { position: relative; display: block; min-width: 0; }
+.rogue-starters-screen .rss-move>span { position: absolute; top: 2px; left: 7px; z-index: 1; color: #7c8971; font-size: 10px; pointer-events: none; font-family: ui-monospace,monospace; }
+.rogue-starters-screen .rss-move>select { min-height: 52px; padding: 17px 20px 6px 8px; font-size: 13px; }
+.rogue-starters-screen .rss-candy { margin-top: 20px; padding-top: 17px; border-top: 2px solid #bdc4ac; }
+.rogue-starters-screen .rss-candy>div { display: flex; align-items: baseline; justify-content: space-between; gap: 7px; }
+.rogue-starters-screen .rss-candy b { font-size: 14px; }
+.rogue-starters-screen .rss-candy span { font-size: 12px; color: #748168; }
+.rogue-starters-screen .rss-candy>.rss-button { width: 100%; margin-top: 10px; font-size: 14px; }
+.rogue-starters-screen .rss-candy>p { margin-top: 7px; font-size: 12px; color: #9a6245; }
+.rogue-starters-screen .rss-add-area { margin-top: 21px; padding-top: 18px; border-top: 2px solid #bdc4ac; }
+.rogue-starters-screen .rss-add-area>.rss-button { width: 100%; min-height: 50px; }
+.rogue-starters-screen .rss-add-area>.rss-button>span { padding: 0 0 0 8px; margin-left: auto; color: #e0e9c7; font-size: 13px; }
+.rogue-starters-screen .rss-add-area>p { display: flex; align-items: start; gap: 6px; margin-bottom: 12px; color: #4e7858; font-size: 13px; line-height: 1.7; }
+.rogue-starters-screen .rss-add-area>p>svg { margin-top: 2px; }
+.rogue-starters-screen .rss-add-area>.rss-add-reason { display: block; color: #95613f; margin-top: 10px; margin-bottom: 0; font-size: 13px; }
+.rogue-starters-screen .rss-remove-link { display: block; min-height: 44px; width: 100%; padding: 10px 4px; margin-top: 6px; background: transparent; border: 0; color: #8c5748; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
+.rogue-starters-screen .rss-detail-empty { display: flex; flex-direction: column; align-items: center; gap: 14px; min-height: 350px; padding: 40px 25px; color: #658363; text-align: center; }
+.rogue-starters-screen .rss-detail-empty h3 { font-size: 20px; }
+.rogue-starters-screen .rss-detail-empty p { color: #748168; font-size: 14px; line-height: 1.8; }
+.rogue-starters-screen .rss-run-note { display: flex; align-items: start; gap: 12px; padding: 18px 25px; background: #e7e4ce; border-top: 2px solid #aab69b; color: #6b775f; }
+.rogue-starters-screen .rss-run-note>svg { margin-top: 4px; color: #7b8b65; }
+.rogue-starters-screen .rss-run-note>p { font-size: 14px; line-height: 1.8; }
+.rogue-starters-screen .rss-run-note b { display: block; color: #4c674d; font-weight: 700; margin-bottom: 3px; }
+.rogue-starters-screen .rss-status { padding: 0 24px; min-height: 0; background: #e3eed4; color: #3a7854; font-size: 14px; line-height: 1.8; }
+.rogue-starters-screen .rss-status:not(:empty) { padding-top: 11px; padding-bottom: 11px; border-top: 1px solid #b0c69e; }
+.rogue-starters-screen .rss-error { padding: 14px 24px; border-top: 1px solid #c09c7c; background: #f4e1c9; color: #904734; font-size: 14px; line-height: 1.8; }
+.rogue-starters-screen .rss-launchbar { display: flex; align-items: center; gap: 22px; justify-content: space-between; padding: 22px 25px; color: var(--rss-cream); background: var(--rss-navy); border-top: 3px solid var(--rss-deep); }
+.rogue-starters-screen .rss-launchbar>div { min-width: 0; flex: 1; }
+.rogue-starters-screen .rss-launchbar .rss-eyebrow { color: #a9c8b8; }
+.rogue-starters-screen .rss-launchbar b { display: block; margin-top: 4px; font-size: 20px; font-weight: 700; }
+.rogue-starters-screen .rss-launchbar p { color: #c0cec3; font-size: 14px; margin-top: 6px; line-height: 1.7; }
+.rogue-starters-screen .rss-button-start { flex-shrink: 0; min-height: 59px; padding: 14px 24px; font-size: 18px; background: #e8bc67; color: #2c352d; border-color: #aa8039; box-shadow: inset 0 2px #ffe0a1,0 4px #8a642f; }
+.rogue-starters-screen .rss-button-start:not(:disabled):hover { background: #f3cc7f; }
+.rogue-starters-screen .rss-key-help { padding: 9px 20px; color: #adc0b9; background: var(--rss-deep); font-size: 12px; line-height: 1.7; text-align: center; }
+
+@media (max-width: 1100px) {
+  .rogue-starters-screen .rss-layout { grid-template-columns: minmax(0,1.2fr) minmax(310px,1fr); }
+  .rogue-starters-screen .rss-search-row { flex-wrap: wrap; gap: 7px; }
+  .rogue-starters-screen .rss-search { flex-basis: 100%; }
+  .rogue-starters-screen .rss-unlocked-filter { min-height: 35px; }
+  .rogue-starters-screen .rss-generations { grid-template-columns: repeat(5,minmax(0,1fr)); gap: 5px; margin-top: 8px; }
+  .rogue-starters-screen .rss-generations>button { font-size: 13px; }
+  .rogue-starters-screen .rss-header { padding: 20px; gap: 13px; }
+  .rogue-starters-screen .rss-header h2 { font-size: 25px; }
+  .rogue-starters-screen .rss-budget { padding-left: 18px; }
+  .rogue-starters-screen .rss-party { padding: 15px 17px; }
+  .rogue-starters-screen .rss-slots { gap: 6px; }
+  .rogue-starters-screen .rss-slot-main { padding-left: 7px; padding-right: 7px; }
+  .rogue-starters-screen .rss-slot-main b { font-size: 12px; }
+  .rogue-starters-screen .rss-slot-empty>small { font-size: 11px; }
+  .rogue-starters-screen .rss-mon-grid { grid-template-columns: repeat(auto-fill,minmax(86px,1fr)); padding: 12px; gap: 7px; }
+  .rogue-starters-screen .rss-detail-heading { padding: 17px 15px; }
+  .rogue-starters-screen .rss-detail-sprite { width: 101px; height: 104px; }
+  .rogue-starters-screen .rss-detail-sprite>img { width: 95px; height: 98px; }
+  .rogue-starters-screen .rss-detail-identity { gap: 12px; }
+  .rogue-starters-screen .rss-detail-heading h3 { font-size: 23px; }
+  .rogue-starters-screen .rss-detail-body { padding: 18px 15px; }
+  .rogue-starters-screen .rss-type-row>span { padding: 2px 6px; }
+  .rogue-starters-screen .rss-config-grid { gap: 12px 9px; }
+  .rogue-starters-screen .rss-candy>div { flex-wrap: wrap; }
+}
+@media (max-width: 800px) {
+  .rogue-starters-screen .rss-header { padding: 17px; flex-wrap: wrap; }
+  .rogue-starters-screen .rss-header>.rss-back { align-self: start; margin-top: 3px; }
+  .rogue-starters-screen .rss-header h2 { font-size: 25px; }
+  .rogue-starters-screen .rss-header p { font-size: 14px; }
+  .rogue-starters-screen .rss-header .rss-eyebrow { font-size: 10px; letter-spacing: .5px; }
+  .rogue-starters-screen .rss-budget { display: flex; align-items: baseline; gap: 8px; width: 100%; padding: 10px 0 0; border-left: 0; border-top: 1px solid #526a70; text-align: left; }
+  .rogue-starters-screen .rss-budget>b { font-size: 27px; }
+  .rogue-starters-screen .rss-budget>b>span { font-size: 18px; }
+  .rogue-starters-screen .rss-budget>span { margin-left: auto; font-size: 13px; }
+  .rogue-starters-screen .rss-party { padding: 15px; }
+  .rogue-starters-screen .rss-slots { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+  .rogue-starters-screen .rss-slots>li { min-height: 85px; }
+  .rogue-starters-screen .rss-slot-main { flex-direction: row; align-items: center; text-align: left; padding: 12px 18px 11px 3px; gap: 1px; }
+  .rogue-starters-screen .rss-slot-main>img { width: 44px; height: 44px; margin: 0; }
+  .rogue-starters-screen .rss-slot-main b { font-size: 13px; line-height: 1.5; }
+  .rogue-starters-screen .rss-slot-main small { font-size: 12px; }
+  .rogue-starters-screen .rss-slot-remove { top: -5px; right: -7px; }
+  .rogue-starters-screen .rss-slot-empty>small { font-size: 12px; }
+  .rogue-starters-screen .rss-layout { display: block; }
+  .rogue-starters-screen .rss-layout[data-pane='catalog'] .rss-detail,
+  .rogue-starters-screen .rss-layout[data-pane='detail'] .rss-catalog { display: none; }
+  .rogue-starters-screen .rss-pane-nav { display: flex; border-bottom: 2px solid #7f9a7f; background: #e3e7cf; }
+  .rogue-starters-screen .rss-pane-nav>button { display: flex; align-items: center; justify-content: center; gap: 8px; flex: 1; min-height: 49px; padding: 9px 7px; border: 0; border-right: 1px solid #aab89d; color: #6b8063; background: transparent; font-size: 14px; border-radius: 0; }
+  .rogue-starters-screen .rss-pane-nav>button:last-child { border-right: 0; }
+  .rogue-starters-screen .rss-pane-nav>button.is-active { color: #235d46; background: #f7f5e6; box-shadow: inset 0 -3px #3d8061; }
+  .rogue-starters-screen .rss-catalog-controls { padding: 16px 15px 12px; }
+  .rogue-starters-screen .rss-search-row { flex-wrap: nowrap; gap: 13px; }
+  .rogue-starters-screen .rss-search { flex-basis: auto; }
+  .rogue-starters-screen .rss-unlocked-filter { min-height: 44px; }
+  .rogue-starters-screen .rss-generations { grid-template-columns: repeat(10,minmax(0,1fr)); gap: 4px; margin-top: 13px; }
+  .rogue-starters-screen .rss-generations>button { font-size: 12px; }
+  .rogue-starters-screen .rss-mon-grid { max-height: 620px; min-height: 300px; grid-template-columns: repeat(auto-fill,minmax(92px,1fr)); padding: 14px; gap: 8px; }
+  .rogue-starters-screen .rss-mon-name { font-size: 15px; }
+  .rogue-starters-screen .rss-mon>img { width: 73px; height: 73px; }
+  .rogue-starters-screen .rss-detail { border-left: 0; }
+  .rogue-starters-screen .rss-detail-heading { padding: 20px 23px; }
+  .rogue-starters-screen .rss-detail-back { display: flex; align-items: center; justify-content: center; gap: 5px; position: absolute; top: 12px; right: 17px; min-height: 44px; padding: 7px 9px; border: 1px solid #9ca98f; background: #f8f4e4; color: #567451; font-size: 14px; }
+  .rogue-starters-screen .rss-detail-heading>.rss-eyebrow { padding-right: 75px; }
+  .rogue-starters-screen .rss-detail-identity { gap: 22px; margin-top: 17px; }
+  .rogue-starters-screen .rss-detail-sprite { width: 126px; height: 126px; }
+  .rogue-starters-screen .rss-detail-sprite>img { width: 120px; height: 120px; }
+  .rogue-starters-screen .rss-detail-heading h3 { font-size: 29px; }
+  .rogue-starters-screen .rss-detail-cost { max-width: 240px; }
+  .rogue-starters-screen .rss-detail-body { padding: 21px 23px; }
+  .rogue-starters-screen .rss-config-grid { gap: 16px; }
+  .rogue-starters-screen .rss-field>span { font-size: 14px; }
+  .rogue-starters-screen select { font-size: 16px; }
+  .rogue-starters-screen .rss-shiny-controls>button { font-size: 16px; }
+  .rogue-starters-screen .rss-stats { margin-top: 25px; }
+  .rogue-starters-screen .rss-section-heading h4 { font-size: 17px; }
+  .rogue-starters-screen .rss-section-heading>span { font-size: 13px; }
+  .rogue-starters-screen .rss-stats table { font-size: 16px; }
+  .rogue-starters-screen .rss-stats thead { font-size: 13px; }
+  .rogue-starters-screen .rss-stats th, .rogue-starters-screen .rss-stats td { padding: 8px 10px; }
+  .rogue-starters-screen .rss-iv-track { width: 75px; height: 6px; }
+  .rogue-starters-screen .rss-stats>p { font-size: 13px; }
+  .rogue-starters-screen .rss-moves { gap: 12px; margin-top: 25px; }
+  .rogue-starters-screen .rss-moves>legend { font-size: 17px; }
+  .rogue-starters-screen .rss-moves>legend>span { font-size: 13px; }
+  .rogue-starters-screen .rss-move>select { min-height: 58px; font-size: 16px; padding-left: 11px; }
+  .rogue-starters-screen .rss-move>span { left: 10px; font-size: 11px; }
+  .rogue-starters-screen .rss-candy>div { flex-wrap: nowrap; }
+  .rogue-starters-screen .rss-candy b { font-size: 16px; }
+  .rogue-starters-screen .rss-candy span { font-size: 14px; }
+  .rogue-starters-screen .rss-candy>.rss-button { max-width: 320px; font-size: 16px; }
+  .rogue-starters-screen .rss-add-area>.rss-button { min-height: 54px; font-size: 17px; }
+  .rogue-starters-screen .rss-add-area>p { font-size: 14px; }
+  .rogue-starters-screen .rss-run-note { padding: 17px 20px; }
+  .rogue-starters-screen .rss-launchbar { padding: 21px 20px; gap: 20px; }
+  .rogue-starters-screen .rss-launchbar b { font-size: 18px; }
+  .rogue-starters-screen .rss-launchbar p { font-size: 13px; }
+  .rogue-starters-screen .rss-button-start { min-height: 56px; padding: 13px 17px; font-size: 16px; }
+}
+@media (max-width: 520px) {
+  .rogue-starters-screen { border-width: 2px; }
+  .rogue-starters-screen .rss-header { padding: 16px 12px; gap: 10px; }
+  .rogue-starters-screen .rss-header h2 { font-size: 24px; }
+  .rogue-starters-screen .rss-header .rss-eyebrow { font-size: 9px; letter-spacing: .2px; }
+  .rogue-starters-screen .rss-header p { line-height: 1.7; }
+  .rogue-starters-screen .rss-budget { gap: 7px; }
+  .rogue-starters-screen .rss-budget>small { font-size: 12px; }
+  .rogue-starters-screen .rss-budget>b { font-size: 26px; }
+  .rogue-starters-screen .rss-budget>span { font-size: 12px; }
+  .rogue-starters-screen .rss-party { padding: 13px 10px; }
+  .rogue-starters-screen .rss-slots { gap: 6px; }
+  .rogue-starters-screen .rss-slots>li { min-height: 99px; }
+  .rogue-starters-screen .rss-slot-main { flex-direction: column; padding: 3px 5px 8px; text-align: center; }
+  .rogue-starters-screen .rss-slot-main>img { width: 47px; height: 47px; }
+  .rogue-starters-screen .rss-slot-main b { font-size: 13px; }
+  .rogue-starters-screen .rss-slot-main small { font-size: 11px; }
+  .rogue-starters-screen .rss-slot-remove { top: -5px; right: -7px; }
+  .rogue-starters-screen .rss-point-track { margin-top: 11px; }
+  .rogue-starters-screen .rss-pane-nav>button { gap: 5px; font-size: 14px; }
+  .rogue-starters-screen .rss-catalog-controls { padding: 14px 12px 11px; }
+  .rogue-starters-screen .rss-search-row { flex-wrap: wrap; gap: 5px; }
+  .rogue-starters-screen .rss-search { flex-basis: 100%; }
+  .rogue-starters-screen .rss-search>input { font-size: 16px; }
+  .rogue-starters-screen .rss-unlocked-filter { min-height: 44px; font-size: 14px; }
+  .rogue-starters-screen .rss-generations { grid-template-columns: repeat(5,minmax(0,1fr)); gap: 5px; margin-top: 7px; }
+  .rogue-starters-screen .rss-generations>button { font-size: 14px; }
+  .rogue-starters-screen .rss-list-caption { font-size: 12px; }
+  .rogue-starters-screen .rss-mon-grid { grid-template-columns: repeat(3,minmax(0,1fr)); grid-auto-rows: minmax(143px,auto); padding: 12px; gap: 8px; max-height: 605px; }
+  .rogue-starters-screen .rss-mon { min-height: 143px; padding: 5px 4px 10px; }
+  .rogue-starters-screen .rss-mon>img { width: 73px; height: 73px; }
+  .rogue-starters-screen .rss-mon-name { font-size: 14px; }
+  .rogue-starters-screen .rss-mon-meta>span { font-size: 10px; }
+  .rogue-starters-screen .rss-mon-meta>b { height: 23px; min-width: 27px; font-size: 14px; }
+  .rogue-starters-screen .rss-locked-label { font-size: 11px; }
+  .rogue-starters-screen .rss-pagination { padding: 13px 12px; }
+  .rogue-starters-screen .rss-pagination>button { min-width: 80px; }
+  .rogue-starters-screen .rss-detail-heading { padding: 18px 16px; }
+  .rogue-starters-screen .rss-detail-heading>.rss-eyebrow { font-size: 11px; }
+  .rogue-starters-screen .rss-detail-back { right: 13px; top: 10px; }
+  .rogue-starters-screen .rss-detail-identity { gap: 15px; }
+  .rogue-starters-screen .rss-detail-sprite { width: 106px; height: 108px; }
+  .rogue-starters-screen .rss-detail-sprite>img { width: 100px; height: 102px; }
+  .rogue-starters-screen .rss-detail-heading h3 { font-size: 26px; }
+  .rogue-starters-screen .rss-detail-cost { font-size: 23px; }
+  .rogue-starters-screen .rss-detail-body { padding: 20px 16px; }
+  .rogue-starters-screen .rss-config-grid { gap: 15px 11px; }
+  .rogue-starters-screen .rss-shiny-controls { gap: 3px; }
+  .rogue-starters-screen .rss-shiny-controls>button { font-size: 14px; }
+  .rogue-starters-screen .rss-stats th, .rogue-starters-screen .rss-stats td { padding: 7px; }
+  .rogue-starters-screen .rss-iv-track { width: 48px; }
+  .rogue-starters-screen .rss-moves { gap: 9px; }
+  .rogue-starters-screen .rss-move>select { padding-right: 17px; font-size: 15px; }
+  .rogue-starters-screen .rss-candy span { font-size: 13px; }
+  .rogue-starters-screen .rss-run-note { padding: 16px 14px; gap: 9px; }
+  .rogue-starters-screen .rss-run-note>p { font-size: 14px; }
+  .rogue-starters-screen .rss-launchbar { flex-direction: column; align-items: stretch; padding: 21px 17px 24px; gap: 18px; }
+  .rogue-starters-screen .rss-launchbar b { font-size: 20px; }
+  .rogue-starters-screen .rss-launchbar p { font-size: 14px; }
+  .rogue-starters-screen .rss-button-start { width: 100%; min-height: 58px; font-size: 18px; }
+  .rogue-starters-screen .rss-key-help { font-size: 11px; padding: 10px 12px max(10px,env(safe-area-inset-bottom)); }
+  .rogue-starters-screen .rss-status, .rogue-starters-screen .rss-error { padding-left: 15px; padding-right: 15px; }
+}
+@media (max-width: 350px) {
+  .rogue-starters-screen .rss-header h2 { font-size: 22px; }
+  .rogue-starters-screen .rss-budget>span { display: none; }
+  .rogue-starters-screen .rss-mon-grid { padding: 8px; gap: 6px; }
+  .rogue-starters-screen .rss-mon-name { font-size: 13px; }
+  .rogue-starters-screen .rss-detail-sprite { width: 94px; height: 98px; }
+  .rogue-starters-screen .rss-detail-sprite>img { width: 89px; height: 92px; }
+  .rogue-starters-screen .rss-detail-heading h3 { font-size: 23px; }
+  .rogue-starters-screen .rss-detail-body { padding: 18px 12px; }
+  .rogue-starters-screen .rss-iv-track { width: 36px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rogue-starters-screen *, .rogue-starters-screen *::before, .rogue-starters-screen *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+.rogue-starters-screen .rss-pokerus{font-size:9px;color:#ffe8ff;background:#894c98;border-radius:4px;padding:2px 5px;font-weight:700}
+
+@media(min-width:992px){.rc-shell:has(.rogue-starters-screen){margin:12px auto;width:min(1240px,calc(100% - 32px))}.rc-shell .rogue-starters-screen{height:calc(100dvh - 132px);min-height:600px;display:flex;flex-direction:column;border-width:1px}.rogue-starters-screen .rss-header{padding:14px 20px;border-bottom-width:1px;flex:none}.rogue-starters-screen .rss-header h2{font-size:25px}.rogue-starters-screen .rss-header p{font-size:12px}.rogue-starters-screen .rss-party{padding:10px 18px;border-bottom-width:1px;flex:none}.rogue-starters-screen .rss-party-label{margin-bottom:7px}.rogue-starters-screen .rss-slot{min-height:75px}.rogue-starters-screen .rss-slot-main>img{width:40px;height:40px}.rogue-starters-screen .rss-slot-main b{font-size:12px}.rogue-starters-screen .rss-slot-main small{font-size:10px}.rogue-starters-screen .rss-point-track{margin-top:8px;height:4px}.rogue-starters-screen .rss-layout{flex:1;height:0;min-height:0;align-items:stretch}.rogue-starters-screen .rss-catalog{display:flex;flex-direction:column;min-height:0}.rogue-starters-screen .rss-catalog-controls{padding:12px 14px 8px;flex:none}.rogue-starters-screen .rss-mon-grid{flex:1;max-height:none;min-height:0;overflow:auto;grid-auto-rows:minmax(112px,auto);padding:10px;gap:7px}.rogue-starters-screen .rss-mon{min-height:112px}.rogue-starters-screen .rss-mon>img{width:48px;height:48px}.rogue-starters-screen .rss-mon-name{font-size:12px}.rogue-starters-screen .rss-detail{min-height:0;max-height:100%;overflow:auto;scrollbar-width:thin}.rogue-starters-screen .rss-detail-heading{padding:14px 18px}.rogue-starters-screen .rss-detail-body{padding:15px 18px}.rogue-starters-screen .rss-run-note{padding:10px 18px;flex:none}.rogue-starters-screen .rss-run-note>p{font-size:11px;line-height:1.7}.rogue-starters-screen .rss-status{padding:0 18px;font-size:11px;flex:none}.rogue-starters-screen .rss-launchbar{padding:14px 20px;flex:none}.rogue-starters-screen .rss-launchbar b{font-size:19px}.rogue-starters-screen .rss-launchbar p{font-size:12px}.rogue-starters-screen .rss-key-help{padding:5px;flex:none;font-size:10px}}

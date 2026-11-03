@@ -1,0 +1,25 @@
+@font-face{font-family:NeoDunggeunmo;src:url('/fonts/neodgm.woff2') format('woff2');font-style:normal;font-weight:400 900;font-display:swap}
+.topbar-admin-group{display:flex;align-items:center;gap:14px;min-width:0}.admin-entry{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:8px 13px;border:1px solid #b89b57;border-radius:7px;background:#fff0bd;color:#493a15;font-weight:750;font-size:13px;cursor:pointer;flex:none}.admin-entry:hover{background:#ffe396}.admin-entry:focus-visible{outline:3px solid #e9bc5e;outline-offset:3px}@media(max-width:600px){.topbar-admin-group{gap:5px}.admin-entry{padding:7px 9px;font-size:12px}.topbar-admin-group .top-right{max-width:none}}
+main[data-mode="rogue"]{background:#192c38;--ink:#213342;--muted:#617078;--border:#c3c5af;--green:#1b8174}
+main[data-mode="rogue"] .workspace{background:radial-gradient(ellipse at 50% 0,#2d4854,#142832 90%);min-height:100dvh}
+main[data-mode="rogue"] .sidebar{width:82px;padding:20px 10px;background:#122630;border-color:#3e5860;z-index:10}
+main[data-mode="rogue"] .brand{margin:4px auto 30px;justify-content:center}
+main[data-mode="rogue"] .brand>div:last-child,main[data-mode="rogue"] .side-label,main[data-mode="rogue"] .sidebar-bottom,main[data-mode="rogue"] .nav-label{display:none}
+main[data-mode="rogue"] .brandmark{background:#dbb45d;border:3px solid #122630;box-shadow:0 0 0 2px #dbb45d;color:#122630;border-radius:50%;width:42px;height:42px}
+main[data-mode="rogue"] .sidebar .nav{justify-content:center;padding:15px;margin:0 0 12px;border:2px solid transparent;border-radius:6px;color:#b9cec7;min-height:52px}
+main[data-mode="rogue"] .sidebar .nav.active{border-color:#e2c36f;background:#29434b;color:#ffe9a1;box-shadow:0 3px #0b1f28}
+main[data-mode="rogue"] .sidebar .nav:hover{background:#2a444d;color:white}
+main[data-mode="rogue"] .topbar{height:68px;padding:0 28px;background:#152d37;border-color:#3c555b;color:#f5efd9}
+main[data-mode="rogue"] .topbar h1{font-size:18px;letter-spacing:0;margin:0;font-family:NeoDunggeunmo,monospace}
+main[data-mode="rogue"] .eyebrow,main[data-mode="rogue"] .avatar,main[data-mode="rogue"] .status-dot,main[data-mode="rogue"] .account-cloud{display:none}
+main[data-mode="rogue"] .account-name{background:#29434c;color:#f2efd8;border:1px solid #58736f;border-radius:4px;padding:8px 12px;font-size:13px}
+main[data-mode="rogue"] .signin{margin-left:14px;color:#d0d9c4;font-size:12px}
+main[data-mode="rogue"] .workspace>footer{padding:10px 28px;background:#10242d;color:#9bb2b1;border:0;font-size:10px}
+main[data-mode="rogue"] .session-error{background:#fff2cf;color:#6b321e}
+.rogue-game,.battle-screen{font-family:NeoDunggeunmo,'Noto Sans KR',sans-serif;font-synthesis:none}
+.rogue-game button,.rogue-game input,.rogue-game select,.battle-screen button,.battle-screen select{font-family:inherit}
+@media(max-width:800px){main[data-mode="rogue"] .sidebar{width:64px;padding:16px 6px}main[data-mode="rogue"] .topbar{padding:0 18px}}
+@media(max-width:520px){main[data-mode="rogue"]{display:block;padding-bottom:calc(66px + env(safe-area-inset-bottom))}main[data-mode="rogue"] .workspace{min-height:calc(100dvh - 66px)}main[data-mode="rogue"] .sidebar{position:fixed;bottom:0;top:auto;left:0;right:0;width:100%;height:auto;padding:6px 7px calc(6px + env(safe-area-inset-bottom));border:0;border-top:2px solid #48616a}main[data-mode="rogue"] .sidebar .brand{display:none}main[data-mode="rogue"] .sidebar nav{display:flex;flex-direction:row;justify-content:space-around;gap:4px}main[data-mode="rogue"] .sidebar .nav{margin:0;padding:9px 8px;min-height:44px;min-width:44px;flex:1}main[data-mode="rogue"] .topbar{height:56px;padding:0 14px}main[data-mode="rogue"] .topbar h1{font-size:16px}main[data-mode="rogue"] .account-name{font-size:12px;padding:6px 8px;min-height:36px}main[data-mode="rogue"] .signin{font-size:11px;margin-left:8px;min-height:36px}main[data-mode="rogue"] .workspace>footer{display:none}}
+@media(prefers-reduced-motion:reduce){main[data-mode="rogue"] *{scroll-behavior:auto}}
+
+.egg-entry{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:8px 13px;border:1px solid #d9bc6c;border-radius:7px;background:#f3d68c;color:#473817;font-weight:750;font-size:13px;cursor:pointer;flex:none}.egg-entry:hover{background:#ffe9ad}.egg-entry:focus-visible{outline:3px solid #ffe392;outline-offset:3px}main[data-mode=rogue] .sidebar .nav[href*="tab=eggs"]{flex-direction:column;gap:4px;padding:8px 2px}main[data-mode=rogue] .sidebar .nav[href*="tab=eggs"] .nav-label{display:block;font-size:10px;line-height:1.3}@media(max-width:600px){.egg-entry{font-size:11px;padding:7px 8px}.topbar-admin-group{gap:4px}.admin-entry{padding:7px 8px}.topbar-admin-group .account-name{max-width:65px}.topbar-admin-group .signin{font-size:10px;margin-left:4px}}

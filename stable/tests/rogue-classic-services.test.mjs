@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';import {makeMon} from '../lib/game.mjs';
+import {classicServices,buyClassicService,classicMaxPP,restoreClassicParty} from '../lib/rogue-classic-services.mjs';
+const a={...makeMon(7,5),boxId:'a',moves:['물대포'],pp:{watergun:0},hp:1},b={...makeMon(1,5),boxId:'b',hp:0,status:null};
+let run={screen:'reward',wave:1,money:1000,party:[a,b]};
+const store=classicServices(run);assert.deepEqual(store.map(p=>p.id),['potion','ether','revive']);assert.equal(store[0].price,36);assert.equal(store[1].price,72);assert.equal(store[2].price,360);
+assert.equal(classicMaxPP(a,0),25);buyClassicService(run,{itemId:'ether',boxId:'a',moveIndex:0,expectedPrice:72});assert.equal(run.money,928);assert.equal(run.party[0].pp.watergun,10);
+const money=run.money,before=JSON.stringify(run.party);assert.throws(()=>buyClassicService(run,{itemId:'potion',boxId:'b',expectedPrice:36}));assert.equal(run.money,money);assert.equal(JSON.stringify(run.party),before);
+assert.throws(()=>buyClassicService(run,{itemId:'potion',boxId:'a',expectedPrice:1}));assert.equal(run.money,money);assert.equal(JSON.stringify(run.party),before);
+buyClassicService(run,{itemId:'revive',boxId:'b',expectedPrice:360});assert.equal(run.party[1].hp,Math.floor(b.maxHp*.5));assert.equal(run.money,568);
+run={...run,wave:10};assert.deepEqual(classicServices(run),[]);assert.throws(()=>buyClassicService(run,{itemId:'potion',boxId:'a',expectedPrice:36}));
+assert.equal(classicServices({...run,wave:20}).some(p=>p.id==='superpotion'),false);assert.equal(classicServices({...run,wave:21}).some(p=>p.id==='superpotion'),true);
+const poisoned={...a,hp:a.maxHp,status:'독'},healed=restoreClassicParty([poisoned],'fullrestore',{boxId:'a'});assert.equal(healed[0].status,null);assert.equal(poisoned.status,'독');
+const hp300={...a,hp:1,maxHp:300};assert.equal(restoreClassicParty([hp300],'potion',{boxId:'a'})[0].hp,31);
+assert.throws(()=>buyClassicService({...run,wave:1,screen:'battle'},{itemId:'potion',boxId:'a',expectedPrice:36}));
+console.log('Wave-priced immediate services, PP base capacity, revive/status/percent healing, eligibility and no-charge-on-failure: passed');
