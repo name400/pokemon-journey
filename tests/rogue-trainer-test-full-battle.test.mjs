@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
+import {applyClassicAction} from '../lib/rogue-classic-game.mjs';
+import {chooseClassicProbeAction} from '../scripts/classic-probe-policy.mjs';
+// Synthetic, strong level-100 team exercises the real six-member event battle.
+let doc={coins:0},state=ensureClassicState(doc);const roster=[[150,['Psystrike','Ice Beam','Aura Sphere','Recover']],[382,['Origin Pulse','Ice Beam','Thunder','Calm Mind']],[383,['Precipice Blades','Fire Punch','Stone Edge','Swords Dance']],[384,['Dragon Ascent','Earthquake','Dragon Claw','Extreme Speed']],[250,['Sacred Fire','Brave Bird','Recover','Earthquake']],[493,['Judgment','Recover','Earth Power','Calm Mind']]],party=roster.map(([id,moves],i)=>makeReferenceMon(id,100,{boxId:'p'+i,moves,ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31}}));
+let run={id:'full-trainer',seed:'test',rng:121*38947,wave:122,biome:4,screen:'mystery',mysteryRule:'part-timer-v18',party,modifiers:[],tools:{},balls:{},money:100000,encounter:{kind:'mystery',key:'a-trainers-test'},mystery:{type:'a-trainers-test',stage:'choose',trainerId:121},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[],trainerTraitsRule:'source-v1',trainerItemsRule:'source-v1',trainerFieldItemsRule:'source-v1'};state.slots[0]=run;
+applyClassicAction(doc,{action:'mysterySelect',job:'battle'});applyClassicAction(doc,{action:'mysteryConfirm'});let actions=0;const meta={lastSwitchWave:0};while(['battle','learn','evolution'].includes(run.screen)&&actions<100){applyClassicAction(doc,chooseClassicProbeAction(doc,meta));actions++;doc=JSON.parse(JSON.stringify(doc));run=ensureClassicState(doc).slots[0];}
+assert.equal(run.screen,'reward');assert.equal(run.combat.snapshot.sides[1].pokemon.filter(p=>p.hp===0).length,6);assert.equal(ensureClassicState(doc).system.eggs.filter(e=>e.productId==='epic').length,1);assert.equal(run.rewards[0].id,'relicgold');assert.throws(()=>applyClassicAction(doc,{action:'recoverBattle'}));assert.equal(ensureClassicState(doc).system.eggs.length,1);
