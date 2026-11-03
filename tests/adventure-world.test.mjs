@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -85,4 +85,11 @@ test('wild district opens only after the city investigation and preserves legacy
  const back=stepField({area:3,district:'lumiose-wild',x:1,y:8},'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-site',21,8]);
  const saved=storeAdventurePosition({area:3,district:'lumiose-wild',x:6,y:8,regionId:6,districtReturnRegion:1},12);assert.deepEqual([saved.x,saved.y,saved.regionId],[5,9,1]);assert.equal(restoreAdventurePosition(structuredClone(saved),12).district,'lumiose-wild');
  const old=restoreAdventurePosition({area:3,district:'lumiose-wild',x:5,y:8,regionId:1},13);assert.equal(old.district,null);assert.deepEqual([old.x,old.y],[5,8]);
+});
+test('observation garden opens after reporting and returns to the wild district',()=>{
+ const map=lumioseObservationMap();for(const tile of ['B','g','W'])assert.ok(fieldPath(map,{x:1,y:8},findTile(map,tile)).length,`${tile} reachable`);
+ const gate={area:3,district:'lumiose-wild',x:21,y:8};assert.equal(stepField(gate,'right').blocked,true);
+ const next=stepField({...gate,wildStudy:{stage:3}},'right');assert.deepEqual([next.district,next.x,next.y],['lumiose-observation',1,8]);
+ const back=stepField({area:3,district:'lumiose-observation',x:1,y:8},'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-wild',21,8]);
+ const saved=storeAdventurePosition({area:3,district:'lumiose-observation',x:12,y:8,regionId:6,districtReturnRegion:1},10);assert.deepEqual([saved.x,saved.y,saved.regionId],[5,9,1]);assert.equal(restoreAdventurePosition(structuredClone(saved),10).district,'lumiose-observation');
 });
