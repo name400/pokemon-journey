@@ -195,7 +195,7 @@ export default function BattlePanel({battle,battleKey,title,trainer,biome,busy,o
         {event.kind==='damage'&&event.hit&&<><div className="bs-impact"><TypeFX event={{...event,category:'physical'}}/></div><div className="bs-hit-wash"/></>}
         {eventNumber&&<strong className={`bs-float ${event.kind==='heal'?'heal':''}`}>{eventNumber}</strong>}
         {['critical','immune','miss','effect','status','form'].includes(event.kind||'')&&<strong className={`bs-effect-text ${event.kind==='critical'?'critical':''}`}>{event.text}</strong>}
-        {captureEvent&&<div className={`bs-capture ${event.caught?'caught':'escaped'}`} style={{'--bs-shakes':Math.min(3,Number(event.shakes)||0)} as React.CSSProperties}><div className="bs-capture-flight"><BallIcon id={ballKey} fallback={captureImage}/></div><span>{event.caught?'찰칵!':'…'}</span></div>}
+        {captureEvent&&<div className={`bs-capture ${event.caught?'caught':'escaped'}`} data-ball={ballKey} style={{'--bs-shakes':Math.min(3,Number(event.shakes)||0)} as React.CSSProperties}><div className="bs-capture-flight"><BallIcon id={ballKey} fallback={captureImage}/></div><span>{event.caught?'찰칵!':'…'}</span></div>}
       </div>}
     </div>
     {multiple&&multiVitals(side)}

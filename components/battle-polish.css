@@ -179,3 +179,13 @@
 @media(max-width:600px){.battle-screen .bs-move-stats,.battle-screen .bs-effectiveness{font-size:12px}}
 
 .battle-screen .bs-capture-note{margin:10px 0;padding:10px 12px;border:1px solid #8b7650;border-radius:6px;background:#fff4d4;color:#4c3b1e;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+
+/* Each capture ball retains its own flight colour while the atlas supplies its real image. */
+.battle-screen .bs-capture{--capture-glow:#f16661}
+.battle-screen .bs-capture[data-ball="greatball"]{--capture-glow:#65aeff}
+.battle-screen .bs-capture[data-ball="ultraball"]{--capture-glow:#f5d75b}
+.battle-screen .bs-capture[data-ball="rogueball"]{--capture-glow:#d28cff}
+.battle-screen .bs-capture[data-ball="masterball"]{--capture-glow:#f58fe9}
+.battle-screen .bs-capture-flight{isolation:isolate}
+.battle-screen .bs-capture-flight::before{content:"";position:absolute;z-index:-1;inset:-7px;border:2px solid var(--capture-glow);border-radius:50%;box-shadow:0 0 10px var(--capture-glow);opacity:.7;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.battle-screen .bs-capture-flight::before{box-shadow:none;opacity:.45}}
