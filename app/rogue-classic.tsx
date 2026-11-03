@@ -44,7 +44,7 @@ export default function RogueClassic({initialView='slots',navigationKey=0,onView
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  }
  const run=saved?.run,screen=run?.screen,battle=finished||saved?.battle;
- useEffect(()=>{if(!saved||view!=='game'||finished||busy||screen!=='battle'||!run?.party?.length||run.party.some((mon:any)=>mon.hp>0))return;const key=String(saved.revision);if(recoveryKey.current===key)return;recoveryKey.current=key;void act('recoverBattle');},[saved?.revision,view,screen,finished,busy]);
+ useEffect(()=>{if(!saved||view!=='game'||finished||busy||screen!=='battle'||!run?.party?.length||(!saved.battle?.ended&&run.party.some((mon:any)=>mon.hp>0)))return;const key=String(saved.revision);if(recoveryKey.current===key)return;recoveryKey.current=key;void act('recoverBattle');},[saved?.revision,view,screen,finished,busy]);
  useEffect(()=>{if(!saved||view!=='game'||battle||finished||busy||saved.pendingHatches?.length||!['advance','interlude'].includes(screen))return;const key=saved.revision+':'+screen;if(autoAdvanceKey.current===key)return;autoAdvanceKey.current=key;void act('next');},[saved?.revision,saved?.pendingHatches?.length,view,screen,battle,finished,busy]);
  const lureStatus=(run?.modifiers||[]).filter((m:any)=>['lure','superlure','maxlure'].includes(m.id)&&Number.isInteger(m.remaining)&&m.remaining>0);
  const inventoryEggs=saved?.eggShop?.eggs||[],safeEggIndex=Math.max(0,Math.min(eggIndex,inventoryEggs.length-1)),eggPage=Math.floor(safeEggIndex/10),eggPages=Math.max(1,Math.ceil(inventoryEggs.length/10));
