@@ -30,6 +30,7 @@ export type StarterEntry = {
   candies?: number;
   sameEggCandies?: number;
   sameEggCost?: number;
+  passive?: { key: string | null; name?: string | null; unlocked: boolean; cost: number };
   reductionCost?: number;
   costReduction?: number;
   formName?: string;
@@ -40,6 +41,7 @@ export type StarterSelection = {
   nature: string;
   gender: string;
   shiny: boolean;
+  passive?: boolean;
   moves: string[];
 };
 export type StarterTeamValidation = { valid: boolean; cost: number; remaining: number; error: string | null };
@@ -52,6 +54,7 @@ export type RogueStarterSelectProps = {
   onCancel: () => void;
   onReduceCost?: (id: number) => Promise<unknown> | void;
   onBuyEgg?: (id: number, cost: number) => Promise<unknown> | void;
+  onUnlockPassive?: (id: number, cost: number) => Promise<unknown> | void;
 };
 
 const PAGE_SIZE = 48;
@@ -77,6 +80,7 @@ export function defaultStarterSelection(entry: StarterEntry): StarterSelection {
     nature: entry.natures.find(nature => nature.key === 'hardy')?.key || entry.natures[0]?.key || 'hardy',
     gender: entry.genders[0] || 'N',
     shiny: false,
+    passive: !!entry.passive?.unlocked && !!entry.passive.key,
     moves: defaultMoves.length ? defaultMoves : [...new Set(entry.moves)].slice(0, 4),
   };
 }
@@ -92,6 +96,7 @@ export function starterSelectionError(entry: StarterEntry, selection: StarterSel
   if (!entry.abilities.some(ability => ability.key === selection.ability)) return '해금된 특성을 선택하세요.';
   if (!entry.natures.some(nature => nature.key === selection.nature)) return '선택 가능한 성격을 골라주세요.';
   if (!entry.genders.some(gender => gender === selection.gender)) return '선택 가능한 성별을 골라주세요.';
+  if (selection.passive && (!entry.passive?.unlocked || !entry.passive.key)) return '패시브를 먼저 해금하세요.';
   if (selection.shiny && !entry.shinyUnlocked) return '색이 다른 모습을 먼저 해금해야 합니다.';
   if (selection.moves.length < 1 || selection.moves.length > 4) return '기술을 1개에서 4개까지 선택하세요.';
   if (new Set(selection.moves).size !== selection.moves.length) return '같은 기술을 두 번 선택할 수 없습니다.';
@@ -139,7 +144,7 @@ export function starterStatsForNature(stats: StarterStats, nature: string): Star
   return { ...stats, [effect[0]]: Math.floor(stats[effect[0]] * 1.1), [effect[1]]: Math.floor(stats[effect[1]] * .9) };
 }
 
-export default function RogueStarterSelect({ starters, budget = 10, busy, error, onStart, onCancel, onReduceCost, onBuyEgg }: RogueStarterSelectProps) {
+export default function RogueStarterSelect({ starters, budget = 10, busy, error, onStart, onCancel, onReduceCost, onBuyEgg, onUnlockPassive }: RogueStarterSelectProps) {
   const [team, setTeam] = useState<StarterSelection[]>([]);
   const [drafts, setDrafts] = useState<Record<number, StarterSelection>>({});
   const [focusedId, setFocusedId] = useState<number | null>(null);
@@ -228,6 +233,13 @@ export default function RogueStarterSelect({ starters, budget = 10, busy, error,
     catch (cause) { if (mounted.current) setLocalError(cause instanceof Error ? cause.message : '비용을 감소시키지 못했습니다.'); }
     finally { actionLock.current = false; if (mounted.current) setReducing(false); }
   }
+  async function unlockPassive() {
+    if (!focused || !draft || !onUnlockPassive || !focused.passive?.cost || locked || actionLock.current) return;
+    const focusedEntry=focused, next={...draft,passive:true};actionLock.current=true;setReducing(true);setLocalError('');
+    try { await onUnlockPassive(focusedEntry.id, focusedEntry.passive!.cost); if(mounted.current){setDrafts(previous=>({...previous,[focusedEntry.id]:next}));setTeam(previous=>previous.map(member=>member.id===focusedEntry.id?next:member));setStatus(`${focusedEntry.name}의 패시브를 해금했습니다.`);} }
+    catch(cause){if(mounted.current)setLocalError(cause instanceof Error?cause.message:'패시브를 해금하지 못했습니다.');}
+    finally{actionLock.current=false;if(mounted.current)setReducing(false);}
+  }
   async function buyEgg() {
     if (!focused || !onBuyEgg || !focused.sameEggCost || locked || actionLock.current) return;
     actionLock.current = true; setReducing(true); setLocalError('');
@@ -281,6 +293,7 @@ export default function RogueStarterSelect({ starters, budget = 10, busy, error,
           <div className="rss-stats"><div className="rss-section-heading"><h4>능력치와 영구 IV</h4><span>Lv.5 · EV 0</span></div><table><thead><tr><th scope="col">능력</th><th scope="col">능력치</th><th scope="col">IV / 31</th></tr></thead><tbody>{STAT_NAMES.map(([stat, name]) => <tr key={stat}><th scope="row">{name}{natureEffect?.[0] === stat ? <span className="rss-nature-up" aria-label="성격으로 상승">↑</span> : natureEffect?.[1] === stat ? <span className="rss-nature-down" aria-label="성격으로 하락">↓</span> : null}</th><td>{selectedStats[stat]}</td><td><span className="rss-iv-track" aria-hidden="true"><i style={{ transform: `scaleX(${Math.max(0, Math.min(1, focused.ivs[stat] / 31))})` }}/></span><b>{focused.ivs[stat]}</b></td></tr>)}</tbody></table><p>포획한 개체 중 능력별로 가장 높은 IV가 유지됩니다.</p></div>
           <fieldset className="rss-moves" disabled={locked || !focused.unlocked}><legend>출발 기술 <span>고유 기술 1–4개</span></legend>{[0, 1, 2, 3].map(slot => <label key={slot} className="rss-move"><span>0{slot + 1}</span><select aria-label={`${slot + 1}번 출발 기술`} value={draft.moves[slot] || ''} onChange={event => updateMove(slot, event.target.value)}><option value="">선택하지 않음</option>{[...new Set(focused.moves)].map(move => <option key={move} value={move} disabled={draft.moves.some((chosen, index) => index !== slot && chosen === move)}>{move}</option>)}</select></label>)}</fieldset>
           {onReduceCost && focused.unlocked && (focused.reductionCost || 0) > 0 && <div className="rss-candy"><div><b>스타터 비용 감소</b><span>보유 사탕 {focused.candies || 0}개</span></div><button className="rss-button rss-button-outline" disabled={locked || (focused.candies || 0) < (focused.reductionCost || 0)} onClick={() => void reduceCost()}><Minus size={15} aria-hidden="true"/>{reducing ? '적용 중…' : `사탕 ${focused.reductionCost}개 사용`}</button>{(focused.candies || 0) < (focused.reductionCost || 0) && <p>사탕 {(focused.reductionCost || 0) - (focused.candies || 0)}개가 더 필요합니다.</p>}</div>}
+          {focused.unlocked && focused.passive?.key && <div className="rss-candy"><div><b>패시브 · {focused.passive.name || focused.passive.key}</b><span>보유 사탕 {focused.sameEggCandies || 0}개</span></div>{focused.passive.unlocked ? <label className="rss-passive-toggle"><input type="checkbox" checked={draft.passive !== false} disabled={locked} onChange={event=>updateDraft({passive:event.target.checked})}/> 이번 도전에 사용</label> : onUnlockPassive && <button className="rss-button rss-button-outline" disabled={locked || (focused.sameEggCandies || 0) < focused.passive.cost} onClick={()=>void unlockPassive()}>사탕 {focused.passive.cost}개로 패시브 해금</button>}</div>}
           {onBuyEgg && focused.unlocked && !!focused.sameEggCost && <div className="rss-candy"><div><b>같은 종의 알</b><span>보유 사탕 {focused.sameEggCandies || 0}개</span></div><button className="rss-button rss-button-outline" disabled={locked || (focused.sameEggCandies || 0) < focused.sameEggCost} onClick={() => void buyEgg()}>사탕 {focused.sameEggCost}개로 알 받기</button></div>}
           <div className="rss-add-area">{selected ? <><p><Check size={16} aria-hidden="true"/>파티에 편성됨 · 설정 변경은 바로 적용됩니다.</p><button className="rss-button rss-button-outline" disabled><Check size={18} aria-hidden="true"/>파티 편성 완료</button><button className="rss-remove-link" disabled={locked} onClick={() => remove(focused.id)}>이 포켓몬을 파티에서 제외</button></> : <><button className="rss-button rss-button-primary" disabled={locked || !!addReason || !!draftError} onClick={addFocused}><Plus size={19} aria-hidden="true"/>파티에 추가<span>{points(focused.cost)} PT</span></button>{(addReason || draftError) && <p className="rss-add-reason">{addReason || draftError}</p>}</>}</div>
         </div></> : <div className="rss-detail-empty"><Users size={34} aria-hidden="true"/><h3>첫 파트너를 찾아보세요.</h3><p>목록에서 포켓몬을 고르면 능력과 출발 기술을 확인할 수 있습니다.</p></div>}</aside>
