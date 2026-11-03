@@ -1,5 +1,6 @@
 export type BattleMoveTarget={side:number;index:number;slot:number;name:string;target?:number};
-export type BattleMove={id:string;name:string;pp:number;maxPp:number;target?:string;targets?:BattleMoveTarget[];disabled?:boolean;type?:string;typeKey?:string;power?:number;accuracy?:number|boolean;category?:string;effectiveness?:number|null};
+export type BattleMove={id:string;variants?:Record<string,Partial<BattleMove>>;name:string;pp:number;maxPp:number;target?:string;targets?:BattleMoveTarget[];disabled?:boolean;type?:string;typeKey?:string;power?:number;accuracy?:number|boolean;category?:string;effectiveness?:number|null};
+export function battleMoveForSpecial(move:BattleMove,special?:string):BattleMove{return special&&move.variants?.[special]?{...move,...move.variants[special],id:move.id}:move;}
 export type BattleActor={slot:number;kind:string;active:number;moves?:BattleMove[];switches?:Array<{slot:number;index:number;name?:string}>;specials?:Array<{key:string;label:string}>;teraType?:string};
 export type BattleTurnAction={actor:number;type:'move';move:string;target?:number;special?:string}|{actor:number;type:'switch';slot:number};
 export function hasMultiBattleDTO(battle:any):boolean{return Array.isArray(battle.requests?.[0]?.actors)&&battle.requests[0].actors.length>0&&Array.isArray(battle.activeBySide)&&battle.activeBySide.length===2&&battle.activeBySide.every((indices:unknown)=>Array.isArray(indices))&&battle.activeBySide.some((indices:number[])=>indices.length>1);}
@@ -7,13 +8,13 @@ export function signedBattleTarget(target:BattleMoveTarget,side:number):number{r
 export function selectableBattleTargets(move:BattleMove):BattleMoveTarget[]{return !move.target||['normal','adjacentFoe','adjacentAlly','adjacentAllyOrSelf','any'].includes(move.target)?move.targets||[]:[];}
 export function buildBattleTurnCommand(actors:readonly BattleActor[],drafts:Record<number,BattleTurnAction>,side=0):{command:{type:'turn';actions:BattleTurnAction[]}|null;error:string|null}{
   const required=actors.filter(actor=>actor.kind==='move'||actor.kind==='switch'),actions:BattleTurnAction[]=[],switched=new Set<number>();
-  if(required.filter(actor=>{const action=drafts[actor.slot];return action?.type==='move'&&action.special==='terastallize';}).length>1)return {command:null,error:'한 턴에는 한 마리만 테라스탈할 수 있습니다.'};
+  if(['terastallize','dynamax'].some(kind=>required.filter(actor=>{const action=drafts[actor.slot];return action?.type==='move'&&action.special===kind;}).length>1))return {command:null,error:'같은 특수 변화는 한 턴에 한 번만 사용할 수 있습니다.'};
   if(!required.length)return {command:null,error:'지금 선택할 행동이 없습니다.'};
   for(const actor of required){const action=drafts[actor.slot];if(!action)return {command:null,error:`${actor.slot+1}번 포켓몬의 행동을 선택하세요.`};
     if(action.type==='switch'){if(!actor.switches?.some(option=>option.slot===action.slot))return {command:null,error:'교체할 수 있는 포켓몬을 선택하세요.'};if(switched.has(action.slot))return {command:null,error:'두 포켓몬이 같은 파티 자리로 교체할 수 없습니다.'};switched.add(action.slot);actions.push({...action,actor:actor.slot});continue;}
     const move=actor.moves?.find(move=>move.id===action.move);if(actor.kind!=='move'||!move||move.disabled||move.pp<=0)return {command:null,error:'사용 가능한 기술을 선택하세요.'};
     if(action.special&&!actor.specials?.some(special=>special.key===action.special))return {command:null,error:'사용 가능한 특수 변화를 선택하세요.'};
-    const targets=selectableBattleTargets(move);if(targets.length&&!targets.some(target=>signedBattleTarget(target,side)===action.target))return {command:null,error:'기술을 사용할 대상을 선택하세요.'};
+    const selected=battleMoveForSpecial(move,action.special);if(selected.disabled)return {command:null,error:'이 변화로 사용할 수 없는 기술입니다.'};const targets=selectableBattleTargets(selected);if(targets.length&&!targets.some(target=>signedBattleTarget(target,side)===action.target))return {command:null,error:'기술을 사용할 대상을 선택하세요.'};
     actions.push({...action,actor:actor.slot});
   }return {command:{type:'turn',actions},error:null};
 }
