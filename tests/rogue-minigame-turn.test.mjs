@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {createClassicCombat,playClassicMinigameTurn} from '../lib/rogue-battle-engine.mjs';
+const mon=(id,boxId,moves)=>makeReferenceMon(id,50,{boxId,moves});
+const run={id:'minigame',wave:30,biome:1,rng:420,screen:'battle',party:[mon(151,'hero',['Tackle'])],modifiers:[],tools:{},balls:{},encounter:{kind:'mystery',key:'fun-and-games'},mystery:{type:'fun-and-games',stage:'battle'},participants:[],awardedFoes:[],expNotices:[]};
+run.combat=createClassicCombat(run,[mon(202,'opponent',['Tackle'])]);run.party=run.combat.teams[0];
+const foeHp=run.combat.teams[1][0].hp,heroHp=run.party[0].hp,foePP=run.combat.snapshot.sides[1].pokemon[0].moveSlots[0].pp,heroPP=run.combat.snapshot.sides[0].pokemon[0].moveSlots[0].pp;
+for(let turn=0;turn<3;turn++){const restored=JSON.parse(JSON.stringify(run));run.combat=playClassicMinigameTurn(restored,{type:'move',move:'tackle'});run.party=run.combat.teams[0];assert.equal(run.party[0].hp,heroHp);assert.equal(run.combat.snapshot.sides[1].pokemon[0].moveSlots[0].pp,foePP);assert.equal(run.combat.snapshot.sides[0].pokemon[0].moveSlots[0].pp,heroPP-turn-1);assert.ok(!run.combat.log.some(line=>/Wobbuffet.*used Tackle/.test(line)));}
+assert.ok(run.combat.teams[1][0].hp<foeHp);assert.throws(()=>playClassicMinigameTurn({...run,mystery:{type:'other',stage:'battle'}},{type:'move',move:'tackle'}));assert.throws(()=>playClassicMinigameTurn(run,{type:'switch',slot:2}));assert.throws(()=>playClassicMinigameTurn(run,{type:'move',move:'tackle',special:'terastallize'}));
+// Defeating the target ends the simulator battle but never grants battle EXP.
+{const test=JSON.parse(JSON.stringify(run));test.party=[makeReferenceMon(151,100,{boxId:'hero',moves:['Tackle']})];test.combat=createClassicCombat(test,[makeReferenceMon(202,1,{boxId:'opponent',moves:['Tackle']})]);test.party=test.combat.teams[0];test.combat=playClassicMinigameTurn(test,{type:'move',move:'tackle'});assert.ok(test.combat.ended);assert.deepEqual(test.expNotices,[]);assert.deepEqual(test.awardedFoes,[]);}
+// Thresholds are strict and fainting is a loss, even after the last attack.
+{const {classicFunAndGamesPrize:prize}=await import('../lib/rogue-mystery.mjs');assert.equal(prize(0,1000),'knockout');assert.equal(prize(29,1000),'multilens');assert.equal(prize(30,1000),'scopelens');assert.equal(prize(149,1000),'scopelens');assert.equal(prize(150,1000),'widelens');assert.equal(prize(329,1000),'widelens');assert.equal(prize(330,1000),null);assert.throws(()=>prize(-1,1000));assert.throws(()=>prize(1,0));}
