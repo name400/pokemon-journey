@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {hasClassicMove,installClassicMove} from '../lib/rogue-move-learning.mjs';
+import {queueClassicMoves,repairClassicLearning,learnClassicPendingMove} from '../lib/rogue-classic-growth.mjs';
+import {classicRelearnMoves} from '../lib/rogue-classic-services.mjs';
+const mon=makeReferenceMon(1,10,{boxId:'alias',moves:['Tackle'],pp:{tackle:3}});
+assert.equal(hasClassicMove(mon,'몸통박치기'),true);
+assert.throws(()=>installClassicMove(mon,'몸통박치기'),/기술/);
+const run={party:[mon],screen:'learn',afterLearn:'reward',pendingMoves:[{boxId:'alias',move:'몸통박치기'}]};
+repairClassicLearning(run);assert.deepEqual(mon.moves,['Tackle']);assert.equal(mon.pp.tackle,3);assert.equal(run.screen,'reward');
+queueClassicMoves(run,mon,['몸통박치기','Growl']);assert.deepEqual(mon.moves,['Tackle','Growl']);assert.equal(mon.pp.tackle,3);
+assert.equal(classicRelearnMoves(mon).includes('몸통박치기'),false);
+mon.moves=['Tackle','Growl','Protect','Splash'];run.pendingMoves=[];queueClassicMoves(run,mon,['Ember','불꽃세례']);assert.equal(run.pendingMoves.length,1);
+run.pendingMoves=[{boxId:'alias',move:'몸통박치기'}];assert.throws(()=>learnClassicPendingMove(run,{boxId:'alias',move:'몸통박치기',slot:1}),/이미 배운/);
