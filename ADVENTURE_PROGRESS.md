@@ -1,3 +1,10 @@
+## 2026-11-03 · Z-A 로열 W 포인트 (개발 브랜치)
+
+- Lida 사건 완료 후 임시 배틀 존에서 Mathis, Aya, Sean과 배틀하고 승리당 500 티켓포인트를 얻어 5,000점까지 기록한다. 각 진입 중 상대별 한 번만 승리할 수 있으며 광장에 나갔다 재입장하면 다시 등장한다. 이는 현재 구현의 임시 재등장 규칙이며 원작 배치·실시간 전투·보너스 카드의 재현이 아니다. 이전 W 저장에는 새 선행 사건을 강제하지 않고 포인트가 없으면 0으로 시작한다. 코인과 기존 진행은 유지한다.
+- 근거: [Serebii W 랭크 상대·포켓몬](https://www.serebii.net/legendsz-a/z-aroyale/rankw.shtml), [조거 상대 포인트](https://bulbapedia.bulbagarden.net/wiki/Jogger), [작업원 상대 포인트](https://bulbapedia.bulbagarden.net/wiki/Worker_(Trainer_class)), [W 랭크 요구 포인트](https://gamewith.jp/pokemon-za/520641).
+- Rintaro 승급전과 이후 랭크는 미구현이다. 보상에 대해 [전체 로열 표](https://bulbapedia.bulbagarden.net/wiki/Z-A_Royale)는 1,140, [개별 공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_8)은 1,260으로 서로 다르며 후자는 레벨 표기에도 불일치가 있다. 원본 또는 더 신뢰할 근거로 해결하지 못하면 사용자 검수가 필요하다. 임의의 금액을 지급하거나 승급을 완성으로 표시하지 않는다.
+- 자동 API 검사는 전투 패배, 상대별 중복 거부, 실제 이동과 재진입, 10승과 5,000점 저장, 코인 불변, 승급 미구현 상태를 확인한다. 실제 모바일 조작·브라우저와 운영 D1 검증은 아직 하지 않았다. 운영 배포 없음. 토중몬·껍질몬 제공 정책은 사용자 답변 대기이며 변경하지 않았다.
+
 ## 2026-11-03 원작 임무 08: Lida의 물건과 배틀
 
 - 새로 랭크 W에 오른 플레이어는 호텔에서 Lida의 물건을 맡고, 정원 지구에서 이를 전하며 Lida와 배틀한다. 승리하면 확인된 1,288코인을 한 번 받고 다음 승급 상대 Rintaro와 5,000점 조건을 안내한다. Lida의 완철포·바닐프티 Lv.22와 별가사리 Lv.23 및 기술은 [Serebii 임무 자료](https://www.serebii.net/legendsz-a/mainmissions/reachingrankv.shtml), 보상은 [Lida 자료](https://bulbapedia.bulbagarden.net/wiki/Lida)를 확인했다. 현재 호텔 안내원·정원 지구의 위치와 연출은 임시다.
