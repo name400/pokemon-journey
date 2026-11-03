@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon,rogueSpecies} from '../lib/rogue-reference.mjs';
+import {rogueFormArt} from '../lib/rogue-form-art.mjs';
+import {configure,calculateStats} from '../lib/pokemon-config.mjs';
+import {createClassicCombat,playClassicCombat,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+for(const shiny of [false,true]){
+ const forms=rogueSpecies.get(964).formList,zero=forms.find(f=>f.formKey==='zero'),hero=forms.find(f=>f.formKey==='hero'),mon=makeReferenceMon(964,50,{boxId:'palafin',moves:['Splash'],shiny,...rogueFormArt(zero,shiny)}),run={id:'palafin-hero',wave:50,biome:1,rng:42,party:[mon,makeReferenceMon(143,50,{boxId:'ally',moves:['Splash']})],modifiers:[],tools:{},encounter:{kind:'wild'},teraCharged:false};
+ run.combat=createClassicCombat(run,[makeReferenceMon(19,50,{boxId:'foe',moves:['Splash']})]);let choice=run.combat.requests[0].switches.find(s=>run.combat.teams[0][s.index].boxId==='ally');run.combat=playClassicCombat(run,{type:'switch',slot:choice.slot});run.party=run.combat.teams[0];let native=restoreClassicNativeBattle(JSON.parse(JSON.stringify(run.combat)),run),p=native.p1.pokemon.find(p=>p.set.trainerToken==='palafin');assert.equal(p.species.id,'palafinhero');assert.equal(p.storedStats.atk,calculateStats({...run.party.find(m=>m.boxId==='palafin'),rogueBaseStats:hero.baseStats}).atk);assert.equal(run.party.find(m=>m.boxId==='palafin').sourceImage,rogueFormArt(hero,shiny).sourceImage);
+ const leveled=configure(run.party.find(m=>m.boxId==='palafin'),{level:51,hp:mon.hp}),run2={...run,party:run.party.map(m=>m.boxId==='palafin'?leveled:m)},p2=restoreClassicNativeBattle(run.combat,run2).p1.pokemon.find(p=>p.set.trainerToken==='palafin');assert.equal(p2.level,51);assert.equal(p2.storedStats.atk,calculateStats({...leveled,rogueBaseStats:hero.baseStats}).atk);
+ choice=run.combat.requests[0].switches.find(s=>run.party[s.index].boxId==='palafin');run.combat=playClassicCombat(run,{type:'switch',slot:choice.slot});run.party=run.combat.teams[0];native=restoreClassicNativeBattle(run.combat,run);assert.equal(native.p1.active[0].species.id,'palafinhero');assert.equal(run.party.find(m=>m.boxId==='palafin').sourceBackImage,rogueFormArt(hero,shiny).sourceBackImage);
+}
