@@ -312,3 +312,9 @@
 - 기존 진행 도전의 동작을 갑자기 바꾸지 않기 위해 새 도전에만 `capturePolicy: source-v1`을 기록한다. 이 필드가 없는 기존 저장은 기존 대상 선택 방식을 유지하고 포켓몬·볼·다른 데이터를 이관하거나 삭제하지 않는다. UI의 포획 불가 사유와 서버의 실제 제한에 같은 판정을 사용한다. 이 변경은 신규 도전에서 기존과 다르게 더블배틀 중 즉시 포획할 수 없다는 영향이 있다.
 - 실제 더블 전투에서 두 마리일 때 마스터볼 거부와 저장·볼 무변경, 한 마리를 쓰러뜨린 뒤 나머지 포획, 기존 저장의 두 대상 포획 호환성, UI용 사유를 검사했다. 실제 브라우저 클릭과 모든 특수 전투는 미검증이며 운영 배포는 하지 않았다.
 - 전체 `npm test` 87개와 `npm run typecheck`가 통과했다.
+
+### 전투 날씨에 따른 진화 조건 — 2026-11-03
+- 원본 `7c088125`의 [pokemon-evolutions.ts](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/balance/pokemon-evolutions.ts)와 [generation-06.ts](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/balance/species/generation-06.ts), [generation-08.ts](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/balance/species/generation-08.ts)를 대조했다. 일반·히스이 미끄네일은 비·안개·강한 비가 진화 조건이다. 기존 구현은 비바라기, 쾌청 또는 날씨 만료가 있어도 바이옴 최초 날씨만 확인했다.
+- 현재 전투 스냅샷의 날씨를 우선하며 빈 문자열은 날씨 종료로 처리하도록 수정했다. 전투 날씨 필드가 없는 오래된 저장만 기존 바이옴 날씨로 대체한다. 기존 도전을 포함해 다음 진화 조건 확인부터 반영되며 이전과 달리 전투에서 비가 내리면 진화할 수 있고 비가 그치거나 쾌청으로 바뀌면 진화하지 않는다. 기존 포켓몬·기록을 소급 변경하거나 이관하지 않는다.
+- 실제 전투의 비바라기→레벨 상승→진화 및 초기 비→쾌청→레벨 상승 시 진화 거부, 중간 저장·복원과 진화 결정 복원, 두 폼의 날씨 소멸·비·안개·강한 비 판정을 검사했다. 원본은 레벨업 단계의 날씨를 확인하지만 현재 게임은 턴 처리가 끝난 전투 스냅샷에서 대기 진화를 판단하므로 같은 턴에 날씨가 만료되는 경계는 원본과 다를 수 있다. 브라우저와 자연 200층 완주는 미검증이다. 운영 배포는 하지 않았다.
+- 전체 `npm test` 88개와 `npm run typecheck`가 통과했다.
