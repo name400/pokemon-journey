@@ -1,3 +1,10 @@
+## 2026-11-03 · 연구 기술머신 보상 목록과 레벨 4~7
+
+- 연구 레벨 4 방어(TM017), 5 번개엄니(TM021), 6 불꽃엄니(TM014), 7 얼음엄니(TM015)의 수령 및 반복 사용을 추가했다. [모미지 리서치 보상](https://bulbapedia.bulbagarden.net/wiki/Mable%27s_research)과 [기술머신 재사용](https://www.serebii.net/legendsz-a/tm.shtml)을 기준으로 한다. 각 보상은 플레이어가 수첩에서 직접 수령하며 레벨 조건·중복 수령·전투 중 사용과 소유·학습 대상을 서버에서 검증한다.
+- 레벨 2~7의 번호·기술·허용 종을 하나의 탐험 전용 목록에서 관리하고 UI와 서버가 공통 판정을 쓴다. 이전 클라이언트의 레벨 2·3 요청 이름과 기존 `zaResearchRewards` 기록은 계속 지원한다. 임의의 레벨이나 기술명을 요청해 보상을 받을 수 없다.
+- 학습 종은 확인된 **일부**만 포함한다. [방어](https://www.dittobase.com/legends-za/moves/protect) 1·4·6·63·142·304·305·306·650·652·659, [번개엄니](https://www.dittobase.com/legends-za/moves/thunder-fang) 24·142·371, [불꽃엄니](https://www.dittobase.com/legends-za/moves/fire-fang) 6·24·142·371, [얼음엄니](https://www.dittobase.com/legends-za/moves/ice-fang) 24·142·713·998. 이 목록의 나머지 원작 종 및 폼별 차이는 미완성으로 표시한다. 레벨 8 이후 보상·나머지 연구 과제·실시간 전투는 미구현이다.
+- 실제 API·메모리 SQLite에서 조건 전 수령 및 임의 레벨 거부, 4~7 수령과 중복 거부, 네 기술의 실제 학습, 기존 2·3 수령 기록과 이전 요청 호환을 검사했다. PC·모바일 실조작과 실제 D1은 미검증이며 운영 배포하지 않았다. 기존 소유 데이터와 로그라이크 코드, 보류 중인 Rintaro 보상·토중몬 정책은 건드리지 않았다.
+
 ## 2026-11-03 · 모미지 리서치 레벨 3 기술머신 보상
 
 - 연구 레벨 3(누적 600점)부터 수첩에서 기술머신046 머드샷을 수령하고 포켓몬 관리의 선택한 기술 칸에 가르칠 수 있다. [레벨 3 보상](https://bulbapedia.bulbagarden.net/wiki/List_of_TMs_in_Pok%C3%A9mon_Legends%3A_Z-A), [원작 학습 대상](https://www.dittobase.com/legends-za/moves/mud-shot), [기술머신 재사용](https://www.serebii.net/legendsz-a/tm.shtml)을 확인했다. 수령 상태는 기존 레벨 2 보상과 같은 탐험 저장 배열에 추가하며, 한 번만 수령하고 소모 없이 반복 사용한다.
