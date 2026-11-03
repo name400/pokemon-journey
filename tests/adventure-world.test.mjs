@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseZone1Map,lumioseZone2Map,lumioseZone3Map,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,lumioseZone3Map,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/adventure-story.mjs';
 
@@ -173,4 +173,14 @@ test('cemetery draft connects to the third zone and preserves its location',()=>
  assert.equal(stepField({area:3,district:'lumiose-zone4',x:21,y:8},'right').district,'lumiose-zone3');
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone4',x:18,y:6,regionId:6,districtReturnRegion:1,zaSableyeQuest:1},8),loaded=restoreAdventurePosition(structuredClone(saved),8);
  assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaSableyeQuest],['lumiose-zone4',18,6,1]);
+});
+
+
+test('rooftop crystal blocks the provisional shortcut until cleared',()=>{
+ const blocked=lumioseRooftopMap(),cleared=lumioseRooftopMap({zaRooftopCrystalCleared:true});
+ assert.equal(walkable(blocked[9][11]),false);assert.equal(walkable(cleared[9][11]),true);
+ assert.equal(fieldPath(blocked,{x:11,y:13},{x:1,y:8}).length,0);assert.ok(fieldPath(cleared,{x:11,y:13},{x:1,y:8}).length);
+ assert.equal(stepField({area:3,district:'lumiose-rooftop',x:1,y:8,zaRooftopCrystalCleared:true},'left').district,'lumiose-zone2');
+ const saved=storeAdventurePosition({area:3,district:'lumiose-rooftop',x:11,y:10,regionId:6,districtReturnRegion:1},8),loaded=restoreAdventurePosition(structuredClone(saved),8);
+ assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-rooftop',11,10]);
 });
