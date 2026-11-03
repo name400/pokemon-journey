@@ -5,6 +5,22 @@ function fixture({berry=true,modern=true,ability='cheekpouch'}={}){const p=makeR
 {let run=fixture();let view=classicCombatView(run.combat);assert.equal(!!view.requests[0].actors[0].moves.find(m=>m.id==='stuffcheeks').disabled,false);run=JSON.parse(JSON.stringify(run));run.combat=playClassicCombat(run,{type:'move',move:'stuffcheeks'});run.party=run.combat.teams[0];const b=restoreClassicNativeBattle(run.combat,run);assert.equal(b.p1.active[0].boosts.def,2);assert.equal(run.modifiers.find(m=>m.id==='berrylum').count,1);assert.equal(run.combat.modifiers.find(m=>m.id==='berrylum').count,1);run=JSON.parse(JSON.stringify(run));assert.equal(restoreClassicNativeBattle(run.combat,run).p1.active[0].boosts.def,2);}
 for(const opts of [{berry:false},{modern:false}]){const run=fixture(opts),view=classicCombatView(run.combat);assert.ok(!view.requests[0].actors[0].moves.find(m=>m.id==='stuffcheeks')||view.requests[0].actors[0].moves.find(m=>m.id==='stuffcheeks').disabled);}
 // Cheek Pouch heals from a forced berry even when its normal trigger is inactive.
+// A teammate's berry satisfies the source's side-wide restriction without being eaten.
+for(const doubles of [false,true]){
+ let run=fixture({berry:false});
+ run.party.push(makeReferenceMon(7,50,{boxId:'ally',moves:['Splash']}));
+ run.modifiers.push({id:'berrylum',boxId:'ally',count:1,typeBoost:null});
+ const foes=[makeReferenceMon(143,70,{boxId:'foe',moves:['Splash']})];
+ if(doubles)foes.push(makeReferenceMon(143,70,{boxId:'foe2',moves:['Splash']}));
+ run.combat=createClassicCombat(run,foes,{doubles});run.party=run.combat.teams[0];
+ assert.equal(!!classicCombatView(run.combat).requests[0].actors[0].moves.find(m=>m.id==='stuffcheeks').disabled,false);
+ run=JSON.parse(JSON.stringify(run));
+ run.combat=playClassicCombat(run,doubles?{type:'turn',actions:[{actor:0,type:'move',move:'stuffcheeks'},{actor:1,type:'move',move:'splash'}]}:{type:'move',move:'stuffcheeks'});
+ assert.equal(run.modifiers.find(m=>m.boxId==='ally'&&m.id==='berrylum').count,1);
+ run=JSON.parse(JSON.stringify(run));assert.equal(restoreClassicNativeBattle(run.combat,run).p1.active[0].boosts.def,2);
+}
+// Existing runs retain the old rule when only a teammate has a berry.
+{const run=fixture({berry:false,modern:false});run.party.push(makeReferenceMon(7,50,{boxId:'ally',moves:['Splash']}));run.modifiers.push({id:'berrylum',boxId:'ally',count:1,typeBoost:null});run.combat=createClassicCombat(run,[makeReferenceMon(143,70,{boxId:'foe',moves:['Splash']})]);const move=classicCombatView(run.combat).requests[0].actors[0].moves.find(m=>m.id==='stuffcheeks');assert.ok(!move||move.disabled);}
 {let run=fixture();run.party[0].hp=Math.floor(run.party[0].maxHp/2);run.combat.snapshot.sides[0].pokemon[0].hp=run.party[0].hp;run.combat.teams[0][0].hp=run.party[0].hp;const before=run.party[0].hp;run.combat=playClassicCombat(run,{type:'move',move:'stuffcheeks'});assert.ok(run.combat.teams[0][0].hp>before);}
 // A held berry in the native simulator slot still follows the normal native path.
 {const run=fixture({berry:false});run.party[0].item='sitrusberry';run.combat=createClassicCombat(run,[makeReferenceMon(143,70,{boxId:'foe',moves:['Splash']})]);run.party=run.combat.teams[0];run.combat=playClassicCombat(run,{type:'move',move:'stuffcheeks'});assert.equal(restoreClassicNativeBattle(run.combat,run).p1.active[0].boosts.def,2);assert.equal(run.combat.teams[0][0].item,'');}
