@@ -15,7 +15,7 @@ const team=[1,4,7].map(id=>{const p=view.starters.find(s=>s.id===id);return {id,
 assert.throws(()=>applyClassicAction(document,{action:'start',selection:[...team,team[0]]}),/중복/);
 applyClassicAction(document,{action:'start',selection:team});const run=activeClassicRun(document);assert.equal(run.screen,'battle');assert.equal(run.party.length,3);assert.equal(run.money,1000);assert.equal(run.combat.requests[0].moves.find(m=>m.id==='tackle').pp,35);
 const snapshot=JSON.stringify(document);const loaded=JSON.parse(snapshot);assert.equal(classicGameView(loaded).battle.teams[0][0].level,5);
-const command=run.combat.requests[0].moves.find(m=>m.id==='tackle');applyClassicAction(document,{action:'turn',command:{type:'move',move:command.id}});assert.equal(run.party[0].pp.tackle,34);
+const command=run.combat.requests[0].moves.find(m=>m.id==='tackle'),actors=run.combat.requests[0].actors.filter(actor=>actor.kind==='move'),actions=actors.map((actor,index)=>{const move=index===0?command:actor.moves.find(m=>m.pp>0&&!m.disabled),target=move.targets?.[0]?.target;return {actor:actor.slot,type:'move',move:move.id,...(target===undefined?{}:{target})};});applyClassicAction(document,{action:'turn',command:actions.length===1?actions[0]:{type:'turn',actions}});assert.equal(run.party[0].pp.tackle,34);
 assert.equal(document.coins,old.coins);assert.deepEqual(document.inventory,old.inventory);assert.deepEqual(document.run,old.run);
 // Capture and permanent starter unlock never add the caught high-level party
 // member to the next run, and never consume cartridge/adventure inventory.
