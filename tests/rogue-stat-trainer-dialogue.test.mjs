@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
+import {applyClassicAction,classicGameView} from '../lib/rogue-classic-game.mjs';
+import {classicStatTrainerDialogue} from '../lib/rogue-stat-trainer-dialogue.mjs';
+function fixture(id){const doc={},state=ensureClassicState(doc),run={id:'dialogue',seed:'d',rng:42,wave:122,biome:4,screen:'mystery',mysteryRule:'part-timer-v19',party:[makeReferenceMon(151,80,{boxId:'hero',moves:['Tackle']})],modifiers:[],tools:{},balls:{},money:100000,encounter:{kind:'mystery',key:'a-trainers-test'},mystery:{type:'a-trainers-test',stage:'choose',trainerId:id},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[]};state.slots[0]=run;return {doc,run};}
+const intros=new Set();for(let id=120;id<=124;id++){let {doc,run}=fixture(id);const lines=classicStatTrainerDialogue(id),view=classicGameView(doc);assert.equal(view.run.mystery.trainerDialogue.intro,lines.intro);intros.add(lines.intro);applyClassicAction(doc,{action:'mysterySelect',job:'rest'});doc=JSON.parse(JSON.stringify(doc));run=ensureClassicState(doc).slots[0];applyClassicAction(doc,{action:'mysteryConfirm'});assert.equal(classicGameView(doc).run.mystery.trainerDialogue.rest,lines.rest);assert.equal(run.screen,'reward');assert.equal(ensureClassicState(doc).system.eggs.length,1);}assert.equal(intros.size,5);
+{let {doc,run}=fixture(121);applyClassicAction(doc,{action:'mysterySelect',job:'battle'});applyClassicAction(doc,{action:'mysteryConfirm'});const view=classicGameView(doc);assert.ok(view.battle.log[0].includes(classicStatTrainerDialogue(121).accept));doc=JSON.parse(JSON.stringify(doc));assert.ok(classicGameView(doc).battle.log[0].includes(classicStatTrainerDialogue(121).accept));}
+assert.equal(classicStatTrainerDialogue(119),null);
