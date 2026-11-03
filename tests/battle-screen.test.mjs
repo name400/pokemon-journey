@@ -1,0 +1,72 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {build} from 'esbuild';
+import React from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {makeMon} from '../lib/game.mjs';
+import {createCombat,playCpu,playDuel,combatView} from '../lib/party-battle.mjs';
+import {Battle} from '@pkmn/sim';
+import {battleVisuals} from '../lib/full-battle.mjs';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {createClassicCombat,classicCombatView,restoreClassicNativeBattle,snapshotClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+
+await fs.mkdir('.sites-runtime/tests',{recursive:true});
+await build({entryPoints:['components/battle-panel.tsx'],outfile:'.sites-runtime/tests/battle-panel.mjs',bundle:true,format:'esm',platform:'node',external:['react','react/jsx-runtime','lucide-react'],loader:{'.css':'empty'}});
+await build({entryPoints:['hooks/use-battle-playback.ts'],outfile:'.sites-runtime/tests/battle-display.mjs',bundle:true,format:'esm',platform:'node',external:['react']});
+const {default:BattlePanel}=await import('../.sites-runtime/tests/battle-panel.mjs');
+const {battleDisplay,applyBattleEvent}=await import('../.sites-runtime/tests/battle-display.mjs');
+const a={...makeMon(7,5),boxId:'squirtle',moves:['물대포']},b={...makeMon(4,5),boxId:'charmander',moves:['할퀴기']};
+const before=createCombat([a],[b]);
+const after=playDuel(before,[{type:'move',move:'물대포'},{type:'move',move:'할퀴기'}]);
+const view=combatView(after,1);
+assert.ok(view.events.some(event=>event.kind==='damage'&&event.amount>0));
+assert.ok(view.events.some(event=>event.kind==='move'&&event.move==='물대포'));
+let display=battleDisplay(view,true);
+assert.equal(display.teams[0][0].hp,before.teams[0][0].hp);
+assert.equal(display.teams[1][0].hp,before.teams[1][0].hp);
+for(const event of view.events){const previous=display;display=applyBattleEvent(display,event);if(event.kind==='move')assert.equal(display,previous,'Move start must not reduce HP before impact');}
+assert.equal(display.teams[0][0].hp,view.teams[0][0].hp);
+assert.equal(display.teams[1][0].hp,view.teams[1][0].hp);
+const html=renderToStaticMarkup(React.createElement(BattlePanel,{battle:view,battleKey:'fixture:1',title:'실제 턴 검증',busy:false,onCommand(){}}));
+assert.ok(html.includes('class="battle-screen"'));
+assert.ok(!html.includes('<dialog'));
+assert.ok(html.includes('/back/4.png'),'Side 1 player must have its own back-facing sprite');
+assert.ok(html.includes('/pokemon/7.png'),'Side 1 opponent must use side 0 front sprite');
+assert.ok(html.includes('PP'));
+const unrevealed=renderToStaticMarkup(React.createElement(BattlePanel,{battle:{...view,log:['아직 재생되지 않은 최종 대사']},battleKey:'fixture:unrevealed',title:'대사 순서',busy:false,onCommand(){}}));
+assert.ok(!unrevealed.includes('아직 재생되지 않은 최종 대사'),'The final server log must not be shown ahead of its impact events');
+
+const bench={...makeMon(1,50),boxId:'bench',moves:['튀어오르기']},lead={...makeMon(25,50),boxId:'lead',moves:['튀어오르기']},enemy={...makeMon(7,50),boxId:'enemy',moves:['물대포']};
+const switchBefore=createCombat([lead,bench],[enemy]);
+const switched=playCpu(switchBefore,{type:'switch',slot:switchBefore.requests[0].switches[0].slot});
+let switchView=battleDisplay(combatView(switched),true);
+assert.equal(switchView.active[0],switchBefore.requests[0].active);
+const switchedEvent=switched.events.find(event=>event.kind==='switch'&&event.side===0);
+assert.equal(switchedEvent.boxId,'bench');
+for(const event of switched.events)switchView=applyBattleEvent(switchView,event);
+assert.equal(switchView.teams[0][switchView.active[0]].boxId,'bench');
+assert.equal(switchView.teams[0][switchView.active[0]].hp,switched.teams[0][switched.requests[0].active].hp);
+
+const buff=createCombat([{...makeMon(1,50),boxId:'buff',moves:['칼춤']}],[{...makeMon(7,50),boxId:'splash',moves:['튀어오르기']}]);
+const buffed=playDuel(buff,[{type:'move',move:'칼춤'},{type:'move',move:'튀어오르기'}]);
+assert.ok(buffed.events.every(event=>event.hit!==true),'Self buffs must never trigger opponent damage flash');
+const ended={...view,ended:true,winner:1,events:[],before:undefined,beforeActive:undefined};
+const finishedHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:ended,battleKey:'finished:1',title:'종료 검증',busy:false,onCommand(){},onContinue(){},continueLabel:'보상으로 가기'}));
+assert.ok(finishedHTML.includes('보상으로 가기'));
+// A trainer's hidden bench boss must only be announced once it enters the field.
+const bossBench={...makeMon(143,50),boxId:'hidden-boss',rogueBoss:true,rogueBossSegments:2};const benchBattle=combatView(createCombat([a],[b,bossBench]));benchBattle.events=[];const hiddenHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:benchBattle,battleKey:'boss-bench',title:'보스 검증',busy:false,onCommand(){}}));assert.ok(!hiddenHTML.includes('보스 등장'));const activeBoss={...benchBattle,active:[0,1]};const activeHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:activeBoss,battleKey:'boss-active',title:'보스 검증',busy:false,onCommand(){}}));assert.ok(activeHTML.includes('보스 등장'));
+// The first doubles slot may be empty while the second Pokémon is still active.
+const doubleRun={id:'empty-first-slot',wave:30,biome:0,rng:42,party:[makeReferenceMon(1,10,{boxId:'empty',moves:['Splash']}),makeReferenceMon(7,10,{boxId:'survivor',moves:['Splash']})],modifiers:[],tools:{},encounter:{kind:'wild'}};doubleRun.combat=createClassicCombat(doubleRun,[makeReferenceMon(19,5,{boxId:'foe-a',moves:['Splash']}),makeReferenceMon(25,5,{boxId:'foe-b',moves:['Splash']})],{doubles:true});const nativeDouble=restoreClassicNativeBattle(doubleRun.combat,doubleRun);nativeDouble.p1.active[0]=null;doubleRun.combat.snapshot=snapshotClassicNativeBattle(nativeDouble);const doubleView=classicCombatView(doubleRun.combat);doubleView.events=[];assert.equal(doubleView.activeBySide[0][0],-1);const doubleHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:doubleView,battleKey:'empty-first-slot',title:'더블 빈 슬롯',busy:false,onCommand(){}}));assert.ok(!doubleHTML.includes('전투 장면을 불러오고 있습니다.'));assert.ok(doubleHTML.includes('data-battle-boxid="survivor"'));assert.ok(!doubleHTML.includes('data-battle-boxid="empty"'));
+// A single-battle slot can be empty during a forced replacement. Keep the
+// party controls visible without inventing an active Pokémon or HP bar.
+const emptySingle={...combatView(switchBefore),events:[],before:undefined,beforeActive:undefined,active:[-1,0],activeBySide:[[-1],[0]],requests:[{kind:'switch',active:-1,moves:[],specials:[],switches:[{slot:2,index:1,name:bench.name,hp:bench.hp,maxHp:bench.maxHp}]}]};const emptySingleHTML=renderToStaticMarkup(React.createElement(BattlePanel,{battle:emptySingle,battleKey:'empty-single',title:'빈 싱글 자리',busy:false,onCommand(){}}));assert.ok(!emptySingleHTML.includes('전투 장면을 불러오고 있습니다.'));assert.ok(emptySingleHTML.includes('다음 포켓몬을 내보내세요'));assert.ok(!emptySingleHTML.includes('bs-hud bs-hud-own'));assert.ok(!emptySingleHTML.includes('data-battle-boxid="lead"'));
+const protocol=Battle.fromJSON(before.snapshot),firstActor=`p1a: ${protocol.p1.active[0].name}`,secondActor=`p2a: ${protocol.p2.active[0].name}`;
+protocol.log=[`|move|${firstActor}|Tackle|${secondActor}`,`|-crit|${secondActor}`,`|-damage|${secondActor}|30/40`,`|-damage|${secondActor}|17/40`,`|-heal|${secondActor}|22/40|[from] item: Leftovers`,`|-miss|${firstActor}|${secondActor}`,`|-immune|${secondActor}`,`|move|${firstActor}|Swords Dance|${firstActor}`,`|-boost|${firstActor}|atk|2`];
+const visual=battleVisuals(protocol,0,[[{...a,hp:40,maxHp:40}],[{...b,hp:40,maxHp:40}]]),damage=visual.filter(event=>event.kind==='damage');
+assert.deepEqual(damage.map(event=>event.amount),[10,13]);
+assert.deepEqual(damage.map(event=>event.hp),[30,17]);
+assert.equal(damage[0].critical,true);
+assert.equal(visual.find(event=>event.kind==='heal').amount,5);
+assert.ok(visual.filter(event=>['immune','miss','heal'].includes(event.kind)).every(event=>!event.hit));
+assert.equal(visual.find(event=>event.moveId==='swordsdance').hit,false);
+console.log('Inline RPG battle screen, side-1 facing, pre-impact HP, switch timeline and self-buff events: passed');

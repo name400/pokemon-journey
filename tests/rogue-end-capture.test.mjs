@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
+import {createClassicCombat,captureClassicCombat} from '../lib/rogue-battle-engine.mjs';
+import {classicGameView} from '../lib/rogue-classic-game.mjs';
+const document={coins:0,collection:[]},state=ensureClassicState(document),foes=[19,16].map((id,i)=>makeReferenceMon(id,5,{boxId:'foe'+i,moves:['Splash']}));
+const run={id:'end-capture',wave:181,biome:50,rng:42,screen:'battle',party:[makeReferenceMon(151,50,{boxId:'hero',moves:['Splash']}),makeReferenceMon(7,50,{boxId:'hero2',moves:['Splash']})],modifiers:[],tools:{},balls:{masterball:2},encounter:{kind:'wild',trainer:null},teraCharged:false};state.slots[0]=run;run.combat=createClassicCombat(run,foes,{doubles:true,system:state.system});
+state.system.dex[19]={caught:true};state.system.dex[16]={caught:false};
+let view=classicGameView(document);assert.equal(view.run.captureAllowed,false);assert.match(view.run.captureReason,/엔드 바이옴/);
+assert.throws(()=>captureClassicCombat(run,'masterball',{system:state.system,targetBoxId:'foe0'}),/엔드 바이옴/);assert.equal(run.balls.masterball,2);
+state.system.dex[16].caught=true;view=classicGameView(document);assert.equal(view.run.captureAllowed,true);assert.equal(view.run.captureReason,null);
+const result=captureClassicCombat(run,'masterball',{system:state.system,targetBoxId:'foe0'});assert.equal(result.caught.rogueSourceId,19);assert.equal(run.balls.masterball,1);

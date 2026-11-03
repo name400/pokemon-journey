@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "source": "PokeAPI/sprites",
+    "revision": "1dd55c0436d2a5b6e324c0b780e1b1b416fbfb64",
+    "method": "Verified exact directory identities, pinned Git blob hashes and unchanged PNG bytes; Pokémon artwork rights remain with original rights holders."
+  },
+  "forms": [
+    {
+      "sourceId": 172,
+      "formIndex": 1,
+      "spriteKey": "pichu-spikyeared",
+      "sourceImage": "/game/pokemon/pichu-spikyeared.png",
+      "sourceBackImage": "/game/pokemon/pichu-spikyeared-back.png",
+      "sourceShinyImage": "/game/pokemon/pichu-spikyeared-shiny.png",
+      "sourceShinyBackImage": "/game/pokemon/pichu-spikyeared-back-shiny.png",
+      "sourceAppearanceMissing": false,
+      "evidence": [
+        {
+          "src": "/game/pokemon/pichu-spikyeared.png",
+          "sourceUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/1dd55c0436d2a5b6e324c0b780e1b1b416fbfb64/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/172-spiky-eared.png",
+          "gitBlob": "bed93ff5786e0f3a7dc4bc11003aef88c0843a78",
+          "bytes": 560
+        },
+        {
+          "src": "/game/pokemon/pichu-spikyeared-back.png",
+          "sourceUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/1dd55c0436d2a5b6e324c0b780e1b1b416fbfb64/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/back/172-spiky-eared.png",
+          "gitBlob": "aa427a69a72fc21861b7181bf181d05e9d1d2812",
+          "bytes": 625
+        },
+        {
+          "src": "/game/pokemon/pichu-spikyeared-shiny.png",
+          "sourceUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/1dd55c0436d2a5b6e324c0b780e1b1b416fbfb64/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/shiny/172-spiky-eared.png",
+          "gitBlob": "c94c198ae75a4598788f42d2554e5f3693d2c6f3",
+          "bytes": 560
+        },
+        {
+          "src": "/game/pokemon/pichu-spikyeared-back-shiny.png",
+          "sourceUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/1dd55c0436d2a5b6e324c0b780e1b1b416fbfb64/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/back/shiny/172-spiky-eared.png",
+          "gitBlob": "079423a920e73037f52f6df4a17dad026a1559af",
+          "bytes": 619
+        }
+      ]
+    }
+  ]
+}

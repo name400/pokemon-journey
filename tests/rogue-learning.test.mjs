@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {queueClassicMoves,repairClassicLearning} from '../lib/rogue-classic-growth.mjs';
+import {createClassicCombat,playClassicCombat,classicCombatView} from '../lib/rogue-battle-engine.mjs';
+const mon=makeReferenceMon(1,10,{boxId:'learner',moves:['몸통박치기','울음소리','덩굴채찍']}),run={id:'learn',wave:10,biome:1,rng:7,party:[mon],modifiers:[],tools:{},pendingMoves:[],screen:'reward'};
+queueClassicMoves(run,mon,['성장']);assert.equal(mon.moves.length,4);assert.equal(run.pendingMoves.length,0);assert.ok(mon.moves.includes('성장'));
+queueClassicMoves(run,mon,['광합성']);assert.equal(run.pendingMoves.length,1);assert.equal(mon.moves.length,4);
+mon.moves=mon.moves.slice(0,3);run.screen='learn';run.afterLearn='battle';repairClassicLearning(run);assert.equal(run.pendingMoves.length,0);assert.equal(run.screen,'battle');assert.ok(mon.moves.includes('광합성'));
+run.combat=createClassicCombat(run,[makeReferenceMon(143,50,{boxId:'foe',moves:['Splash']})]);mon.moves=mon.moves.slice(0,3);run.combat.teams[0][0].moves=mon.moves;queueClassicMoves(run,mon,['성장']);const view=classicCombatView({...run.combat,teams:[run.party,run.combat.teams[1]]});assert.ok(view.requests[0].moves.some(m=>m.id==='growth'));
+run.combat=playClassicCombat(run,{type:'move',move:'growth'});assert.ok(run.combat.teams[0][0].moves.includes('성장'));
+console.log('Three moves learn into the empty slot without replacement; only four-full moves queue a choice; existing interrupted saves repair and native requests immediately include the learned move');

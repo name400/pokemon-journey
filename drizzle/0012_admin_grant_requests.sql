@@ -1,0 +1,1 @@
+CREATE TABLE `admin_grant_requests` (`id` text PRIMARY KEY NOT NULL, `actor` text NOT NULL, `target` text NOT NULL, `mode` text NOT NULL, `signature` text NOT NULL, `result` text NOT NULL, `created_at` integer NOT NULL);

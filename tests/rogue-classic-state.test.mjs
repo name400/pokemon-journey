@@ -1,0 +1,18 @@
+import {makeMon} from '../lib/game.mjs';
+import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
+import assert from 'node:assert/strict';
+import {ensureClassicState,startClassicRun,selectClassicSlot,prepareClassicTeam,classicRandom,spendClassicMoney} from '../lib/rogue-classic-state.mjs';
+import {starterCatalog} from '../lib/rogue-starter-system.mjs';
+const oldRun={wave:150,party:[{id:1,level:100,item:'leftovers'}]};
+const document={version:2,coins:999999,balls:999,potions:99,inventory:{masterball:99},collection:[],run:oldRun};
+const state=ensureClassicState(document,{initialStarterId:1});for(const id of [4,7])registerStarterCaught(state.system,makeMon(id,5),{kind:'admin',increment:false});assert.equal(state.slots.length,5);assert.equal(document.run,oldRun);
+const entries=starterCatalog(state.system),team=[1,4,7].map(id=>{const e=entries.find(p=>p.id===id);return {id,ability:e.abilities[0].key,nature:e.natures[0].key,gender:e.genders[0],shiny:false,moves:e.defaultMoves};});
+prepareClassicTeam(document,0);const first=startClassicRun(document,team,{slot:0,seed:'fixed',id:'run-a',now:1});
+assert.equal(first.starterCost,9);assert.equal(first.money,1000);assert.equal(first.balls.pokeball,5);assert.equal(first.balls.masterball,0);assert.deepEqual(first.modifiers,[]);
+assert.ok(first.party.every(p=>p.level===5&&p.item===''&&Object.values(p.evs).every(v=>v===0)));
+assert.equal(document.coins,999999);assert.equal(document.inventory.masterball,99);assert.equal(document.run,oldRun);
+spendClassicMoney(first,200,200);assert.equal(first.money,800);assert.equal(document.coins,999999);assert.throws(()=>spendClassicMoney(first,50,1));assert.throws(()=>spendClassicMoney(first,-10));
+assert.throws(()=>startClassicRun(document,team,{slot:0}),/덮어/);
+const second=startClassicRun(document,team,{slot:1,seed:'fixed',id:'run-b',now:2});assert.equal(second.money,1000);assert.equal(first.money,800);assert.equal(classicRandom(first),classicRandom(second));
+selectClassicSlot(document,0);assert.equal(state.activeSlot,0);assert.equal(state.slots[0],first);assert.throws(()=>selectClassicSlot(document,5));
+console.log('Five independent classic run slots, 10-point level-5 teams, run-only money/items, preserved legacy/meta data and persisted RNG: passed');
