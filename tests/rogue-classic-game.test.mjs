@@ -14,6 +14,14 @@ for(const id of [4,7])registerStarterCaught(initialState.system,makeReferenceMon
 const team=[1,4,7].map(id=>{const p=view.starters.find(s=>s.id===id);return {id,ability:p.abilities[0].key,nature:p.natures[0].key,gender:p.genders[0],shiny:false,moves:p.defaultMoves};});
 assert.throws(()=>applyClassicAction(document,{action:'start',selection:[...team,team[0]]}),/중복/);
 applyClassicAction(document,{action:'start',selection:team});const run=activeClassicRun(document);assert.equal(run.screen,'battle');assert.equal(run.party.length,3);assert.equal(run.money,1000);assert.equal(run.combat.requests[0].moves.find(m=>m.id==='tackle').pp,35);
+// A wild encounter now offers a free lead change before any normal turn.
+const opening=classicGameView(document).battle.initialSwitch;assert.ok(opening?.switches?.length);
+assert.throws(()=>applyClassicAction(document,{action:'turn',command:{type:'move',move:'tackle'}}),/교체 여부/);
+const switching=JSON.parse(JSON.stringify(document));const switchedRun=activeClassicRun(switching), oldTurn=switchedRun.combat.turn;
+const next=opening.switches[0];const switchTarget=switchedRun.party[next.index];assert.ok(switchTarget?.boxId);
+applyClassicAction(switching,{action:'initialSwitch',slot:opening.slot,boxId:switchTarget.boxId});
+assert.equal(activeClassicRun(switching).combat.turn,oldTurn);assert.equal(classicGameView(switching).battle.activeBySide[0][opening.slot],next.index);
+while(classicGameView(document).battle.initialSwitch){const choice=classicGameView(document).battle.initialSwitch;applyClassicAction(document,{action:'initialSwitch',slot:choice.slot});}
 const snapshot=JSON.stringify(document);const loaded=JSON.parse(snapshot);assert.equal(classicGameView(loaded).battle.teams[0][0].level,5);
 const command=run.combat.requests[0].moves.find(m=>m.id==='tackle');applyClassicAction(document,{action:'turn',command:{type:'move',move:command.id}});assert.equal(run.party[0].pp.tackle,34);
 assert.equal(document.coins,old.coins);assert.deepEqual(document.inventory,old.inventory);assert.deepEqual(document.run,old.run);
@@ -26,7 +34,7 @@ assert.equal(run.screen,'reward');assert.equal(classicGameView(document).run.ser
 const reward=classicRewardView(run,ensureClassicState(document).system).find(r=>!r.requiresTarget)||classicRewardView(run,ensureClassicState(document).system)[0];
 if(!reward.requiresTarget)applyClassicAction(document,{action:'reward',rewardId:reward.id});
 else applyClassicAction(document,{action:'skipReward'});
-assert.equal(run.screen,'advance');applyClassicAction(document,{action:'next'});assert.equal(run.wave,2);assert.equal(run.screen,'battle');
+assert.equal(run.wave,2);assert.equal(run.screen,'battle');
 // All five slots hold separate party objects and run currency.
 applyClassicAction(document,{action:'prepare',slot:1});applyClassicAction(document,{action:'start',slot:1,selection:team});assert.equal(activeClassicRun(document).money,1000);assert.notEqual(activeClassicRun(document).id,run.id);
 applyClassicAction(document,{action:'selectSlot',slot:0});assert.equal(activeClassicRun(document).wave,2);
