@@ -4,6 +4,8 @@
 
 The source repository declares the GNU Affero General Public License, version 3, reproduced in [pokerogue-locales-AGPL-3.0.txt](pokerogue-locales-AGPL-3.0.txt). The JSON files here are modified extracts: unsupported trainers, languages, and gender variants were omitted; selected strings themselves are unchanged. Application code strips source presentation directives before rendering, so source expression sprites and timing are not reproduced.
 
-`data/rogue-bug-superfan-dialogue-ko-pinned.json` contains the Korean Bug-Type Superfan dialogue file from the same commit; it is currently unchanged and is not yet connected to the encounter UI.
+`data/rogue-bug-superfan-dialogue-ko-pinned.json` contains the Korean Bug-Type Superfan dialogue file from the same commit, unchanged.
+
+`data/rogue-dancing-lessons-dialogue-ko-pinned.json` contains the Korean Dancing Lessons dialogue file from the same commit, unchanged; the game substitutes names and Korean particles and omits sound directives when displaying it.
 
 The root project has no project-wide license file and `package.json` declares no license. Compatibility and the obligations of distributing or offering the combined application over a network have not been determined. AGPL section 13 describes source availability for covered modified versions used over a network. Do not treat this notice as a license-compatibility determination.
