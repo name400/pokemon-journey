@@ -35,6 +35,11 @@ test('only living field owners boost encounters; bench gas never suppresses the 
  run.combat.activeBySide[0]=[-1,1];assert.equal(classicDoubleAbilityBoosts(run),0);
  delete run.combat;assert.equal(classicDoubleAbilityBoosts(run),0);
 });
+test('two Gas owners suppress their other encounter abilities; transformed Gas is not a source',()=>{
+ const run=fixture(),native=run.combat.snapshot.sides[0].pokemon;run.party[0].roguePassiveAbility='neutralizinggas';native[1].ability='neutralizinggas';
+ assert.equal(classicDoubleAbilityBoosts(run),0);
+ native[1].transformed=true;assert.equal(classicDoubleAbilityBoosts(run),1);
+});
 
 function wildFixture(wave){return {id:'source-wild-double',wave,biome:0,biomeStep:wave,rng:12345,party:[makeReferenceMon(151,20,{boxId:'solo',moves:['Splash']})],modifiers:['lure','superlure','maxlure'].map(id=>({id,count:1,remaining:10})),tools:{},balls:{pokeball:5}};}
 test('source wild-double roll also applies with a single usable starter, including wave one',()=>{
