@@ -36,3 +36,11 @@ Runtime images currently depend on the remote repositories above. `components/po
 - public/game/town/rock.svg: 프로젝트 제작 바위 타일. 잘못 참조한 Tiny Town 소품 좌표를 대체한다.
 
 - public/game/trainers/rival-local.svg: 프로젝트 제작 임시 라이벌 초상화이며 원작 이미지는 아닙니다.
+
+## UI and simulator references (2026-11-04)
+- public/game/tm-icons/: project-drawn disc silhouettes and type-specific colors, incorporating the existing credited Scarlet/Violet type-symbol PNGs as embedded images. Embedding does not change their underlying artwork rights; no commercial artwork license is asserted.
+- lib/simulator-reference-codec.mjs: project-written compatibility adapter for the installed MIT @pkmn/sim reference serializer. Fixed reference tags prevent production class-name mangling from corrupting reloads. The dependency's license remains in public/licenses/pkmn-sim.txt.
+
+
+- data/starter-option-descriptions.json의 특성 한국어 설명은 설치된 MIT @pkmn/sim 0.10.12의 설명을 바탕으로 프로젝트에서 요약·번역했다. scripts/localize-starter-abilities.mjs로 재생성하며, 포켓로그 전용 볼줍기/꿀모으기/도주 효과 설명은 해당 프로젝트 구현을 따른다. 효과 동등성 전수 확인을 뜻하지 않는다.
+
