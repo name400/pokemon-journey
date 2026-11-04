@@ -12,4 +12,6 @@ The source repository declares the GNU Affero General Public License, version 3,
 
 `data/rogue-salesman-dialogue-ko-pinned.json` contains the Korean Pokémon Salesman dialogue file from the same commit, unchanged; selected strings are displayed by the game.
 
+`data/rogue-dark-deal-dialogue-ko-pinned.json` contains the Korean Dark Deal dialogue file from the same commit, unchanged; the game substitutes names and Korean particles when displaying it.
+
 The root project has no project-wide license file and `package.json` declares no license. Compatibility and the obligations of distributing or offering the combined application over a network have not been determined. AGPL section 13 describes source availability for covered modified versions used over a network. Do not treat this notice as a license-compatibility determination.
