@@ -1105,3 +1105,11 @@
 - 실제 Ultra 후보 추첨과 원본 보스 생성, 발굴과 포획 완료·JSON 복원, 이전 플래그 없는 도전, 챌린지·기절·특수 폼·융합 제외, 1회 제한, 1,000개 시드의 행운 상향 가능성과 이름 중복 방지를 검사했다. 390×844·1280×800 테스트 데이터 Chromium에서 선택·저장 복원·보스 전투·발굴 화면을 재검사했다. 운영 D1·실기기와 자연 200층 완주는 미검증이다.
 - 연승가족은 원본 등장 조건·대사와 전투 경로를 구현했으나 특수 기술·폼·도구 조합의 전수 검증과 다섯 인물의 검증된 초상화가 남아 비활성이다. 현재 포트레이트 자료에는 해당 인물이 확인되지 않아 대체 아이콘을 사용하며, 다른 인물의 그림을 임의로 지정하지 않았다. 원격 푸시·Sites 저장/배포는 하지 않았다.
 - 전체 `npm test` 214개와 `npx tsc --noEmit` 통과.
+
+### 2026-11-04 — dialogue theme and battle proportions (local development)
+
+- Reworked the separate NPC dialogue around the selected portrait-left layout with the battle frame's navy, teal and gold, readable cream text, page indication, keyboard focus and reduced-motion handling. Long passages scroll within the dialogue text area while next and skip remain available; existing dialogue state and dialogue/log separation remain in place.
+- Constrained the normal desktop battle frame and increased the relative height of the scene. At 1280×800 the measured battle scene changed from about 1154×224 to 894×272. Short landscape layouts place scene and controls side by side, including the two-actor selector; compact portrait layouts shorten the scene and retain commands.
+- Test harness: Chromium at 320×568, 390×844, 1280×800 and 844×390 checked dialogue focus, reload restoration, skip, extreme long text and reduced motion. Single and double command screens were measured on these viewports and 568×320. Synthetic test data was used. `npx tsc --noEmit` passed; `npm test` passed 214/214, including adventure regression tests.
+- Limits: on the 320×568 double fixture document height measured 569 px (1 px overflow); the 568×320 double scene is crowded and HP panels overlap the battlefield, and command subpanels/fullscreen/physical devices were not comprehensively verified. Long dialogue can require scrolling inside its text area. Actual B reference image pixel comparison remains unavailable. The full home theme was not redesigned. Screenshots are local test artifacts under `/workspace/pokemon-ui-harness/`; no production account data was used.
+- No remote push, Sites save or deployment. Preserve account, save and adventure data. The full PokéRogue implementation and 200-wave natural completion remain unfinished.
