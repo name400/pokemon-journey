@@ -21,3 +21,4 @@ test('duplicate groups retry within the selected tier and respect the attempt li
  assert.equal(result.effect,'tm');assert.deepEqual(seen,[1,2,2]);
  let calls=0;const fallback=retryChallengerReward(tier=>{calls++;return {name:'같은 볼',effect:'balls',tier};},2,existing,4);assert.equal(calls,4);assert.equal(fallback.effect,'balls');
 });
+test('source money reward group retries other money but not unrelated ungrouped items',async()=>{const {retryChallengerReward}=await import('../lib/rogue-classic-rewards.mjs');const held={name:'먹다남은음식',effect:'modifier',tier:2},money={name:'금구슬',effect:'money',tier:2};let calls=0;const allowed=retryChallengerReward(()=>{calls++;return money;},2,[held],5);assert.equal(allowed,money);assert.equal(calls,1);calls=0;const other=retryChallengerReward(()=>{calls++;return calls===1?{name:'큰금구슬',effect:'money',tier:2}:held;},2,[money],5);assert.equal(calls,2);assert.equal(other,held);});
