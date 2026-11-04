@@ -457,3 +457,84 @@ html:fullscreen main[data-mode=rogue] .rc-shell.is-battle .bs-scene,html.poke-vi
  .rc-shell.is-battle .battle-screen[data-multi=true] .bs-console:not([data-ended=true]):has(.bs-party-panel,.bs-ball-panel) .bs-actor-steps{display:none}
  .rc-shell.is-battle .battle-screen[data-multi=true] .bs-console:not([data-ended=true]) :is(.bs-party-panel,.bs-ball-panel){width:100%}
 }
+/* Use the available width again while keeping the battlefield proportionate. */
+@media(min-width:850px) and (min-height:501px){
+ .rc-shell.is-battle{width:min(100% - 24px,1100px);max-width:1100px}
+ .rc-shell.is-battle .battle-screen .bs-scene,.rc-shell.is-battle .battle-screen .bs-scene[data-multi=true]{height:clamp(220px,35dvh,320px)}
+ :is(html:fullscreen,html.poke-viewport-fit) main[data-mode=rogue] .rc-shell.is-battle{width:min(100%,1100px);max-width:1100px}
+ :is(html:fullscreen,html.poke-viewport-fit) main[data-mode=rogue] .rc-shell.is-battle .bs-scene{height:clamp(220px,35dvh,320px)}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-scene,.rc-shell.is-battle .battle-screen .bs-scene[data-multi=true],
+ :is(html:fullscreen,html.poke-viewport-fit) main[data-mode=rogue] .rc-shell.is-battle .bs-scene{height:180px}
+}
+/* Keep battlefield and commands visible together while preserving full status cards. */
+@media(orientation:landscape) and (max-height:500px) and (min-width:481px){
+ .rc-shell.is-battle .battle-screen{grid-template-columns:minmax(0,1.4fr) minmax(205px,1fr)}
+ .rc-shell.is-battle .battle-screen .bs-scene .bs-multi-vitals{width:47%}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-scene,.rc-shell.is-battle .battle-screen .bs-scene[data-multi=true],
+ :is(html:fullscreen,html.poke-viewport-fit) main[data-mode=rogue] .rc-shell.is-battle .bs-scene{height:150px}
+ .rc-shell.is-battle .battle-screen .bs-scene .bs-multi-vitals{width:47%}
+}
+.rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-name b{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.2}
+@media(orientation:landscape) and (max-height:340px) and (min-width:481px){
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="0"]{left:58%!important;top:37%!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="1"]{left:75%!important;top:29%!important}
+}
+@media(orientation:landscape) and (max-height:500px) and (min-width:481px){
+ .rc-shell.is-battle .battle-screen .bs-actor-step-heading{gap:2px;margin:0 0 2px;flex-wrap:wrap}
+ .rc-shell.is-battle .battle-screen .bs-actor-step-heading>b,.rc-shell.is-battle .battle-screen .bs-actor-step-heading>span{font-size:11px;line-height:1.15}
+ .rc-shell.is-battle .battle-screen .bs-actor-step-heading>button{min-height:44px;padding:2px 4px;font-size:11px}
+ .rc-shell.is-battle .battle-screen .bs-actor-step-list{grid-template-columns:1fr;gap:1px}
+ .rc-shell.is-battle .battle-screen .bs-actor-step-list>button{min-height:44px;padding:2px 3px;align-items:center}
+ .rc-shell.is-battle .battle-screen .bs-actor-step-list>button>img{display:block;width:26px;height:26px}
+ .rc-shell.is-battle .battle-screen .bs-actor-step-list b{font-size:11px;line-height:1.15}
+ .rc-shell.is-battle .battle-screen .bs-actor-step-list small{font-size:10px;line-height:1.15;margin-top:1px}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .rogue-hud{padding-top:3px;padding-bottom:3px}
+ .rc-shell.is-battle .battle-screen .bs-header{padding-top:3px;padding-bottom:3px}
+}
+@media(orientation:landscape) and (max-height:340px) and (min-width:481px){
+ .rc-shell.is-battle .battle-screen .bs-scene,.rc-shell.is-battle .battle-screen .bs-scene[data-multi=true],
+ :is(html:fullscreen,html.poke-viewport-fit) main[data-mode=rogue] .rc-shell.is-battle .bs-scene{height:192px}
+ .rc-shell.is-battle .battle-screen .bs-console{max-height:192px}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-actor-steps{padding:5px}
+ .rc-shell.is-battle .battle-screen .bs-actor-step-heading{margin-bottom:4px}
+}
+@media(orientation:landscape) and (max-height:340px) and (min-width:481px){
+ .rc-shell.is-battle .battle-screen[data-multi=true] .bs-console{max-height:192px}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-actor-steps{padding-top:0;padding-bottom:0}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="0"]{left:58%!important;top:38%!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="1"]{left:75%!important;top:31%!important}
+}
+@media(min-width:850px) and (min-height:501px){
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="0"]{top:70%!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="1"]{top:56%!important}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="0"]{top:40%!important}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-scene .bs-multi-vitals.is-foe{left:2%;top:2%;bottom:auto}
+ .rc-shell.is-battle .battle-screen .bs-scene .bs-multi-vitals.is-own{right:2%;top:2%;bottom:auto}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-own[data-battle-slot="0"]{left:13%!important;top:98%!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-own[data-battle-slot="1"]{left:36%!important;top:98%!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="0"]{left:63%!important;top:98%!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot="1"]{left:85%!important;top:98%!important}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-health{margin-top:1px}
+ .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-hp-row{gap:1px;line-height:1.1}
+ .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-hp-row>span{font-size:9px;white-space:nowrap}
+ .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-hp-track{margin-top:1px}
+ .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-exp{margin-top:1px}
+}

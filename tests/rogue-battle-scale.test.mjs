@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import heights from '../data/battle-heights.json' with {type:'json'};
+import {classicSpeciesScale} from '../lib/rogue-battle-scale.mjs';
+const s=mon=>classicSpeciesScale(mon,heights);
+assert.ok(s({id:25})<s({id:1}));
+assert.ok(s({id:1})<s({id:150}));
+assert.ok(s({id:3,battleAppearance:'venusaur-mega'})>s({id:3,battleAppearance:'venusaur'}));
+assert.ok(s({id:321})<=1.35);
+assert.equal(s({id:999999}),1);
+assert.equal(classicSpeciesScale({id:1},{byId:{'1':-10},byKey:{}}),1);
+assert.equal(classicSpeciesScale({id:1,battleAppearance:'invalid'},{byId:{'1':1},byKey:{invalid:NaN}}),1.14);
+console.log('Battle species/form height scale: distinction, bounds and fallback passed');
