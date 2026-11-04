@@ -3,7 +3,7 @@ import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {calculateStats} from '../lib/pokemon-config.mjs';
 import {awardClassicExperience} from '../lib/rogue-classic-growth.mjs';
 import {CLASSIC_REWARD_REGISTRY,chooseClassicReward,transferClassicModifier} from '../lib/rogue-classic-rewards.mjs';
-import {createClassicCombat,playClassicCombat,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+import {createClassicCombat,playClassicCombat,restoreClassicNativeBattle,captureClassicCombat} from '../lib/rogue-battle-engine.mjs';
 const hero=makeReferenceMon(150,100,{boxId:'hero',moves:['Seismic Toss']}),other=makeReferenceMon(7,30,{boxId:'other',moves:['Splash']});
 const run={id:'macho',wave:120,biome:1,rng:42,screen:'reward',party:[hero,other],balls:{},money:0,tools:{},modifiers:[],encounter:{kind:'wild'},participants:[],awardedFoes:[],pendingMoves:[],rewards:[{...CLASSIC_REWARD_REGISTRY.find(d=>d.id==='machobrace'),rewardId:'brace'}]};
 const base=calculateStats(hero);chooseClassicReward(run,{rewardId:'brace',boxId:'hero'});assert.equal(hero.stats.hp,base.hp+2);assert.equal(hero.stats.atk,base.atk+1);assert.equal(run.modifiers[0].transferable,false);assert.throws(()=>transferClassicModifier(run,{fromBoxId:'hero',toBoxId:'other',id:'machobrace',quantity:1,kind:'modifier'}));
@@ -19,4 +19,11 @@ console.log('Macho Brace: stats, combat growth, cap, ownership, non-transfer and
  d.screen='reward';d.rewards=[{...CLASSIC_REWARD_REGISTRY.find(v=>v.id==='machobrace'),rewardId:'d'}];chooseClassicReward(d,{rewardId:'d',boxId:'double-a'});d.combat=createClassicCombat(d,[x,y],{doubles:true});
  d.combat=playClassicCombat(d,{type:'turn',actions:[{actor:0,type:'move',move:'seismictoss',target:1},{actor:1,type:'move',move:'splash'}]});
  assert.equal(d.modifiers[0].count,2);assert.equal(d.combat.modifiers[0].count,2);assert.equal(d.combat.teams[0][1].rogueMachoBraceCount,undefined);
+}
+
+// Capturing a wild Pokémon awards participation growth once and preserves it in the battle save.
+{
+ const a=makeReferenceMon(150,100,{boxId:'catcher',moves:['Splash']}),wild=makeReferenceMon(19,1,{boxId:'catch-target',moves:['Splash']});
+ const c={id:'brace-capture',wave:120,biome:1,rng:42,screen:'reward',party:[a],balls:{masterball:1},money:0,tools:{},modifiers:[],encounter:{kind:'wild'},participants:[],awardedFoes:[],pendingMoves:[],rewards:[{...CLASSIC_REWARD_REGISTRY.find(v=>v.id==='machobrace'),rewardId:'capture-brace'}]};
+ chooseClassicReward(c,{rewardId:'capture-brace',boxId:'catcher'});c.screen='battle';c.combat=createClassicCombat(c,[wild]);const result=captureClassicCombat(c,'masterball',{targetBoxId:'catch-target',rng:()=>0});assert.ok(result.caught);assert.equal(c.modifiers[0].count,2);assert.equal(result.combat.modifiers.find(m=>m.id==='machobrace').count,2);const restored=JSON.parse(JSON.stringify(result.combat));assert.equal(restored.teams[0].find(p=>p.boxId==='catcher').rogueMachoBraceCount,2);
 }
