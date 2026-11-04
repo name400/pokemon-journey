@@ -34,3 +34,5 @@ Runtime images currently depend on the remote repositories above. `components/po
 - 전투 크기 보정: 설치된 @pkmn/sim 종 데이터의 키(heightm)를 `scripts/build-battle-heights.mjs`로 추출. 실제 키 그대로 비례하지 않고 화면 가독성을 위해 범위를 제한해 표시한다.
 
 - public/game/town/rock.svg: 프로젝트 제작 바위 타일. 잘못 참조한 Tiny Town 소품 좌표를 대체한다.
+
+- public/game/trainers/rival-local.svg: 프로젝트 제작 임시 라이벌 초상화이며 원작 이미지는 아닙니다.

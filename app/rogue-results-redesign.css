@@ -69,3 +69,5 @@ main[data-mode="rogue"]:has(.rogue-classic-rewards) .workspace>footer{display:no
 @media(max-width:680px){.rogue-classic-rewards{height:auto;min-height:0;max-height:calc(100dvh - 185px - env(safe-area-inset-bottom));grid-template-rows:auto auto auto auto minmax(0,auto) auto}}
 
 .rcr-choice .rcr-tm-preview{display:flex;flex-direction:column;gap:2px;margin-top:3px;color:#315a60;font-size:11px;line-height:1.3}.rcr-choice .rcr-tm-preview strong{font-size:11px}.rcr-choice .rcr-tm-preview small{font-size:10px;color:#536a64;line-height:1.35}
+
+@media(min-width:992px){.rc-shell:has(.rogue-classic-rewards){width:min(1500px,calc(100% - 28px));max-width:1500px}.rogue-classic-rewards .rcr-choice{height:auto;min-height:112px}.rogue-classic-rewards .rcr-choice-copy>b{font-size:17px}.rogue-classic-rewards .rcr-choice-copy>span{font-size:13px;line-height:1.4}.rogue-classic-rewards .rcr-service{min-height:76px}.rogue-classic-rewards .rcr-service-copy>b{font-size:16px}.rogue-classic-rewards .rcr-service-copy>span{font-size:12px}.rogue-classic-rewards .rcr-tier,.rogue-classic-rewards .rcr-service-price{font-size:13px}}
