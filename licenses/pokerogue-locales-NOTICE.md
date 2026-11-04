@@ -28,4 +28,6 @@ Regenerate the index with `node scripts/import-rogue-trainer-dialogues.mjs <extr
 
 `data/rogue-trainer-classes-ko-pinned.json` preserves the same pinned locale commit's `ko/trainer-classes.json` contents under a local filename. The new-run random trainer variant adapter uses its Korean female/paired class labels. Individual randomly assigned trainer personal names are a separate source system and are not supplied by this file.
 
+`data/rogue-trainers-common-ko-pinned.json` preserves the same pinned commit's `ko/trainers-common.json` under a local filename. New-run NPC identities select the original class/gender-specific entries and persist their locale keys. Existing saved NPC identities are not replaced by importing this file.
+
 `data/rogue-trash-dialogue-ko-pinned.json` contains the Korean Trash to Treasure encounter dialogue from the same pinned locale commit, unchanged.
