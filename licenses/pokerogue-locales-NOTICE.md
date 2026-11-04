@@ -19,3 +19,5 @@ The root project has no project-wide license file and `package.json` declares no
 `data/rogue-winstrate-dialogue-ko-pinned.json` contains the Korean Winstrate encounter dialogue from the same pinned locale commit, unchanged.
 
 `data/rogue-winstrate-trainer-dialogue-ko-pinned.json` contains the five Winstrate trainer dialogue entries from the same pinned Korean `ko/dialogue.json`; their Korean names are from `ko/trainer-names.json` at the same commit.
+
+`data/rogue-training-dialogue-ko-pinned.json` contains the Korean Training Session encounter dialogue from the same pinned locale commit, unchanged.
