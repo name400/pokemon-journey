@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {classicServices,buyClassicService} from '../lib/rogue-classic-services.mjs';
+import {addClassicModifier,rerollClassicRewards,generateClassicRewards} from '../lib/rogue-classic-rewards.mjs';
+import {classicRerollCost,classicShopCost} from '../lib/rogue-classic-rules.mjs';
+import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
+import {classicGameView} from '../lib/rogue-classic-game.mjs';
+const p=makeReferenceMon(1,20,{boxId:'p',moves:['Tackle']});p.hp=1;const doc={coins:99,collection:[],adventure:{keep:true}},state=ensureClassicState(doc),run={id:'sludge',seed:'sludge',wave:21,biome:1,rng:42,screen:'reward',party:[p],money:100000,balls:{pokeball:5},tools:{},modifiers:[],encounter:{kind:'wild'},rewards:[],rerolls:0,pendingMoves:[]};state.slots[0]=run;
+const baseline=classicServices(run).find(x=>x.id==='potion').price,oldReroll=classicRerollCost(run.wave);assert.equal(classicGameView(doc).run.rerollCost,oldReroll);assert.equal(classicShopCost(run,101),101);
+addClassicModifier(run,'blacksludge');assert.equal(classicShopCost(run,101),252);assert.throws(()=>addClassicModifier(run,'blacksludge'));let view=classicGameView(doc);assert.equal(view.run.rerollCost,Math.floor(oldReroll*2.5));assert.equal(view.run.services.find(x=>x.id==='potion').price,Math.floor(baseline*2.5));
+const initial=run.money,party=JSON.stringify(run.party);assert.throws(()=>buyClassicService(run,{itemId:'potion',boxId:'p',expectedPrice:baseline}));assert.equal(run.money,initial);assert.equal(JSON.stringify(run.party),party);buyClassicService(run,{itemId:'potion',boxId:'p',expectedPrice:Math.floor(baseline*2.5)});assert.equal(run.money,initial-Math.floor(baseline*2.5));
+const saved=JSON.parse(JSON.stringify(doc)),restored=ensureClassicState(saved).slots[0];assert.equal(classicGameView(saved).run.rerollCost,Math.floor(oldReroll*2.5));const before=restored.money;assert.throws(()=>rerollClassicRewards(restored,oldReroll));assert.equal(restored.money,before);rerollClassicRewards(restored,Math.floor(oldReroll*2.5));assert.equal(restored.money,before-Math.floor(oldReroll*2.5));assert.equal(restored.rerolls,1);assert.deepEqual(saved.adventure,{keep:true});assert.equal(saved.coins,99);
+for(let i=0;i<500;i++)assert.ok(generateClassicRewards(restored).every(x=>x.id!=='blacksludge'));
+console.log('Black Sludge: shop and reroll prices, stale requests, persistence and old saves passed');
