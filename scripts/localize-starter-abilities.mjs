@@ -284,5 +284,8 @@ persistent|자신이 사용한 중력·회복봉인·신비의부적·순풍·�
 for(const line of lines.split('\n')){const [key,text]=line.split('|');put(key,text);}
 ko.ballfetch='필드에 나와 있으면 포획에 실패한 볼을 턴 종료 시 주워 돌려받습니다. 한 포켓몬당 전투마다 한 번 발동합니다.';
 ko.honeygather='승리 후 해당 웨이브 기본 금액의 20%에 해당하는 돈을 모읍니다. 살아 있는 파티 포켓몬에게 적용되며 도주·패배 때는 받지 않습니다.';
+ko.pickup='승리 후 쓰러진 상대가 남긴 옮길 수 있는 소지 도구 중 무작위 한 개를 줍습니다. 선택한 도구가 중첩·소지 한도에 걸리면 다시 뽑지 않습니다.';
+ko.synchronize='다른 포켓몬 때문에 화상·독·마비에 걸리면 상대에게도 옮깁니다. 야생 조우에서는 선두의 성격을 상대에게 적용합니다. 더블에서 둘 다 지녔으면 첫 번째 자리가 우선합니다.';
+for(const key of ['illuminate','arenatrap','noguard','commander'])ko[key]+=' 야생 더블배틀의 출현 확률도 높입니다.';
 for(const key of ['blaze','overgrow','torrent'])ko[key]=data.abilities[key];
 const missing=Object.keys(data.abilities).filter(key=>!ko[key]);if(missing.length){console.log('Missing translations:',missing.join(','));process.exitCode=1;}else{data.abilities=Object.fromEntries(Object.keys(data.abilities).map(key=>[key,ko[key]]));fs.writeFileSync(path,JSON.stringify(data));console.log('Localized '+Object.keys(data.abilities).length+' ability descriptions.');}
