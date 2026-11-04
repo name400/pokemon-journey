@@ -22,3 +22,16 @@ export function variantFrames(key:string,variant:number,facing:'front'|'back'):P
   }return result;
  }catch{return null;}})();if(cache.size>=96){const oldest=cache.keys().next().value;if(oldest)cache.delete(oldest);}cache.set(cacheKey,task);void task.then(result=>{if(!result&&cache.get(cacheKey)===task)cache.delete(cacheKey);});return task;
 }
+
+// Exact base/shiny sprites for the reviewed PokéRogue form atlases.
+const formCache=new Map<string,Promise<string[]|null>>();
+export function sourceFormFrames(key:string,shiny:boolean,facing:'front'|'back'):Promise<string[]|null>{
+ if(!/^(855|869|869-(ruby-cream|matcha-cream|mint-cream|lemon-cream|salted-cream|ruby-swirl|caramel-swirl|rainbow-swirl))$/.test(key))return Promise.resolve(null);
+ const cacheKey=`${key}:${shiny}:${facing}`,prior=formCache.get(cacheKey);if(prior)return prior;
+ const task=(async()=>{try{
+  const base=`${root}/${facing==='back'?'back/':''}${shiny?'shiny/':''}${key}`;
+  const atlas=await json<{textures:{frames:Frame[]}[]}>(`${base}.json`),ordered=(atlas.textures?.[0]?.frames||[]).filter(f=>/^\d{4}\.png$/.test(f.filename)&&!f.rotated).sort((a,b)=>a.filename.localeCompare(b.filename));if(!ordered.length)return null;
+  const image=new Image();image.crossOrigin='anonymous';image.src=`${base}.png`;await image.decode();const selected=ordered.filter((_,i)=>i%Math.max(1,Math.ceil(ordered.length/12))===0),result:string[]=[];
+  for(const f of selected){const canvas=document.createElement('canvas');canvas.width=f.sourceSize.w;canvas.height=f.sourceSize.h;const ctx=canvas.getContext('2d');if(!ctx)return null;const p=f.frame,o=f.spriteSourceSize;ctx.drawImage(image,p.x,p.y,p.w,p.h,o.x,o.y,p.w,p.h);result.push(canvas.toDataURL('image/png'));}return result;
+ }catch{return null;}})();if(formCache.size>=96){const oldest=formCache.keys().next().value;if(oldest)formCache.delete(oldest);}formCache.set(cacheKey,task);void task.then(result=>{if(!result&&formCache.get(cacheKey)===task)formCache.delete(cacheKey);});return task;
+}
