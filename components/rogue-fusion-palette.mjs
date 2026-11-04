@@ -13,12 +13,15 @@ function reducePalette(initial){
  }while(groups.size);
  return keys.map(rgb);
 }
-function sample(frames){const values=[];for(const frame of frames)for(let i=0;i<frame.length;i+=4){const [r,g,b,a]=frame.slice(i,i+4);if(r+g+b)values.push(argb(r,g,b,a));}return values;}
-export function buildClassicFusionPalette(primaryFaces,donorFaces){
+const hex=(r,g,b)=>[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+function mapped(r,g,b,a,palette,shader=false){const value=palette&&(shader||a===255)?palette[hex(r,g,b)]:null;return value?[parseInt(value.slice(0,2),16),parseInt(value.slice(2,4),16),parseInt(value.slice(4,6),16),shader?a:255]:[r,g,b,a];}
+function sample(frames,palettes=[]){const values=[];for(let n=0;n<frames.length;n++){const frame=frames[n];for(let i=0;i<frame.length;i+=4){const [r,g,b,a]=frame.slice(i,i+4);if(r+g+b)values.push(argb(...mapped(r,g,b,a,palettes[n])));}}return values;}
+export function applyClassicVariantPalette(pixels,palette){if(!palette)return new Uint8ClampedArray(pixels);const out=new Uint8ClampedArray(pixels),visible=Object.fromEntries(Object.entries(palette).slice(0,32));for(let i=0;i<out.length;i+=4){if(!out[i+3])continue;const color=mapped(out[i],out[i+1],out[i+2],out[i+3],visible,true);out.set(color,i);}return out;}
+export function buildClassicFusionPalette(primaryFaces,donorFaces,primaryPalettes=[],donorPalettes=[]){
  if(!Array.isArray(primaryFaces)||primaryFaces.length!==2||!Array.isArray(donorFaces)||donorFaces.length!==2)return null;
- const primaryPixels=sample(primaryFaces),donorPixels=sample(donorFaces);if(!primaryPixels.length||!donorPixels.length)return null;
+ const primaryPixels=sample(primaryFaces),donorPixels=sample(donorFaces,donorPalettes);if(!primaryPixels.length||!donorPixels.length)return null;
  let left,right;const previous=Math.random,rng=rogueSeededRandom('This result should not vary');try{Math.random=rng;left=reducePalette(QuantizerCelebi.quantize(primaryPixels,4));right=reducePalette(QuantizerCelebi.quantize(donorPixels,4));}finally{Math.random=previous;}if(!left.length||!right.length)return null;
- const colors=[],seen=new Set();for(const face of primaryFaces)for(let i=0;i<face.length;i+=4){if(!face[i+3])continue;const key=`${face[i]},${face[i+1]},${face[i+2]}`;if(!seen.has(key)){seen.add(key);colors.push([face[i],face[i+1],face[i+2]]);}}
+ const colors=[],seen=new Set();for(let n=0;n<primaryFaces.length;n++){const face=primaryFaces[n];for(let i=0;i<face.length;i+=4){if(!face[i+3])continue;const color=mapped(face[i],face[i+1],face[i+2],face[i+3],primaryPalettes[n]).slice(0,3),key=color.join(',');if(!seen.has(key)){seen.add(key);colors.push(color);}}}
  return colors.slice(0,32).map(color=>{let best=Infinity,at=0;for(let i=0;i<left.length;i++){const d=distance(color,left[i]);if(d<best){best=d;at=i;}}const target=right[Math.min(at,right.length-1)],mix=best<255?(best/255)**3:1;return {from:color,to:color.map((v,i)=>Math.round(v*mix+target[i]*(1-mix)))};});
 }
 export function applyClassicFusionPalette(pixels,mapping){
