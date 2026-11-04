@@ -14,6 +14,6 @@ for(const type of ['training-session','trash-to-treasure','dancing-lessons','bug
  if(type==='pokemon-salesman')run.mystery.offer=classicSalesmanOffer(run);
  state.slots[0]=run;
  const action=chooseClassicProbeAction(doc);assert.equal(action.action,'mysterySelect',type);applyClassicAction(doc,action);assert.equal(run.mystery.stage,'confirm',type);
- const saved=JSON.parse(JSON.stringify(doc));assert.deepEqual(chooseClassicProbeAction(saved),{action:'mysteryConfirm'},type);assert.deepEqual(saved.adventure,{untouched:true});
+ const saved=JSON.parse(JSON.stringify(doc));assert.deepEqual(chooseClassicProbeAction(saved),{action:'mysteryConfirm'},type);applyClassicAction(saved,{action:'mysteryConfirm'});assert.notEqual(saved.classic.slots[0].screen,'mystery',type);const next=chooseClassicProbeAction(saved);assert.ok(next.action,type);applyClassicAction(saved,next);assert.deepEqual(saved.adventure,{untouched:true});
 }
 console.log('Natural-play probe handles eight additional mystery choices and saved confirmation');
