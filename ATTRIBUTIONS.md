@@ -39,6 +39,7 @@ Runtime images currently depend on the remote repositories above. `components/po
 - public/game/trainers/bug-superfan.png: © 2025 Chani von Karpa, CC-BY-NC-SA-4.0. PokéRogue assets fb8ccb6의 trainer/bug_type_superfan.png를 변경 없이 사용(파일 이름만 변경). Git blob 64f644b4f5719530df40771b6c927962fb11a39d. 원본 images/REUSE.toml의 개별 항목을 확인했다. 공개 출처 화면은 public/game/trainers/pokerogue-credits.html, 전체 라이선스는 public/licenses/pokerogue-bug-superfan-CC-BY-NC-SA-4.0.txt에 보관한다.
 
 ## UI and simulator references (2026-11-04)
+- Additional female trainer portraits are unchanged PNGs from the same official Showdown trainer directory. Their exact source URLs, content hashes, verification details and available artist captions are recorded in data/rogue-trainer-appearance.json. Public artist credits are regenerated from that manifest by scripts/write-trainer-credits.mjs. Absence of an artist caption is not a public-domain or blanket commercial-license assertion. Portraits not matched to the explicit source identity remain generic fallbacks.
 - public/game/tm-icons/: project-drawn disc silhouettes and type-specific colors, incorporating the existing credited Scarlet/Violet type-symbol PNGs as embedded images. Embedding does not change their underlying artwork rights; no commercial artwork license is asserted.
 - lib/simulator-reference-codec.mjs: project-written compatibility adapter for the installed MIT @pkmn/sim reference serializer. Fixed reference tags prevent production class-name mangling from corrupting reloads. The dependency's license remains in public/licenses/pkmn-sim.txt.
 

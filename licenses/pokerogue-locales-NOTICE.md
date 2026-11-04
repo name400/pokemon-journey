@@ -26,4 +26,6 @@ The root project has no project-wide license file and `package.json` declares no
 
 Regenerate the index with `node scripts/import-rogue-trainer-dialogues.mjs <extracted-source>/src/data/dialogue.ts <extracted-source>/src/data/double-battle-dialogue.ts`. Runtime resolves source references to pinned Korean strings, preserves `$` page boundaries, and omits the original portrait-expression and delay directives when rendering text. Source expression sprites, all trainer gender generation, and all associated animations have not been reproduced merely by importing these strings.
 
+`data/rogue-trainer-classes-ko-pinned.json` preserves the same pinned locale commit's `ko/trainer-classes.json` contents under a local filename. The new-run random trainer variant adapter uses its Korean female/paired class labels. Individual randomly assigned trainer personal names are a separate source system and are not supplied by this file.
+
 `data/rogue-trash-dialogue-ko-pinned.json` contains the Korean Trash to Treasure encounter dialogue from the same pinned locale commit, unchanged.

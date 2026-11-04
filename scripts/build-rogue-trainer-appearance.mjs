@@ -6,6 +6,7 @@
 import {readFileSync, writeFileSync, mkdirSync, existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
+import {writeTrainerCredits} from './write-trainer-credits.mjs';
 
 const root = new URL('../', import.meta.url);
 const dataFile = new URL('data/rogue-trainer-appearance.json', root);
@@ -16,6 +17,7 @@ const compact = text => String(text).normalize('NFKD').replace(/[\u0300-\u036f]/
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const args = new Set(process.argv.slice(2));
 const world = JSON.parse(readFileSync(worldFile));
+const prior = args.has('--reuse-verified') && existsSync(dataFile) ? JSON.parse(readFileSync(dataFile)) : null;
 
 // Explicit canon-class aliases, not a fallback to an unrelated trainer face.
 const aliases = {
@@ -88,8 +90,10 @@ function resolve(config, keys) {
   const gender=methods.find(c=>c.method==='setHasGenders');
   let female=null;
   if(gender) {
-    const explicit=typeof gender.args[1]==='string'?gender.args[1]:typeof gender.args[0]==='string'?gender.args[0]:null;
+    // setHasGenders(nameFemale, femaleEncounterBgm): arg 1 is music, not identity.
+    const explicit=typeof gender.args[0]==='string'?gender.args[0]:null;
     female=choose(keys,explicit?compact(explicit):canonical+'f');
+    if(!female&&explicit&&/female$/i.test(explicit))female=choose(keys,canonical+'f');
   }
   const double=methods.find(c=>c.method==='setHasDouble'||c.method==='setDoubleOnly');
   const doubleName=typeof double?.args[0]==='string'?compact(double.args[0]):null;
@@ -125,6 +129,13 @@ async function build() {
     while(index<wanted.length){
       const key=wanted[index++],url=directoryURL+key+'.png';
       try {
+        const cached=prior?.assets?.[key],file=new URL(key+'.png',assetDir);
+        if(cached?.sourceUrl===url&&cached.artist===entries.get(key).artist&&existsSync(file)){
+          const bytes=readFileSync(file);
+          if(hash(bytes)===cached.sha256&&bytes.subarray(0,8).toString('hex')==='89504e470d0a1a0a'){
+            assets[key]=cached;completed++;continue;
+          }
+        }
         const r=await get(url),bytes=Buffer.from(await r.arrayBuffer()),contentType=r.headers.get('content-type');
         if(r.status!==200||!contentType?.startsWith('image/png')||bytes.subarray(0,8).toString('hex')!=='89504e470d0a1a0a')throw Error(`HTTP ${r.status}, ${contentType}, invalid PNG=${bytes.subarray(0,8).toString('hex')}`);
         const localUrl=`/game/trainers/${key}.png`;
@@ -165,6 +176,7 @@ async function build() {
     variantDefinitions:{default:'Default appearance; does not imply male gender for named characters',female:'Explicit source-configured gender counterpart when available',double:'Verified double-trainer class portrait only'}},
     byEnumName,byTrainerType,assets:Object.fromEntries(Object.entries(assets).sort(([a],[b])=>a.localeCompare(b))),unmatched,httpFailures:errors};
   writeFileSync(dataFile,JSON.stringify(manifest,null,2)+'\n');
+  writeTrainerCredits(manifest);
   console.log(JSON.stringify({output:fileURLToPath(dataFile),counts,unmatched,errors},null,2));
   if(errors.length)process.exitCode=1;
 }

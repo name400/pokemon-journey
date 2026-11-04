@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": 1,
-    "generatedAt": "2026-11-02T13:23:04.645Z",
+    "generatedAt": "2026-11-04T14:33:52.111Z",
     "sourceVersion": "1.12.2.3",
     "sourceCommit": "29441f7aa7482d9e816b253d324293788936dc3e",
     "directory": {
@@ -14,7 +14,7 @@
       "sourceTrainers": 272,
       "mapped": 252,
       "unmatched": 20,
-      "localAssets": 241,
+      "localAssets": 267,
       "gym": 74,
       "eliteFour": 42,
       "champion": 16,
@@ -67,7 +67,12 @@
       "canonicalIdentity": "acetrainer",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "acetrainerf",
+          "src": "/game/trainers/acetrainerf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/acetrainerf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "acetrainer",
@@ -77,7 +82,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -169,7 +173,12 @@
       "canonicalIdentity": "backpacker",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "backpackerf",
+          "src": "/game/trainers/backpackerf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/backpackerf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "backpacker",
@@ -179,7 +188,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -322,7 +330,12 @@
       "canonicalIdentity": "pokemonbreeder",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokemonbreederf",
+          "src": "/game/trainers/pokemonbreederf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/pokemonbreederf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "pokemonbreeder",
@@ -332,7 +345,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -372,9 +384,9 @@
       "reason": null,
       "variants": {
         "female": {
-          "spriteKey": "lass",
-          "src": "/game/trainers/lass.png",
-          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/lass.png",
+          "spriteKey": "picnicker",
+          "src": "/game/trainers/picnicker.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/picnicker.png",
           "matchRule": "exact-directory-identity"
         },
         "double": null,
@@ -399,7 +411,12 @@
       "canonicalIdentity": "clerk",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "clerkf",
+          "src": "/game/trainers/clerkf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/clerkf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "clerk",
@@ -409,7 +426,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -448,7 +464,12 @@
       "canonicalIdentity": "cyclist",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "cyclistf",
+          "src": "/game/trainers/cyclistf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/cyclistf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "cyclist",
@@ -458,7 +479,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -521,9 +541,9 @@
       "reason": null,
       "variants": {
         "female": {
-          "spriteKey": "lass",
-          "src": "/game/trainers/lass.png",
-          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/lass.png",
+          "spriteKey": "nurse",
+          "src": "/game/trainers/nurse.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/nurse.png",
           "matchRule": "exact-directory-identity"
         },
         "double": null,
@@ -1034,7 +1054,12 @@
       "canonicalIdentity": "pokefan",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokefanf",
+          "src": "/game/trainers/pokefanf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/pokefanf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "pokefan",
@@ -1044,7 +1069,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1061,9 +1085,9 @@
       "reason": null,
       "variants": {
         "female": {
-          "spriteKey": "lass",
-          "src": "/game/trainers/lass.png",
-          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/lass.png",
+          "spriteKey": "preschoolerf",
+          "src": "/game/trainers/preschoolerf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/preschoolerf.png",
           "matchRule": "exact-directory-identity"
         },
         "double": {
@@ -1093,7 +1117,12 @@
       "canonicalIdentity": "psychic",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "psychicf",
+          "src": "/game/trainers/psychicf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/psychicf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "psychic",
@@ -1103,7 +1132,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1119,7 +1147,12 @@
       "canonicalIdentity": "pokemonranger",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokemonrangerf",
+          "src": "/game/trainers/pokemonrangerf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/pokemonrangerf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "pokemonranger",
@@ -1129,7 +1162,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1274,7 +1306,12 @@
       "canonicalIdentity": "scientist",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "scientistf",
+          "src": "/game/trainers/scientistf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/scientistf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "scientist",
@@ -1284,7 +1321,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1351,7 +1387,12 @@
       "canonicalIdentity": "acetrainersnow",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "acetrainersnowf",
+          "src": "/game/trainers/acetrainersnowf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/acetrainersnowf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "acetrainersnow",
@@ -1361,7 +1402,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1426,9 +1466,9 @@
       "reason": null,
       "variants": {
         "female": {
-          "spriteKey": "lass",
-          "src": "/game/trainers/lass.png",
-          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/lass.png",
+          "spriteKey": "schoolkidf",
+          "src": "/game/trainers/schoolkidf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/schoolkidf.png",
           "matchRule": "exact-directory-identity"
         },
         "double": null,
@@ -1455,7 +1495,12 @@
       "canonicalIdentity": "swimmer",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "swimmerf",
+          "src": "/game/trainers/swimmerf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/swimmerf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "swimmer",
@@ -1465,7 +1510,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1506,7 +1550,12 @@
       "canonicalIdentity": "veteran",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "veteranf",
+          "src": "/game/trainers/veteranf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/veteranf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "veteran",
@@ -1516,7 +1565,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1562,7 +1610,12 @@
       "canonicalIdentity": "worker",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "workerf-gen8",
+          "src": "/game/trainers/workerf-gen8.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/workerf-gen8.png",
+          "matchRule": "same-identity-generation-variant"
+        },
         "double": null,
         "default": {
           "spriteKey": "worker",
@@ -1572,7 +1625,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1643,7 +1695,12 @@
       "canonicalIdentity": "rocketgrunt",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "rocketgruntf",
+          "src": "/game/trainers/rocketgruntf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/rocketgruntf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "rocketgrunt",
@@ -1653,7 +1710,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1761,7 +1817,12 @@
       "canonicalIdentity": "magmagrunt",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "magmagruntf",
+          "src": "/game/trainers/magmagruntf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/magmagruntf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "magmagrunt",
@@ -1771,7 +1832,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1833,7 +1893,12 @@
       "canonicalIdentity": "aquagrunt",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "aquagruntf",
+          "src": "/game/trainers/aquagruntf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/aquagruntf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "aquagrunt",
@@ -1843,7 +1908,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -1905,7 +1969,12 @@
       "canonicalIdentity": "galacticgrunt",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "galacticgruntf",
+          "src": "/game/trainers/galacticgruntf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/galacticgruntf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "galacticgrunt",
@@ -1915,7 +1984,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -2000,7 +2068,12 @@
       "canonicalIdentity": "plasmagrunt",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "plasmagruntf",
+          "src": "/game/trainers/plasmagruntf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/plasmagruntf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "plasmagrunt",
@@ -2010,7 +2083,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -2072,7 +2144,12 @@
       "canonicalIdentity": "flaregrunt",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "flaregruntf",
+          "src": "/game/trainers/flaregruntf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/flaregruntf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "flaregrunt",
@@ -2082,7 +2159,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -2203,7 +2279,12 @@
       "canonicalIdentity": "aetheremployee",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "aetheremployeef",
+          "src": "/game/trainers/aetheremployeef.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/aetheremployeef.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "aetheremployee",
@@ -2213,7 +2294,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -2252,7 +2332,12 @@
       "canonicalIdentity": "skullgrunt",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "skullgruntf",
+          "src": "/game/trainers/skullgruntf.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/skullgruntf.png",
+          "matchRule": "exact-directory-identity"
+        },
         "double": null,
         "default": {
           "spriteKey": "skullgrunt",
@@ -2262,7 +2347,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -2345,7 +2429,12 @@
       "canonicalIdentity": "stargrunt",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "stargruntf-s",
+          "src": "/game/trainers/stargruntf-s.png",
+          "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/stargruntf-s.png",
+          "matchRule": "same-identity-stated-game-version-variant"
+        },
         "double": null,
         "default": {
           "spriteKey": "stargrunt-s",
@@ -2355,7 +2444,6 @@
         }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -6687,6 +6775,23 @@
         "checkedAt": "2026-11-02T13:23:02.061Z"
       }
     },
+    "acetrainerf": {
+      "spriteKey": "acetrainerf",
+      "localUrl": "/game/trainers/acetrainerf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/acetrainerf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "37c20636f55a8d55e5bece8340014804a7929de09ed623f1fd0e2dfe5df453f5",
+      "bytes": 804,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.456Z"
+      }
+    },
     "acetrainersnow": {
       "spriteKey": "acetrainersnow",
       "localUrl": "/game/trainers/acetrainersnow.png",
@@ -6704,6 +6809,23 @@
         "checkedAt": "2026-11-02T13:23:02.808Z"
       }
     },
+    "acetrainersnowf": {
+      "spriteKey": "acetrainersnowf",
+      "localUrl": "/game/trainers/acetrainersnowf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/acetrainersnowf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "6ced38acaed7f12dab36f111cce00f8f11c4c102e13eb5c91d378bbb75ca3454",
+      "bytes": 738,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.950Z"
+      }
+    },
     "aetheremployee": {
       "spriteKey": "aetheremployee",
       "localUrl": "/game/trainers/aetheremployee.png",
@@ -6719,6 +6841,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:03.180Z"
+      }
+    },
+    "aetheremployeef": {
+      "spriteKey": "aetheremployeef",
+      "localUrl": "/game/trainers/aetheremployeef.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/aetheremployeef.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": "Beliot419",
+      "sha256": "afa1795135ba99b8086d33816badfde889f92c62c8a6960570d88c99472d4410",
+      "bytes": 738,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:52.068Z"
       }
     },
     "agatha-gen3": {
@@ -6804,6 +6943,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:03.038Z"
+      }
+    },
+    "aquagruntf": {
+      "spriteKey": "aquagruntf",
+      "localUrl": "/game/trainers/aquagruntf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/aquagruntf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": "kyledove",
+      "sha256": "2521bbdfbfe484fe562587a47c63406288687bd04edb73f54ff51aea3ba7b943",
+      "bytes": 722,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.699Z"
       }
     },
     "archer": {
@@ -6940,6 +7096,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.156Z"
+      }
+    },
+    "backpackerf": {
+      "spriteKey": "backpackerf",
+      "localUrl": "/game/trainers/backpackerf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/backpackerf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "db89db26a56268725e21eb1802dc69547794378b12558778e634c93b1857c23c",
+      "bytes": 898,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.866Z"
       }
     },
     "baker": {
@@ -7520,6 +7693,23 @@
         "checkedAt": "2026-11-02T13:23:02.279Z"
       }
     },
+    "clerkf": {
+      "spriteKey": "clerkf",
+      "localUrl": "/game/trainers/clerkf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/clerkf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "a717e93998921b73ee0f077b480e4b4f92eafbf780540dc290c41a079a33fa09",
+      "bytes": 692,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.870Z"
+      }
+    },
     "collector": {
       "spriteKey": "collector",
       "localUrl": "/game/trainers/collector.png",
@@ -7654,6 +7844,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.311Z"
+      }
+    },
+    "cyclistf": {
+      "spriteKey": "cyclistf",
+      "localUrl": "/game/trainers/cyclistf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/cyclistf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "bb46bd3203c005bd34d0ec1574d96eb69a9866f2b00976c839e5ff5395efc0bf",
+      "bytes": 1101,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.865Z"
       }
     },
     "cynthia": {
@@ -8030,6 +8237,23 @@
         "checkedAt": "2026-11-02T13:23:03.134Z"
       }
     },
+    "flaregruntf": {
+      "spriteKey": "flaregruntf",
+      "localUrl": "/game/trainers/flaregruntf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/flaregruntf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": "kyledove",
+      "sha256": "dcc6eb7f735948e428eb82a52e8ad1a6230db45357384cd1a51c6f1bf7f3c917",
+      "bytes": 547,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.739Z"
+      }
+    },
     "flint": {
       "spriteKey": "flint",
       "localUrl": "/game/trainers/flint.png",
@@ -8079,6 +8303,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:03.079Z"
+      }
+    },
+    "galacticgruntf": {
+      "spriteKey": "galacticgruntf",
+      "localUrl": "/game/trainers/galacticgruntf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/galacticgruntf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "f27fbbaccb19d95d251eb135fa09250e284087a50d5a36d1de1caf0e0edfaa54",
+      "bytes": 729,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.782Z"
       }
     },
     "gardenia": {
@@ -9033,6 +9274,23 @@
         "checkedAt": "2026-11-02T13:23:03.006Z"
       }
     },
+    "magmagruntf": {
+      "spriteKey": "magmagruntf",
+      "localUrl": "/game/trainers/magmagruntf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/magmagruntf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": "ZacWeavile",
+      "sha256": "c10d17156c6fa39caba1205fdd0231ad9d2b44bae72274906c271fee67129f57",
+      "bytes": 727,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.671Z"
+      }
+    },
     "maid": {
       "spriteKey": "maid",
       "localUrl": "/game/trainers/maid.png",
@@ -9407,6 +9665,23 @@
         "checkedAt": "2026-11-02T13:23:03.635Z"
       }
     },
+    "nurse": {
+      "spriteKey": "nurse",
+      "localUrl": "/game/trainers/nurse.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/nurse.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "9333a7c91adc0fdd5b32ad98f0cbd124e0ff49d34c09a2e56ae10ff6fc325ea1",
+      "bytes": 605,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.894Z"
+      }
+    },
     "nurseryaide": {
       "spriteKey": "nurseryaide",
       "localUrl": "/game/trainers/nurseryaide.png",
@@ -9594,6 +9869,23 @@
         "checkedAt": "2026-11-02T13:23:04.247Z"
       }
     },
+    "picnicker": {
+      "spriteKey": "picnicker",
+      "localUrl": "/game/trainers/picnicker.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/picnicker.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "72eee3ffb156a03f6451d7996d370434361c4fe0b8241956befb248af1a82954",
+      "bytes": 541,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.858Z"
+      }
+    },
     "piers": {
       "spriteKey": "piers",
       "localUrl": "/game/trainers/piers.png",
@@ -9645,6 +9937,23 @@
         "checkedAt": "2026-11-02T13:23:03.096Z"
       }
     },
+    "plasmagruntf": {
+      "spriteKey": "plasmagruntf",
+      "localUrl": "/game/trainers/plasmagruntf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/plasmagruntf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "93a3fb736cf4c409d99edddebb7f0c498959c67845fe071659da1fea172d52b3",
+      "bytes": 615,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.709Z"
+      }
+    },
     "plumeria": {
       "spriteKey": "plumeria",
       "localUrl": "/game/trainers/plumeria.png",
@@ -9679,6 +9988,23 @@
         "checkedAt": "2026-11-02T13:23:02.556Z"
       }
     },
+    "pokefanf": {
+      "spriteKey": "pokefanf",
+      "localUrl": "/game/trainers/pokefanf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/pokefanf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "b9023cd5849d482896468eba6149f94fa4b2ed2be5e8d72c3420a9930971f1b4",
+      "bytes": 707,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.291Z"
+      }
+    },
     "pokemonbreeder": {
       "spriteKey": "pokemonbreeder",
       "localUrl": "/game/trainers/pokemonbreeder.png",
@@ -9696,6 +10022,23 @@
         "checkedAt": "2026-11-02T13:23:02.253Z"
       }
     },
+    "pokemonbreederf": {
+      "spriteKey": "pokemonbreederf",
+      "localUrl": "/game/trainers/pokemonbreederf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/pokemonbreederf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "bd6a1512f6572b954fc1c308fd48a3ff241d5188fe91564da7663516686e4957",
+      "bytes": 736,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.868Z"
+      }
+    },
     "pokemonranger": {
       "spriteKey": "pokemonranger",
       "localUrl": "/game/trainers/pokemonranger.png",
@@ -9711,6 +10054,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.614Z"
+      }
+    },
+    "pokemonrangerf": {
+      "spriteKey": "pokemonrangerf",
+      "localUrl": "/game/trainers/pokemonrangerf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/pokemonrangerf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "69f3b78bd2d75c2f2f525e4b573241ce149449c760d02a852845f8d973c18558",
+      "bytes": 793,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.304Z"
       }
     },
     "poppy": {
@@ -9745,6 +10105,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.555Z"
+      }
+    },
+    "preschoolerf": {
+      "spriteKey": "preschoolerf",
+      "localUrl": "/game/trainers/preschoolerf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/preschoolerf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "6edadd068583a2c45155f54b2c735550d71c9d3cfe238ff3befbafdc752580f5",
+      "bytes": 449,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:50.915Z"
       }
     },
     "preschoolers": {
@@ -9813,6 +10190,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.630Z"
+      }
+    },
+    "psychicf": {
+      "spriteKey": "psychicf",
+      "localUrl": "/game/trainers/psychicf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/psychicf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "b0305c0a5a99ab904f6cf38109543546c92a05a723c34fb55594122e9fc7adf7",
+      "bytes": 759,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.335Z"
       }
     },
     "raihan": {
@@ -9949,6 +10343,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.940Z"
+      }
+    },
+    "rocketgruntf": {
+      "spriteKey": "rocketgruntf",
+      "localUrl": "/game/trainers/rocketgruntf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/rocketgruntf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "c8f42e7e79d6270fd245a5b86fe56a699ce1ec39dbe508862bc7e2115631beea",
+      "bytes": 647,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.349Z"
       }
     },
     "rose": {
@@ -10121,6 +10532,23 @@
         "checkedAt": "2026-11-02T13:23:02.834Z"
       }
     },
+    "schoolkidf": {
+      "spriteKey": "schoolkidf",
+      "localUrl": "/game/trainers/schoolkidf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/schoolkidf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "ca733b24cab4ed40fe52be46d45d6e16d0ecec7d62185bc71ff518e4dcf45e22",
+      "bytes": 506,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.294Z"
+      }
+    },
     "scientist": {
       "spriteKey": "scientist",
       "localUrl": "/game/trainers/scientist.png",
@@ -10136,6 +10564,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.721Z"
+      }
+    },
+    "scientistf": {
+      "spriteKey": "scientistf",
+      "localUrl": "/game/trainers/scientistf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/scientistf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "2cef010f9057d05b5d74386d0448ee81bfa8900903ab47a85be15af252a99e1d",
+      "bytes": 719,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.225Z"
       }
     },
     "scubadiver": {
@@ -10240,6 +10685,23 @@
         "checkedAt": "2026-11-02T13:23:03.405Z"
       }
     },
+    "skullgruntf": {
+      "spriteKey": "skullgruntf",
+      "localUrl": "/game/trainers/skullgruntf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/skullgruntf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": "ZacWeavile",
+      "sha256": "91dbfc8f83eeb3b70a9b27f9d7a513ff3b6ab2daffc35baf5f5c5e6f39c99fe4",
+      "bytes": 692,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:52.073Z"
+      }
+    },
     "skyla": {
       "spriteKey": "skyla",
       "localUrl": "/game/trainers/skyla.png",
@@ -10291,6 +10753,23 @@
         "checkedAt": "2026-11-02T13:23:03.219Z"
       }
     },
+    "stargruntf-s": {
+      "spriteKey": "stargruntf-s",
+      "localUrl": "/game/trainers/stargruntf-s.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/stargruntf-s.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": "kyledove",
+      "sha256": "fbe4813488de1f3db658845cf53745a305852530c88d0cf77e668b84daa5e50b",
+      "bytes": 692,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:52.110Z"
+      }
+    },
     "steven": {
       "spriteKey": "steven",
       "localUrl": "/game/trainers/steven.png",
@@ -10340,6 +10819,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.857Z"
+      }
+    },
+    "swimmerf": {
+      "spriteKey": "swimmerf",
+      "localUrl": "/game/trainers/swimmerf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/swimmerf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "8c8d78c139ba6352916e92f8a991c7d922d33446569eeb9da9d523d92d1fce93",
+      "bytes": 639,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.320Z"
       }
     },
     "tabitha": {
@@ -10442,6 +10938,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.866Z"
+      }
+    },
+    "veteranf": {
+      "spriteKey": "veteranf",
+      "localUrl": "/game/trainers/veteranf.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/veteranf.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": null,
+      "sha256": "dbb8dd4be91d2b06a220525e5bffa327252d9b6b850d60df3494b29eb1f4aef4",
+      "bytes": 722,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.289Z"
       }
     },
     "viola": {
@@ -10629,6 +11142,23 @@
         "status": 200,
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:02.909Z"
+      }
+    },
+    "workerf-gen8": {
+      "spriteKey": "workerf-gen8",
+      "localUrl": "/game/trainers/workerf-gen8.png",
+      "sourceUrl": "https://play.pokemonshowdown.com/sprites/trainers/workerf-gen8.png",
+      "sourceDirectory": "https://play.pokemonshowdown.com/sprites/trainers/",
+      "artist": "kyledove",
+      "sha256": "7e17e9e6e355d8fcd13cb3b075e4713aeda95a77622dbe3201647640fd902788",
+      "bytes": 804,
+      "width": 80,
+      "height": 80,
+      "verification": {
+        "method": "GET",
+        "status": 200,
+        "contentType": "image/png",
+        "checkedAt": "2026-11-04T14:33:51.673Z"
       }
     },
     "workerice": {
