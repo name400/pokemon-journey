@@ -14,3 +14,12 @@ assert.equal(teams[1][1].rogueBattleSpecies,'gardevoirmega');assert.equal(teams[
 assert.equal(teams[0][0].item,'flameorb');assert.equal(teams[2][1].item,'toxicorb');assert.equal(teams[2][0].rogueBaseBoosts.hp,4);assert.equal(teams[4][1].rogueFixedModifiers.length,11);assert.ok(teams[4][1].rogueFixedModifiers.every(m=>m.transferable));
 assert.throws(()=>classicWinstrateTeam(run,5));assert.throws(()=>classicWinstrateTeam(run,-1));
 console.log('Winstrate fixed teams: species, moves, forms, items and battle serialization passed');
+// Each compound trainer template assigns strong levels to the source's final members.
+{
+ const {classicTrainerLevel}=await import('../lib/rogue-classic-rules.mjs');
+ const strengths=[[3,4],[3,4],[3,3,4],[3],[3,3,3,4,4]];
+ for(const wave of [101,125,150,180])for(let round=0;round<5;round++){
+  const generated=classicWinstrateTeam({...run,wave,rng:wave+round},round);
+  assert.deepEqual(generated.map(p=>p.level),strengths[round].map(strength=>classicTrainerLevel(wave,strength)));
+ }
+}

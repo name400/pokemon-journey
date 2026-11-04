@@ -17,3 +17,5 @@ The source repository declares the GNU Affero General Public License, version 3,
 The root project has no project-wide license file and `package.json` declares no license. Compatibility and the obligations of distributing or offering the combined application over a network have not been determined. AGPL section 13 describes source availability for covered modified versions used over a network. Do not treat this notice as a license-compatibility determination.
 
 `data/rogue-winstrate-dialogue-ko-pinned.json` contains the Korean Winstrate encounter dialogue from the same pinned locale commit, unchanged.
+
+`data/rogue-winstrate-trainer-dialogue-ko-pinned.json` contains the five Winstrate trainer dialogue entries from the same pinned Korean `ko/dialogue.json`; their Korean names are from `ko/trainer-names.json` at the same commit.
