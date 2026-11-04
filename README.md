@@ -1,6 +1,6 @@
 # 포켓몬 저니 — 중간 통합 작업본
 
-현재 범위와 이어서 할 일은 [NEXT_STEPS.md](NEXT_STEPS.md), 파일별 이력은 [INTEGRATION_STATUS.md](INTEGRATION_STATUS.md)를 먼저 확인하세요.
+최신 클라우드 인계는 [CLOUD_HANDOFF_20261105.md](docs/CLOUD_HANDOFF_20261105.md)와 [재개 프롬프트](docs/CLOUD_RESUME_PROMPT.md)를 먼저 읽으세요. 현재 범위와 이어서 할 일은 [NEXT_STEPS.md](NEXT_STEPS.md), 파일별 과거 이력은 [INTEGRATION_STATUS.md](INTEGRATION_STATUS.md)에 있습니다.
 
 # vinext-starter
 

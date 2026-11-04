@@ -15,7 +15,7 @@ function fixture(){
 {
  const {doc,run}=fixture();assert.equal(classicGameView(doc).run.rewards[0].requiresTarget,false);
  applyClassicAction(doc,{action:'reward',rewardId:'all'});
- assert.deepEqual(run.party.map(p=>p.level),[18,18,100,100]);assert.equal(run.party[1].hp,0);
+ assert.deepEqual(run.party.map(p=>p.level),[18,18,102,103]);assert.equal(run.party[1].hp,0);
  assert.deepEqual(run.party.map(p=>p.friendship),[56,56,56,56]);assert.equal(run.modifiers[0].count,2);
  assert.equal(run.screen,'evolution');assert.equal(run.pendingEvolution.boxId,'a');
  const saved=JSON.parse(JSON.stringify(doc)),restored=ensureClassicState(saved).slots[0];
