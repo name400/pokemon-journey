@@ -41,3 +41,17 @@ for(const [job,itemId] of [['nature','adamant'],['ability','chlorophyll']]){
 for(const [job,itemId] of [['nature','adamant'],['ability','chlorophyll']]){
  const {doc,run}=fixture();run.party[0]=makeReferenceMon(7,1,{boxId:'weak',moves:['Splash']});run.party[0].hp=1;run.party[1].level=100;run.party[1].moves=['Seismic Toss'];const before=structuredClone(run.party[1]);applyClassicAction(doc,{action:'mysterySelect',job,boxId:'student',itemId});applyClassicAction(doc,{action:'mysteryConfirm'});let turns=0;while(run.screen==='battle'&&turns++<10)applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash'}});assert.equal(run.screen,'defeat');const restored=run.party.find(m=>m.boxId==='student');assert.equal(restored.nature,before.nature);assert.equal(restored.ability,before.ability);assert.equal(restored.item,before.item);assert.equal(run.modifiers.filter(m=>m.boxId==='student').length,2);
 }
+// The pinned source sets a post-summon tag but provides no effect callback;
+// the neutral-ability training target starts without invented stage boosts.
+{
+ const {doc,run}=fixture();applyClassicAction(doc,{action:'mysterySelect',job:'ability',boxId:'student',itemId:'chlorophyll'});applyClassicAction(doc,{action:'mysteryConfirm'});const foe=run.combat.snapshot.sides[1].pokemon[0];for(const stat of ['atk','def','spa','spd','spe'])assert.equal(foe.boosts[stat],0);
+}
+// A temporary Mega form remains the same original Pokémon and held state after restore.
+{
+ const {doc,run}=fixture();const {classicWinstrateTeam}=await import('../lib/rogue-classic-world.mjs');const mega=classicWinstrateTeam(run,1)[1];mega.boxId='student';mega.origin='capture';mega.ivs={hp:0,atk:1,def:10,spa:11,spd:20,spe:21};mega.item='leftovers';run.party[1]=mega;run.modifiers=[{id:'focusband',boxId:'student',count:2}];const before=structuredClone(mega);applyClassicAction(doc,{action:'mysterySelect',job:'iv',boxId:'student'});applyClassicAction(doc,{action:'mysteryConfirm'});assert.equal(run.combat.teams[1][0].rogueBattleSpecies,'gardevoirmega');let turns=0;while(run.screen==='battle'&&turns++<20)applyClassicAction(doc,{action:'turn',command:{type:'move',move:'seismictoss'}});assert.ok(['reward','defeat'].includes(run.screen));const restored=run.party.find(m=>m.boxId==='student');assert.equal(restored.rogueBattleSpecies,before.rogueBattleSpecies);assert.equal(restored.rogueFormIndex,before.rogueFormIndex);assert.equal(restored.item,before.item);assert.equal(run.modifiers.find(m=>m.boxId==='student').count,2);
+}
+// If the last active party member and the practice target faint together,
+// the temporarily held student is restored without treating the battle as won.
+{
+ const {doc,run}=fixture();run.party[0]=makeReferenceMon(150,100,{boxId:'last-hero',moves:['Double-Edge']});run.party[0].hp=1;const before=structuredClone(run.party[1].ivs);applyClassicAction(doc,{action:'mysterySelect',job:'iv',boxId:'student'});applyClassicAction(doc,{action:'mysteryConfirm'});run.combat.snapshot.sides[1].pokemon[0].hp=1;run.combat.teams[1][0].hp=1;applyClassicAction(doc,{action:'turn',command:{type:'move',move:'doubleedge'}});assert.equal(run.screen,'defeat');assert.deepEqual(run.party.find(p=>p.boxId==='student').ivs,before);assert.equal(run.modifiers.find(m=>m.id==='focusband'&&m.boxId==='student').count,2);assert.deepEqual(run.mystery.changes,[]);
+}
