@@ -28,6 +28,7 @@ type ImagePokemon = {
   battleAppearance?: string | null;
   battleArtId?: number | string | null;
   name?: string;
+  gender?: string;
   shiny?: boolean;
 };
 type AppearanceData = {
