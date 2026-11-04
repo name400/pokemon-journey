@@ -22,4 +22,8 @@ The root project has no project-wide license file and `package.json` declares no
 
 `data/rogue-training-dialogue-ko-pinned.json` contains the Korean Training Session encounter dialogue from the same pinned locale commit, unchanged.
 
+`data/rogue-dialogue-ko-full-pinned.json` and `data/rogue-double-dialogue-ko-pinned.json` preserve the complete `ko/dialogue.json` and `ko/dialogue-double-battle.json` JSON contents from the same pinned locales commit, with local filenames changed. They expand the earlier selected extract; they do not replace the underlying license. `data/rogue-trainer-dialogue-index.json` is a generated reference index derived from the user-provided PokéRogue source `src/data/dialogue.ts` and `src/data/double-battle-dialogue.ts`. The source ZIP SHA-256 is recorded in that file. These referenced source files declare AGPL-3.0; the existing AGPL license text is retained. The project-written importer parses literal TypeScript AST nodes without executing the upstream code.
+
+Regenerate the index with `node scripts/import-rogue-trainer-dialogues.mjs <extracted-source>/src/data/dialogue.ts <extracted-source>/src/data/double-battle-dialogue.ts`. Runtime resolves source references to pinned Korean strings, preserves `$` page boundaries, and omits the original portrait-expression and delay directives when rendering text. Source expression sprites, all trainer gender generation, and all associated animations have not been reproduced merely by importing these strings.
+
 `data/rogue-trash-dialogue-ko-pinned.json` contains the Korean Trash to Treasure encounter dialogue from the same pinned locale commit, unchanged.
