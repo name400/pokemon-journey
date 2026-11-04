@@ -1,6 +1,7 @@
 'use client';
 
 import {useEffect,useRef,useState,useSyncExternalStore} from 'react';
+import RogueIvScanner from './rogue-iv-scanner';
 import {ArrowLeft,ArrowRightLeft,Backpack,Check,ChevronRight,CircleDot,Clock3,History,LogOut,Settings2,Sparkles,Swords,Volume2,VolumeX} from 'lucide-react';
 import PokemonImage from './pokemon-image';
 import battleHeights from '@/data/battle-heights.json';
@@ -234,7 +235,7 @@ export default function BattlePanel({classicLayout=false,classicTools,classicIte
       </div>}
     </div>
     {multiple&&!classicLayout&&multiVitals(side)}
-    {classicLayout&&classicTools?.ivScanner&&<details className="bs-owned-tools"><summary>야생 포켓몬 IV 스캐너</summary>{(battle.activeBySide?.[opponent]||[]).map((index:number)=>battle.teams?.[opponent]?.[index]).filter((mon:any)=>mon?.ivs).map((mon:any)=><p key={mon.boxId}>{mon.name} · {([['hp','HP'],['atk','공격'],['def','방어'],['spa','특공'],['spd','특방'],['spe','스피드']] as const).map(([key,label])=>label+' '+mon.ivs[key]).join(' · ')}</p>)}</details>}
+    {classicLayout&&classicTools?.ivScanner&&<RogueIvScanner readings={battle.ivScanner}/>}
     {classicLayout&&(ownedTools.length>0||classicItems.length>0)&&<div className="bs-owned-tools" role="group" tabIndex={0} aria-label="보유한 중요 도구와 효과 아이템"><span className="bs-owned-tools-label">보유 도구</span>{ownedTools.map(tool=><span key={tool.key} className={tool.key==='teraOrb'&&!classicTools?.teraCharged?'is-spent':''} title={tool.key==='teraOrb'&&!classicTools?.teraCharged?'사용 후 충전 필요':tool.name}><BattleToolIcon slug={tool.slug}/><b>{tool.name}</b>{tool.key==='teraOrb'&&!classicTools?.teraCharged&&<small>충전 필요</small>}</span>)}{classicItems.map(item=><span key={item.key} title={item.name+(item.owner?' · '+item.owner+' 보유':'')+(item.remaining!=null?' · '+item.remaining+'전 남음':'')}><BattleToolIcon src={item.image}/><b>{item.name}</b>{item.count>1&&<small>×{item.count}</small>}{item.remaining!=null&&<small>{item.remaining}전</small>}</span>)}</div>}
     <div className="bs-console" data-ended={showResult||undefined}><div className="bs-narration">{classicLayout?<button type="button" className="bs-console-label bs-log-open" onClick={()=>setPanel('history')}>전투 기록 보기</button>:<span className="bs-console-label">BATTLE LOG</span>}{classicLayout?<><div className="bs-log-lines" role="log" tabIndex={0} aria-label="이번 웨이브 전투 기록" aria-live="polite" aria-relevant="additions" ref={logElement} onScroll={event=>{const el=event.currentTarget;logPinned.current=el.scrollHeight-el.scrollTop-el.clientHeight<24;}}>{visibleBattleLog.length?visibleBattleLog.map((line,index)=><p key={index}>{line}</p>):<p>{playing?'행동을 확인하고 있습니다…':`${own.name}은(는) 무엇을 할까?`}</p>}</div>{submitted&&<small className="bs-log-pending">{submitted} 선택 · 서버 판정 중</small>}</>:<><p role="status" aria-live="polite">{submitted?<><span className="bs-pending-dot"/>{submitted} 선택… <small>서버 판정 중</small></>:narration||(playing?'행동을 확인하고 있습니다…':(battle.log||[]).at(-1))||(req.kind==='switch'?'다음에 내보낼 포켓몬을 선택하세요!':req.kind==='wait'?'상대의 선택을 기다리고 있습니다…':`${own.name}은(는) 무엇을 할까?`)}</p>{playing&&<small className="bs-replaying">실제 전투 결과 재생 중 · {settings.speed}×</small>}</>}</div>
       {(error||commandError)&&<p className="bs-error" role="alert">{error||commandError}</p>}

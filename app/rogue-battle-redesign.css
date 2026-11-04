@@ -104,6 +104,12 @@
 .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-status{position:static;display:inline-block;margin-top:2px}
 .rc-shell.is-battle .battle-screen .bs-log-lines:focus-visible{outline:2px solid #f3c96c;outline-offset:-2px}
 .rc-shell.is-battle .battle-screen .bs-owned-tools:focus-visible{outline:2px solid #f2cc6d;outline-offset:-2px}
+.rc-shell .bs-iv-scanner{padding:5px 8px;background:#242c40;color:#f8f2df;font-size:12px;line-height:1.45}
+.rc-shell .bs-iv-scanner summary{cursor:pointer;min-height:32px;display:flex;align-items:center;font-weight:700}
+.rc-shell .bs-iv-scanner summary:focus-visible{outline:2px solid #f2cc6d;outline-offset:2px}
+.rc-shell .bs-iv-scanner p{margin:2px 0;overflow-wrap:anywhere}
+.rc-shell .bs-iv-scanner .is-improved{color:#9be3a3}
+.rc-shell .bs-iv-scanner .is-perfect{color:#ffe07c}
 .rc-shell.is-battle .battle-screen .bs-log-lines p{min-height:0}
 
 /* Classic biome artwork follows the encounter. */
