@@ -70,6 +70,14 @@ function subscribeReducedMotion(change:()=>void){const query=window.matchMedia('
 const reducedMotionSnapshot=()=>typeof window==='undefined'||window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const serverReducedMotion=()=>true;
 function directBattleSpriteSources(mon:any,facing:'front'|'back'):string[]{const direct=hasDifferentBattleForm(mon)?null:mon?.rogueSourceId!=null&&mon.shiny?(facing==='back'?mon.sourceShinyBackImage:mon.sourceShinyImage):(facing==='back'?mon?.sourceBackImage:mon?.sourceImage);const sprite=String(mon?.battleSprite||'').toLowerCase();if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(sprite))return mon?.rogueSourceId!=null&&direct?[direct]:[];const shiny=mon?.shiny?'-shiny':'';return [...new Set([...(direct?[direct]:[]),`https://play.pokemonshowdown.com/sprites/ani${facing==='back'?'-back':''}${shiny}/${sprite}.gif`,`https://play.pokemonshowdown.com/sprites/ani${shiny}/${sprite}.gif`])];}
+// Measure a separate CORS-enabled image so a failed pixel read never breaks the
+// image the player sees. The first frame is an approximation for animated GIFs.
+type SpriteFloor={x:number;y:number};
+const spriteFloorCache=new Map<string,Promise<SpriteFloor|null>>();
+function spriteFloor(src:string):Promise<SpriteFloor|null>{
+ const prior=spriteFloorCache.get(src);if(prior)return prior;
+ const task=new Promise<SpriteFloor|null>(resolve=>{const image=new Image();image.crossOrigin='anonymous';image.onerror=()=>resolve(null);image.onload=()=>{try{const canvas=document.createElement('canvas');canvas.width=96;canvas.height=96;const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx){resolve(null);return;}ctx.drawImage(image,0,0,96,96);const data=ctx.getImageData(0,0,96,96).data;let left=96,right=-1,bottom=-1;for(let y=0;y<96;y++)for(let x=0;x<96;x++)if(data[(y*96+x)*4+3]>16){left=Math.min(left,x);right=Math.max(right,x);bottom=Math.max(bottom,y);}resolve(right<left?null:{x:(left+right+1)/192,y:(bottom+1)/96});}catch{resolve(null);}};image.src=src;});spriteFloorCache.set(src,task);return task;
+}
 function BattleSprite({mon,facing,animations}:{mon:any;facing:'front'|'back';animations:boolean}){
   const reduced=useSyncExternalStore(subscribeReducedMotion,reducedMotionSnapshot,serverReducedMotion),sources=directBattleSpriteSources(mon,facing),key=sources.join('|');
   const [failed,setFailed]=useState({key:'',index:0});const index=failed.key===key?failed.index:0;
@@ -124,6 +132,20 @@ export default function BattlePanel({classicLayout=false,classicTools,classicIte
     return()=>{if(watchdog)clearTimeout(watchdog);run.current++;playback.cancel()};
   },[battleKey,settingsReady,trainerIntro,playback.play,playback.cancel]);
   useEffect(()=>{if(!classicLayout||!logPinned.current)return;const frame=requestAnimationFrame(()=>{const el=logElement.current;if(el)el.scrollTop=el.scrollHeight;});return()=>cancelAnimationFrame(frame);},[classicLayout,battleKey,playing,revealed.length,battle.log?.length]);
+  // The user selected the PC layout scaled down for short landscape phones.
+  // Restore the original viewport as soon as the battle or orientation changes.
+  useEffect(()=>{
+    if(!classicLayout)return;const meta=document.querySelector<HTMLMetaElement>('meta[name="viewport"]');if(!meta)return;const original=meta.getAttribute('content'),root=document.documentElement,orientation=window.matchMedia('(orientation: landscape)');
+    const update=()=>{const smallScreen=Math.min(screen.width,screen.height)<=500&&Math.max(screen.width,screen.height)<=1000,active=orientation.matches&&smallScreen;if(active){root.classList.add('poke-classic-landscape-pc');if(meta.content!=='width=1450')meta.content='width=1450';}else{root.classList.remove('poke-classic-landscape-pc');if(original===null)meta.removeAttribute('content');else if(meta.content!==original)meta.content=original;}};
+    orientation.addEventListener('change',update);window.addEventListener('resize',update);update();return()=>{orientation.removeEventListener('change',update);window.removeEventListener('resize',update);root.classList.remove('poke-classic-landscape-pc');if(original===null)meta.removeAttribute('content');else meta.content=original;};
+  },[classicLayout]);
+  // Approved classic doubles staging; other modes and single battles keep their layout.
+  useEffect(()=>{
+    const scene=stage.current;if(!classicLayout||!multiple||!scene||playing)return;
+    let cancelled=false,frame=0;
+    const align=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const applicable=window.matchMedia('(min-width:850px), (max-width:600px) and (orientation:portrait)').matches;if(!applicable)return;for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant')){const img=node.querySelector<HTMLImageElement>('.bs-sprite img');if(!img||!img.complete||!img.naturalWidth)continue;const src=img.currentSrc||img.src;void spriteFloor(src).then(bounds=>{if(cancelled||!node.isConnected||(img.currentSrc||img.src)!==src)return;const floor=bounds||{x:.5,y:.85},rect=img.getBoundingClientRect(),box=scene.getBoundingClientRect(),slot=Number(node.dataset.battleSlot),own=node.classList.contains('bs-combatant-own'),tiny=window.matchMedia('(max-width:360px) and (max-height:650px) and (orientation:portrait)').matches,goals=tiny?(own?[[.13,.98],[.36,.98]]:[[.63,.40],[.85,.40]]):(own?[[.134,.898],[.271,.898]]:[[.678,.587],[.823,.568]]),goal=goals[slot];if(!goal||!box.width||!box.height)return;const current=getComputedStyle(node),left=parseFloat(current.left),top=parseFloat(current.top);if(!Number.isFinite(left)||!Number.isFinite(top))return;const scaleX=tiny?.88:1,scaleY=tiny?.88:1;node.style.setProperty('--classic-anchor-x',`${left+(box.left+goal[0]*box.width-(rect.left+floor.x*rect.width))/scaleX}px`);node.style.setProperty('--classic-anchor-y',`${top+(box.top+goal[1]*box.height-(rect.top+floor.y*rect.height))/scaleY}px`);node.style.setProperty('--classic-floor-x',`${floor.x*100}%`);node.style.setProperty('--classic-floor-y',`${(1-floor.y)*100}%`);});}});};
+    const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(align);observer?.observe(scene);scene.addEventListener('load',align,true);window.addEventListener('resize',align);align();return()=>{cancelled=true;cancelAnimationFrame(frame);observer?.disconnect();scene.removeEventListener('load',align,true);window.removeEventListener('resize',align);};
+  },[classicLayout,multiple,battleKey,playing,settings.animations]);
   useEffect(()=>{if(busy)hadBusy.current=true;else if(hadBusy.current){hadBusy.current=false;gate.current.release(battleKey);setSubmitted('')}},[busy,battleKey]);
   useEffect(()=>{if(error){gate.current.release(battleKey);setSubmitted('')}},[error,battleKey]);
   function prepareAudio(){if(!settings.sound)return;try{const Ctor=window.AudioContext||(window as any).webkitAudioContext;if(Ctor&&!audio.current)audio.current=new Ctor();void audio.current?.resume()}catch{}}

@@ -538,3 +538,29 @@ html:fullscreen main[data-mode=rogue] .rc-shell.is-battle .bs-scene,html.poke-vi
  .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-hp-track{margin-top:1px}
  .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-exp{margin-top:1px}
 }
+/* Approved classic doubles positions. Mobile keeps its existing HUD and tools. */
+@media (min-width:850px), (max-width:600px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-own[data-battle-slot='0']{left:var(--classic-anchor-x,13.4%)!important;top:var(--classic-anchor-y,95%)!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-own[data-battle-slot='1']{left:var(--classic-anchor-x,27.1%)!important;top:var(--classic-anchor-y,95%)!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot='0']{left:var(--classic-anchor-x,67.8%)!important;top:var(--classic-anchor-y,70%)!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot='1']{left:var(--classic-anchor-x,82.3%)!important;top:var(--classic-anchor-y,70%)!important}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant[data-commanding=true]::after{left:var(--classic-floor-x,50%);bottom:var(--classic-floor-y,15%);transform:translate(-50%,50%)}
+}
+@media (min-width:850px){
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant::before{content:'';position:absolute;left:var(--classic-floor-x,50%);bottom:var(--classic-floor-y,15%);width:53%;height:8%;transform:translate(-50%,50%);border:2px solid #f9e1a0;border-radius:50%;background:#e5d39f66;z-index:-1;box-shadow:0 1px 0 2px #274b4366}
+}
+/* Preserve the approved mobile HUD placement and visible tool strip on short phones. */
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle{zoom:.88}
+ .rc-shell.is-battle .battle-screen .bs-scene .bs-multi-vitals.is-own{top:auto;bottom:2%}
+ .rc-shell.is-battle .battle-screen .bs-tools-toggle{display:none}
+ .rc-shell.is-battle .battle-screen .bs-owned-tools,.rc-shell.is-battle .battle-screen[data-tools-expanded=true] .bs-owned-tools{display:flex;position:static;max-width:none;border:0;border-top:1px solid #728c92;border-radius:0;padding:2px 4px;background:#242c40}
+}
+@media(orientation:landscape) and (max-height:500px) and (min-width:481px){
+ .rc-shell.is-battle{zoom:.88}
+ .rc-shell.is-battle .battle-screen .bs-tools-toggle{display:none}
+ .rc-shell.is-battle .battle-screen .bs-owned-tools,.rc-shell.is-battle .battle-screen[data-tools-expanded=true] .bs-owned-tools{display:flex;position:static;grid-column:1/-1;grid-row:4;max-width:none;border:0;border-top:1px solid #728c92;border-radius:0;padding:2px 4px;background:#242c40}
+}
+/* PC-layout landscape phone: keep the complete battle within the scaled viewport. */
+html.poke-classic-landscape-pc .rc-shell.is-battle .battle-screen .bs-scene,
+html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-battle .bs-scene{height:calc(35dvh - 35px)!important}
