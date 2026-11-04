@@ -46,3 +46,5 @@ Runtime images currently depend on the remote repositories above. `components/po
 
 - data/starter-option-descriptions.json의 특성 한국어 설명은 설치된 MIT @pkmn/sim 0.10.12의 설명을 바탕으로 프로젝트에서 요약·번역했다. scripts/localize-starter-abilities.mjs로 재생성하며, 포켓로그 전용 볼줍기/꿀모으기/도주 효과 설명은 해당 프로젝트 구현을 따른다. 효과 동등성 전수 확인을 뜻하지 않는다.
 
+
+- `data/rogue-mysterious-challengers-dialogue-ko-pinned.json` is the Korean Mysterious Challengers dialogue from [PokéRogue locales, commit 616cf3eb6b1b15e48784ff138ca7748ea63ed258](https://github.com/pagefaultgames/pokerogue-locales/blob/616cf3eb6b1b15e48784ff138ca7748ea63ed258/ko/mystery-encounters/mysterious-challengers-dialogue.json). The locale repository is distributed under AGPL-3.0; see the existing locale attribution and license discussion above.

@@ -22,3 +22,15 @@ test('hard candidate retries at most five times and draws the boss separately', 
   const second = selectMysteriousChallengerCandidates(boss => {flags.push(boss);return early.shift();},id=>({id}));
   assert.deepEqual(flags,[false,false,false,true]);assert.equal(second.hard.id,4);assert.equal(second.brutal.id,9);
 });
+
+test('source wave offsets shift UTF-16 code units for each difficulty', async () => {
+ const {mysteriousChallengerSeed}=await import('../lib/rogue-mysterious-challengers.mjs');
+ assert.equal(mysteriousChallengerSeed('Az',20,'normal'),String.fromCharCode(65+200,122+200));
+ assert.notEqual(mysteriousChallengerSeed('Az',20,'hard'),mysteriousChallengerSeed('Az',20,'brutal'));
+ assert.throws(()=>mysteriousChallengerSeed('x',0,'normal'));
+});
+test('a temporary random source preserves the persisted cursor even after errors', async () => {
+ const {classicRandom,withClassicRandomSource}=await import('../lib/rogue-classic-state.mjs');
+ const run={rng:42};assert.throws(()=>withClassicRandomSource(run,()=>0.25,()=>{assert.equal(classicRandom(run),0.25);throw Error('test');}));
+ assert.equal(run.rng,42);const expected=classicRandom({rng:42});assert.equal(classicRandom(run),expected);
+});

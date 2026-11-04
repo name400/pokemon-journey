@@ -1,0 +1,41 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
+import {applyClassicAction,classicGameView} from '../lib/rogue-classic-game.mjs';
+import {classicMysteriousChallengerCandidates} from '../lib/rogue-classic-world.mjs';
+function fixture(){const doc={coins:99,adventure:{safe:true}},state=ensureClassicState(doc),run={id:'challenger',seed:'abc',rng:42,wave:82,biome:1,screen:'mystery',party:[makeReferenceMon(151,80,{boxId:'hero',moves:['Tackle']})],modifiers:[],tools:{},balls:{},money:100000,encounter:{kind:'mystery',key:'mysterious-challengers'},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[]};run.mystery={type:'mysterious-challengers',stage:'choose',candidates:classicMysteriousChallengerCandidates(run)};state.slots[0]=run;return {doc,run};}
+test('challenger selection and confirmation survive JSON and enter a trainer battle',()=>{
+ for(const job of ['normal','hard','brutal']){
+  let {doc,run}=fixture();const candidates=structuredClone(run.mystery.candidates);assert.throws(()=>applyClassicAction(doc,{action:'mysterySelect',job:'leave'}));
+  applyClassicAction(doc,{action:'mysterySelect',job});applyClassicAction(doc,{action:'mysteryCancel'});assert.deepEqual(run.mystery.candidates,candidates);
+  applyClassicAction(doc,{action:'mysterySelect',job});doc=JSON.parse(JSON.stringify(doc));run=ensureClassicState(doc).slots[0];
+  applyClassicAction(doc,{action:'mysteryConfirm'});assert.equal(run.mystery.stage,'battle');assert.equal(run.encounter.trainer.id,candidates[job].id);assert.equal(run.encounter.noCapture,true);assert.equal(run.encounter.trainer.hasVoucher,false);
+  assert.equal(run.encounter.template,job==='normal'?run.encounter.template:job==='hard'?'MYSTERIOUS_HARD':'ELITE_FOUR');assert.ok(classicGameView(doc).run);
+ }
+});
+test('winning a recovered challenger battle generates its rewards exactly once',()=>{
+ let {doc,run}=fixture();applyClassicAction(doc,{action:'mysterySelect',job:'hard'});applyClassicAction(doc,{action:'mysteryConfirm'});
+ for(const foe of run.combat.snapshot.sides[1].pokemon){foe.hp=0;foe.fainted=true;}run.combat.snapshot.sides[1].pokemonLeft=0;run.combat.snapshot.ended=true;run.combat.snapshot.winner=run.combat.snapshot.sides[0].name;run.combat.ended=true;run.combat.winner=0;
+ doc=JSON.parse(JSON.stringify(doc));run=ensureClassicState(doc).slots[0];applyClassicAction(doc,{action:'recoverBattle'});assert.equal(run.screen,'reward');assert.equal(run.mystery.stage,'resolved');assert.deepEqual(run.rewards.slice(0,4).map(r=>r.tier),[2,2,1,1]);assert.deepEqual(doc.adventure,{safe:true});assert.throws(()=>applyClassicAction(doc,{action:'recoverBattle'}));
+});
+test('Ruin abilities use their own source IDs even when simulator numbers collide',async()=>{
+ const {rogueSpecies,sourceAbility,rogueReferenceData}=await import('../lib/rogue-reference.mjs');
+ for(const [name,key] of [['VESSEL_OF_RUIN','vesselofruin'],['SWORD_OF_RUIN','swordofruin'],['TABLETS_OF_RUIN','tabletsofruin'],['BEADS_OF_RUIN','beadsofruin']])assert.equal(sourceAbility(rogueReferenceData.enums.AbilityId[name]),key);
+ assert.equal(rogueSpecies.get(1001).abilities[0].key,'tabletsofruin');assert.equal(rogueSpecies.get(1004).abilities[0].key,'beadsofruin');
+});
+test('new-rule natural encounter persists hidden candidates while legacy runs do not spawn it',async()=>{
+ const {maybeClassicMystery}=await import('../lib/rogue-mystery.mjs');let found=null;
+ for(let i=1;i<20000&&!found;i++){const {doc,run}=fixture();run.screen='battle';run.encounter={kind:'wild'};run.challengerRule='source-v1';run.mysteryRule='part-timer-v19';run.mysteryState={spawnWeight:256,history:[]};run.rng=i*1234567>>>0;if(maybeClassicMystery(run,ensureClassicState(doc).system)&&run.mystery?.type==='mysterious-challengers')found={doc,run};}
+ assert.ok(found);const candidates=structuredClone(found.run.mystery.candidates);assert.deepEqual(JSON.parse(JSON.stringify(found.doc)).classic.slots[0].mystery.candidates,candidates);assert.equal(classicGameView(found.doc).run.mystery.candidates,undefined);
+ for(let i=1;i<=1000;i++){const {doc,run}=fixture();run.screen='battle';run.encounter={kind:'wild'};run.mysteryRule='part-timer-v19';run.mysteryState={spawnWeight:256,history:[]};run.rng=i*1234567>>>0;if(maybeClassicMystery(run,ensureClassicState(doc).system))assert.notEqual(run.mystery.type,'mysterious-challengers');}
+});
+test('challenger defeat ends the run without granting rewards',()=>{
+ let {doc,run}=fixture();applyClassicAction(doc,{action:'mysterySelect',job:'normal'});applyClassicAction(doc,{action:'mysteryConfirm'});
+ for(const mon of run.combat.snapshot.sides[0].pokemon){mon.hp=0;mon.fainted=true;}run.party.forEach(mon=>{mon.hp=0;});run.combat.snapshot.sides[0].pokemonLeft=0;run.combat.snapshot.ended=true;run.combat.snapshot.winner=run.combat.snapshot.sides[1].name;run.combat.ended=true;run.combat.winner=1;
+ doc=JSON.parse(JSON.stringify(doc));run=ensureClassicState(doc).slots[0];applyClassicAction(doc,{action:'recoverBattle'});assert.equal(run.screen,'defeat');assert.deepEqual(run.rewards,[]);assert.equal(run.pendingChallengerRewards,undefined);
+});
+test('reroll returns to ordinary reward count after the guaranteed offers',async()=>{
+ const {rerollClassicRewards}=await import('../lib/rogue-classic-rewards.mjs');const {classicRerollCost,classicShopCost}=await import('../lib/rogue-classic-rules.mjs');
+ const {run}=fixture();run.screen='reward';run.mystery={type:'mysterious-challengers',stage:'resolved',job:'hard'};run.rerolls=0;rerollClassicRewards(run,classicShopCost(run,classicRerollCost(run.wave,0)));assert.equal(run.rewards.length,3);
+});
