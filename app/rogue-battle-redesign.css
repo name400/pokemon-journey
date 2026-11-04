@@ -110,6 +110,11 @@
 .rc-shell .bs-iv-scanner p{margin:2px 0;overflow-wrap:anywhere}
 .rc-shell .bs-iv-scanner .is-improved{color:#9be3a3}
 .rc-shell .bs-iv-scanner .is-perfect{color:#ffe07c}
+.bs-iv-dialog{width:min(360px,calc(100vw - 32px));max-height:min(80vh,600px);box-sizing:border-box;padding:18px;border:2px solid #92aa9e;border-radius:10px;background:#242c40;color:#f8f2df;box-shadow:0 12px 40px #0009}
+.bs-iv-dialog::backdrop{background:#0009}
+.bs-iv-dialog h2{margin:0 0 12px;font-size:18px}.bs-iv-dialog p{margin:0 0 16px;line-height:1.5}
+.bs-iv-dialog dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 16px}.bs-iv-dialog dl div{padding:8px;border:1px solid #728c92;border-radius:6px}.bs-iv-dialog dt{font-size:12px}.bs-iv-dialog dd{margin:2px 0 0;font-weight:700}.bs-iv-dialog .is-improved{color:#9be3a3}.bs-iv-dialog .is-perfect{color:#ffe07c}
+.bs-iv-actions{display:flex;gap:8px}.bs-iv-actions button{min-height:44px;flex:1;padding:8px;border:1px solid #a2b8a8;border-radius:6px;background:#35445a;color:#fff;font:inherit;font-weight:700;cursor:pointer}.bs-iv-actions button:focus-visible{outline:3px solid #ffe07c;outline-offset:2px}
 .rc-shell.is-battle .battle-screen .bs-log-lines p{min-height:0}
 
 /* Classic biome artwork follows the encounter. */
