@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {makeReferenceMon,sourceSpeciesFor} from '../lib/rogue-reference.mjs';
 import {applyClassicEggForm} from '../lib/rogue-egg-forms.mjs';
-import {classicChallengeBattleEligibility as eligible} from '../lib/rogue-challenge-eligibility.mjs';
+import {classicChallengeBattleEligibility as eligible,classicChallengeStarterEligibility as starterEligible} from '../lib/rogue-challenge-eligibility.mjs';
+import {ensureStarterSystem,starterCatalog,buildStarterParty} from '../lib/rogue-starter-system.mjs';
 const mon=id=>makeReferenceMon(id,50);
 const gen=value=>({id:0,value}),type=value=>({id:1,value});
 assert.equal(eligible(mon(25),[]),true);
@@ -25,5 +26,13 @@ const castform=mon(351),record=sourceSpeciesFor(castform),rain=record.formList.f
 assert.ok(rain);
 assert.equal(eligible({...castform,rogueFormIndex:rain.formIndex,rogueFormKey:rain.formKey},[type(1)]),true);
 assert.equal(eligible({...castform,rogueFormIndex:rain.formIndex,rogueFormKey:rain.formKey},[type(11)]),true);
+assert.equal(starterEligible({...castform,rogueFormIndex:rain.formIndex,rogueFormKey:rain.formKey},[type(1)]),false);
+assert.equal(starterEligible({...castform,rogueFormIndex:rain.formIndex,rogueFormKey:rain.formKey},[type(11)]),true);
+const system={initialStarterId:1};ensureStarterSystem(system);const entry=starterCatalog(system).find(x=>x.id===1);const choice={id:entry.id,ability:entry.abilities[0].key,nature:entry.natures[0].key,gender:entry.genders[0],shiny:false,moves:entry.defaultMoves};
+assert.equal(buildStarterParty(system,[choice],{challenges:[gen(1),type(12)]}).party.length,1);
+assert.throws(()=>buildStarterParty(system,[choice],{challenges:[gen(2)]}),/챌린지 조건/);
+assert.throws(()=>buildStarterParty(system,[choice],{challenges:[type(10)]}),/챌린지 조건/);
+assert.throws(()=>buildStarterParty(system,[choice],{challenges:[{id:99,value:1}]}),/지원하지/);
+assert.equal(buildStarterParty(system,[choice]).party.length,1);
 assert.equal(eligible(mon(25),[type(19)]),null);
 console.log('Challenge eligibility: generation, intrinsic type, forms, Castform and conservative unknowns passed');
