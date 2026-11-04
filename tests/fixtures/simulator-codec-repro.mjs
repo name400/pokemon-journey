@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {State} from '@pkmn/sim';
+import {makeReferenceMon} from '../../lib/rogue-reference.mjs';
+import {createClassicCombat,playClassicCombat,continueClassicWild,classicCombatView,restoreClassicNativeBattle} from '../../lib/rogue-battle-engine.mjs';
+const run={id:'production-codec',wave:1,biome:0,rng:100,party:[makeReferenceMon(150,5,{boxId:'own',moves:['Confusion']})],modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],pendingMoves:[]};
+run.combat=createClassicCombat(run,[makeReferenceMon(396,2,{boxId:'first-distinct-id',moves:['Splash']})],{weather:'raindance'});
+run.combat=playClassicCombat(run,{type:'move',move:'confusion'});run.party=run.combat.teams[0];assert.equal(run.combat.ended,true);
+const legacy=JSON.parse(JSON.stringify(run.combat).replaceAll('[Pokemon:','[old_$:').replaceAll('[Side:','[oldSide:'));
+const unchanged=JSON.stringify(legacy);assert.equal(classicCombatView(legacy).activeBySide[0][0],0);assert.equal(JSON.stringify(legacy),unchanged);
+run.combat=legacy;run.wave=2;run.combat=continueClassicWild(run,[makeReferenceMon(19,2,{boxId:'next-distinct-id',moves:['Splash']})]);
+const view=classicCombatView(run.combat);assert.equal(view.teams[1][0].boxId,'next-distinct-id');assert.equal(view.requests[0].actors[0].kind,'move');
+const native=restoreClassicNativeBattle(run.combat,run);assert.equal(native.p1.foe,native.p2);assert.equal(native.p2.foe,native.p1);assert.equal(State.fromRef('[DataMove:tackle]',native).id,'tackle');
+run.combat=playClassicCombat(run,{type:'move',move:'confusion'});assert.equal(run.combat.ended,true);classicCombatView(run.combat);
+console.log('Minified simulator serialization, legacy refs, distinct-foe wave transition and second victory passed.');
