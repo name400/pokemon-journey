@@ -12,3 +12,17 @@ for(const oldDouble of [false,true]){let matched=false;for(let seed=1;seed<=300&
 for(const count of [undefined,-1,1.5,'3']){const doc=fixture();const run=activeClassicRun(doc);const combat=createClassicCombat(run,[enemy],{carryPlayerFaints:count});assert.equal(combat.snapshot.sides[0].totalFainted,0);}
 const doc=fixture();const run=activeClassicRun(doc);const fresh=createClassicCombat(run,[enemy],{trainer:true});assert.equal(fresh.snapshot.sides[0].totalFainted,0);
 console.log('Last Respects: both format transitions, saved restore, opposing counter and new battle isolation passed');
+// The source game caps the contribution at 100; compare real engine damage with
+// identical RNG for 100 and 101/150 faints, and retain normal 99-faint damage.
+{
+ const r={id:'last-respects-cap',wave:22,biome:1,rng:44,party:[mon(151,'user',['Last Respects'])],modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],expNotices:[]};
+ r.combat=createClassicCombat(r,[mon(151,'target')]);
+ function damage(count,asString=false){const copy=JSON.parse(JSON.stringify(r));copy.combat.snapshot.sides[0].totalFainted=count;const b=restoreClassicNativeBattle(copy.combat,copy);const move=asString?'lastrespects':b.dex.getActiveMove('lastrespects');return b.actions.getDamage(b.p1.active[0],b.p2.active[0],move,true);}
+ const at100=damage(100);assert.ok(at100>damage(99));assert.equal(damage(101),at100);assert.equal(damage(150),at100);assert.equal(damage(150,true),at100);
+}
+// Real Revival Blessing selection restores the fainted member, and a second KO
+// counts again; the counter remains present after serializing and restoring.
+{
+ const r={id:'revive-counter',wave:22,biome:1,rng:2,party:[mon(151,'reviver',['Revival Blessing']),mon(7,'revived')],modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],expNotices:[]};r.combat=createClassicCombat(r,[mon(143,'foe')]);let b=restoreClassicNativeBattle(r.combat,r),p=b.p1.pokemon[1];p.faint(b.p2.active[0],b.dex.moves.get('tackle'));b.resolveFaints();assert.equal(b.p1.totalFainted,1);b.makeChoices('move revivalblessing','move splash');assert.equal(b.requestState,'switch');assert.equal(b.choose('p1','switch 2'),true);assert.ok(p.hp>0&&!p.fainted);assert.equal(b.p1.totalFainted,1);p.faint(b.p2.active[0],b.dex.moves.get('tackle'));b.resolveFaints();assert.equal(b.p1.totalFainted,2);const {snapshotClassicNativeBattle}=await import('../lib/rogue-battle-engine.mjs');r.combat.snapshot=JSON.parse(JSON.stringify(snapshotClassicNativeBattle(b)));b=restoreClassicNativeBattle(r.combat,r);assert.equal(b.p1.totalFainted,2);assert.equal(b.p1.pokemon[1].fainted,true);
+}
+console.log('Last Respects: cap and revival/re-faint counter passed');
