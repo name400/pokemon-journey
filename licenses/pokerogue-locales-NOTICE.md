@@ -8,4 +8,6 @@ The source repository declares the GNU Affero General Public License, version 3,
 
 `data/rogue-dancing-lessons-dialogue-ko-pinned.json` contains the Korean Dancing Lessons dialogue file from the same commit, unchanged; the game substitutes names and Korean particles and omits sound directives when displaying it.
 
+`data/rogue-safari-dialogue-ko-pinned.json` contains the Korean Safari Zone dialogue file from the same commit, unchanged; selected strings are displayed by the game.
+
 The root project has no project-wide license file and `package.json` declares no license. Compatibility and the obligations of distributing or offering the combined application over a network have not been determined. AGPL section 13 describes source availability for covered modified versions used over a network. Do not treat this notice as a license-compatibility determination.
