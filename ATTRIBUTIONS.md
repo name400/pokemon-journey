@@ -48,3 +48,4 @@ Runtime images currently depend on the remote repositories above. `components/po
 
 
 - `data/rogue-mysterious-challengers-dialogue-ko-pinned.json` is the Korean Mysterious Challengers dialogue from [PokéRogue locales, commit 616cf3eb6b1b15e48784ff138ca7748ea63ed258](https://github.com/pagefaultgames/pokerogue-locales/blob/616cf3eb6b1b15e48784ff138ca7748ea63ed258/ko/mystery-encounters/mysterious-challengers-dialogue.json). The locale repository is distributed under AGPL-3.0; see the existing locale attribution and license discussion above.
+- `data/rogue-weird-dream-dialogue-ko-pinned.json` is the [Korean Weird Dream dialogue at PokéRogue locales commit 616cf3eb6b1b15e48784ff138ca7748ea63ed258](https://github.com/pagefaultgames/pokerogue-locales/blob/616cf3eb6b1b15e48784ff138ca7748ea63ed258/ko/mystery-encounters/weird-dream-dialogue.json). The locale repository is distributed under AGPL-3.0; see the existing locale attribution above.
