@@ -75,6 +75,8 @@ function directBattleSpriteSources(mon:any,facing:'front'|'back'):string[]{const
 type SpriteFloor={x:number;y:number};
 const spriteFloorCache=new Map<string,Promise<SpriteFloor|null>>();
 function spriteFloor(src:string):Promise<SpriteFloor|null>{
+ // Image display does not require CORS; Showdown does not permit canvas pixel inspection.
+ if(src.toLowerCase().startsWith('https://play.pokemonshowdown.com/')||src.toLowerCase().startsWith('http://play.pokemonshowdown.com/'))return Promise.resolve(null);
  const prior=spriteFloorCache.get(src);if(prior)return prior;
  const task=new Promise<SpriteFloor|null>(resolve=>{const image=new Image();image.crossOrigin='anonymous';image.onerror=()=>resolve(null);image.onload=()=>{try{const canvas=document.createElement('canvas');canvas.width=96;canvas.height=96;const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx){resolve(null);return;}ctx.drawImage(image,0,0,96,96);const data=ctx.getImageData(0,0,96,96).data;let left=96,right=-1,bottom=-1;for(let y=0;y<96;y++)for(let x=0;x<96;x++)if(data[(y*96+x)*4+3]>16){left=Math.min(left,x);right=Math.max(right,x);bottom=Math.max(bottom,y);}resolve(right<left?null:{x:(left+right+1)/192,y:(bottom+1)/96});}catch{resolve(null);}};image.src=src;});spriteFloorCache.set(src,task);return task;
 }
