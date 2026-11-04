@@ -9,6 +9,7 @@ export type StarterEntry = {
   name: string;
   types: string[];
   generation: number;
+  challengeRibbons?: {generations: number[]; types: number[]};
   pokerus?: boolean;
   /** The current effective cost, including any permanent reductions. */
   cost: number;
@@ -44,17 +45,34 @@ export type StarterSelection = {
   moves: string[];
 };
 export type StarterTeamValidation = { valid: boolean; cost: number; remaining: number; error: string | null };
+export type StarterChallenge = { id: 0 | 1; value: number };
+export const CHALLENGE_TYPES = ['노말','격투','비행','독','땅','바위','벌레','고스트','강철','불꽃','물','풀','전기','에스퍼','얼음','드래곤','악','페어리'];
 export type RogueStarterSelectProps = {
   starters: StarterEntry[];
   budget?: number;
   busy: boolean;
   error?: string;
-  onStart: (team: StarterSelection[]) => Promise<unknown> | void;
+  onStart: (team: StarterSelection[], challenges?: StarterChallenge[]) => Promise<unknown> | void;
   onCancel: () => void;
   onReduceCost?: (id: number) => Promise<unknown> | void;
   onBuySpeciesEgg?: (id:number,cost:number) => Promise<unknown> | void;
   onUnlockPassive?: (id: number, cost: number) => Promise<unknown> | void;
 };
+
+export function starterChallengeError(starters: StarterEntry[], team: StarterSelection[], generation: number, type: number): string | null {
+  for (const choice of team) {
+    const entry = starters.find(candidate => candidate.id === choice.id);
+    if (!entry) return '스타터 정보를 다시 확인하세요.';
+    if (generation && entry.generation !== generation) return `${entry.name}은(는) 선택한 세대에 속하지 않습니다.`;
+    if (type && !entry.types.includes(CHALLENGE_TYPES[type - 1])) return `${entry.name}은(는) 선택한 타입이 아닙니다.`;
+    const id = entry.sourceId ?? entry.speciesId;
+    let required: string | null = null;
+    if (generation === 4 && id === 280 || type === 2 && id === 280 || type === 3 && id === 412) required = 'M';
+    if (generation === 4 && id === 361 || type === 8 && id === 361 || [5,9,12].includes(type) && id === 412) required = 'F';
+    if (required && choice.gender !== required) return `${entry.name}의 성별이 선택한 챌린지 조건에 맞지 않습니다.`;
+  }
+  return null;
+}
 
 
 export const STAT_NAMES: Array<[StarterStat, string]> = [['hp', 'HP'], ['atk', '공격'], ['def', '방어'], ['spa', '특수공격'], ['spd', '특수방어'], ['spe', '스피드']];
