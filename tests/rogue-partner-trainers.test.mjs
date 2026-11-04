@@ -22,10 +22,10 @@ test('Tate and Liza gym doubles lead with their own Solrock/Lunatone and alterna
   }
  }
 });
-function fixture({reserveA=false,spread=false}={}){
- const enemy=(boxId,owner)=>({...makeReferenceMon(151,10,{boxId,ability:'runaway',moves:['Splash']}),rogueTrainerSlot:owner});
+function fixture({reserveA=false,spread=false,pivot=false}={}){
+ const enemy=(boxId,owner)=>({...makeReferenceMon(151,10,{boxId,ability:'runaway',moves:[pivot&&boxId==='a'?'U-turn':'Splash']}),rogueTrainerSlot:owner});
  const team=[enemy('a',0),enemy('b',1),...(reserveA?[enemy('reserve-a',0)]:[]),enemy('reserve-b',1)];
- const run={id:'partner-battle',wave:50,biome:1,rng:42,party:[makeReferenceMon(151,100,{boxId:'hero',ability:'runaway',moves:[spread?'Earthquake':'Seismic Toss']})],modifiers:[],tools:{},balls:{},encounter:{kind:'trainer',trainer:{name:'pair'}}};
+ const run={id:'partner-battle',wave:50,biome:1,rng:42,party:[makeReferenceMon(151,100,{boxId:'hero',ability:'runaway',moves:[pivot?'Splash':spread?'Earthquake':'Seismic Toss']})],modifiers:[],tools:{},balls:{},encounter:{kind:'trainer',trainer:{name:'pair'}}};
  run.combat=createClassicCombat(run,team,{doubles:true,trainer:true});run.party=run.combat.teams[0];return run;
 }
 test('trainer switch choices and Roar stay within each partner’s reserves after JSON restore',()=>{
@@ -51,4 +51,15 @@ test('simultaneous double knockout replaces only the partner with a legal reserv
  const b=restoreClassicNativeBattle(JSON.parse(JSON.stringify(run.combat)),run);
  assert.equal(b.p2.active[0].hp,0);assert.equal(b.p2.active[1].set.trainerToken,'reserve-b');assert.equal(run.combat.ended,false);
  run.combat=playClassicCombat(run,{type:'move',move:'earthquake'});assert.equal(run.combat.winner,0);
+});
+test('U-turn cannot open an empty replacement request or borrow the partner’s reserve',()=>{
+ const run=fixture({pivot:true}),b=restoreClassicNativeBattle(run.combat,run);
+ b.makeChoices('move splash','move uturn 1, move splash');
+ assert.equal(b.requestState,'move');assert.equal(b.p2.active[0].set.trainerToken,'a');assert.ok(b.turn>=2);
+});
+test('U-turn still requests the correct trainer’s available reserve',()=>{
+ const run=fixture({reserveA:true,pivot:true}),b=restoreClassicNativeBattle(run.combat,run);
+ b.makeChoices('move splash','move uturn 1, move splash');
+ assert.equal(b.requestState,'switch');assert.equal(b.p2.activeRequest.forceSwitch[0],true);assert.equal(b.p2.activeRequest.forceSwitch[1],false);
+ assert.equal(b.choose('p2','switch 3, pass'),true);assert.equal(b.p2.active[0].set.trainerToken,'reserve-a');
 });
