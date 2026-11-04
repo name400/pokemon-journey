@@ -17,6 +17,8 @@ export type RewardChoice = {
   tier: 0 | 1 | 2 | 3 | 4;
   quantity?: number;
   requiresTarget?: boolean;
+  requiresFusion?: boolean;
+  fusionPairs?: {primaryBoxId:string;donorBoxId:string}[];
   requiresMove?: boolean;
   moveSelectionMode?: 'ppup';
   requiresReplace?: boolean;
@@ -54,7 +56,7 @@ export type ClassicRewardMon = {
   level?: number;
   shiny?: boolean;
 };
-export type RewardPayload = { rewardId: string; boxId?: string; moveIndex?: number; replaceIndex?: number; moveName?: string };
+export type RewardPayload = { rewardId: string; donorBoxId?: string; confirmFusion?: boolean; boxId?: string; moveIndex?: number; replaceIndex?: number; moveName?: string };
 export type ServicePayload = { itemId: string; boxId?: string; moveIndex?: number; replaceIndex?: number; moveName?: string; expectedPrice: number };
 export type RogueClassicRewardsProps = {
   wave: number;
@@ -74,7 +76,7 @@ export type RogueClassicRewardsProps = {
 };
 
 export type ActionChoice = RewardChoice | ServiceChoice;
-export type Configuration = { boxId?: string; moveIndex?: number; replaceIndex?: number; moveName?: string };
+export type Configuration = { boxId?: string; donorBoxId?: string; confirmFusion?: boolean; moveIndex?: number; replaceIndex?: number; moveName?: string };
 
 export const moneyText = (value: number) => value.toLocaleString('ko-KR');
 export const requiresReplacement = (choice: ActionChoice) => 'requiresReplace' in choice && !!choice.requiresReplace;
@@ -103,6 +105,7 @@ export function rewardActionError(choice: ActionChoice, configuration: Configura
     if (!target) return '아이템을 사용할 포켓몬을 선택하세요.';
     if (!target.eligible) return target.reason || '이 포켓몬에게는 사용할 수 없습니다.';
   }
+  if ('requiresFusion' in choice && choice.requiresFusion && (!configuration.confirmFusion || !choice.fusionPairs?.some(pair=>pair.primaryBoxId===configuration.boxId&&pair.donorBoxId===configuration.donorBoxId))) return '두 번째 포켓몬과 소모 확인을 선택하세요.';
   if (choice.requiresMove && !eligibleRewardMoves(target, choice).some(move => move.index === configuration.moveIndex)) return 'moveSelectionMode' in choice && choice.moveSelectionMode === 'ppup' ? '최대 PP를 늘릴 수 있는 기술을 선택하세요.' : 'PP가 줄어든 기술을 선택하세요.';
   if (choice.requiresNewMove && (!configuration.moveName || !target?.learnableMoves?.includes(configuration.moveName))) return '다시 배울 수 있는 기술을 선택하세요.';
   const replacement=emptyMoveSlot(target) ?? configuration.replaceIndex;
