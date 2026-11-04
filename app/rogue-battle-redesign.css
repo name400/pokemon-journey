@@ -452,3 +452,8 @@ html:fullscreen main[data-mode=rogue] .rc-shell.is-battle .bs-scene,html.poke-vi
 }
 .rc-shell.is-battle .battle-screen .bs-target-grid>button>span>small{display:inline;margin-right:4px}
 .rc-shell.is-battle .battle-screen .bs-target-grid>button>span>b{display:inline;font-size:13px;line-height:1.1}
+@media(orientation:landscape) and (max-height:500px) and (min-width:481px){
+ .rc-shell.is-battle .battle-screen[data-multi=true] .bs-console:not([data-ended=true]):has(.bs-party-panel,.bs-ball-panel){display:flex;grid-column:1/-1}
+ .rc-shell.is-battle .battle-screen[data-multi=true] .bs-console:not([data-ended=true]):has(.bs-party-panel,.bs-ball-panel) .bs-actor-steps{display:none}
+ .rc-shell.is-battle .battle-screen[data-multi=true] .bs-console:not([data-ended=true]) :is(.bs-party-panel,.bs-ball-panel){width:100%}
+}
