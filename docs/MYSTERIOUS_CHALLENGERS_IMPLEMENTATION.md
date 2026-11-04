@@ -30,3 +30,9 @@
 
 ## 원본 비활성 이벤트
 AN_OFFER_YOU_CANT_REFUSE는 mystery-encounter-biomes.ts에서 Disabled로 주석 처리되어 있다. 개별 이벤트 파일이 있다는 이유만으로 일반 플레이에 활성화하지 않는다. BERRIES_ABOUND 등 다른 후보도 원본의 활성 여부를 직접 확인해야 한다.
+
+## 클라우드 재개 — 기초 템플릿
+- 태그가 가리키는 `059130acaaea04a3c1edc519dc6cb8ef154bcc48`과 별도 원본 `7c0881255af5cd51992e513ff93c2f71adbe40e0`을 확인했다.
+- 어려움 파티의 STRONGER 1마리와 AVERAGE 최대 5마리, 밸런스 및 진화 기준을 생성하는 독립 함수를 추가했다. 20·21·40·41·80·81·100·200웨이브 경계 단위 검사를 통과했다.
+- 함수는 아직 전투 생성기나 이벤트에 연결되지 않았으며 저장, 선택, 배틀, 보상과 실플레이 검증이 모두 남아 있다. 이벤트를 후보에 추가하지 않았다.
+- 이 환경의 기본 npm 캐시 경로는 쓰기 제한으로 설치가 실패했다. `npm_config_cache=/tmp/pokerogue-npm-cache npm run install:ci`로 설치했다.
