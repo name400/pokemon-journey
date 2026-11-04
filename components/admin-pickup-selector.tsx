@@ -1,0 +1,11 @@
+'use client';
+import {useMemo,useState} from 'react';
+import {Search,X,Check,CalendarDays} from 'lucide-react';
+import PokemonImage from './pokemon-image';
+type Entry={sourceId:number;id?:number;artId?:number;name:string};
+export default function AdminPickupSelector({options,value,onChange,disabled}:{options:Entry[];value:string;onChange:(value:string)=>void;disabled:boolean}){
+ const [search,setSearch]=useState('');
+ const matches=useMemo(()=>{const q=search.normalize('NFKC').toLocaleLowerCase().replace(/[\s#]/g,'');return options.filter(p=>!q||String(p.sourceId).includes(q)||p.name.normalize('NFKC').toLocaleLowerCase().replace(/\s/g,'').includes(q));},[options,search]);
+ const selected=options.find(p=>String(p.sourceId)===value);
+ return <div className="admin-pickup-selector"><label htmlFor="pickup-search">픽업 포켓몬 검색</label><div className="admin-pickup-search"><Search size={18} aria-hidden="true"/><input id="pickup-search" type="search" className="form-control" placeholder="포켓몬 이름 또는 도감 번호" value={search} onChange={e=>setSearch(e.target.value)} disabled={disabled}/>{search&&<button type="button" onClick={()=>setSearch('')} aria-label="픽업 검색 지우기" disabled={disabled}><X size={17}/></button>}</div><div className="admin-pickup-selected" role="status">{selected?<><PokemonImage mon={{...selected,id:selected.id??selected.sourceId}} variant="sprite"/><span><small>선택한 픽업</small><b>#{selected.sourceId} {selected.name}</b></span></>:<><CalendarDays size={27}/><span><small>선택한 방식</small><b>매일 자동 변경</b></span></>}</div><button type="button" className="admin-pickup-auto" aria-pressed={!value} disabled={disabled} onClick={()=>onChange('')}><CalendarDays size={17}/>매일 자동 변경{!value&&<Check size={17}/>}</button><p className="admin-pickup-count" role="status">검색 결과 {matches.length}종 · 선택 후 아래 ‘픽업 적용’을 누르세요.</p><div className="admin-pickup-results" role="group" aria-label="픽업 검색 결과">{matches.map(entry=><button type="button" key={entry.sourceId} aria-pressed={value===String(entry.sourceId)} disabled={disabled} onClick={()=>onChange(String(entry.sourceId))}><PokemonImage mon={{...entry,id:entry.id??entry.sourceId}} variant="sprite"/><span><small>#{entry.sourceId}</small><b>{entry.name}</b></span>{value===String(entry.sourceId)&&<Check size={17}/>}</button>)}{!matches.length&&<p>일치하는 픽업 후보가 없습니다. 이름이나 도감 번호를 확인해 주세요.</p>}</div></div>;
+}
