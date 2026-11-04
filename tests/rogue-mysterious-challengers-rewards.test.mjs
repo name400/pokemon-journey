@@ -14,3 +14,10 @@ test('challenger rewards preserve guarantees and fill the bonus slots',()=>{
  }
  assert.throws(()=>generateClassicChallengerRewards(fixture(),'unknown'));
 });
+test('duplicate groups retry within the selected tier and respect the attempt limit',async()=>{
+ const {retryChallengerReward}=await import('../lib/rogue-classic-rewards.mjs');
+ const existing=[{name:'볼',effect:'balls',tier:1}],seen=[];
+ const result=retryChallengerReward(tier=>{seen.push(tier);return seen.length<3?{name:'다른 볼',effect:'balls',tier:2}:{name:'기술머신',effect:'tm',tier:2};},1,existing,10);
+ assert.equal(result.effect,'tm');assert.deepEqual(seen,[1,2,2]);
+ let calls=0;const fallback=retryChallengerReward(tier=>{calls++;return {name:'같은 볼',effect:'balls',tier};},2,existing,4);assert.equal(calls,4);assert.equal(fallback.effect,'balls');
+});

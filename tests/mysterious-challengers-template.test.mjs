@@ -34,3 +34,10 @@ test('a temporary random source preserves the persisted cursor even after errors
  const run={rng:42};assert.throws(()=>withClassicRandomSource(run,()=>0.25,()=>{assert.equal(classicRandom(run),0.25);throw Error('test');}));
  assert.equal(run.rng,42);const expected=classicRandom({rng:42});assert.equal(classicRandom(run),expected);
 });
+test('member offsets match static, ordinary and shared-member source rules',async()=>{
+ const {mysteriousChallengerMemberOffset}=await import('../lib/rogue-mysterious-challengers.mjs');
+ assert.equal(mysteriousChallengerMemberOffset(82,48,0),82+(48<<10)+(1<<8));
+ assert.equal(mysteriousChallengerMemberOffset(82,48,2),82+(48<<10)+(3<<8));
+ assert.equal(mysteriousChallengerMemberOffset(82,48,2,{sameSeed:true}),82+(48<<10)+(1<<8));
+ assert.equal(mysteriousChallengerMemberOffset(82,48,2,{staticParty:true}),48+(3<<8));
+});

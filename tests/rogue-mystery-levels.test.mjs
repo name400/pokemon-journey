@@ -9,7 +9,7 @@ test('mystery level scaling matches source wave/10 rounding, including brutal 1.
  for(const [wave,multiplier,expected]of [[10,1,1],[25,1,3],[49,1,5],[100,1,10],[42,1.5,6],[50,1.5,8],[200,1.5,30],[100,-1,0],[50,0,0],[50,null,0]])assert.equal(classicMysteryLevelAdditive(wave,multiplier),expected);
  for(const [wave,multiplier]of [[0,1],[201,1],[1,Infinity],[1,NaN]])assert.throws(()=>classicMysteryLevelAdditive(wave,multiplier));
 });
-function fixture(wave){return {id:'source-mystery-level',wave,biome:1,rng:42,party:[makeReferenceMon(151,50,{boxId:'hero',moves:['Splash']})],modifiers:[],tools:{},balls:{}};}
+function fixture(wave){return {id:'source-mystery-level',seed:'source-mystery-level',wave,biome:1,rng:42,party:[makeReferenceMon(151,50,{boxId:'hero',moves:['Splash']})],modifiers:[],tools:{},balls:{}};}
 test('all five stat-trainer parties use source level scaling at original levels above100',()=>{
  for(const wave of [22,49,101,180])for(const id of [120,121,122,123,124]){
   const run=fixture(wave),encounter=classicStatTrainerEncounter(run,id),template=templates.templates[encounter.template];
