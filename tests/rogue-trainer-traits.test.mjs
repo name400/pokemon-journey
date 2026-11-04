@@ -14,10 +14,10 @@ assert.equal(classicTrainerFriendship(1),50);assert.equal(classicTrainerFriendsh
 // A known roll produces a hidden ability in the real trainer path. Player
 // ability charms affect wild encounters only and do not change this roll.
 for(const modifiers of [[],[{id:'abilitycharm',count:4}]]){
- const run={id:'hidden',wave:100,biome:0,rng:35,party:[makeReferenceMon(151,100,{boxId:'player'})],modifiers,tools:{},seed:'fixture',trainerTraitsRule:'source-v1'};
+ const run={id:'hidden',wave:100,biome:0,rng:1773,party:[makeReferenceMon(151,100,{boxId:'player'})],modifiers,tools:{},seed:'fixture',trainerTraitsRule:'source-v1'};
  const encounter=classicTrainerEncounter(run,5,{kind:'trainer'});run.encounter=encounter;
  const mon=encounter.team.find(p=>p.rogueAbilitySlot==='hidden');assert.equal(mon?.ability,'skilllink');
- const battle=restoreClassicNativeBattle(createClassicCombat(run,encounter.team,{trainer:true}),run);
+ const battle=restoreClassicNativeBattle(createClassicCombat(run,encounter.team,{trainer:true,doubles:encounter.doubles}),run);
  assert.equal(battle.p2.pokemon.find(p=>p.set.trainerToken===mon.boxId).getAbility().id,'skilllink');
 }
 for(const wave of [20,100,145,199]){

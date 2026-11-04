@@ -36,6 +36,7 @@ Runtime images currently depend on the remote repositories above. `components/po
 - public/game/town/rock.svg: 프로젝트 제작 바위 타일. 잘못 참조한 Tiny Town 소품 좌표를 대체한다.
 
 - public/game/trainers/rival-local.svg: 프로젝트 제작 임시 라이벌 초상화이며 원작 이미지는 아닙니다.
+- public/game/trainers/bug-superfan.png: © 2025 Chani von Karpa, CC-BY-NC-SA-4.0. PokéRogue assets fb8ccb6의 trainer/bug_type_superfan.png를 변경 없이 사용(파일 이름만 변경). Git blob 64f644b4f5719530df40771b6c927962fb11a39d. 원본 images/REUSE.toml의 개별 항목을 확인했다. 공개 출처 화면은 public/game/trainers/pokerogue-credits.html, 전체 라이선스는 public/licenses/pokerogue-bug-superfan-CC-BY-NC-SA-4.0.txt에 보관한다.
 
 ## UI and simulator references (2026-11-04)
 - public/game/tm-icons/: project-drawn disc silhouettes and type-specific colors, incorporating the existing credited Scarlet/Violet type-symbol PNGs as embedded images. Embedding does not change their underlying artwork rights; no commercial artwork license is asserted.
