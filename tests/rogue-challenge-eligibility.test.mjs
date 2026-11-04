@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {makeReferenceMon,sourceSpeciesFor} from '../lib/rogue-reference.mjs';
 import {applyClassicEggForm} from '../lib/rogue-egg-forms.mjs';
-import {classicChallengeBattleEligibility as eligible,classicChallengeStarterEligibility as starterEligible} from '../lib/rogue-challenge-eligibility.mjs';
+import {classicChallengeBattleEligibility as eligible,classicChallengeStarterEligibility as starterEligible,classicChallengeStarterGenderEligibility as genderEligible} from '../lib/rogue-challenge-eligibility.mjs';
 import {ensureStarterSystem,starterCatalog,buildStarterParty} from '../lib/rogue-starter-system.mjs';
 const mon=id=>makeReferenceMon(id,50);
 const gen=value=>({id:0,value}),type=value=>({id:1,value});
@@ -36,3 +36,8 @@ assert.throws(()=>buildStarterParty(system,[choice],{challenges:[{id:99,value:1}
 assert.equal(buildStarterParty(system,[choice]).party.length,1);
 assert.equal(eligible(mon(25),[type(19)]),null);
 console.log('Challenge eligibility: generation, intrinsic type, forms, Castform and conservative unknowns passed');
+
+// Original starter selection gender restrictions (independent of type/generation eligibility).
+for(const [id,challenge,accepted] of [[280,gen(4),'M'],[361,gen(4),'F'],[280,type(2),'M'],[361,type(8),'F'],[412,type(3),'M'],[412,type(5),'F'],[412,type(9),'F'],[412,type(12),'F']]){assert.equal(genderEligible(id,accepted,[challenge]),true);assert.equal(genderEligible(id,accepted==='M'?'F':'M',[challenge]),false);assert.equal(genderEligible(id,null,[challenge]),null);}
+assert.equal(genderEligible(412,'M',[type(3),type(12)]),false);
+assert.equal(genderEligible(25,'F',[gen(4)]),true);
