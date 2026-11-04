@@ -564,3 +564,11 @@ html:fullscreen main[data-mode=rogue] .rc-shell.is-battle .bs-scene,html.poke-vi
 /* PC-layout landscape phone: keep the complete battle within the scaled viewport. */
 html.poke-classic-landscape-pc .rc-shell.is-battle .battle-screen .bs-scene,
 html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-battle .bs-scene{height:calc(35dvh - 35px)!important}
+
+/* Desktop battle: use the available height and retain the log while choosing moves. */
+@media(min-width:900px) and (min-height:680px){
+ .rc-shell.is-battle .battle-screen .bs-scene,.rc-shell.is-battle .battle-screen .bs-scene[data-multi=true]{height:clamp(270px,38dvh,390px);max-height:none}
+ .rc-shell.is-battle .battle-screen .bs-combatant-own{max-width:min(21cqw,25dvh,220px)}
+ .rc-shell.is-battle .battle-screen .bs-combatant-foe{max-width:min(15cqw,19dvh,165px)}
+ .rc-shell.is-battle .battle-screen .bs-console:has(.bs-move-panel) .bs-narration{display:flex;flex-direction:column;min-height:0;max-height:100%;overflow:hidden}
+}
