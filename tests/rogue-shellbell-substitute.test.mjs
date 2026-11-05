@@ -37,5 +37,5 @@ test('opponent-owned modifier heals its holder when hitting a substitute',()=>{
 });
 test('new games opt in without rewriting another slot',async()=>{
  const {ensureClassicState,startClassicRun}=await import('../lib/rogue-classic-state.mjs'),{starterCatalog}=await import('../lib/rogue-starter-system.mjs');const doc={},state=ensureClassicState(doc,{initialStarterId:1}),entry=starterCatalog(state.system).find(p=>p.id===1);state.slots[1]={keep:true};
- const run=startClassicRun(doc,[{id:1,ability:entry.abilities[0].key,nature:entry.natures[0].key,gender:entry.genders[0],shiny:false,moves:entry.defaultMoves}],{id:'shell-v2',seed:'shell-v2'});assert.equal(run.shellBellRule,'source-v2');assert.deepEqual(state.slots[1],{keep:true});
+ const run=startClassicRun(doc,[{id:1,ability:entry.abilities[0].key,nature:entry.natures[0].key,gender:entry.genders[0],shiny:false,moves:entry.defaultMoves}],{id:'shell-v2',seed:'shell-v2'});assert.equal(run.shellBellRule,'source-v3');assert.deepEqual(state.slots[1],{keep:true});
 });
