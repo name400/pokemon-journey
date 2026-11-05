@@ -3,8 +3,8 @@
   "method": "Local exported source metadata versus runtime permission and enum-name mapping. Missing rows in the existing export and engine-effect parity are not inferred.",
   "counts": {
     "forms": 416,
-    "fusionForms": 361,
-    "unconnectedForms": 55,
+    "fusionForms": 365,
+    "unconnectedForms": 51,
     "staticFamilyForms": 95,
     "automaticHookForms": 28,
     "triggerHookForms": 9,
@@ -2118,39 +2118,39 @@
       "index": 1,
       "key": "therian",
       "native": "tornadustherian",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 642,
       "index": 1,
       "key": "therian",
       "native": "thundurustherian",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 645,
       "index": 1,
       "key": "therian",
       "native": "landorustherian",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 646,
@@ -4634,13 +4634,13 @@
       "index": 1,
       "key": "therian",
       "native": "enamorustherian",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 916,

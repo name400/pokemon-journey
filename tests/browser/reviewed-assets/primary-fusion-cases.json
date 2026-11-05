@@ -1697,6 +1697,84 @@
     }
   },
   {
+    "key": "641:1",
+    "atlas": "641-therian",
+    "mon": {
+      "id": 641,
+      "rogueSourceId": 641,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "therian",
+      "rogueBattleSpecies": "tornadustherian",
+      "battleAppearance": "tornadustherian",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "642:1",
+    "atlas": "642-therian",
+    "mon": {
+      "id": 642,
+      "rogueSourceId": 642,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "therian",
+      "rogueBattleSpecies": "thundurustherian",
+      "battleAppearance": "thundurustherian",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "645:1",
+    "atlas": "645-therian",
+    "mon": {
+      "id": 645,
+      "rogueSourceId": 645,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "therian",
+      "rogueBattleSpecies": "landorustherian",
+      "battleAppearance": "landorustherian",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "646:1",
     "atlas": "646-black",
     "mon": {
@@ -5346,6 +5424,32 @@
       "rogueFormKey": "female",
       "rogueBattleSpecies": "basculegionf",
       "battleAppearance": "basculegionf",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "905:1",
+    "atlas": "905-therian",
+    "mon": {
+      "id": 905,
+      "rogueSourceId": 905,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "therian",
+      "rogueBattleSpecies": "enamorustherian",
+      "battleAppearance": "enamorustherian",
       "mega": false,
       "primal": false,
       "ultra": false,
