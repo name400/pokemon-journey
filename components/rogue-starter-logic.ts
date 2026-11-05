@@ -45,13 +45,16 @@ export type StarterSelection = {
   moves: string[];
 };
 export type StarterTeamValidation = { valid: boolean; cost: number; remaining: number; error: string | null };
-export type StarterChallenge = { id: 0 | 1 | 5 | 6 | 8; value: number };
+export type StarterChallenge = { id: 0 | 1 | 5 | 6 | 7 | 8 | 9 | 10; value: number };
 export const EXTRA_CHALLENGES: Array<{id: StarterChallenge['id']; name: string; options: string[]; description: string}> = [
  {id:5,name:'거꾸로 배틀',options:['켜기'],description:'타입의 약점과 내성이 반대로 적용됩니다. 특성·도구의 면역은 유지됩니다.'},
  {id:6,name:'종족값 반전',options:['켜기'],description:'모든 포켓몬의 HP·공격·방어·특공·특방·스피드 종족값 순서를 뒤집습니다.'},
+ {id:7,name:'포획 제한',options:['켜기'],description:'매 10층의 첫 층에서 잡은 포켓몬만 영입합니다. 다른 층에서도 포획 등록과 사탕은 받습니다.'},
  {id:8,name:'지원 제한',options:['구간 회복 금지','상점 금지','구간 회복·상점 금지'],description:'10층마다 회복 또는 전투 후 유료 보급을 제한합니다. 무료 보상은 받을 수 있습니다.'},
+ {id:9,name:'영구 기절',options:['켜기'],description:'쓰러진 포켓몬은 부활하거나 융합할 수 없습니다. 기절 직전에 발동하는 부활씨앗은 사용할 수 있습니다.'},
+ {id:10,name:'패시브 특성',options:['트레이너·최종 보스','모든 포켓몬'],description:'선택한 대상에게 패시브 특성을 적용합니다.'},
 ];
-export const CHALLENGE_RIBBON_NAMES: Record<string,string> = {inverse:'거꾸로 배틀',flipStats:'종족값 반전',noHeal:'회복 금지',noShop:'상점 금지',noSupport:'지원 금지'};
+export const CHALLENGE_RIBBON_NAMES: Record<string,string> = {limitedCatch:'포획 제한',hardcore:'영구 기절',passives:'패시브 챌린지',inverse:'거꾸로 배틀',flipStats:'종족값 반전',noHeal:'회복 금지',noShop:'상점 금지',noSupport:'지원 금지'};
 export const CHALLENGE_TYPES = ['노말','격투','비행','독','땅','바위','벌레','고스트','강철','불꽃','물','풀','전기','에스퍼','얼음','드래곤','악','페어리'];
 export type RogueStarterSelectProps = {
   starters: StarterEntry[];
