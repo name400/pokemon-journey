@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 폴터가이스트의 전투 기록에 소지 효과의 한국어 이름을 표시하고 빗나감보다 먼저 안내한다. 녹슨검·녹슨방패도 이전 불가 폼 도구로 구분한다. [POLTERGEIST_ITEM_DISPLAY_QA_20261105.md](POLTERGEIST_ITEM_DISPLAY_QA_20261105.md) 참조.
+
 후속: 신규 도전의 폴터가이스트가 이전 가능한 포켓로그식 소지 효과를 인식하고, 적 AI도 같은 조건으로 대상을 판정한다. 이전 불가 효과와 다이맥스는 구분한다. [POLTERGEIST_SOURCE_ITEMS_QA_20261105.md](POLTERGEIST_SOURCE_ITEMS_QA_20261105.md) 참조.
 
 후속 검사: 막말내뱉기·유턴·배턴터치·울부짖기·기절·위기회피 교체와 미스터리 이벤트 선봉 선택 후 만나자마자의 첫 턴·저장 복구를 확인했다. [FIRST_TURN_SWITCH_EDGES_QA_20261105.md](FIRST_TURN_SWITCH_EDGES_QA_20261105.md) 참조.
