@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 적 AI가 지형 없는 아이언롤러와 타입이 맞지 않는 싱크로노이즈를 실패할 공격으로 평가한다. 더블 전투의 양쪽 상대와 다이맥스 예외를 구분한다. [AI_CONDITIONAL_MOVES_QA_20261105.md](AI_CONDITIONAL_MOVES_QA_20261105.md) 참조.
+
 후속: 신규 도전의 적 AI가 활성화된 습기를 보고 자폭·대폭발·깜짝헤드·미스트버스트를 기절 후보에서 제외한다. 원본처럼 틀깨기의 실행 전 평가 순서와 다이맥스를 구분한다. [AI_DAMP_EXPLOSION_QA_20261105.md](AI_DAMP_EXPLOSION_QA_20261105.md) 참조.
 
 후속: 신규 도전의 불태우기가 플레이어와 상대의 이전 가능한 포켓로그식 열매를 각각 한 개 제거하고, 전투·저장 수량을 동기화한다. [INCINERATE_SOURCE_BERRIES_QA_20261105.md](INCINERATE_SOURCE_BERRIES_QA_20261105.md) 참조.
