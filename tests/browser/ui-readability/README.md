@@ -5,6 +5,7 @@ From the repository root:
 ```sh
 npx vite --config tests/browser/ui-readability/vite.config.mjs --host 127.0.0.1 --port 5222 --strictPort
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/check.mjs
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/beast-and-rewards.mjs
 ```
 
 `CHROMIUM_PATH` defaults to `/usr/bin/chromium`; `UI_TEST_URL` defaults to localhost5222.
@@ -24,3 +25,7 @@ run through the UI.
 
 Screenshots and JSON are ignored outputs under `.sites-runtime/tests/ui-readability/`.
 Local Chromium tests do not replace physical-device, real-artwork or production QA.
+
+The second script uses long descriptions at five mobile sizes and one PC size.
+It checks free reward text/tier and paid-service price containment, real revive
+purchase, Beast Ball reward acquisition, ball selection/capture and reload.

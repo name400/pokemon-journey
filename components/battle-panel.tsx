@@ -34,7 +34,7 @@ function BattleToolIcon({slug,src}:{slug?:string;src?:string|null}){const [faile
 const conditionLabels:Record<string,string>={psn:'독',tox:'맹독',brn:'화상',par:'마비',slp:'잠듦',frz:'얼음'};
 const statusLabel=(status:string)=>conditionLabels[status]||status;
 const conditionVisual:Record<string,string>={독:'poison',맹독:'poison',화상:'burn',마비:'paralysis',잠듦:'sleep',얼음:'freeze',psn:'poison',tox:'poison',brn:'burn',par:'paralysis',slp:'sleep',frz:'freeze'};
-const ballSlugs:Record<string,string>={pokeball:'poke-ball',greatball:'great-ball',ultraball:'ultra-ball',masterball:'master-ball',quickball:'quick-ball',timerball:'timer-ball',netball:'net-ball',duskball:'dusk-ball',healball:'heal-ball',luxuryball:'luxury-ball'};
+const ballSlugs:Record<string,string>={pokeball:'poke-ball',greatball:'great-ball',ultraball:'ultra-ball',beastball:'beast-ball',masterball:'master-ball',quickball:'quick-ball',timerball:'timer-ball',netball:'net-ball',duskball:'dusk-ball',healball:'heal-ball',luxuryball:'luxury-ball'};
 const itemList=[{key:'potion',label:'상처약',field:'potions',effect:'HP 20 회복'},{key:'super',label:'좋은상처약',field:'super_potions',effect:'HP 60 회복'},{key:'hyper',label:'고급상처약',field:'hyper_potions',effect:'HP 120 회복'},{key:'max',label:'풀회복약',field:'max_potions',effect:'HP 전부 회복'},{key:'fullrestore',label:'회복약',field:'full_restores',effect:'HP·상태 전부 회복'},{key:'antidote',label:'해독제',field:'antidotes',effect:'독·맹독 치료'}];
 
 function eventDuration(e:BattleVisualEvent){if(e.kind==='capture'||e.kind==='captureAttempt')return 650+Math.min(3,Number(e.shakes)||0)*250;if(e.kind==='form')return 780;return e.kind==='move'?440:e.kind==='damage'||e.kind==='heal'?360:e.kind==='switch'||e.kind==='faint'?420:e.kind==='status'?340:240;}

@@ -71,3 +71,24 @@ main[data-mode="rogue"]:has(.rogue-classic-rewards) .workspace>footer{display:no
 .rcr-choice .rcr-tm-preview{display:flex;flex-direction:column;gap:2px;margin-top:3px;color:#315a60;font-size:11px;line-height:1.3}.rcr-choice .rcr-tm-preview strong{font-size:11px}.rcr-choice .rcr-tm-preview small{font-size:10px;color:#536a64;line-height:1.35}
 
 @media(min-width:992px){.rc-shell:has(.rogue-classic-rewards){width:min(1500px,calc(100% - 28px));max-width:1500px}.rogue-classic-rewards .rcr-choice{height:auto;min-height:112px}.rogue-classic-rewards .rcr-choice-copy>b{font-size:17px}.rogue-classic-rewards .rcr-choice-copy>span{font-size:13px;line-height:1.4}.rogue-classic-rewards .rcr-service{min-height:76px}.rogue-classic-rewards .rcr-service-copy>b{font-size:16px}.rogue-classic-rewards .rcr-service-copy>span{font-size:12px}.rogue-classic-rewards .rcr-tier,.rogue-classic-rewards .rcr-service-price{font-size:13px}}
+
+/* Mobile supplies grow with their copy; prices and tier labels stay in flow. */
+@media(max-width:680px){
+ .rc-shell .rogue-classic-rewards{height:auto;max-height:none;overflow:visible;grid-template-rows:auto; padding-bottom:16px}
+ .rc-shell .rogue-classic-rewards .rcr-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto;align-items:stretch;overflow:visible}
+ .rc-shell .rogue-classic-rewards .rcr-choice{height:auto;min-height:112px;align-self:stretch;align-items:start;grid-template-columns:42px minmax(0,1fr);grid-template-rows:auto auto;padding:7px;gap:5px}
+ .rc-shell .rogue-classic-rewards .rcr-choice-top{position:static;grid-column:1/-1;grid-row:1;align-self:start;padding:0;min-width:0}
+ .rc-shell .rogue-classic-rewards .rcr-choice-art{grid-column:1;grid-row:2;align-self:start;width:42px;min-height:42px}
+ .rc-shell .rogue-classic-rewards .rcr-choice-copy{grid-column:2;grid-row:2;padding:0;gap:5px;min-width:0}
+ .rc-shell .rogue-classic-rewards .rcr-choice-copy>b,.rc-shell .rogue-classic-rewards .rcr-choice-copy>span,.rc-shell .rogue-classic-rewards .rcr-tier,.rc-shell .rogue-classic-rewards .rcr-service-copy>b,.rc-shell .rogue-classic-rewards .rcr-service-copy>span{display:block;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;-webkit-line-clamp:unset;line-clamp:none}
+ .rc-shell .rogue-classic-rewards .rcr-tier{display:inline-flex;flex-wrap:wrap;max-width:100%}
+ .rc-shell .rogue-classic-rewards .rcr-choice-copy>b{font-size:13px;line-height:1.4}
+ .rc-shell .rogue-classic-rewards .rcr-choice-copy>span{font-size:11px;line-height:1.5}
+ .rc-shell .rogue-classic-rewards .rcr-service-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto;align-items:stretch;overflow:visible}
+ .rc-shell .rogue-classic-rewards .rcr-service{height:auto;min-height:84px;align-self:stretch;display:grid;grid-template-columns:30px minmax(0,1fr);grid-template-rows:auto auto;padding:8px;gap:6px}
+ .rc-shell .rogue-classic-rewards .rcr-service>.rcr-item-image{grid-column:1;grid-row:1;align-self:start}
+ .rc-shell .rogue-classic-rewards .rcr-service-copy{grid-column:2;grid-row:1;min-width:0}
+ .rc-shell .rogue-classic-rewards .rcr-service-price{position:static;grid-column:1/-1;grid-row:2;align-self:end;min-width:0;max-width:100%;min-height:24px;flex-wrap:wrap;white-space:normal;overflow-wrap:anywhere;font-size:14px;line-height:1.4}
+ .rc-shell .rogue-classic-rewards .rcr-scrim{position:fixed}
+ .rc-shell .rogue-classic-rewards .rcr-detail{position:fixed;top:calc((100dvh - 80px)/2);width:min(94vw,660px);max-height:calc(100dvh - 112px - env(safe-area-inset-bottom))}
+}
