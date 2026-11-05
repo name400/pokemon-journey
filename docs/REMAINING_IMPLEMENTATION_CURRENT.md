@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 멀티렌즈 방전 첫 타격 피해와 마비 추가 효과의 대상 순서를 보완했다. [MULTILENS_DISCHARGE_FIRST_HIT_QA_20261105.md](MULTILENS_DISCHARGE_FIRST_HIT_QA_20261105.md) 참조.
+
 후속: 신규 도전의 멀티렌즈 지진 첫 타격에서 상대를 먼저 처리하고 기절 여부를 아군 피해 계산에 반영한다. [MULTILENS_EARTHQUAKE_FIRST_HIT_QA_20261105.md](MULTILENS_EARTHQUAKE_FIRST_HIT_QA_20261105.md) 참조.
 
 후속: 신규 도전의 멀티렌즈 파도타기 첫 타격에서 상대를 먼저 처리하고 기절 여부를 아군 피해 계산에 반영한다. [MULTILENS_SURF_FIRST_HIT_QA_20261105.md](MULTILENS_SURF_FIRST_HIT_QA_20261105.md) 참조.
