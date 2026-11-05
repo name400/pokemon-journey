@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 광합성·달의불빛·아침햇살이 날씨별 원본 비율과 반올림을 사용한다. 메가솔·날씨 억제·치유 부적과 기존 도전을 구분한다. [WEATHER_HEALING_ROUNDING_QA_20261105.md](WEATHER_HEALING_ROUNDING_QA_20261105.md) 참조.
+
 후속: 신규 도전의 강풍에서 날씨볼의 위력을 원본처럼 두 배로 적용하고 AI 피해 추정에도 반영한다. 다이맥스·메가솔·날씨 억제를 구분한다. [WEATHER_BALL_STRONG_WINDS_QA_20261105.md](WEATHER_BALL_STRONG_WINDS_QA_20261105.md) 참조.
 
 후속: 신규 도전 적 AI가 날씨볼의 현재 날씨에 따른 타입·위력을 추정하고 메가솔과 원시 날씨 무효를 함께 판정한다. [AI_WEATHER_BALL_QA_20261105.md](AI_WEATHER_BALL_QA_20261105.md) 참조.
