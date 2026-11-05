@@ -4,13 +4,14 @@ import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle,playClassicCombat} from '../lib/rogue-battle-engine.mjs';
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
 
-function fixture({modern=true,reserve=false,fainted=false,doubles=false,dynamax=false}={}) {
+function fixture({modern=true,reserve=false,fainted=false,doubles=false,dynamax=false,wild=false,ghost=false}={}) {
  const mon=(id,boxId,moves)=>makeReferenceMon(id,50,{boxId,moves,ability:'runaway'});
  const hero=mon(143,'hero',['Splash']),ally=mon(7,'ally',['Splash']);
- const foe=mon(151,'foe',['Teleport','Splash']),foe2=mon(25,'foe2',['Splash']),bench=mon(1,'bench',['Splash']);
- const run={id:'teleport-ai',seed:'teleport-ai',rng:42,wave:20,screen:'battle',party:doubles?[hero,ally]:[hero],modifiers:[],tools:{},encounter:{kind:'trainer'},enemyAiRule:'source-ranked-v1',...(modern?{enemyAiTeleportRule:'trainer-source-v1'}:{})};
+ const foe=mon(ghost?94:151,'foe',['Teleport','Splash']),foe2=mon(25,'foe2',['Splash']),bench=mon(1,'bench',['Splash']);
+ if(ghost)foe.ability='levitate';
+ const run={id:'teleport-ai',seed:'teleport-ai',rng:42,wave:20,screen:'battle',party:doubles?[hero,ally]:[hero],modifiers:[],tools:{},encounter:{kind:wild?'wild':'trainer'},enemyAiRule:'source-ranked-v1',...(modern?{enemyAiTeleportRule:'trainer-source-v1',wildTeleportAiRule:'double-source-v1'}:{})};
  const team=[foe,...(doubles?[foe2]:[]),...(reserve?[bench]:[])];
- run.combat=createClassicCombat(run,team,{trainer:true,doubles});
+ run.combat=createClassicCombat(run,team,{trainer:!wild,doubles});
  if(fainted||dynamax){const b=restoreClassicNativeBattle(run.combat,run);if(fainted){const p=b.p2.pokemon.at(-1);p.hp=0;p.fainted=true;}if(dynamax)b.p2.active[0].addVolatile('dynamax');run.combat.snapshot=snapshotClassicNativeBattle(b);}
  return run;
 }
@@ -45,5 +46,13 @@ test('new runs enable the rule without changing another slot',async()=>{
  const doc={},state=ensureClassicState(doc,{initialStarterId:1}),entry=starterCatalog(state.system).find(p=>p.id===1);
  state.slots[1]={keep:true};
  const run=startClassicRun(doc,[{id:1,ability:entry.abilities[0].key,nature:entry.natures[0].key,gender:entry.genders[0],shiny:false,moves:entry.defaultMoves}],{id:'teleport-ai',seed:'teleport-ai'});
- assert.equal(run.enemyAiTeleportRule,'trainer-source-v1');assert.deepEqual(state.slots[1],{keep:true});
+ assert.equal(run.enemyAiTeleportRule,'trainer-source-v1');assert.equal(run.wildTeleportAiRule,'double-source-v1');assert.deepEqual(state.slots[1],{keep:true});
+});
+
+test('wild doubles avoid Teleport even for Ghost or Run Away',async()=>{
+ for(const ghost of [false,true]){
+  const modern=await act(fixture({wild:true,doubles:true,ghost})),legacy=await act(fixture({wild:true,doubles:true,modern:false,ghost}));
+  assert.ok(!modern.log.some(s=>s.includes('|Teleport|')),modern.log.join('\n'));
+  assert.ok(legacy.log.some(s=>s.includes('|Teleport|')),legacy.log.join('\n'));
+ }
 });
