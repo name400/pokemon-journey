@@ -78,7 +78,7 @@ try{
   await page.route('**/api/rogue-classic*',async route=>{let extra={};if(route.request().method()==='POST'){const p=route.request().postDataJSON();assert.equal(p.revision,revision);if(p.action==='turn')turns.push(p.command);extra=applyClassicAction(doc,p);doc=await decodeGameData(await encodeGameData(doc));revision++;}await route.fulfill({json:{...classicGameView(doc),...extra,revision}});});
   await page.goto(base+'/?mode=rogue&tab=rogue');await page.getByRole('button',{name:'계속하기',exact:true}).first().click();
   for(let i=0;i<3;i++){await page.getByRole('button',{name:'싸운다',exact:true}).click();await Promise.all([page.waitForResponse(r=>r.request().method()==='POST'&&r.request().postDataJSON()?.action==='turn'),page.locator('.bs-move').first().click()]);}
-  assert.equal(turns.length,3);assert.ok(turns.every(command=>command.type==='move'&&command.move==='splash'));assert.equal(activeClassicRun(doc).mystery.turns,3);assert.equal(activeClassicRun(doc).screen,'reward');assert.deepEqual(errors,[]);
+  assert.equal(turns.length,3);assert.ok(turns.every(command=>command.type==='move'&&command.move==='splash'));assert.equal(activeClassicRun(doc).mystery.turns,3);assert.equal(activeClassicRun(doc).screen,'reward');await page.getByRole('button',{name:'보상 선택',exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'싸운다',exact:true}).count(),0);await page.getByRole('button',{name:'보상 선택',exact:true}).click();assert.equal(turns.length,3);assert.deepEqual(errors,[]);
   results.push({case:'Wobbuffet actual UI and save round trips',turns,screen:activeClassicRun(doc).screen});await context.close();
  }
  await writeFile(out+'/results.json',JSON.stringify(results,null,2));console.log(JSON.stringify({passed:results.length,results}));

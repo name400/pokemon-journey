@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {createFixture} from './fixture.mjs';
+import {applyClassicAction,classicGameView,activeClassicRun} from '../../../lib/rogue-classic-game.mjs';
+import {makeReferenceMon} from '../../../lib/rogue-reference.mjs';
+import {encodeGameData,decodeGameData} from '../../../lib/game-storage.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');const base=process.env.UI_TEST_URL||'http://127.0.0.1:5224';
+const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+try{for(const size of [{width:375,height:667},{width:1280,height:850}]){
+ const context=await browser.newContext({viewport:size,hasTouch:size.width<600,isMobile:size.width<600,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://**/*',route=>route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
+ let doc=createFixture('battle'),run=activeClassicRun(doc),revision=0,turns=0;Object.assign(run,{wave:27,biome:4,screen:'mystery',combat:undefined,mysteryRule:'part-timer-v17',party:[makeReferenceMon(150,40,{boxId:'hero',moves:['Splash']})],tools:{},encounter:{kind:'mystery',key:'fun-and-games'},mystery:{type:'fun-and-games',stage:'choose'}});applyClassicAction(doc,{action:'mysterySelect',job:'play',boxId:'hero'});applyClassicAction(doc,{action:'mysteryConfirm'});
+ await page.route('**/api/rogue-classic*',async route=>{let extra={};if(route.request().method()==='POST'){const p=route.request().postDataJSON();assert.equal(p.revision,revision);if(p.action==='turn')turns++;extra=applyClassicAction(doc,p);doc=await decodeGameData(await encodeGameData(doc));revision++;}await route.fulfill({json:{...classicGameView(doc),...extra,revision}});});
+ await page.goto(base+'/?mode=rogue&tab=rogue');await page.getByRole('button',{name:'계속하기',exact:true}).first().click();for(let i=0;i<3;i++){await page.getByRole('button',{name:'싸운다',exact:true}).click();await Promise.all([page.waitForResponse(r=>r.request().method()==='POST'&&r.request().postDataJSON()?.action==='turn'),page.locator('.bs-move').first().click()]);}
+ await page.getByRole('button',{name:'보상 선택',exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'싸운다',exact:true}).count(),0);assert.equal(turns,3);assert.equal(activeClassicRun(doc).screen,'reward');await page.getByRole('button',{name:'보상 선택',exact:true}).click();assert.equal(turns,3);assert.deepEqual(errors,[]);await page.reload();await page.getByRole('button',{name:'계속하기',exact:true}).first().click();assert.equal(activeClassicRun(doc).screen,'reward');assert.deepEqual(errors,[]);console.log(JSON.stringify({viewport:size,turns,screen:activeClassicRun(doc).screen}));await context.close();
+}}finally{await browser.close();}
