@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 멀티렌즈는 원본처럼 더블 전투의 전체 공격에도 추가 타격을 적용한다. 면역·방어·기절과 부자유친 등의 확인 범위는 [MULTILENS_SPREAD_QA_20261105.md](MULTILENS_SPREAD_QA_20261105.md)에 기록했다.
+
 후속: 신규 도전의 경혈찌르기는 선택한 아군이 먼저 기절하면 사용자에게 능력치 상승을 돌리지 않는다. 교체·변신·다이맥스 경계를 구분한다. [ACUPRESSURE_TARGET_LOSS_QA_20261105.md](ACUPRESSURE_TARGET_LOSS_QA_20261105.md) 참조.
 
 후속: 신규 도전의 호출된 경혈찌르기가 원본처럼 자신 또는 아군을 대상으로 선택한다. 우유마시기의 추가 공격 도구·특성 및 현재 Z기술 동작도 별도 검사했다. [ACUPRESSURE_CALLED_TARGET_QA_20261105.md](ACUPRESSURE_CALLED_TARGET_QA_20261105.md) 참조.
