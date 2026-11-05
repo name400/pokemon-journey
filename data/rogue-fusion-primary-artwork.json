@@ -196,6 +196,21 @@
       "key": "snowy",
       "native": "castformsnowy"
     },
+    "386:1": {
+      "id": 386,
+      "key": "attack",
+      "native": "deoxysattack"
+    },
+    "386:2": {
+      "id": 386,
+      "key": "defense",
+      "native": "deoxysdefense"
+    },
+    "386:3": {
+      "id": 386,
+      "key": "speed",
+      "native": "deoxysspeed"
+    },
     "412:1": {
       "id": 30034,
       "key": "sandy",
@@ -1118,9 +1133,6 @@
     }
   },
   "blocked": [
-    "386:1",
-    "386:2",
-    "386:3",
     "483:1",
     "484:1",
     "487:1",

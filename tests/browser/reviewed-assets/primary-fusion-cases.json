@@ -1021,6 +1021,84 @@
     }
   },
   {
+    "key": "386:1",
+    "atlas": "386-attack",
+    "mon": {
+      "id": 386,
+      "rogueSourceId": 386,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "attack",
+      "rogueBattleSpecies": "deoxysattack",
+      "battleAppearance": "deoxysattack",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "386:2",
+    "atlas": "386-defense",
+    "mon": {
+      "id": 386,
+      "rogueSourceId": 386,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "defense",
+      "rogueBattleSpecies": "deoxysdefense",
+      "battleAppearance": "deoxysdefense",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "386:3",
+    "atlas": "386-speed",
+    "mon": {
+      "id": 386,
+      "rogueSourceId": 386,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "speed",
+      "rogueBattleSpecies": "deoxysspeed",
+      "battleAppearance": "deoxysspeed",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "412:1",
     "atlas": "412-sandy",
     "mon": {

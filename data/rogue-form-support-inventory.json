@@ -3,8 +3,8 @@
   "method": "Local exported source metadata versus runtime permission and enum-name mapping. Missing rows in the existing export and engine-effect parity are not inferred.",
   "counts": {
     "forms": 416,
-    "fusionForms": 355,
-    "unconnectedForms": 61,
+    "fusionForms": 358,
+    "unconnectedForms": 58,
     "staticFamilyForms": 95,
     "automaticHookForms": 28,
     "triggerHookForms": 9,
@@ -1322,39 +1322,39 @@
       "index": 1,
       "key": "attack",
       "native": "deoxysattack",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 386,
       "index": 2,
       "key": "defense",
       "native": "deoxysdefense",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 386,
       "index": 3,
       "key": "speed",
       "native": "deoxysspeed",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 398,
