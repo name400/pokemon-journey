@@ -3,8 +3,8 @@
   "method": "Local exported source metadata versus runtime permission and enum-name mapping. Missing rows in the existing export and engine-effect parity are not inferred.",
   "counts": {
     "forms": 416,
-    "fusionForms": 370,
-    "unconnectedForms": 46,
+    "fusionForms": 372,
+    "unconnectedForms": 44,
     "staticFamilyForms": 95,
     "automaticHookForms": 28,
     "triggerHookForms": 9,
@@ -4509,26 +4509,26 @@
       "index": 1,
       "key": "crowned",
       "native": "zaciancrowned",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 889,
       "index": 1,
       "key": "crowned",
       "native": "zamazentacrowned",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 890,

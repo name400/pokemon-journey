@@ -5441,6 +5441,58 @@
     }
   },
   {
+    "key": "888:1",
+    "atlas": "888-crowned",
+    "mon": {
+      "id": 888,
+      "rogueSourceId": 888,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "crowned",
+      "rogueBattleSpecies": "zaciancrowned",
+      "battleAppearance": "zaciancrowned",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "889:1",
+    "atlas": "889-crowned",
+    "mon": {
+      "id": 889,
+      "rogueSourceId": 889,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "crowned",
+      "rogueBattleSpecies": "zamazentacrowned",
+      "battleAppearance": "zamazentacrowned",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "892:1",
     "atlas": "892-rapid-strike",
     "mon": {

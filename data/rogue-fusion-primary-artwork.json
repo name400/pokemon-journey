@@ -1046,6 +1046,16 @@
       "key": "hangry",
       "native": "morpekohangry"
     },
+    "888:1": {
+      "id": 888,
+      "key": "crowned",
+      "native": "zaciancrowned"
+    },
+    "889:1": {
+      "id": 889,
+      "key": "crowned",
+      "native": "zamazentacrowned"
+    },
     "892:1": {
       "id": 892,
       "key": "rapid-strike",
@@ -1228,8 +1238,6 @@
     "773:15",
     "773:16",
     "773:17",
-    "888:1",
-    "889:1",
     "1024:1",
     "1024:2"
   ]
