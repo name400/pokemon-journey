@@ -713,3 +713,13 @@ Absolute Avarice 선택 후 파티의 열매 보유 기록이 바뀐 경우 기�
 완료/부분지원/검증잔량은 `REMAINING_IMPLEMENTATION_CURRENT.md`, 상세 근거는 `DNA_COSMETIC_AND_SPECIAL_EFFECTS_QA_20261105.md`. Sites는 변경하지 않는다.
 
 최종고정코드 전체720/720(131.5초), 확장 집중12/12, 팔레트9/9. 타입·빌드·변경린트 오류/경고0·diff 통과. 초기 탐색 전체검사에서 발견한 파생 팔레트 폼 목록 누락은 생성 스크립트로 재생성한 후 위 최종 전체검사에서 통과했다. `/tmp/held-final-all-tests.log`, `/tmp/held-final-type.log`, `/tmp/held-final-build.log`, `/tmp/held-lint.log`. 해당 코드/문서/파생 메타데이터를 같은 승인 브랜치에 일반 푸시하고 원격 SHA를 확인한다.
+
+### 2026-11-05 후속: 주체 메가4폼·동종 스톤 이전·융합 파티 이상한 꿈
+
+주체 이상해꽃/리자몽X·Y/거북왕의4메가폼을 융합 전후에 지원한다. donor 일반 특성을 유지하고 primary 폼 능력치/타입/패시브 및 분리용 특성을 갱신해 검증한 뒤 저장한다. 미지원 융합 변신은 후보에서 제외하고 기존 잘못된 standalone 덮어쓰기를 막는다. 같은 종의 donor가 보유한 해당 호환 스톤은 중복·손상·비호환 없이 모두 보존할 수 있을 때만 primary로 이전한다. 다른 메가/기증자변신/Primal·Ultra·Max/임의 폼 도구는 아직 부분지원이다.
+
+새 `weirdDreamFusionRule: validated-v1` 도전은 검증된 융합과 주체 메가4폼 파티로 이상한 꿈에 자연 출현할 수 있다. 원본은 새 PlayerPokemon을 만들므로 변환 후에는 비융합 포켓몬으로 교체하고 기증자는 복원하지 않으며 폼 도구는 제외한다. 일반 소지 효과·IV·기술·도감 보상은 기존 규칙으로 처리한다. 대체 전투·거절은 기존 융합을 유지한다. 화면에 변환의 융합/기증자/폼도구 손실을 명시했다. 이전 도전의 gate와 불명확한 저장은 임의 변경하지 않는다.
+
+상세 근거·검증은 `DNA_PRIMARY_MEGA_AND_DREAM_QA_20261105.md`, 완료/미구현·부분지원/검증잔량은 `REMAINING_IMPLEMENTATION_CURRENT.md`. 원본 전체 난수·엔진 동등성이나 실계정·실기기 검증을 주장하지 않고 Sites는 변경하지 않는다.
+
+주체메가/융합꿈 최종: 전체728/728(134.8초), 집중8/8, 타입·빌드 통과. 마지막 정적 안내 문구 보완 뒤 타입·빌드를 재실행했다. 백엔드/테스트 변경파일린트0오류/0경고, 앱 파일은 기준·현재 모두 기존98오류/18경고로 신규 증가없음(저장소전체린트통과 주장하지 않음). diff 통과. `/tmp/mega-dream-final-full.log`, `/tmp/mega-dream-final-type.log`, `/tmp/mega-dream-final-build.log`. 승인 브랜치 일반push 후 원격SHA를 검증한다. 완료/잔량 목록을 기능별로 계속 함께 보고한다.
