@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 경혈찌르기는 선택한 아군이 먼저 기절하면 사용자에게 능력치 상승을 돌리지 않는다. 교체·변신·다이맥스 경계를 구분한다. [ACUPRESSURE_TARGET_LOSS_QA_20261105.md](ACUPRESSURE_TARGET_LOSS_QA_20261105.md) 참조.
+
 후속: 신규 도전의 호출된 경혈찌르기가 원본처럼 자신 또는 아군을 대상으로 선택한다. 우유마시기의 추가 공격 도구·특성 및 현재 Z기술 동작도 별도 검사했다. [ACUPRESSURE_CALLED_TARGET_QA_20261105.md](ACUPRESSURE_CALLED_TARGET_QA_20261105.md) 참조.
 
 후속: 신규 도전의 흉내내기로 우유마시기를 복사할 때 원본의 싱글·더블 대상 차이를 반영하고, 지시의 원래 대상·PP를 검사했다. [MILK_DRINK_MIRROR_INSTRUCT_QA_20261105.md](MILK_DRINK_MIRROR_INSTRUCT_QA_20261105.md) 참조.
