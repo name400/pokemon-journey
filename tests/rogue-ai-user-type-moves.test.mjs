@@ -4,8 +4,8 @@ import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle,playClassicCombat} from '../lib/rogue-battle-engine.mjs';
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
 
-function fixture({modern=true,move='Steel Roller',heroId=4,terrain='',secondMove='Tackle',secondHeroId,foeId=151}={}) {
- const hero=makeReferenceMon(heroId,50,{boxId:'hero',moves:['Splash'],ability:'pressure'}); hero.hp=1;
+function fixture({modern=true,move='Steel Roller',heroId=4,terrain='',secondMove='Tackle',secondHeroId,foeId=151,heroMoves=['Splash']}={}) {
+ const hero=makeReferenceMon(heroId,50,{boxId:'hero',moves:heroMoves,ability:'pressure'}); hero.hp=1;
  const foe=makeReferenceMon(foeId,50,{boxId:'foe',moves:[move,secondMove],ability:'pressure'});
  const party=[hero],enemies=[foe];
  if(secondHeroId){const h=makeReferenceMon(secondHeroId,50,{boxId:'hero2',moves:['Splash'],ability:'pressure'});h.hp=1;party.push(h);enemies.push(makeReferenceMon(4,50,{boxId:'foe2',moves:['Splash'],ability:'pressure'}));}
@@ -23,4 +23,11 @@ for(const [move,foeId] of [['Burn Up',4],['Double Shock',25]]){
 test('new starts enable user type filtering without altering another slot',async()=>{const {ensureClassicState,startClassicRun}=await import('../lib/rogue-classic-state.mjs'),{starterCatalog}=await import('../lib/rogue-starter-system.mjs');const doc={},state=ensureClassicState(doc,{initialStarterId:1}),entry=starterCatalog(state.system).find(p=>p.id===1);state.slots[1]={keep:true};const run=startClassicRun(doc,[{id:1,ability:entry.abilities[0].key,nature:entry.natures[0].key,gender:entry.genders[0],shiny:false,moves:entry.defaultMoves}],{id:'ai-type',seed:'ai-type'});assert.equal(run.enemyAiUserTypeRule,'source-v1');assert.deepEqual(state.slots[1],{keep:true});});
 for(const [move,type,foeId] of [['Burn Up','Fire',4],['Double Shock','Electric',25]]){
  test(`${move}: restored current type determines eligibility`,async()=>{for(const [id,changed,shouldUse] of [[151,type,true],[foeId,'Water',false]]){const run=fixture({move,foeId:id,secondMove:shouldUse?'Splash':'Tackle'});const before=restoreClassicNativeBattle(run.combat,run);before.p2.active[0].setType(changed,true);run.combat.snapshot=snapshotClassicNativeBattle(before);const {b}=await act(run);assert.ok(b.log.some(s=>s.includes(`|${shouldUse?move:'Tackle'}|`)));assert.equal(b.p1.pokemon[0].hp,0);}});
+}
+for(const [move,type,nativeId] of [['Burn Up','Fire',4],['Double Shock','Electric',25]]){
+ test(`${move}: Terastallized type controls eligibility across save recovery`,async()=>{for(const [id,tera,shouldUse] of [[151,type,true],[nativeId,'Water',false],[nativeId,'Stellar',true],[151,'Stellar',false]]){const run=fixture({move,foeId:id,secondMove:shouldUse?'Splash':'Tackle'});const b=restoreClassicNativeBattle(run.combat,run),att=b.p2.active[0];att.teraType=tera;att.set.teraType=tera;b.actions.terastallize(att);assert.equal(att.terastallized,tera);run.combat.snapshot=snapshotClassicNativeBattle(b);const {b:after}=await act(run);assert.ok(after.log.some(s=>s.includes(`|${shouldUse?move:'Tackle'}|`)),`${move} ${id} ${tera}`);assert.equal(after.p1.pokemon[0].hp,0);}});
+}
+
+for(const [move,heroId] of [['Burn Up',4],['Double Shock',25]]){
+ test(`${move}: Transform copies the required type and moves through save recovery`,async()=>{const run=fixture({move,heroId,heroMoves:['Splash',move,'Tackle']});const b=restoreClassicNativeBattle(run.combat,run);assert.equal(b.p2.active[0].transformInto(b.p1.active[0]),true);assert.equal(b.p2.active[0].transformed,true);run.combat.snapshot=snapshotClassicNativeBattle(b);const {b:after}=await act(run);assert.equal(after.p2.pokemon[0].transformed,true);assert.ok(after.log.some(s=>s.includes(`|${move}|`)));assert.equal(after.p1.pokemon[0].hp,0);});
 }
