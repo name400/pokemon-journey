@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 그라운드포스·오버드라이브·아스트랄비트의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_THREE_SPREAD_FIRST_QA_20261105.md](MULTILENS_THREE_SPREAD_FIRST_QA_20261105.md) 참조.
+
 후속: 신규 도전에서 용해액·거품·눈싸라기·회오리의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_SECONDARY_FOUR_FIRST_QA_20261105.md](MULTILENS_SECONDARY_FOUR_FIRST_QA_20261105.md) 참조.
 
 후속: 신규 도전에서 분화·해수스파우팅·드래곤에너지의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_HP_SPREAD_FIRST_QA_20261105.md](MULTILENS_HP_SPREAD_FIRST_QA_20261105.md) 참조.
