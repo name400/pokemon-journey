@@ -3343,7 +3343,7 @@
       "id": "rustedshield",
       "gen": 8,
       "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "reason": "form-or-special-item",
       "hooks": [
         "onTakeItem"
       ]
@@ -3352,7 +3352,7 @@
       "id": "rustedsword",
       "gen": 8,
       "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "reason": "form-or-special-item",
       "hooks": [
         "onTakeItem"
       ]

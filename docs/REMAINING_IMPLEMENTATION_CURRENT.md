@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 이상한 꿈에서 백금옥을 보존하고 기라티나 전투 효과와 융합 파티를 검사했다. [WEIRD_DREAM_GRISEOUS_ORB_QA_20261105.md](WEIRD_DREAM_GRISEOUS_ORB_QA_20261105.md) 참조.
+
 후속: 신규 도전의 멀티렌즈 바크아웃·벌레의저항 첫 타격 순서를 보완했다. [MULTILENS_SPECIAL_DROP_FIRST_QA_20261105.md](MULTILENS_SPECIAL_DROP_FIRST_QA_20261105.md) 참조.
 
 후속: 신규 도전의 멀티렌즈 얼다바람·일렉트릭네트·땅고르기 첫 타격 순서를 보완했다. [MULTILENS_SPEED_SPREAD_FIRST_QA_20261105.md](MULTILENS_SPEED_SPREAD_FIRST_QA_20261105.md) 참조.
@@ -142,7 +144,7 @@
 
 후속: 신규 도전의 기합의머리띠는 독·화상·날씨 등 간접 피해에 발동하지 않도록 수정했다. 기존 진행은 기존 규칙을 보존한다. 범위와 검증은 [FOCUS_BAND_INDIRECT_QA_20261105.md](FOCUS_BAND_INDIRECT_QA_20261105.md)를 따른다. 나머지 도구·이벤트·전투·AI와 운영 오류 조사는 아래 목록에 남아 있다.
 
-자동 폼(Morpeko/Cramorant/Battle Bond/Meloetta/Xerneas/Ogerpon), 폼 도구 독립 active·이전/복제/Ultra 복귀, 타입 강화 도구 합산·Focus Band/Scope Lens, 꿈 native 도구143종, 호출 기술 원본 후보·제한·이력/FOLLOW_UP, AI matchup 타입 경계, 일반 폼 이미지277종·검토된 융합 주체 이미지241종을 연결했다. 양쪽 역할/수명/legacy에 따른 제한은 각 QA를 따른다. 일반·Worker 영향 범위 각113/113과 타입·production 빌드 통과. 이번 R3로 전체 프로젝트 검사를 다시 실행한 것은 아니다.
+자동 폼(Morpeko/Cramorant/Battle Bond/Meloetta/Xerneas/Ogerpon), 폼 도구 독립 active·이전/복제/Ultra 복귀, 타입 강화 도구 합산·Focus Band/Scope Lens, 꿈 native 도구144종, 호출 기술 원본 후보·제한·이력/FOLLOW_UP, AI matchup 타입 경계, 일반 폼 이미지277종·검토된 융합 주체 이미지241종을 연결했다. 양쪽 역할/수명/legacy에 따른 제한은 각 QA를 따른다. 일반·Worker 영향 범위 각113/113과 타입·production 빌드 통과. 이번 R3로 전체 프로젝트 검사를 다시 실행한 것은 아니다.
 
 ## 실제 미구현·부분지원
 
