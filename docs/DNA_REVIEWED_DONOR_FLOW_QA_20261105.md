@@ -34,3 +34,40 @@ Final validation: full suite **707/707**, no failed/skipped tests
 (`/tmp/dna-reviewed-full.log`, 124.2s); typecheck and build exit0
 (`/tmp/dna-reviewed-typecheck.log`, `/tmp/dna-reviewed-build.log`);
 changed-code ESLint has zero errors/warnings; `git diff --check` passes.
+
+## Follow-up: primary forms and held effects
+
+The 15 exact form identities are now also accepted on the primary side, and
+validation reconstructs each component's intrinsic form types. Reviewed primary
+form evolution records its target form key. Existing Mega/Primal/Ultra/Max,
+unknown-form, override and malformed-data restrictions are retained.
+
+The source `PlayerPokemon.fuse` transfers all held modifiers via
+`tryTransferHeldItemModifier`, even items whose normal manual transfer is off.
+The local transaction now combines recorded Macho Brace stacks (1–50), recomputes
+stats and preserves them after unsplice. Duplicate/opaque/inconsistent records
+and cap overflow reject the transaction atomically. Source transfer can cap and
+lose excess stacks; the adapter retains its explicit no-loss refusal policy.
+
+Additional integration covers all 15 primary forms through reward listing,
+selection, a real victory, codec, and confirmed unsplice; female Espurr's primary
+form evolution; and Macho Brace merges including the 50-stack bonus boundary.
+The new-run `mysteryReviewedFormsRule` also admits these 15 non-fused forms in
+sea/fire mixed-party selection and confirmation. Both event types are exercised
+for all 15 with save/reload and other-mode/slot preservation. Old runs keep
+their narrower checks. Fusion/passive/unknown ability event combinations remain
+outside this extension. The current remaining list supersedes the earlier
+primary-form and preview-rounding entries above: `REMAINING_IMPLEMENTATION_CURRENT.md`.
+
+Independent QA's confusion text error was reproduced in the latest formatter:
+volatile `confusion` collided with the move name Confusion (염동력). The formatter
+now distinguishes start/ongoing/end effects while retaining the move's name;
+actual seeded Supersonic and battle restore are tested without changing its
+battle rule. Nature preview boosts now use the source adapter's ceil, checked
+against calculated stats for all natures in normal/Flip/Fresh Start modes.
+
+Final follow-up validation: **715/715 tests**, 0 failed/skipped
+(`/tmp/primary-dna-all-tests.log`, 126.4s). Focused suite 25/25, typecheck/build
+exit0; changed-code ESLint 0 errors / 1 pre-existing unused-import warning in
+rogue-mystery.mjs. `git diff --check` passes. No new real-account, physical-device,
+production or asset availability check is claimed. Sites was not changed.

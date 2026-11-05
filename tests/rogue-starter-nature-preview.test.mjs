@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {starterStatsForNature,projectStarterChallenges,NATURE_EFFECTS} from '../components/rogue-starter-logic.ts';import {starterCatalog} from '../lib/rogue-starter-system.mjs';import {ensureClassicState} from '../lib/rogue-classic-state.mjs';import {makeReferenceMon,sourceSpeciesFor} from '../lib/rogue-reference.mjs';import {calculateStats} from '../lib/pokemon-config.mjs';
+test('starter nature previews agree with source stat rounding, including flipped and fresh IVs',()=>{
+ const state=ensureClassicState({}, {initialStarterId:1}),entry=starterCatalog(state.system).find(e=>e.id===1),base=sourceSpeciesFor(makeReferenceMon(1)).baseStats;
+ for(const values of [{},{6:1},{4:2},{4:2,6:1}]){const row=projectStarterChallenges([entry],values)[0];for(const nature of ['hardy',...Object.keys(NATURE_EFFECTS)]){const mon={...makeReferenceMon(1,5),ivs:{...row.ivs},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},nature,rogueBaseStats:base,rogueFlipStats:!!values[6]};assert.deepEqual(starterStatsForNature(row.stats,nature),calculateStats(mon),`${nature}/${JSON.stringify(values)}`);}}
+ assert.equal(starterStatsForNature({hp:20,atk:12,def:12,spa:12,spd:12,spe:12},'adamant').atk,14);
+});

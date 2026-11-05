@@ -176,7 +176,7 @@ export function validateStarterTeam(starters: readonly StarterEntry[], team: rea
 export function starterStatsForNature(stats: StarterStats, nature: string): StarterStats {
   const effect = NATURE_EFFECTS[nature];
   if (!effect) return { ...stats };
-  return { ...stats, [effect[0]]: Math.floor(stats[effect[0]] * 1.1), [effect[1]]: Math.floor(stats[effect[1]] * .9) };
+  return { ...stats, [effect[0]]: Math.ceil(stats[effect[0]] * 1.1), [effect[1]]: Math.floor(stats[effect[1]] * .9) };
 }
 
 
