@@ -3,8 +3,8 @@
   "method": "Local exported source metadata versus runtime permission and enum-name mapping. Missing rows in the existing export and engine-effect parity are not inferred.",
   "counts": {
     "forms": 416,
-    "fusionForms": 373,
-    "unconnectedForms": 43,
+    "fusionForms": 407,
+    "unconnectedForms": 9,
     "staticFamilyForms": 95,
     "automaticHookForms": 28,
     "triggerHookForms": 9,
@@ -1690,221 +1690,221 @@
       "index": 1,
       "key": "fighting",
       "native": "arceusfighting",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 2,
       "key": "flying",
       "native": "arceusflying",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 3,
       "key": "poison",
       "native": "arceuspoison",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 4,
       "key": "ground",
       "native": "arceusground",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 5,
       "key": "rock",
       "native": "arceusrock",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 6,
       "key": "bug",
       "native": "arceusbug",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 7,
       "key": "ghost",
       "native": "arceusghost",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 8,
       "key": "steel",
       "native": "arceussteel",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 9,
       "key": "fire",
       "native": "arceusfire",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 10,
       "key": "water",
       "native": "arceuswater",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 11,
       "key": "grass",
       "native": "arceusgrass",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 12,
       "key": "electric",
       "native": "arceuselectric",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 13,
       "key": "psychic",
       "native": "arceuspsychic",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 14,
       "key": "ice",
       "native": "arceusice",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 15,
       "key": "dragon",
       "native": "arceusdragon",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 16,
       "key": "dark",
       "native": "arceusdark",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 493,
       "index": 17,
       "key": "fairy",
       "native": "arceusfairy",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 500,
@@ -3550,221 +3550,221 @@
       "index": 1,
       "key": "fighting",
       "native": "silvallyfighting",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 2,
       "key": "flying",
       "native": "silvallyflying",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 3,
       "key": "poison",
       "native": "silvallypoison",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 4,
       "key": "ground",
       "native": "silvallyground",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 5,
       "key": "rock",
       "native": "silvallyrock",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 6,
       "key": "bug",
       "native": "silvallybug",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 7,
       "key": "ghost",
       "native": "silvallyghost",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 8,
       "key": "steel",
       "native": "silvallysteel",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 9,
       "key": "fire",
       "native": "silvallyfire",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 10,
       "key": "water",
       "native": "silvallywater",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 11,
       "key": "grass",
       "native": "silvallygrass",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 12,
       "key": "electric",
       "native": "silvallyelectric",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 13,
       "key": "psychic",
       "native": "silvallypsychic",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 14,
       "key": "ice",
       "native": "silvallyice",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 15,
       "key": "dragon",
       "native": "silvallydragon",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 16,
       "key": "dark",
       "native": "silvallydark",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 773,
       "index": 17,
       "key": "fairy",
       "native": "silvallyfairy",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 774,

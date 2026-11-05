@@ -291,6 +291,91 @@
       "key": "sky",
       "native": "shayminsky"
     },
+    "493:1": {
+      "id": 493,
+      "key": "fighting",
+      "native": "arceusfighting"
+    },
+    "493:2": {
+      "id": 493,
+      "key": "flying",
+      "native": "arceusflying"
+    },
+    "493:3": {
+      "id": 493,
+      "key": "poison",
+      "native": "arceuspoison"
+    },
+    "493:4": {
+      "id": 493,
+      "key": "ground",
+      "native": "arceusground"
+    },
+    "493:5": {
+      "id": 493,
+      "key": "rock",
+      "native": "arceusrock"
+    },
+    "493:6": {
+      "id": 493,
+      "key": "bug",
+      "native": "arceusbug"
+    },
+    "493:7": {
+      "id": 493,
+      "key": "ghost",
+      "native": "arceusghost"
+    },
+    "493:8": {
+      "id": 493,
+      "key": "steel",
+      "native": "arceussteel"
+    },
+    "493:9": {
+      "id": 493,
+      "key": "fire",
+      "native": "arceusfire"
+    },
+    "493:10": {
+      "id": 493,
+      "key": "water",
+      "native": "arceuswater"
+    },
+    "493:11": {
+      "id": 493,
+      "key": "grass",
+      "native": "arceusgrass"
+    },
+    "493:12": {
+      "id": 493,
+      "key": "electric",
+      "native": "arceuselectric"
+    },
+    "493:13": {
+      "id": 493,
+      "key": "psychic",
+      "native": "arceuspsychic"
+    },
+    "493:14": {
+      "id": 493,
+      "key": "ice",
+      "native": "arceusice"
+    },
+    "493:15": {
+      "id": 493,
+      "key": "dragon",
+      "native": "arceusdragon"
+    },
+    "493:16": {
+      "id": 493,
+      "key": "dark",
+      "native": "arceusdark"
+    },
+    "493:17": {
+      "id": 493,
+      "key": "fairy",
+      "native": "arceusfairy"
+    },
     "550:1": {
       "id": 10016,
       "key": "blue-striped",
@@ -886,6 +971,91 @@
       "key": "school",
       "native": "wishiwashischool"
     },
+    "773:1": {
+      "id": 773,
+      "key": "fighting",
+      "native": "silvallyfighting"
+    },
+    "773:2": {
+      "id": 773,
+      "key": "flying",
+      "native": "silvallyflying"
+    },
+    "773:3": {
+      "id": 773,
+      "key": "poison",
+      "native": "silvallypoison"
+    },
+    "773:4": {
+      "id": 773,
+      "key": "ground",
+      "native": "silvallyground"
+    },
+    "773:5": {
+      "id": 773,
+      "key": "rock",
+      "native": "silvallyrock"
+    },
+    "773:6": {
+      "id": 773,
+      "key": "bug",
+      "native": "silvallybug"
+    },
+    "773:7": {
+      "id": 773,
+      "key": "ghost",
+      "native": "silvallyghost"
+    },
+    "773:8": {
+      "id": 773,
+      "key": "steel",
+      "native": "silvallysteel"
+    },
+    "773:9": {
+      "id": 773,
+      "key": "fire",
+      "native": "silvallyfire"
+    },
+    "773:10": {
+      "id": 773,
+      "key": "water",
+      "native": "silvallywater"
+    },
+    "773:11": {
+      "id": 773,
+      "key": "grass",
+      "native": "silvallygrass"
+    },
+    "773:12": {
+      "id": 773,
+      "key": "electric",
+      "native": "silvallyelectric"
+    },
+    "773:13": {
+      "id": 773,
+      "key": "psychic",
+      "native": "silvallypsychic"
+    },
+    "773:14": {
+      "id": 773,
+      "key": "ice",
+      "native": "silvallyice"
+    },
+    "773:15": {
+      "id": 773,
+      "key": "dragon",
+      "native": "silvallydragon"
+    },
+    "773:16": {
+      "id": 773,
+      "key": "dark",
+      "native": "silvallydark"
+    },
+    "773:17": {
+      "id": 773,
+      "key": "fairy",
+      "native": "silvallyfairy"
+    },
     "774:1": {
       "id": 10130,
       "key": "orange-meteor",
@@ -1208,40 +1378,6 @@
     }
   },
   "blocked": [
-    "493:1",
-    "493:2",
-    "493:3",
-    "493:4",
-    "493:5",
-    "493:6",
-    "493:7",
-    "493:8",
-    "493:9",
-    "493:10",
-    "493:11",
-    "493:12",
-    "493:13",
-    "493:14",
-    "493:15",
-    "493:16",
-    "493:17",
-    "773:1",
-    "773:2",
-    "773:3",
-    "773:4",
-    "773:5",
-    "773:6",
-    "773:7",
-    "773:8",
-    "773:9",
-    "773:10",
-    "773:11",
-    "773:12",
-    "773:13",
-    "773:14",
-    "773:15",
-    "773:16",
-    "773:17",
     "1024:1",
     "1024:2"
   ]
