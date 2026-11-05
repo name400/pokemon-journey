@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 우유마시기는 선택한 아군이 기절하면 사용자에게 다시 지정하지 않고, 교체·변신과 손가락흔들기·따라하기·잠꼬대·조수 호출을 구분한다. [MILK_DRINK_TARGET_EDGES_QA_20261105.md](MILK_DRINK_TARGET_EDGES_QA_20261105.md) 참조.
+
 후속: 신규 도전의 더블 전투에서 우유마시기가 원본처럼 자신 또는 아군을 선택해 회복하며 상대 AI와 기술 설명도 같은 대상을 사용한다. [MILK_DRINK_ALLY_TARGET_QA_20261105.md](MILK_DRINK_ALLY_TARGET_QA_20261105.md) 참조.
 
 후속: 신규 도전의 모래모으기는 모든 사용자에 대해 원본 날씨 비율과 반올림을 적용한다. 메가솔 이전 규칙을 가진 도전은 유지한다. [SHORE_UP_ROUNDING_QA_20261105.md](SHORE_UP_ROUNDING_QA_20261105.md) 참조.
