@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 멀티렌즈 잎날가르기의 첫 타격에 앞 상대의 실제 생존 여부를 반영했다. [MULTILENS_RAZOR_LEAF_FIRST_QA_20261105.md](MULTILENS_RAZOR_LEAF_FIRST_QA_20261105.md) 참조.
+
 후속: 신규 도전 AI의 환영 방어 점수에서 첫 번째 상대 타입은 실제 타입으로 계산한다. 교체 결과와 테라스탈 등 복합 조합은 추가 검증이 필요하다. [AI_ILLUSION_DEFENSE_QA_20261105.md](AI_ILLUSION_DEFENSE_QA_20261105.md) 참조.
 
 후속: 신규 도전 적 AI가 환영 상태에서 자신의 실제 타입으로 자속 보너스를 판단하도록 수정했다. 상대 환영·테라스탈 방어 상성과 나머지 AI 동등성은 별도 확인이 필요하다. [AI_ILLUSION_MATCHUP_STAB_QA_20261105.md](AI_ILLUSION_MATCHUP_STAB_QA_20261105.md) 참조.
