@@ -731,3 +731,13 @@ Absolute Avarice 선택 후 파티의 열매 보유 기록이 바뀐 경우 기�
 새 저장/복구 제어기9경계와 실제 화면4크기×5경로20개로 검사한다. 근거와 확정 결과는 `SAFARI_REWARD_RECOVERY_QA_20261105.md`; 잔량은 `REMAINING_IMPLEMENTATION_CURRENT.md`. 진행 중인 메타데이터 기반 Mega/Primal/Ultra/Gmax 융합·역변신·폼 도구 일반화는 이름 있는 stash `WIP persistent fusion forms before urgent safari recovery`에 보존했다. 해당 코드는 전투 중 Trace 능력 변경 보존 문제가 아직 조사 중이므로 완료/공개 기능으로 세지 않는다. 긴급 수정이 저장된 뒤 stash를 복구해 계속한다.
 
 사파리 최종 확정: 전체737/737(155.2초), 타입·production빌드 통과, 실제 화면4크기×5경로20/20, 새 테스트·harness·타입 파일 린트0오류/0경고. 화면 기존 진단은 앱98오류/18경고 및 보상 컴포넌트1오류로 신규 증가없다. 원본 QA 계정/물리기기/운영 배포는 미검증이다. 승인 브랜치에 일반push 후 원격SHA를 확인한다.
+
+### 2026-11-05 지속 폼 융합 일반화 복원·구현
+
+사파리6037c54 뒤 named stash를 충돌 없이 apply했다. shared native/source 매핑으로 Mega88/Gmax33/Primal2/Ultra1/결합6/우라오스1의131비기본폼을 양쪽 DNA 보상·저장·native턴·분리에 연결했다. 기존60폼과 합쳐191메타데이터 항목이며 기존주체메가4폼이131에 포함된다. Ultra는 Dawn/Dusk origin 증명도 요구한다. Trace 실패는 baseAbility 대신 전투 중 복사한 ability를 비교한 테스트 문제였고, 파티 기본 특성이 영구 변경되는 결함은 재현되지 않았다.
+
+source registry 자동역방향 규칙의129지원경로와 known 폼도구98키 종간 이전·소유 표시를 연결했다. 중복·불명확한 기록은 원자적 거부. source item inactive 이벤트 대신 명시적 파티 해제와 현재폼으로 표현하므로 완전한 active modifier 동등성은 아니다. Mega Zygarde의 Complete 중간형은 융합 상태로의 변신/역변신 미지원이라 후보를 숨기고, 분리 후 standalone 해제로 보존한다. 8미매핑/분류불일치 Mega와 임시Dynamax 융합·다른자동폼은 계속 미지원이다.
+
+validated-v1 도전의 이상한 꿈은 새 지속폼 융합을 처리한다. 특히 Gmax융합은 기존 독립Gmax 검증을 유지한 채 DNA/form/HP 증명으로 허용한다. transform은 새 비융합 파티와 폼도구 제외, battle/leave는 기존융합과 도구를 유지한다. 원본비활성콘텐츠·탐험·Sites는 건드리지 않는다. QA와 정확한 수치·경계는 `DNA_PERSISTENT_FORMS_QA_20261105.md`, 최신잔량은 `REMAINING_IMPLEMENTATION_CURRENT.md`. stash는 복구용 원본으로 유지하되 재apply하면 완료변경을 중복 적용하므로 하지 않는다.
+
+지속 폼 확장 최종 검증: 전체 **745/745**(167.2초), 마지막 집중 **16/16**(4.9초), 타입·production빌드 통과. 실제 파티 화면4크기×4분류 **16/16**(변신/해제/reload/분리), 브라우저 오류·가로 overflow0. 변경 백엔드/테스트/harness 린트 오류0·기존경고2, diff 검사 통과. `/tmp/persistent-full.log`, `/tmp/persistent-final-focus.log`, `/tmp/persistent-type.log`, `/tmp/persistent-build.log`, `/tmp/persistent-browser.log`, `/tmp/persistent-lint.log`. 실계정·실기기·실제 자산·운영 배포 검증과는 구분한다. 승인 브랜치에 일반push 후 원격 SHA를 확인한다.
