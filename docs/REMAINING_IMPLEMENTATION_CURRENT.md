@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전 적 AI가 환영 상태에서 자신의 실제 타입으로 자속 보너스를 판단하도록 수정했다. 상대 환영·테라스탈 방어 상성과 나머지 AI 동등성은 별도 확인이 필요하다. [AI_ILLUSION_MATCHUP_STAB_QA_20261105.md](AI_ILLUSION_MATCHUP_STAB_QA_20261105.md) 참조.
+
 후속: 신규 도전 적 AI의 교체 점수에 원본 타입 변경 기술 분류를 연결해 맹세 기술의 자속 과대평가를 수정했다. [AI_VARIABLE_TYPE_MATCHUP_QA_20261105.md](AI_VARIABLE_TYPE_MATCHUP_QA_20261105.md) 참조.
 
 후속: 신규 도전의 이상한 꿈에서 백금옥을 보존하고 기라티나 전투 효과와 융합 파티를 검사했다. [WEIRD_DREAM_GRISEOUS_ORB_QA_20261105.md](WEIRD_DREAM_GRISEOUS_ORB_QA_20261105.md) 참조.
