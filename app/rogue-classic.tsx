@@ -1,5 +1,6 @@
 'use client';
 import {Fragment,useEffect,useRef,useState} from 'react';
+import {readGameResponse} from '@/lib/game-response.mjs';
 import {ArrowLeft,ArrowRight,Box,Coins,Flag,LoaderCircle,MapPin,RefreshCw,Sparkles,Swords,Trophy,Users} from 'lucide-react';
 import RogueMoveLearn from '@/components/rogue-move-learn';
 import RogueIvScanner from '@/components/rogue-iv-scanner';
@@ -38,7 +39,7 @@ export default function RogueClassic({initialView='slots',navigationKey=0,onView
  function accept(data:State){if(!mounted.current||data.revision<revision.current)return;revision.current=data.revision;if(Number.isSafeInteger(data.pickupVersion))pickupVersion.current=data.pickupVersion!;setSaved(data);if(data.starters)setStarters(data.starters);if(data.finishedBattle)setFinished({...data.finishedBattle,visualBiome:biomeRef.current||data.run?.biome?.key});if(data.hatchedEgg)setHatched(data.hatchedEgg);if(data.drawnEggs){setDrawNotice('알 '+data.drawnEggs.count+'개를 받았다! 웨이브를 진행해 부화시키세요.');if(data.drawnEggs.eggs?.length){setDrawSummary(data.drawnEggs.eggs);setDrawSequence(true);}}if(data.evolutionResult)setEvolved(data.evolutionResult);}
  async function request(body?:any,query=''){
   const controller=new AbortController();controllers.current.add(controller);const timeout=setTimeout(()=>controller.abort(),25000);
-  try{const response=await fetch('/api/rogue-classic'+query,{...(body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store' as RequestCache}),signal:controller.signal});const data:any=await response.json();if(!response.ok)throw Error(data.error||'요청을 처리하지 못했습니다.');return data as State;}
+  try{const response=await fetch('/api/rogue-classic'+query,{...(body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store' as RequestCache}),signal:controller.signal});return await readGameResponse(response) as State;}
   finally{clearTimeout(timeout);controllers.current.delete(controller);}
  }
  async function load(){try{const data=await request(undefined,'?starters=1');accept(data);return data;}catch(e){if(mounted.current)setError(e instanceof Error?e.message:'도전을 불러오지 못했습니다.');}}

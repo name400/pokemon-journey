@@ -751,3 +751,12 @@ validated-v1 도전의 이상한 꿈은 새 지속폼 융합을 처리한다. �
 읽기조사상 남은Mega8폼의 native자료 자체는 있다. Magearna/Tatsugiri는 명명순서 alias가 다르고, Mega-Z와 Meowstic성별Mega는 isMega플래그가 비어 있다. 매핑+로컬종분류+성별/이미지/저장 어댑터가 다음범위이며 전역Dex는 수정하지 않았다. Zygarde50-pc/10-pc→Complete/10-Complete→Mega와 자동변경·다른진화/도구/이벤트는 계속남았다. Sites는 변경하지 않는다.
 
 임시 다이맥스/분리 HP 최종 확정: 전체 **756/756**(156.7초), 집중 **42/42**(7.1초), 새11테스트 포함. 타입·production빌드·변경 린트(오류/경고0)·diff 검사 통과. 근거는 `/tmp/dna-dmax-release-full.log`, `/tmp/dna-dmax-final-focus.log`, `/tmp/dna-dmax-release-type.log`, `/tmp/dna-dmax-release-build.log`, `/tmp/dna-dmax-release-lint.log`. 새 실계정·실기기·브라우저·운영 배포 검증은 하지 않았다. 승인된 브랜치에 일반push 후 원격 SHA를 확인한다.
+
+
+### 2026-11-05 운영 메모리·마자용·등장 선표시 사고 대응
+
+6726fef에서 Mega8폼 읽기 조사를 멈추고 장애를 우선했다. v50 POST rogue-classic의 exceededMemory를 확인했다. native sim의 미사용 Learnsets/Legality를 빌드 plugin에서만 제외해 게임 모듈 Node 유지 힙 약32–34MiB를 줄였다. 소스 자체 학습/출전 판정과 전투 데이터는 유지한다. npm test와 npm run test:worker 각각765/765, 타입/빌드 통과. 로컬 production Worker에서도 합성 저장의 일반 전투와 마자용3턴·보상이 HTTP200으로 진행했다. 운영 성능/메모리 한도의 재측정과 같지는 않다.
+
+마자용은 현재 UI의 단일 actor turn/actions envelope를 기존 move로 정규화하며 기존 제한을 유지한다. baseline 엔진의 같은 명령 거부→route409를 재현했지만 운영409 여섯 건의 개별 원인은 본문이 없어 단정하지 않는다. 전투 시작/다음 전투 before roster의 들어올 개체 선표시를 지연해 첫 표시 뒤 다시 등장하는 경로를 수정했다. 모든 중복 재생의 실제 브라우저 검증은 남았다. HTML500의 JSON파싱 오류는 한국어 서버 오류로 표시하며 POST를 자동 재전송하지 않는다.
+
+사용자가6726fef 배포를 알려줬고 Sites 재조회는v51/소스1951eb15를 반환했다. v50의 기존 오류와 구분하며 새 로그에는 게임 POST가 없어 신규 배포 재현은 미확정이다. 현재 사고 수정은 그 이후 변경이며 Sites는 쓰지 않는다. 상세 근거/제한은 WORKER_MEMORY_AND_EVENT_INCIDENT_QA_20261105.md, 최신 잔량은 REMAINING_IMPLEMENTATION_CURRENT.md. Mega8폼·지가르데 중간형/자동 변형·다른 진화/도구/이벤트/전투 차이는 여전히 남는다.

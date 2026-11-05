@@ -29,7 +29,19 @@ export function battleDisplay(battle: any, before = false, normalizeFainted = fa
   const active = before && Array.isArray(battle.beforeActive) ? battle.beforeActive : battle.active;
   const multiple = before && Array.isArray(battle.beforeActiveBySide) ? battle.beforeActiveBySide : battle.activeBySide;
   const activeBySide = [0, 1].map(side => Array.isArray(multiple?.[side]) ? multiple[side].map((index: number) => Number.isInteger(index) ? index : -1) : [active?.[side] ?? 0]);
-  return { teams: (teams || [[], []]).map((team: any[]) => team.map(mon => ({ ...mon, ...(normalizeFainted ? { fainted: Number.isFinite(mon.hp) && mon.hp <= 0 } : {}) }))), active: [...(active || [0, 0])], activeBySide };
+  const shownActive=[...(active||[0,0])];
+  // New encounter DTOs already contain the incoming roster. Keep those slots
+  // empty until their entry event, instead of showing them once before replay
+  // and then making the same Pokémon enter again. Ordinary switches retain the
+  // different outgoing member; later move-induced switches are not entry setup.
+  if(before&&normalizeFainted)for(const event of (battle.events||[]) as BattleVisualEvent[]){
+    if(event.kind==='move')break;if(event.kind!=='switch')continue;
+    const side=event.targetSide??event.side,slot=event.targetSlot??event.activeSlot??event.slot??0;
+    if(side!==0&&side!==1||!Number.isInteger(slot)||slot<0)continue;
+    const id=event.targetBoxId??event.boxId??event.pokemon?.boxId,index=activeBySide[side]?.[slot];
+    if(id!=null&&teams?.[side]?.[index]?.boxId!=null&&String(teams[side][index].boxId)===String(id)){activeBySide[side][slot]=-1;if(slot===0)shownActive[side]=-1;}
+  }
+  return { teams: (teams || [[], []]).map((team: any[]) => team.map(mon => ({ ...mon, ...(normalizeFainted ? { fainted: Number.isFinite(mon.hp) && mon.hp <= 0 } : {}) }))), active: shownActive, activeBySide };
 }
 export type BattleEventLocation = { side: number; index: number; slot: number; boxId?: string };
 /** Explicit identity wins over side/slot hints, including friendly fire and switches. */

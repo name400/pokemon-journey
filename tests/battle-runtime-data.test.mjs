@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {BATTLE_LOOKUP_STUB,isNativeValidationData,battleRuntimeData} from '../scripts/vite/battle-runtime-data.mjs';
+test('battle build excludes only native TeamValidator lookup catalogs',()=>{const importer='/app/node_modules/@pkmn/sim/build/esm/sim/dex.mjs';for(const path of ['../data/learnsets.mjs','../data/mods/gen8/legality.mjs'])assert.equal(isNativeValidationData(path,importer),true);for(const path of ['../data/moves.mjs','../data/abilities.mjs','../data/pokedex.mjs','../data/mods/gen8/scripts.mjs'])assert.equal(isNativeValidationData(path,importer),false);assert.equal(isNativeValidationData('../data/learnsets.mjs','/app/lib/game.mjs'),false);const plugin=battleRuntimeData(),id=plugin.resolveId('../data/learnsets.mjs',importer);assert.equal(plugin.load(id),BATTLE_LOOKUP_STUB);});
+test('worker data policy retains battle damage, source level moves and forms under a bounded heap',()=>{
+ const result=spawnSync(process.execPath,['--max-old-space-size=80','--import','./tests/support/register-battle-runtime-loader.mjs','--input-type=module','-e',`
+  import assert from 'node:assert/strict';import {Dex} from '@pkmn/sim';import {makeReferenceMon} from './lib/rogue-reference.mjs';import {createClassicCombat,playClassicCombat} from './lib/rogue-battle-engine.mjs';
+  assert.equal(Object.keys(Dex.data.Learnsets).length,0);assert.ok(Dex.moves.get('psystrike').basePower>0);assert.ok(Dex.abilities.get('intimidate').onStart);const p=makeReferenceMon(150,5,{boxId:'p',moves:['Disable','Confusion','Teleport','Psywave']}),foe=makeReferenceMon(915,2,{boxId:'foe',moves:['Tackle','Tail Whip']}),run={id:'bounded',wave:1,biome:0,rng:42,party:[p],tools:{},modifiers:[],encounter:{kind:'wild'}};run.combat=createClassicCombat(run,[foe]);run.combat=playClassicCombat(run,{type:'move',move:'confusion'});assert.ok(run.combat.teams[1][0].hp<foe.hp);assert.ok(makeReferenceMon(7,5).moves.length);console.log('bounded worker battle passed');
+ `],{encoding:'utf8',timeout:30000});assert.equal(result.status,0,result.stderr);assert.match(result.stdout,/bounded worker battle passed/);
+});
