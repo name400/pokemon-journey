@@ -1593,6 +1593,32 @@
     }
   },
   {
+    "key": "647:1",
+    "atlas": "647-resolute",
+    "mon": {
+      "id": 10024,
+      "rogueSourceId": 647,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "resolute",
+      "rogueBattleSpecies": "keldeoresolute",
+      "battleAppearance": "keldeoresolute",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "648:1",
     "atlas": "648-pirouette",
     "mon": {
