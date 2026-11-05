@@ -361,6 +361,26 @@
       "key": "pirouette",
       "native": "meloettapirouette"
     },
+    "649:1": {
+      "id": 649,
+      "key": "shock",
+      "native": "genesectshock"
+    },
+    "649:2": {
+      "id": 649,
+      "key": "burn",
+      "native": "genesectburn"
+    },
+    "649:3": {
+      "id": 649,
+      "key": "chill",
+      "native": "genesectchill"
+    },
+    "649:4": {
+      "id": 649,
+      "key": "douse",
+      "native": "genesectdouse"
+    },
     "664:1": {
       "id": 664,
       "key": "icy-snow",
@@ -1191,10 +1211,6 @@
     "493:15",
     "493:16",
     "493:17",
-    "649:1",
-    "649:2",
-    "649:3",
-    "649:4",
     "773:1",
     "773:2",
     "773:3",

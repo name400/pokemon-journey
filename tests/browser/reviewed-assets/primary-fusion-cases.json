@@ -1879,6 +1879,110 @@
     }
   },
   {
+    "key": "649:1",
+    "atlas": "649-shock",
+    "mon": {
+      "id": 649,
+      "rogueSourceId": 649,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "shock",
+      "rogueBattleSpecies": "genesectshock",
+      "battleAppearance": "genesectshock",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "649:2",
+    "atlas": "649-burn",
+    "mon": {
+      "id": 649,
+      "rogueSourceId": 649,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "burn",
+      "rogueBattleSpecies": "genesectburn",
+      "battleAppearance": "genesectburn",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "649:3",
+    "atlas": "649-chill",
+    "mon": {
+      "id": 649,
+      "rogueSourceId": 649,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "chill",
+      "rogueBattleSpecies": "genesectchill",
+      "battleAppearance": "genesectchill",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "649:4",
+    "atlas": "649-douse",
+    "mon": {
+      "id": 649,
+      "rogueSourceId": 649,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "douse",
+      "rogueBattleSpecies": "genesectdouse",
+      "battleAppearance": "genesectdouse",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "664:1",
     "atlas": "664",
     "mon": {
