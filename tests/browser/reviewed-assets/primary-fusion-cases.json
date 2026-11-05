@@ -7053,6 +7053,58 @@
     }
   },
   {
+    "key": "1024:1",
+    "atlas": "1024-terastal",
+    "mon": {
+      "id": 10276,
+      "rogueSourceId": 1024,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "terastal",
+      "rogueBattleSpecies": "terapagosterastal",
+      "battleAppearance": "terapagosterastal",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1024:2",
+    "atlas": "1024-stellar",
+    "mon": {
+      "id": 10277,
+      "rogueSourceId": 1024,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "stellar",
+      "rogueBattleSpecies": "terapagosstellar",
+      "battleAppearance": "terapagosstellar",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "2658:1",
     "atlas": "2658-ash",
     "mon": {

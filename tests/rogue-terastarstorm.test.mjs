@@ -1,0 +1,19 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {Dex} from '@pkmn/sim';
+import {syncNativeTeams} from '../lib/party-battle.mjs';
+import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {previewClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
+import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+const mon=(id,boxId,moves=['Splash'])=>makeReferenceMon(id,80,{boxId,moves});
+function battle(role,tera,ability=null,physical=false){const t=mon(1024,'t'),m=mon(151,'m'),hero=role==='solo'?t:role==='other'?m:previewClassicDnaFusion(role==='primary'?t:m,role==='primary'?m:t).fused;hero.moves=['Tera Starstorm'];const run={wave:30,rng:42,party:[hero,mon(151,'ally')],modifiers:[],tools:{teraOrb:tera},teraCharged:tera,moveBalanceRule:'source-subset-v2',encounter:{kind:'trainer'}};run.combat=createClassicCombat(run,[mon(143,'foe1'),mon(242,'foe2')],{trainer:true,doubles:true});const b=restoreClassicNativeBattle(run.combat,run);if(ability)b.p1.active[0].setAbility(ability);if(physical){b.p1.active[0].boosts.atk=6;b.p1.active[0].boosts.spa=-6;}let hits=[];b.onEvent('DamagingHit',b.format,{priority:-100},function(damage,target,source,move){if(source.side.n===0&&move.id==='terastarstorm')hits.push({target:target.set.trainerToken,type:move.type,category:move.category});});b.onEvent('Accuracy',b.format,{priority:-100},()=>true);b.makeChoices(`move terastarstorm 1${tera?' terastallize':''},move splash`,'move splash,move splash');return {b,hits,run};}
+test('Stellar Tera Starstorm hits both opponents for either fusion role',()=>{for(const role of ['solo','primary','donor']){const {hits}=battle(role,true);assert.deepEqual(hits.map(h=>h.target).sort(),['foe1','foe2'],role);assert.ok(hits.every(h=>h.type==='Stellar'),role);}});
+test('before Tera and for unrelated species it keeps a single Normal target',()=>{for(const role of ['solo','primary','donor','other']){const {hits}=battle(role,false);assert.deepEqual(hits.map(h=>h.target),['foe1'],role);assert.equal(hits[0].type,'Normal',role);}});
+test('battle patches leave the shared move unchanged',()=>{const before=Dex.moves.get('terastarstorm').onModifyType;battle('donor',true);assert.equal(Dex.moves.get('terastarstorm').onModifyType,before);});
+
+test('Tera Starstorm remains Stellar and spread after restoring a fused battle',async()=>{const {b,run}=battle('donor',true);run.combat.teams=syncNativeTeams(b,run.combat.teams);run.party=run.combat.teams[0];run.combat.snapshot=snapshotClassicNativeBattle(b);const saved=await decodeGameData(await encodeGameData({run,otherSlot:{keep:true}}));assert.deepEqual(saved.otherSlot,{keep:true});const restored=restoreClassicNativeBattle(saved.run.combat,saved.run),hits=[];restored.onEvent('DamagingHit',restored.format,{priority:-100},function(damage,target,source,move){if(source.side.n===0&&move.id==='terastarstorm')hits.push({target:target.set.trainerToken,type:move.type});});restored.onEvent('Accuracy',restored.format,{priority:-100},()=>true);restored.makeChoices('move terastarstorm 1,move splash','move splash,move splash');assert.deepEqual(hits.map(h=>h.target).sort(),['foe1','foe2']);assert.ok(hits.every(h=>h.type==='Stellar'));});
+
+test('Normalize cannot change Stellar Tera Starstorm',()=>{const {hits}=battle('donor',true,'normalize');assert.equal(hits.length,2);assert.ok(hits.every(hit=>hit.type==='Stellar'));});
+test('a Terastallized non-Terapagos does not gain Stellar or spread targeting',()=>{const {hits}=battle('other',true);assert.deepEqual(hits.map(hit=>hit.target),['foe1']);assert.equal(hits[0].type,'Normal');});
+
+test('Terastallized fused Terapagos selects physical category when Attack is higher',()=>{const {hits}=battle('donor',true,null,true);assert.equal(hits.length,2);assert.ok(hits.every(hit=>hit.category==='Physical'));});

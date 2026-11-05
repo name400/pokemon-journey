@@ -1356,6 +1356,16 @@
       "key": "cornerstone-mask-tera",
       "native": "ogerponcornerstonetera"
     },
+    "1024:1": {
+      "id": 10276,
+      "key": "terastal",
+      "native": "terapagosterastal"
+    },
+    "1024:2": {
+      "id": 10277,
+      "key": "stellar",
+      "native": "terapagosstellar"
+    },
     "2658:1": {
       "id": 10117,
       "key": "ash",
@@ -1377,8 +1387,5 @@
       "native": "taurospaldeaaqua"
     }
   },
-  "blocked": [
-    "1024:1",
-    "1024:2"
-  ]
+  "blocked": []
 }
