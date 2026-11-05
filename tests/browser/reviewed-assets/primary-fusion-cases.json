@@ -4271,6 +4271,32 @@
     }
   },
   {
+    "key": "720:1",
+    "atlas": "720-unbound",
+    "mon": {
+      "id": 720,
+      "rogueSourceId": 720,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "unbound",
+      "rogueBattleSpecies": "hoopaunbound",
+      "battleAppearance": "hoopaunbound",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "741:1",
     "atlas": "741-pompom",
     "mon": {

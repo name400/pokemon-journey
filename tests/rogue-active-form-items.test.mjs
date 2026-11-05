@@ -61,7 +61,7 @@ test('all reviewed item forwards activate and deactivate with independent source
   if(s.sourceId===800&&f.formKey==='ultra'){const item=pre.formKey==='dawn-wings'?'nlunarizer':'nsolarizer';run.formItems.primary=[item];run.formItemStates={primary:{[item]:true}};}
   const option=classicTransformationItems(mon,run,state.system).find(o=>o.formKey===f.formKey);if(!option)continue;count++;run.party[0]=grantClassicFormItem(mon,run,option.itemKey,state.system);assert.equal(run.party[0].rogueFormKey,f.formKey,`${s.sourceId}:${f.formKey}`);assert.equal(run.formItemStates.primary[option.itemKey],true);const reverse=classicFormOptions(run.party[0],run,{system:state.system}).find(o=>o.reverse&&o.itemKey===option.itemKey);assert.ok(reverse,`${s.sourceId}:${f.formKey}:reverse`);run.party[0]=applyClassicForm(run.party[0],run,reverse.key,state.system);assert.equal(run.party[0].rogueFormKey,pre.formKey);assert.equal(run.formItemStates.primary[option.itemKey],false);
  }
- assert.equal(count,147);
+ assert.equal(count,148);
 });
 
 test('Dream new identities cannot overwrite orphaned activation records',async()=>{
