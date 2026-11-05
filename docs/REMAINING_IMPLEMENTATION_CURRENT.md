@@ -4,9 +4,11 @@
 
 ## 현재 완료 범위
 
-후속: 신규 도전의 변신은 변신 직전 현재 기술에 남아 있는 직접 사용 이력을 같은 복사 기술에 이어준다. 격리 전투에서 원본의 일부 호출 기술 이력도 확인했다. [LAST_RESORT_TRANSFORM_QA_20261105.md](LAST_RESORT_TRANSFORM_QA_20261105.md) 참조.
+후속: 최신 신규 도전은 직접 사용한 기술을 같은 출전 중 잊었다 다시 배우거나 변신으로 복사해도 원본처럼 이력을 유지하고, 교체 시 초기화한다. 변신 후 복사 기술 수가 원래보다 적을 때 발생하던 저장 복원 오류도 수정했다. [LAST_RESORT_SOURCE_LEDGER_QA_20261105.md](LAST_RESORT_SOURCE_LEDGER_QA_20261105.md) 참조.
 
-후속: 신규 도전에서 전투 중 기술 구성이 바뀔 때 남아 있는 기술의 뒀다쓰기 사용 이력을 보존하고, 새로 추가하거나 다시 배운 기술은 미사용으로 처리한다. 기존 도전은 이전 처리를 유지한다. [LAST_RESORT_MOVE_HISTORY_QA_20261105.md](LAST_RESORT_MOVE_HISTORY_QA_20261105.md) 참조.
+후속: 기존 `source-v1` 도전의 변신은 변신 직전 현재 기술에 남아 있는 직접 사용 이력을 같은 복사 기술에 이어준다. 격리 전투에서 원본의 일부 호출 기술 이력도 확인했다. [LAST_RESORT_TRANSFORM_QA_20261105.md](LAST_RESORT_TRANSFORM_QA_20261105.md) 참조.
+
+후속: `source-v1` 도전에서 전투 중 기술 구성이 바뀔 때 남아 있는 기술의 뒀다쓰기 사용 이력을 보존하고, 새로 추가하거나 다시 배운 기술은 미사용으로 처리한다. 이 재학습 처리는 최신 `source-v2`와 다르다. [LAST_RESORT_MOVE_HISTORY_QA_20261105.md](LAST_RESORT_MOVE_HISTORY_QA_20261105.md) 참조.
 
 후속: 신규 도전 AI가 다른 기술을 모두 쓰기 전의 뒀다쓰기를 기절 후보에서 제외하고 점수를 낮춘다. 사용 이력·교체·복구와 다이맥스 예외를 구분한다. [AI_LAST_RESORT_QA_20261105.md](AI_LAST_RESORT_QA_20261105.md) 참조.
 
