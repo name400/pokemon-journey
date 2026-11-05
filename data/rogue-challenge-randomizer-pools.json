@@ -1,0 +1,5627 @@
+{
+  "sourceCommit": "7c0881255af5cd51992e513ff93c2f71adbe40e0",
+  "moves": [
+    {
+      "id": 1,
+      "name": "POUND",
+      "key": "pound"
+    },
+    {
+      "id": 2,
+      "name": "KARATE_CHOP",
+      "key": "karatechop"
+    },
+    {
+      "id": 3,
+      "name": "DOUBLE_SLAP",
+      "key": "doubleslap"
+    },
+    {
+      "id": 4,
+      "name": "COMET_PUNCH",
+      "key": "cometpunch"
+    },
+    {
+      "id": 5,
+      "name": "MEGA_PUNCH",
+      "key": "megapunch"
+    },
+    {
+      "id": 6,
+      "name": "PAY_DAY",
+      "key": "payday"
+    },
+    {
+      "id": 7,
+      "name": "FIRE_PUNCH",
+      "key": "firepunch"
+    },
+    {
+      "id": 8,
+      "name": "ICE_PUNCH",
+      "key": "icepunch"
+    },
+    {
+      "id": 9,
+      "name": "THUNDER_PUNCH",
+      "key": "thunderpunch"
+    },
+    {
+      "id": 10,
+      "name": "SCRATCH",
+      "key": "scratch"
+    },
+    {
+      "id": 11,
+      "name": "VISE_GRIP",
+      "key": "visegrip"
+    },
+    {
+      "id": 12,
+      "name": "GUILLOTINE",
+      "key": "guillotine"
+    },
+    {
+      "id": 13,
+      "name": "RAZOR_WIND",
+      "key": "razorwind"
+    },
+    {
+      "id": 14,
+      "name": "SWORDS_DANCE",
+      "key": "swordsdance"
+    },
+    {
+      "id": 15,
+      "name": "CUT",
+      "key": "cut"
+    },
+    {
+      "id": 16,
+      "name": "GUST",
+      "key": "gust"
+    },
+    {
+      "id": 17,
+      "name": "WING_ATTACK",
+      "key": "wingattack"
+    },
+    {
+      "id": 18,
+      "name": "WHIRLWIND",
+      "key": "whirlwind"
+    },
+    {
+      "id": 19,
+      "name": "FLY",
+      "key": "fly"
+    },
+    {
+      "id": 20,
+      "name": "BIND",
+      "key": "bind"
+    },
+    {
+      "id": 21,
+      "name": "SLAM",
+      "key": "slam"
+    },
+    {
+      "id": 22,
+      "name": "VINE_WHIP",
+      "key": "vinewhip"
+    },
+    {
+      "id": 23,
+      "name": "STOMP",
+      "key": "stomp"
+    },
+    {
+      "id": 24,
+      "name": "DOUBLE_KICK",
+      "key": "doublekick"
+    },
+    {
+      "id": 25,
+      "name": "MEGA_KICK",
+      "key": "megakick"
+    },
+    {
+      "id": 26,
+      "name": "JUMP_KICK",
+      "key": "jumpkick"
+    },
+    {
+      "id": 27,
+      "name": "ROLLING_KICK",
+      "key": "rollingkick"
+    },
+    {
+      "id": 28,
+      "name": "SAND_ATTACK",
+      "key": "sandattack"
+    },
+    {
+      "id": 29,
+      "name": "HEADBUTT",
+      "key": "headbutt"
+    },
+    {
+      "id": 30,
+      "name": "HORN_ATTACK",
+      "key": "hornattack"
+    },
+    {
+      "id": 31,
+      "name": "FURY_ATTACK",
+      "key": "furyattack"
+    },
+    {
+      "id": 32,
+      "name": "HORN_DRILL",
+      "key": "horndrill"
+    },
+    {
+      "id": 33,
+      "name": "TACKLE",
+      "key": "tackle"
+    },
+    {
+      "id": 34,
+      "name": "BODY_SLAM",
+      "key": "bodyslam"
+    },
+    {
+      "id": 35,
+      "name": "WRAP",
+      "key": "wrap"
+    },
+    {
+      "id": 36,
+      "name": "TAKE_DOWN",
+      "key": "takedown"
+    },
+    {
+      "id": 37,
+      "name": "THRASH",
+      "key": "thrash"
+    },
+    {
+      "id": 38,
+      "name": "DOUBLE_EDGE",
+      "key": "doubleedge"
+    },
+    {
+      "id": 39,
+      "name": "TAIL_WHIP",
+      "key": "tailwhip"
+    },
+    {
+      "id": 40,
+      "name": "POISON_STING",
+      "key": "poisonsting"
+    },
+    {
+      "id": 41,
+      "name": "TWINEEDLE",
+      "key": "twineedle"
+    },
+    {
+      "id": 42,
+      "name": "PIN_MISSILE",
+      "key": "pinmissile"
+    },
+    {
+      "id": 43,
+      "name": "LEER",
+      "key": "leer"
+    },
+    {
+      "id": 44,
+      "name": "BITE",
+      "key": "bite"
+    },
+    {
+      "id": 45,
+      "name": "GROWL",
+      "key": "growl"
+    },
+    {
+      "id": 46,
+      "name": "ROAR",
+      "key": "roar"
+    },
+    {
+      "id": 47,
+      "name": "SING",
+      "key": "sing"
+    },
+    {
+      "id": 48,
+      "name": "SUPERSONIC",
+      "key": "supersonic"
+    },
+    {
+      "id": 49,
+      "name": "SONIC_BOOM",
+      "key": "sonicboom"
+    },
+    {
+      "id": 50,
+      "name": "DISABLE",
+      "key": "disable"
+    },
+    {
+      "id": 51,
+      "name": "ACID",
+      "key": "acid"
+    },
+    {
+      "id": 52,
+      "name": "EMBER",
+      "key": "ember"
+    },
+    {
+      "id": 53,
+      "name": "FLAMETHROWER",
+      "key": "flamethrower"
+    },
+    {
+      "id": 54,
+      "name": "MIST",
+      "key": "mist"
+    },
+    {
+      "id": 55,
+      "name": "WATER_GUN",
+      "key": "watergun"
+    },
+    {
+      "id": 56,
+      "name": "HYDRO_PUMP",
+      "key": "hydropump"
+    },
+    {
+      "id": 57,
+      "name": "SURF",
+      "key": "surf"
+    },
+    {
+      "id": 58,
+      "name": "ICE_BEAM",
+      "key": "icebeam"
+    },
+    {
+      "id": 59,
+      "name": "BLIZZARD",
+      "key": "blizzard"
+    },
+    {
+      "id": 60,
+      "name": "PSYBEAM",
+      "key": "psybeam"
+    },
+    {
+      "id": 61,
+      "name": "BUBBLE_BEAM",
+      "key": "bubblebeam"
+    },
+    {
+      "id": 62,
+      "name": "AURORA_BEAM",
+      "key": "aurorabeam"
+    },
+    {
+      "id": 63,
+      "name": "HYPER_BEAM",
+      "key": "hyperbeam"
+    },
+    {
+      "id": 64,
+      "name": "PECK",
+      "key": "peck"
+    },
+    {
+      "id": 65,
+      "name": "DRILL_PECK",
+      "key": "drillpeck"
+    },
+    {
+      "id": 66,
+      "name": "SUBMISSION",
+      "key": "submission"
+    },
+    {
+      "id": 67,
+      "name": "LOW_KICK",
+      "key": "lowkick"
+    },
+    {
+      "id": 68,
+      "name": "COUNTER",
+      "key": "counter"
+    },
+    {
+      "id": 69,
+      "name": "SEISMIC_TOSS",
+      "key": "seismictoss"
+    },
+    {
+      "id": 70,
+      "name": "STRENGTH",
+      "key": "strength"
+    },
+    {
+      "id": 71,
+      "name": "ABSORB",
+      "key": "absorb"
+    },
+    {
+      "id": 72,
+      "name": "MEGA_DRAIN",
+      "key": "megadrain"
+    },
+    {
+      "id": 73,
+      "name": "LEECH_SEED",
+      "key": "leechseed"
+    },
+    {
+      "id": 74,
+      "name": "GROWTH",
+      "key": "growth"
+    },
+    {
+      "id": 75,
+      "name": "RAZOR_LEAF",
+      "key": "razorleaf"
+    },
+    {
+      "id": 76,
+      "name": "SOLAR_BEAM",
+      "key": "solarbeam"
+    },
+    {
+      "id": 77,
+      "name": "POISON_POWDER",
+      "key": "poisonpowder"
+    },
+    {
+      "id": 78,
+      "name": "STUN_SPORE",
+      "key": "stunspore"
+    },
+    {
+      "id": 79,
+      "name": "SLEEP_POWDER",
+      "key": "sleeppowder"
+    },
+    {
+      "id": 80,
+      "name": "PETAL_DANCE",
+      "key": "petaldance"
+    },
+    {
+      "id": 81,
+      "name": "STRING_SHOT",
+      "key": "stringshot"
+    },
+    {
+      "id": 82,
+      "name": "DRAGON_RAGE",
+      "key": "dragonrage"
+    },
+    {
+      "id": 83,
+      "name": "FIRE_SPIN",
+      "key": "firespin"
+    },
+    {
+      "id": 84,
+      "name": "THUNDER_SHOCK",
+      "key": "thundershock"
+    },
+    {
+      "id": 85,
+      "name": "THUNDERBOLT",
+      "key": "thunderbolt"
+    },
+    {
+      "id": 86,
+      "name": "THUNDER_WAVE",
+      "key": "thunderwave"
+    },
+    {
+      "id": 87,
+      "name": "THUNDER",
+      "key": "thunder"
+    },
+    {
+      "id": 88,
+      "name": "ROCK_THROW",
+      "key": "rockthrow"
+    },
+    {
+      "id": 89,
+      "name": "EARTHQUAKE",
+      "key": "earthquake"
+    },
+    {
+      "id": 90,
+      "name": "FISSURE",
+      "key": "fissure"
+    },
+    {
+      "id": 91,
+      "name": "DIG",
+      "key": "dig"
+    },
+    {
+      "id": 92,
+      "name": "TOXIC",
+      "key": "toxic"
+    },
+    {
+      "id": 93,
+      "name": "CONFUSION",
+      "key": "confusion"
+    },
+    {
+      "id": 94,
+      "name": "PSYCHIC",
+      "key": "psychic"
+    },
+    {
+      "id": 95,
+      "name": "HYPNOSIS",
+      "key": "hypnosis"
+    },
+    {
+      "id": 96,
+      "name": "MEDITATE",
+      "key": "meditate"
+    },
+    {
+      "id": 97,
+      "name": "AGILITY",
+      "key": "agility"
+    },
+    {
+      "id": 98,
+      "name": "QUICK_ATTACK",
+      "key": "quickattack"
+    },
+    {
+      "id": 99,
+      "name": "RAGE",
+      "key": "rage"
+    },
+    {
+      "id": 100,
+      "name": "TELEPORT",
+      "key": "teleport"
+    },
+    {
+      "id": 101,
+      "name": "NIGHT_SHADE",
+      "key": "nightshade"
+    },
+    {
+      "id": 102,
+      "name": "MIMIC",
+      "key": "mimic"
+    },
+    {
+      "id": 103,
+      "name": "SCREECH",
+      "key": "screech"
+    },
+    {
+      "id": 104,
+      "name": "DOUBLE_TEAM",
+      "key": "doubleteam"
+    },
+    {
+      "id": 105,
+      "name": "RECOVER",
+      "key": "recover"
+    },
+    {
+      "id": 106,
+      "name": "HARDEN",
+      "key": "harden"
+    },
+    {
+      "id": 107,
+      "name": "MINIMIZE",
+      "key": "minimize"
+    },
+    {
+      "id": 108,
+      "name": "SMOKESCREEN",
+      "key": "smokescreen"
+    },
+    {
+      "id": 109,
+      "name": "CONFUSE_RAY",
+      "key": "confuseray"
+    },
+    {
+      "id": 110,
+      "name": "WITHDRAW",
+      "key": "withdraw"
+    },
+    {
+      "id": 111,
+      "name": "DEFENSE_CURL",
+      "key": "defensecurl"
+    },
+    {
+      "id": 112,
+      "name": "BARRIER",
+      "key": "barrier"
+    },
+    {
+      "id": 113,
+      "name": "LIGHT_SCREEN",
+      "key": "lightscreen"
+    },
+    {
+      "id": 114,
+      "name": "HAZE",
+      "key": "haze"
+    },
+    {
+      "id": 115,
+      "name": "REFLECT",
+      "key": "reflect"
+    },
+    {
+      "id": 116,
+      "name": "FOCUS_ENERGY",
+      "key": "focusenergy"
+    },
+    {
+      "id": 118,
+      "name": "METRONOME",
+      "key": "metronome"
+    },
+    {
+      "id": 119,
+      "name": "MIRROR_MOVE",
+      "key": "mirrormove"
+    },
+    {
+      "id": 120,
+      "name": "SELF_DESTRUCT",
+      "key": "selfdestruct"
+    },
+    {
+      "id": 121,
+      "name": "EGG_BOMB",
+      "key": "eggbomb"
+    },
+    {
+      "id": 122,
+      "name": "LICK",
+      "key": "lick"
+    },
+    {
+      "id": 123,
+      "name": "SMOG",
+      "key": "smog"
+    },
+    {
+      "id": 124,
+      "name": "SLUDGE",
+      "key": "sludge"
+    },
+    {
+      "id": 125,
+      "name": "BONE_CLUB",
+      "key": "boneclub"
+    },
+    {
+      "id": 126,
+      "name": "FIRE_BLAST",
+      "key": "fireblast"
+    },
+    {
+      "id": 127,
+      "name": "WATERFALL",
+      "key": "waterfall"
+    },
+    {
+      "id": 128,
+      "name": "CLAMP",
+      "key": "clamp"
+    },
+    {
+      "id": 129,
+      "name": "SWIFT",
+      "key": "swift"
+    },
+    {
+      "id": 130,
+      "name": "SKULL_BASH",
+      "key": "skullbash"
+    },
+    {
+      "id": 131,
+      "name": "SPIKE_CANNON",
+      "key": "spikecannon"
+    },
+    {
+      "id": 132,
+      "name": "CONSTRICT",
+      "key": "constrict"
+    },
+    {
+      "id": 133,
+      "name": "AMNESIA",
+      "key": "amnesia"
+    },
+    {
+      "id": 134,
+      "name": "KINESIS",
+      "key": "kinesis"
+    },
+    {
+      "id": 135,
+      "name": "SOFT_BOILED",
+      "key": "softboiled"
+    },
+    {
+      "id": 136,
+      "name": "HIGH_JUMP_KICK",
+      "key": "highjumpkick"
+    },
+    {
+      "id": 137,
+      "name": "GLARE",
+      "key": "glare"
+    },
+    {
+      "id": 138,
+      "name": "DREAM_EATER",
+      "key": "dreameater"
+    },
+    {
+      "id": 139,
+      "name": "POISON_GAS",
+      "key": "poisongas"
+    },
+    {
+      "id": 140,
+      "name": "BARRAGE",
+      "key": "barrage"
+    },
+    {
+      "id": 141,
+      "name": "LEECH_LIFE",
+      "key": "leechlife"
+    },
+    {
+      "id": 142,
+      "name": "LOVELY_KISS",
+      "key": "lovelykiss"
+    },
+    {
+      "id": 143,
+      "name": "SKY_ATTACK",
+      "key": "skyattack"
+    },
+    {
+      "id": 144,
+      "name": "TRANSFORM",
+      "key": "transform"
+    },
+    {
+      "id": 145,
+      "name": "BUBBLE",
+      "key": "bubble"
+    },
+    {
+      "id": 146,
+      "name": "DIZZY_PUNCH",
+      "key": "dizzypunch"
+    },
+    {
+      "id": 147,
+      "name": "SPORE",
+      "key": "spore"
+    },
+    {
+      "id": 148,
+      "name": "FLASH",
+      "key": "flash"
+    },
+    {
+      "id": 149,
+      "name": "PSYWAVE",
+      "key": "psywave"
+    },
+    {
+      "id": 151,
+      "name": "ACID_ARMOR",
+      "key": "acidarmor"
+    },
+    {
+      "id": 152,
+      "name": "CRABHAMMER",
+      "key": "crabhammer"
+    },
+    {
+      "id": 153,
+      "name": "EXPLOSION",
+      "key": "explosion"
+    },
+    {
+      "id": 154,
+      "name": "FURY_SWIPES",
+      "key": "furyswipes"
+    },
+    {
+      "id": 155,
+      "name": "BONEMERANG",
+      "key": "bonemerang"
+    },
+    {
+      "id": 156,
+      "name": "REST",
+      "key": "rest"
+    },
+    {
+      "id": 157,
+      "name": "ROCK_SLIDE",
+      "key": "rockslide"
+    },
+    {
+      "id": 158,
+      "name": "HYPER_FANG",
+      "key": "hyperfang"
+    },
+    {
+      "id": 159,
+      "name": "SHARPEN",
+      "key": "sharpen"
+    },
+    {
+      "id": 160,
+      "name": "CONVERSION",
+      "key": "conversion"
+    },
+    {
+      "id": 161,
+      "name": "TRI_ATTACK",
+      "key": "triattack"
+    },
+    {
+      "id": 162,
+      "name": "SUPER_FANG",
+      "key": "superfang"
+    },
+    {
+      "id": 163,
+      "name": "SLASH",
+      "key": "slash"
+    },
+    {
+      "id": 164,
+      "name": "SUBSTITUTE",
+      "key": "substitute"
+    },
+    {
+      "id": 166,
+      "name": "SKETCH",
+      "key": "sketch"
+    },
+    {
+      "id": 167,
+      "name": "TRIPLE_KICK",
+      "key": "triplekick"
+    },
+    {
+      "id": 168,
+      "name": "THIEF",
+      "key": "thief"
+    },
+    {
+      "id": 169,
+      "name": "SPIDER_WEB",
+      "key": "spiderweb"
+    },
+    {
+      "id": 170,
+      "name": "MIND_READER",
+      "key": "mindreader"
+    },
+    {
+      "id": 171,
+      "name": "NIGHTMARE",
+      "key": "nightmare"
+    },
+    {
+      "id": 172,
+      "name": "FLAME_WHEEL",
+      "key": "flamewheel"
+    },
+    {
+      "id": 173,
+      "name": "SNORE",
+      "key": "snore"
+    },
+    {
+      "id": 174,
+      "name": "CURSE",
+      "key": "curse"
+    },
+    {
+      "id": 175,
+      "name": "FLAIL",
+      "key": "flail"
+    },
+    {
+      "id": 176,
+      "name": "CONVERSION_2",
+      "key": "conversion2"
+    },
+    {
+      "id": 177,
+      "name": "AEROBLAST",
+      "key": "aeroblast"
+    },
+    {
+      "id": 178,
+      "name": "COTTON_SPORE",
+      "key": "cottonspore"
+    },
+    {
+      "id": 179,
+      "name": "REVERSAL",
+      "key": "reversal"
+    },
+    {
+      "id": 180,
+      "name": "SPITE",
+      "key": "spite"
+    },
+    {
+      "id": 181,
+      "name": "POWDER_SNOW",
+      "key": "powdersnow"
+    },
+    {
+      "id": 182,
+      "name": "PROTECT",
+      "key": "protect"
+    },
+    {
+      "id": 183,
+      "name": "MACH_PUNCH",
+      "key": "machpunch"
+    },
+    {
+      "id": 184,
+      "name": "SCARY_FACE",
+      "key": "scaryface"
+    },
+    {
+      "id": 185,
+      "name": "FEINT_ATTACK",
+      "key": "feintattack"
+    },
+    {
+      "id": 186,
+      "name": "SWEET_KISS",
+      "key": "sweetkiss"
+    },
+    {
+      "id": 187,
+      "name": "BELLY_DRUM",
+      "key": "bellydrum"
+    },
+    {
+      "id": 188,
+      "name": "SLUDGE_BOMB",
+      "key": "sludgebomb"
+    },
+    {
+      "id": 189,
+      "name": "MUD_SLAP",
+      "key": "mudslap"
+    },
+    {
+      "id": 190,
+      "name": "OCTAZOOKA",
+      "key": "octazooka"
+    },
+    {
+      "id": 191,
+      "name": "SPIKES",
+      "key": "spikes"
+    },
+    {
+      "id": 192,
+      "name": "ZAP_CANNON",
+      "key": "zapcannon"
+    },
+    {
+      "id": 193,
+      "name": "FORESIGHT",
+      "key": "foresight"
+    },
+    {
+      "id": 194,
+      "name": "DESTINY_BOND",
+      "key": "destinybond"
+    },
+    {
+      "id": 195,
+      "name": "PERISH_SONG",
+      "key": "perishsong"
+    },
+    {
+      "id": 196,
+      "name": "ICY_WIND",
+      "key": "icywind"
+    },
+    {
+      "id": 197,
+      "name": "DETECT",
+      "key": "detect"
+    },
+    {
+      "id": 198,
+      "name": "BONE_RUSH",
+      "key": "bonerush"
+    },
+    {
+      "id": 199,
+      "name": "LOCK_ON",
+      "key": "lockon"
+    },
+    {
+      "id": 200,
+      "name": "OUTRAGE",
+      "key": "outrage"
+    },
+    {
+      "id": 201,
+      "name": "SANDSTORM",
+      "key": "sandstorm"
+    },
+    {
+      "id": 202,
+      "name": "GIGA_DRAIN",
+      "key": "gigadrain"
+    },
+    {
+      "id": 203,
+      "name": "ENDURE",
+      "key": "endure"
+    },
+    {
+      "id": 204,
+      "name": "CHARM",
+      "key": "charm"
+    },
+    {
+      "id": 205,
+      "name": "ROLLOUT",
+      "key": "rollout"
+    },
+    {
+      "id": 206,
+      "name": "FALSE_SWIPE",
+      "key": "falseswipe"
+    },
+    {
+      "id": 207,
+      "name": "SWAGGER",
+      "key": "swagger"
+    },
+    {
+      "id": 208,
+      "name": "MILK_DRINK",
+      "key": "milkdrink"
+    },
+    {
+      "id": 209,
+      "name": "SPARK",
+      "key": "spark"
+    },
+    {
+      "id": 210,
+      "name": "FURY_CUTTER",
+      "key": "furycutter"
+    },
+    {
+      "id": 211,
+      "name": "STEEL_WING",
+      "key": "steelwing"
+    },
+    {
+      "id": 212,
+      "name": "MEAN_LOOK",
+      "key": "meanlook"
+    },
+    {
+      "id": 213,
+      "name": "ATTRACT",
+      "key": "attract"
+    },
+    {
+      "id": 214,
+      "name": "SLEEP_TALK",
+      "key": "sleeptalk"
+    },
+    {
+      "id": 215,
+      "name": "HEAL_BELL",
+      "key": "healbell"
+    },
+    {
+      "id": 216,
+      "name": "RETURN",
+      "key": "return"
+    },
+    {
+      "id": 217,
+      "name": "PRESENT",
+      "key": "present"
+    },
+    {
+      "id": 218,
+      "name": "FRUSTRATION",
+      "key": "frustration"
+    },
+    {
+      "id": 219,
+      "name": "SAFEGUARD",
+      "key": "safeguard"
+    },
+    {
+      "id": 220,
+      "name": "PAIN_SPLIT",
+      "key": "painsplit"
+    },
+    {
+      "id": 221,
+      "name": "SACRED_FIRE",
+      "key": "sacredfire"
+    },
+    {
+      "id": 222,
+      "name": "MAGNITUDE",
+      "key": "magnitude"
+    },
+    {
+      "id": 223,
+      "name": "DYNAMIC_PUNCH",
+      "key": "dynamicpunch"
+    },
+    {
+      "id": 224,
+      "name": "MEGAHORN",
+      "key": "megahorn"
+    },
+    {
+      "id": 225,
+      "name": "DRAGON_BREATH",
+      "key": "dragonbreath"
+    },
+    {
+      "id": 226,
+      "name": "BATON_PASS",
+      "key": "batonpass"
+    },
+    {
+      "id": 227,
+      "name": "ENCORE",
+      "key": "encore"
+    },
+    {
+      "id": 228,
+      "name": "PURSUIT",
+      "key": "pursuit"
+    },
+    {
+      "id": 229,
+      "name": "RAPID_SPIN",
+      "key": "rapidspin"
+    },
+    {
+      "id": 230,
+      "name": "SWEET_SCENT",
+      "key": "sweetscent"
+    },
+    {
+      "id": 231,
+      "name": "IRON_TAIL",
+      "key": "irontail"
+    },
+    {
+      "id": 232,
+      "name": "METAL_CLAW",
+      "key": "metalclaw"
+    },
+    {
+      "id": 233,
+      "name": "VITAL_THROW",
+      "key": "vitalthrow"
+    },
+    {
+      "id": 234,
+      "name": "MORNING_SUN",
+      "key": "morningsun"
+    },
+    {
+      "id": 235,
+      "name": "SYNTHESIS",
+      "key": "synthesis"
+    },
+    {
+      "id": 236,
+      "name": "MOONLIGHT",
+      "key": "moonlight"
+    },
+    {
+      "id": 237,
+      "name": "HIDDEN_POWER",
+      "key": "hiddenpower"
+    },
+    {
+      "id": 238,
+      "name": "CROSS_CHOP",
+      "key": "crosschop"
+    },
+    {
+      "id": 239,
+      "name": "TWISTER",
+      "key": "twister"
+    },
+    {
+      "id": 240,
+      "name": "RAIN_DANCE",
+      "key": "raindance"
+    },
+    {
+      "id": 241,
+      "name": "SUNNY_DAY",
+      "key": "sunnyday"
+    },
+    {
+      "id": 242,
+      "name": "CRUNCH",
+      "key": "crunch"
+    },
+    {
+      "id": 243,
+      "name": "MIRROR_COAT",
+      "key": "mirrorcoat"
+    },
+    {
+      "id": 244,
+      "name": "PSYCH_UP",
+      "key": "psychup"
+    },
+    {
+      "id": 245,
+      "name": "EXTREME_SPEED",
+      "key": "extremespeed"
+    },
+    {
+      "id": 246,
+      "name": "ANCIENT_POWER",
+      "key": "ancientpower"
+    },
+    {
+      "id": 247,
+      "name": "SHADOW_BALL",
+      "key": "shadowball"
+    },
+    {
+      "id": 248,
+      "name": "FUTURE_SIGHT",
+      "key": "futuresight"
+    },
+    {
+      "id": 249,
+      "name": "ROCK_SMASH",
+      "key": "rocksmash"
+    },
+    {
+      "id": 250,
+      "name": "WHIRLPOOL",
+      "key": "whirlpool"
+    },
+    {
+      "id": 251,
+      "name": "BEAT_UP",
+      "key": "beatup"
+    },
+    {
+      "id": 252,
+      "name": "FAKE_OUT",
+      "key": "fakeout"
+    },
+    {
+      "id": 253,
+      "name": "UPROAR",
+      "key": "uproar"
+    },
+    {
+      "id": 254,
+      "name": "STOCKPILE",
+      "key": "stockpile"
+    },
+    {
+      "id": 255,
+      "name": "SPIT_UP",
+      "key": "spitup"
+    },
+    {
+      "id": 256,
+      "name": "SWALLOW",
+      "key": "swallow"
+    },
+    {
+      "id": 257,
+      "name": "HEAT_WAVE",
+      "key": "heatwave"
+    },
+    {
+      "id": 258,
+      "name": "HAIL",
+      "key": "hail"
+    },
+    {
+      "id": 259,
+      "name": "TORMENT",
+      "key": "torment"
+    },
+    {
+      "id": 260,
+      "name": "FLATTER",
+      "key": "flatter"
+    },
+    {
+      "id": 261,
+      "name": "WILL_O_WISP",
+      "key": "willowisp"
+    },
+    {
+      "id": 262,
+      "name": "MEMENTO",
+      "key": "memento"
+    },
+    {
+      "id": 263,
+      "name": "FACADE",
+      "key": "facade"
+    },
+    {
+      "id": 264,
+      "name": "FOCUS_PUNCH",
+      "key": "focuspunch"
+    },
+    {
+      "id": 265,
+      "name": "SMELLING_SALTS",
+      "key": "smellingsalts"
+    },
+    {
+      "id": 266,
+      "name": "FOLLOW_ME",
+      "key": "followme"
+    },
+    {
+      "id": 267,
+      "name": "NATURE_POWER",
+      "key": "naturepower"
+    },
+    {
+      "id": 268,
+      "name": "CHARGE",
+      "key": "charge"
+    },
+    {
+      "id": 269,
+      "name": "TAUNT",
+      "key": "taunt"
+    },
+    {
+      "id": 270,
+      "name": "HELPING_HAND",
+      "key": "helpinghand"
+    },
+    {
+      "id": 272,
+      "name": "ROLE_PLAY",
+      "key": "roleplay"
+    },
+    {
+      "id": 273,
+      "name": "WISH",
+      "key": "wish"
+    },
+    {
+      "id": 274,
+      "name": "ASSIST",
+      "key": "assist"
+    },
+    {
+      "id": 275,
+      "name": "INGRAIN",
+      "key": "ingrain"
+    },
+    {
+      "id": 276,
+      "name": "SUPERPOWER",
+      "key": "superpower"
+    },
+    {
+      "id": 277,
+      "name": "MAGIC_COAT",
+      "key": "magiccoat"
+    },
+    {
+      "id": 279,
+      "name": "REVENGE",
+      "key": "revenge"
+    },
+    {
+      "id": 280,
+      "name": "BRICK_BREAK",
+      "key": "brickbreak"
+    },
+    {
+      "id": 281,
+      "name": "YAWN",
+      "key": "yawn"
+    },
+    {
+      "id": 282,
+      "name": "KNOCK_OFF",
+      "key": "knockoff"
+    },
+    {
+      "id": 283,
+      "name": "ENDEAVOR",
+      "key": "endeavor"
+    },
+    {
+      "id": 284,
+      "name": "ERUPTION",
+      "key": "eruption"
+    },
+    {
+      "id": 285,
+      "name": "SKILL_SWAP",
+      "key": "skillswap"
+    },
+    {
+      "id": 286,
+      "name": "IMPRISON",
+      "key": "imprison"
+    },
+    {
+      "id": 287,
+      "name": "REFRESH",
+      "key": "refresh"
+    },
+    {
+      "id": 288,
+      "name": "GRUDGE",
+      "key": "grudge"
+    },
+    {
+      "id": 290,
+      "name": "SECRET_POWER",
+      "key": "secretpower"
+    },
+    {
+      "id": 291,
+      "name": "DIVE",
+      "key": "dive"
+    },
+    {
+      "id": 292,
+      "name": "ARM_THRUST",
+      "key": "armthrust"
+    },
+    {
+      "id": 293,
+      "name": "CAMOUFLAGE",
+      "key": "camouflage"
+    },
+    {
+      "id": 294,
+      "name": "TAIL_GLOW",
+      "key": "tailglow"
+    },
+    {
+      "id": 295,
+      "name": "LUSTER_PURGE",
+      "key": "lusterpurge"
+    },
+    {
+      "id": 296,
+      "name": "MIST_BALL",
+      "key": "mistball"
+    },
+    {
+      "id": 297,
+      "name": "FEATHER_DANCE",
+      "key": "featherdance"
+    },
+    {
+      "id": 298,
+      "name": "TEETER_DANCE",
+      "key": "teeterdance"
+    },
+    {
+      "id": 299,
+      "name": "BLAZE_KICK",
+      "key": "blazekick"
+    },
+    {
+      "id": 300,
+      "name": "MUD_SPORT",
+      "key": "mudsport"
+    },
+    {
+      "id": 301,
+      "name": "ICE_BALL",
+      "key": "iceball"
+    },
+    {
+      "id": 302,
+      "name": "NEEDLE_ARM",
+      "key": "needlearm"
+    },
+    {
+      "id": 303,
+      "name": "SLACK_OFF",
+      "key": "slackoff"
+    },
+    {
+      "id": 304,
+      "name": "HYPER_VOICE",
+      "key": "hypervoice"
+    },
+    {
+      "id": 305,
+      "name": "POISON_FANG",
+      "key": "poisonfang"
+    },
+    {
+      "id": 306,
+      "name": "CRUSH_CLAW",
+      "key": "crushclaw"
+    },
+    {
+      "id": 307,
+      "name": "BLAST_BURN",
+      "key": "blastburn"
+    },
+    {
+      "id": 308,
+      "name": "HYDRO_CANNON",
+      "key": "hydrocannon"
+    },
+    {
+      "id": 309,
+      "name": "METEOR_MASH",
+      "key": "meteormash"
+    },
+    {
+      "id": 310,
+      "name": "ASTONISH",
+      "key": "astonish"
+    },
+    {
+      "id": 311,
+      "name": "WEATHER_BALL",
+      "key": "weatherball"
+    },
+    {
+      "id": 312,
+      "name": "AROMATHERAPY",
+      "key": "aromatherapy"
+    },
+    {
+      "id": 313,
+      "name": "FAKE_TEARS",
+      "key": "faketears"
+    },
+    {
+      "id": 314,
+      "name": "AIR_CUTTER",
+      "key": "aircutter"
+    },
+    {
+      "id": 315,
+      "name": "OVERHEAT",
+      "key": "overheat"
+    },
+    {
+      "id": 316,
+      "name": "ODOR_SLEUTH",
+      "key": "odorsleuth"
+    },
+    {
+      "id": 317,
+      "name": "ROCK_TOMB",
+      "key": "rocktomb"
+    },
+    {
+      "id": 318,
+      "name": "SILVER_WIND",
+      "key": "silverwind"
+    },
+    {
+      "id": 319,
+      "name": "METAL_SOUND",
+      "key": "metalsound"
+    },
+    {
+      "id": 320,
+      "name": "GRASS_WHISTLE",
+      "key": "grasswhistle"
+    },
+    {
+      "id": 321,
+      "name": "TICKLE",
+      "key": "tickle"
+    },
+    {
+      "id": 322,
+      "name": "COSMIC_POWER",
+      "key": "cosmicpower"
+    },
+    {
+      "id": 323,
+      "name": "WATER_SPOUT",
+      "key": "waterspout"
+    },
+    {
+      "id": 324,
+      "name": "SIGNAL_BEAM",
+      "key": "signalbeam"
+    },
+    {
+      "id": 325,
+      "name": "SHADOW_PUNCH",
+      "key": "shadowpunch"
+    },
+    {
+      "id": 326,
+      "name": "EXTRASENSORY",
+      "key": "extrasensory"
+    },
+    {
+      "id": 327,
+      "name": "SKY_UPPERCUT",
+      "key": "skyuppercut"
+    },
+    {
+      "id": 328,
+      "name": "SAND_TOMB",
+      "key": "sandtomb"
+    },
+    {
+      "id": 329,
+      "name": "SHEER_COLD",
+      "key": "sheercold"
+    },
+    {
+      "id": 330,
+      "name": "MUDDY_WATER",
+      "key": "muddywater"
+    },
+    {
+      "id": 331,
+      "name": "BULLET_SEED",
+      "key": "bulletseed"
+    },
+    {
+      "id": 332,
+      "name": "AERIAL_ACE",
+      "key": "aerialace"
+    },
+    {
+      "id": 333,
+      "name": "ICICLE_SPEAR",
+      "key": "iciclespear"
+    },
+    {
+      "id": 334,
+      "name": "IRON_DEFENSE",
+      "key": "irondefense"
+    },
+    {
+      "id": 335,
+      "name": "BLOCK",
+      "key": "block"
+    },
+    {
+      "id": 336,
+      "name": "HOWL",
+      "key": "howl"
+    },
+    {
+      "id": 337,
+      "name": "DRAGON_CLAW",
+      "key": "dragonclaw"
+    },
+    {
+      "id": 338,
+      "name": "FRENZY_PLANT",
+      "key": "frenzyplant"
+    },
+    {
+      "id": 339,
+      "name": "BULK_UP",
+      "key": "bulkup"
+    },
+    {
+      "id": 340,
+      "name": "BOUNCE",
+      "key": "bounce"
+    },
+    {
+      "id": 341,
+      "name": "MUD_SHOT",
+      "key": "mudshot"
+    },
+    {
+      "id": 342,
+      "name": "POISON_TAIL",
+      "key": "poisontail"
+    },
+    {
+      "id": 343,
+      "name": "COVET",
+      "key": "covet"
+    },
+    {
+      "id": 344,
+      "name": "VOLT_TACKLE",
+      "key": "volttackle"
+    },
+    {
+      "id": 345,
+      "name": "MAGICAL_LEAF",
+      "key": "magicalleaf"
+    },
+    {
+      "id": 346,
+      "name": "WATER_SPORT",
+      "key": "watersport"
+    },
+    {
+      "id": 347,
+      "name": "CALM_MIND",
+      "key": "calmmind"
+    },
+    {
+      "id": 348,
+      "name": "LEAF_BLADE",
+      "key": "leafblade"
+    },
+    {
+      "id": 349,
+      "name": "DRAGON_DANCE",
+      "key": "dragondance"
+    },
+    {
+      "id": 350,
+      "name": "ROCK_BLAST",
+      "key": "rockblast"
+    },
+    {
+      "id": 351,
+      "name": "SHOCK_WAVE",
+      "key": "shockwave"
+    },
+    {
+      "id": 352,
+      "name": "WATER_PULSE",
+      "key": "waterpulse"
+    },
+    {
+      "id": 353,
+      "name": "DOOM_DESIRE",
+      "key": "doomdesire"
+    },
+    {
+      "id": 354,
+      "name": "PSYCHO_BOOST",
+      "key": "psychoboost"
+    },
+    {
+      "id": 355,
+      "name": "ROOST",
+      "key": "roost"
+    },
+    {
+      "id": 356,
+      "name": "GRAVITY",
+      "key": "gravity"
+    },
+    {
+      "id": 357,
+      "name": "MIRACLE_EYE",
+      "key": "miracleeye"
+    },
+    {
+      "id": 358,
+      "name": "WAKE_UP_SLAP",
+      "key": "wakeupslap"
+    },
+    {
+      "id": 359,
+      "name": "HAMMER_ARM",
+      "key": "hammerarm"
+    },
+    {
+      "id": 360,
+      "name": "GYRO_BALL",
+      "key": "gyroball"
+    },
+    {
+      "id": 361,
+      "name": "HEALING_WISH",
+      "key": "healingwish"
+    },
+    {
+      "id": 362,
+      "name": "BRINE",
+      "key": "brine"
+    },
+    {
+      "id": 364,
+      "name": "FEINT",
+      "key": "feint"
+    },
+    {
+      "id": 365,
+      "name": "PLUCK",
+      "key": "pluck"
+    },
+    {
+      "id": 366,
+      "name": "TAILWIND",
+      "key": "tailwind"
+    },
+    {
+      "id": 367,
+      "name": "ACUPRESSURE",
+      "key": "acupressure"
+    },
+    {
+      "id": 368,
+      "name": "METAL_BURST",
+      "key": "metalburst"
+    },
+    {
+      "id": 369,
+      "name": "U_TURN",
+      "key": "uturn"
+    },
+    {
+      "id": 370,
+      "name": "CLOSE_COMBAT",
+      "key": "closecombat"
+    },
+    {
+      "id": 371,
+      "name": "PAYBACK",
+      "key": "payback"
+    },
+    {
+      "id": 372,
+      "name": "ASSURANCE",
+      "key": "assurance"
+    },
+    {
+      "id": 375,
+      "name": "PSYCHO_SHIFT",
+      "key": "psychoshift"
+    },
+    {
+      "id": 376,
+      "name": "TRUMP_CARD",
+      "key": "trumpcard"
+    },
+    {
+      "id": 377,
+      "name": "HEAL_BLOCK",
+      "key": "healblock"
+    },
+    {
+      "id": 378,
+      "name": "WRING_OUT",
+      "key": "wringout"
+    },
+    {
+      "id": 379,
+      "name": "POWER_TRICK",
+      "key": "powertrick"
+    },
+    {
+      "id": 380,
+      "name": "GASTRO_ACID",
+      "key": "gastroacid"
+    },
+    {
+      "id": 381,
+      "name": "LUCKY_CHANT",
+      "key": "luckychant"
+    },
+    {
+      "id": 383,
+      "name": "COPYCAT",
+      "key": "copycat"
+    },
+    {
+      "id": 384,
+      "name": "POWER_SWAP",
+      "key": "powerswap"
+    },
+    {
+      "id": 385,
+      "name": "GUARD_SWAP",
+      "key": "guardswap"
+    },
+    {
+      "id": 386,
+      "name": "PUNISHMENT",
+      "key": "punishment"
+    },
+    {
+      "id": 387,
+      "name": "LAST_RESORT",
+      "key": "lastresort"
+    },
+    {
+      "id": 388,
+      "name": "WORRY_SEED",
+      "key": "worryseed"
+    },
+    {
+      "id": 389,
+      "name": "SUCKER_PUNCH",
+      "key": "suckerpunch"
+    },
+    {
+      "id": 390,
+      "name": "TOXIC_SPIKES",
+      "key": "toxicspikes"
+    },
+    {
+      "id": 391,
+      "name": "HEART_SWAP",
+      "key": "heartswap"
+    },
+    {
+      "id": 392,
+      "name": "AQUA_RING",
+      "key": "aquaring"
+    },
+    {
+      "id": 393,
+      "name": "MAGNET_RISE",
+      "key": "magnetrise"
+    },
+    {
+      "id": 394,
+      "name": "FLARE_BLITZ",
+      "key": "flareblitz"
+    },
+    {
+      "id": 395,
+      "name": "FORCE_PALM",
+      "key": "forcepalm"
+    },
+    {
+      "id": 396,
+      "name": "AURA_SPHERE",
+      "key": "aurasphere"
+    },
+    {
+      "id": 397,
+      "name": "ROCK_POLISH",
+      "key": "rockpolish"
+    },
+    {
+      "id": 398,
+      "name": "POISON_JAB",
+      "key": "poisonjab"
+    },
+    {
+      "id": 399,
+      "name": "DARK_PULSE",
+      "key": "darkpulse"
+    },
+    {
+      "id": 400,
+      "name": "NIGHT_SLASH",
+      "key": "nightslash"
+    },
+    {
+      "id": 401,
+      "name": "AQUA_TAIL",
+      "key": "aquatail"
+    },
+    {
+      "id": 402,
+      "name": "SEED_BOMB",
+      "key": "seedbomb"
+    },
+    {
+      "id": 403,
+      "name": "AIR_SLASH",
+      "key": "airslash"
+    },
+    {
+      "id": 404,
+      "name": "X_SCISSOR",
+      "key": "xscissor"
+    },
+    {
+      "id": 405,
+      "name": "BUG_BUZZ",
+      "key": "bugbuzz"
+    },
+    {
+      "id": 406,
+      "name": "DRAGON_PULSE",
+      "key": "dragonpulse"
+    },
+    {
+      "id": 407,
+      "name": "DRAGON_RUSH",
+      "key": "dragonrush"
+    },
+    {
+      "id": 408,
+      "name": "POWER_GEM",
+      "key": "powergem"
+    },
+    {
+      "id": 409,
+      "name": "DRAIN_PUNCH",
+      "key": "drainpunch"
+    },
+    {
+      "id": 410,
+      "name": "VACUUM_WAVE",
+      "key": "vacuumwave"
+    },
+    {
+      "id": 411,
+      "name": "FOCUS_BLAST",
+      "key": "focusblast"
+    },
+    {
+      "id": 412,
+      "name": "ENERGY_BALL",
+      "key": "energyball"
+    },
+    {
+      "id": 413,
+      "name": "BRAVE_BIRD",
+      "key": "bravebird"
+    },
+    {
+      "id": 414,
+      "name": "EARTH_POWER",
+      "key": "earthpower"
+    },
+    {
+      "id": 416,
+      "name": "GIGA_IMPACT",
+      "key": "gigaimpact"
+    },
+    {
+      "id": 417,
+      "name": "NASTY_PLOT",
+      "key": "nastyplot"
+    },
+    {
+      "id": 418,
+      "name": "BULLET_PUNCH",
+      "key": "bulletpunch"
+    },
+    {
+      "id": 419,
+      "name": "AVALANCHE",
+      "key": "avalanche"
+    },
+    {
+      "id": 420,
+      "name": "ICE_SHARD",
+      "key": "iceshard"
+    },
+    {
+      "id": 421,
+      "name": "SHADOW_CLAW",
+      "key": "shadowclaw"
+    },
+    {
+      "id": 422,
+      "name": "THUNDER_FANG",
+      "key": "thunderfang"
+    },
+    {
+      "id": 423,
+      "name": "ICE_FANG",
+      "key": "icefang"
+    },
+    {
+      "id": 424,
+      "name": "FIRE_FANG",
+      "key": "firefang"
+    },
+    {
+      "id": 425,
+      "name": "SHADOW_SNEAK",
+      "key": "shadowsneak"
+    },
+    {
+      "id": 426,
+      "name": "MUD_BOMB",
+      "key": "mudbomb"
+    },
+    {
+      "id": 427,
+      "name": "PSYCHO_CUT",
+      "key": "psychocut"
+    },
+    {
+      "id": 428,
+      "name": "ZEN_HEADBUTT",
+      "key": "zenheadbutt"
+    },
+    {
+      "id": 429,
+      "name": "MIRROR_SHOT",
+      "key": "mirrorshot"
+    },
+    {
+      "id": 430,
+      "name": "FLASH_CANNON",
+      "key": "flashcannon"
+    },
+    {
+      "id": 431,
+      "name": "ROCK_CLIMB",
+      "key": "rockclimb"
+    },
+    {
+      "id": 432,
+      "name": "DEFOG",
+      "key": "defog"
+    },
+    {
+      "id": 433,
+      "name": "TRICK_ROOM",
+      "key": "trickroom"
+    },
+    {
+      "id": 434,
+      "name": "DRACO_METEOR",
+      "key": "dracometeor"
+    },
+    {
+      "id": 435,
+      "name": "DISCHARGE",
+      "key": "discharge"
+    },
+    {
+      "id": 436,
+      "name": "LAVA_PLUME",
+      "key": "lavaplume"
+    },
+    {
+      "id": 437,
+      "name": "LEAF_STORM",
+      "key": "leafstorm"
+    },
+    {
+      "id": 438,
+      "name": "POWER_WHIP",
+      "key": "powerwhip"
+    },
+    {
+      "id": 439,
+      "name": "ROCK_WRECKER",
+      "key": "rockwrecker"
+    },
+    {
+      "id": 440,
+      "name": "CROSS_POISON",
+      "key": "crosspoison"
+    },
+    {
+      "id": 441,
+      "name": "GUNK_SHOT",
+      "key": "gunkshot"
+    },
+    {
+      "id": 442,
+      "name": "IRON_HEAD",
+      "key": "ironhead"
+    },
+    {
+      "id": 443,
+      "name": "MAGNET_BOMB",
+      "key": "magnetbomb"
+    },
+    {
+      "id": 444,
+      "name": "STONE_EDGE",
+      "key": "stoneedge"
+    },
+    {
+      "id": 445,
+      "name": "CAPTIVATE",
+      "key": "captivate"
+    },
+    {
+      "id": 446,
+      "name": "STEALTH_ROCK",
+      "key": "stealthrock"
+    },
+    {
+      "id": 447,
+      "name": "GRASS_KNOT",
+      "key": "grassknot"
+    },
+    {
+      "id": 448,
+      "name": "CHATTER",
+      "key": "chatter"
+    },
+    {
+      "id": 449,
+      "name": "JUDGMENT",
+      "key": "judgment"
+    },
+    {
+      "id": 450,
+      "name": "BUG_BITE",
+      "key": "bugbite"
+    },
+    {
+      "id": 451,
+      "name": "CHARGE_BEAM",
+      "key": "chargebeam"
+    },
+    {
+      "id": 452,
+      "name": "WOOD_HAMMER",
+      "key": "woodhammer"
+    },
+    {
+      "id": 453,
+      "name": "AQUA_JET",
+      "key": "aquajet"
+    },
+    {
+      "id": 454,
+      "name": "ATTACK_ORDER",
+      "key": "attackorder"
+    },
+    {
+      "id": 455,
+      "name": "DEFEND_ORDER",
+      "key": "defendorder"
+    },
+    {
+      "id": 456,
+      "name": "HEAL_ORDER",
+      "key": "healorder"
+    },
+    {
+      "id": 457,
+      "name": "HEAD_SMASH",
+      "key": "headsmash"
+    },
+    {
+      "id": 458,
+      "name": "DOUBLE_HIT",
+      "key": "doublehit"
+    },
+    {
+      "id": 459,
+      "name": "ROAR_OF_TIME",
+      "key": "roaroftime"
+    },
+    {
+      "id": 460,
+      "name": "SPACIAL_REND",
+      "key": "spacialrend"
+    },
+    {
+      "id": 461,
+      "name": "LUNAR_DANCE",
+      "key": "lunardance"
+    },
+    {
+      "id": 462,
+      "name": "CRUSH_GRIP",
+      "key": "crushgrip"
+    },
+    {
+      "id": 463,
+      "name": "MAGMA_STORM",
+      "key": "magmastorm"
+    },
+    {
+      "id": 464,
+      "name": "DARK_VOID",
+      "key": "darkvoid"
+    },
+    {
+      "id": 465,
+      "name": "SEED_FLARE",
+      "key": "seedflare"
+    },
+    {
+      "id": 466,
+      "name": "OMINOUS_WIND",
+      "key": "ominouswind"
+    },
+    {
+      "id": 467,
+      "name": "SHADOW_FORCE",
+      "key": "shadowforce"
+    },
+    {
+      "id": 468,
+      "name": "HONE_CLAWS",
+      "key": "honeclaws"
+    },
+    {
+      "id": 469,
+      "name": "WIDE_GUARD",
+      "key": "wideguard"
+    },
+    {
+      "id": 470,
+      "name": "GUARD_SPLIT",
+      "key": "guardsplit"
+    },
+    {
+      "id": 471,
+      "name": "POWER_SPLIT",
+      "key": "powersplit"
+    },
+    {
+      "id": 473,
+      "name": "PSYSHOCK",
+      "key": "psyshock"
+    },
+    {
+      "id": 474,
+      "name": "VENOSHOCK",
+      "key": "venoshock"
+    },
+    {
+      "id": 475,
+      "name": "AUTOTOMIZE",
+      "key": "autotomize"
+    },
+    {
+      "id": 476,
+      "name": "RAGE_POWDER",
+      "key": "ragepowder"
+    },
+    {
+      "id": 477,
+      "name": "TELEKINESIS",
+      "key": "telekinesis"
+    },
+    {
+      "id": 479,
+      "name": "SMACK_DOWN",
+      "key": "smackdown"
+    },
+    {
+      "id": 480,
+      "name": "STORM_THROW",
+      "key": "stormthrow"
+    },
+    {
+      "id": 481,
+      "name": "FLAME_BURST",
+      "key": "flameburst"
+    },
+    {
+      "id": 482,
+      "name": "SLUDGE_WAVE",
+      "key": "sludgewave"
+    },
+    {
+      "id": 483,
+      "name": "QUIVER_DANCE",
+      "key": "quiverdance"
+    },
+    {
+      "id": 484,
+      "name": "HEAVY_SLAM",
+      "key": "heavyslam"
+    },
+    {
+      "id": 485,
+      "name": "SYNCHRONOISE",
+      "key": "synchronoise"
+    },
+    {
+      "id": 486,
+      "name": "ELECTRO_BALL",
+      "key": "electroball"
+    },
+    {
+      "id": 487,
+      "name": "SOAK",
+      "key": "soak"
+    },
+    {
+      "id": 488,
+      "name": "FLAME_CHARGE",
+      "key": "flamecharge"
+    },
+    {
+      "id": 489,
+      "name": "COIL",
+      "key": "coil"
+    },
+    {
+      "id": 490,
+      "name": "LOW_SWEEP",
+      "key": "lowsweep"
+    },
+    {
+      "id": 491,
+      "name": "ACID_SPRAY",
+      "key": "acidspray"
+    },
+    {
+      "id": 492,
+      "name": "FOUL_PLAY",
+      "key": "foulplay"
+    },
+    {
+      "id": 493,
+      "name": "SIMPLE_BEAM",
+      "key": "simplebeam"
+    },
+    {
+      "id": 494,
+      "name": "ENTRAINMENT",
+      "key": "entrainment"
+    },
+    {
+      "id": 495,
+      "name": "AFTER_YOU",
+      "key": "afteryou"
+    },
+    {
+      "id": 496,
+      "name": "ROUND",
+      "key": "round"
+    },
+    {
+      "id": 497,
+      "name": "ECHOED_VOICE",
+      "key": "echoedvoice"
+    },
+    {
+      "id": 498,
+      "name": "CHIP_AWAY",
+      "key": "chipaway"
+    },
+    {
+      "id": 499,
+      "name": "CLEAR_SMOG",
+      "key": "clearsmog"
+    },
+    {
+      "id": 500,
+      "name": "STORED_POWER",
+      "key": "storedpower"
+    },
+    {
+      "id": 501,
+      "name": "QUICK_GUARD",
+      "key": "quickguard"
+    },
+    {
+      "id": 503,
+      "name": "SCALD",
+      "key": "scald"
+    },
+    {
+      "id": 504,
+      "name": "SHELL_SMASH",
+      "key": "shellsmash"
+    },
+    {
+      "id": 505,
+      "name": "HEAL_PULSE",
+      "key": "healpulse"
+    },
+    {
+      "id": 506,
+      "name": "HEX",
+      "key": "hex"
+    },
+    {
+      "id": 507,
+      "name": "SKY_DROP",
+      "key": "skydrop"
+    },
+    {
+      "id": 508,
+      "name": "SHIFT_GEAR",
+      "key": "shiftgear"
+    },
+    {
+      "id": 509,
+      "name": "CIRCLE_THROW",
+      "key": "circlethrow"
+    },
+    {
+      "id": 510,
+      "name": "INCINERATE",
+      "key": "incinerate"
+    },
+    {
+      "id": 511,
+      "name": "QUASH",
+      "key": "quash"
+    },
+    {
+      "id": 512,
+      "name": "ACROBATICS",
+      "key": "acrobatics"
+    },
+    {
+      "id": 513,
+      "name": "REFLECT_TYPE",
+      "key": "reflecttype"
+    },
+    {
+      "id": 514,
+      "name": "RETALIATE",
+      "key": "retaliate"
+    },
+    {
+      "id": 515,
+      "name": "FINAL_GAMBIT",
+      "key": "finalgambit"
+    },
+    {
+      "id": 517,
+      "name": "INFERNO",
+      "key": "inferno"
+    },
+    {
+      "id": 518,
+      "name": "WATER_PLEDGE",
+      "key": "waterpledge"
+    },
+    {
+      "id": 519,
+      "name": "FIRE_PLEDGE",
+      "key": "firepledge"
+    },
+    {
+      "id": 520,
+      "name": "GRASS_PLEDGE",
+      "key": "grasspledge"
+    },
+    {
+      "id": 521,
+      "name": "VOLT_SWITCH",
+      "key": "voltswitch"
+    },
+    {
+      "id": 522,
+      "name": "STRUGGLE_BUG",
+      "key": "strugglebug"
+    },
+    {
+      "id": 523,
+      "name": "BULLDOZE",
+      "key": "bulldoze"
+    },
+    {
+      "id": 524,
+      "name": "FROST_BREATH",
+      "key": "frostbreath"
+    },
+    {
+      "id": 525,
+      "name": "DRAGON_TAIL",
+      "key": "dragontail"
+    },
+    {
+      "id": 526,
+      "name": "WORK_UP",
+      "key": "workup"
+    },
+    {
+      "id": 527,
+      "name": "ELECTROWEB",
+      "key": "electroweb"
+    },
+    {
+      "id": 528,
+      "name": "WILD_CHARGE",
+      "key": "wildcharge"
+    },
+    {
+      "id": 529,
+      "name": "DRILL_RUN",
+      "key": "drillrun"
+    },
+    {
+      "id": 530,
+      "name": "DUAL_CHOP",
+      "key": "dualchop"
+    },
+    {
+      "id": 531,
+      "name": "HEART_STAMP",
+      "key": "heartstamp"
+    },
+    {
+      "id": 532,
+      "name": "HORN_LEECH",
+      "key": "hornleech"
+    },
+    {
+      "id": 533,
+      "name": "SACRED_SWORD",
+      "key": "sacredsword"
+    },
+    {
+      "id": 534,
+      "name": "RAZOR_SHELL",
+      "key": "razorshell"
+    },
+    {
+      "id": 535,
+      "name": "HEAT_CRASH",
+      "key": "heatcrash"
+    },
+    {
+      "id": 536,
+      "name": "LEAF_TORNADO",
+      "key": "leaftornado"
+    },
+    {
+      "id": 537,
+      "name": "STEAMROLLER",
+      "key": "steamroller"
+    },
+    {
+      "id": 538,
+      "name": "COTTON_GUARD",
+      "key": "cottonguard"
+    },
+    {
+      "id": 539,
+      "name": "NIGHT_DAZE",
+      "key": "nightdaze"
+    },
+    {
+      "id": 540,
+      "name": "PSYSTRIKE",
+      "key": "psystrike"
+    },
+    {
+      "id": 541,
+      "name": "TAIL_SLAP",
+      "key": "tailslap"
+    },
+    {
+      "id": 542,
+      "name": "HURRICANE",
+      "key": "hurricane"
+    },
+    {
+      "id": 543,
+      "name": "HEAD_CHARGE",
+      "key": "headcharge"
+    },
+    {
+      "id": 544,
+      "name": "GEAR_GRIND",
+      "key": "geargrind"
+    },
+    {
+      "id": 545,
+      "name": "SEARING_SHOT",
+      "key": "searingshot"
+    },
+    {
+      "id": 546,
+      "name": "TECHNO_BLAST",
+      "key": "technoblast"
+    },
+    {
+      "id": 547,
+      "name": "RELIC_SONG",
+      "key": "relicsong"
+    },
+    {
+      "id": 548,
+      "name": "SECRET_SWORD",
+      "key": "secretsword"
+    },
+    {
+      "id": 549,
+      "name": "GLACIATE",
+      "key": "glaciate"
+    },
+    {
+      "id": 550,
+      "name": "BOLT_STRIKE",
+      "key": "boltstrike"
+    },
+    {
+      "id": 551,
+      "name": "BLUE_FLARE",
+      "key": "blueflare"
+    },
+    {
+      "id": 552,
+      "name": "FIERY_DANCE",
+      "key": "fierydance"
+    },
+    {
+      "id": 553,
+      "name": "FREEZE_SHOCK",
+      "key": "freezeshock"
+    },
+    {
+      "id": 554,
+      "name": "ICE_BURN",
+      "key": "iceburn"
+    },
+    {
+      "id": 555,
+      "name": "SNARL",
+      "key": "snarl"
+    },
+    {
+      "id": 556,
+      "name": "ICICLE_CRASH",
+      "key": "iciclecrash"
+    },
+    {
+      "id": 557,
+      "name": "V_CREATE",
+      "key": "vcreate"
+    },
+    {
+      "id": 558,
+      "name": "FUSION_FLARE",
+      "key": "fusionflare"
+    },
+    {
+      "id": 559,
+      "name": "FUSION_BOLT",
+      "key": "fusionbolt"
+    },
+    {
+      "id": 560,
+      "name": "FLYING_PRESS",
+      "key": "flyingpress"
+    },
+    {
+      "id": 561,
+      "name": "MAT_BLOCK",
+      "key": "matblock"
+    },
+    {
+      "id": 562,
+      "name": "BELCH",
+      "key": "belch"
+    },
+    {
+      "id": 563,
+      "name": "ROTOTILLER",
+      "key": "rototiller"
+    },
+    {
+      "id": 564,
+      "name": "STICKY_WEB",
+      "key": "stickyweb"
+    },
+    {
+      "id": 565,
+      "name": "FELL_STINGER",
+      "key": "fellstinger"
+    },
+    {
+      "id": 566,
+      "name": "PHANTOM_FORCE",
+      "key": "phantomforce"
+    },
+    {
+      "id": 567,
+      "name": "TRICK_OR_TREAT",
+      "key": "trickortreat"
+    },
+    {
+      "id": 568,
+      "name": "NOBLE_ROAR",
+      "key": "nobleroar"
+    },
+    {
+      "id": 569,
+      "name": "ION_DELUGE",
+      "key": "iondeluge"
+    },
+    {
+      "id": 570,
+      "name": "PARABOLIC_CHARGE",
+      "key": "paraboliccharge"
+    },
+    {
+      "id": 571,
+      "name": "FORESTS_CURSE",
+      "key": "forestscurse"
+    },
+    {
+      "id": 572,
+      "name": "PETAL_BLIZZARD",
+      "key": "petalblizzard"
+    },
+    {
+      "id": 573,
+      "name": "FREEZE_DRY",
+      "key": "freezedry"
+    },
+    {
+      "id": 574,
+      "name": "DISARMING_VOICE",
+      "key": "disarmingvoice"
+    },
+    {
+      "id": 575,
+      "name": "PARTING_SHOT",
+      "key": "partingshot"
+    },
+    {
+      "id": 576,
+      "name": "TOPSY_TURVY",
+      "key": "topsyturvy"
+    },
+    {
+      "id": 577,
+      "name": "DRAINING_KISS",
+      "key": "drainingkiss"
+    },
+    {
+      "id": 578,
+      "name": "CRAFTY_SHIELD",
+      "key": "craftyshield"
+    },
+    {
+      "id": 579,
+      "name": "FLOWER_SHIELD",
+      "key": "flowershield"
+    },
+    {
+      "id": 580,
+      "name": "GRASSY_TERRAIN",
+      "key": "grassyterrain"
+    },
+    {
+      "id": 581,
+      "name": "MISTY_TERRAIN",
+      "key": "mistyterrain"
+    },
+    {
+      "id": 582,
+      "name": "ELECTRIFY",
+      "key": "electrify"
+    },
+    {
+      "id": 583,
+      "name": "PLAY_ROUGH",
+      "key": "playrough"
+    },
+    {
+      "id": 584,
+      "name": "FAIRY_WIND",
+      "key": "fairywind"
+    },
+    {
+      "id": 585,
+      "name": "MOONBLAST",
+      "key": "moonblast"
+    },
+    {
+      "id": 586,
+      "name": "BOOMBURST",
+      "key": "boomburst"
+    },
+    {
+      "id": 587,
+      "name": "FAIRY_LOCK",
+      "key": "fairylock"
+    },
+    {
+      "id": 588,
+      "name": "KINGS_SHIELD",
+      "key": "kingsshield"
+    },
+    {
+      "id": 589,
+      "name": "PLAY_NICE",
+      "key": "playnice"
+    },
+    {
+      "id": 590,
+      "name": "CONFIDE",
+      "key": "confide"
+    },
+    {
+      "id": 591,
+      "name": "DIAMOND_STORM",
+      "key": "diamondstorm"
+    },
+    {
+      "id": 592,
+      "name": "STEAM_ERUPTION",
+      "key": "steameruption"
+    },
+    {
+      "id": 593,
+      "name": "HYPERSPACE_HOLE",
+      "key": "hyperspacehole"
+    },
+    {
+      "id": 594,
+      "name": "WATER_SHURIKEN",
+      "key": "watershuriken"
+    },
+    {
+      "id": 595,
+      "name": "MYSTICAL_FIRE",
+      "key": "mysticalfire"
+    },
+    {
+      "id": 596,
+      "name": "SPIKY_SHIELD",
+      "key": "spikyshield"
+    },
+    {
+      "id": 597,
+      "name": "AROMATIC_MIST",
+      "key": "aromaticmist"
+    },
+    {
+      "id": 598,
+      "name": "EERIE_IMPULSE",
+      "key": "eerieimpulse"
+    },
+    {
+      "id": 599,
+      "name": "VENOM_DRENCH",
+      "key": "venomdrench"
+    },
+    {
+      "id": 600,
+      "name": "POWDER",
+      "key": "powder"
+    },
+    {
+      "id": 601,
+      "name": "GEOMANCY",
+      "key": "geomancy"
+    },
+    {
+      "id": 602,
+      "name": "MAGNETIC_FLUX",
+      "key": "magneticflux"
+    },
+    {
+      "id": 603,
+      "name": "HAPPY_HOUR",
+      "key": "happyhour"
+    },
+    {
+      "id": 604,
+      "name": "ELECTRIC_TERRAIN",
+      "key": "electricterrain"
+    },
+    {
+      "id": 605,
+      "name": "DAZZLING_GLEAM",
+      "key": "dazzlinggleam"
+    },
+    {
+      "id": 606,
+      "name": "CELEBRATE",
+      "key": "celebrate"
+    },
+    {
+      "id": 608,
+      "name": "BABY_DOLL_EYES",
+      "key": "babydolleyes"
+    },
+    {
+      "id": 609,
+      "name": "NUZZLE",
+      "key": "nuzzle"
+    },
+    {
+      "id": 610,
+      "name": "HOLD_BACK",
+      "key": "holdback"
+    },
+    {
+      "id": 611,
+      "name": "INFESTATION",
+      "key": "infestation"
+    },
+    {
+      "id": 612,
+      "name": "POWER_UP_PUNCH",
+      "key": "poweruppunch"
+    },
+    {
+      "id": 613,
+      "name": "OBLIVION_WING",
+      "key": "oblivionwing"
+    },
+    {
+      "id": 614,
+      "name": "THOUSAND_ARROWS",
+      "key": "thousandarrows"
+    },
+    {
+      "id": 615,
+      "name": "THOUSAND_WAVES",
+      "key": "thousandwaves"
+    },
+    {
+      "id": 616,
+      "name": "LANDS_WRATH",
+      "key": "landswrath"
+    },
+    {
+      "id": 617,
+      "name": "LIGHT_OF_RUIN",
+      "key": "lightofruin"
+    },
+    {
+      "id": 618,
+      "name": "ORIGIN_PULSE",
+      "key": "originpulse"
+    },
+    {
+      "id": 619,
+      "name": "PRECIPICE_BLADES",
+      "key": "precipiceblades"
+    },
+    {
+      "id": 620,
+      "name": "DRAGON_ASCENT",
+      "key": "dragonascent"
+    },
+    {
+      "id": 621,
+      "name": "HYPERSPACE_FURY",
+      "key": "hyperspacefury"
+    },
+    {
+      "id": 659,
+      "name": "SHORE_UP",
+      "key": "shoreup"
+    },
+    {
+      "id": 660,
+      "name": "FIRST_IMPRESSION",
+      "key": "firstimpression"
+    },
+    {
+      "id": 661,
+      "name": "BANEFUL_BUNKER",
+      "key": "banefulbunker"
+    },
+    {
+      "id": 662,
+      "name": "SPIRIT_SHACKLE",
+      "key": "spiritshackle"
+    },
+    {
+      "id": 663,
+      "name": "DARKEST_LARIAT",
+      "key": "darkestlariat"
+    },
+    {
+      "id": 664,
+      "name": "SPARKLING_ARIA",
+      "key": "sparklingaria"
+    },
+    {
+      "id": 665,
+      "name": "ICE_HAMMER",
+      "key": "icehammer"
+    },
+    {
+      "id": 666,
+      "name": "FLORAL_HEALING",
+      "key": "floralhealing"
+    },
+    {
+      "id": 667,
+      "name": "HIGH_HORSEPOWER",
+      "key": "highhorsepower"
+    },
+    {
+      "id": 668,
+      "name": "STRENGTH_SAP",
+      "key": "strengthsap"
+    },
+    {
+      "id": 669,
+      "name": "SOLAR_BLADE",
+      "key": "solarblade"
+    },
+    {
+      "id": 670,
+      "name": "LEAFAGE",
+      "key": "leafage"
+    },
+    {
+      "id": 671,
+      "name": "SPOTLIGHT",
+      "key": "spotlight"
+    },
+    {
+      "id": 672,
+      "name": "TOXIC_THREAD",
+      "key": "toxicthread"
+    },
+    {
+      "id": 673,
+      "name": "LASER_FOCUS",
+      "key": "laserfocus"
+    },
+    {
+      "id": 674,
+      "name": "GEAR_UP",
+      "key": "gearup"
+    },
+    {
+      "id": 675,
+      "name": "THROAT_CHOP",
+      "key": "throatchop"
+    },
+    {
+      "id": 676,
+      "name": "POLLEN_PUFF",
+      "key": "pollenpuff"
+    },
+    {
+      "id": 677,
+      "name": "ANCHOR_SHOT",
+      "key": "anchorshot"
+    },
+    {
+      "id": 678,
+      "name": "PSYCHIC_TERRAIN",
+      "key": "psychicterrain"
+    },
+    {
+      "id": 679,
+      "name": "LUNGE",
+      "key": "lunge"
+    },
+    {
+      "id": 680,
+      "name": "FIRE_LASH",
+      "key": "firelash"
+    },
+    {
+      "id": 681,
+      "name": "POWER_TRIP",
+      "key": "powertrip"
+    },
+    {
+      "id": 682,
+      "name": "BURN_UP",
+      "key": "burnup"
+    },
+    {
+      "id": 683,
+      "name": "SPEED_SWAP",
+      "key": "speedswap"
+    },
+    {
+      "id": 684,
+      "name": "SMART_STRIKE",
+      "key": "smartstrike"
+    },
+    {
+      "id": 685,
+      "name": "PURIFY",
+      "key": "purify"
+    },
+    {
+      "id": 686,
+      "name": "REVELATION_DANCE",
+      "key": "revelationdance"
+    },
+    {
+      "id": 687,
+      "name": "CORE_ENFORCER",
+      "key": "coreenforcer"
+    },
+    {
+      "id": 688,
+      "name": "TROP_KICK",
+      "key": "tropkick"
+    },
+    {
+      "id": 689,
+      "name": "INSTRUCT",
+      "key": "instruct"
+    },
+    {
+      "id": 690,
+      "name": "BEAK_BLAST",
+      "key": "beakblast"
+    },
+    {
+      "id": 691,
+      "name": "CLANGING_SCALES",
+      "key": "clangingscales"
+    },
+    {
+      "id": 692,
+      "name": "DRAGON_HAMMER",
+      "key": "dragonhammer"
+    },
+    {
+      "id": 693,
+      "name": "BRUTAL_SWING",
+      "key": "brutalswing"
+    },
+    {
+      "id": 694,
+      "name": "AURORA_VEIL",
+      "key": "auroraveil"
+    },
+    {
+      "id": 704,
+      "name": "SHELL_TRAP",
+      "key": "shelltrap"
+    },
+    {
+      "id": 705,
+      "name": "FLEUR_CANNON",
+      "key": "fleurcannon"
+    },
+    {
+      "id": 706,
+      "name": "PSYCHIC_FANGS",
+      "key": "psychicfangs"
+    },
+    {
+      "id": 707,
+      "name": "STOMPING_TANTRUM",
+      "key": "stompingtantrum"
+    },
+    {
+      "id": 708,
+      "name": "SHADOW_BONE",
+      "key": "shadowbone"
+    },
+    {
+      "id": 709,
+      "name": "ACCELEROCK",
+      "key": "accelerock"
+    },
+    {
+      "id": 710,
+      "name": "LIQUIDATION",
+      "key": "liquidation"
+    },
+    {
+      "id": 711,
+      "name": "PRISMATIC_LASER",
+      "key": "prismaticlaser"
+    },
+    {
+      "id": 712,
+      "name": "SPECTRAL_THIEF",
+      "key": "spectralthief"
+    },
+    {
+      "id": 713,
+      "name": "SUNSTEEL_STRIKE",
+      "key": "sunsteelstrike"
+    },
+    {
+      "id": 714,
+      "name": "MOONGEIST_BEAM",
+      "key": "moongeistbeam"
+    },
+    {
+      "id": 715,
+      "name": "TEARFUL_LOOK",
+      "key": "tearfullook"
+    },
+    {
+      "id": 716,
+      "name": "ZING_ZAP",
+      "key": "zingzap"
+    },
+    {
+      "id": 717,
+      "name": "NATURES_MADNESS",
+      "key": "naturesmadness"
+    },
+    {
+      "id": 718,
+      "name": "MULTI_ATTACK",
+      "key": "multiattack"
+    },
+    {
+      "id": 720,
+      "name": "MIND_BLOWN",
+      "key": "mindblown"
+    },
+    {
+      "id": 721,
+      "name": "PLASMA_FISTS",
+      "key": "plasmafists"
+    },
+    {
+      "id": 722,
+      "name": "PHOTON_GEYSER",
+      "key": "photongeyser"
+    },
+    {
+      "id": 729,
+      "name": "ZIPPY_ZAP",
+      "key": "zippyzap"
+    },
+    {
+      "id": 730,
+      "name": "SPLISHY_SPLASH",
+      "key": "splishysplash"
+    },
+    {
+      "id": 731,
+      "name": "FLOATY_FALL",
+      "key": "floatyfall"
+    },
+    {
+      "id": 732,
+      "name": "PIKA_PAPOW",
+      "key": "pikapapow"
+    },
+    {
+      "id": 733,
+      "name": "BOUNCY_BUBBLE",
+      "key": "bouncybubble"
+    },
+    {
+      "id": 734,
+      "name": "BUZZY_BUZZ",
+      "key": "buzzybuzz"
+    },
+    {
+      "id": 735,
+      "name": "SIZZLY_SLIDE",
+      "key": "sizzlyslide"
+    },
+    {
+      "id": 736,
+      "name": "GLITZY_GLOW",
+      "key": "glitzyglow"
+    },
+    {
+      "id": 737,
+      "name": "BADDY_BAD",
+      "key": "baddybad"
+    },
+    {
+      "id": 738,
+      "name": "SAPPY_SEED",
+      "key": "sappyseed"
+    },
+    {
+      "id": 739,
+      "name": "FREEZY_FROST",
+      "key": "freezyfrost"
+    },
+    {
+      "id": 740,
+      "name": "SPARKLY_SWIRL",
+      "key": "sparklyswirl"
+    },
+    {
+      "id": 741,
+      "name": "VEEVEE_VOLLEY",
+      "key": "veeveevolley"
+    },
+    {
+      "id": 742,
+      "name": "DOUBLE_IRON_BASH",
+      "key": "doubleironbash"
+    },
+    {
+      "id": 744,
+      "name": "DYNAMAX_CANNON",
+      "key": "dynamaxcannon"
+    },
+    {
+      "id": 745,
+      "name": "SNIPE_SHOT",
+      "key": "snipeshot"
+    },
+    {
+      "id": 746,
+      "name": "JAW_LOCK",
+      "key": "jawlock"
+    },
+    {
+      "id": 747,
+      "name": "STUFF_CHEEKS",
+      "key": "stuffcheeks"
+    },
+    {
+      "id": 748,
+      "name": "NO_RETREAT",
+      "key": "noretreat"
+    },
+    {
+      "id": 749,
+      "name": "TAR_SHOT",
+      "key": "tarshot"
+    },
+    {
+      "id": 750,
+      "name": "MAGIC_POWDER",
+      "key": "magicpowder"
+    },
+    {
+      "id": 751,
+      "name": "DRAGON_DARTS",
+      "key": "dragondarts"
+    },
+    {
+      "id": 752,
+      "name": "TEATIME",
+      "key": "teatime"
+    },
+    {
+      "id": 753,
+      "name": "OCTOLOCK",
+      "key": "octolock"
+    },
+    {
+      "id": 754,
+      "name": "BOLT_BEAK",
+      "key": "boltbeak"
+    },
+    {
+      "id": 755,
+      "name": "FISHIOUS_REND",
+      "key": "fishiousrend"
+    },
+    {
+      "id": 756,
+      "name": "COURT_CHANGE",
+      "key": "courtchange"
+    },
+    {
+      "id": 775,
+      "name": "CLANGOROUS_SOUL",
+      "key": "clangoroussoul"
+    },
+    {
+      "id": 776,
+      "name": "BODY_PRESS",
+      "key": "bodypress"
+    },
+    {
+      "id": 777,
+      "name": "DECORATE",
+      "key": "decorate"
+    },
+    {
+      "id": 778,
+      "name": "DRUM_BEATING",
+      "key": "drumbeating"
+    },
+    {
+      "id": 779,
+      "name": "SNAP_TRAP",
+      "key": "snaptrap"
+    },
+    {
+      "id": 780,
+      "name": "PYRO_BALL",
+      "key": "pyroball"
+    },
+    {
+      "id": 781,
+      "name": "BEHEMOTH_BLADE",
+      "key": "behemothblade"
+    },
+    {
+      "id": 782,
+      "name": "BEHEMOTH_BASH",
+      "key": "behemothbash"
+    },
+    {
+      "id": 783,
+      "name": "AURA_WHEEL",
+      "key": "aurawheel"
+    },
+    {
+      "id": 784,
+      "name": "BREAKING_SWIPE",
+      "key": "breakingswipe"
+    },
+    {
+      "id": 785,
+      "name": "BRANCH_POKE",
+      "key": "branchpoke"
+    },
+    {
+      "id": 786,
+      "name": "OVERDRIVE",
+      "key": "overdrive"
+    },
+    {
+      "id": 787,
+      "name": "APPLE_ACID",
+      "key": "appleacid"
+    },
+    {
+      "id": 788,
+      "name": "GRAV_APPLE",
+      "key": "gravapple"
+    },
+    {
+      "id": 789,
+      "name": "SPIRIT_BREAK",
+      "key": "spiritbreak"
+    },
+    {
+      "id": 790,
+      "name": "STRANGE_STEAM",
+      "key": "strangesteam"
+    },
+    {
+      "id": 791,
+      "name": "LIFE_DEW",
+      "key": "lifedew"
+    },
+    {
+      "id": 792,
+      "name": "OBSTRUCT",
+      "key": "obstruct"
+    },
+    {
+      "id": 793,
+      "name": "FALSE_SURRENDER",
+      "key": "falsesurrender"
+    },
+    {
+      "id": 794,
+      "name": "METEOR_ASSAULT",
+      "key": "meteorassault"
+    },
+    {
+      "id": 795,
+      "name": "ETERNABEAM",
+      "key": "eternabeam"
+    },
+    {
+      "id": 796,
+      "name": "STEEL_BEAM",
+      "key": "steelbeam"
+    },
+    {
+      "id": 797,
+      "name": "EXPANDING_FORCE",
+      "key": "expandingforce"
+    },
+    {
+      "id": 798,
+      "name": "STEEL_ROLLER",
+      "key": "steelroller"
+    },
+    {
+      "id": 799,
+      "name": "SCALE_SHOT",
+      "key": "scaleshot"
+    },
+    {
+      "id": 800,
+      "name": "METEOR_BEAM",
+      "key": "meteorbeam"
+    },
+    {
+      "id": 801,
+      "name": "SHELL_SIDE_ARM",
+      "key": "shellsidearm"
+    },
+    {
+      "id": 802,
+      "name": "MISTY_EXPLOSION",
+      "key": "mistyexplosion"
+    },
+    {
+      "id": 803,
+      "name": "GRASSY_GLIDE",
+      "key": "grassyglide"
+    },
+    {
+      "id": 804,
+      "name": "RISING_VOLTAGE",
+      "key": "risingvoltage"
+    },
+    {
+      "id": 805,
+      "name": "TERRAIN_PULSE",
+      "key": "terrainpulse"
+    },
+    {
+      "id": 806,
+      "name": "SKITTER_SMACK",
+      "key": "skittersmack"
+    },
+    {
+      "id": 807,
+      "name": "BURNING_JEALOUSY",
+      "key": "burningjealousy"
+    },
+    {
+      "id": 808,
+      "name": "LASH_OUT",
+      "key": "lashout"
+    },
+    {
+      "id": 809,
+      "name": "POLTERGEIST",
+      "key": "poltergeist"
+    },
+    {
+      "id": 811,
+      "name": "COACHING",
+      "key": "coaching"
+    },
+    {
+      "id": 812,
+      "name": "FLIP_TURN",
+      "key": "flipturn"
+    },
+    {
+      "id": 813,
+      "name": "TRIPLE_AXEL",
+      "key": "tripleaxel"
+    },
+    {
+      "id": 814,
+      "name": "DUAL_WINGBEAT",
+      "key": "dualwingbeat"
+    },
+    {
+      "id": 815,
+      "name": "SCORCHING_SANDS",
+      "key": "scorchingsands"
+    },
+    {
+      "id": 816,
+      "name": "JUNGLE_HEALING",
+      "key": "junglehealing"
+    },
+    {
+      "id": 817,
+      "name": "WICKED_BLOW",
+      "key": "wickedblow"
+    },
+    {
+      "id": 818,
+      "name": "SURGING_STRIKES",
+      "key": "surgingstrikes"
+    },
+    {
+      "id": 819,
+      "name": "THUNDER_CAGE",
+      "key": "thundercage"
+    },
+    {
+      "id": 820,
+      "name": "DRAGON_ENERGY",
+      "key": "dragonenergy"
+    },
+    {
+      "id": 821,
+      "name": "FREEZING_GLARE",
+      "key": "freezingglare"
+    },
+    {
+      "id": 822,
+      "name": "FIERY_WRATH",
+      "key": "fierywrath"
+    },
+    {
+      "id": 823,
+      "name": "THUNDEROUS_KICK",
+      "key": "thunderouskick"
+    },
+    {
+      "id": 824,
+      "name": "GLACIAL_LANCE",
+      "key": "glaciallance"
+    },
+    {
+      "id": 825,
+      "name": "ASTRAL_BARRAGE",
+      "key": "astralbarrage"
+    },
+    {
+      "id": 826,
+      "name": "EERIE_SPELL",
+      "key": "eeriespell"
+    },
+    {
+      "id": 827,
+      "name": "DIRE_CLAW",
+      "key": "direclaw"
+    },
+    {
+      "id": 828,
+      "name": "PSYSHIELD_BASH",
+      "key": "psyshieldbash"
+    },
+    {
+      "id": 829,
+      "name": "POWER_SHIFT",
+      "key": "powershift"
+    },
+    {
+      "id": 830,
+      "name": "STONE_AXE",
+      "key": "stoneaxe"
+    },
+    {
+      "id": 831,
+      "name": "SPRINGTIDE_STORM",
+      "key": "springtidestorm"
+    },
+    {
+      "id": 832,
+      "name": "MYSTICAL_POWER",
+      "key": "mysticalpower"
+    },
+    {
+      "id": 833,
+      "name": "RAGING_FURY",
+      "key": "ragingfury"
+    },
+    {
+      "id": 834,
+      "name": "WAVE_CRASH",
+      "key": "wavecrash"
+    },
+    {
+      "id": 835,
+      "name": "CHLOROBLAST",
+      "key": "chloroblast"
+    },
+    {
+      "id": 836,
+      "name": "MOUNTAIN_GALE",
+      "key": "mountaingale"
+    },
+    {
+      "id": 837,
+      "name": "VICTORY_DANCE",
+      "key": "victorydance"
+    },
+    {
+      "id": 838,
+      "name": "HEADLONG_RUSH",
+      "key": "headlongrush"
+    },
+    {
+      "id": 839,
+      "name": "BARB_BARRAGE",
+      "key": "barbbarrage"
+    },
+    {
+      "id": 840,
+      "name": "ESPER_WING",
+      "key": "esperwing"
+    },
+    {
+      "id": 841,
+      "name": "BITTER_MALICE",
+      "key": "bittermalice"
+    },
+    {
+      "id": 842,
+      "name": "SHELTER",
+      "key": "shelter"
+    },
+    {
+      "id": 843,
+      "name": "TRIPLE_ARROWS",
+      "key": "triplearrows"
+    },
+    {
+      "id": 844,
+      "name": "INFERNAL_PARADE",
+      "key": "infernalparade"
+    },
+    {
+      "id": 845,
+      "name": "CEASELESS_EDGE",
+      "key": "ceaselessedge"
+    },
+    {
+      "id": 846,
+      "name": "BLEAKWIND_STORM",
+      "key": "bleakwindstorm"
+    },
+    {
+      "id": 847,
+      "name": "WILDBOLT_STORM",
+      "key": "wildboltstorm"
+    },
+    {
+      "id": 848,
+      "name": "SANDSEAR_STORM",
+      "key": "sandsearstorm"
+    },
+    {
+      "id": 849,
+      "name": "LUNAR_BLESSING",
+      "key": "lunarblessing"
+    },
+    {
+      "id": 850,
+      "name": "TAKE_HEART",
+      "key": "takeheart"
+    },
+    {
+      "id": 851,
+      "name": "TERA_BLAST",
+      "key": "terablast"
+    },
+    {
+      "id": 852,
+      "name": "SILK_TRAP",
+      "key": "silktrap"
+    },
+    {
+      "id": 853,
+      "name": "AXE_KICK",
+      "key": "axekick"
+    },
+    {
+      "id": 854,
+      "name": "LAST_RESPECTS",
+      "key": "lastrespects"
+    },
+    {
+      "id": 855,
+      "name": "LUMINA_CRASH",
+      "key": "luminacrash"
+    },
+    {
+      "id": 856,
+      "name": "ORDER_UP",
+      "key": "orderup"
+    },
+    {
+      "id": 857,
+      "name": "JET_PUNCH",
+      "key": "jetpunch"
+    },
+    {
+      "id": 858,
+      "name": "SPICY_EXTRACT",
+      "key": "spicyextract"
+    },
+    {
+      "id": 859,
+      "name": "SPIN_OUT",
+      "key": "spinout"
+    },
+    {
+      "id": 860,
+      "name": "POPULATION_BOMB",
+      "key": "populationbomb"
+    },
+    {
+      "id": 861,
+      "name": "ICE_SPINNER",
+      "key": "icespinner"
+    },
+    {
+      "id": 862,
+      "name": "GLAIVE_RUSH",
+      "key": "glaiverush"
+    },
+    {
+      "id": 863,
+      "name": "REVIVAL_BLESSING",
+      "key": "revivalblessing"
+    },
+    {
+      "id": 864,
+      "name": "SALT_CURE",
+      "key": "saltcure"
+    },
+    {
+      "id": 865,
+      "name": "TRIPLE_DIVE",
+      "key": "tripledive"
+    },
+    {
+      "id": 866,
+      "name": "MORTAL_SPIN",
+      "key": "mortalspin"
+    },
+    {
+      "id": 867,
+      "name": "DOODLE",
+      "key": "doodle"
+    },
+    {
+      "id": 868,
+      "name": "FILLET_AWAY",
+      "key": "filletaway"
+    },
+    {
+      "id": 869,
+      "name": "KOWTOW_CLEAVE",
+      "key": "kowtowcleave"
+    },
+    {
+      "id": 870,
+      "name": "FLOWER_TRICK",
+      "key": "flowertrick"
+    },
+    {
+      "id": 871,
+      "name": "TORCH_SONG",
+      "key": "torchsong"
+    },
+    {
+      "id": 872,
+      "name": "AQUA_STEP",
+      "key": "aquastep"
+    },
+    {
+      "id": 873,
+      "name": "RAGING_BULL",
+      "key": "ragingbull"
+    },
+    {
+      "id": 874,
+      "name": "MAKE_IT_RAIN",
+      "key": "makeitrain"
+    },
+    {
+      "id": 875,
+      "name": "PSYBLADE",
+      "key": "psyblade"
+    },
+    {
+      "id": 876,
+      "name": "HYDRO_STEAM",
+      "key": "hydrosteam"
+    },
+    {
+      "id": 877,
+      "name": "RUINATION",
+      "key": "ruination"
+    },
+    {
+      "id": 878,
+      "name": "COLLISION_COURSE",
+      "key": "collisioncourse"
+    },
+    {
+      "id": 879,
+      "name": "ELECTRO_DRIFT",
+      "key": "electrodrift"
+    },
+    {
+      "id": 880,
+      "name": "SHED_TAIL",
+      "key": "shedtail"
+    },
+    {
+      "id": 881,
+      "name": "CHILLY_RECEPTION",
+      "key": "chillyreception"
+    },
+    {
+      "id": 882,
+      "name": "TIDY_UP",
+      "key": "tidyup"
+    },
+    {
+      "id": 883,
+      "name": "SNOWSCAPE",
+      "key": "snowscape"
+    },
+    {
+      "id": 884,
+      "name": "POUNCE",
+      "key": "pounce"
+    },
+    {
+      "id": 885,
+      "name": "TRAILBLAZE",
+      "key": "trailblaze"
+    },
+    {
+      "id": 886,
+      "name": "CHILLING_WATER",
+      "key": "chillingwater"
+    },
+    {
+      "id": 887,
+      "name": "HYPER_DRILL",
+      "key": "hyperdrill"
+    },
+    {
+      "id": 888,
+      "name": "TWIN_BEAM",
+      "key": "twinbeam"
+    },
+    {
+      "id": 889,
+      "name": "RAGE_FIST",
+      "key": "ragefist"
+    },
+    {
+      "id": 890,
+      "name": "ARMOR_CANNON",
+      "key": "armorcannon"
+    },
+    {
+      "id": 891,
+      "name": "BITTER_BLADE",
+      "key": "bitterblade"
+    },
+    {
+      "id": 892,
+      "name": "DOUBLE_SHOCK",
+      "key": "doubleshock"
+    },
+    {
+      "id": 893,
+      "name": "GIGATON_HAMMER",
+      "key": "gigatonhammer"
+    },
+    {
+      "id": 894,
+      "name": "COMEUPPANCE",
+      "key": "comeuppance"
+    },
+    {
+      "id": 895,
+      "name": "AQUA_CUTTER",
+      "key": "aquacutter"
+    },
+    {
+      "id": 896,
+      "name": "BLAZING_TORQUE",
+      "key": "blazingtorque"
+    },
+    {
+      "id": 897,
+      "name": "WICKED_TORQUE",
+      "key": "wickedtorque"
+    },
+    {
+      "id": 898,
+      "name": "NOXIOUS_TORQUE",
+      "key": "noxioustorque"
+    },
+    {
+      "id": 899,
+      "name": "COMBAT_TORQUE",
+      "key": "combattorque"
+    },
+    {
+      "id": 900,
+      "name": "MAGICAL_TORQUE",
+      "key": "magicaltorque"
+    },
+    {
+      "id": 901,
+      "name": "BLOOD_MOON",
+      "key": "bloodmoon"
+    },
+    {
+      "id": 902,
+      "name": "MATCHA_GOTCHA",
+      "key": "matchagotcha"
+    },
+    {
+      "id": 903,
+      "name": "SYRUP_BOMB",
+      "key": "syrupbomb"
+    },
+    {
+      "id": 904,
+      "name": "IVY_CUDGEL",
+      "key": "ivycudgel"
+    },
+    {
+      "id": 905,
+      "name": "ELECTRO_SHOT",
+      "key": "electroshot"
+    },
+    {
+      "id": 906,
+      "name": "TERA_STARSTORM",
+      "key": "terastarstorm"
+    },
+    {
+      "id": 907,
+      "name": "FICKLE_BEAM",
+      "key": "ficklebeam"
+    },
+    {
+      "id": 908,
+      "name": "BURNING_BULWARK",
+      "key": "burningbulwark"
+    },
+    {
+      "id": 909,
+      "name": "THUNDERCLAP",
+      "key": "thunderclap"
+    },
+    {
+      "id": 910,
+      "name": "MIGHTY_CLEAVE",
+      "key": "mightycleave"
+    },
+    {
+      "id": 911,
+      "name": "TACHYON_CUTTER",
+      "key": "tachyoncutter"
+    },
+    {
+      "id": 912,
+      "name": "HARD_PRESS",
+      "key": "hardpress"
+    },
+    {
+      "id": 913,
+      "name": "DRAGON_CHEER",
+      "key": "dragoncheer"
+    },
+    {
+      "id": 914,
+      "name": "ALLURING_VOICE",
+      "key": "alluringvoice"
+    },
+    {
+      "id": 915,
+      "name": "TEMPER_FLARE",
+      "key": "temperflare"
+    },
+    {
+      "id": 916,
+      "name": "SUPERCELL_SLAM",
+      "key": "supercellslam"
+    },
+    {
+      "id": 917,
+      "name": "PSYCHIC_NOISE",
+      "key": "psychicnoise"
+    },
+    {
+      "id": 918,
+      "name": "UPPER_HAND",
+      "key": "upperhand"
+    },
+    {
+      "id": 919,
+      "name": "MALIGNANT_CHAIN",
+      "key": "malignantchain"
+    },
+    {
+      "id": 920,
+      "name": "NIHIL_LIGHT",
+      "key": "nihillight"
+    }
+  ],
+  "abilities": [
+    {
+      "id": 1,
+      "name": "STENCH",
+      "key": "stench"
+    },
+    {
+      "id": 2,
+      "name": "DRIZZLE",
+      "key": "drizzle"
+    },
+    {
+      "id": 3,
+      "name": "SPEED_BOOST",
+      "key": "speedboost"
+    },
+    {
+      "id": 4,
+      "name": "BATTLE_ARMOR",
+      "key": "battlearmor"
+    },
+    {
+      "id": 5,
+      "name": "STURDY",
+      "key": "sturdy"
+    },
+    {
+      "id": 6,
+      "name": "DAMP",
+      "key": "damp"
+    },
+    {
+      "id": 7,
+      "name": "LIMBER",
+      "key": "limber"
+    },
+    {
+      "id": 8,
+      "name": "SAND_VEIL",
+      "key": "sandveil"
+    },
+    {
+      "id": 9,
+      "name": "STATIC",
+      "key": "static"
+    },
+    {
+      "id": 10,
+      "name": "VOLT_ABSORB",
+      "key": "voltabsorb"
+    },
+    {
+      "id": 11,
+      "name": "WATER_ABSORB",
+      "key": "waterabsorb"
+    },
+    {
+      "id": 12,
+      "name": "OBLIVIOUS",
+      "key": "oblivious"
+    },
+    {
+      "id": 13,
+      "name": "CLOUD_NINE",
+      "key": "cloudnine"
+    },
+    {
+      "id": 14,
+      "name": "COMPOUND_EYES",
+      "key": "compoundeyes"
+    },
+    {
+      "id": 15,
+      "name": "INSOMNIA",
+      "key": "insomnia"
+    },
+    {
+      "id": 16,
+      "name": "COLOR_CHANGE",
+      "key": "colorchange"
+    },
+    {
+      "id": 17,
+      "name": "IMMUNITY",
+      "key": "immunity"
+    },
+    {
+      "id": 18,
+      "name": "FLASH_FIRE",
+      "key": "flashfire"
+    },
+    {
+      "id": 19,
+      "name": "SHIELD_DUST",
+      "key": "shielddust"
+    },
+    {
+      "id": 20,
+      "name": "OWN_TEMPO",
+      "key": "owntempo"
+    },
+    {
+      "id": 21,
+      "name": "SUCTION_CUPS",
+      "key": "suctioncups"
+    },
+    {
+      "id": 22,
+      "name": "INTIMIDATE",
+      "key": "intimidate"
+    },
+    {
+      "id": 23,
+      "name": "SHADOW_TAG",
+      "key": "shadowtag"
+    },
+    {
+      "id": 24,
+      "name": "ROUGH_SKIN",
+      "key": "roughskin"
+    },
+    {
+      "id": 25,
+      "name": "WONDER_GUARD",
+      "key": "wonderguard"
+    },
+    {
+      "id": 26,
+      "name": "LEVITATE",
+      "key": "levitate"
+    },
+    {
+      "id": 27,
+      "name": "EFFECT_SPORE",
+      "key": "effectspore"
+    },
+    {
+      "id": 28,
+      "name": "SYNCHRONIZE",
+      "key": "synchronize"
+    },
+    {
+      "id": 29,
+      "name": "CLEAR_BODY",
+      "key": "clearbody"
+    },
+    {
+      "id": 30,
+      "name": "NATURAL_CURE",
+      "key": "naturalcure"
+    },
+    {
+      "id": 31,
+      "name": "LIGHTNING_ROD",
+      "key": "lightningrod"
+    },
+    {
+      "id": 32,
+      "name": "SERENE_GRACE",
+      "key": "serenegrace"
+    },
+    {
+      "id": 33,
+      "name": "SWIFT_SWIM",
+      "key": "swiftswim"
+    },
+    {
+      "id": 34,
+      "name": "CHLOROPHYLL",
+      "key": "chlorophyll"
+    },
+    {
+      "id": 35,
+      "name": "ILLUMINATE",
+      "key": "illuminate"
+    },
+    {
+      "id": 36,
+      "name": "TRACE",
+      "key": "trace"
+    },
+    {
+      "id": 37,
+      "name": "HUGE_POWER",
+      "key": "hugepower"
+    },
+    {
+      "id": 38,
+      "name": "POISON_POINT",
+      "key": "poisonpoint"
+    },
+    {
+      "id": 39,
+      "name": "INNER_FOCUS",
+      "key": "innerfocus"
+    },
+    {
+      "id": 40,
+      "name": "MAGMA_ARMOR",
+      "key": "magmaarmor"
+    },
+    {
+      "id": 41,
+      "name": "WATER_VEIL",
+      "key": "waterveil"
+    },
+    {
+      "id": 42,
+      "name": "MAGNET_PULL",
+      "key": "magnetpull"
+    },
+    {
+      "id": 43,
+      "name": "SOUNDPROOF",
+      "key": "soundproof"
+    },
+    {
+      "id": 44,
+      "name": "RAIN_DISH",
+      "key": "raindish"
+    },
+    {
+      "id": 45,
+      "name": "SAND_STREAM",
+      "key": "sandstream"
+    },
+    {
+      "id": 46,
+      "name": "PRESSURE",
+      "key": "pressure"
+    },
+    {
+      "id": 47,
+      "name": "THICK_FAT",
+      "key": "thickfat"
+    },
+    {
+      "id": 48,
+      "name": "EARLY_BIRD",
+      "key": "earlybird"
+    },
+    {
+      "id": 49,
+      "name": "FLAME_BODY",
+      "key": "flamebody"
+    },
+    {
+      "id": 50,
+      "name": "RUN_AWAY",
+      "key": "runaway"
+    },
+    {
+      "id": 51,
+      "name": "KEEN_EYE",
+      "key": "keeneye"
+    },
+    {
+      "id": 52,
+      "name": "HYPER_CUTTER",
+      "key": "hypercutter"
+    },
+    {
+      "id": 53,
+      "name": "PICKUP",
+      "key": "pickup"
+    },
+    {
+      "id": 55,
+      "name": "HUSTLE",
+      "key": "hustle"
+    },
+    {
+      "id": 56,
+      "name": "CUTE_CHARM",
+      "key": "cutecharm"
+    },
+    {
+      "id": 57,
+      "name": "PLUS",
+      "key": "plus"
+    },
+    {
+      "id": 58,
+      "name": "MINUS",
+      "key": "minus"
+    },
+    {
+      "id": 60,
+      "name": "STICKY_HOLD",
+      "key": "stickyhold"
+    },
+    {
+      "id": 61,
+      "name": "SHED_SKIN",
+      "key": "shedskin"
+    },
+    {
+      "id": 62,
+      "name": "GUTS",
+      "key": "guts"
+    },
+    {
+      "id": 63,
+      "name": "MARVEL_SCALE",
+      "key": "marvelscale"
+    },
+    {
+      "id": 64,
+      "name": "LIQUID_OOZE",
+      "key": "liquidooze"
+    },
+    {
+      "id": 65,
+      "name": "OVERGROW",
+      "key": "overgrow"
+    },
+    {
+      "id": 66,
+      "name": "BLAZE",
+      "key": "blaze"
+    },
+    {
+      "id": 67,
+      "name": "TORRENT",
+      "key": "torrent"
+    },
+    {
+      "id": 68,
+      "name": "SWARM",
+      "key": "swarm"
+    },
+    {
+      "id": 69,
+      "name": "ROCK_HEAD",
+      "key": "rockhead"
+    },
+    {
+      "id": 70,
+      "name": "DROUGHT",
+      "key": "drought"
+    },
+    {
+      "id": 71,
+      "name": "ARENA_TRAP",
+      "key": "arenatrap"
+    },
+    {
+      "id": 72,
+      "name": "VITAL_SPIRIT",
+      "key": "vitalspirit"
+    },
+    {
+      "id": 73,
+      "name": "WHITE_SMOKE",
+      "key": "whitesmoke"
+    },
+    {
+      "id": 74,
+      "name": "PURE_POWER",
+      "key": "purepower"
+    },
+    {
+      "id": 75,
+      "name": "SHELL_ARMOR",
+      "key": "shellarmor"
+    },
+    {
+      "id": 76,
+      "name": "AIR_LOCK",
+      "key": "airlock"
+    },
+    {
+      "id": 77,
+      "name": "TANGLED_FEET",
+      "key": "tangledfeet"
+    },
+    {
+      "id": 78,
+      "name": "MOTOR_DRIVE",
+      "key": "motordrive"
+    },
+    {
+      "id": 79,
+      "name": "RIVALRY",
+      "key": "rivalry"
+    },
+    {
+      "id": 80,
+      "name": "STEADFAST",
+      "key": "steadfast"
+    },
+    {
+      "id": 81,
+      "name": "SNOW_CLOAK",
+      "key": "snowcloak"
+    },
+    {
+      "id": 82,
+      "name": "GLUTTONY",
+      "key": "gluttony"
+    },
+    {
+      "id": 83,
+      "name": "ANGER_POINT",
+      "key": "angerpoint"
+    },
+    {
+      "id": 84,
+      "name": "UNBURDEN",
+      "key": "unburden"
+    },
+    {
+      "id": 85,
+      "name": "HEATPROOF",
+      "key": "heatproof"
+    },
+    {
+      "id": 86,
+      "name": "SIMPLE",
+      "key": "simple"
+    },
+    {
+      "id": 87,
+      "name": "DRY_SKIN",
+      "key": "dryskin"
+    },
+    {
+      "id": 88,
+      "name": "DOWNLOAD",
+      "key": "download"
+    },
+    {
+      "id": 89,
+      "name": "IRON_FIST",
+      "key": "ironfist"
+    },
+    {
+      "id": 90,
+      "name": "POISON_HEAL",
+      "key": "poisonheal"
+    },
+    {
+      "id": 91,
+      "name": "ADAPTABILITY",
+      "key": "adaptability"
+    },
+    {
+      "id": 92,
+      "name": "SKILL_LINK",
+      "key": "skilllink"
+    },
+    {
+      "id": 93,
+      "name": "HYDRATION",
+      "key": "hydration"
+    },
+    {
+      "id": 94,
+      "name": "SOLAR_POWER",
+      "key": "solarpower"
+    },
+    {
+      "id": 95,
+      "name": "QUICK_FEET",
+      "key": "quickfeet"
+    },
+    {
+      "id": 97,
+      "name": "SNIPER",
+      "key": "sniper"
+    },
+    {
+      "id": 98,
+      "name": "MAGIC_GUARD",
+      "key": "magicguard"
+    },
+    {
+      "id": 99,
+      "name": "NO_GUARD",
+      "key": "noguard"
+    },
+    {
+      "id": 101,
+      "name": "TECHNICIAN",
+      "key": "technician"
+    },
+    {
+      "id": 102,
+      "name": "LEAF_GUARD",
+      "key": "leafguard"
+    },
+    {
+      "id": 104,
+      "name": "MOLD_BREAKER",
+      "key": "moldbreaker"
+    },
+    {
+      "id": 105,
+      "name": "SUPER_LUCK",
+      "key": "superluck"
+    },
+    {
+      "id": 106,
+      "name": "AFTERMATH",
+      "key": "aftermath"
+    },
+    {
+      "id": 107,
+      "name": "ANTICIPATION",
+      "key": "anticipation"
+    },
+    {
+      "id": 108,
+      "name": "FOREWARN",
+      "key": "forewarn"
+    },
+    {
+      "id": 109,
+      "name": "UNAWARE",
+      "key": "unaware"
+    },
+    {
+      "id": 110,
+      "name": "TINTED_LENS",
+      "key": "tintedlens"
+    },
+    {
+      "id": 111,
+      "name": "FILTER",
+      "key": "filter"
+    },
+    {
+      "id": 113,
+      "name": "SCRAPPY",
+      "key": "scrappy"
+    },
+    {
+      "id": 114,
+      "name": "STORM_DRAIN",
+      "key": "stormdrain"
+    },
+    {
+      "id": 115,
+      "name": "ICE_BODY",
+      "key": "icebody"
+    },
+    {
+      "id": 116,
+      "name": "SOLID_ROCK",
+      "key": "solidrock"
+    },
+    {
+      "id": 117,
+      "name": "SNOW_WARNING",
+      "key": "snowwarning"
+    },
+    {
+      "id": 118,
+      "name": "HONEY_GATHER",
+      "key": "honeygather"
+    },
+    {
+      "id": 119,
+      "name": "FRISK",
+      "key": "frisk"
+    },
+    {
+      "id": 120,
+      "name": "RECKLESS",
+      "key": "reckless"
+    },
+    {
+      "id": 122,
+      "name": "FLOWER_GIFT",
+      "key": "flowergift"
+    },
+    {
+      "id": 123,
+      "name": "BAD_DREAMS",
+      "key": "baddreams"
+    },
+    {
+      "id": 124,
+      "name": "PICKPOCKET",
+      "key": "pickpocket"
+    },
+    {
+      "id": 125,
+      "name": "SHEER_FORCE",
+      "key": "sheerforce"
+    },
+    {
+      "id": 126,
+      "name": "CONTRARY",
+      "key": "contrary"
+    },
+    {
+      "id": 127,
+      "name": "UNNERVE",
+      "key": "unnerve"
+    },
+    {
+      "id": 128,
+      "name": "DEFIANT",
+      "key": "defiant"
+    },
+    {
+      "id": 130,
+      "name": "CURSED_BODY",
+      "key": "cursedbody"
+    },
+    {
+      "id": 131,
+      "name": "HEALER",
+      "key": "healer"
+    },
+    {
+      "id": 132,
+      "name": "FRIEND_GUARD",
+      "key": "friendguard"
+    },
+    {
+      "id": 133,
+      "name": "WEAK_ARMOR",
+      "key": "weakarmor"
+    },
+    {
+      "id": 134,
+      "name": "HEAVY_METAL",
+      "key": "heavymetal"
+    },
+    {
+      "id": 135,
+      "name": "LIGHT_METAL",
+      "key": "lightmetal"
+    },
+    {
+      "id": 136,
+      "name": "MULTISCALE",
+      "key": "multiscale"
+    },
+    {
+      "id": 137,
+      "name": "TOXIC_BOOST",
+      "key": "toxicboost"
+    },
+    {
+      "id": 138,
+      "name": "FLARE_BOOST",
+      "key": "flareboost"
+    },
+    {
+      "id": 139,
+      "name": "HARVEST",
+      "key": "harvest"
+    },
+    {
+      "id": 140,
+      "name": "TELEPATHY",
+      "key": "telepathy"
+    },
+    {
+      "id": 141,
+      "name": "MOODY",
+      "key": "moody"
+    },
+    {
+      "id": 142,
+      "name": "OVERCOAT",
+      "key": "overcoat"
+    },
+    {
+      "id": 143,
+      "name": "POISON_TOUCH",
+      "key": "poisontouch"
+    },
+    {
+      "id": 144,
+      "name": "REGENERATOR",
+      "key": "regenerator"
+    },
+    {
+      "id": 145,
+      "name": "BIG_PECKS",
+      "key": "bigpecks"
+    },
+    {
+      "id": 146,
+      "name": "SAND_RUSH",
+      "key": "sandrush"
+    },
+    {
+      "id": 147,
+      "name": "WONDER_SKIN",
+      "key": "wonderskin"
+    },
+    {
+      "id": 148,
+      "name": "ANALYTIC",
+      "key": "analytic"
+    },
+    {
+      "id": 150,
+      "name": "IMPOSTER",
+      "key": "imposter"
+    },
+    {
+      "id": 151,
+      "name": "INFILTRATOR",
+      "key": "infiltrator"
+    },
+    {
+      "id": 152,
+      "name": "MUMMY",
+      "key": "mummy"
+    },
+    {
+      "id": 153,
+      "name": "MOXIE",
+      "key": "moxie"
+    },
+    {
+      "id": 154,
+      "name": "JUSTIFIED",
+      "key": "justified"
+    },
+    {
+      "id": 155,
+      "name": "RATTLED",
+      "key": "rattled"
+    },
+    {
+      "id": 156,
+      "name": "MAGIC_BOUNCE",
+      "key": "magicbounce"
+    },
+    {
+      "id": 157,
+      "name": "SAP_SIPPER",
+      "key": "sapsipper"
+    },
+    {
+      "id": 158,
+      "name": "PRANKSTER",
+      "key": "prankster"
+    },
+    {
+      "id": 159,
+      "name": "SAND_FORCE",
+      "key": "sandforce"
+    },
+    {
+      "id": 160,
+      "name": "IRON_BARBS",
+      "key": "ironbarbs"
+    },
+    {
+      "id": 162,
+      "name": "VICTORY_STAR",
+      "key": "victorystar"
+    },
+    {
+      "id": 163,
+      "name": "TURBOBLAZE",
+      "key": "turboblaze"
+    },
+    {
+      "id": 164,
+      "name": "TERAVOLT",
+      "key": "teravolt"
+    },
+    {
+      "id": 165,
+      "name": "AROMA_VEIL",
+      "key": "aromaveil"
+    },
+    {
+      "id": 166,
+      "name": "FLOWER_VEIL",
+      "key": "flowerveil"
+    },
+    {
+      "id": 167,
+      "name": "CHEEK_POUCH",
+      "key": "cheekpouch"
+    },
+    {
+      "id": 168,
+      "name": "PROTEAN",
+      "key": "protean"
+    },
+    {
+      "id": 169,
+      "name": "FUR_COAT",
+      "key": "furcoat"
+    },
+    {
+      "id": 170,
+      "name": "MAGICIAN",
+      "key": "magician"
+    },
+    {
+      "id": 171,
+      "name": "BULLETPROOF",
+      "key": "bulletproof"
+    },
+    {
+      "id": 172,
+      "name": "COMPETITIVE",
+      "key": "competitive"
+    },
+    {
+      "id": 173,
+      "name": "STRONG_JAW",
+      "key": "strongjaw"
+    },
+    {
+      "id": 174,
+      "name": "REFRIGERATE",
+      "key": "refrigerate"
+    },
+    {
+      "id": 175,
+      "name": "SWEET_VEIL",
+      "key": "sweetveil"
+    },
+    {
+      "id": 177,
+      "name": "GALE_WINGS",
+      "key": "galewings"
+    },
+    {
+      "id": 178,
+      "name": "MEGA_LAUNCHER",
+      "key": "megalauncher"
+    },
+    {
+      "id": 179,
+      "name": "GRASS_PELT",
+      "key": "grasspelt"
+    },
+    {
+      "id": 181,
+      "name": "TOUGH_CLAWS",
+      "key": "toughclaws"
+    },
+    {
+      "id": 182,
+      "name": "PIXILATE",
+      "key": "pixilate"
+    },
+    {
+      "id": 183,
+      "name": "GOOEY",
+      "key": "gooey"
+    },
+    {
+      "id": 184,
+      "name": "AERILATE",
+      "key": "aerilate"
+    },
+    {
+      "id": 185,
+      "name": "PARENTAL_BOND",
+      "key": "parentalbond"
+    },
+    {
+      "id": 186,
+      "name": "DARK_AURA",
+      "key": "darkaura"
+    },
+    {
+      "id": 187,
+      "name": "FAIRY_AURA",
+      "key": "fairyaura"
+    },
+    {
+      "id": 188,
+      "name": "AURA_BREAK",
+      "key": "aurabreak"
+    },
+    {
+      "id": 189,
+      "name": "PRIMORDIAL_SEA",
+      "key": "primordialsea"
+    },
+    {
+      "id": 190,
+      "name": "DESOLATE_LAND",
+      "key": "desolateland"
+    },
+    {
+      "id": 191,
+      "name": "DELTA_STREAM",
+      "key": "deltastream"
+    },
+    {
+      "id": 192,
+      "name": "STAMINA",
+      "key": "stamina"
+    },
+    {
+      "id": 194,
+      "name": "EMERGENCY_EXIT",
+      "key": "emergencyexit"
+    },
+    {
+      "id": 195,
+      "name": "WATER_COMPACTION",
+      "key": "watercompaction"
+    },
+    {
+      "id": 196,
+      "name": "MERCILESS",
+      "key": "merciless"
+    },
+    {
+      "id": 198,
+      "name": "STAKEOUT",
+      "key": "stakeout"
+    },
+    {
+      "id": 199,
+      "name": "WATER_BUBBLE",
+      "key": "waterbubble"
+    },
+    {
+      "id": 200,
+      "name": "STEELWORKER",
+      "key": "steelworker"
+    },
+    {
+      "id": 201,
+      "name": "BERSERK",
+      "key": "berserk"
+    },
+    {
+      "id": 202,
+      "name": "SLUSH_RUSH",
+      "key": "slushrush"
+    },
+    {
+      "id": 203,
+      "name": "LONG_REACH",
+      "key": "longreach"
+    },
+    {
+      "id": 204,
+      "name": "LIQUID_VOICE",
+      "key": "liquidvoice"
+    },
+    {
+      "id": 205,
+      "name": "TRIAGE",
+      "key": "triage"
+    },
+    {
+      "id": 206,
+      "name": "GALVANIZE",
+      "key": "galvanize"
+    },
+    {
+      "id": 207,
+      "name": "SURGE_SURFER",
+      "key": "surgesurfer"
+    },
+    {
+      "id": 210,
+      "name": "BATTLE_BOND",
+      "key": "battlebond"
+    },
+    {
+      "id": 212,
+      "name": "CORROSION",
+      "key": "corrosion"
+    },
+    {
+      "id": 213,
+      "name": "COMATOSE",
+      "key": "comatose"
+    },
+    {
+      "id": 214,
+      "name": "QUEENLY_MAJESTY",
+      "key": "queenlymajesty"
+    },
+    {
+      "id": 215,
+      "name": "INNARDS_OUT",
+      "key": "innardsout"
+    },
+    {
+      "id": 216,
+      "name": "DANCER",
+      "key": "dancer"
+    },
+    {
+      "id": 217,
+      "name": "BATTERY",
+      "key": "battery"
+    },
+    {
+      "id": 218,
+      "name": "FLUFFY",
+      "key": "fluffy"
+    },
+    {
+      "id": 219,
+      "name": "DAZZLING",
+      "key": "dazzling"
+    },
+    {
+      "id": 220,
+      "name": "SOUL_HEART",
+      "key": "soulheart"
+    },
+    {
+      "id": 221,
+      "name": "TANGLING_HAIR",
+      "key": "tanglinghair"
+    },
+    {
+      "id": 222,
+      "name": "RECEIVER",
+      "key": "receiver"
+    },
+    {
+      "id": 223,
+      "name": "POWER_OF_ALCHEMY",
+      "key": "powerofalchemy"
+    },
+    {
+      "id": 224,
+      "name": "BEAST_BOOST",
+      "key": "beastboost"
+    },
+    {
+      "id": 226,
+      "name": "ELECTRIC_SURGE",
+      "key": "electricsurge"
+    },
+    {
+      "id": 227,
+      "name": "PSYCHIC_SURGE",
+      "key": "psychicsurge"
+    },
+    {
+      "id": 228,
+      "name": "MISTY_SURGE",
+      "key": "mistysurge"
+    },
+    {
+      "id": 229,
+      "name": "GRASSY_SURGE",
+      "key": "grassysurge"
+    },
+    {
+      "id": 230,
+      "name": "FULL_METAL_BODY",
+      "key": "fullmetalbody"
+    },
+    {
+      "id": 231,
+      "name": "SHADOW_SHIELD",
+      "key": "shadowshield"
+    },
+    {
+      "id": 232,
+      "name": "PRISM_ARMOR",
+      "key": "prismarmor"
+    },
+    {
+      "id": 233,
+      "name": "NEUROFORCE",
+      "key": "neuroforce"
+    },
+    {
+      "id": 234,
+      "name": "INTREPID_SWORD",
+      "key": "intrepidsword"
+    },
+    {
+      "id": 235,
+      "name": "DAUNTLESS_SHIELD",
+      "key": "dauntlessshield"
+    },
+    {
+      "id": 236,
+      "name": "LIBERO",
+      "key": "libero"
+    },
+    {
+      "id": 237,
+      "name": "BALL_FETCH",
+      "key": "ballfetch"
+    },
+    {
+      "id": 238,
+      "name": "COTTON_DOWN",
+      "key": "cottondown"
+    },
+    {
+      "id": 239,
+      "name": "PROPELLER_TAIL",
+      "key": "propellertail"
+    },
+    {
+      "id": 240,
+      "name": "MIRROR_ARMOR",
+      "key": "mirrorarmor"
+    },
+    {
+      "id": 242,
+      "name": "STALWART",
+      "key": "stalwart"
+    },
+    {
+      "id": 243,
+      "name": "STEAM_ENGINE",
+      "key": "steamengine"
+    },
+    {
+      "id": 244,
+      "name": "PUNK_ROCK",
+      "key": "punkrock"
+    },
+    {
+      "id": 245,
+      "name": "SAND_SPIT",
+      "key": "sandspit"
+    },
+    {
+      "id": 246,
+      "name": "ICE_SCALES",
+      "key": "icescales"
+    },
+    {
+      "id": 247,
+      "name": "RIPEN",
+      "key": "ripen"
+    },
+    {
+      "id": 249,
+      "name": "POWER_SPOT",
+      "key": "powerspot"
+    },
+    {
+      "id": 250,
+      "name": "MIMICRY",
+      "key": "mimicry"
+    },
+    {
+      "id": 251,
+      "name": "SCREEN_CLEANER",
+      "key": "screencleaner"
+    },
+    {
+      "id": 252,
+      "name": "STEELY_SPIRIT",
+      "key": "steelyspirit"
+    },
+    {
+      "id": 253,
+      "name": "PERISH_BODY",
+      "key": "perishbody"
+    },
+    {
+      "id": 254,
+      "name": "WANDERING_SPIRIT",
+      "key": "wanderingspirit"
+    },
+    {
+      "id": 255,
+      "name": "GORILLA_TACTICS",
+      "key": "gorillatactics"
+    },
+    {
+      "id": 256,
+      "name": "NEUTRALIZING_GAS",
+      "key": "neutralizinggas"
+    },
+    {
+      "id": 257,
+      "name": "PASTEL_VEIL",
+      "key": "pastelveil"
+    },
+    {
+      "id": 259,
+      "name": "QUICK_DRAW",
+      "key": "quickdraw"
+    },
+    {
+      "id": 260,
+      "name": "UNSEEN_FIST",
+      "key": "unseenfist"
+    },
+    {
+      "id": 261,
+      "name": "CURIOUS_MEDICINE",
+      "key": "curiousmedicine"
+    },
+    {
+      "id": 262,
+      "name": "TRANSISTOR",
+      "key": "transistor"
+    },
+    {
+      "id": 263,
+      "name": "DRAGONS_MAW",
+      "key": "dragonsmaw"
+    },
+    {
+      "id": 264,
+      "name": "CHILLING_NEIGH",
+      "key": "chillingneigh"
+    },
+    {
+      "id": 265,
+      "name": "GRIM_NEIGH",
+      "key": "grimneigh"
+    },
+    {
+      "id": 266,
+      "name": "AS_ONE_GLASTRIER",
+      "key": "asoneglastrier"
+    },
+    {
+      "id": 267,
+      "name": "AS_ONE_SPECTRIER",
+      "key": "asonespectrier"
+    },
+    {
+      "id": 268,
+      "name": "LINGERING_AROMA",
+      "key": "lingeringaroma"
+    },
+    {
+      "id": 269,
+      "name": "SEED_SOWER",
+      "key": "seedsower"
+    },
+    {
+      "id": 270,
+      "name": "THERMAL_EXCHANGE",
+      "key": "thermalexchange"
+    },
+    {
+      "id": 271,
+      "name": "ANGER_SHELL",
+      "key": "angershell"
+    },
+    {
+      "id": 272,
+      "name": "PURIFYING_SALT",
+      "key": "purifyingsalt"
+    },
+    {
+      "id": 273,
+      "name": "WELL_BAKED_BODY",
+      "key": "wellbakedbody"
+    },
+    {
+      "id": 274,
+      "name": "WIND_RIDER",
+      "key": "windrider"
+    },
+    {
+      "id": 275,
+      "name": "GUARD_DOG",
+      "key": "guarddog"
+    },
+    {
+      "id": 276,
+      "name": "ROCKY_PAYLOAD",
+      "key": "rockypayload"
+    },
+    {
+      "id": 277,
+      "name": "WIND_POWER",
+      "key": "windpower"
+    },
+    {
+      "id": 280,
+      "name": "ELECTROMORPHOSIS",
+      "key": "electromorphosis"
+    },
+    {
+      "id": 281,
+      "name": "PROTOSYNTHESIS",
+      "key": "protosynthesis"
+    },
+    {
+      "id": 282,
+      "name": "QUARK_DRIVE",
+      "key": "quarkdrive"
+    },
+    {
+      "id": 283,
+      "name": "GOOD_AS_GOLD",
+      "key": "goodasgold"
+    },
+    {
+      "id": 284,
+      "name": "VESSEL_OF_RUIN",
+      "key": "vesselofruin"
+    },
+    {
+      "id": 285,
+      "name": "SWORD_OF_RUIN",
+      "key": "swordofruin"
+    },
+    {
+      "id": 286,
+      "name": "TABLETS_OF_RUIN",
+      "key": "tabletsofruin"
+    },
+    {
+      "id": 287,
+      "name": "BEADS_OF_RUIN",
+      "key": "beadsofruin"
+    },
+    {
+      "id": 288,
+      "name": "ORICHALCUM_PULSE",
+      "key": "orichalcumpulse"
+    },
+    {
+      "id": 289,
+      "name": "HADRON_ENGINE",
+      "key": "hadronengine"
+    },
+    {
+      "id": 290,
+      "name": "OPPORTUNIST",
+      "key": "opportunist"
+    },
+    {
+      "id": 291,
+      "name": "CUD_CHEW",
+      "key": "cudchew"
+    },
+    {
+      "id": 292,
+      "name": "SHARPNESS",
+      "key": "sharpness"
+    },
+    {
+      "id": 293,
+      "name": "SUPREME_OVERLORD",
+      "key": "supremeoverlord"
+    },
+    {
+      "id": 294,
+      "name": "COSTAR",
+      "key": "costar"
+    },
+    {
+      "id": 295,
+      "name": "TOXIC_DEBRIS",
+      "key": "toxicdebris"
+    },
+    {
+      "id": 296,
+      "name": "ARMOR_TAIL",
+      "key": "armortail"
+    },
+    {
+      "id": 297,
+      "name": "EARTH_EATER",
+      "key": "eartheater"
+    },
+    {
+      "id": 298,
+      "name": "MYCELIUM_MIGHT",
+      "key": "myceliummight"
+    },
+    {
+      "id": 299,
+      "name": "MINDS_EYE",
+      "key": "mindseye"
+    },
+    {
+      "id": 300,
+      "name": "SUPERSWEET_SYRUP",
+      "key": "supersweetsyrup"
+    },
+    {
+      "id": 301,
+      "name": "HOSPITALITY",
+      "key": "hospitality"
+    },
+    {
+      "id": 302,
+      "name": "TOXIC_CHAIN",
+      "key": "toxicchain"
+    },
+    {
+      "id": 303,
+      "name": "EMBODY_ASPECT_TEAL",
+      "key": "embodyaspectteal"
+    },
+    {
+      "id": 304,
+      "name": "EMBODY_ASPECT_WELLSPRING",
+      "key": "embodyaspectwellspring"
+    },
+    {
+      "id": 305,
+      "name": "EMBODY_ASPECT_HEARTHFLAME",
+      "key": "embodyaspecthearthflame"
+    },
+    {
+      "id": 306,
+      "name": "EMBODY_ASPECT_CORNERSTONE",
+      "key": "embodyaspectcornerstone"
+    },
+    {
+      "id": 308,
+      "name": "TERA_SHELL",
+      "key": "terashell"
+    },
+    {
+      "id": 309,
+      "name": "TERAFORM_ZERO",
+      "key": "teraformzero"
+    },
+    {
+      "id": 310,
+      "name": "POISON_PUPPETEER",
+      "key": "poisonpuppeteer"
+    },
+    {
+      "id": 311,
+      "name": "PIERCING_DRILL",
+      "key": "piercingdrill"
+    },
+    {
+      "id": 312,
+      "name": "DRAGONIZE",
+      "key": "dragonize"
+    },
+    {
+      "id": 313,
+      "name": "EELEVATE",
+      "key": "eelevate"
+    },
+    {
+      "id": 315,
+      "name": "MEGA_SOL",
+      "key": "megasol"
+    },
+    {
+      "id": 316,
+      "name": "FIRE_MANE",
+      "key": "firemane"
+    },
+    {
+      "id": 318,
+      "name": "SPICY_SPRAY",
+      "key": "spicyspray"
+    },
+    {
+      "id": 319,
+      "name": "AURA_GUARD",
+      "key": "auraguard"
+    }
+  ]
+}

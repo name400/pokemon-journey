@@ -673,3 +673,15 @@ Absolute Avarice 선택 후 파티의 열매 보유 기록이 바뀐 경우 기�
 - 새 `docs/CHALLENGE_EXPANSION_QA_20261105.md` 참조. 전체 689/689, typecheck/build 통과; 준비 스타터/추가 껍질몬 반전 후속 회귀 포함 새 테스트 파일 6/6.
 - Sites 변경 금지. 남은 챌린지 완료 후 종료하고 챌린지 밖 작업은 다음 Sol High 턴으로 넘길 예정.
 - 두 번째 묶음 id7 제한포획 / id9 영구기절 / id10 패시브 연결: 포획등록·사탕 보존, 부활금지/원본 씨앗 예외, 최종보스 2단계 패시브·복구 검증. 확장11/11. 전체9종 완료 후 전체회귀/최종브라우저 예정.
+
+### 2026-11-05 챌린지 9종 구현 완료 (Astra High, 앞 진행 메모 대체)
+
+기존0/1 외 활성9종 **4/5/6/7/8/9/10/11/12**를 실제 시작·전투·보상·성장·저장 경로에 연결했다. 원본 비활성2/3은 계속 거부한다. 첫 두 묶음은 `29c4e00`, `32e2b16`으로 같은 승인 브랜치에 저장했고 마지막 묶음은 FreshStart/기술랜덤화/특성랜덤화, 동적폼 Flip와 Hardcore 발버둥 경계 보완이다. 최종 커밋은 git log에서 확인한다.
+
+`docs/CHALLENGE_EXPANSION_QA_20261105.md`가 세부 근거·검증·차이의 기준이다. 랜덤 후보831기술/293특성은 고정원본 구현목록 전부와 native 이름이 대응하지만 모든 효과의 원본동등성을 검증한 것은 아니다. 개체seed UUID대체/기존trainer heuristic/기존species-form-TM자료 범위는 문서에 명시했다. 원본 Disabled 콘텐츠를 추가로 켜지 않았다.
+
+최종격리브라우저 4크기(390×844,375×667,844×390,1280×850),9종최대값동시선택·각select키보드·실제시작POST·저장/reload·오류0/가로overflow0 통과. 영구harness `tests/browser/challenge-start/`; real계정·Sites·물리기기·배포검증은 하지 않았다. 최종전체회귀 수치·빌드·타입·lint 결과는 QA 마지막 절에 기록한다.
+
+다음 턴은 사용자 지시대로 Sol High로 전환할 예정. 챌린지 밖 새 작업은 시작하지 않았다. 작은 후속 표시후보: 기존 starterStatsForNature의 상승성격 floor와 서버source calculateStats ceil 차이(중립FreshStart무관). 모든 전투기술/특성/폼 조합의 전수원본동등성은 별도범위다. Sites는 사용자가 별도관리하므로 계속 변경하지 않는다.
+
+최종고정코드 전체 **705/705**, 타입검사·production빌드 통과, 변경lint 오류0/기존경고5, diff검사 통과. `/tmp/challenge-final-705-tests.log`(120.9초), `/tmp/challenge-final-build.log`, `/tmp/challenge-final-typecheck.log`, `/tmp/challenge-final-lint.log`. 이 뒤 앱변경없이 코드/문서/영구browserharness를같은브랜치에일반push하고원격SHA일치확인한다.

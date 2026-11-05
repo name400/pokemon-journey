@@ -435,3 +435,7 @@
 .rogue-starters-screen .rss-challenge select { min-height: 44px; min-width: 130px; padding: 6px 10px; border: 1px solid #839780; border-radius: 5px; color: #304a37; background: #fff; }
 .rogue-starters-screen .rss-challenge p { margin: 5px 0 0; font-size: 13px; }
 @media(max-width:520px){.rogue-starters-screen .rss-challenge { padding: 4px 10px; max-height: 132px; overflow: auto; }.rogue-starters-screen .rss-challenge summary { min-height: 28px; font-size: 13px; }.rogue-starters-screen .rss-challenge select { min-height: 44px; min-width: 100px; }.rogue-starters-screen .rss-challenge p { font-size: 12px; }}
+
+.rogue-starters-screen .rss-challenge label { display: grid; grid-template-columns: minmax(90px, auto) minmax(130px, 1fr); max-width: 100%; }
+.rogue-starters-screen .rss-challenge label small { grid-column: 1 / -1; line-height: 1.4; }
+@media(max-width:520px){.rogue-starters-screen .rss-challenge-fields { display: grid; grid-template-columns: minmax(0, 1fr); }.rogue-starters-screen .rss-challenge select { min-width: 0; max-width: 100%; }}

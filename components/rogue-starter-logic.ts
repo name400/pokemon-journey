@@ -13,6 +13,10 @@ export type StarterEntry = {
   pokerus?: boolean;
   /** The current effective cost, including any permanent reductions. */
   cost: number;
+  baseCost?: number;
+  baseStats?: StarterStats;
+  freshAllowed?: boolean;
+  freshStart?: Partial<StarterEntry> | null;
   unlocked: boolean;
   ivs: StarterStats;
   /** Neutral-nature level-5 stats, with no EVs. */
@@ -45,16 +49,19 @@ export type StarterSelection = {
   moves: string[];
 };
 export type StarterTeamValidation = { valid: boolean; cost: number; remaining: number; error: string | null };
-export type StarterChallenge = { id: 0 | 1 | 5 | 6 | 7 | 8 | 9 | 10; value: number };
+export type StarterChallenge = { id: 0 | 1 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12; value: number };
 export const EXTRA_CHALLENGES: Array<{id: StarterChallenge['id']; name: string; options: string[]; description: string}> = [
+ {id:4,name:'새 출발',options:['기본 스타터만','해금한 모든 스타터'],description:'시작 보너스를 초기화합니다. IV는 최대 15, 중립 성격·일반 특성·레벨 기술만 사용하며 비용 감소와 이로치 행운을 적용하지 않습니다.'},
  {id:5,name:'거꾸로 배틀',options:['켜기'],description:'타입의 약점과 내성이 반대로 적용됩니다. 특성·도구의 면역은 유지됩니다.'},
  {id:6,name:'종족값 반전',options:['켜기'],description:'모든 포켓몬의 HP·공격·방어·특공·특방·스피드 종족값 순서를 뒤집습니다.'},
  {id:7,name:'포획 제한',options:['켜기'],description:'매 10층의 첫 층에서 잡은 포켓몬만 영입합니다. 다른 층에서도 포획 등록과 사탕은 받습니다.'},
  {id:8,name:'지원 제한',options:['구간 회복 금지','상점 금지','구간 회복·상점 금지'],description:'10층마다 회복 또는 전투 후 유료 보급을 제한합니다. 무료 보상은 받을 수 있습니다.'},
  {id:9,name:'영구 기절',options:['켜기'],description:'쓰러진 포켓몬은 부활하거나 융합할 수 없습니다. 기절 직전에 발동하는 부활씨앗은 사용할 수 있습니다.'},
  {id:10,name:'패시브 특성',options:['트레이너·최종 보스','모든 포켓몬'],description:'선택한 대상에게 패시브 특성을 적용합니다.'},
+ {id:11,name:'기술 랜덤화',options:['기술 랜덤화','기술 진화 조건 완화'],description:'시드에 따라 레벨 기술과 기술머신 호환을 바꿉니다. 결과는 도전 시작 후 공개되며 알 기술은 되살릴 수 없습니다.'},
+ {id:12,name:'특성 랜덤화',options:['일반 특성','일반·패시브 특성','폼 변화 특성 보존'],description:'시드에 따라 특성을 바꿉니다. 세 번째 설정은 원본에서 지정한 폼 변화 특성을 보존합니다.'},
 ];
-export const CHALLENGE_RIBBON_NAMES: Record<string,string> = {limitedCatch:'포획 제한',hardcore:'영구 기절',passives:'패시브 챌린지',inverse:'거꾸로 배틀',flipStats:'종족값 반전',noHeal:'회복 금지',noShop:'상점 금지',noSupport:'지원 금지'};
+export const CHALLENGE_RIBBON_NAMES: Record<string,string> = {freshStart:'새 출발',limitedCatch:'포획 제한',hardcore:'영구 기절',passives:'패시브 챌린지',inverse:'거꾸로 배틀',flipStats:'종족값 반전',noHeal:'회복 금지',noShop:'상점 금지',noSupport:'지원 금지'};
 export const CHALLENGE_TYPES = ['노말','격투','비행','독','땅','바위','벌레','고스트','강철','불꽃','물','풀','전기','에스퍼','얼음','드래곤','악','페어리'];
 export type RogueStarterSelectProps = {
   starters: StarterEntry[];
@@ -172,3 +179,15 @@ export function starterStatsForNature(stats: StarterStats, nature: string): Star
   return { ...stats, [effect[0]]: Math.floor(stats[effect[0]] * 1.1), [effect[1]]: Math.floor(stats[effect[1]] * .9) };
 }
 
+
+
+/** Project challenge choices without changing the permanent starter catalog. */
+export function projectStarterChallenges(entries: StarterEntry[], values: Record<number,number>): StarterEntry[] {
+  return entries.map(original => {
+    const fresh=values[4]||0;
+    const entry: StarterEntry = fresh ? {...original,...(original.freshStart||{}),unlocked:original.unlocked&&!!original.freshStart?.unlocked&&(fresh!==1||original.freshAllowed===true),luck:0} : {...original};
+    if(fresh||values[12]) {let cost=(original.baseCost??original.cost)+(values[12]?({290:-2,307:-1,298:-1,751:-1,566:1,287:2,486:1} as Record<number,number>)[original.sourceId??original.speciesId]||0:0);for(let i=0;i<(fresh?0:original.costReduction||0);i++)cost=cost<=1?cost/2:cost-1;entry.cost=cost;}
+    if(entry.baseStats){const keys: StarterStat[]=['hp','atk','def','spa','spd','spe'];entry.stats=Object.fromEntries(keys.map((key,i)=>{const base=entry.baseStats![values[6]?keys[5-i]:key],value=Math.floor((2*base+entry.ivs[key])*5/100);return [key,key==='hp'?(entry.speciesId===292?1:value+15):value+5];})) as StarterStats;}
+    return entry;
+  });
+}
