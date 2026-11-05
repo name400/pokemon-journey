@@ -44,3 +44,37 @@ Outputs are in `.sites-runtime/tests/{all-mega-artwork,transformation-artwork,pa
 Original source hashes and per-file notices are in `data/rogue-*-asset-provenance.json`.
 See `docs/COMPLETE_MEGA_AND_PARTNER_ARTWORK_QA_20261105.md` for precise limits,
 including unsupported fusion samples and assets prepared for the next unit.
+
+Ordinary source forms and their additional boundaries:
+
+```sh
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/reviewed-assets/ordinary-forms.mjs
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/reviewed-assets/ordinary-boundaries.mjs
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/reviewed-assets/ordinary-fusion.mjs
+node --test tests/rogue-ordinary-artwork.test.mjs
+```
+
+The ordinary catalog checks272 currently supported native source forms plus7
+gender branches,4,464 actual front/back/color outputs in46 batches. The separate
+boundary page exercises source hash-atlas parsing,direction/sex/color changes,
+reduced motion,lazy img display after scrolling and404/remount recovery. The
+fusion page checks224 outputs for already-permitted male/female form donors.
+Eleven additional source-art sets are recorded but remain blocked by native or
+source obtainability/lifetime policy. See `docs/ORDINARY_FORM_ARTWORK_QA_20261105.md`.
+
+Existing game-permitted ordinary primaries and packed-atlas regressions:
+
+```sh
+node scripts/generate-fusion-primary-artwork.mjs --check
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/reviewed-assets/primary-fusion.mjs
+python tests/browser/reviewed-assets/repack-offset-atlases.py
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/reviewed-assets/offset-fusion.mjs
+node --test tests/rogue-fusion-primary-artwork.test.mjs
+```
+
+Repacking requires Python/Pillow and writes only `/tmp/repacked-reviewed-mega-atlases`
+(override with `REPACKED_ATLAS_ROOT`). It moves actual source pixels into a canonical
+atlas for an independent crop-equivalence comparison; product assets stay unchanged.
+`PRIMARY_KEYS=648:1,1017:1,1017:2,1017:3` selects only those cases in the primary test
+and writes a separate `primary-fusion-delta` result so earlier full results remain.
+See `docs/FUSION_PRIMARY_AND_ATLAS_OFFSET_QA_20261105.md` for exact counts and limits.

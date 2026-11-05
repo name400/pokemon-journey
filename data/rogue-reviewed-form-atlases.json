@@ -1,0 +1,5717 @@
+[
+  {
+    "sourceId": 25,
+    "formIndex": 1,
+    "formKey": "partner",
+    "atlas": "25-partner",
+    "native": [
+      "pikachustarter"
+    ],
+    "genderDiffs": true,
+    "femaleAtlas": "female/25-partner",
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleBackVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 25,
+    "formIndex": 2,
+    "formKey": "cosplay",
+    "atlas": "25-cosplay",
+    "native": [
+      "pikachucosplay"
+    ],
+    "genderDiffs": true,
+    "femaleAtlas": "female/25-cosplay",
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleBackVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 25,
+    "formIndex": 3,
+    "formKey": "cool-cosplay",
+    "atlas": "25-cool-cosplay",
+    "native": [
+      "pikachurockstar"
+    ],
+    "genderDiffs": true,
+    "femaleAtlas": "female/25-cool-cosplay",
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleBackVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 25,
+    "formIndex": 4,
+    "formKey": "beauty-cosplay",
+    "atlas": "25-beauty-cosplay",
+    "native": [
+      "pikachubelle"
+    ],
+    "genderDiffs": true,
+    "femaleAtlas": "female/25-beauty-cosplay",
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleBackVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 25,
+    "formIndex": 5,
+    "formKey": "cute-cosplay",
+    "atlas": "25-cute-cosplay",
+    "native": [
+      "pikachupopstar"
+    ],
+    "genderDiffs": true,
+    "femaleAtlas": "female/25-cute-cosplay",
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleBackVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 25,
+    "formIndex": 6,
+    "formKey": "smart-cosplay",
+    "atlas": "25-smart-cosplay",
+    "native": [
+      "pikachuphd"
+    ],
+    "genderDiffs": true,
+    "femaleAtlas": "female/25-smart-cosplay",
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleBackVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 25,
+    "formIndex": 7,
+    "formKey": "tough-cosplay",
+    "atlas": "25-tough-cosplay",
+    "native": [
+      "pikachulibre"
+    ],
+    "genderDiffs": true,
+    "femaleAtlas": "female/25-tough-cosplay",
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleVariants": [
+      0,
+      1,
+      1
+    ],
+    "femaleBackVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 133,
+    "formIndex": 1,
+    "formKey": "partner",
+    "atlas": "133-partner",
+    "native": [
+      "eeveestarter"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 172,
+    "formIndex": 1,
+    "formKey": "spiky",
+    "atlas": "172-spiky",
+    "native": [
+      "pichuspikyeared"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 1,
+    "formKey": "b",
+    "atlas": "201-b",
+    "native": [
+      "unownb"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 2,
+    "formKey": "c",
+    "atlas": "201-c",
+    "native": [
+      "unownc"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 3,
+    "formKey": "d",
+    "atlas": "201-d",
+    "native": [
+      "unownd"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 4,
+    "formKey": "e",
+    "atlas": "201-e",
+    "native": [
+      "unowne"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 5,
+    "formKey": "f",
+    "atlas": "201-f",
+    "native": [
+      "unownf"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 6,
+    "formKey": "g",
+    "atlas": "201-g",
+    "native": [
+      "unowng"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 7,
+    "formKey": "h",
+    "atlas": "201-h",
+    "native": [
+      "unownh"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 8,
+    "formKey": "i",
+    "atlas": "201-i",
+    "native": [
+      "unowni"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 9,
+    "formKey": "j",
+    "atlas": "201-j",
+    "native": [
+      "unownj"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 10,
+    "formKey": "k",
+    "atlas": "201-k",
+    "native": [
+      "unownk"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 11,
+    "formKey": "l",
+    "atlas": "201-l",
+    "native": [
+      "unownl"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 12,
+    "formKey": "m",
+    "atlas": "201-m",
+    "native": [
+      "unownm"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 13,
+    "formKey": "n",
+    "atlas": "201-n",
+    "native": [
+      "unownn"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 14,
+    "formKey": "o",
+    "atlas": "201-o",
+    "native": [
+      "unowno"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 15,
+    "formKey": "p",
+    "atlas": "201-p",
+    "native": [
+      "unownp"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 16,
+    "formKey": "q",
+    "atlas": "201-q",
+    "native": [
+      "unownq"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 17,
+    "formKey": "r",
+    "atlas": "201-r",
+    "native": [
+      "unownr"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 18,
+    "formKey": "s",
+    "atlas": "201-s",
+    "native": [
+      "unowns"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 19,
+    "formKey": "t",
+    "atlas": "201-t",
+    "native": [
+      "unownt"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 20,
+    "formKey": "u",
+    "atlas": "201-u",
+    "native": [
+      "unownu"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 21,
+    "formKey": "v",
+    "atlas": "201-v",
+    "native": [
+      "unownv"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 22,
+    "formKey": "w",
+    "atlas": "201-w",
+    "native": [
+      "unownw"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 23,
+    "formKey": "x",
+    "atlas": "201-x",
+    "native": [
+      "unownx"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 24,
+    "formKey": "y",
+    "atlas": "201-y",
+    "native": [
+      "unowny"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 25,
+    "formKey": "z",
+    "atlas": "201-z",
+    "native": [
+      "unownz"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 26,
+    "formKey": "exclamation",
+    "atlas": "201-exclamation",
+    "native": [
+      "unownexclamation"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 201,
+    "formIndex": 27,
+    "formKey": "question",
+    "atlas": "201-question",
+    "native": [
+      "unownquestion"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 351,
+    "formIndex": 1,
+    "formKey": "sunny",
+    "atlas": "351-sunny",
+    "native": [
+      "castformsunny"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "sourceId": 351,
+    "formIndex": 2,
+    "formKey": "rainy",
+    "atlas": "351-rainy",
+    "native": [
+      "castformrainy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 351,
+    "formIndex": 3,
+    "formKey": "snowy",
+    "atlas": "351-snowy",
+    "native": [
+      "castformsnowy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 386,
+    "formIndex": 1,
+    "formKey": "attack",
+    "atlas": "386-attack",
+    "native": [
+      "deoxysattack"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 386,
+    "formIndex": 2,
+    "formKey": "defense",
+    "atlas": "386-defense",
+    "native": [
+      "deoxysdefense"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 386,
+    "formIndex": 3,
+    "formKey": "speed",
+    "atlas": "386-speed",
+    "native": [
+      "deoxysspeed"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 412,
+    "formIndex": 1,
+    "formKey": "sandy",
+    "atlas": "412-sandy",
+    "native": [
+      "burmysandy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 412,
+    "formIndex": 2,
+    "formKey": "trash",
+    "atlas": "412-trash",
+    "native": [
+      "burmytrash"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 413,
+    "formIndex": 1,
+    "formKey": "sandy",
+    "atlas": "413-sandy",
+    "native": [
+      "wormadamsandy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 413,
+    "formIndex": 2,
+    "formKey": "trash",
+    "atlas": "413-trash",
+    "native": [
+      "wormadamtrash"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 421,
+    "formIndex": 1,
+    "formKey": "sunshine",
+    "atlas": "421-sunshine",
+    "native": [
+      "cherrimsunshine"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 422,
+    "formIndex": 1,
+    "formKey": "west",
+    "atlas": "422-west",
+    "native": [
+      "shellos"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 423,
+    "formIndex": 1,
+    "formKey": "west",
+    "atlas": "423-west",
+    "native": [
+      "gastrodon"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 479,
+    "formIndex": 1,
+    "formKey": "heat",
+    "atlas": "479-heat",
+    "native": [
+      "rotomheat"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 479,
+    "formIndex": 2,
+    "formKey": "wash",
+    "atlas": "479-wash",
+    "native": [
+      "rotomwash"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 479,
+    "formIndex": 3,
+    "formKey": "frost",
+    "atlas": "479-frost",
+    "native": [
+      "rotomfrost"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 479,
+    "formIndex": 4,
+    "formKey": "fan",
+    "atlas": "479-fan",
+    "native": [
+      "rotomfan"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 479,
+    "formIndex": 5,
+    "formKey": "mow",
+    "atlas": "479-mow",
+    "native": [
+      "rotommow"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 483,
+    "formIndex": 1,
+    "formKey": "origin",
+    "atlas": "483-origin",
+    "native": [
+      "dialgaorigin"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 484,
+    "formIndex": 1,
+    "formKey": "origin",
+    "atlas": "484-origin",
+    "native": [
+      "palkiaorigin"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 487,
+    "formIndex": 1,
+    "formKey": "origin",
+    "atlas": "487-origin",
+    "native": [
+      "giratinaorigin"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 492,
+    "formIndex": 1,
+    "formKey": "sky",
+    "atlas": "492-sky",
+    "native": [
+      "shayminsky"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 1,
+    "formKey": "fighting",
+    "atlas": "493-fighting",
+    "native": [
+      "arceusfighting"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 2,
+    "formKey": "flying",
+    "atlas": "493-flying",
+    "native": [
+      "arceusflying"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 3,
+    "formKey": "poison",
+    "atlas": "493-poison",
+    "native": [
+      "arceuspoison"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 4,
+    "formKey": "ground",
+    "atlas": "493-ground",
+    "native": [
+      "arceusground"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 5,
+    "formKey": "rock",
+    "atlas": "493-rock",
+    "native": [
+      "arceusrock"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 6,
+    "formKey": "bug",
+    "atlas": "493-bug",
+    "native": [
+      "arceusbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 7,
+    "formKey": "ghost",
+    "atlas": "493-ghost",
+    "native": [
+      "arceusghost"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 8,
+    "formKey": "steel",
+    "atlas": "493-steel",
+    "native": [
+      "arceussteel"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 9,
+    "formKey": "fire",
+    "atlas": "493-fire",
+    "native": [
+      "arceusfire"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 10,
+    "formKey": "water",
+    "atlas": "493-water",
+    "native": [
+      "arceuswater"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 11,
+    "formKey": "grass",
+    "atlas": "493-grass",
+    "native": [
+      "arceusgrass"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 12,
+    "formKey": "electric",
+    "atlas": "493-electric",
+    "native": [
+      "arceuselectric"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 13,
+    "formKey": "psychic",
+    "atlas": "493-psychic",
+    "native": [
+      "arceuspsychic"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 14,
+    "formKey": "ice",
+    "atlas": "493-ice",
+    "native": [
+      "arceusice"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 15,
+    "formKey": "dragon",
+    "atlas": "493-dragon",
+    "native": [
+      "arceusdragon"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 16,
+    "formKey": "dark",
+    "atlas": "493-dark",
+    "native": [
+      "arceusdark"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 493,
+    "formIndex": 17,
+    "formKey": "fairy",
+    "atlas": "493-fairy",
+    "native": [
+      "arceusfairy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 550,
+    "formIndex": 1,
+    "formKey": "blue-striped",
+    "atlas": "550-blue-striped",
+    "native": [
+      "basculinbluestriped"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 555,
+    "formIndex": 1,
+    "formKey": "zen",
+    "atlas": "555-zen",
+    "native": [
+      "darmanitanzen"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 585,
+    "formIndex": 1,
+    "formKey": "summer",
+    "atlas": "585-summer",
+    "native": [
+      "deerlingsummer"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 585,
+    "formIndex": 2,
+    "formKey": "autumn",
+    "atlas": "585-autumn",
+    "native": [
+      "deerlingautumn"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 585,
+    "formIndex": 3,
+    "formKey": "winter",
+    "atlas": "585-winter",
+    "native": [
+      "deerlingwinter"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 586,
+    "formIndex": 1,
+    "formKey": "summer",
+    "atlas": "586-summer",
+    "native": [
+      "sawsbucksummer"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 586,
+    "formIndex": 2,
+    "formKey": "autumn",
+    "atlas": "586-autumn",
+    "native": [
+      "sawsbuckautumn"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 586,
+    "formIndex": 3,
+    "formKey": "winter",
+    "atlas": "586-winter",
+    "native": [
+      "sawsbuckwinter"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 641,
+    "formIndex": 1,
+    "formKey": "therian",
+    "atlas": "641-therian",
+    "native": [
+      "tornadustherian"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 642,
+    "formIndex": 1,
+    "formKey": "therian",
+    "atlas": "642-therian",
+    "native": [
+      "thundurustherian"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 645,
+    "formIndex": 1,
+    "formKey": "therian",
+    "atlas": "645-therian",
+    "native": [
+      "landorustherian"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 646,
+    "formIndex": 1,
+    "formKey": "black",
+    "atlas": "646-black",
+    "native": [
+      "kyuremblack"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 646,
+    "formIndex": 2,
+    "formKey": "white",
+    "atlas": "646-white",
+    "native": [
+      "kyuremwhite"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 647,
+    "formIndex": 1,
+    "formKey": "resolute",
+    "atlas": "647-resolute",
+    "native": [
+      "keldeoresolute"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 648,
+    "formIndex": 1,
+    "formKey": "pirouette",
+    "atlas": "648-pirouette",
+    "native": [
+      "meloettapirouette"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 649,
+    "formIndex": 1,
+    "formKey": "shock",
+    "atlas": "649-shock",
+    "native": [
+      "genesectshock"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 649,
+    "formIndex": 2,
+    "formKey": "burn",
+    "atlas": "649-burn",
+    "native": [
+      "genesectburn"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 649,
+    "formIndex": 3,
+    "formKey": "chill",
+    "atlas": "649-chill",
+    "native": [
+      "genesectchill"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 649,
+    "formIndex": 4,
+    "formKey": "douse",
+    "atlas": "649-douse",
+    "native": [
+      "genesectdouse"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 1,
+    "formKey": "icy-snow",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 2,
+    "formKey": "polar",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 3,
+    "formKey": "tundra",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 4,
+    "formKey": "continental",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 5,
+    "formKey": "garden",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 6,
+    "formKey": "elegant",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 7,
+    "formKey": "modern",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 8,
+    "formKey": "marine",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 9,
+    "formKey": "archipelago",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 10,
+    "formKey": "high-plains",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 11,
+    "formKey": "sandstorm",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 12,
+    "formKey": "river",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 13,
+    "formKey": "monsoon",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 14,
+    "formKey": "savanna",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 15,
+    "formKey": "sun",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 16,
+    "formKey": "ocean",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 17,
+    "formKey": "jungle",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 18,
+    "formKey": "fancy",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 664,
+    "formIndex": 19,
+    "formKey": "poke-ball",
+    "atlas": "664",
+    "native": [
+      "scatterbug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 1,
+    "formKey": "icy-snow",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 2,
+    "formKey": "polar",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 3,
+    "formKey": "tundra",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 4,
+    "formKey": "continental",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 5,
+    "formKey": "garden",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 6,
+    "formKey": "elegant",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 7,
+    "formKey": "modern",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 8,
+    "formKey": "marine",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 9,
+    "formKey": "archipelago",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 10,
+    "formKey": "high-plains",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 11,
+    "formKey": "sandstorm",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 12,
+    "formKey": "river",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 13,
+    "formKey": "monsoon",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 14,
+    "formKey": "savanna",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 15,
+    "formKey": "sun",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 16,
+    "formKey": "ocean",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 17,
+    "formKey": "jungle",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 18,
+    "formKey": "fancy",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 665,
+    "formIndex": 19,
+    "formKey": "poke-ball",
+    "atlas": "665",
+    "native": [
+      "spewpa"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 1,
+    "formKey": "icy-snow",
+    "atlas": "666-icy-snow",
+    "native": [
+      "vivillonicysnow"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 2,
+    "formKey": "polar",
+    "atlas": "666-polar",
+    "native": [
+      "vivillonpolar"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 3,
+    "formKey": "tundra",
+    "atlas": "666-tundra",
+    "native": [
+      "vivillontundra"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 4,
+    "formKey": "continental",
+    "atlas": "666-continental",
+    "native": [
+      "vivilloncontinental"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 5,
+    "formKey": "garden",
+    "atlas": "666-garden",
+    "native": [
+      "vivillongarden"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 6,
+    "formKey": "elegant",
+    "atlas": "666-elegant",
+    "native": [
+      "vivillonelegant"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 7,
+    "formKey": "modern",
+    "atlas": "666-modern",
+    "native": [
+      "vivillonmodern"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 8,
+    "formKey": "marine",
+    "atlas": "666-marine",
+    "native": [
+      "vivillonmarine"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 9,
+    "formKey": "archipelago",
+    "atlas": "666-archipelago",
+    "native": [
+      "vivillonarchipelago"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 10,
+    "formKey": "high-plains",
+    "atlas": "666-high-plains",
+    "native": [
+      "vivillonhighplains"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 11,
+    "formKey": "sandstorm",
+    "atlas": "666-sandstorm",
+    "native": [
+      "vivillonsandstorm"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 12,
+    "formKey": "river",
+    "atlas": "666-river",
+    "native": [
+      "vivillonriver"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 13,
+    "formKey": "monsoon",
+    "atlas": "666-monsoon",
+    "native": [
+      "vivillonmonsoon"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 14,
+    "formKey": "savanna",
+    "atlas": "666-savanna",
+    "native": [
+      "vivillonsavanna"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 15,
+    "formKey": "sun",
+    "atlas": "666-sun",
+    "native": [
+      "vivillonsun"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 16,
+    "formKey": "ocean",
+    "atlas": "666-ocean",
+    "native": [
+      "vivillonocean"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 17,
+    "formKey": "jungle",
+    "atlas": "666-jungle",
+    "native": [
+      "vivillonjungle"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 18,
+    "formKey": "fancy",
+    "atlas": "666-fancy",
+    "native": [
+      "vivillonfancy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 666,
+    "formIndex": 19,
+    "formKey": "poke-ball",
+    "atlas": "666-poke-ball",
+    "native": [
+      "vivillonpokeball"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 669,
+    "formIndex": 1,
+    "formKey": "yellow",
+    "atlas": "669-yellow",
+    "native": [
+      "flabebeyellow"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 669,
+    "formIndex": 2,
+    "formKey": "orange",
+    "atlas": "669-orange",
+    "native": [
+      "flabebeorange"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 669,
+    "formIndex": 3,
+    "formKey": "blue",
+    "atlas": "669-blue",
+    "native": [
+      "flabebeblue"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 669,
+    "formIndex": 4,
+    "formKey": "white",
+    "atlas": "669-white",
+    "native": [
+      "flabebewhite"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 670,
+    "formIndex": 1,
+    "formKey": "yellow",
+    "atlas": "670-yellow",
+    "native": [
+      "floetteyellow"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 670,
+    "formIndex": 2,
+    "formKey": "orange",
+    "atlas": "670-orange",
+    "native": [
+      "floetteorange"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 670,
+    "formIndex": 3,
+    "formKey": "blue",
+    "atlas": "670-blue",
+    "native": [
+      "floetteblue"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 670,
+    "formIndex": 4,
+    "formKey": "white",
+    "atlas": "670-white",
+    "native": [
+      "floettewhite"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 671,
+    "formIndex": 1,
+    "formKey": "yellow",
+    "atlas": "671-yellow",
+    "native": [
+      "florgesyellow"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 671,
+    "formIndex": 2,
+    "formKey": "orange",
+    "atlas": "671-orange",
+    "native": [
+      "florgesorange"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 671,
+    "formIndex": 3,
+    "formKey": "blue",
+    "atlas": "671-blue",
+    "native": [
+      "florgesblue"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 671,
+    "formIndex": 4,
+    "formKey": "white",
+    "atlas": "671-white",
+    "native": [
+      "florgeswhite"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 1,
+    "formKey": "heart",
+    "atlas": "676-heart",
+    "native": [
+      "furfrouheart"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 2,
+    "formKey": "star",
+    "atlas": "676-star",
+    "native": [
+      "furfroustar"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 3,
+    "formKey": "diamond",
+    "atlas": "676-diamond",
+    "native": [
+      "furfroudiamond"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 4,
+    "formKey": "debutante",
+    "atlas": "676-debutante",
+    "native": [
+      "furfroudebutante"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 5,
+    "formKey": "matron",
+    "atlas": "676-matron",
+    "native": [
+      "furfroumatron"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 6,
+    "formKey": "dandy",
+    "atlas": "676-dandy",
+    "native": [
+      "furfroudandy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 7,
+    "formKey": "la-reine",
+    "atlas": "676-la-reine",
+    "native": [
+      "furfroulareine"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 8,
+    "formKey": "kabuki",
+    "atlas": "676-kabuki",
+    "native": [
+      "furfroukabuki"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 676,
+    "formIndex": 9,
+    "formKey": "pharaoh",
+    "atlas": "676-pharaoh",
+    "native": [
+      "furfroupharaoh"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 678,
+    "formIndex": 1,
+    "formKey": "female",
+    "atlas": "678-female",
+    "native": [
+      "meowsticf"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 681,
+    "formIndex": 1,
+    "formKey": "blade",
+    "atlas": "681-blade",
+    "native": [
+      "aegislashblade"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 710,
+    "formIndex": 1,
+    "formKey": "small",
+    "atlas": "710-small",
+    "native": [
+      "pumpkaboosmall"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 710,
+    "formIndex": 2,
+    "formKey": "large",
+    "atlas": "710-large",
+    "native": [
+      "pumpkaboolarge"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 710,
+    "formIndex": 3,
+    "formKey": "jumbo",
+    "atlas": "710-jumbo",
+    "native": [
+      "pumpkaboosuper"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 711,
+    "formIndex": 1,
+    "formKey": "small",
+    "atlas": "711-small",
+    "native": [
+      "gourgeistsmall"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 711,
+    "formIndex": 2,
+    "formKey": "large",
+    "atlas": "711-large",
+    "native": [
+      "gourgeistlarge"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 711,
+    "formIndex": 3,
+    "formKey": "jumbo",
+    "atlas": "711-jumbo",
+    "native": [
+      "gourgeistsuper"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 716,
+    "formIndex": 1,
+    "formKey": "active",
+    "atlas": "716-active",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 718,
+    "formIndex": 1,
+    "formKey": "10",
+    "atlas": "718-10",
+    "native": [
+      "zygarde10"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 718,
+    "formIndex": 2,
+    "formKey": "50-pc",
+    "atlas": "718",
+    "native": [
+      "zygarde"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 718,
+    "formIndex": 3,
+    "formKey": "10-pc",
+    "atlas": "718-10",
+    "native": [
+      "zygarde10"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 718,
+    "formIndex": 4,
+    "formKey": "complete",
+    "atlas": "718-complete",
+    "native": [
+      "zygardecomplete"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 718,
+    "formIndex": 5,
+    "formKey": "10-complete",
+    "atlas": "718-complete",
+    "native": [
+      "zygardecomplete"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 720,
+    "formIndex": 1,
+    "formKey": "unbound",
+    "atlas": "720-unbound",
+    "native": [
+      "hoopaunbound"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 741,
+    "formIndex": 1,
+    "formKey": "pompom",
+    "atlas": "741-pompom",
+    "native": [
+      "oricoriopompom"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 741,
+    "formIndex": 2,
+    "formKey": "pau",
+    "atlas": "741-pau",
+    "native": [
+      "oricoriopau"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 741,
+    "formIndex": 3,
+    "formKey": "sensu",
+    "atlas": "741-sensu",
+    "native": [
+      "oricoriosensu"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 744,
+    "formIndex": 1,
+    "formKey": "own-tempo",
+    "atlas": "744",
+    "native": [
+      "rockruffdusk"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 745,
+    "formIndex": 1,
+    "formKey": "midnight",
+    "atlas": "745-midnight",
+    "native": [
+      "lycanrocmidnight"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 745,
+    "formIndex": 2,
+    "formKey": "dusk",
+    "atlas": "745-dusk",
+    "native": [
+      "lycanrocdusk"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 746,
+    "formIndex": 1,
+    "formKey": "school",
+    "atlas": "746-school",
+    "native": [
+      "wishiwashischool"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 1,
+    "formKey": "fighting",
+    "atlas": "773-fighting",
+    "native": [
+      "silvallyfighting"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 2,
+    "formKey": "flying",
+    "atlas": "773-flying",
+    "native": [
+      "silvallyflying"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 3,
+    "formKey": "poison",
+    "atlas": "773-poison",
+    "native": [
+      "silvallypoison"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 4,
+    "formKey": "ground",
+    "atlas": "773-ground",
+    "native": [
+      "silvallyground"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 5,
+    "formKey": "rock",
+    "atlas": "773-rock",
+    "native": [
+      "silvallyrock"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 6,
+    "formKey": "bug",
+    "atlas": "773-bug",
+    "native": [
+      "silvallybug"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 7,
+    "formKey": "ghost",
+    "atlas": "773-ghost",
+    "native": [
+      "silvallyghost"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 8,
+    "formKey": "steel",
+    "atlas": "773-steel",
+    "native": [
+      "silvallysteel"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 9,
+    "formKey": "fire",
+    "atlas": "773-fire",
+    "native": [
+      "silvallyfire"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 10,
+    "formKey": "water",
+    "atlas": "773-water",
+    "native": [
+      "silvallywater"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 11,
+    "formKey": "grass",
+    "atlas": "773-grass",
+    "native": [
+      "silvallygrass"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 12,
+    "formKey": "electric",
+    "atlas": "773-electric",
+    "native": [
+      "silvallyelectric"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 13,
+    "formKey": "psychic",
+    "atlas": "773-psychic",
+    "native": [
+      "silvallypsychic"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 14,
+    "formKey": "ice",
+    "atlas": "773-ice",
+    "native": [
+      "silvallyice"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 15,
+    "formKey": "dragon",
+    "atlas": "773-dragon",
+    "native": [
+      "silvallydragon"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 16,
+    "formKey": "dark",
+    "atlas": "773-dark",
+    "native": [
+      "silvallydark"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 773,
+    "formIndex": 17,
+    "formKey": "fairy",
+    "atlas": "773-fairy",
+    "native": [
+      "silvallyfairy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 1,
+    "formKey": "orange-meteor",
+    "atlas": "774-orange-meteor",
+    "native": [
+      "miniormeteor"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 2,
+    "formKey": "yellow-meteor",
+    "atlas": "774-yellow-meteor",
+    "native": [
+      "miniormeteor"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 3,
+    "formKey": "green-meteor",
+    "atlas": "774-green-meteor",
+    "native": [
+      "miniormeteor"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 4,
+    "formKey": "blue-meteor",
+    "atlas": "774-blue-meteor",
+    "native": [
+      "miniormeteor"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 5,
+    "formKey": "indigo-meteor",
+    "atlas": "774-indigo-meteor",
+    "native": [
+      "miniormeteor"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 6,
+    "formKey": "violet-meteor",
+    "atlas": "774-violet-meteor",
+    "native": [
+      "miniormeteor"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 7,
+    "formKey": "red",
+    "atlas": "774-red",
+    "native": [
+      "minior"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 8,
+    "formKey": "orange",
+    "atlas": "774-orange",
+    "native": [
+      "miniororange"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 9,
+    "formKey": "yellow",
+    "atlas": "774-yellow",
+    "native": [
+      "minioryellow"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 10,
+    "formKey": "green",
+    "atlas": "774-green",
+    "native": [
+      "miniorgreen"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 11,
+    "formKey": "blue",
+    "atlas": "774-blue",
+    "native": [
+      "miniorblue"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 12,
+    "formKey": "indigo",
+    "atlas": "774-indigo",
+    "native": [
+      "miniorindigo"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 774,
+    "formIndex": 13,
+    "formKey": "violet",
+    "atlas": "774-violet",
+    "native": [
+      "miniorviolet"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 778,
+    "formIndex": 1,
+    "formKey": "busted",
+    "atlas": "778-busted",
+    "native": [
+      "mimikyubusted"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 800,
+    "formIndex": 1,
+    "formKey": "dusk-mane",
+    "atlas": "800-dusk-mane",
+    "native": [
+      "necrozmaduskmane"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 800,
+    "formIndex": 2,
+    "formKey": "dawn-wings",
+    "atlas": "800-dawn-wings",
+    "native": [
+      "necrozmadawnwings"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 801,
+    "formIndex": 1,
+    "formKey": "original",
+    "atlas": "801-original",
+    "native": [
+      "magearnaoriginal"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 802,
+    "formIndex": 1,
+    "formKey": "zenith",
+    "atlas": "802-zenith",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 845,
+    "formIndex": 1,
+    "formKey": "gulping",
+    "atlas": "845-gulping",
+    "native": [
+      "cramorantgulping"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 845,
+    "formIndex": 2,
+    "formKey": "gorging",
+    "atlas": "845-gorging",
+    "native": [
+      "cramorantgorging"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 849,
+    "formIndex": 1,
+    "formKey": "lowkey",
+    "atlas": "849-lowkey",
+    "native": [
+      "toxtricitylowkey"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 854,
+    "formIndex": 1,
+    "formKey": "antique",
+    "atlas": "854",
+    "native": [
+      "sinisteaantique"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 855,
+    "formIndex": 1,
+    "formKey": "antique",
+    "atlas": "855",
+    "native": [
+      "polteageistantique"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 1,
+    "formKey": "ruby-cream",
+    "atlas": "869-ruby-cream",
+    "native": [
+      "alcremierubycream"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 2,
+    "formKey": "matcha-cream",
+    "atlas": "869-matcha-cream",
+    "native": [
+      "alcremiematchacream"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 3,
+    "formKey": "mint-cream",
+    "atlas": "869-mint-cream",
+    "native": [
+      "alcremiemintcream"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 4,
+    "formKey": "lemon-cream",
+    "atlas": "869-lemon-cream",
+    "native": [
+      "alcremielemoncream"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 5,
+    "formKey": "salted-cream",
+    "atlas": "869-salted-cream",
+    "native": [
+      "alcremiesaltedcream"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 6,
+    "formKey": "ruby-swirl",
+    "atlas": "869-ruby-swirl",
+    "native": [
+      "alcremierubyswirl"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 7,
+    "formKey": "caramel-swirl",
+    "atlas": "869-caramel-swirl",
+    "native": [
+      "alcremiecaramelswirl"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 8,
+    "formKey": "rainbow-swirl",
+    "atlas": "869-rainbow-swirl",
+    "native": [
+      "alcremierainbowswirl"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 875,
+    "formIndex": 1,
+    "formKey": "no-ice",
+    "atlas": "875-no-ice",
+    "native": [
+      "eiscuenoice"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 876,
+    "formIndex": 1,
+    "formKey": "female",
+    "atlas": "876-female",
+    "native": [
+      "indeedeef"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 877,
+    "formIndex": 1,
+    "formKey": "hangry",
+    "atlas": "877-hangry",
+    "native": [
+      "morpekohangry"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 888,
+    "formIndex": 1,
+    "formKey": "crowned",
+    "atlas": "888-crowned",
+    "native": [
+      "zaciancrowned"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 889,
+    "formIndex": 1,
+    "formKey": "crowned",
+    "atlas": "889-crowned",
+    "native": [
+      "zamazentacrowned"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 892,
+    "formIndex": 1,
+    "formKey": "rapid-strike",
+    "atlas": "892-rapid-strike",
+    "native": [
+      "urshifurapidstrike"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 893,
+    "formIndex": 1,
+    "formKey": "dada",
+    "atlas": "893-dada",
+    "native": [
+      "zarudedada"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 898,
+    "formIndex": 1,
+    "formKey": "ice",
+    "atlas": "898-ice",
+    "native": [
+      "calyrexice"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 898,
+    "formIndex": 2,
+    "formKey": "shadow",
+    "atlas": "898-shadow",
+    "native": [
+      "calyrexshadow"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 902,
+    "formIndex": 1,
+    "formKey": "female",
+    "atlas": "902-female",
+    "native": [
+      "basculegionf"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 905,
+    "formIndex": 1,
+    "formKey": "therian",
+    "atlas": "905-therian",
+    "native": [
+      "enamorustherian"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 916,
+    "formIndex": 1,
+    "formKey": "female",
+    "atlas": "916-female",
+    "native": [
+      "oinkolognef"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 925,
+    "formIndex": 1,
+    "formKey": "three",
+    "atlas": "925-three",
+    "native": [
+      "maushold"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 931,
+    "formIndex": 1,
+    "formKey": "blue-plumage",
+    "atlas": "931-blue-plumage",
+    "native": [
+      "squawkabillyblue"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 931,
+    "formIndex": 2,
+    "formKey": "yellow-plumage",
+    "atlas": "931-yellow-plumage",
+    "native": [
+      "squawkabillyyellow"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 931,
+    "formIndex": 3,
+    "formKey": "white-plumage",
+    "atlas": "931-white-plumage",
+    "native": [
+      "squawkabillywhite"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 964,
+    "formIndex": 1,
+    "formKey": "hero",
+    "atlas": "964-hero",
+    "native": [
+      "palafinhero"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 966,
+    "formIndex": 1,
+    "formKey": "segin-starmobile",
+    "atlas": "966-segin-starmobile",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 966,
+    "formIndex": 2,
+    "formKey": "schedar-starmobile",
+    "atlas": "966-schedar-starmobile",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 966,
+    "formIndex": 3,
+    "formKey": "navi-starmobile",
+    "atlas": "966-navi-starmobile",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 966,
+    "formIndex": 4,
+    "formKey": "ruchbah-starmobile",
+    "atlas": "966-ruchbah-starmobile",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 966,
+    "formIndex": 5,
+    "formKey": "caph-starmobile",
+    "atlas": "966-caph-starmobile",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 978,
+    "formIndex": 1,
+    "formKey": "droopy",
+    "atlas": "978-droopy",
+    "native": [
+      "tatsugiridroopy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 978,
+    "formIndex": 2,
+    "formKey": "stretchy",
+    "atlas": "978-stretchy",
+    "native": [
+      "tatsugiristretchy"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 982,
+    "formIndex": 1,
+    "formKey": "three-segment",
+    "atlas": "982-three-segment",
+    "native": [
+      "dudunsparcethreesegment"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "sourceId": 999,
+    "formIndex": 1,
+    "formKey": "roaming",
+    "atlas": "999-roaming",
+    "native": [
+      "gimmighoulroaming"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 1012,
+    "formIndex": 1,
+    "formKey": "artisan",
+    "atlas": "1012-counterfeit",
+    "native": [
+      "poltchageistartisan"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 1013,
+    "formIndex": 1,
+    "formKey": "masterpiece",
+    "atlas": "1013-unremarkable",
+    "native": [
+      "sinistchamasterpiece"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 1017,
+    "formIndex": 1,
+    "formKey": "wellspring-mask",
+    "atlas": "1017-wellspring-mask",
+    "native": [
+      "ogerponwellspring"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 1017,
+    "formIndex": 2,
+    "formKey": "hearthflame-mask",
+    "atlas": "1017-hearthflame-mask",
+    "native": [
+      "ogerponhearthflame"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 1017,
+    "formIndex": 3,
+    "formKey": "cornerstone-mask",
+    "atlas": "1017-cornerstone-mask",
+    "native": [
+      "ogerponcornerstone"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 1017,
+    "formIndex": 4,
+    "formKey": "teal-mask-tera",
+    "atlas": "1017-teal-mask-tera",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 1017,
+    "formIndex": 5,
+    "formKey": "wellspring-mask-tera",
+    "atlas": "1017-wellspring-mask-tera",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 1017,
+    "formIndex": 6,
+    "formKey": "hearthflame-mask-tera",
+    "atlas": "1017-hearthflame-mask-tera",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 1017,
+    "formIndex": 7,
+    "formKey": "cornerstone-mask-tera",
+    "atlas": "1017-cornerstone-mask-tera",
+    "native": [],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 1024,
+    "formIndex": 1,
+    "formKey": "terastal",
+    "atlas": "1024-terastal",
+    "native": [
+      "terapagosterastal"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 1024,
+    "formIndex": 2,
+    "formKey": "stellar",
+    "atlas": "1024-stellar",
+    "native": [
+      "terapagosstellar"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 2658,
+    "formIndex": 1,
+    "formKey": "ash",
+    "atlas": "2658-ash",
+    "native": [
+      "greninjaash"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 4555,
+    "formIndex": 1,
+    "formKey": "zen",
+    "atlas": "4555-zen",
+    "native": [
+      "darmanitangalarzen"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 8128,
+    "formIndex": 1,
+    "formKey": "blaze",
+    "atlas": "8128-blaze",
+    "native": [
+      "taurospaldeablaze"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 8128,
+    "formIndex": 2,
+    "formKey": "aqua",
+    "atlas": "8128-aqua",
+    "native": [
+      "taurospaldeaaqua"
+    ],
+    "genderDiffs": false,
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  }
+]

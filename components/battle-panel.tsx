@@ -9,6 +9,7 @@ import {classicTrainerPortraits} from './rogue-trainer-portraits.mjs';
 import './rogue-trainer-portraits.css';
 import {reviewedMegaAtlas} from './rogue-reviewed-mega-atlases.mjs';
 import {reviewedTransformationAtlas} from './rogue-reviewed-transformation-atlases.mjs';
+import {reviewedOrdinaryFormAtlas} from './rogue-reviewed-form-atlases.mjs';
 import battleHeights from '@/data/battle-heights.json';
 import {classicSpeciesScale} from '@/lib/rogue-battle-scale.mjs';
 import {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleScenePosition,impactLabel,battleTransformation,hasDifferentBattleForm,type BattleMoveTarget,type BattleMove,type BattleActor,type BattleTurnAction} from './battle-logic';
@@ -94,7 +95,7 @@ function spriteFloor(src:string):Promise<SpriteFloor|null>{
 function BattleSprite({mon,facing,animations}:{mon:any;facing:'front'|'back';animations:boolean}){
   const reduced=useSyncExternalStore(subscribeReducedMotion,reducedMotionSnapshot,serverReducedMotion),sources=directBattleSpriteSources(mon,facing),key=sources.join('|');
   const [failed,setFailed]=useState({key:'',index:0});const index=failed.key===key?failed.index:0;
-  if(reviewedMegaAtlas(mon)||reviewedTransformationAtlas(mon)||mon?.fusionSpecies||(mon?.rogueSourceId!=null && mon?.shiny && mon?.variant>0)||!animations||reduced||!sources.length||index>=sources.length){const imageMon=hasDifferentBattleForm(mon)?{...mon,sourceImage:null,sourceBackImage:null,sourceShinyImage:null,sourceShinyBackImage:null,sourceAppearanceMissing:false}:mon;return <PokemonImage mon={imageMon} variant="battle" facing={facing} eager frozen={!animations||reduced}/>;}
+  if(reviewedMegaAtlas(mon)||reviewedTransformationAtlas(mon)||reviewedOrdinaryFormAtlas(mon)||mon?.fusionSpecies||(mon?.rogueSourceId!=null && mon?.shiny && mon?.variant>0)||!animations||reduced||!sources.length||index>=sources.length){const imageMon=hasDifferentBattleForm(mon)?{...mon,sourceImage:null,sourceBackImage:null,sourceShinyImage:null,sourceShinyBackImage:null,sourceAppearanceMissing:false}:mon;return <PokemonImage mon={imageMon} variant="battle" facing={facing} eager frozen={!animations||reduced}/>;}
   return <img className="bs-live-battle-image" width="128" height="128" src={sources[index]} alt={`${mon.name}${mon.gigantamax?' · 거다이맥스 모습':''}`} decoding="async" onError={()=>setFailed({key,index:index+1})}/>;
 }
 function TransformationBurst({mon}:{mon:any}){const form=battleTransformation(mon);return <div className="bs-transformation-burst" data-transformation={form.tera?'tera':form.gmax?'gmax':form.giant?'dynamax':form.mega?'mega':form.primal?'primal':form.ultra?'ultra':'form'} aria-hidden="true"><i className="bs-transform-ring ring-one"/><i className="bs-transform-ring ring-two"/><span className="bs-transform-column"/><svg className="bs-transform-shards" viewBox="0 0 200 200"><path d="m100 5 8 20-8 20-8-20ZM32 27l18 7 4 21-18-7Zm135 4-5 21-20 7 5-21ZM8 104l20-8 20 8-20 8Zm145 0 20-8 20 8-20 8ZM37 151l17 3-4 22-17-3Zm110 2 18-5 4 20-18 5ZM100 158l8 17-8 21-8-21Z"/></svg></div>}

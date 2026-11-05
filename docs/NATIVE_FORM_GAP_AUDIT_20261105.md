@@ -18,3 +18,7 @@ Evidence locations in the pinned tree:
 - `src/data/balance/species/generation-09.ts:10458` onward (four Tera mask forms), `:10570` onward (Tera/lapse transitions).
 
 A read-only Node assertion checked all five existing native candidates against source base stats and the enum-corrected primary ability. Native types also match: Fairy; Grass; Grass/Water; Grass/Fire; Grass/Rock. These are identity checks, not executed Tera/active-form integration tests. Result: **one cosmetic active alias candidate, six protected unavailable/enemy forms, four real Tera lifecycle candidates**. Source artwork availability does not change these restrictions.
+
+## R3 implementation update
+
+The original eleven-row snapshot above is historical. Xerneas active and Ogerpon Tera four now have exact native aliases and executed source lifetime/save/fusion tests; see `SOURCE_TRIGGER_FORMS_R3_QA_20261105.md`. The latest generated inventory has six null native identities, precisely the protected Zenith and five enemy-only Starmobiles. Their restrictions remain unchanged.

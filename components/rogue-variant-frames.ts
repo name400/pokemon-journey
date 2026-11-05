@@ -7,7 +7,7 @@ const cache=new Map<string,Promise<string[]|null>>();
 async function json<T>(url:string):Promise<T>{const r=await fetch(url);if(!r.ok)throw Error('missing asset');return await r.json() as T;}
 let masterPromise:Promise<Master>|null=null;
 export function variantFrames(key:string,variant:number,facing:'front'|'back'):Promise<string[]|null>{
- if(!/^[0-9]+(?:-[a-z0-9-]+)?$/i.test(key)||![1,2].includes(variant))return Promise.resolve(null);
+ if(!/^(?:female\/)?[0-9]+(?:-[a-z0-9-]+)?$/i.test(key)||![1,2].includes(variant))return Promise.resolve(null);
  const cacheKey=`${key}:${variant}:${facing}`,previous=cache.get(cacheKey);if(previous)return previous;
  const task=(async()=>{try{
   const local=reviewedAtlasRoot(key),localKind=reviewedAtlasVariant(key,variant,facing);

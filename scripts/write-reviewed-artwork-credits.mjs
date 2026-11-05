@@ -3,9 +3,10 @@ import provenance from '../data/rogue-reviewed-asset-provenance.json' with {type
 import additional from '../data/rogue-additional-mega-asset-provenance.json' with {type:'json'};
 import transformations from '../data/rogue-transformation-asset-provenance.json' with {type:'json'};
 import existing from '../data/rogue-existing-trainer-asset-provenance.json' with {type:'json'};
+import ordinary from '../data/rogue-form-asset-provenance.json' with {type:'json'};
 const escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const source=`https://github.com/pagefaultgames/pokerogue-assets/blob/${provenance.sourceCommit}/`;
-const rows=[...provenance.assets,...additional.assets,...transformations.assets,...existing.assets].filter(a=>a.path.endsWith('.png')).map(a=>{
+const rows=[...provenance.assets,...additional.assets,...transformations.assets,...existing.assets,...ordinary.assets].filter(a=>a.path.endsWith('.png')).map(a=>{
  const notice=a.attribution?.map(r=>`${escape(r['SPDX-FileCopyrightText'])} · ${escape(r['SPDX-License-Identifier'])}`).join('; ')||'고정 원본 images/REUSE.toml에 이 PNG와 일치하는 개별 표기 없음. 제작자·라이선스를 추정하지 않습니다.';
  return `<tr><td><img loading="lazy" src="/${escape(a.localPath.slice(7))}" alt="${escape(a.path)}"></td><td><a href="${source+escape(a.path)}">${escape(a.path)}</a><br><small>SHA-256 ${a.sha256}</small><p>${notice}</p></td></tr>`;
 }).join('\n');

@@ -18,6 +18,8 @@
 
 `scripts/generate-trainer-portrait-pairs.mjs`가 원본 hasDouble/doubleOnly, 명시된 partnerId, 기존 검증된 성별 이미지를 compact metadata로 만든다. BattlePanel은 실제 double variant에서만 레드·그린 같은 지정 파트너 또는 남녀 클래스 쌍을 표시한다. Twins 등 원래 한 장에 둘이 그려진 doubleOnly 초상은1장을 유지한다. 저장된 partnerId가 원본과 다르면 추가 인물을 붙이지 않는다. 상대 헤더와 등장 장면에만 적용하며 대사 화자·RNG·전투 상태·skip 타이머는 바꾸지 않는다.
 
+이 helper가 읽는 기존 world export의 출처 표기는 `29441f7aa7482d9e816b253d324293788936dc3e`다. 해당48 trainer 구성의 hasDouble/doubleOnly/hasGenders/명시 partner를 현재 고정 코드 `7c08812`의 TrainerConfig와 다시 대조했고 차이0이었다. UNKNOWN을 제외한 성별 대응은 모두 있고, 복합1장 클래스에는 별도 합성 PNG를 만들지 않는다.
+
 기존 고지를 유지하며 `/game/pokerogue/credits.html`에 추가 PNG의 고정 원본 경로/해시/개별 라이선스 표기를 확장했다. 원본 REUSE.toml에 일치하는 PNG 표기가 없으면 null이며 인접 JSON의 라이선스나 퍼블릭 도메인을 추정하지 않는다. 생성기는 `scripts/write-reviewed-artwork-credits.mjs`다.
 
 ## 검증

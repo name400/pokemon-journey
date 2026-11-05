@@ -160,7 +160,7 @@ export default function PokemonImage({ mon, className = '', alt, eager = false, 
     fetchPriority={eager ? 'high' : 'auto'}
     decoding="async"
     className={className}
-    title={mon?.fusionSpecies&&variant==='battle'&&(!fusionKey||fusionUnavailable===fusionKey)?'융합 색상을 표시할 수 없어 기본 모습으로 표시합니다.':formAtlasKey&&sourceFormUnavailable===formAtlasKey?'폼 이미지를 불러올 수 없어 기본 모습으로 표시합니다.':shiny&&mon?.variant&&sourceId!=null&&(!assetKey||changedForm||unavailable===customKey)?'변종 이미지를 불러올 수 없어 기본 이로치 이미지로 표시합니다.':undefined}
+    title={mon?.fusionSpecies&&variant==='battle'&&(!fusionKey||fusionUnavailable===fusionKey)?'융합 색상을 표시할 수 없어 기본 모습으로 표시합니다.':!fusionSource&&formAtlasKey&&sourceFormUnavailable===formAtlasKey?'폼 이미지를 불러올 수 없어 기본 모습으로 표시합니다.':!fusionSource&&shiny&&mon?.variant&&sourceId!=null&&(!assetKey||changedForm||unavailable===customKey)?'변종 이미지를 불러올 수 없어 기본 이로치 이미지로 표시합니다.':undefined}
     src={currentSource}
     style={{...((fusionSource||customSource||formSource)?{imageRendering:'pixelated' as const}:{}),...(normalizeSprite&&fit.src===currentSource&&fit.value?{transform:`scale(${fit.value.scale}) translate(${fit.value.x}%, ${fit.value.y}%)`}:{})}}
     alt={alt ?? `${mon?.name || '포켓몬'}${shiny ? ' · 색이 다른 모습' : ''}`}

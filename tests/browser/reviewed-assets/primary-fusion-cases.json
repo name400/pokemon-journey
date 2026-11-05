@@ -1,0 +1,5651 @@
+[
+  {
+    "key": "25:1",
+    "atlas": "female/25-partner",
+    "mon": {
+      "id": 10158,
+      "rogueSourceId": 25,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "partner",
+      "rogueBattleSpecies": "pikachustarter",
+      "battleAppearance": "pikachustarter",
+      "gender": "F",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "25:2",
+    "atlas": "female/25-cosplay",
+    "mon": {
+      "id": 10085,
+      "rogueSourceId": 25,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "cosplay",
+      "rogueBattleSpecies": "pikachucosplay",
+      "battleAppearance": "pikachucosplay",
+      "gender": "F",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "25:3",
+    "atlas": "female/25-cool-cosplay",
+    "mon": {
+      "id": 10080,
+      "rogueSourceId": 25,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "cool-cosplay",
+      "rogueBattleSpecies": "pikachurockstar",
+      "battleAppearance": "pikachurockstar",
+      "gender": "F",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "25:4",
+    "atlas": "female/25-beauty-cosplay",
+    "mon": {
+      "id": 10081,
+      "rogueSourceId": 25,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "beauty-cosplay",
+      "rogueBattleSpecies": "pikachubelle",
+      "battleAppearance": "pikachubelle",
+      "gender": "F",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "25:5",
+    "atlas": "female/25-cute-cosplay",
+    "mon": {
+      "id": 10082,
+      "rogueSourceId": 25,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "cute-cosplay",
+      "rogueBattleSpecies": "pikachupopstar",
+      "battleAppearance": "pikachupopstar",
+      "gender": "F",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "25:6",
+    "atlas": "female/25-smart-cosplay",
+    "mon": {
+      "id": 10083,
+      "rogueSourceId": 25,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "smart-cosplay",
+      "rogueBattleSpecies": "pikachuphd",
+      "battleAppearance": "pikachuphd",
+      "gender": "F",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "25:7",
+    "atlas": "female/25-tough-cosplay",
+    "mon": {
+      "id": 10084,
+      "rogueSourceId": 25,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "tough-cosplay",
+      "rogueBattleSpecies": "pikachulibre",
+      "battleAppearance": "pikachulibre",
+      "gender": "F",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "133:1",
+    "atlas": "133-partner",
+    "mon": {
+      "id": 10159,
+      "rogueSourceId": 133,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "partner",
+      "rogueBattleSpecies": "eeveestarter",
+      "battleAppearance": "eeveestarter",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "172:1",
+    "atlas": "172-spiky",
+    "mon": {
+      "id": 30065,
+      "rogueSourceId": 172,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "spiky",
+      "rogueBattleSpecies": "pichuspikyeared",
+      "battleAppearance": "pichuspikyeared",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:1",
+    "atlas": "201-b",
+    "mon": {
+      "id": 30001,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "b",
+      "rogueBattleSpecies": "unownb",
+      "battleAppearance": "unownb",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:2",
+    "atlas": "201-c",
+    "mon": {
+      "id": 30002,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "c",
+      "rogueBattleSpecies": "unownc",
+      "battleAppearance": "unownc",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:3",
+    "atlas": "201-d",
+    "mon": {
+      "id": 30003,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "d",
+      "rogueBattleSpecies": "unownd",
+      "battleAppearance": "unownd",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:4",
+    "atlas": "201-e",
+    "mon": {
+      "id": 30004,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "e",
+      "rogueBattleSpecies": "unowne",
+      "battleAppearance": "unowne",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:5",
+    "atlas": "201-f",
+    "mon": {
+      "id": 30005,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "f",
+      "rogueBattleSpecies": "unownf",
+      "battleAppearance": "unownf",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:6",
+    "atlas": "201-g",
+    "mon": {
+      "id": 30006,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "g",
+      "rogueBattleSpecies": "unowng",
+      "battleAppearance": "unowng",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:7",
+    "atlas": "201-h",
+    "mon": {
+      "id": 30007,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "h",
+      "rogueBattleSpecies": "unownh",
+      "battleAppearance": "unownh",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:8",
+    "atlas": "201-i",
+    "mon": {
+      "id": 30008,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 8,
+      "rogueFormKey": "i",
+      "rogueBattleSpecies": "unowni",
+      "battleAppearance": "unowni",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:9",
+    "atlas": "201-j",
+    "mon": {
+      "id": 30009,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 9,
+      "rogueFormKey": "j",
+      "rogueBattleSpecies": "unownj",
+      "battleAppearance": "unownj",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:10",
+    "atlas": "201-k",
+    "mon": {
+      "id": 30010,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 10,
+      "rogueFormKey": "k",
+      "rogueBattleSpecies": "unownk",
+      "battleAppearance": "unownk",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:11",
+    "atlas": "201-l",
+    "mon": {
+      "id": 30011,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 11,
+      "rogueFormKey": "l",
+      "rogueBattleSpecies": "unownl",
+      "battleAppearance": "unownl",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:12",
+    "atlas": "201-m",
+    "mon": {
+      "id": 30012,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 12,
+      "rogueFormKey": "m",
+      "rogueBattleSpecies": "unownm",
+      "battleAppearance": "unownm",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:13",
+    "atlas": "201-n",
+    "mon": {
+      "id": 30013,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 13,
+      "rogueFormKey": "n",
+      "rogueBattleSpecies": "unownn",
+      "battleAppearance": "unownn",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:14",
+    "atlas": "201-o",
+    "mon": {
+      "id": 30014,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 14,
+      "rogueFormKey": "o",
+      "rogueBattleSpecies": "unowno",
+      "battleAppearance": "unowno",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:15",
+    "atlas": "201-p",
+    "mon": {
+      "id": 30015,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 15,
+      "rogueFormKey": "p",
+      "rogueBattleSpecies": "unownp",
+      "battleAppearance": "unownp",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:16",
+    "atlas": "201-q",
+    "mon": {
+      "id": 30016,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 16,
+      "rogueFormKey": "q",
+      "rogueBattleSpecies": "unownq",
+      "battleAppearance": "unownq",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:17",
+    "atlas": "201-r",
+    "mon": {
+      "id": 30017,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 17,
+      "rogueFormKey": "r",
+      "rogueBattleSpecies": "unownr",
+      "battleAppearance": "unownr",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:18",
+    "atlas": "201-s",
+    "mon": {
+      "id": 30018,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 18,
+      "rogueFormKey": "s",
+      "rogueBattleSpecies": "unowns",
+      "battleAppearance": "unowns",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:19",
+    "atlas": "201-t",
+    "mon": {
+      "id": 30019,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 19,
+      "rogueFormKey": "t",
+      "rogueBattleSpecies": "unownt",
+      "battleAppearance": "unownt",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:20",
+    "atlas": "201-u",
+    "mon": {
+      "id": 30020,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 20,
+      "rogueFormKey": "u",
+      "rogueBattleSpecies": "unownu",
+      "battleAppearance": "unownu",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:21",
+    "atlas": "201-v",
+    "mon": {
+      "id": 30021,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 21,
+      "rogueFormKey": "v",
+      "rogueBattleSpecies": "unownv",
+      "battleAppearance": "unownv",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:22",
+    "atlas": "201-w",
+    "mon": {
+      "id": 30022,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 22,
+      "rogueFormKey": "w",
+      "rogueBattleSpecies": "unownw",
+      "battleAppearance": "unownw",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:23",
+    "atlas": "201-x",
+    "mon": {
+      "id": 30023,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 23,
+      "rogueFormKey": "x",
+      "rogueBattleSpecies": "unownx",
+      "battleAppearance": "unownx",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:24",
+    "atlas": "201-y",
+    "mon": {
+      "id": 30024,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 24,
+      "rogueFormKey": "y",
+      "rogueBattleSpecies": "unowny",
+      "battleAppearance": "unowny",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:25",
+    "atlas": "201-z",
+    "mon": {
+      "id": 30025,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 25,
+      "rogueFormKey": "z",
+      "rogueBattleSpecies": "unownz",
+      "battleAppearance": "unownz",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:26",
+    "atlas": "201-exclamation",
+    "mon": {
+      "id": 30026,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 26,
+      "rogueFormKey": "exclamation",
+      "rogueBattleSpecies": "unownexclamation",
+      "battleAppearance": "unownexclamation",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "201:27",
+    "atlas": "201-question",
+    "mon": {
+      "id": 30027,
+      "rogueSourceId": 201,
+      "rogueFormIndex": 27,
+      "rogueFormKey": "question",
+      "rogueBattleSpecies": "unownquestion",
+      "battleAppearance": "unownquestion",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "351:1",
+    "atlas": "351-sunny",
+    "mon": {
+      "id": 10013,
+      "rogueSourceId": 351,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "sunny",
+      "rogueBattleSpecies": "castformsunny",
+      "battleAppearance": "castformsunny",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "351:2",
+    "atlas": "351-rainy",
+    "mon": {
+      "id": 10014,
+      "rogueSourceId": 351,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "rainy",
+      "rogueBattleSpecies": "castformrainy",
+      "battleAppearance": "castformrainy",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "351:3",
+    "atlas": "351-snowy",
+    "mon": {
+      "id": 10015,
+      "rogueSourceId": 351,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "snowy",
+      "rogueBattleSpecies": "castformsnowy",
+      "battleAppearance": "castformsnowy",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "412:1",
+    "atlas": "412-sandy",
+    "mon": {
+      "id": 30034,
+      "rogueSourceId": 412,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "sandy",
+      "rogueBattleSpecies": "burmysandy",
+      "battleAppearance": "burmysandy",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "412:2",
+    "atlas": "412-trash",
+    "mon": {
+      "id": 30035,
+      "rogueSourceId": 412,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "trash",
+      "rogueBattleSpecies": "burmytrash",
+      "battleAppearance": "burmytrash",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "413:1",
+    "atlas": "413-sandy",
+    "mon": {
+      "id": 10004,
+      "rogueSourceId": 413,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "sandy",
+      "rogueBattleSpecies": "wormadamsandy",
+      "battleAppearance": "wormadamsandy",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "413:2",
+    "atlas": "413-trash",
+    "mon": {
+      "id": 10005,
+      "rogueSourceId": 413,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "trash",
+      "rogueBattleSpecies": "wormadamtrash",
+      "battleAppearance": "wormadamtrash",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "421:1",
+    "atlas": "421-sunshine",
+    "mon": {
+      "id": 421,
+      "rogueSourceId": 421,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "sunshine",
+      "rogueBattleSpecies": "cherrimsunshine",
+      "battleAppearance": "cherrimsunshine",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "422:1",
+    "atlas": "422-west",
+    "mon": {
+      "id": 422,
+      "rogueSourceId": 422,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "west",
+      "rogueBattleSpecies": "shellos",
+      "battleAppearance": "shellos",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "423:1",
+    "atlas": "423-west",
+    "mon": {
+      "id": 423,
+      "rogueSourceId": 423,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "west",
+      "rogueBattleSpecies": "gastrodon",
+      "battleAppearance": "gastrodon",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "479:1",
+    "atlas": "479-heat",
+    "mon": {
+      "id": 10008,
+      "rogueSourceId": 479,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "heat",
+      "rogueBattleSpecies": "rotomheat",
+      "battleAppearance": "rotomheat",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "479:2",
+    "atlas": "479-wash",
+    "mon": {
+      "id": 10009,
+      "rogueSourceId": 479,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "wash",
+      "rogueBattleSpecies": "rotomwash",
+      "battleAppearance": "rotomwash",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "479:3",
+    "atlas": "479-frost",
+    "mon": {
+      "id": 10010,
+      "rogueSourceId": 479,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "frost",
+      "rogueBattleSpecies": "rotomfrost",
+      "battleAppearance": "rotomfrost",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "479:4",
+    "atlas": "479-fan",
+    "mon": {
+      "id": 10011,
+      "rogueSourceId": 479,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "fan",
+      "rogueBattleSpecies": "rotomfan",
+      "battleAppearance": "rotomfan",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "479:5",
+    "atlas": "479-mow",
+    "mon": {
+      "id": 10012,
+      "rogueSourceId": 479,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "mow",
+      "rogueBattleSpecies": "rotommow",
+      "battleAppearance": "rotommow",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "550:1",
+    "atlas": "550-blue-striped",
+    "mon": {
+      "id": 10016,
+      "rogueSourceId": 550,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "blue-striped",
+      "rogueBattleSpecies": "basculinbluestriped",
+      "battleAppearance": "basculinbluestriped",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "555:1",
+    "atlas": "555-zen",
+    "mon": {
+      "id": 10017,
+      "rogueSourceId": 555,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "zen",
+      "rogueBattleSpecies": "darmanitanzen",
+      "battleAppearance": "darmanitanzen",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "585:1",
+    "atlas": "585-summer",
+    "mon": {
+      "id": 30068,
+      "rogueSourceId": 585,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "summer",
+      "rogueBattleSpecies": "deerlingsummer",
+      "battleAppearance": "deerlingsummer",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "585:2",
+    "atlas": "585-autumn",
+    "mon": {
+      "id": 30069,
+      "rogueSourceId": 585,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "autumn",
+      "rogueBattleSpecies": "deerlingautumn",
+      "battleAppearance": "deerlingautumn",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "585:3",
+    "atlas": "585-winter",
+    "mon": {
+      "id": 30070,
+      "rogueSourceId": 585,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "winter",
+      "rogueBattleSpecies": "deerlingwinter",
+      "battleAppearance": "deerlingwinter",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "586:1",
+    "atlas": "586-summer",
+    "mon": {
+      "id": 586,
+      "rogueSourceId": 586,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "summer",
+      "rogueBattleSpecies": "sawsbucksummer",
+      "battleAppearance": "sawsbucksummer",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "586:2",
+    "atlas": "586-autumn",
+    "mon": {
+      "id": 586,
+      "rogueSourceId": 586,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "autumn",
+      "rogueBattleSpecies": "sawsbuckautumn",
+      "battleAppearance": "sawsbuckautumn",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "586:3",
+    "atlas": "586-winter",
+    "mon": {
+      "id": 586,
+      "rogueSourceId": 586,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "winter",
+      "rogueBattleSpecies": "sawsbuckwinter",
+      "battleAppearance": "sawsbuckwinter",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "646:1",
+    "atlas": "646-black",
+    "mon": {
+      "id": 646,
+      "rogueSourceId": 646,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "black",
+      "rogueBattleSpecies": "kyuremblack",
+      "battleAppearance": "kyuremblack",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "646:2",
+    "atlas": "646-white",
+    "mon": {
+      "id": 646,
+      "rogueSourceId": 646,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "white",
+      "rogueBattleSpecies": "kyuremwhite",
+      "battleAppearance": "kyuremwhite",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "648:1",
+    "atlas": "648-pirouette",
+    "mon": {
+      "id": 10018,
+      "rogueSourceId": 648,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "pirouette",
+      "rogueBattleSpecies": "meloettapirouette",
+      "battleAppearance": "meloettapirouette",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:1",
+    "atlas": "664",
+    "mon": {
+      "id": 664,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "icy-snow",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:2",
+    "atlas": "664",
+    "mon": {
+      "id": 30271,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "polar",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:3",
+    "atlas": "664",
+    "mon": {
+      "id": 30272,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "tundra",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:4",
+    "atlas": "664",
+    "mon": {
+      "id": 30273,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "continental",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:5",
+    "atlas": "664",
+    "mon": {
+      "id": 30274,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "garden",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:6",
+    "atlas": "664",
+    "mon": {
+      "id": 30275,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "elegant",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:7",
+    "atlas": "664",
+    "mon": {
+      "id": 30277,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "modern",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:8",
+    "atlas": "664",
+    "mon": {
+      "id": 30278,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 8,
+      "rogueFormKey": "marine",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:9",
+    "atlas": "664",
+    "mon": {
+      "id": 30279,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 9,
+      "rogueFormKey": "archipelago",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:10",
+    "atlas": "664",
+    "mon": {
+      "id": 30280,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 10,
+      "rogueFormKey": "high-plains",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:11",
+    "atlas": "664",
+    "mon": {
+      "id": 30281,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 11,
+      "rogueFormKey": "sandstorm",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:12",
+    "atlas": "664",
+    "mon": {
+      "id": 30282,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 12,
+      "rogueFormKey": "river",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:13",
+    "atlas": "664",
+    "mon": {
+      "id": 30283,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 13,
+      "rogueFormKey": "monsoon",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:14",
+    "atlas": "664",
+    "mon": {
+      "id": 30284,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 14,
+      "rogueFormKey": "savanna",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:15",
+    "atlas": "664",
+    "mon": {
+      "id": 30285,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 15,
+      "rogueFormKey": "sun",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:16",
+    "atlas": "664",
+    "mon": {
+      "id": 30286,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 16,
+      "rogueFormKey": "ocean",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:17",
+    "atlas": "664",
+    "mon": {
+      "id": 30287,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 17,
+      "rogueFormKey": "jungle",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:18",
+    "atlas": "664",
+    "mon": {
+      "id": 30288,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 18,
+      "rogueFormKey": "fancy",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "664:19",
+    "atlas": "664",
+    "mon": {
+      "id": 30289,
+      "rogueSourceId": 664,
+      "rogueFormIndex": 19,
+      "rogueFormKey": "poke-ball",
+      "rogueBattleSpecies": "scatterbug",
+      "battleAppearance": "scatterbug",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:1",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "icy-snow",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:2",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "polar",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:3",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "tundra",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:4",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "continental",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:5",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "garden",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:6",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "elegant",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:7",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "modern",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:8",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 8,
+      "rogueFormKey": "marine",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:9",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 9,
+      "rogueFormKey": "archipelago",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:10",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 10,
+      "rogueFormKey": "high-plains",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:11",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 11,
+      "rogueFormKey": "sandstorm",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:12",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 12,
+      "rogueFormKey": "river",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:13",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 13,
+      "rogueFormKey": "monsoon",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:14",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 14,
+      "rogueFormKey": "savanna",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:15",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 15,
+      "rogueFormKey": "sun",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:16",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 16,
+      "rogueFormKey": "ocean",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:17",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 17,
+      "rogueFormKey": "jungle",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:18",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 18,
+      "rogueFormKey": "fancy",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "665:19",
+    "atlas": "665",
+    "mon": {
+      "id": 665,
+      "rogueSourceId": 665,
+      "rogueFormIndex": 19,
+      "rogueFormKey": "poke-ball",
+      "rogueBattleSpecies": "spewpa",
+      "battleAppearance": "spewpa",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:1",
+    "atlas": "666-icy-snow",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "icy-snow",
+      "rogueBattleSpecies": "vivillonicysnow",
+      "battleAppearance": "vivillonicysnow",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:2",
+    "atlas": "666-polar",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "polar",
+      "rogueBattleSpecies": "vivillonpolar",
+      "battleAppearance": "vivillonpolar",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:3",
+    "atlas": "666-tundra",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "tundra",
+      "rogueBattleSpecies": "vivillontundra",
+      "battleAppearance": "vivillontundra",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:4",
+    "atlas": "666-continental",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "continental",
+      "rogueBattleSpecies": "vivilloncontinental",
+      "battleAppearance": "vivilloncontinental",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:5",
+    "atlas": "666-garden",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "garden",
+      "rogueBattleSpecies": "vivillongarden",
+      "battleAppearance": "vivillongarden",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:6",
+    "atlas": "666-elegant",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "elegant",
+      "rogueBattleSpecies": "vivillonelegant",
+      "battleAppearance": "vivillonelegant",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:7",
+    "atlas": "666-modern",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "modern",
+      "rogueBattleSpecies": "vivillonmodern",
+      "battleAppearance": "vivillonmodern",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:8",
+    "atlas": "666-marine",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 8,
+      "rogueFormKey": "marine",
+      "rogueBattleSpecies": "vivillonmarine",
+      "battleAppearance": "vivillonmarine",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:9",
+    "atlas": "666-archipelago",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 9,
+      "rogueFormKey": "archipelago",
+      "rogueBattleSpecies": "vivillonarchipelago",
+      "battleAppearance": "vivillonarchipelago",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:10",
+    "atlas": "666-high-plains",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 10,
+      "rogueFormKey": "high-plains",
+      "rogueBattleSpecies": "vivillonhighplains",
+      "battleAppearance": "vivillonhighplains",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:11",
+    "atlas": "666-sandstorm",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 11,
+      "rogueFormKey": "sandstorm",
+      "rogueBattleSpecies": "vivillonsandstorm",
+      "battleAppearance": "vivillonsandstorm",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:12",
+    "atlas": "666-river",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 12,
+      "rogueFormKey": "river",
+      "rogueBattleSpecies": "vivillonriver",
+      "battleAppearance": "vivillonriver",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:13",
+    "atlas": "666-monsoon",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 13,
+      "rogueFormKey": "monsoon",
+      "rogueBattleSpecies": "vivillonmonsoon",
+      "battleAppearance": "vivillonmonsoon",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:14",
+    "atlas": "666-savanna",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 14,
+      "rogueFormKey": "savanna",
+      "rogueBattleSpecies": "vivillonsavanna",
+      "battleAppearance": "vivillonsavanna",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:15",
+    "atlas": "666-sun",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 15,
+      "rogueFormKey": "sun",
+      "rogueBattleSpecies": "vivillonsun",
+      "battleAppearance": "vivillonsun",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:16",
+    "atlas": "666-ocean",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 16,
+      "rogueFormKey": "ocean",
+      "rogueBattleSpecies": "vivillonocean",
+      "battleAppearance": "vivillonocean",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:17",
+    "atlas": "666-jungle",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 17,
+      "rogueFormKey": "jungle",
+      "rogueBattleSpecies": "vivillonjungle",
+      "battleAppearance": "vivillonjungle",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:18",
+    "atlas": "666-fancy",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 18,
+      "rogueFormKey": "fancy",
+      "rogueBattleSpecies": "vivillonfancy",
+      "battleAppearance": "vivillonfancy",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "666:19",
+    "atlas": "666-poke-ball",
+    "mon": {
+      "id": 666,
+      "rogueSourceId": 666,
+      "rogueFormIndex": 19,
+      "rogueFormKey": "poke-ball",
+      "rogueBattleSpecies": "vivillonpokeball",
+      "battleAppearance": "vivillonpokeball",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "669:1",
+    "atlas": "669-yellow",
+    "mon": {
+      "id": 30103,
+      "rogueSourceId": 669,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "yellow",
+      "rogueBattleSpecies": "flabebeyellow",
+      "battleAppearance": "flabebeyellow",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "669:2",
+    "atlas": "669-orange",
+    "mon": {
+      "id": 30104,
+      "rogueSourceId": 669,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "orange",
+      "rogueBattleSpecies": "flabebeorange",
+      "battleAppearance": "flabebeorange",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "669:3",
+    "atlas": "669-blue",
+    "mon": {
+      "id": 30105,
+      "rogueSourceId": 669,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "blue",
+      "rogueBattleSpecies": "flabebeblue",
+      "battleAppearance": "flabebeblue",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "669:4",
+    "atlas": "669-white",
+    "mon": {
+      "id": 30106,
+      "rogueSourceId": 669,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "white",
+      "rogueBattleSpecies": "flabebewhite",
+      "battleAppearance": "flabebewhite",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "670:1",
+    "atlas": "670-yellow",
+    "mon": {
+      "id": 670,
+      "rogueSourceId": 670,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "yellow",
+      "rogueBattleSpecies": "floetteyellow",
+      "battleAppearance": "floetteyellow",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "670:2",
+    "atlas": "670-orange",
+    "mon": {
+      "id": 670,
+      "rogueSourceId": 670,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "orange",
+      "rogueBattleSpecies": "floetteorange",
+      "battleAppearance": "floetteorange",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "670:3",
+    "atlas": "670-blue",
+    "mon": {
+      "id": 670,
+      "rogueSourceId": 670,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "blue",
+      "rogueBattleSpecies": "floetteblue",
+      "battleAppearance": "floetteblue",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "670:4",
+    "atlas": "670-white",
+    "mon": {
+      "id": 670,
+      "rogueSourceId": 670,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "white",
+      "rogueBattleSpecies": "floettewhite",
+      "battleAppearance": "floettewhite",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "671:1",
+    "atlas": "671-yellow",
+    "mon": {
+      "id": 671,
+      "rogueSourceId": 671,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "yellow",
+      "rogueBattleSpecies": "florgesyellow",
+      "battleAppearance": "florgesyellow",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "671:2",
+    "atlas": "671-orange",
+    "mon": {
+      "id": 671,
+      "rogueSourceId": 671,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "orange",
+      "rogueBattleSpecies": "florgesorange",
+      "battleAppearance": "florgesorange",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "671:3",
+    "atlas": "671-blue",
+    "mon": {
+      "id": 671,
+      "rogueSourceId": 671,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "blue",
+      "rogueBattleSpecies": "florgesblue",
+      "battleAppearance": "florgesblue",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "671:4",
+    "atlas": "671-white",
+    "mon": {
+      "id": 671,
+      "rogueSourceId": 671,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "white",
+      "rogueBattleSpecies": "florgeswhite",
+      "battleAppearance": "florgeswhite",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:1",
+    "atlas": "676-heart",
+    "mon": {
+      "id": 30115,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "heart",
+      "rogueBattleSpecies": "furfrouheart",
+      "battleAppearance": "furfrouheart",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:2",
+    "atlas": "676-star",
+    "mon": {
+      "id": 30116,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "star",
+      "rogueBattleSpecies": "furfroustar",
+      "battleAppearance": "furfroustar",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:3",
+    "atlas": "676-diamond",
+    "mon": {
+      "id": 30117,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "diamond",
+      "rogueBattleSpecies": "furfroudiamond",
+      "battleAppearance": "furfroudiamond",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:4",
+    "atlas": "676-debutante",
+    "mon": {
+      "id": 30118,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "debutante",
+      "rogueBattleSpecies": "furfroudebutante",
+      "battleAppearance": "furfroudebutante",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:5",
+    "atlas": "676-matron",
+    "mon": {
+      "id": 30119,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "matron",
+      "rogueBattleSpecies": "furfroumatron",
+      "battleAppearance": "furfroumatron",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:6",
+    "atlas": "676-dandy",
+    "mon": {
+      "id": 30120,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "dandy",
+      "rogueBattleSpecies": "furfroudandy",
+      "battleAppearance": "furfroudandy",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:7",
+    "atlas": "676-la-reine",
+    "mon": {
+      "id": 30121,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "la-reine",
+      "rogueBattleSpecies": "furfroulareine",
+      "battleAppearance": "furfroulareine",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:8",
+    "atlas": "676-kabuki",
+    "mon": {
+      "id": 30122,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 8,
+      "rogueFormKey": "kabuki",
+      "rogueBattleSpecies": "furfroukabuki",
+      "battleAppearance": "furfroukabuki",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "676:9",
+    "atlas": "676-pharaoh",
+    "mon": {
+      "id": 30123,
+      "rogueSourceId": 676,
+      "rogueFormIndex": 9,
+      "rogueFormKey": "pharaoh",
+      "rogueBattleSpecies": "furfroupharaoh",
+      "battleAppearance": "furfroupharaoh",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "678:1",
+    "atlas": "678-female",
+    "mon": {
+      "id": 10025,
+      "rogueSourceId": 678,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "female",
+      "rogueBattleSpecies": "meowsticf",
+      "battleAppearance": "meowsticf",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "681:1",
+    "atlas": "681-blade",
+    "mon": {
+      "id": 10026,
+      "rogueSourceId": 681,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "blade",
+      "rogueBattleSpecies": "aegislashblade",
+      "battleAppearance": "aegislashblade",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "710:1",
+    "atlas": "710-small",
+    "mon": {
+      "id": 10027,
+      "rogueSourceId": 710,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "small",
+      "rogueBattleSpecies": "pumpkaboosmall",
+      "battleAppearance": "pumpkaboosmall",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "710:2",
+    "atlas": "710-large",
+    "mon": {
+      "id": 10028,
+      "rogueSourceId": 710,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "large",
+      "rogueBattleSpecies": "pumpkaboolarge",
+      "battleAppearance": "pumpkaboolarge",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "710:3",
+    "atlas": "710-jumbo",
+    "mon": {
+      "id": 10029,
+      "rogueSourceId": 710,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "jumbo",
+      "rogueBattleSpecies": "pumpkaboosuper",
+      "battleAppearance": "pumpkaboosuper",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "711:1",
+    "atlas": "711-small",
+    "mon": {
+      "id": 10030,
+      "rogueSourceId": 711,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "small",
+      "rogueBattleSpecies": "gourgeistsmall",
+      "battleAppearance": "gourgeistsmall",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "711:2",
+    "atlas": "711-large",
+    "mon": {
+      "id": 10031,
+      "rogueSourceId": 711,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "large",
+      "rogueBattleSpecies": "gourgeistlarge",
+      "battleAppearance": "gourgeistlarge",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "711:3",
+    "atlas": "711-jumbo",
+    "mon": {
+      "id": 10032,
+      "rogueSourceId": 711,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "jumbo",
+      "rogueBattleSpecies": "gourgeistsuper",
+      "battleAppearance": "gourgeistsuper",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "718:1",
+    "atlas": "718-10",
+    "mon": {
+      "id": 10181,
+      "rogueSourceId": 718,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "10",
+      "rogueBattleSpecies": "zygarde10",
+      "battleAppearance": "zygarde10",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "718:2",
+    "atlas": "718",
+    "mon": {
+      "id": 10119,
+      "rogueSourceId": 718,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "50-pc",
+      "rogueBattleSpecies": "zygarde",
+      "battleAppearance": "zygarde",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "718:3",
+    "atlas": "718-10",
+    "mon": {
+      "id": 10118,
+      "rogueSourceId": 718,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "10-pc",
+      "rogueBattleSpecies": "zygarde10",
+      "battleAppearance": "zygarde10",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "718:4",
+    "atlas": "718-complete",
+    "mon": {
+      "id": 10120,
+      "rogueSourceId": 718,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "complete",
+      "rogueBattleSpecies": "zygardecomplete",
+      "battleAppearance": "zygardecomplete",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "718:5",
+    "atlas": "718-complete",
+    "mon": {
+      "id": 10118,
+      "rogueSourceId": 718,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "10-complete",
+      "rogueBattleSpecies": "zygardecomplete",
+      "battleAppearance": "zygardecomplete",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "741:1",
+    "atlas": "741-pompom",
+    "mon": {
+      "id": 10123,
+      "rogueSourceId": 741,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "pompom",
+      "rogueBattleSpecies": "oricoriopompom",
+      "battleAppearance": "oricoriopompom",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "741:2",
+    "atlas": "741-pau",
+    "mon": {
+      "id": 10124,
+      "rogueSourceId": 741,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "pau",
+      "rogueBattleSpecies": "oricoriopau",
+      "battleAppearance": "oricoriopau",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "741:3",
+    "atlas": "741-sensu",
+    "mon": {
+      "id": 10125,
+      "rogueSourceId": 741,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "sensu",
+      "rogueBattleSpecies": "oricoriosensu",
+      "battleAppearance": "oricoriosensu",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "744:1",
+    "atlas": "744",
+    "mon": {
+      "id": 10151,
+      "rogueSourceId": 744,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "own-tempo",
+      "rogueBattleSpecies": "rockruffdusk",
+      "battleAppearance": "rockruffdusk",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "745:1",
+    "atlas": "745-midnight",
+    "mon": {
+      "id": 10126,
+      "rogueSourceId": 745,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "midnight",
+      "rogueBattleSpecies": "lycanrocmidnight",
+      "battleAppearance": "lycanrocmidnight",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "745:2",
+    "atlas": "745-dusk",
+    "mon": {
+      "id": 10152,
+      "rogueSourceId": 745,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "dusk",
+      "rogueBattleSpecies": "lycanrocdusk",
+      "battleAppearance": "lycanrocdusk",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "746:1",
+    "atlas": "746-school",
+    "mon": {
+      "id": 10127,
+      "rogueSourceId": 746,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "school",
+      "rogueBattleSpecies": "wishiwashischool",
+      "battleAppearance": "wishiwashischool",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:1",
+    "atlas": "774-orange-meteor",
+    "mon": {
+      "id": 10130,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "orange-meteor",
+      "rogueBattleSpecies": "miniormeteor",
+      "battleAppearance": "miniormeteor",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:2",
+    "atlas": "774-yellow-meteor",
+    "mon": {
+      "id": 10131,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "yellow-meteor",
+      "rogueBattleSpecies": "miniormeteor",
+      "battleAppearance": "miniormeteor",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:3",
+    "atlas": "774-green-meteor",
+    "mon": {
+      "id": 10132,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "green-meteor",
+      "rogueBattleSpecies": "miniormeteor",
+      "battleAppearance": "miniormeteor",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:4",
+    "atlas": "774-blue-meteor",
+    "mon": {
+      "id": 10133,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "blue-meteor",
+      "rogueBattleSpecies": "miniormeteor",
+      "battleAppearance": "miniormeteor",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:5",
+    "atlas": "774-indigo-meteor",
+    "mon": {
+      "id": 10134,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "indigo-meteor",
+      "rogueBattleSpecies": "miniormeteor",
+      "battleAppearance": "miniormeteor",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:6",
+    "atlas": "774-violet-meteor",
+    "mon": {
+      "id": 10135,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "violet-meteor",
+      "rogueBattleSpecies": "miniormeteor",
+      "battleAppearance": "miniormeteor",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:7",
+    "atlas": "774-red",
+    "mon": {
+      "id": 10136,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "red",
+      "rogueBattleSpecies": "minior",
+      "battleAppearance": "minior",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:8",
+    "atlas": "774-orange",
+    "mon": {
+      "id": 10137,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 8,
+      "rogueFormKey": "orange",
+      "rogueBattleSpecies": "miniororange",
+      "battleAppearance": "miniororange",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:9",
+    "atlas": "774-yellow",
+    "mon": {
+      "id": 10138,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 9,
+      "rogueFormKey": "yellow",
+      "rogueBattleSpecies": "minioryellow",
+      "battleAppearance": "minioryellow",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:10",
+    "atlas": "774-green",
+    "mon": {
+      "id": 10139,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 10,
+      "rogueFormKey": "green",
+      "rogueBattleSpecies": "miniorgreen",
+      "battleAppearance": "miniorgreen",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:11",
+    "atlas": "774-blue",
+    "mon": {
+      "id": 10140,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 11,
+      "rogueFormKey": "blue",
+      "rogueBattleSpecies": "miniorblue",
+      "battleAppearance": "miniorblue",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:12",
+    "atlas": "774-indigo",
+    "mon": {
+      "id": 10141,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 12,
+      "rogueFormKey": "indigo",
+      "rogueBattleSpecies": "miniorindigo",
+      "battleAppearance": "miniorindigo",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "774:13",
+    "atlas": "774-violet",
+    "mon": {
+      "id": 10142,
+      "rogueSourceId": 774,
+      "rogueFormIndex": 13,
+      "rogueFormKey": "violet",
+      "rogueBattleSpecies": "miniorviolet",
+      "battleAppearance": "miniorviolet",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "778:1",
+    "atlas": "778-busted",
+    "mon": {
+      "id": 10143,
+      "rogueSourceId": 778,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "busted",
+      "rogueBattleSpecies": "mimikyubusted",
+      "battleAppearance": "mimikyubusted",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "800:1",
+    "atlas": "800-dusk-mane",
+    "mon": {
+      "id": 800,
+      "rogueSourceId": 800,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "dusk-mane",
+      "rogueBattleSpecies": "necrozmaduskmane",
+      "battleAppearance": "necrozmaduskmane",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "800:2",
+    "atlas": "800-dawn-wings",
+    "mon": {
+      "id": 800,
+      "rogueSourceId": 800,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "dawn-wings",
+      "rogueBattleSpecies": "necrozmadawnwings",
+      "battleAppearance": "necrozmadawnwings",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "801:1",
+    "atlas": "801-original",
+    "mon": {
+      "id": 10147,
+      "rogueSourceId": 801,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "original",
+      "rogueBattleSpecies": "magearnaoriginal",
+      "battleAppearance": "magearnaoriginal",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "845:1",
+    "atlas": "845-gulping",
+    "mon": {
+      "id": 10182,
+      "rogueSourceId": 845,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "gulping",
+      "rogueBattleSpecies": "cramorantgulping",
+      "battleAppearance": "cramorantgulping",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "845:2",
+    "atlas": "845-gorging",
+    "mon": {
+      "id": 10183,
+      "rogueSourceId": 845,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "gorging",
+      "rogueBattleSpecies": "cramorantgorging",
+      "battleAppearance": "cramorantgorging",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "849:1",
+    "atlas": "849-lowkey",
+    "mon": {
+      "id": 10184,
+      "rogueSourceId": 849,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "lowkey",
+      "rogueBattleSpecies": "toxtricitylowkey",
+      "battleAppearance": "toxtricitylowkey",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "854:1",
+    "atlas": "854",
+    "mon": {
+      "id": 30344,
+      "rogueSourceId": 854,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "antique",
+      "rogueBattleSpecies": "sinisteaantique",
+      "battleAppearance": "sinisteaantique",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "855:1",
+    "atlas": "855",
+    "mon": {
+      "id": 855,
+      "rogueSourceId": 855,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "antique",
+      "rogueBattleSpecies": "polteageistantique",
+      "battleAppearance": "polteageistantique",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "869:1",
+    "atlas": "869-ruby-cream",
+    "mon": {
+      "id": 869,
+      "rogueSourceId": 869,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "ruby-cream",
+      "rogueBattleSpecies": "alcremierubycream",
+      "battleAppearance": "alcremierubycream",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "869:2",
+    "atlas": "869-matcha-cream",
+    "mon": {
+      "id": 869,
+      "rogueSourceId": 869,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "matcha-cream",
+      "rogueBattleSpecies": "alcremiematchacream",
+      "battleAppearance": "alcremiematchacream",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "869:3",
+    "atlas": "869-mint-cream",
+    "mon": {
+      "id": 869,
+      "rogueSourceId": 869,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "mint-cream",
+      "rogueBattleSpecies": "alcremiemintcream",
+      "battleAppearance": "alcremiemintcream",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "869:4",
+    "atlas": "869-lemon-cream",
+    "mon": {
+      "id": 869,
+      "rogueSourceId": 869,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "lemon-cream",
+      "rogueBattleSpecies": "alcremielemoncream",
+      "battleAppearance": "alcremielemoncream",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "869:5",
+    "atlas": "869-salted-cream",
+    "mon": {
+      "id": 869,
+      "rogueSourceId": 869,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "salted-cream",
+      "rogueBattleSpecies": "alcremiesaltedcream",
+      "battleAppearance": "alcremiesaltedcream",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "869:6",
+    "atlas": "869-ruby-swirl",
+    "mon": {
+      "id": 869,
+      "rogueSourceId": 869,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "ruby-swirl",
+      "rogueBattleSpecies": "alcremierubyswirl",
+      "battleAppearance": "alcremierubyswirl",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "869:7",
+    "atlas": "869-caramel-swirl",
+    "mon": {
+      "id": 869,
+      "rogueSourceId": 869,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "caramel-swirl",
+      "rogueBattleSpecies": "alcremiecaramelswirl",
+      "battleAppearance": "alcremiecaramelswirl",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "869:8",
+    "atlas": "869-rainbow-swirl",
+    "mon": {
+      "id": 869,
+      "rogueSourceId": 869,
+      "rogueFormIndex": 8,
+      "rogueFormKey": "rainbow-swirl",
+      "rogueBattleSpecies": "alcremierainbowswirl",
+      "battleAppearance": "alcremierainbowswirl",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "875:1",
+    "atlas": "875-no-ice",
+    "mon": {
+      "id": 10185,
+      "rogueSourceId": 875,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "no-ice",
+      "rogueBattleSpecies": "eiscuenoice",
+      "battleAppearance": "eiscuenoice",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "876:1",
+    "atlas": "876-female",
+    "mon": {
+      "id": 10186,
+      "rogueSourceId": 876,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "female",
+      "rogueBattleSpecies": "indeedeef",
+      "battleAppearance": "indeedeef",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "877:1",
+    "atlas": "877-hangry",
+    "mon": {
+      "id": 10187,
+      "rogueSourceId": 877,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "hangry",
+      "rogueBattleSpecies": "morpekohangry",
+      "battleAppearance": "morpekohangry",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "892:1",
+    "atlas": "892-rapid-strike",
+    "mon": {
+      "id": 892,
+      "rogueSourceId": 892,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "rapid-strike",
+      "rogueBattleSpecies": "urshifurapidstrike",
+      "battleAppearance": "urshifurapidstrike",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "893:1",
+    "atlas": "893-dada",
+    "mon": {
+      "id": 10192,
+      "rogueSourceId": 893,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "dada",
+      "rogueBattleSpecies": "zarudedada",
+      "battleAppearance": "zarudedada",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "898:1",
+    "atlas": "898-ice",
+    "mon": {
+      "id": 898,
+      "rogueSourceId": 898,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "ice",
+      "rogueBattleSpecies": "calyrexice",
+      "battleAppearance": "calyrexice",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "898:2",
+    "atlas": "898-shadow",
+    "mon": {
+      "id": 898,
+      "rogueSourceId": 898,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "shadow",
+      "rogueBattleSpecies": "calyrexshadow",
+      "battleAppearance": "calyrexshadow",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "902:1",
+    "atlas": "902-female",
+    "mon": {
+      "id": 10248,
+      "rogueSourceId": 902,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "female",
+      "rogueBattleSpecies": "basculegionf",
+      "battleAppearance": "basculegionf",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "916:1",
+    "atlas": "916-female",
+    "mon": {
+      "id": 10254,
+      "rogueSourceId": 916,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "female",
+      "rogueBattleSpecies": "oinkolognef",
+      "battleAppearance": "oinkolognef",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "925:1",
+    "atlas": "925-three",
+    "mon": {
+      "id": 10257,
+      "rogueSourceId": 925,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "three",
+      "rogueBattleSpecies": "maushold",
+      "battleAppearance": "maushold",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "931:1",
+    "atlas": "931-blue-plumage",
+    "mon": {
+      "id": 10260,
+      "rogueSourceId": 931,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "blue-plumage",
+      "rogueBattleSpecies": "squawkabillyblue",
+      "battleAppearance": "squawkabillyblue",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "931:2",
+    "atlas": "931-yellow-plumage",
+    "mon": {
+      "id": 10261,
+      "rogueSourceId": 931,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "yellow-plumage",
+      "rogueBattleSpecies": "squawkabillyyellow",
+      "battleAppearance": "squawkabillyyellow",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "931:3",
+    "atlas": "931-white-plumage",
+    "mon": {
+      "id": 10262,
+      "rogueSourceId": 931,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "white-plumage",
+      "rogueBattleSpecies": "squawkabillywhite",
+      "battleAppearance": "squawkabillywhite",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "964:1",
+    "atlas": "964-hero",
+    "mon": {
+      "id": 10256,
+      "rogueSourceId": 964,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "hero",
+      "rogueBattleSpecies": "palafinhero",
+      "battleAppearance": "palafinhero",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "978:1",
+    "atlas": "978-droopy",
+    "mon": {
+      "id": 10258,
+      "rogueSourceId": 978,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "droopy",
+      "rogueBattleSpecies": "tatsugiridroopy",
+      "battleAppearance": "tatsugiridroopy",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "978:2",
+    "atlas": "978-stretchy",
+    "mon": {
+      "id": 10259,
+      "rogueSourceId": 978,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "stretchy",
+      "rogueBattleSpecies": "tatsugiristretchy",
+      "battleAppearance": "tatsugiristretchy",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "982:1",
+    "atlas": "982-three-segment",
+    "mon": {
+      "id": 10255,
+      "rogueSourceId": 982,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "three-segment",
+      "rogueBattleSpecies": "dudunsparcethreesegment",
+      "battleAppearance": "dudunsparcethreesegment",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "999:1",
+    "atlas": "999-roaming",
+    "mon": {
+      "id": 10263,
+      "rogueSourceId": 999,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "roaming",
+      "rogueBattleSpecies": "gimmighoulroaming",
+      "battleAppearance": "gimmighoulroaming",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1012:1",
+    "atlas": "1012-counterfeit",
+    "mon": {
+      "id": 30447,
+      "rogueSourceId": 1012,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "artisan",
+      "rogueBattleSpecies": "poltchageistartisan",
+      "battleAppearance": "poltchageistartisan",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1013:1",
+    "atlas": "1013-unremarkable",
+    "mon": {
+      "id": 1013,
+      "rogueSourceId": 1013,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "masterpiece",
+      "rogueBattleSpecies": "sinistchamasterpiece",
+      "battleAppearance": "sinistchamasterpiece",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1017:1",
+    "atlas": "1017-wellspring-mask",
+    "mon": {
+      "id": 10273,
+      "rogueSourceId": 1017,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "wellspring-mask",
+      "rogueBattleSpecies": "ogerponwellspring",
+      "battleAppearance": "ogerponwellspring",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1017:2",
+    "atlas": "1017-hearthflame-mask",
+    "mon": {
+      "id": 10274,
+      "rogueSourceId": 1017,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "hearthflame-mask",
+      "rogueBattleSpecies": "ogerponhearthflame",
+      "battleAppearance": "ogerponhearthflame",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1017:3",
+    "atlas": "1017-cornerstone-mask",
+    "mon": {
+      "id": 10275,
+      "rogueSourceId": 1017,
+      "rogueFormIndex": 3,
+      "rogueFormKey": "cornerstone-mask",
+      "rogueBattleSpecies": "ogerponcornerstone",
+      "battleAppearance": "ogerponcornerstone",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "2658:1",
+    "atlas": "2658-ash",
+    "mon": {
+      "id": 10117,
+      "rogueSourceId": 2658,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "ash",
+      "rogueBattleSpecies": "greninjaash",
+      "battleAppearance": "greninjaash",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "4555:1",
+    "atlas": "4555-zen",
+    "mon": {
+      "id": 10178,
+      "rogueSourceId": 4555,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "zen",
+      "rogueBattleSpecies": "darmanitangalarzen",
+      "battleAppearance": "darmanitangalarzen",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "8128:1",
+    "atlas": "8128-blaze",
+    "mon": {
+      "id": 10251,
+      "rogueSourceId": 8128,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "blaze",
+      "rogueBattleSpecies": "taurospaldeablaze",
+      "battleAppearance": "taurospaldeablaze",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "8128:2",
+    "atlas": "8128-aqua",
+    "mon": {
+      "id": 10252,
+      "rogueSourceId": 8128,
+      "rogueFormIndex": 2,
+      "rogueFormKey": "aqua",
+      "rogueBattleSpecies": "taurospaldeaaqua",
+      "battleAppearance": "taurospaldeaaqua",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  }
+]

@@ -1,3 +1,4 @@
 # Preserve pinned source asset bytes used by provenance/hash checks.
-public/game/pokerogue/** -text whitespace=cr-at-eol
+# Upstream atlas JSON also contains spaces before CRLF; keep hash-exact bytes.
+public/game/pokerogue/** -text -whitespace
 data/rogue-asset-attribution-REUSE.toml -text -whitespace

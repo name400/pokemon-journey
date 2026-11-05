@@ -6,8 +6,8 @@
     {
       "id": "abilityshield",
       "gen": 9,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onSetAbility"
       ]
@@ -61,8 +61,8 @@
     {
       "id": "adamantorb",
       "gen": 4,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onBasePower"
       ]
@@ -418,8 +418,8 @@
     {
       "id": "boosterenergy",
       "gen": 9,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onStart",
         "onUpdate",
@@ -1068,8 +1068,8 @@
     {
       "id": "ejectpack",
       "gen": 8,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onAfterBoost",
         "onAnySwitchIn",
@@ -2121,8 +2121,8 @@
     {
       "id": "lightball",
       "gen": 2,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onModifyAtk",
         "onModifySpA"
@@ -2241,8 +2241,8 @@
     {
       "id": "lustrousorb",
       "gen": 4,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onBasePower"
       ]
@@ -2560,8 +2560,8 @@
     {
       "id": "mirrorherb",
       "gen": 9,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onFoeAfterBoost",
         "onAnySwitchIn",
@@ -3648,8 +3648,8 @@
     {
       "id": "souldew",
       "gen": 3,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onBasePower"
       ]
@@ -4816,8 +4816,8 @@
     {
       "id": "whiteherb",
       "gen": 3,
-      "allowed": false,
-      "reason": "species-or-form-hook-needs-review",
+      "allowed": true,
+      "reason": "reviewed-general-hook",
       "hooks": [
         "onStart",
         "onAnySwitchIn",
