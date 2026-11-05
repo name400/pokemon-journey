@@ -741,3 +741,13 @@ source registry 자동역방향 규칙의129지원경로와 known 폼도구98키
 validated-v1 도전의 이상한 꿈은 새 지속폼 융합을 처리한다. 특히 Gmax융합은 기존 독립Gmax 검증을 유지한 채 DNA/form/HP 증명으로 허용한다. transform은 새 비융합 파티와 폼도구 제외, battle/leave는 기존융합과 도구를 유지한다. 원본비활성콘텐츠·탐험·Sites는 건드리지 않는다. QA와 정확한 수치·경계는 `DNA_PERSISTENT_FORMS_QA_20261105.md`, 최신잔량은 `REMAINING_IMPLEMENTATION_CURRENT.md`. stash는 복구용 원본으로 유지하되 재apply하면 완료변경을 중복 적용하므로 하지 않는다.
 
 지속 폼 확장 최종 검증: 전체 **745/745**(167.2초), 마지막 집중 **16/16**(4.9초), 타입·production빌드 통과. 실제 파티 화면4크기×4분류 **16/16**(변신/해제/reload/분리), 브라우저 오류·가로 overflow0. 변경 백엔드/테스트/harness 린트 오류0·기존경고2, diff 검사 통과. `/tmp/persistent-full.log`, `/tmp/persistent-final-focus.log`, `/tmp/persistent-type.log`, `/tmp/persistent-build.log`, `/tmp/persistent-browser.log`, `/tmp/persistent-lint.log`. 실계정·실기기·실제 자산·운영 배포 검증과는 구분한다. 승인 브랜치에 일반push 후 원격 SHA를 확인한다.
+
+### 2026-11-05 임시 다이맥스 융합·분리 HP 후속
+
+기존native3턴다이맥스 융합이 첫 턴 이후 DNA검증에서 거부돼 챌린지 다음턴/복구가 막히는 결함을 실제제어기로 재현했다. normalizeClassicTransientDynamax는 HP/배율/혼합폼을 확인한 사본으로 DNA증명을 검증하며 실제전투의남은턴/HP는 유지한다. 새융합·분리·폼변경은 선택개체의 사본을 먼저 정상화하고 held효과를 이전한다. 자연꿈출현도 정상화사본을 사용해 세분기로 복구한다. 원본 item-Gmax와 기존native3턴기능은 구분한다.
+
+추가로 원본 clearFusionSpecies→calculateStats의 HP증가분 보정을 previewClassicDnaUnsplice에 적용했다. 최대HP증가/감소·WG1HP·기절을 검사하고 기증자는 복원하지 않는다. 근거/확정결과는 DNA_TRANSIENT_DYNAMAX_QA_20261105.md, 최신잔량은 REMAINING_IMPLEMENTATION_CURRENT.md.
+
+읽기조사상 남은Mega8폼의 native자료 자체는 있다. Magearna/Tatsugiri는 명명순서 alias가 다르고, Mega-Z와 Meowstic성별Mega는 isMega플래그가 비어 있다. 매핑+로컬종분류+성별/이미지/저장 어댑터가 다음범위이며 전역Dex는 수정하지 않았다. Zygarde50-pc/10-pc→Complete/10-Complete→Mega와 자동변경·다른진화/도구/이벤트는 계속남았다. Sites는 변경하지 않는다.
+
+임시 다이맥스/분리 HP 최종 확정: 전체 **756/756**(156.7초), 집중 **42/42**(7.1초), 새11테스트 포함. 타입·production빌드·변경 린트(오류/경고0)·diff 검사 통과. 근거는 `/tmp/dna-dmax-release-full.log`, `/tmp/dna-dmax-final-focus.log`, `/tmp/dna-dmax-release-type.log`, `/tmp/dna-dmax-release-build.log`, `/tmp/dna-dmax-release-lint.log`. 새 실계정·실기기·브라우저·운영 배포 검증은 하지 않았다. 승인된 브랜치에 일반push 후 원격 SHA를 확인한다.
