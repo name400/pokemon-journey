@@ -6,6 +6,7 @@ From the repository root:
 npx vite --config tests/browser/ui-readability/vite.config.mjs --host 127.0.0.1 --port 5222 --strictPort
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/check.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/beast-and-rewards.mjs
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/touch-move-info.mjs
 ```
 
 `CHROMIUM_PATH` defaults to `/usr/bin/chromium`; `UI_TEST_URL` defaults to localhost5222.
@@ -29,3 +30,9 @@ Local Chromium tests do not replace physical-device, real-artwork or production 
 The second script uses long descriptions at five mobile sizes and one PC size.
 It checks free reward text/tier and paid-service price containment, real revive
 purchase, Beast Ball reward acquisition, ball selection/capture and reload.
+
+The touch script starts each of four move cards from a fresh page, twice, at
+375/390/430px, mobile landscape and desktop. It uses real touch taps rather
+than keyboard-only activation, checks the description stays open and toggles,
+and verifies no move POST, PP or save changes. Desktop keyboard and mouse
+hover/leave behavior are also checked.

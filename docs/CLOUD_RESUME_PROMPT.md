@@ -793,3 +793,17 @@ load는기본GET이며서버는saved.data.classic.selection일때catalog를자�
 모바일보상76px고정높이/서비스고정행으로설명과등급·가격이넘치는것을390폭에서재현했다. 680이하2열/내용기반높이/줄바꿈/별도가격행과viewport기반대상팝업을적용했다. lazy CSS와의우선순위를명시했다. PC는유지한다. 실제6크기(320/360/390/430/640landscape/1280PC)의부활구매·무료울트라볼·포획·reload가통과했다. 이미지다운로드는stub검사와구분한다.
 
 일반전체779/779(167.7초),Worker779/779(157.2초),신규집중6/6,앞선UI11경로재검사,타입·빌드·diff통과. 변경백엔드/테스트린트0오류·기존경고2. 실제로컬productionWorker도7요청전부200(보상64ms/포획39ms/복구/새도전0개)이다. 근거 BEAST_BALL_AND_MOBILE_REWARDS_QA_20261105.md. 지속PC끊김은미재현,운영마자용409원인은미확정이라는정정을유지한다. Sites는사용자가관리하며직접저장·배포하지않는다. 다음실제구현은지가르데중간형/자동변형과복잡한진화/도구/이벤트/전투,새메가이미지다.
+
+### 2026-11-05 지가르데 중간형·자동 변형과 모바일 정보 터치
+
+ee4c0e0 다음 단계로 지가르데10/50-pc/10-pc/complete/10-complete의 양쪽 DNA 보상·전투·저장·분리를 연결했다. 일반68+지속139=207폼 항목이고 known 폼 도구103키는 그대로다. source의10-complete(index5)는 native zygardecomplete를 공유하지만 source index와10%출신은 보존한다. Zygardite forward는 rogueZygardeMegaOrigin을 기록해 standalone/융합·codec 후 같은 Complete로 해제한다. 출신 필드 없는 legacy Mega는 기존50%Complete 역변신을 유지한다. 새 지가르데 폼은 원본 Pokémon ID로 저장한다. 원본 Mega 출신 조건 TODO가 남아 있으므로 구별 해제는 현재 프로젝트의 데이터 보존 정책이며 원본 왕복 동등성을 증명한 것으로 말하지 않는다.
+
+스웜체인지는 battle-local native ability로 연결해 검증된 비융합 지가르데의 등장/턴 종료 반HP 이하 변형과 source 최대HP 증가분을 적용한다. 기절·새전투·연속야생 시작에 출신 PC폼으로 돌아가며 HP0을 유지하고 감소는 최대HP로 자른다. 임시 다이맥스의 HP 배율과 새 트레이너 경계 정상화를 구분한다. 원본 NoFusionAbility 때문에 융합 중에는 발동하지 않는다. p.m의 일시 폼 patch를 sourceStats와 output이 반영한 뒤 snapshot 전에 제거해 다음 요청에서 출신/수치가 되돌아가지 않는다.
+
+이전 native 자동 변형이 Complete 외형/HP만 저장하고 source PC형을 남긴 정확한 signature도 확인했다. 검증된 source ID/능력치/현재특성·sprite·계산 Complete 최대HP와 살아있는 정상범위 HP가 모두 맞을 때만 active slot과 대응 combat member를 복구한다. 저장 HP/도구/기술/다른 슬롯은 보존한다. 불명확·다이맥스 legacy 기록은 추정하지 않는다. 바다/화산은68일반폼의 source/native 별칭을 허용하며 donor palette 메타데이터도 검증된 원본/직전 ID 별칭을 생성한다. 실제 이미지 확인과 구분한다.
+
+독립 QA의 모바일1·2·4번i 닫힘을375/390/430px에서 재현했다. touch 뒤 호환 mouse 이벤트가 wrapper의 mouse-leave를 실행했다. pointer enter/leave의 mouse 전용 호버로 바꿔 touch click 토글·기존 blur/키보드를 보존한다. 새 touch-move-info 브라우저 스크립트는4버튼×2회×5크기40경로를 실제tap/PC Enter·hover로 검사하고 move POST0/PP/저장 불변을 확인했다. 이전 키보드-only 검사는 이 경계를 놓쳤으며 실기기는 별도다.
+
+마지막 코드 일반 전체790/790(181.2초), 지가르데11+팔레트9 집중20/20, touch40/40·기존UI11·울트라볼/보상6경로 재검사, 타입·빌드·diff를 통과했다. 변경 backend/test lint 오류0·기존 classicDancingEligible 경고1이고 BattlePanel은 기존36오류/10경고 그대로다. 초기 전체의 팔레트 metadata drift1개를 수정한 뒤 마지막 코드로 전체를 재실행했다. Worker 정책 전체도790/790(157.2초) 통과했다(`/tmp/zygarde-release-worker.log`). 마지막 코드 뒤 문서만 갱신했고 승인된 브랜치에 일반 push 후 원격 SHA를 확인한다.
+
+다음 구현은 다른 자동 폼·복잡한 진화/추가 개체·도구/이벤트/전투 조합과 신규 메가8폼 실제 자산이다. PC 지속끊김과 운영 마자용409는 이번 수정으로 해결/원인을 확정하지 않는다. 자세한 범위와 근거는 ZYGARDE_AND_TOUCH_INFO_QA_20261105.md, 잔량은 REMAINING_IMPLEMENTATION_CURRENT.md. Sites는 사용자 관리이며 저장/배포하지 않는다. 막히면 사용자 승인대로 Astra High 분석을 고려하되 이번에는 문제를 해결해 모델 전환을 요청하지 않았다.
