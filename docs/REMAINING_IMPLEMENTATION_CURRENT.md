@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 용해액·거품·눈싸라기·회오리의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_SECONDARY_FOUR_FIRST_QA_20261105.md](MULTILENS_SECONDARY_FOUR_FIRST_QA_20261105.md) 참조.
+
 후속: 신규 도전에서 분화·해수스파우팅·드래곤에너지의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_HP_SPREAD_FIRST_QA_20261105.md](MULTILENS_HP_SPREAD_FIRST_QA_20261105.md) 참조.
 
 후속: 신규 도전에서 차밍보이스·근원의파동·단애의칼·블리자드랜스의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_FOUR_SPREAD_FIRST_QA_20261105.md](MULTILENS_FOUR_SPREAD_FIRST_QA_20261105.md) 참조.
