@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 불태우기가 플레이어와 상대의 이전 가능한 포켓로그식 열매를 각각 한 개 제거하고, 전투·저장 수량을 동기화한다. [INCINERATE_SOURCE_BERRIES_QA_20261105.md](INCINERATE_SOURCE_BERRIES_QA_20261105.md) 참조.
+
 후속: 신규 도전의 탁쳐서떨구기가 이전 가능한 소지 효과에 위력 보너스를 적용하고 대상 효과 하나를 제거한다. 원본의 플레이어 소지품 보호, 점착·폼 도구·마음의물방울·더블 전투를 구분한다. [KNOCK_OFF_SOURCE_ITEMS_QA_20261105.md](KNOCK_OFF_SOURCE_ITEMS_QA_20261105.md) 참조.
 
 후속: 폴터가이스트의 전투 기록에 소지 효과의 한국어 이름을 표시하고 빗나감보다 먼저 안내한다. 녹슨검·녹슨방패도 이전 불가 폼 도구로 구분한다. [POLTERGEIST_ITEM_DISPLAY_QA_20261105.md](POLTERGEIST_ITEM_DISPLAY_QA_20261105.md) 참조.
