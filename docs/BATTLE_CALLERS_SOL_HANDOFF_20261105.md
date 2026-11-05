@@ -25,3 +25,7 @@
 5. **검증만 남은 사항:** 이번 범위의 실기기/실계정과 배포 후 검증. 원격 운영409와 PC지연의 원인/해결을 이 전투 규칙 결과로 단정하지 않는다.
 
 상세 근거는 `STELLAR_DELAYED_CALLED_QA_20261105.md`, `NATURE_POWER_AND_CALLED_MOVE_DATA_QA_20261105.md`, `METRONOME_SOURCE_POOL_QA_20261105.md`, `CALLED_MOVE_RESTRICTIONS_QA_20261105.md`, `MIRROR_MOVE_INSTRUCT_QA_20261105.md`, `CALLED_CHARGE_FOLLOWUP_QA_20261105.md`에 있다. 작업을 이어갈 때 기존 flag 없는 저장·다른 슬롯·탐험·재화를 보존하고 공유 파일 소유를 root와 조율한다.
+
+## 후속 검증
+
+이후 FOLLOW_UP의 풀죽음·헤롱헤롱·사슬묶기·게으름(일반/패시브)·도발·봉인 차이를 실제 호출 후 충전과 codec 복구로 재현해 수정했다. 직접 선택한 충전 기술은 기존 판정을 유지하고 회복봉인·목막힘·중력은 기존 제한을 유지한다. 관련 일반·Worker 각 96/96, 타입 검사·빌드 통과. 전체 대상 소실·특수 폼·원본 난수 순서 동등성은 여전히 미완성이다.
