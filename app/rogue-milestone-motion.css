@@ -1,0 +1,23 @@
+/* Short, nonblocking presentation. Gameplay and acknowledgements never wait on motion. */
+.rc-shell .rc-evolution-result{position:relative;isolation:isolate;overflow:hidden;gap:clamp(12px,2vw,24px);background:radial-gradient(ellipse at 22% 45%,#5b7880,#2a4852 70%)}
+.rc-shell .rc-evolution-result .rc-evolution-art{position:relative;isolation:isolate;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8px;flex:none;width:clamp(200px,24vw,300px);min-height:150px}
+.rc-shell .rc-evolution-art img{position:relative;z-index:1;width:clamp(80px,10vw,120px);height:clamp(80px,10vw,120px)}
+.rc-shell .rc-evolution-art .rc-evolve-before{opacity:.55;animation:rc-evolution-before .8s ease-out both}
+.rc-shell .rc-evolution-art .rc-evolve-after{animation:rc-evolution-reveal .95s cubic-bezier(.16,.8,.3,1) both}
+.rc-evolution-ring{position:absolute;z-index:0;left:48%;top:10%;width:48%;aspect-ratio:1;border:3px solid #ffebaa;border-radius:50%;background:radial-gradient(circle,#fff4c144,transparent 65%);animation:rc-evolution-ring 1s ease-out both;pointer-events:none}
+.rc-evolution-sparks{position:absolute;z-index:2;inset:8% -3% auto 45%;color:#ffe499;font-size:25px;animation:rc-evolution-sparks 1s ease-out both;pointer-events:none}
+.rc-evolution-arrow{color:#f6d478;font-size:24px}.rc-evolution-copy{min-width:0}.rc-evolution-copy>small{color:#f8dd93;letter-spacing:.14em;font-size:11px}.rc-evolution-copy>b{line-height:1.5;overflow-wrap:anywhere}
+.rc-shell .rc-evolution-result[data-motion-skipped=true] .rc-evolution-art *{animation:none!important}.rc-evolution-result[data-motion-skipped=true] .rc-evolution-ring,.rc-evolution-result[data-motion-skipped=true] .rc-evolution-sparks{display:none}
+.rc-content[data-event-stage]>.rc-decision{animation:rc-event-choose .28s ease-out both}
+.rc-content[data-event-stage=confirm]>.rc-decision{animation-name:rc-event-confirm}
+.rc-content[data-event-stage=resolved]>.rc-decision{animation-name:rc-event-result}
+.rc-content[data-event-stage]>.rc-decision>.rogue-eyebrow{display:inline-block;letter-spacing:.14em;color:#f4dc9d}
+@keyframes rc-evolution-before{from{opacity:1;transform:scale(1)}to{opacity:.55;transform:scale(.94)}}
+@keyframes rc-evolution-reveal{0%{opacity:.15;transform:scale(.75)}55%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes rc-evolution-ring{0%{opacity:0;transform:scale(.55)}35%{opacity:.9}100%{opacity:0;transform:scale(1.45)}}
+@keyframes rc-evolution-sparks{0%,25%{opacity:0;transform:translateY(12px) scale(.7)}55%{opacity:1}100%{opacity:0;transform:translateY(-12px) scale(1.1)}}
+@keyframes rc-event-choose{from{opacity:.5;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes rc-event-confirm{from{opacity:.5;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes rc-event-result{from{opacity:.5;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+@media(max-width:600px){.rc-shell .rc-evolution-result{padding:12px;gap:8px}.rc-shell .rc-evolution-result .rc-evolution-art{min-height:120px}.rc-evolution-copy{width:100%}.rc-evolution-copy .rc-decision-buttons{justify-content:center}}
+@media(prefers-reduced-motion:reduce){.rc-shell .rc-evolution-art *,.rc-content[data-event-stage]>.rc-decision{animation:none!important}.rc-evolution-ring,.rc-evolution-sparks,.rc-evolution-skip{display:none!important}}

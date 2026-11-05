@@ -807,3 +807,35 @@ ee4c0e0 다음 단계로 지가르데10/50-pc/10-pc/complete/10-complete의 양�
 마지막 코드 일반 전체790/790(181.2초), 지가르데11+팔레트9 집중20/20, touch40/40·기존UI11·울트라볼/보상6경로 재검사, 타입·빌드·diff를 통과했다. 변경 backend/test lint 오류0·기존 classicDancingEligible 경고1이고 BattlePanel은 기존36오류/10경고 그대로다. 초기 전체의 팔레트 metadata drift1개를 수정한 뒤 마지막 코드로 전체를 재실행했다. Worker 정책 전체도790/790(157.2초) 통과했다(`/tmp/zygarde-release-worker.log`). 마지막 코드 뒤 문서만 갱신했고 승인된 브랜치에 일반 push 후 원격 SHA를 확인한다.
 
 다음 구현은 다른 자동 폼·복잡한 진화/추가 개체·도구/이벤트/전투 조합과 신규 메가8폼 실제 자산이다. PC 지속끊김과 운영 마자용409는 이번 수정으로 해결/원인을 확정하지 않는다. 자세한 범위와 근거는 ZYGARDE_AND_TOUCH_INFO_QA_20261105.md, 잔량은 REMAINING_IMPLEMENTATION_CURRENT.md. Sites는 사용자 관리이며 저장/배포하지 않는다. 막히면 사용자 승인대로 Astra High 분석을 고려하되 이번에는 문제를 해결해 모델 전환을 요청하지 않았다.
+
+### 2026-11-05 POST 409 재조사와 저장 경계
+
+1dcfdce 뒤 API를 조사했다. 운영 v55의 UTC11:36:05.390 POST409 뒤 GET200/다음 POST200을 읽기 조회로 확인했지만 요청·응답 본문이 없어 원인은 미확정이다. content-length84는 요청헤더다. act의 모든 실패가GET을 호출하므로 이 순서만으로 저장충돌을 확정하지 않는다. 동일탭act의ref lock은 보통 중복클릭을 막으며 실제싱글UI 마자용flat move 정정을 유지한다. PC지속끊김도 새재현·해결로 주장하지 않는다.
+
+별개로 실제route/SQLite의 DTO실패주입에서 기존코드는409를 반환하면서 저장revision0→1을 반영하는 결함을 재현했다. 이제DTO/JSON응답을 저장전에 준비해 이실패의저장을 막는다. malformed400, revision/픽업CAS409, 게임plainError409 ACTION_FAILED, read/encode/write/DTO·TypeError500으로구분하고 요청ID·단계·enum·revision·저장결과만진단한다. 원시요청·계정·저장·오류message/stack은로그하지 않는다. ACTION_FAILED는게임규칙거부와내부plainError가구분되지 않은것이며 입력잘못으로단정하지 않는다. DB통신예외는커밋여부unknown으로남기고POST자동재전송하지 않는다.
+
+표준/Worker집중9/9와타입통과,신규helper/test린트0,route기존any3오류유지. 실제SQLite동시CAS·랭킹guard·DTO저장보존·전투codec를검사했다. 통합전체/빌드는최종부모기록을따른다. API_FAILURE_DIAGNOSTICS_QA_20261105.md참조. 운영원인확정에는수정배포후error/code/requestId및동일요청로그가필요하며Sites·운영저장은변경하지않는다.
+
+### 2026-11-05 오브 없는 포획 개체 테라스탈
+
+사용자의50층 물테라고라파덕보고후,기존HEAD에서49층포획→50층연속야생→교체경로를재현했다. tools{}·teraChargedfalse인데선택노출과실제terastallizedWater가발생했다. 최초생성만도구검사하고appendOwnedPokemon/native기본권한과restore가검사를빠뜨린것이코드원인이다. 운영계정의정확한과거이력은열어확인하지않았다.
+
+공통prepare/restore/create에서오브·충전·같은진영사용·특수폼을검사하고combat에도정책을저장한다. 실제classicGameView는현재run도구를전달해구형snapshot권한도차단한다. 자동합류·6파티교체·더블·충전소모·오브중간획득·정상사용과codec/연속야생유지·야생적/지정트레이너·Mega/임시다이맥스검사를추가했다. 과거불법테라의피해/보상/이미변신한상태는소급삭제하지않으므로현재왕관이즉시사라진다고보장하지않는다.
+
+테라신규8+API9+기존dmax/Z2=집중19/19,Worker정책19/19. 엔진/신규테스트린트0,classic-game기존경고3. 통합타입첫실행은동시UI작업layout.tsx unknown1건으로실패해부모에공유했으며최종통합검사기록을따른다. TERA_ORB_CAPTURE_ACCESS_QA_20261105.md참조. Sites·운영저장은변경하지않았고운영409·PC끊김은이결함과별개로미확정이다.
+
+### 2026-11-05 신속 소실처럼 보이던 PP0 표시
+
+사용자가Lv9염버니신속소실을보고한후PP0때안보인다고확인했다. 실제신속5회사용+codec에서저장moves4개는유지되고pp.extremespeed0이며UI에쓰던legal moves만3개였다. displayMoves를추가해기존슬롯/PP/설명/비활성사유를보존하며서버허용moves는그대로유지했다. 모두PP0이면4비활성+발버둥을제공하고PP회복뒤같은4번카드가다시사용가능하다. 미니게임교체기술제한도두배열에적용했다. 기술이나PP를임의복구/추가하지않는다. UIagent가BattlePanel의목록/1–4키를displayMoves??moves에연결한다.
+
+신규4검사와API9·테라8·기존dmax/Z2를묶은집중23개가표준/Worker대상이며최종결과는astra-final-focused/worker-focused.log와부모통합기록참조. PP_ZERO_MOVE_VISIBILITY_QA_20261105.md에재현/범위기록. 더넓은기술저장유실/운영409/PC끊김을해결했다고확장해보고하지않는다.
+
+### 더블 배치·타입·PP·진화 표시 후속
+
+더블의 실제 GIF contain 여백/종별 크기/바닥 링과 HUD 가림을 수정하고 싱글·화면 전환 시 오래된 좌표를 제거했다. 누리레느 등 복합 방어 타입을 모두 표시하며 일반 테라/Stellar를 구분한다. PP0 기술은 원래 카드와 설명을 유지하고 비활성 사유를 표시한다. 모든 PP0의 발버둥·PP회복도 확인했다. 진화 결과와 미스터리 전환에는 짧고 건너뛸 수 있는 reduced-motion 대응 효과를 추가했으며 별도 대기 타이머나 저장 변경은 없다.
+
+실제 이미지 더블27, 타입/연출27, PP/트레이너14, 새 슬롯 경계3·라이벌 얼굴표시8 경로 통과. 기존 UI11·touch40·보상/울트라볼6도 재통과했다. 원본 라이벌 PNG의 header/intro/dialogue와 fallback을 확인했다. 새 파일린트0, 기존 화면 진단 증가없음. 근거: `BATTLE_PRESENTATION_QA_20261105.md`. 운영 배포·실계정 자연 진행·물리기기/Safari·모든 종/폼의 실제 프레임별 검증은 남는다.
+
+### 2026-11-05 신고 결함 통합 최종 검증
+
+전체 표준814/814·Worker814/814, 최종 타입/production 빌드 통과. 더블27·타입/연출27·PP/라이벌14·마지막 슬롯3/얼굴8 및 기존 UI11·터치40·울트라볼/보상6 검사 통과. 라이벌 실제 PNG와 표시 복구도 포함했다. 최종 커밋은 git log에서 확인한다. 문서는 INCIDENT_UI_INTEGRATION_QA_20261105.md, BATTLE_PRESENTATION_QA_20261105.md와 각 기능 QA를 따른다. 운영409와PC지속끊김은 아직 원인 미확정이며 수정 배포 후 code/requestId와 실제 성능 기록이 필요하다. 기존 발생 테라 상태/피해를 소급삭제하지 않는다. Sites 저장·배포는 계속 사용자 담당이다. 다음에는 남은 구현 목록을 기준으로 이어가되 이 미확정 범위를 완료로 보고하지 않는다.

@@ -551,8 +551,12 @@ html:fullscreen main[data-mode=rogue] .rc-shell.is-battle .bs-scene,html.poke-vi
  .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-hp-track{margin-top:1px}
  .rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-exp{margin-top:1px}
 }
-/* Approved classic doubles positions. Mobile keeps its existing HUD and tools. */
+/* Approved classic doubles positions. Mobile keeps its existing HUD and tools.
+   Bound artwork to the distance between slots, including the 1.35 species scale. */
+.rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant{max-width:15.5cqw}
 @media (min-width:850px), (max-width:600px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-own{max-width:10cqw}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe{max-width:10.5cqw}
  .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-own[data-battle-slot='0']{left:var(--classic-anchor-x,13.4%)!important;top:var(--classic-anchor-y,95%)!important}
  .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-own[data-battle-slot='1']{left:var(--classic-anchor-x,27.1%)!important;top:var(--classic-anchor-y,95%)!important}
  .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe[data-battle-slot='0']{left:var(--classic-anchor-x,67.8%)!important;top:var(--classic-anchor-y,70%)!important}
@@ -561,6 +565,10 @@ html:fullscreen main[data-mode=rogue] .rc-shell.is-battle .bs-scene,html.poke-vi
 }
 @media (min-width:850px){
  .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant::before{content:'';position:absolute;left:var(--classic-floor-x,50%);bottom:var(--classic-floor-y,15%);width:53%;height:8%;transform:translate(-50%,50%);border:2px solid #f9e1a0;border-radius:50%;background:#e5d39f66;z-index:-1;box-shadow:0 1px 0 2px #274b4366}
+}
+@media(max-width:360px) and (max-height:650px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-own,
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-combatant-foe{max-width:16cqw}
 }
 /* Preserve the approved mobile HUD placement and visible tool strip on short phones. */
 @media(max-width:360px) and (max-height:650px) and (orientation:portrait){
@@ -591,3 +599,7 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
 .rc-shell.is-battle .battle-screen .bs-move-wrap>.bs-move{padding-right:calc(var(--bs-info-size) + 20px)}
 .rc-shell.is-battle .battle-screen .bs-move-info{box-sizing:border-box;display:grid;place-items:center;width:var(--bs-info-size);min-width:var(--bs-info-size);height:var(--bs-info-size);min-height:var(--bs-info-size);padding:0;margin:0;line-height:1;right:7px;bottom:7px}
 @media(pointer:coarse){.rc-shell.is-battle .battle-screen .bs-move-wrap{--bs-info-size:44px}}
+
+/* Keep every current defensive type visible, including dual types and Stellar's base types. */
+.rc-shell.is-battle .battle-screen .bs-name>.bs-type-symbols{display:inline-flex;align-items:center;gap:2px;flex:none;margin-left:auto}
+@media(max-width:600px){.rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-name{flex-wrap:wrap}.rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-name>span:last-child{margin-left:auto}}

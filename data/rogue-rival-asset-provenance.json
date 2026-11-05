@@ -1,0 +1,31 @@
+{
+  "sourceRepository": "pagefaultgames/pokerogue-assets",
+  "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+  "sourceCodeCommit": "7c0881255af5cd51992e513ff93c2f71adbe40e0",
+  "mapping": "trainer-config.ts RIVAL_2..6 derive RIVAL; getSpriteKey chooses rival_m/rival_f. Existing unspecified gender keeps male dialogue identity; no RNG change.",
+  "assets": [
+    {
+      "sourcePath": "images/trainer/rival_m.png",
+      "localPath": "public/game/trainers/rival-m.png",
+      "gitBlobSha": "e4b0db493f6d16ec2dc731ea7c7a4081d029bca0",
+      "bytes": 865,
+      "dimensions": [
+        69,
+        69
+      ],
+      "modified": false
+    },
+    {
+      "sourcePath": "images/trainer/rival_f.png",
+      "localPath": "public/game/trainers/rival-f.png",
+      "gitBlobSha": "2f78d3906b6da3b1cf5986afff229e5c312fa828",
+      "bytes": 721,
+      "dimensions": [
+        70,
+        70
+      ],
+      "modified": false
+    }
+  ],
+  "attribution": "Original Finn/Ivy sprites distributed by Pagefault Games in the pinned PokéRogue assets repository. PNG-specific attribution is not listed in its images/REUSE.toml; do not infer an individual creator or license from adjacent JSON metadata."
+}

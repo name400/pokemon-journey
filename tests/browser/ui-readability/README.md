@@ -7,6 +7,9 @@ npx vite --config tests/browser/ui-readability/vite.config.mjs --host 127.0.0.1 
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/check.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/beast-and-rewards.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/touch-move-info.mjs
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/double-layout.mjs
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/types-and-motion.mjs
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/pp-and-trainers.mjs
 ```
 
 `CHROMIUM_PATH` defaults to `/usr/bin/chromium`; `UI_TEST_URL` defaults to localhost5222.
@@ -36,3 +39,31 @@ The touch script starts each of four move cards from a fresh page, twice, at
 than keyboard-only activation, checks the description stays open and toggles,
 and verifies no move POST, PP or save changes. Desktop keyboard and mouse
 hover/leave behavior are also checked.
+
+Run the scripts sequentially: the local fixture server owns one in-memory save.
+Changing server-imported code while a script runs restarts Vite and resets that save.
+
+The doubles script downloads actual PokeAPI sprite bytes through `curl`, caches
+them under `SPRITE_CACHE` (default `/tmp/double-sprite-cache`), and records their
+URLs and SHA-256 hashes. Showdown URLs are served the corresponding actual
+PokeAPI Showdown GIF copies; they are not geometric placeholder sprites. It
+checks alpha bounds with `object-fit: contain`, slot separation, floor/ring
+alignment, responsive resizing, reversed slots and single/double transitions.
+Animated first-frame measurements are approximate for other animation frames.
+`layout.html` renders the actual BattlePanel on one retained React instance with
+real controller-generated DTOs, avoiding a page reload between those transitions.
+
+The types/motion script covers both teams' single and double HUDs, Primarina's
+Water/Fairy types, normal Tera, Stellar's defensive types, changed current types,
+evolution selection/result/skip/acknowledgement, and mystery choose/confirm/cancel.
+It checks reduced motion and that local presentation controls do not write saves.
+Its external Pokémon artwork is stubbed; this script verifies presentation and
+controls, not real Pokémon asset availability.
+
+The PP/trainer script checks a fourth-slot Extreme Speed at 0 PP, all four moves
+at 0 PP plus selectable Struggle, restored PP, disabled hotkeys and usable info
+buttons. Trainer header/intro/dialogue use the real local Finn/Ivy PNGs and check
+their full portrait containment; generic trainer and failed-image fallbacks are
+also covered. Pokémon artwork in this script is stubbed. Its legacy rival fixture
+uses the existing trainer battle/controller with old fallback metadata, testing
+the presentation repair without altering the saved trainer record.
