@@ -12,14 +12,15 @@
     },
     "counts": {
       "sourceTrainers": 272,
-      "mapped": 252,
-      "unmatched": 20,
-      "localAssets": 267,
+      "mapped": 264,
+      "unmatched": 8,
+      "localAssets": 281,
       "gym": 74,
       "eliteFour": 42,
       "champion": 16,
       "unmatchedPriority": 0,
-      "httpFailures": 0
+      "httpFailures": 0,
+      "pinnedOriginalAssets": 14
     },
     "useConditions": {
       "notice": "Many sprites are not from the games. Credit the appropriate artist; do not edit without permission.",
@@ -35,6 +36,11 @@
       "default": "Default appearance; does not imply male gender for named characters",
       "female": "Explicit source-configured gender counterpart when available",
       "double": "Verified double-trainer class portrait only"
+    },
+    "pinnedOriginals": {
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "mapping": "Original TrainerConfig.getSpriteKey, with enum identities and explicit _m/_f suffixes. See rogue-reviewed-asset-provenance.json.",
+      "license": "Per-file source annotations only; unannotated PNGs are not assumed public domain."
     }
   },
   "byEnumName": {
@@ -272,7 +278,12 @@
       "canonicalIdentity": "birdkeeper",
       "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokerogue-bird_keeper_f",
+          "src": "/game/trainers/pokerogue-bird_keeper_f.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/bird_keeper_f.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
         "double": null,
         "default": {
           "spriteKey": "birdkeeper",
@@ -281,9 +292,7 @@
           "matchRule": "exact-directory-identity"
         }
       },
-      "variantLimitations": [
-        "Female counterpart is not verified"
-      ]
+      "variantLimitations": []
     },
     "BLACK_BELT": {
       "sourceType": 10,
@@ -934,21 +943,29 @@
       "sourceType": 36,
       "enumName": "MYSTERIOUS_SISTERS",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "matchRule": null,
-      "canonicalIdentity": "mysterioussisters",
-      "reason": "No exact directory identity for mysterioussisters",
+      "status": "matched",
+      "spriteKey": "pokerogue-mysterious_sisters",
+      "src": "/game/trainers/pokerogue-mysterious_sisters.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/mysterious_sisters.png",
+      "matchRule": "pinned-source-getSpriteKey",
+      "canonicalIdentity": "mysterious_sisters",
+      "reason": null,
       "variants": {
         "female": null,
-        "double": null,
-        "default": null
+        "double": {
+          "spriteKey": "pokerogue-mysterious_sisters",
+          "src": "/game/trainers/pokerogue-mysterious_sisters.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/mysterious_sisters.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
+        "default": {
+          "spriteKey": "pokerogue-mysterious_sisters",
+          "src": "/game/trainers/pokerogue-mysterious_sisters.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/mysterious_sisters.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": [
-        "Double-trainer portrait is not verified"
-      ]
+      "variantLimitations": []
     },
     "NURSERY_AIDE": {
       "sourceType": 37,
@@ -2212,17 +2229,22 @@
       "sourceType": 85,
       "enumName": "ALIANA",
       "category": "evilAdmin",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "matchRule": null,
+      "status": "matched",
+      "spriteKey": "pokerogue-aliana",
+      "src": "/game/trainers/pokerogue-aliana.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/aliana.png",
+      "matchRule": "pinned-source-getSpriteKey",
       "canonicalIdentity": "aliana",
-      "reason": "No exact directory identity for aliana",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-aliana",
+          "src": "/game/trainers/pokerogue-aliana.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/aliana.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
       "variantLimitations": []
     },
@@ -2230,17 +2252,22 @@
       "sourceType": 86,
       "enumName": "CELOSIA",
       "category": "evilAdmin",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "matchRule": null,
+      "status": "matched",
+      "spriteKey": "pokerogue-celosia",
+      "src": "/game/trainers/pokerogue-celosia.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/celosia.png",
+      "matchRule": "pinned-source-getSpriteKey",
       "canonicalIdentity": "celosia",
-      "reason": "No exact directory identity for celosia",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-celosia",
+          "src": "/game/trainers/pokerogue-celosia.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/celosia.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
       "variantLimitations": []
     },
@@ -2377,20 +2404,29 @@
       "sourceType": 92,
       "enumName": "MACRO_GRUNT",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "matchRule": null,
-      "canonicalIdentity": "macrogrunt",
-      "reason": "No exact directory identity for macrogrunt",
+      "status": "matched",
+      "spriteKey": "pokerogue-macro_grunt_m",
+      "src": "/game/trainers/pokerogue-macro_grunt_m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/macro_grunt_m.png",
+      "matchRule": "pinned-source-getSpriteKey",
+      "canonicalIdentity": "macro_grunt_m",
+      "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokerogue-macro_grunt_f",
+          "src": "/game/trainers/pokerogue-macro_grunt_f.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/macro_grunt_f.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-macro_grunt_m",
+          "src": "/game/trainers/pokerogue-macro_grunt_m.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/macro_grunt_m.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
       "variantLimitations": [
-        "Female counterpart is not verified",
         "Double-trainer portrait is not verified"
       ]
     },
@@ -3141,86 +3177,116 @@
       "sourceType": 125,
       "enumName": "VICTOR",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-victor",
+      "src": "/game/trainers/pokerogue-victor.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/victor.png",
+      "canonicalIdentity": "victor",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-victor",
+          "src": "/game/trainers/pokerogue-victor.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/victor.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "VICTORIA": {
       "sourceType": 126,
       "enumName": "VICTORIA",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-victoria",
+      "src": "/game/trainers/pokerogue-victoria.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/victoria.png",
+      "canonicalIdentity": "victoria",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-victoria",
+          "src": "/game/trainers/pokerogue-victoria.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/victoria.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "VIVI": {
       "sourceType": 127,
       "enumName": "VIVI",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-vivi",
+      "src": "/game/trainers/pokerogue-vivi.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vivi.png",
+      "canonicalIdentity": "vivi",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-vivi",
+          "src": "/game/trainers/pokerogue-vivi.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vivi.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "VICKY": {
       "sourceType": 128,
       "enumName": "VICKY",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-vicky",
+      "src": "/game/trainers/pokerogue-vicky.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vicky.png",
+      "canonicalIdentity": "vicky",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-vicky",
+          "src": "/game/trainers/pokerogue-vicky.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vicky.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "VITO": {
       "sourceType": 129,
       "enumName": "VITO",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-vito",
+      "src": "/game/trainers/pokerogue-vito.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vito.png",
+      "canonicalIdentity": "vito",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-vito",
+          "src": "/game/trainers/pokerogue-vito.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vito.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "BUG_TYPE_SUPERFAN": {
       "sourceType": 130,
@@ -3243,52 +3309,70 @@
       "sourceType": 131,
       "enumName": "EXPERT_POKEMON_BREEDER",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-expert_pokemon_breeder",
+      "src": "/game/trainers/pokerogue-expert_pokemon_breeder.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/expert_pokemon_breeder.png",
+      "canonicalIdentity": "expert_pokemon_breeder",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-expert_pokemon_breeder",
+          "src": "/game/trainers/pokerogue-expert_pokemon_breeder.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/expert_pokemon_breeder.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "PLAYER_M_ALTERNATE": {
       "sourceType": 132,
       "enumName": "PLAYER_M_ALTERNATE",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-player_m_alternate",
+      "src": "/game/trainers/pokerogue-player_m_alternate.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/player_m_alternate.png",
+      "canonicalIdentity": "player_m_alternate",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-player_m_alternate",
+          "src": "/game/trainers/pokerogue-player_m_alternate.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/player_m_alternate.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "PLAYER_F_ALTERNATE": {
       "sourceType": 133,
       "enumName": "PLAYER_F_ALTERNATE",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-player_f_alternate",
+      "src": "/game/trainers/pokerogue-player_f_alternate.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/player_f_alternate.png",
+      "canonicalIdentity": "player_f_alternate",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-player_f_alternate",
+          "src": "/game/trainers/pokerogue-player_f_alternate.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/player_f_alternate.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "BROCK": {
       "sourceType": 200,
@@ -11262,6 +11346,272 @@
         "contentType": "image/png",
         "checkedAt": "2026-11-02T13:23:03.133Z"
       }
+    },
+    "pokerogue-mysterious_sisters": {
+      "spriteKey": "pokerogue-mysterious_sisters",
+      "localUrl": "/game/trainers/pokerogue-mysterious_sisters.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/mysterious_sisters.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "393354ac7e242e9b4627cbd2b8f87fdd428fc42aae1d5404cd504fa3098babf8",
+      "bytes": 1478,
+      "width": 94,
+      "height": 94,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/mysterious_sisters.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-aliana": {
+      "spriteKey": "pokerogue-aliana",
+      "localUrl": "/game/trainers/pokerogue-aliana.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/aliana.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": "2026 Red",
+      "sha256": "95e0ce14bc1ea4c8e38b548f271c2dc27d4c352c2bc277b0da184006d2678fb2",
+      "bytes": 800,
+      "width": 64,
+      "height": 64,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/aliana.png",
+      "license": "CC-BY-NC-SA-4.0",
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-celosia": {
+      "spriteKey": "pokerogue-celosia",
+      "localUrl": "/game/trainers/pokerogue-celosia.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/celosia.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": "2026 Red",
+      "sha256": "11bf6ae7b419368ba2074acca9312e73f5b1e9696bcaf77ed7c956143c8c356b",
+      "bytes": 609,
+      "width": 73,
+      "height": 73,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/celosia.png",
+      "license": "CC-BY-NC-SA-4.0",
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-macro_grunt_m": {
+      "spriteKey": "pokerogue-macro_grunt_m",
+      "localUrl": "/game/trainers/pokerogue-macro_grunt_m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/macro_grunt_m.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "2aafc2ab433b76850af103c421ab14ffe52f56c905b7eb8c030d1595269e6abb",
+      "bytes": 749,
+      "width": 76,
+      "height": 76,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/macro_grunt_m.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-macro_grunt_f": {
+      "spriteKey": "pokerogue-macro_grunt_f",
+      "localUrl": "/game/trainers/pokerogue-macro_grunt_f.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/macro_grunt_f.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "c3fd0dae638ce25d06e9d2f039fe5ba85a35167dfed5be5fb35cab2094663a1f",
+      "bytes": 711,
+      "width": 74,
+      "height": 74,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/macro_grunt_f.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-victor": {
+      "spriteKey": "pokerogue-victor",
+      "localUrl": "/game/trainers/pokerogue-victor.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/victor.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "5d3bdcb03f805c0f17b7eac0e2d07aaf6d0c76fcd1d224f9b8a142db8041902e",
+      "bytes": 763,
+      "width": 55,
+      "height": 53,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/victor.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-victoria": {
+      "spriteKey": "pokerogue-victoria",
+      "localUrl": "/game/trainers/pokerogue-victoria.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/victoria.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "7e9632fd062c86762e52f96f280ca3a62c9899ce3e87a5829be7f5be6b9a1531",
+      "bytes": 788,
+      "width": 52,
+      "height": 54,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/victoria.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-vivi": {
+      "spriteKey": "pokerogue-vivi",
+      "localUrl": "/game/trainers/pokerogue-vivi.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vivi.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "133aedbb056f8cd1fa5a5451a6444b2380d95438b8f897d96c10e1fff6aa6245",
+      "bytes": 687,
+      "width": 48,
+      "height": 69,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/vivi.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-vicky": {
+      "spriteKey": "pokerogue-vicky",
+      "localUrl": "/game/trainers/pokerogue-vicky.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vicky.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "c819ccc6ebe5b3e1c053065238792584d1c827a750bd16ffb340c44d34829cea",
+      "bytes": 677,
+      "width": 52,
+      "height": 53,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/vicky.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-vito": {
+      "spriteKey": "pokerogue-vito",
+      "localUrl": "/game/trainers/pokerogue-vito.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/vito.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "9ba8a043d84f8598a3d536d56e68bd9c0e1aa95945b3a44c12eec91eb0167fed",
+      "bytes": 754,
+      "width": 41,
+      "height": 78,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/vito.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-expert_pokemon_breeder": {
+      "spriteKey": "pokerogue-expert_pokemon_breeder",
+      "localUrl": "/game/trainers/pokerogue-expert_pokemon_breeder.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/expert_pokemon_breeder.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "bca539c70a9d74eb0233e741c9bc5edd25b585a3a365774b6ea7a6801a29d2c4",
+      "bytes": 930,
+      "width": 39,
+      "height": 75,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/expert_pokemon_breeder.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-player_m_alternate": {
+      "spriteKey": "pokerogue-player_m_alternate",
+      "localUrl": "/game/trainers/pokerogue-player_m_alternate.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/player_m_alternate.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "8ea1526d64ecc5234adb0975b80ecd604103843993d6f4d3c89c9034b5858f86",
+      "bytes": 702,
+      "width": 73,
+      "height": 73,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/player_m_alternate.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-player_f_alternate": {
+      "spriteKey": "pokerogue-player_f_alternate",
+      "localUrl": "/game/trainers/pokerogue-player_f_alternate.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/player_f_alternate.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "9fae7519ebc094e044d258f78b855e1e93827384a1f7327a698975225d9e6edc",
+      "bytes": 635,
+      "width": 70,
+      "height": 70,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/player_f_alternate.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-bird_keeper_f": {
+      "spriteKey": "pokerogue-bird_keeper_f",
+      "localUrl": "/game/trainers/pokerogue-bird_keeper_f.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/bird_keeper_f.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "50eedcf2e6aec1c965c5ca07bf485daed7cda03657554cf8f68e3dbee986c50f",
+      "bytes": 819,
+      "width": 73,
+      "height": 73,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/bird_keeper_f.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
     }
   },
   "unmatched": [
@@ -11272,80 +11622,8 @@
       "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
     },
     {
-      "sourceType": 36,
-      "enumName": "MYSTERIOUS_SISTERS",
-      "category": "trainer",
-      "reason": "No exact directory identity for mysterioussisters"
-    },
-    {
-      "sourceType": 85,
-      "enumName": "ALIANA",
-      "category": "evilAdmin",
-      "reason": "No exact directory identity for aliana"
-    },
-    {
-      "sourceType": 86,
-      "enumName": "CELOSIA",
-      "category": "evilAdmin",
-      "reason": "No exact directory identity for celosia"
-    },
-    {
-      "sourceType": 92,
-      "enumName": "MACRO_GRUNT",
-      "category": "trainer",
-      "reason": "No exact directory identity for macrogrunt"
-    },
-    {
-      "sourceType": 125,
-      "enumName": "VICTOR",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 126,
-      "enumName": "VICTORIA",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 127,
-      "enumName": "VIVI",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 128,
-      "enumName": "VICKY",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 129,
-      "enumName": "VITO",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
       "sourceType": 130,
       "enumName": "BUG_TYPE_SUPERFAN",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 131,
-      "enumName": "EXPERT_POKEMON_BREEDER",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 132,
-      "enumName": "PLAYER_M_ALTERNATE",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 133,
-      "enumName": "PLAYER_F_ALTERNATE",
       "category": "trainer",
       "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
     },

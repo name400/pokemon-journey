@@ -6,6 +6,7 @@
 import {readFileSync, writeFileSync, mkdirSync, existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
+import {mergePinnedTrainerAppearance} from './merge-pinned-trainer-appearance.mjs';
 import {writeTrainerCredits} from './write-trainer-credits.mjs';
 
 const root = new URL('../', import.meta.url);
@@ -175,6 +176,7 @@ async function build() {
     fallbackPolicy:'Unmatched src is null. UI must use a clearly generic fallback rather than claiming another person is this trainer',
     variantDefinitions:{default:'Default appearance; does not imply male gender for named characters',female:'Explicit source-configured gender counterpart when available',double:'Verified double-trainer class portrait only'}},
     byEnumName,byTrainerType,assets:Object.fromEntries(Object.entries(assets).sort(([a],[b])=>a.localeCompare(b))),unmatched,httpFailures:errors};
+  mergePinnedTrainerAppearance(manifest);
   writeFileSync(dataFile,JSON.stringify(manifest,null,2)+'\n');
   writeTrainerCredits(manifest);
   console.log(JSON.stringify({output:fileURLToPath(dataFile),counts,unmatched,errors},null,2));

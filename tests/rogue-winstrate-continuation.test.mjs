@@ -1,3 +1,4 @@
+import trainerImages from '../data/rogue-trainer-appearance.json' with {type:'json'};
 import assert from 'node:assert/strict';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {configure} from '../lib/pokemon-config.mjs';
@@ -9,7 +10,7 @@ const run={id:'winstrate',seed:'winstrate',wave:101,biome:1,rng:42,weather:'rain
 let current=doc;
 for(let round=0;round<5;round++){
  let live=ensureClassicState(current).slots[0];live.npcDialogueRule='source-v1';assert.equal(live.screen,'winstrateNext');assert.equal(live.mystery.round,round);if(round>0)assert.throws(()=>applyClassicAction(current,{action:'winstrateContinue',round:round-1}));const oldHp=live.party[0].hp,oldMoney=live.money;
- applyClassicAction(current,{action:'winstrateContinue',round});assert.equal(live.screen,'battle');assert.equal(live.party[0].hp,oldHp);{assert.equal(live.npcDialogueQueue[0].sourceKey,'winstrate.trainer.'+round+'.intro');const q=live.npcDialogueQueue[0];applyClassicAction(current,{action:'npcDialogueSkip',dialogueId:q.id,index:q.index});}
+ applyClassicAction(current,{action:'winstrateContinue',round});assert.equal(live.encounter.trainer.sprite,trainerImages.byEnumName[['VICTOR','VICTORIA','VIVI','VICKY','VITO'][round]].src);assert.notEqual(live.encounter.trainer.sprite,'/game/trainers/fallback.svg');assert.equal(live.screen,'battle');assert.equal(live.party[0].hp,oldHp);{assert.equal(live.npcDialogueQueue[0].sourceKey,'winstrate.trainer.'+round+'.intro');const q=live.npcDialogueQueue[0];applyClassicAction(current,{action:'npcDialogueSkip',dialogueId:q.id,index:q.index});}
  assert.throws(()=>applyClassicAction(current,{action:'winstrateContinue',round}));
  // Lower only synthetic test enemies' HP; all progression uses real battle actions.
  for(const p of live.combat.snapshot.sides[1].pokemon)p.hp=1;for(const p of live.combat.teams[1])p.hp=1;

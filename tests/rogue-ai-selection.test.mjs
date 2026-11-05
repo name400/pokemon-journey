@@ -1,0 +1,16 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {chooseClassicRankedMove} from '../lib/rogue-ai-selection.mjs';
+import {createFixture} from './browser/ui-readability/fixture.mjs';
+import {activeClassicRun,applyClassicAction} from '../lib/rogue-classic-game.mjs';
+import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
+import {ensureClassicState,startClassicRun} from '../lib/rogue-classic-state.mjs';
+import {starterCatalog} from '../lib/rogue-starter-system.mjs';
+import {createClassicCombat} from '../lib/rogue-battle-engine.mjs';
+const candidates=scores=>scores.map((score,i)=>({m:{id:'move'+i,slot:i+1},score}));
+test('SMART_RANDOM follows 5/8 stop and repeated 3/8 rank descent',()=>{const pool=candidates([100,50,10]);for(let roll=0;roll<8;roll++){let draws=0;const pick=chooseClassicRankedMove(pool,{randomInt:n=>{assert.equal(n,8);return draws++===0?roll:0;}});assert.equal(pick.m.slot,roll<5?1:2);assert.equal(draws,roll<5?1:2);}assert.equal(chooseClassicRankedMove(pool,{randomInt:()=>7}).m.slot,3);});
+test('SMART uses source rounded score ratios and skips a negative next ratio',()=>{const pool=candidates([100,49,10]);assert.equal(chooseClassicRankedMove(pool,{smart:true,randomInt:()=>25}).m.slot,1);assert.equal(chooseClassicRankedMove(pool,{smart:true,randomInt:()=>24}).m.slot,2);let draws=0;assert.equal(chooseClassicRankedMove(candidates([1,-1]),{smart:true,randomInt:()=>{draws++;return 0;}}).m.slot,1);assert.equal(draws,0);});
+test('KO-capable moves exclude other moves and duplicate targets do not bias ranks',()=>{const pool=candidates([100,50,10]);pool[1].knocksOut=true;let draws=0;assert.equal(chooseClassicRankedMove(pool,{randomInt:()=>{draws++;return 7;}}).m.slot,2);assert.equal(draws,0);const duplicate={...pool[0],score:90,t:{target:2}};delete pool[1].knocksOut;assert.equal(chooseClassicRankedMove([pool[0],duplicate,pool[1]],{randomInt:()=>7}).m.slot,2);});
+test('actual battle rank selection is deterministic across codec restore and legacy snapshots stay unflagged',async t=>{t.mock.timers.enable({apis:['Date'],now:1793884000000});for(const rule of [undefined,'source-ranked-v1']){const doc=createFixture('battle'),run=activeClassicRun(doc);run.enemyAiRule=rule;run.combat=createClassicCombat(run,run.combat.teams[1]);assert.equal(run.combat.enemyAiRule,rule||null);const saved=await decodeGameData(await encodeGameData(doc));applyClassicAction(doc,{action:'turn',command:{type:'move',move:'disable'}});applyClassicAction(saved,{action:'turn',command:{type:'move',move:'disable'}});assert.deepEqual(activeClassicRun(saved).combat,activeClassicRun(doc).combat);}});
+
+test('only newly started runs opt into rank selection and preserve another slot',()=>{const doc={},state=ensureClassicState(doc,{initialStarterId:1}),starter=starterCatalog(state.system).find(s=>s.id===1);state.slots[1]={id:'legacy',party:[],screen:'abandoned'};const other=structuredClone(state.slots[1]);const run=startClassicRun(doc,[{id:1,ability:starter.abilities[0].key,nature:starter.natures[0].key,gender:starter.genders[0],shiny:false,moves:starter.defaultMoves}]);assert.equal(run.enemyAiRule,'source-ranked-v1');assert.deepEqual(state.slots[1],other);assert.equal(state.slots[1].enemyAiRule,undefined);});

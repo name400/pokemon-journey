@@ -1,3 +1,4 @@
+import {reviewedAtlasRoot,reviewedAtlasVariant,sourceAtlasFrames} from './rogue-reviewed-mega-atlases.mjs';
 // PokéRogue asset snapshot; failures must leave the caller's existing sprite intact.
 const root='https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/pokemon';
 type Frame={filename:string;rotated:boolean;frame:{x:number;y:number;w:number;h:number};sourceSize:{w:number;h:number};spriteSourceSize:{x:number;y:number}};
@@ -9,11 +10,12 @@ export function variantFrames(key:string,variant:number,facing:'front'|'back'):P
  if(!/^[0-9]+(?:-[a-z0-9-]+)?$/i.test(key)||![1,2].includes(variant))return Promise.resolve(null);
  const cacheKey=`${key}:${variant}:${facing}`,previous=cache.get(cacheKey);if(previous)return previous;
  const task=(async()=>{try{
-  const master=await (masterPromise ||= json<Master>(`${root}/variant/_masterlist.json`).catch(error=>{masterPromise=null;throw error;}));
-  const section=(facing==='back'?master.back:master) as Record<string,number[]>|undefined,kind=section?.[key]?.[variant];if(kind!==1&&kind!==2)return null;
-  const folder=facing==='back'?'back/':'',base=kind===2?`${root}/variant/${folder}${key}_${variant+1}`:`${root}/${folder}${key}`;
-  const [atlas,palette]=await Promise.all([json<{textures:{frames:Frame[]}[]}>(`${base}.json`),kind===1?json<Record<string,Record<string,string>>>(`${root}/variant/${folder}${key}.json`):Promise.resolve(null)]);
-  const ordered=(atlas.textures?.[0]?.frames||[]).filter(f=>/^\d{4}\.png$/.test(f.filename)&&!f.rotated).sort((a,b)=>a.filename.localeCompare(b.filename));if(!ordered.length)return null;
+  const local=reviewedAtlasRoot(key),localKind=reviewedAtlasVariant(key,variant);
+  const master=local?null:await (masterPromise ||= json<Master>(`${root}/variant/_masterlist.json`).catch(error=>{masterPromise=null;throw error;}));
+  const section=(facing==='back'?master?.back:master) as Record<string,number[]>|undefined,kind=local?localKind:section?.[key]?.[variant];if(kind!==1&&kind!==2)return null;
+  const assetRoot=local||root,folder=facing==='back'?'back/':'',base=kind===2?`${assetRoot}/variant/${folder}${key}_${variant+1}`:`${assetRoot}/${folder}${key}`;
+  const [atlas,palette]=await Promise.all([json<{textures:{frames:Frame[]}[]}>(`${base}.json`),kind===1?json<Record<string,Record<string,string>>>(`${assetRoot}/variant/${folder}${key}.json`):Promise.resolve(null)]);
+  const ordered=(sourceAtlasFrames(atlas) as Frame[]).filter(f=>/^\d{4}\.png$/.test(f.filename)&&!f.rotated).sort((a,b)=>a.filename.localeCompare(b.filename));if(!ordered.length)return null;
   const image=new Image();image.crossOrigin='anonymous';image.src=`${base}.png`;await image.decode();
   const selected=ordered.filter((_,i)=>i%Math.max(1,Math.ceil(ordered.length/12))===0),result:string[]=[];
   for(const f of selected){const canvas=document.createElement('canvas');canvas.width=f.sourceSize.w;canvas.height=f.sourceSize.h;const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx)return null;const p=f.frame,o=f.spriteSourceSize;ctx.drawImage(image,p.x,p.y,p.w,p.h,o.x,o.y,p.w,p.h);
@@ -26,11 +28,11 @@ export function variantFrames(key:string,variant:number,facing:'front'|'back'):P
 // Exact base/shiny sprites for the reviewed PokéRogue form atlases.
 const formCache=new Map<string,Promise<string[]|null>>();
 export function sourceFormFrames(key:string,shiny:boolean,facing:'front'|'back'):Promise<string[]|null>{
- if(!/^(855|869|869-(ruby-cream|matcha-cream|mint-cream|lemon-cream|salted-cream|ruby-swirl|caramel-swirl|rainbow-swirl))$/.test(key))return Promise.resolve(null);
+ if(!reviewedAtlasRoot(key)&&!/^(855|869|869-(ruby-cream|matcha-cream|mint-cream|lemon-cream|salted-cream|ruby-swirl|caramel-swirl|rainbow-swirl))$/.test(key))return Promise.resolve(null);
  const cacheKey=`${key}:${shiny}:${facing}`,prior=formCache.get(cacheKey);if(prior)return prior;
  const task=(async()=>{try{
-  const base=`${root}/${facing==='back'?'back/':''}${shiny?'shiny/':''}${key}`;
-  const atlas=await json<{textures:{frames:Frame[]}[]}>(`${base}.json`),ordered=(atlas.textures?.[0]?.frames||[]).filter(f=>/^\d{4}\.png$/.test(f.filename)&&!f.rotated).sort((a,b)=>a.filename.localeCompare(b.filename));if(!ordered.length)return null;
+  const base=`${reviewedAtlasRoot(key)||root}/${facing==='back'?'back/':''}${shiny?'shiny/':''}${key}`;
+  const atlas=await json<{textures:{frames:Frame[]}[]}>(`${base}.json`),ordered=(sourceAtlasFrames(atlas) as Frame[]).filter(f=>/^\d{4}\.png$/.test(f.filename)&&!f.rotated).sort((a,b)=>a.filename.localeCompare(b.filename));if(!ordered.length)return null;
   const image=new Image();image.crossOrigin='anonymous';image.src=`${base}.png`;await image.decode();const selected=ordered.filter((_,i)=>i%Math.max(1,Math.ceil(ordered.length/12))===0),result:string[]=[];
   for(const f of selected){const canvas=document.createElement('canvas');canvas.width=f.sourceSize.w;canvas.height=f.sourceSize.h;const ctx=canvas.getContext('2d');if(!ctx)return null;const p=f.frame,o=f.spriteSourceSize;ctx.drawImage(image,p.x,p.y,p.w,p.h,o.x,o.y,p.w,p.h);result.push(canvas.toDataURL('image/png'));}return result;
  }catch{return null;}})();if(formCache.size>=96){const oldest=formCache.keys().next().value;if(oldest)formCache.delete(oldest);}formCache.set(cacheKey,task);void task.then(result=>{if(!result&&formCache.get(cacheKey)===task)formCache.delete(cacheKey);});return task;

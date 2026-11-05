@@ -1,0 +1,856 @@
+{
+  "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+  "sourceCodeCommit": "7c0881255af5cd51992e513ff93c2f71adbe40e0",
+  "sourceRepository": "pagefaultgames/pokerogue-assets",
+  "note": "Original bytes. Null attribution means no matching annotation in pinned images/REUSE.toml; it is not a public-domain claim. Meowstic Mega uses one shared atlas for both genders in the pinned source.",
+  "assets": [
+    {
+      "path": "images/pokemon/359-mega-z.json",
+      "status": 200,
+      "bytes": 460,
+      "sha256": "dba9f9dcf3495a600360a1142193cb4a52f8c45cc7b37a81387eac270d48fad0",
+      "localPath": "public/game/pokerogue/pokemon/359-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/359-mega-z.png",
+      "status": 200,
+      "bytes": 979,
+      "sha256": "1676f2abd0f737f962975281656ac1b35773bb093aff1cb9c54c4a6d925a5f33",
+      "localPath": "public/game/pokerogue/pokemon/359-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/359-mega-z.json",
+      "status": 200,
+      "bytes": 460,
+      "sha256": "dba9f9dcf3495a600360a1142193cb4a52f8c45cc7b37a81387eac270d48fad0",
+      "localPath": "public/game/pokerogue/pokemon/shiny/359-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/359-mega-z.png",
+      "status": 200,
+      "bytes": 977,
+      "sha256": "d363513be35f1df0f1d4a228049df84d93752405ad472de35ac19c8f9b33f5a5",
+      "localPath": "public/game/pokerogue/pokemon/shiny/359-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/359-mega-z.json",
+      "status": 200,
+      "bytes": 460,
+      "sha256": "445865a3ab6615d00984676ef090cbbfe34bb8b81852c8feadcae1db23a8b9b7",
+      "localPath": "public/game/pokerogue/pokemon/back/359-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/359-mega-z.png",
+      "status": 200,
+      "bytes": 954,
+      "sha256": "906f7aaf139eb45860f6e81b5f221c1e2acaeb7070f78841eacd4d3806f6a395",
+      "localPath": "public/game/pokerogue/pokemon/back/359-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/359-mega-z.json",
+      "status": 200,
+      "bytes": 460,
+      "sha256": "445865a3ab6615d00984676ef090cbbfe34bb8b81852c8feadcae1db23a8b9b7",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/359-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/359-mega-z.png",
+      "status": 200,
+      "bytes": 948,
+      "sha256": "be6aa0a0605bd2e4cde36474a9128905ccdd66be442f820c4f04ede1331013fa",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/359-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/445-mega-z.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "082e1cdf28c1756ba467058b19820179a8a55f475aca3f9ef85329923c1e1882",
+      "localPath": "public/game/pokerogue/pokemon/445-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/445-mega-z.png",
+      "status": 200,
+      "bytes": 1481,
+      "sha256": "9f4dc9803effd8dbc4dd1b7fa7e19ea2fbf756ee32b1d2eda4e03e63eb6b6e4d",
+      "localPath": "public/game/pokerogue/pokemon/445-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/445-mega-z.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "082e1cdf28c1756ba467058b19820179a8a55f475aca3f9ef85329923c1e1882",
+      "localPath": "public/game/pokerogue/pokemon/shiny/445-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/445-mega-z.png",
+      "status": 200,
+      "bytes": 1480,
+      "sha256": "d6e55ddafb0b5d8d238f2ef6b15a5b1d61f26aa2c08e1bcd94676f799d4eb063",
+      "localPath": "public/game/pokerogue/pokemon/shiny/445-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/445-mega-z.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "be3a65a47affbd6da55223f3dbd655ce14f83a80fa7b6faa43fa6e989ac940b5",
+      "localPath": "public/game/pokerogue/pokemon/back/445-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/445-mega-z.png",
+      "status": 200,
+      "bytes": 1190,
+      "sha256": "9d39a7efe5a7e2b810f7580d62aac076c2eef31531050bbefc3004bd137fe7a1",
+      "localPath": "public/game/pokerogue/pokemon/back/445-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/445-mega-z.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "be3a65a47affbd6da55223f3dbd655ce14f83a80fa7b6faa43fa6e989ac940b5",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/445-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/445-mega-z.png",
+      "status": 200,
+      "bytes": 1190,
+      "sha256": "5c7c12379337775cba06f33c77d4c4cd0ead1383a2a8024f73fc20ece6afd259",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/445-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/448-mega-z.json",
+      "status": 200,
+      "bytes": 460,
+      "sha256": "5162ae18c5c80e0eaf4af6f8c51d8438c0c62d8bf50a05d1c821929c2bba54d0",
+      "localPath": "public/game/pokerogue/pokemon/448-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/448-mega-z.png",
+      "status": 200,
+      "bytes": 862,
+      "sha256": "87dc2a364e7c40d301594c397c8f32992a10bb8464a90f479129bd17f6aabe91",
+      "localPath": "public/game/pokerogue/pokemon/448-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/448-mega-z.json",
+      "status": 200,
+      "bytes": 460,
+      "sha256": "5162ae18c5c80e0eaf4af6f8c51d8438c0c62d8bf50a05d1c821929c2bba54d0",
+      "localPath": "public/game/pokerogue/pokemon/shiny/448-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/448-mega-z.png",
+      "status": 200,
+      "bytes": 862,
+      "sha256": "73e950b7bea895f7e2abcc409951ace205df790c5281d7bbf0cc12987cbc2828",
+      "localPath": "public/game/pokerogue/pokemon/shiny/448-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/448-mega-z.json",
+      "status": 200,
+      "bytes": 460,
+      "sha256": "4b856cfbe1160b3b120d86912dbe44baa1ac804492cc69f289d39696d515a3d9",
+      "localPath": "public/game/pokerogue/pokemon/back/448-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/448-mega-z.png",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "f68ff417cc5cd83fd920f56755190777604413a8574368c97faccc0a1e17d106",
+      "localPath": "public/game/pokerogue/pokemon/back/448-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/448-mega-z.json",
+      "status": 200,
+      "bytes": 460,
+      "sha256": "4b856cfbe1160b3b120d86912dbe44baa1ac804492cc69f289d39696d515a3d9",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/448-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/448-mega-z.png",
+      "status": 200,
+      "bytes": 809,
+      "sha256": "bc04b0f87119eaecd5177ea943815273ad4f92cd85a87095b3fad0120de22ef5",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/448-mega-z.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/678-mega.json",
+      "status": 200,
+      "bytes": 458,
+      "sha256": "eaaa4204e6d5ab60d4b4c2e66fddd22dd2362e24944a06477c006c75cbe8bb01",
+      "localPath": "public/game/pokerogue/pokemon/678-mega.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/678-mega.png",
+      "status": 200,
+      "bytes": 763,
+      "sha256": "61e3d04fe243d04ab6494e4c074a3a350c0740516a5436c421519783b2ff03fd",
+      "localPath": "public/game/pokerogue/pokemon/678-mega.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/678-mega.json",
+      "status": 200,
+      "bytes": 458,
+      "sha256": "eaaa4204e6d5ab60d4b4c2e66fddd22dd2362e24944a06477c006c75cbe8bb01",
+      "localPath": "public/game/pokerogue/pokemon/shiny/678-mega.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/678-mega.png",
+      "status": 200,
+      "bytes": 765,
+      "sha256": "ca2b514f1cbb63531121fa1233e8b7e5aab82fc47353867107b799b50457c0c4",
+      "localPath": "public/game/pokerogue/pokemon/shiny/678-mega.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/678-mega.json",
+      "status": 200,
+      "bytes": 458,
+      "sha256": "1135f2e30e09b3768fd3a7cb8c5e25fcab1a32b9ebfa521fe0367f9aaf6fcec6",
+      "localPath": "public/game/pokerogue/pokemon/back/678-mega.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/678-mega.png",
+      "status": 200,
+      "bytes": 671,
+      "sha256": "32ba982f5ecf76a9e1f6288104fa2f2de6586cef8ae123125800e1fe6c9455ed",
+      "localPath": "public/game/pokerogue/pokemon/back/678-mega.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/678-mega.json",
+      "status": 200,
+      "bytes": 458,
+      "sha256": "1135f2e30e09b3768fd3a7cb8c5e25fcab1a32b9ebfa521fe0367f9aaf6fcec6",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/678-mega.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/678-mega.png",
+      "status": 200,
+      "bytes": 672,
+      "sha256": "21df8c560de9203692d64088f78bbbfcfbfc6dc83740b488db60d3b02cb769d0",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/678-mega.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/801-mega-original.json",
+      "status": 200,
+      "bytes": 467,
+      "sha256": "5154593ae1dcd346aa51b98e39ad29d185cd2966c17de4ec269549118289802a",
+      "localPath": "public/game/pokerogue/pokemon/801-mega-original.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/801-mega-original.png",
+      "status": 200,
+      "bytes": 1058,
+      "sha256": "d40dbc13ac10a9922a74970ddc5cda762a4044494acf7646d1b8f30f73d214b1",
+      "localPath": "public/game/pokerogue/pokemon/801-mega-original.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/801-mega-original.json",
+      "status": 200,
+      "bytes": 467,
+      "sha256": "5154593ae1dcd346aa51b98e39ad29d185cd2966c17de4ec269549118289802a",
+      "localPath": "public/game/pokerogue/pokemon/shiny/801-mega-original.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/801-mega-original.png",
+      "status": 200,
+      "bytes": 1058,
+      "sha256": "54ba35e5f9e674d33236502d4549da2d361fd9b7bc3ddb31297d064034c72a94",
+      "localPath": "public/game/pokerogue/pokemon/shiny/801-mega-original.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/801-mega-original.json",
+      "status": 200,
+      "bytes": 467,
+      "sha256": "fdcf4916c92870c551e5af056ef5a79275c718c9ad3ea992f813a836221cd71c",
+      "localPath": "public/game/pokerogue/pokemon/back/801-mega-original.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/801-mega-original.png",
+      "status": 200,
+      "bytes": 991,
+      "sha256": "1ba8ec5188d6abda98ee7e7dc5d9377f139b90decaf30085eb373cac14f3c609",
+      "localPath": "public/game/pokerogue/pokemon/back/801-mega-original.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/801-mega-original.json",
+      "status": 200,
+      "bytes": 467,
+      "sha256": "fdcf4916c92870c551e5af056ef5a79275c718c9ad3ea992f813a836221cd71c",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/801-mega-original.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/801-mega-original.png",
+      "status": 200,
+      "bytes": 991,
+      "sha256": "2d16f03e7b621c1aadbfaaf8447f2100f8c7b0f889d1b3445dc4aa73c0ffcb1e",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/801-mega-original.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/978-mega-curly.json",
+      "status": 200,
+      "bytes": 458,
+      "sha256": "6e039c34ddcb87097ac295d4a80b9db78ee75223b42893d0c8be6320fba4bf15",
+      "localPath": "public/game/pokerogue/pokemon/978-mega-curly.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/978-mega-curly.png",
+      "status": 200,
+      "bytes": 941,
+      "sha256": "ce6f6959365c4f6db22e4593a86c35bb73f8945c18ea5987b388a44050ae2c8a",
+      "localPath": "public/game/pokerogue/pokemon/978-mega-curly.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/978-mega-curly.json",
+      "status": 200,
+      "bytes": 458,
+      "sha256": "6e039c34ddcb87097ac295d4a80b9db78ee75223b42893d0c8be6320fba4bf15",
+      "localPath": "public/game/pokerogue/pokemon/shiny/978-mega-curly.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/978-mega-curly.png",
+      "status": 200,
+      "bytes": 941,
+      "sha256": "dc7e5a6c11f2ee0096c681c3b5bb093fb5c791835956c24d358f10dbf766f804",
+      "localPath": "public/game/pokerogue/pokemon/shiny/978-mega-curly.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/978-mega-curly.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "b1a794a363099a30c96fbb73c92790fa11c430a379c1d6fe70d97bef003c70e8",
+      "localPath": "public/game/pokerogue/pokemon/back/978-mega-curly.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/978-mega-curly.png",
+      "status": 200,
+      "bytes": 887,
+      "sha256": "8e3a53e6234eee3f968b9a86536a889a55671e117cfac5bd9d32631d2f3deb69",
+      "localPath": "public/game/pokerogue/pokemon/back/978-mega-curly.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/978-mega-curly.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "b1a794a363099a30c96fbb73c92790fa11c430a379c1d6fe70d97bef003c70e8",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/978-mega-curly.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/978-mega-curly.png",
+      "status": 200,
+      "bytes": 887,
+      "sha256": "dfab0447287b2e5aeed2550a578d23077ec8682c5b700a0f3829b9b49650e1b0",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/978-mega-curly.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/978-mega-droopy.json",
+      "status": 200,
+      "bytes": 465,
+      "sha256": "fa11bd3efc87cd4bbdaf282fc0f81c819c1deae64ab59f21a885b83912abba3f",
+      "localPath": "public/game/pokerogue/pokemon/978-mega-droopy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/978-mega-droopy.png",
+      "status": 200,
+      "bytes": 983,
+      "sha256": "cb64b66fd5b001535955f54b2fbb224b86bd8d372723f352c0a1a35b69433e0f",
+      "localPath": "public/game/pokerogue/pokemon/978-mega-droopy.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/978-mega-droopy.json",
+      "status": 200,
+      "bytes": 465,
+      "sha256": "fa11bd3efc87cd4bbdaf282fc0f81c819c1deae64ab59f21a885b83912abba3f",
+      "localPath": "public/game/pokerogue/pokemon/shiny/978-mega-droopy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/978-mega-droopy.png",
+      "status": 200,
+      "bytes": 984,
+      "sha256": "e41de40cb9b7fd115de6c1e9d9c9deeddff1e93eea73e45e6fa939cf9412824b",
+      "localPath": "public/game/pokerogue/pokemon/shiny/978-mega-droopy.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/978-mega-droopy.json",
+      "status": 200,
+      "bytes": 465,
+      "sha256": "c9b8f0d36c7192fbac281b56ceab5b502b0dab700028b8b820f71daf532bbd47",
+      "localPath": "public/game/pokerogue/pokemon/back/978-mega-droopy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/978-mega-droopy.png",
+      "status": 200,
+      "bytes": 874,
+      "sha256": "14f6fde1af5c10f0a45f8ec3a2c1e482ba69ad39557104b076006a07617d9e5a",
+      "localPath": "public/game/pokerogue/pokemon/back/978-mega-droopy.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/978-mega-droopy.json",
+      "status": 200,
+      "bytes": 465,
+      "sha256": "c9b8f0d36c7192fbac281b56ceab5b502b0dab700028b8b820f71daf532bbd47",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/978-mega-droopy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/978-mega-droopy.png",
+      "status": 200,
+      "bytes": 873,
+      "sha256": "8c084b3de39f12f46185d4e0fc8d151796a81ad716bebf05051b53764bb5fb38",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/978-mega-droopy.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/978-mega-stretchy.json",
+      "status": 200,
+      "bytes": 461,
+      "sha256": "72a775a16101f0df682fbb8e3d0e9928cf8891ad589d0c427150a9ccb00550df",
+      "localPath": "public/game/pokerogue/pokemon/978-mega-stretchy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/978-mega-stretchy.png",
+      "status": 200,
+      "bytes": 872,
+      "sha256": "49625d48fd7edba9a0663f350d165de48216326612e6de16edb903653035f123",
+      "localPath": "public/game/pokerogue/pokemon/978-mega-stretchy.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/978-mega-stretchy.json",
+      "status": 200,
+      "bytes": 461,
+      "sha256": "72a775a16101f0df682fbb8e3d0e9928cf8891ad589d0c427150a9ccb00550df",
+      "localPath": "public/game/pokerogue/pokemon/shiny/978-mega-stretchy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/978-mega-stretchy.png",
+      "status": 200,
+      "bytes": 873,
+      "sha256": "0ae4f455d7eb58d0306f74ee6ec4a1a3b21248ff6f8d0e3f01a175f4aefb2221",
+      "localPath": "public/game/pokerogue/pokemon/shiny/978-mega-stretchy.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/978-mega-stretchy.json",
+      "status": 200,
+      "bytes": 467,
+      "sha256": "ae90557820e97fd0a66b91d36a342cec7f8794ada236a61647f1c6e07a0e0a0e",
+      "localPath": "public/game/pokerogue/pokemon/back/978-mega-stretchy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/978-mega-stretchy.png",
+      "status": 200,
+      "bytes": 910,
+      "sha256": "d50f5052a626f0822e179fe1fb67e867761e0777c3ea7dd3864190930ac7a311",
+      "localPath": "public/game/pokerogue/pokemon/back/978-mega-stretchy.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/978-mega-stretchy.json",
+      "status": 200,
+      "bytes": 467,
+      "sha256": "ae90557820e97fd0a66b91d36a342cec7f8794ada236a61647f1c6e07a0e0a0e",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/978-mega-stretchy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/978-mega-stretchy.png",
+      "status": 200,
+      "bytes": 910,
+      "sha256": "17c35ce1bd6f0c69d845668c5dcb38c46471f30cd25a527f954b1f5e842023b1",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/978-mega-stretchy.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/359-mega-z.json",
+      "status": 200,
+      "bytes": 552,
+      "sha256": "3956913880ff2a59ac4fdd586e019d0f3b718e89b428d9626d6d6ad7cb93e692",
+      "localPath": "public/game/pokerogue/pokemon/variant/359-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/359-mega-z.json",
+      "status": 200,
+      "bytes": 508,
+      "sha256": "a73dd5900e76f913f72117459906ddef32271e4e82a45616b8e56e7907617ab9",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/359-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/445-mega-z.json",
+      "status": 200,
+      "bytes": 706,
+      "sha256": "b293fae216f24c7242078d9fb235ddf7fbd3e6c9812d01046da985214a86f09f",
+      "localPath": "public/game/pokerogue/pokemon/variant/445-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/445-mega-z.json",
+      "status": 200,
+      "bytes": 530,
+      "sha256": "1147ed6faa64db43d1c5a63990e35cfd3842b613389aff2773f369db9d6af605",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/445-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/448-mega-z.json",
+      "status": 200,
+      "bytes": 772,
+      "sha256": "828e9f54d7e0c0669ed7fe580dacf16aed0c992d7375e20aeedc044d47aa6905",
+      "localPath": "public/game/pokerogue/pokemon/variant/448-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/448-mega-z.json",
+      "status": 200,
+      "bytes": 816,
+      "sha256": "1b63f083475ba504b47236c7635a4be704daeecebc5716b5e19e7eaa86f7c5b6",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/448-mega-z.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/678-mega.json",
+      "status": 200,
+      "bytes": 508,
+      "sha256": "df124a6bd23ad5ededd752be9ac245c2f817140ef2071fd16a3725a3028b3064",
+      "localPath": "public/game/pokerogue/pokemon/variant/678-mega.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/678-mega.json",
+      "status": 200,
+      "bytes": 288,
+      "sha256": "c22dfa1d5315f3bd16a523e16dfe3f3d8f2ce8dce302a5c2a1521086f2a267c9",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/678-mega.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/978-mega-curly.json",
+      "status": 200,
+      "bytes": 1300,
+      "sha256": "7212c0b38ddd0350bf75573a0c9c1b032a6607f89cca148be6889ac6a0850e95",
+      "localPath": "public/game/pokerogue/pokemon/variant/978-mega-curly.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/978-mega-curly.json",
+      "status": 200,
+      "bytes": 1388,
+      "sha256": "276d1ad690030f8cfd5ea02fdec01cb3d308f2b547f29320d042a87fb6ebfd64",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/978-mega-curly.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/978-mega-droopy.json",
+      "status": 200,
+      "bytes": 1300,
+      "sha256": "7212c0b38ddd0350bf75573a0c9c1b032a6607f89cca148be6889ac6a0850e95",
+      "localPath": "public/game/pokerogue/pokemon/variant/978-mega-droopy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/978-mega-droopy.json",
+      "status": 200,
+      "bytes": 1388,
+      "sha256": "276d1ad690030f8cfd5ea02fdec01cb3d308f2b547f29320d042a87fb6ebfd64",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/978-mega-droopy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/978-mega-stretchy.json",
+      "status": 200,
+      "bytes": 1300,
+      "sha256": "7212c0b38ddd0350bf75573a0c9c1b032a6607f89cca148be6889ac6a0850e95",
+      "localPath": "public/game/pokerogue/pokemon/variant/978-mega-stretchy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/978-mega-stretchy.json",
+      "status": 200,
+      "bytes": 1388,
+      "sha256": "276d1ad690030f8cfd5ea02fdec01cb3d308f2b547f29320d042a87fb6ebfd64",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/978-mega-stretchy.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/mysterious_sisters.png",
+      "status": 200,
+      "bytes": 1478,
+      "sha256": "393354ac7e242e9b4627cbd2b8f87fdd428fc42aae1d5404cd504fa3098babf8",
+      "localPath": "public/game/trainers/pokerogue-mysterious_sisters.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/aliana.png",
+      "status": 200,
+      "bytes": 800,
+      "sha256": "95e0ce14bc1ea4c8e38b548f271c2dc27d4c352c2bc277b0da184006d2678fb2",
+      "localPath": "public/game/trainers/pokerogue-aliana.png",
+      "modified": false,
+      "attribution": [
+        {
+          "path": [
+            "trainer/aliana.png",
+            "trainer/celosia.png",
+            "trainer/mable.png"
+          ],
+          "SPDX-FileCopyrightText": "2026 Red",
+          "SPDX-License-Identifier": "CC-BY-NC-SA-4.0"
+        }
+      ]
+    },
+    {
+      "path": "images/trainer/celosia.png",
+      "status": 200,
+      "bytes": 609,
+      "sha256": "11bf6ae7b419368ba2074acca9312e73f5b1e9696bcaf77ed7c956143c8c356b",
+      "localPath": "public/game/trainers/pokerogue-celosia.png",
+      "modified": false,
+      "attribution": [
+        {
+          "path": [
+            "trainer/aliana.png",
+            "trainer/celosia.png",
+            "trainer/mable.png"
+          ],
+          "SPDX-FileCopyrightText": "2026 Red",
+          "SPDX-License-Identifier": "CC-BY-NC-SA-4.0"
+        }
+      ]
+    },
+    {
+      "path": "images/trainer/macro_grunt_m.png",
+      "status": 200,
+      "bytes": 749,
+      "sha256": "2aafc2ab433b76850af103c421ab14ffe52f56c905b7eb8c030d1595269e6abb",
+      "localPath": "public/game/trainers/pokerogue-macro_grunt_m.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/macro_grunt_f.png",
+      "status": 200,
+      "bytes": 711,
+      "sha256": "c3fd0dae638ce25d06e9d2f039fe5ba85a35167dfed5be5fb35cab2094663a1f",
+      "localPath": "public/game/trainers/pokerogue-macro_grunt_f.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/victor.png",
+      "status": 200,
+      "bytes": 763,
+      "sha256": "5d3bdcb03f805c0f17b7eac0e2d07aaf6d0c76fcd1d224f9b8a142db8041902e",
+      "localPath": "public/game/trainers/pokerogue-victor.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/victoria.png",
+      "status": 200,
+      "bytes": 788,
+      "sha256": "7e9632fd062c86762e52f96f280ca3a62c9899ce3e87a5829be7f5be6b9a1531",
+      "localPath": "public/game/trainers/pokerogue-victoria.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/vivi.png",
+      "status": 200,
+      "bytes": 687,
+      "sha256": "133aedbb056f8cd1fa5a5451a6444b2380d95438b8f897d96c10e1fff6aa6245",
+      "localPath": "public/game/trainers/pokerogue-vivi.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/vicky.png",
+      "status": 200,
+      "bytes": 677,
+      "sha256": "c819ccc6ebe5b3e1c053065238792584d1c827a750bd16ffb340c44d34829cea",
+      "localPath": "public/game/trainers/pokerogue-vicky.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/vito.png",
+      "status": 200,
+      "bytes": 754,
+      "sha256": "9ba8a043d84f8598a3d536d56e68bd9c0e1aa95945b3a44c12eec91eb0167fed",
+      "localPath": "public/game/trainers/pokerogue-vito.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/expert_pokemon_breeder.png",
+      "status": 200,
+      "bytes": 930,
+      "sha256": "bca539c70a9d74eb0233e741c9bc5edd25b585a3a365774b6ea7a6801a29d2c4",
+      "localPath": "public/game/trainers/pokerogue-expert_pokemon_breeder.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/player_m_alternate.png",
+      "status": 200,
+      "bytes": 702,
+      "sha256": "8ea1526d64ecc5234adb0975b80ecd604103843993d6f4d3c89c9034b5858f86",
+      "localPath": "public/game/trainers/pokerogue-player_m_alternate.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/player_f_alternate.png",
+      "status": 200,
+      "bytes": 635,
+      "sha256": "9fae7519ebc094e044d258f78b855e1e93827384a1f7327a698975225d9e6edc",
+      "localPath": "public/game/trainers/pokerogue-player_f_alternate.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/trainer/bird_keeper_f.png",
+      "status": 200,
+      "bytes": 819,
+      "sha256": "50eedcf2e6aec1c965c5ca07bf485daed7cda03657554cf8f68e3dbee986c50f",
+      "localPath": "public/game/trainers/pokerogue-bird_keeper_f.png",
+      "modified": false,
+      "attribution": null
+    }
+  ]
+}

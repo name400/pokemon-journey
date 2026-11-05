@@ -119,7 +119,7 @@ export default function PokemonImage({ mon, className = '', alt, eager = false, 
   const staticImage = reducedMotion || frozen;
   const sourceId=mon?.rogueSourceId??(mon?.formIndex!=null?mon.sourceId:undefined),formIndex=mon?.rogueFormIndex??mon?.formIndex??0;
   const formAtlas=classicSourceFormAtlas(mon,facing),formAtlasKey=formAtlas?`${formAtlas.key}:${formAtlas.shiny}:${formAtlas.facing}`:'',atlasSourceKey=formAtlas?.key,atlasSourceShiny=!!formAtlas?.shiny;
-  const assetKey=sourceId==null?null:formIndex===0?String(sourceId):(variantForms as Record<string,string>)[`${sourceId}:${formIndex}`]||(formAtlas?.key==='855'?'855':null);
+  const assetKey=formAtlas?.key||(sourceId==null?null:formIndex===0?String(sourceId):(variantForms as Record<string,string>)[`${sourceId}:${formIndex}`]||(formAtlas?.key==='855'?'855':null));
   const fusionTarget=classicFusionPaletteTarget(mon,facing,variant),fusionKey=fusionTarget?`${fusionTarget.primary}:${fusionTarget.donor}:${fusionTarget.facing}:${!!fusionTarget.primaryShiny}:${!!fusionTarget.donorShiny}:${fusionTarget.primaryVariant||0}:${fusionTarget.donorVariant||0}`:'',fusionPrimary=fusionTarget?.primary,fusionDonor=fusionTarget?.donor,fusionPrimaryShiny=!!fusionTarget?.primaryShiny,fusionDonorShiny=!!fusionTarget?.donorShiny,fusionPrimaryVariant=fusionTarget?.primaryVariant||0,fusionDonorVariant=fusionTarget?.donorVariant||0;
   const [fusionFrames,setFusionFrames]=useState<{key:string;frames:string[]}|null>(null);
   const [fusionUnavailable,setFusionUnavailable]=useState('');

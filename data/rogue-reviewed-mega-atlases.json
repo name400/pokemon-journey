@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": 359,
+    "formIndex": 2,
+    "formKey": "mega-z",
+    "atlas": "359-mega-z",
+    "native": [
+      "absolmegaz"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 445,
+    "formIndex": 2,
+    "formKey": "mega-z",
+    "atlas": "445-mega-z",
+    "native": [
+      "garchompmegaz"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 448,
+    "formIndex": 2,
+    "formKey": "mega-z",
+    "atlas": "448-mega-z",
+    "native": [
+      "lucariomegaz"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 678,
+    "formIndex": 2,
+    "formKey": "mega",
+    "atlas": "678-mega",
+    "native": [
+      "meowsticmmega",
+      "meowsticfmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 801,
+    "formIndex": 3,
+    "formKey": "mega-original",
+    "atlas": "801-mega-original",
+    "native": [
+      "magearnaoriginalmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 978,
+    "formIndex": 3,
+    "formKey": "mega-curly",
+    "atlas": "978-mega-curly",
+    "native": [
+      "tatsugiricurlymega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 978,
+    "formIndex": 4,
+    "formKey": "mega-droopy",
+    "atlas": "978-mega-droopy",
+    "native": [
+      "tatsugiridroopymega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 978,
+    "formIndex": 5,
+    "formKey": "mega-stretchy",
+    "atlas": "978-mega-stretchy",
+    "native": [
+      "tatsugiristretchymega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ]
+  }
+]
