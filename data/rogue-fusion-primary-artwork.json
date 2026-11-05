@@ -286,6 +286,11 @@
       "key": "origin",
       "native": "giratinaorigin"
     },
+    "492:1": {
+      "id": 492,
+      "key": "sky",
+      "native": "shayminsky"
+    },
     "550:1": {
       "id": 10016,
       "key": "blue-striped",
@@ -1203,7 +1208,6 @@
     }
   },
   "blocked": [
-    "492:1",
     "493:1",
     "493:2",
     "493:3",

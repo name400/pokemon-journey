@@ -1489,6 +1489,32 @@
     }
   },
   {
+    "key": "492:1",
+    "atlas": "492-sky",
+    "mon": {
+      "id": 492,
+      "rogueSourceId": 492,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "sky",
+      "rogueBattleSpecies": "shayminsky",
+      "battleAppearance": "shayminsky",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "550:1",
     "atlas": "550-blue-striped",
     "mon": {
