@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
 import {applyClassicAction,activeClassicRun} from '../lib/rogue-classic-game.mjs';
-import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle,playClassicCombat,continueClassicWild} from '../lib/rogue-battle-engine.mjs';
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
 function fixture({ability='pressure',ghost=false,modern=true,foeMove='Teleport'}={}){
  const doc={coins:17,adventure:{safe:true}},state=ensureClassicState(doc);
  const hero=makeReferenceMon(143,50,{boxId:'hero',moves:['Splash'],ability:'runaway'});
  const foe=makeReferenceMon(ghost?94:151,50,{boxId:'foe',moves:[foeMove],ability});
- const run={id:'wild-teleport',seed:'wild-teleport',wave:21,biome:1,rng:42,screen:'battle',party:[hero],balls:{pokeball:5},money:1000,modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[],rerolls:0,calledMoveRule:'source-pool-v1',...(modern?{wildTeleportRule:'single-source-v1'}:{})};
+ const run={id:'wild-teleport',seed:'wild-teleport',wave:21,biome:1,rng:42,screen:'battle',party:[hero],balls:{pokeball:5},money:1000,modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[],rerolls:0,calledMoveRule:'source-pool-v1',...(modern?{wildTeleportRule:'single-source-v1',wildTeleportWaveRule:'source-v1'}:{})};
  state.slots[0]=run;state.slots[1]={keep:true};run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];return {doc,run};
 }
 test('wild Teleport ends battle without defeating the enemy and can resume after saving',async()=>{
@@ -64,4 +64,16 @@ for(const action of ['capture','escape'])test(`wild Teleport after failed ${acti
 test('mystery battles keep their existing encounter-specific behavior',()=>{
  const {doc,run}=fixture();run.encounter={kind:'mystery',key:'uncommon-breed',trainer:null,noFlee:true};run.mystery={type:'uncommon-breed',stage:'battle'};run.combat=createClassicCombat(run,run.combat.teams[1]);run.party=run.combat.teams[0];assert.equal(run.combat.wildTeleportRule,null);
  applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash'}});assert.equal(run.screen,'battle');assert.ok(!run.combat.wildTeleportEscaped);assert.equal(run.mystery.stage,'battle');
+});
+
+test('wild Teleport fails on every tenth wave even with Run Away or Ghost',()=>{
+ for(const ghost of [false,true]){const {doc,run}=fixture({ghost,ability:'runaway'});run.wave=30;run.combat=createClassicCombat(run,run.combat.teams[1]);run.party=run.combat.teams[0];applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash'}});assert.equal(run.screen,'battle');assert.ok(!run.combat.wildTeleportEscaped);}
+});
+test('earlier saved rule without the wave opt-in keeps previous behavior',()=>{
+ const {doc,run}=fixture({ability:'runaway'});run.wave=30;delete run.wildTeleportWaveRule;run.combat=createClassicCombat(run,run.combat.teams[1]);run.party=run.combat.teams[0];applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash'}});assert.equal(run.screen,'reward');assert.equal(run.combat.wildTeleportEscaped,true);
+});
+
+test('continuous wild battles update the current wave restriction',()=>{
+ const {run}=fixture();run.wave=29;run.party[0].moves=['Seismic Toss'];const first=makeReferenceMon(19,1,{boxId:'first',moves:['Splash']});first.hp=1;run.combat=createClassicCombat(run,[first]);run.party=run.combat.teams[0];run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});assert.equal(run.combat.ended,true);run.party=run.combat.teams[0];
+ run.wave=30;run.party[0].moves=['Splash'];const next=makeReferenceMon(151,50,{boxId:'next',moves:['Teleport'],ability:'runaway'});run.combat=continueClassicWild(run,[next]);run.party=run.combat.teams[0];assert.equal(run.combat.wildTeleportWave,30);run.combat=playClassicCombat(run,{type:'move',move:'splash'});assert.equal(run.combat.ended,false);assert.ok(!run.combat.wildTeleportEscaped);
 });
