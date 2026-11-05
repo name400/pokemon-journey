@@ -38,7 +38,7 @@ export default function RogueClassic({initialView='slots',navigationKey=0,onView
  const [unspliceBox,setUnspliceBox]=useState<string|null>(null);
  useEffect(()=>{const media=window.matchMedia('(max-width: 680px)'),sync=()=>setEggPageSize(media.matches?5:10);sync();media.addEventListener('change',sync);return()=>media.removeEventListener('change',sync);},[]);
  const [eggMachine,setEggMachine]=useState('legendary'),[eggIndex,setEggIndex]=useState(0),[drawNotice,setDrawNotice]=useState(''),[drawSummary,setDrawSummary]=useState<{id:string;name:string;image:string}[]|null>(null),[drawSequence,setDrawSequence]=useState(false),[hatchSummary,setHatchSummary]=useState(false),[hatchPage,setHatchPage]=useState(0);
- const lock=useRef(false),revision=useRef(-1),mounted=useRef(true),controllers=useRef(new Set<AbortController>()),lastEggDay=useRef(Math.floor(Date.now()/86400000)),lastEggRefreshAttempt=useRef(0),pickupVersion=useRef(-1),autoAdvanceKey=useRef(''),recoveryKey=useRef(''),biomeRef=useRef<string|undefined>(undefined);
+ const lock=useRef(false),revision=useRef(-1),readGeneration=useRef(0),mounted=useRef(true),controllers=useRef(new Set<AbortController>()),lastEggDay=useRef(Math.floor(Date.now()/86400000)),lastEggRefreshAttempt=useRef(0),pickupVersion=useRef(-1),autoAdvanceKey=useRef(''),recoveryKey=useRef(''),biomeRef=useRef<string|undefined>(undefined);
  biomeRef.current=saved?.run?.biome?.key;
  function accept(data:State){if(!mounted.current||data.revision<revision.current)return;revision.current=data.revision;if(Number.isSafeInteger(data.pickupVersion))pickupVersion.current=data.pickupVersion!;setSaved(data);if(data.starters)setStarters(data.starters);if(data.finishedBattle)setFinished({...data.finishedBattle,visualBiome:biomeRef.current||data.run?.biome?.key});if(data.hatchedEgg)setHatched(data.hatchedEgg);if(data.drawnEggs){setDrawNotice('알 '+data.drawnEggs.count+'개를 받았다! 웨이브를 진행해 부화시키세요.');if(data.drawnEggs.eggs?.length){setDrawSummary(data.drawnEggs.eggs);setDrawSequence(true);}}if(data.evolutionResult)setEvolved(data.evolutionResult);}
  async function request(body?:any,query=''){
@@ -46,14 +46,16 @@ export default function RogueClassic({initialView='slots',navigationKey=0,onView
   try{const response=await fetch('/api/rogue-classic'+query,{...(body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store' as RequestCache}),signal:controller.signal});return await readGameResponse(response) as State;}
   finally{clearTimeout(timeout);controllers.current.delete(controller);}
  }
- async function load({reportError=true}={}){try{const data=await request();accept(data);return data;}catch(e){if(mounted.current&&reportError)setError(gameErrorMessage(e,'도전을 불러오지 못했습니다.'));}}
+ // Save revision does not order independent pickup updates. Only the latest
+ // read may apply; starting an action also supersedes reads already in flight.
+ async function load({reportError=true}={}){const generation=++readGeneration.current;try{const data=await request();if(!mounted.current||generation!==readGeneration.current)return;accept(data);return data;}catch(e){if(mounted.current&&generation===readGeneration.current&&reportError)setError(gameErrorMessage(e,'도전을 불러오지 못했습니다.'));}}
  useEffect(()=>{if(!drawSequence)return;const delay=window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:2200;const timer=window.setTimeout(()=>setDrawSequence(false),delay);return()=>window.clearTimeout(timer);},[drawSequence]);
  useEffect(()=>{if(view!=='eggs')return;let cancelled=false;const controller=new AbortController();const check=async()=>{if(lock.current)return;try{const response=await fetch('/api/rogue-classic?pickupOnly=1',{cache:'no-store',signal:controller.signal});if(!response.ok)return;const data:any=await response.json();if(!cancelled&&!lock.current&&Number.isSafeInteger(data.pickupVersion)&&pickupVersion.current>=0&&data.pickupVersion!==pickupVersion.current)await load();}catch{}};const timer=window.setInterval(()=>void check(),15000);return()=>{cancelled=true;controller.abort();window.clearInterval(timer);};},[view]);
  useEffect(()=>{setView(initialView);},[navigationKey]);
  useEffect(()=>{onViewChange?.(view);},[view,onViewChange]);
  useEffect(()=>{mounted.current=true;void load();const active=controllers.current;return()=>{mounted.current=false;active.forEach(c=>c.abort());};},[]);
  async function act(action:string,extra:any={}){
-  if(lock.current)return;lock.current=true;setBusy(true);setError('');if(action==='drawEggs')setDrawNotice('');
+  if(lock.current)return;lock.current=true;readGeneration.current++;setBusy(true);setError('');if(action==='drawEggs')setDrawNotice('');
   try{const result=await request({action,revision:revision.current,...extra});accept(result);if(['start','selectSlot'].includes(action)){setFinished(null);setEvolved(null);setView('game');}if(action==='prepare')setView('game');return result;}
   catch(e){if(mounted.current){const message=gameErrorMessage(e,'행동 처리 실패');setError(message);const recovered=await load({reportError:false});if(!recovered&&mounted.current)setError(message+' 진행 상태를 다시 불러오지 못했습니다. 새로고침한 뒤 확인해 주세요.');}}
   finally{lock.current=false;if(mounted.current)setBusy(false);}

@@ -131,3 +131,19 @@ responses at375px and1280px. It checks that the first POST error/UUID remains vi
 no POST is retried, saves are unchanged, and the UUID causes no horizontal overflow.
 Results/screenshots go to `.sites-runtime/tests/error-recovery/`. Keep its browser/CPU
 work separate from performance profiling runs.
+
+Long-wave record and playback-lifecycle probes:
+
+```sh
+# Use the optimized preview above, with real PROFILE_ART_ROOT GIFs.
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/profile-long-session.mjs
+node tests/browser/ui-readability/profile-playback-lifecycle.mjs
+```
+
+The menu probe seeds 0/300/1500 synthetic wave-log lines and runs 12 direct DOM
+click/Escape cycles at 4× CPU. It excludes Playwright actionability from the measured
+section; it is not a replay of hundreds of actual game turns. `PROFILE_LOG_COUNTS`,
+`PROFILE_WIDTH` and `PROFILE_SUFFIX` select cases/output. The lifecycle probe checks
+200 supersede/duplicate/cancel cycles and counts pending timers and retained keys.
+See `docs/PC_REAL_ARTWORK_PERFORMANCE_QA_20261105.md` for the measured limits and the
+memo candidate that was rejected and reverted because it did not improve the long log.

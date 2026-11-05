@@ -62,3 +62,36 @@
 - `/tmp/pokerogue-profile-art/provenance.json` — 실제 이미지 출처/hash
 
 표본은 각 조건 3턴으로 작다. 정상 회차에 문제가 없었다는 결과가 운영 문제의 부재나 해결을 입증하지 않는다. 운영 진단 및 로컬 서버 단계 실측은 [후속 통합 QA](INCIDENT_FOLLOWUP_QA_20261105.md)를 함께 참고한다.
+
+## 추가 조사: 긴 웨이브 기록과 재생 수명 관리
+
+`ebc6a8d` 이후 남아 있던 두 경계만 추가 확인했다. 사용자가 마지막 운영 배포를 `1dcfdce`라고 확인했으므로 아래 최신 로컬 코드 실험을 해당 운영 배포의 재현/해결로 간주하지 않는다. 배포 asset404/빈 화면은 부모의 별도 조사 대상이다.
+
+### 누적 기록
+
+코드 확인 결과 `waveLog`는 웨이브 시작에 초기화된다. 따라서 38웨이브까지의 모든 전투 기록이 계속 DOM에 누적되는 구조는 아니다. 다만 한 웨이브 안에서는 전체 기록이 보존되며 메뉴 변경에도 BattlePanel이 정규화 및 `<p>` 목록을 다시 만든다.
+
+실제 GIF/최적화 번들/1280×800/CPU4×에서 동일 더블 fixture에 0/300/1500줄을 주입했다. 각 조건 12회 `싸운다 → Escape`를 수행하고 두 rAF 이후 완료 시간을 측정했다. 이 측정은 DOM click으로 실행하여 Playwright actionability 검사를 측정 구간에서 제외했다. 정상 게임을 수백 턴 진행한 것이 아니라 긴 기록의 화면 비용을 분리한 합성 경계다.
+
+| 기록 줄 수 | 원본 중앙값 ms | memo 후보 중앙값 ms | 원본/후보 long task 개수 | 원본/후보 최대 long task ms |
+|---:|---:|---:|---:|---:|
+| 0 | 125.1 | 150.3 | 8 / 19 | 91 / 83 |
+| 300 | 141.2 | 118.4 | 15 / 10 | 90 / 63 |
+| 1500 | 266.6 | 330.6 | 23 / 24 | 220 / 197 |
+
+후보는 로그 정규화 `useMemo`와 동일 배열의 목록 `React.memo`였다. 1500줄에서 개선을 입증하지 못했고 **BattlePanel 후보를 전부 원복했다**. 최종 제품 변경은 없다. 원본/후보 각각 1회차라 시스템 변동과 JIT 영향이 있으며, 후보 번들에는 부모의 정상 경로 오류경계 wrapper도 포함되었다. 1500줄 DOM/style/layout 비용이 있다고 관찰할 수는 있지만 React 정규화가 지배적 원인이었다고 결론낼 수 없다. 기록 삭제·축약 또는 임의 CSS 최적화는 하지 않았다.
+
+초기 검사 스크립트의 empty-log placeholder 가정, nonfocusable section 키 입력/비동기 패널 전환 기다림, `data-playing` 생략값 해석 문제로 중단된 회차는 제외했다. 최종 전후 수치는 기능 검사를 분리한 동일 메뉴 반복만의 완료 회차다. 후보가 폐기됐으므로 해당 후보의 기능회귀가 통과했다고 보고하지 않는다. 로그 DOM은 조건별 1(빈 기록 안내)/300/1500개, 전체 DOM은 336/635/1835개로 유지됐고 실제 GIF decode를 확인했다.
+
+### 재생 타이머/중복 수명
+
+실제 `BattlePlaybackController`에서 200회 반복했다: 긴 이벤트 시작 → 새로운 source로 교체 → 완료한 source 중복 재생 → 다른 이벤트 시작 → unmount형 cancel. 총 실제 이벤트 프레임400개(예상400), 동시 pending timer 최대1, 종료 후 잔여 timer0, completed/superseded key 각각128개였다. 타이머를 누적시키거나 취소한 이벤트를 뒤늦게 재생하는 결함은 이 경계에서 발견하지 못했다. 이는 controller 수명 검사이며 브라우저 전체 메모리 누수의 부재를 입증하지 않는다.
+
+재현 파일과 결과:
+
+- `tests/browser/ui-readability/profile-long-session.mjs` — 실제 GIF 메뉴 경계; `PROFILE_LOG_COUNTS`, `PROFILE_WIDTH`, `PROFILE_SUFFIX` 선택 가능.
+- `tests/browser/ui-readability/profile-playback-lifecycle.mjs` — 실제 controller의200회 교체/중복/cancel 계수 검사.
+- `.sites-runtime/tests/ui-readability/long-session/menu-results.json` 및 `long-session-after/menu-results.json` — 원본/폐기 후보의12회 원시 시간과 long task.
+- `.sites-runtime/tests/ui-readability/long-session/playback-lifecycle.json` — 수명 계수 결과.
+
+새 두 스크립트와 fixture 대상 ESLint는 오류/경고 없이 통과했다. 이번 결과는 긴 전투 기록의 한계를 좁힌 조사이며 운영 PC 문제 해결 판정은 계속 보류한다. 추가 무작정 반복 대신 운영에서 실제로 멈춘 구간의 파일 로드/네트워크/브라우저 trace 증거가 필요하다.

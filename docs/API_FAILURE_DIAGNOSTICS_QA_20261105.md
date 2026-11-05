@@ -60,3 +60,7 @@ POST의 `getChatGPTUser()`는 여전히 route의 try 바깥이다. 실제 `app/c
 실제 인증 모듈과 설치된 vinext headers shim을 함께 실행해 정상 이름, 잘못된 percent 인코딩, 인증 누락을 검사했다. 모두 예외 없이 예상 user/null을 반환했다. 요청 scope 바깥 호출에서는 정적인 headers 사용 위치 오류가 발생했지만, 실제 force-dynamic route의 정상 요청 입력으로 민감값을 포함한 인증 예외는 재현하지 못했다. 근거 `/tmp/astra-auth-review.log`.
 
 vinext의 `app-route-handler-execution.js`는 route 밖으로 나온 예외를 원시 `console.error`와 `reportRequestError`에 전달한다. 이는 예외가 발생했을 때의 프레임워크 경로 확인이며 현재 인증 구현의 개인값 유출이나 운영 사건을 증명하지 않는다. 일반적인 민감 Error를 인위적으로 주입하는 것만으로 이번 제품 수정 범위를 넓히지 않았다. POST 인증 예외가 향후 새 구현에서 발생하면 안전한 route 응답을 우회할 수 있다는 경계는 남으며, 인증 구현이 바뀔 때 함께 검토해야 한다. 이번 리뷰에서는 제품 코드와 테스트 수를 바꾸지 않았다.
+
+### ebc6a8d 이후 실제 UI 요청 순서 검사
+
+같은 저장 revision의 pickup full GET이 역순 도착하면 픽업 표시와 다음 뽑기 expectedFeaturedId가 이전 값으로 돌아가는 결함을 격리 재현했다. 클라이언트 load에 조회 세대 번호를 추가해 새 조회/행동보다 오래된 조회의 데이터·오류 적용을 막았다. 실제 UI 요청 순서5/5, 기존 오류 복구4/4, 타입 통과. 트레이너 대화 입력 차단 및 마자용 flat move3턴 저장왕복은 정상이며, 전투409의 운영 원인은 여전히 미확정이다. 배포 버전 정정·근거·검사 한계는 `CLIENT_REQUEST_ORDER_QA_20261105.md` 참고.

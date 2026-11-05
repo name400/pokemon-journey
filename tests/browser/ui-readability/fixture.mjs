@@ -7,6 +7,7 @@ import {starterCatalog} from '../../../lib/rogue-starter-system.mjs';
 import {applyClassicAction,activeClassicRun} from '../../../lib/rogue-classic-game.mjs';
 import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 export function createFixture(scenario='eggs'){
+ if(/^profile-log-(0|300|1500)$/.test(scenario)){const doc=createFixture('profile-double'),run=activeClassicRun(doc),count=Number(scenario.split('-').at(-1));run.waveLog=Array.from({length:count},(_,i)=>`뮤츠의 스피드스타! · ${i+1}번째 행동 · HP 120/300`);run.waveLogTurnStart=count;return doc;}
  if(scenario==='profile-single'||scenario==='profile-double'){
   const {doc,run}=fixture([makeReferenceMon(150,30,{boxId:'profile-own-150',moves:['Swift','Confusion','Recover','Disable']}),makeReferenceMon(440,30,{boxId:'profile-own-440',moves:['Splash']})]);
   run.wave=38;run.screen='battle';run.encounter={kind:'trainer',name:'격리 성능 검사'};
