@@ -63,3 +63,36 @@ main[data-mode="rogue"]:has(.rogue-starters-screen) .workspace>footer{display:no
 .rc-shell .rogue-starters-screen .rss-slot-main>img{width:56px;height:56px}@media(max-width:520px){.rc-shell .rogue-starters-screen .rss-slot-main>img{width:40px;height:40px}}
 /* Larger partner portrait and identity without expanding the detail panel. */
 .rc-shell .rogue-starters-screen .rss-detail-sprite{width:80px;height:80px;min-width:80px}.rc-shell .rogue-starters-screen .rss-detail-heading{padding:9px 12px}.rc-shell .rogue-starters-screen .rss-detail-heading h3{font-size:23px;line-height:1.25}.rc-shell .rogue-starters-screen .rss-detail-identity{gap:12px}.rc-shell .rogue-starters-screen .rss-type-row>span{font-size:13px;padding:4px 7px}.rc-shell .rogue-starters-screen .rss-detail-cost{font-size:25px}.rc-shell .rogue-starters-screen .rss-detail-cost small{font-size:13px}.rc-shell .rogue-starters-screen .rss-detail-identity>div>p{font-size:13px;line-height:1.4;margin:3px 0}@media(max-width:520px){.rc-shell .rogue-starters-screen .rss-detail-sprite{width:70px;height:70px;min-width:70px}.rc-shell .rogue-starters-screen .rss-detail-heading h3{font-size:21px}.rc-shell .rogue-starters-screen .rss-type-row>span{font-size:12px}.rc-shell .rogue-starters-screen .rss-detail-cost{font-size:23px}}
+
+/* Mobile: let the page scroll naturally so the catalog is not squeezed between fixed panels. */
+@media (max-width: 520px) {
+ .rc-shell .rogue-starters-screen{height:auto;min-height:0;overflow:visible}
+ .rogue-starters-screen .rss-layout{flex:none;height:auto;min-height:0;overflow:visible}
+ .rogue-starters-screen .rss-catalog{height:auto;min-height:0;overflow:visible}
+ .rogue-starters-screen .rss-mon-grid{flex:none;min-height:0;max-height:none;overflow:visible}
+ .rogue-starters-screen .rss-slots{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .rogue-starters-screen .rss-slots>li{min-height:52px}
+ .rogue-starters-screen .rss-slot-main{min-width:0;min-height:52px;flex-direction:row;text-align:left;gap:3px;padding:4px 20px 4px 4px}
+ .rogue-starters-screen .rss-slot-main b,.rogue-starters-screen .rss-slot-main small{font-size:10px;line-height:1.25;white-space:normal;overflow-wrap:anywhere}
+ .rogue-starters-screen .rss-generations{display:flex;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+ .rogue-starters-screen .rss-generations>button{flex:0 0 44px;min-height:44px}
+ .rogue-starters-screen .rss-pagination button,.rogue-starters-screen .rss-pane-nav>button{min-height:44px}
+ .rogue-starters-screen .rss-challenge{max-height:none;overflow:visible}
+ .rogue-starters-screen .rss-layout[data-pane='detail'] .rss-detail{height:100dvh;max-height:100dvh;overflow:auto}
+}
+@media (max-width: 520px) {
+ .rogue-starters-screen .rss-header p{display:none}
+ .rogue-starters-screen .rss-slots{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(92px,1fr);overflow-x:auto;overscroll-behavior-x:contain;padding:3px 2px}
+}
+@media (max-width: 520px) {
+ .rogue-starters-screen button,.rogue-starters-screen input,.rogue-starters-screen select,.rogue-starters-screen summary{scroll-margin-block:72px 90px}
+}
+@media (max-width: 520px) {
+ .rogue-starters-screen .rss-slots{grid-auto-columns:minmax(120px,1fr)}
+ .rogue-starters-screen .rss-slot-main{padding-right:39px}
+ .rogue-starters-screen .rss-slot-remove{top:0;right:0;width:44px;height:44px;min-height:44px}
+}
+@media (max-width: 520px) {
+ .rogue-starters-screen .rss-slots>li:not(.is-filled){display:none}
+ .rogue-starters-screen .rss-slots:empty{display:none}
+}
