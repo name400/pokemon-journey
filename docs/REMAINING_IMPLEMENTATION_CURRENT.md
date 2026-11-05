@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 멀티렌즈 첫 타격 순차 처리를 매지컬샤인·하이퍼보이스로 확장했다. [MULTILENS_SIMPLE_SPREAD_FIRST_QA_20261105.md](MULTILENS_SIMPLE_SPREAD_FIRST_QA_20261105.md) 참조.
+
 후속: 융합 회귀의 폼 수와 케르디오·테라파고스 전환 기대값을 원본에 맞춰 복구했다. [DNA_REVIEWED_FLOW_TEST_REPAIR_20261105.md](DNA_REVIEWED_FLOW_TEST_REPAIR_20261105.md) 참조.
 
 후속: 신규 도전 멀티렌즈 스피드스타의 첫 타격은 앞 대상의 실제 기절을 다음 대상의 피해 계산에 반영한다. 다른 전체 공격은 남아 있다. 이후 기존 융합 검사 2건의 오래된 폼 수·폼 전환 기대값을 바로잡고 237개 폼을 다시 검사했다. [MULTILENS_SWIFT_FIRST_HIT_QA_20261105.md](MULTILENS_SWIFT_FIRST_HIT_QA_20261105.md) 참조.
