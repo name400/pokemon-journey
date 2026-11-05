@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전 AI가 강풍의 비행 타입 상성 보정에서 환영이 아닌 실제 타입을 확인한다. [AI_ILLUSION_STRONG_WINDS_QA_20261105.md](AI_ILLUSION_STRONG_WINDS_QA_20261105.md) 참조.
+
 후속: 신규 도전에서 그라운드포스·오버드라이브·아스트랄비트의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_THREE_SPREAD_FIRST_QA_20261105.md](MULTILENS_THREE_SPREAD_FIRST_QA_20261105.md) 참조.
 
 후속: 신규 도전에서 용해액·거품·눈싸라기·회오리의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_SECONDARY_FOUR_FIRST_QA_20261105.md](MULTILENS_SECONDARY_FOUR_FIRST_QA_20261105.md) 참조.
