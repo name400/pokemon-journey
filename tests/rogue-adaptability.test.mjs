@@ -63,7 +63,7 @@ test('Gastro Acid and opposing Gas suppress the source boost; equal components d
  assert.equal(hit(fixture('Confusion',{duplicate:true,tera:'Water'}),{tera:true}).damage,hit(fixture('Confusion',{tera:'Water'}),{tera:true}).damage);
 });
 
-test('fixed damage and Struggle are unaffected; unsupported Stellar behavior is preserved',()=>{
+test('fixed damage and Struggle are unaffected; v1 Stellar behavior is preserved',()=>{
  for(const move of ['Seismic Toss','Struggle'])assert.equal(hit(fixture(move,{tera:'Fighting'}),{tera:true}).damage,hit(fixture(move,{tera:'Fighting',ability:'pressure'}),{tera:true}).damage);
  for(const passive of [false,true])for(const move of ['Confusion','Water Gun'])assert.equal(hit(fixture(move,{tera:'Stellar',passive}),{tera:true}).damage,hit(fixture(move,{tera:'Stellar',passive,rule:null}),{tera:true}).damage);
 });
@@ -84,5 +84,5 @@ test('encoded saves restore the source component after a real Tera action and pr
 
 test('new rules do not migrate old runs or modify shared ability callbacks',()=>{
  const original=Dex.abilities.get('adaptability').onModifySTAB;assert.equal(restoreClassicNativeBattle(fixture('Confusion',{rule:null}).combat).dex.abilities.get('adaptability').onModifySTAB,original);assert.notEqual(restoreClassicNativeBattle(fixture('Confusion').combat).dex.abilities.get('adaptability').onModifySTAB,original);assert.equal(Dex.abilities.get('adaptability').onModifySTAB,original);
- const doc={},state=ensureClassicState(doc,{initialStarterId:4}),starter=starterCatalog(state.system).find(p=>p.id===4),r=startClassicRun(doc,[{id:4,ability:starter.abilities[0].key,nature:starter.natures[0].key,gender:starter.genders[0],shiny:false,moves:starter.defaultMoves}]);assert.equal(r.adaptabilityRule,'source-subset-v1');delete r.adaptabilityRule;assert.equal(ensureClassicState(doc).slots[0].adaptabilityRule,undefined);
+ const doc={},state=ensureClassicState(doc,{initialStarterId:4}),starter=starterCatalog(state.system).find(p=>p.id===4),r=startClassicRun(doc,[{id:4,ability:starter.abilities[0].key,nature:starter.natures[0].key,gender:starter.genders[0],shiny:false,moves:starter.defaultMoves}]);assert.equal(r.adaptabilityRule,'source-subset-v2');delete r.adaptabilityRule;assert.equal(ensureClassicState(doc).slots[0].adaptabilityRule,undefined);
 });

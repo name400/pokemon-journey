@@ -1,5 +1,7 @@
 # 적응력과 비스텔라 테라스탈의 타입 일치 보너스
 
+아래 스텔라 미연결 설명은 v1 당시 상태다. 후속 v2 연결과 현재 검증 범위는 `docs/BATTLE_STELLAR_ADAPTABILITY_AUDIT.md`를 확인한다.
+
 기준은 제공 ZIP의 고정 원본 `7c0881255af5cd51992e513ff93c2f71adbe40e0`이다. `src/field/pokemon.ts`의 `calculateStabMultiplier`는 테라스탈을 제외한 현재 타입과 기술 타입이 일치하면 보너스 1.5를 만들고, `StabBoostAbAttr`로 적응력을 적용한 뒤 테라스탈 보너스를 더한다. 마지막 상한은 2.25다. `src/data/abilities/ab-attrs.ts`의 해당 속성은 이미 1보다 큰 일치 보너스에만 0.5를 더한다.
 
 따라서 비스텔라 타입에서 확인한 배율은 다음과 같다. ‘원래 타입’은 종족의 고정 타입이 아니라 물붓기 등 전투 중 변화를 반영한 테라스탈 이전 타입이다.
