@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 멀티렌즈 탁류 첫 타격에서 앞 상대의 실제 기절 여부를 다음 상대 피해에 반영한다. [MULTILENS_MUDDY_WATER_FIRST_HIT_QA_20261105.md](MULTILENS_MUDDY_WATER_FIRST_HIT_QA_20261105.md) 참조.
+
 후속: 신규 도전의 멀티렌즈 스톤샤워 첫 타격에서 앞 상대의 실제 기절 여부를 다음 상대 피해에 반영한다. [MULTILENS_ROCK_SLIDE_FIRST_HIT_QA_20261105.md](MULTILENS_ROCK_SLIDE_FIRST_HIT_QA_20261105.md) 참조.
 
 후속: 신규 도전의 멀티렌즈 열풍 첫 타격에서 앞 상대의 실제 기절 여부를 다음 상대 피해에 반영한다. [MULTILENS_HEAT_WAVE_FIRST_HIT_QA_20261105.md](MULTILENS_HEAT_WAVE_FIRST_HIT_QA_20261105.md) 참조.
