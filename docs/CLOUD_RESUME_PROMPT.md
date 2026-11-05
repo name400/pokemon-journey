@@ -685,3 +685,9 @@ Absolute Avarice 선택 후 파티의 열매 보유 기록이 바뀐 경우 기�
 다음 턴은 사용자 지시대로 Sol High로 전환할 예정. 챌린지 밖 새 작업은 시작하지 않았다. 작은 후속 표시후보: 기존 starterStatsForNature의 상승성격 floor와 서버source calculateStats ceil 차이(중립FreshStart무관). 모든 전투기술/특성/폼 조합의 전수원본동등성은 별도범위다. Sites는 사용자가 별도관리하므로 계속 변경하지 않는다.
 
 최종고정코드 전체 **705/705**, 타입검사·production빌드 통과, 변경lint 오류0/기존경고5, diff검사 통과. `/tmp/challenge-final-705-tests.log`(120.9초), `/tmp/challenge-final-build.log`, `/tmp/challenge-final-typecheck.log`, `/tmp/challenge-final-lint.log`. 이 뒤 앱변경없이 코드/문서/영구browserharness를같은브랜치에일반push하고원격SHA일치확인한다.
+
+### 2026-11-05 챌린지 이후: 검증된 특수 폼의 실제 융합 보상 연결
+
+718bc7d 이후 `stageClassicDnaFusion`의 두 폼 전용 허용 조건을 기존의 정확한 검증 폼 판정으로 연결했다. 기존 계산/진화에서 검증했던 15개 기증자 폼(두 기존 폼 외 암컷 냐오닉스, 루가루암 한밤중/황혼, 스트린더 로우, 진품 포트데스와 마휘핑 크림8종)을 실제 보상 후보·선택에서 사용할 수 있다. 새 폼 판정을 임의로 추가하지 않았고 기본형 주체, Mega/Primal/Ultra/Max·미이전 폼 도구의 보호 조건은 유지한다. 원본 fuse의 기증자 폼 보존 근거 및 검증은 `docs/DNA_REVIEWED_DONOR_FLOW_QA_20261105.md`. 15폼 실제 보상→저장 codec→전투 행동→분리, 도구/예비파티/다른 슬롯/탐험/재화 보존과 손상 정보의 원자적 거부를 검사했다. 실계정·실기기·전체 원본 효과 동등성을 주장하지 않는다. Sites는 변경하지 않는다.
+
+검증 결과: 전체707/707(124.2초), 타입·빌드·변경파일린트(오류/경고0)·diff 검사 통과. 코드/테스트/문서를 승인된 cloud/pokerogue-continue-20261105 브랜치에 저장한다. 다음 우선 대조 대상은 첫 번째 포켓몬의 검증된 특수 폼 융합, 폼 도구·특수 효과 이전 및 남은 이벤트/전투 기능이다.
