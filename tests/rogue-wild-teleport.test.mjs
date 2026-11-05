@@ -5,10 +5,10 @@ import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
 import {applyClassicAction,activeClassicRun} from '../lib/rogue-classic-game.mjs';
 import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
-function fixture({ability='pressure',ghost=false,modern=true}={}){
+function fixture({ability='pressure',ghost=false,modern=true,foeMove='Teleport'}={}){
  const doc={coins:17,adventure:{safe:true}},state=ensureClassicState(doc);
  const hero=makeReferenceMon(143,50,{boxId:'hero',moves:['Splash'],ability:'runaway'});
- const foe=makeReferenceMon(ghost?94:151,50,{boxId:'foe',moves:['Teleport'],ability});
+ const foe=makeReferenceMon(ghost?94:151,50,{boxId:'foe',moves:[foeMove],ability});
  const run={id:'wild-teleport',seed:'wild-teleport',wave:21,biome:1,rng:42,screen:'battle',party:[hero],balls:{pokeball:5},money:1000,modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[],rerolls:0,calledMoveRule:'source-pool-v1',...(modern?{wildTeleportRule:'single-source-v1'}:{})};
  state.slots[0]=run;state.slots[1]={keep:true};run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];return {doc,run};
 }
@@ -43,4 +43,25 @@ test('knockout before Teleport awards normal battle victory',()=>{
 });
 test('player Teleport with no reserve fails instead of ending the battle',()=>{
  const {doc,run}=fixture();run.party[0].moves=['Teleport'];run.combat=createClassicCombat(run,[makeReferenceMon(151,50,{boxId:'foe',moves:['Splash']})]);run.party=run.combat.teams[0];applyClassicAction(doc,{action:'turn',command:{type:'move',move:'teleport'}});assert.equal(run.screen,'battle');assert.ok(!run.combat.wildTeleportEscaped);
+});
+
+test('wild Copycat calling Teleport flees and persists its result',async()=>{
+ let {doc,run}=fixture({foeMove:'Copycat'}),b=restoreClassicNativeBattle(run.combat,run);b.lastMove=b.dex.getActiveMove('teleport');run.combat.snapshot=snapshotClassicNativeBattle(b);
+ doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);const result=applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash'}});
+ assert.equal(run.combat.wildTeleportEscaped,true);assert.equal(run.screen,'reward');assert.equal(result.finishedBattle.actionResult,'escape');assert.ok(run.combat.teams[1][0].hp>0);
+});
+for(const action of ['capture','escape'])test(`wild Teleport after failed ${action} follows the non-victory route`,()=>{
+ let found=false;
+ for(let seed=1;seed<100&&!found;seed++){
+  const {doc,run}=fixture();run.rng=Math.imul(seed,1234567)>>>0;run.party[0]=makeReferenceMon(1,1,{boxId:'hero',moves:['Splash'],ability:'pressure'});
+  const foe=makeReferenceMon(151,100,{boxId:'foe',moves:['Teleport'],ability:'pressure'});run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];
+  const result=applyClassicAction(doc,action==='capture'?{action:'capture',ballId:'pokeball'}:{action:'escape'});
+  if(!run.combat.wildTeleportEscaped)continue;
+  found=true;assert.equal(run.screen,'reward');assert.deepEqual(run.rewards,[]);assert.equal(run.combat.teams[1][0].hp>0,true);assert.equal(result.finishedBattle.actionResult,'escape');assert.equal(run.pendingCapture,undefined);
+ }
+ assert.ok(found,'expected a failed attempt followed by wild Teleport');
+});
+test('mystery battles keep their existing encounter-specific behavior',()=>{
+ const {doc,run}=fixture();run.encounter={kind:'mystery',key:'uncommon-breed',trainer:null,noFlee:true};run.mystery={type:'uncommon-breed',stage:'battle'};run.combat=createClassicCombat(run,run.combat.teams[1]);run.party=run.combat.teams[0];assert.equal(run.combat.wildTeleportRule,null);
+ applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash'}});assert.equal(run.screen,'battle');assert.ok(!run.combat.wildTeleportEscaped);assert.equal(run.mystery.stage,'battle');
 });
