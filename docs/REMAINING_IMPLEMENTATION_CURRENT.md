@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 타입 강화 도구의 위력 내림과 발버둥 제외를 원본에 맞췄다. 기존 도전은 기존 계산을 유지한다. [TYPE_ITEM_POWER_ROUNDING_QA_20261105.md](TYPE_ITEM_POWER_ROUNDING_QA_20261105.md) 참조.
+
 후속: 신규 도전에서 복합렌즈와 부자유친의 고정 피해 마지막 타격, 세 절반 피해 기술의 타격별 HP 기준을 원본에 맞췄다. 기존 진행의 규칙은 보존한다. [MULTILENS_FIXED_DAMAGE_QA_20261105.md](MULTILENS_FIXED_DAMAGE_QA_20261105.md) 참조.
 
 후속: 신규 도전에서 먹다남은음식 여러 개의 회복량을 원본처럼 개당 정수화한 뒤 합산한다. 기존 진행은 기존 규칙을 보존한다. [LEFTOVERS_ROUNDING_QA_20261105.md](LEFTOVERS_ROUNDING_QA_20261105.md) 참조.
