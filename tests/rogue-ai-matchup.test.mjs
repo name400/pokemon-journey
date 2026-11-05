@@ -60,3 +60,21 @@ test('trainer does not switch based on its own Illusion type after codec recover
  const current=await trial(true),legacy=await trial(false);assert.equal(current.teams[1][current.activeBySide[1][0]].boxId,'active');assert.equal(legacy.teams[1][legacy.activeBySide[1][0]].boxId,'reserve');
 });
 test('fresh runs enable Illusion STAB correction without changing another slot',async()=>{const {ensureClassicState,startClassicRun}=await import('../lib/rogue-classic-state.mjs'),{starterCatalog}=await import('../lib/rogue-starter-system.mjs'),doc={},state=ensureClassicState(doc,{initialStarterId:1}),entry=starterCatalog(state.system).find(p=>p.id===1);state.slots[1]={keep:true};const run=startClassicRun(doc,[{id:1,ability:entry.abilities[0].key,nature:entry.natures[0].key,gender:entry.genders[0],shiny:false,moves:entry.defaultMoves}],{id:'illusion-ai',seed:'var'});assert.equal(run.enemyAiIllusionStabRule,'source-v1');assert.deepEqual(state.slots[1],{keep:true});});
+
+test('Illusion matchup defense uses actual type for the first opposing type only',()=>{
+ const base=(type,defender)=>Dex.getImmunity(type,[defender])?2**Dex.getEffectiveness(type,[defender]):0;
+ const effectiveness=(type,target,source)=>classicAiTypeMultiplier(type,target,source,base);
+ const illusion=mon(['Water'],['Dark']);illusion.actualTypes=['Dark'];illusion.illusionDefenseRule=true;
+ const opponent=mon(['Fighting','Electric'],['Normal']);
+ const source=classicAiMatchupScore(illusion,opponent,effectiveness);
+ illusion.illusionDefenseRule=false;const legacy=classicAiMatchupScore(illusion,opponent,effectiveness);
+ assert.ok(source<legacy,`actual ${source} legacy ${legacy}`);
+ const recorded=[];illusion.illusionDefenseRule=true;classicAiMatchupScore(illusion,opponent,(type,target)=>{recorded.push([type,target.types]);return 1;});
+ assert.deepEqual(recorded.slice(0,2),[['Fighting',['Dark']],['Electric',['Water']]]);
+});
+test('fresh runs enable Illusion defense rule separately from existing saves',async()=>{const {ensureClassicState,startClassicRun}=await import('../lib/rogue-classic-state.mjs'),{starterCatalog}=await import('../lib/rogue-starter-system.mjs'),doc={},state=ensureClassicState(doc,{initialStarterId:1}),entry=starterCatalog(state.system).find(p=>p.id===1);state.slots[1]={keep:true};const run=startClassicRun(doc,[{id:1,ability:entry.abilities[0].key,nature:entry.natures[0].key,gender:entry.genders[0],shiny:false,moves:entry.defaultMoves}],{id:'illusion-defense',seed:'var'});assert.equal(run.enemyAiIllusionDefenseRule,'source-v1');assert.deepEqual(state.slots[1],{keep:true});});
+test('Illusion defense policy survives battle creation and save recovery without changing another slot',async()=>{
+ const hero=makeReferenceMon(68,50,{boxId:'hero',moves:['Splash']}),active=makeReferenceMon(571,50,{boxId:'active',moves:['Bite'],ability:'illusion'}),reserve=makeReferenceMon(9,50,{boxId:'reserve',moves:['Tackle']});
+ const run={id:'illusion-defense',seed:'var',rng:42,wave:30,screen:'battle',party:[hero],modifiers:[],tools:{},encounter:{kind:'trainer',trainer:{}},enemyAiMatchupRule:'source-matchup-v1',enemyAiIllusionStabRule:'source-v1',enemyAiIllusionDefenseRule:'source-v1'};
+ run.combat=createClassicCombat(run,[active,reserve],{trainer:true});const doc=await decodeGameData(await encodeGameData({run,other:{keep:true}}));assert.equal(doc.run.combat.enemyAiIllusionDefenseRule,'source-v1');const {restoreClassicNativeBattle}=await import('../lib/rogue-battle-engine.mjs');assert.equal(restoreClassicNativeBattle(doc.run.combat,doc.run).p2.active[0].illusion?.set.trainerToken,'reserve');assert.doesNotThrow(()=>playClassicCombat(doc.run,{type:'move',move:'splash'}));assert.deepEqual(doc.other,{keep:true});
+});
