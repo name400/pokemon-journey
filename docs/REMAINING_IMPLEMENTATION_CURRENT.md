@@ -4,11 +4,11 @@
 
 ## 현재 완료 범위
 
-자동 폼(Morpeko/Cramorant/Battle Bond/Meloetta/Xerneas/Ogerpon), 폼 도구 독립 active·이전/복제/Ultra 복귀, 타입 강화 도구 합산·Focus Band/Scope Lens, 꿈 native 도구143종, 호출 기술 원본 후보·제한·이력/FOLLOW_UP, AI matchup 타입 경계, 일반 폼 이미지272종·검토된 융합 주체 이미지217종을 연결했다. 양쪽 역할/수명/legacy에 따른 제한은 각 QA를 따른다. 일반·Worker 영향 범위 각113/113과 타입·production 빌드 통과. 이번 R3로 전체 프로젝트 검사를 다시 실행한 것은 아니다.
+자동 폼(Morpeko/Cramorant/Battle Bond/Meloetta/Xerneas/Ogerpon), 폼 도구 독립 active·이전/복제/Ultra 복귀, 타입 강화 도구 합산·Focus Band/Scope Lens, 꿈 native 도구143종, 호출 기술 원본 후보·제한·이력/FOLLOW_UP, AI matchup 타입 경계, 일반 폼 이미지277종·검토된 융합 주체 이미지222종을 연결했다. 양쪽 역할/수명/legacy에 따른 제한은 각 QA를 따른다. 일반·Worker 영향 범위 각113/113과 타입·production 빌드 통과. 이번 R3로 전체 프로젝트 검사를 다시 실행한 것은 아니다.
 
 ## 실제 미구현·부분지원
 
-1. **이미지 5연결**: Xerneas active와 Ogerpon Tera4는 backend 구현 완료, 원본 자산 존재, 표시 연결이 남음.
+1. **이미지**: Xerneas active와 Ogerpon Tera4의 일반·융합 주체 표시를 연결했다. 실제 브라우저/실기기 시각 검증은 남음.
 2. **일반 폼/융합 55개**: Keldeo 학습/망각1, 일반 도구 폼52, Terapagos2의 실제 트리거·타입/기술·패시브·저장 연결. 현재 융합 허용354/416이다. 남은62행 중 보호된6과 보스전용1은 일반 획득 대상이 아니다.
 3. **도구 효과/복잡한 이벤트 조합**: native와 source 효과가 다른 도구의 안전한 모델링, 미검토 폼·융합·패시브/꿈 조합. 분류587종을 모두 효과 지원한다고 말하지 않는다.
 4. **전투 효과**: 호출 FOLLOW_UP의 미검토 상태 경계, 기술·특성·도구 전체 효과 동등성. 확인한 경계와 미확인 가설을 구분한다.

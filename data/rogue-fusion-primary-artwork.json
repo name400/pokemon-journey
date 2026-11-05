@@ -741,6 +741,11 @@
       "key": "jumbo",
       "native": "gourgeistsuper"
     },
+    "716:1": {
+      "id": 30132,
+      "key": "active",
+      "native": "xerneas"
+    },
     "718:1": {
       "id": 10181,
       "key": "10",
@@ -1065,6 +1070,26 @@
       "id": 10275,
       "key": "cornerstone-mask",
       "native": "ogerponcornerstone"
+    },
+    "1017:4": {
+      "id": 1017,
+      "key": "teal-mask-tera",
+      "native": "ogerpontealtera"
+    },
+    "1017:5": {
+      "id": 1017,
+      "key": "wellspring-mask-tera",
+      "native": "ogerponwellspringtera"
+    },
+    "1017:6": {
+      "id": 1017,
+      "key": "hearthflame-mask-tera",
+      "native": "ogerponhearthflametera"
+    },
+    "1017:7": {
+      "id": 1017,
+      "key": "cornerstone-mask-tera",
+      "native": "ogerponcornerstonetera"
     },
     "2658:1": {
       "id": 10117,

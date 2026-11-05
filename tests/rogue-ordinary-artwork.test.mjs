@@ -32,5 +32,5 @@ test('supported ordinary source DTOs select exact artwork without granting unsup
   for(const facing of ['front','back'])for(const shiny of [false,true])assert.deepEqual(classicSourceFormAtlas({...value,shiny},facing),{key:r.atlas,shiny,facing});
   for(const patch of [{battleAppearance:'missing-form'},{rogueBattleSpecies:'missing-form'},{rogueFormKey:'wrong'},{sourceAppearanceMissing:true},{gigantamax:true},{mega:true}])assert.equal(reviewedOrdinaryFormAtlas({...value,...patch}),null,r.atlas);
  }
- assert.equal(supported,272);assert.equal(blocked,11);
+ assert.equal(supported,277);assert.equal(blocked,6);
 });

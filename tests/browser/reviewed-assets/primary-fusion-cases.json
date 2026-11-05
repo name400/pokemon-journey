@@ -3855,6 +3855,32 @@
     }
   },
   {
+    "key": "716:1",
+    "atlas": "716-active",
+    "mon": {
+      "id": 30132,
+      "rogueSourceId": 716,
+      "rogueFormIndex": 1,
+      "rogueFormKey": "active",
+      "rogueBattleSpecies": "xerneas",
+      "battleAppearance": "xerneas",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
     "key": "718:1",
     "atlas": "718-10",
     "mon": {
@@ -5528,6 +5554,110 @@
       "rogueFormKey": "cornerstone-mask",
       "rogueBattleSpecies": "ogerponcornerstone",
       "battleAppearance": "ogerponcornerstone",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1017:4",
+    "atlas": "1017-teal-mask-tera",
+    "mon": {
+      "id": 1017,
+      "rogueSourceId": 1017,
+      "rogueFormIndex": 4,
+      "rogueFormKey": "teal-mask-tera",
+      "rogueBattleSpecies": "ogerpontealtera",
+      "battleAppearance": "ogerpontealtera",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1017:5",
+    "atlas": "1017-wellspring-mask-tera",
+    "mon": {
+      "id": 1017,
+      "rogueSourceId": 1017,
+      "rogueFormIndex": 5,
+      "rogueFormKey": "wellspring-mask-tera",
+      "rogueBattleSpecies": "ogerponwellspringtera",
+      "battleAppearance": "ogerponwellspringtera",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1017:6",
+    "atlas": "1017-hearthflame-mask-tera",
+    "mon": {
+      "id": 1017,
+      "rogueSourceId": 1017,
+      "rogueFormIndex": 6,
+      "rogueFormKey": "hearthflame-mask-tera",
+      "rogueBattleSpecies": "ogerponhearthflametera",
+      "battleAppearance": "ogerponhearthflametera",
+      "mega": false,
+      "primal": false,
+      "ultra": false,
+      "gigantamax": false,
+      "dynamaxed": false,
+      "rogueFusionRule": "preview-v1",
+      "fusionSpecies": 151,
+      "rogueFusion": {
+        "donor": {
+          "id": 151,
+          "rogueSourceId": 151,
+          "gender": "N"
+        }
+      }
+    }
+  },
+  {
+    "key": "1017:7",
+    "atlas": "1017-cornerstone-mask-tera",
+    "mon": {
+      "id": 1017,
+      "rogueSourceId": 1017,
+      "rogueFormIndex": 7,
+      "rogueFormKey": "cornerstone-mask-tera",
+      "rogueBattleSpecies": "ogerponcornerstonetera",
+      "battleAppearance": "ogerponcornerstonetera",
       "mega": false,
       "primal": false,
       "ultra": false,

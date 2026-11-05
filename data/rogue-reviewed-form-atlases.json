@@ -3681,7 +3681,9 @@
     "formIndex": 1,
     "formKey": "active",
     "atlas": "716-active",
-    "native": [],
+    "native": [
+      "xerneas"
+    ],
     "genderDiffs": false,
     "variants": [
       0,
@@ -5527,7 +5529,9 @@
     "formIndex": 4,
     "formKey": "teal-mask-tera",
     "atlas": "1017-teal-mask-tera",
-    "native": [],
+    "native": [
+      "ogerpontealtera"
+    ],
     "genderDiffs": false,
     "variants": [
       0,
@@ -5545,7 +5549,9 @@
     "formIndex": 5,
     "formKey": "wellspring-mask-tera",
     "atlas": "1017-wellspring-mask-tera",
-    "native": [],
+    "native": [
+      "ogerponwellspringtera"
+    ],
     "genderDiffs": false,
     "variants": [
       0,
@@ -5563,7 +5569,9 @@
     "formIndex": 6,
     "formKey": "hearthflame-mask-tera",
     "atlas": "1017-hearthflame-mask-tera",
-    "native": [],
+    "native": [
+      "ogerponhearthflametera"
+    ],
     "genderDiffs": false,
     "variants": [
       0,
@@ -5581,7 +5589,9 @@
     "formIndex": 7,
     "formKey": "cornerstone-mask-tera",
     "atlas": "1017-cornerstone-mask-tera",
-    "native": [],
+    "native": [
+      "ogerponcornerstonetera"
+    ],
     "genderDiffs": false,
     "variants": [
       0,

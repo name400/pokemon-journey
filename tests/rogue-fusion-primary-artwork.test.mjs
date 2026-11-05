@@ -4,7 +4,7 @@ import permissions from '../data/rogue-fusion-primary-artwork.json' with {type:'
 import {classicFusionPaletteTarget} from '../components/rogue-fusion-palette-targets.mjs';
 import {checkedAtlasFrame} from '../components/rogue-atlas-frame.mjs';
 import {sourceAtlasFrames} from '../components/rogue-reviewed-mega-atlases.mjs';
-test('source artwork permissions are reproducible from actual existing game fusion permission',()=>{execFileSync(process.execPath,['scripts/generate-fusion-primary-artwork.mjs','--check']);assert.equal(cases.length,217);assert.equal(permissions.blocked.length,55);});
+test('source artwork permissions are reproducible from actual existing game fusion permission',()=>{execFileSync(process.execPath,['scripts/generate-fusion-primary-artwork.mjs','--check']);assert.equal(cases.length,222);assert.equal(permissions.blocked.length,55);});
 test('every allowed ordinary primary has an exact palette target without accepting a corrupt identity',()=>{
  for(const row of cases)for(const facing of ['front','back']){assert.deepEqual(classicFusionPaletteTarget(row.mon,facing),{primary:row.atlas,donor:'151',facing});for(const patch of [{id:999999},{rogueFormKey:'wrong'},{battleAppearance:'wrong'},{rogueBattleSpecies:'wrong'},{dynamaxed:true},{rogueFusionRule:'wrong'}])assert.equal(classicFusionPaletteTarget({...row.mon,...patch},facing),null,row.key);}
 });

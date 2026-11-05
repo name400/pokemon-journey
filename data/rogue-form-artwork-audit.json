@@ -4,8 +4,8 @@
   "counts": {
     "verified-local-mega": 96,
     "verified-local-transformation": 37,
-    "verified-local-ordinary": 272,
-    "local-artwork-awaiting-native-or-policy": 11
+    "verified-local-ordinary": 277,
+    "local-artwork-awaiting-native-or-policy": 6
   },
   "forms": [
     {
@@ -2213,7 +2213,7 @@
       "formIndex": 1,
       "formKey": "active",
       "native": "xerneas",
-      "imageStatus": "local-artwork-awaiting-native-or-policy",
+      "imageStatus": "verified-local-ordinary",
       "atlas": "716-active"
     },
     {
@@ -3253,7 +3253,7 @@
       "formIndex": 4,
       "formKey": "teal-mask-tera",
       "native": "ogerpontealtera",
-      "imageStatus": "local-artwork-awaiting-native-or-policy",
+      "imageStatus": "verified-local-ordinary",
       "atlas": "1017-teal-mask-tera"
     },
     {
@@ -3261,7 +3261,7 @@
       "formIndex": 5,
       "formKey": "wellspring-mask-tera",
       "native": "ogerponwellspringtera",
-      "imageStatus": "local-artwork-awaiting-native-or-policy",
+      "imageStatus": "verified-local-ordinary",
       "atlas": "1017-wellspring-mask-tera"
     },
     {
@@ -3269,7 +3269,7 @@
       "formIndex": 6,
       "formKey": "hearthflame-mask-tera",
       "native": "ogerponhearthflametera",
-      "imageStatus": "local-artwork-awaiting-native-or-policy",
+      "imageStatus": "verified-local-ordinary",
       "atlas": "1017-hearthflame-mask-tera"
     },
     {
@@ -3277,7 +3277,7 @@
       "formIndex": 7,
       "formKey": "cornerstone-mask-tera",
       "native": "ogerponcornerstonetera",
-      "imageStatus": "local-artwork-awaiting-native-or-policy",
+      "imageStatus": "verified-local-ordinary",
       "atlas": "1017-cornerstone-mask-tera"
     },
     {
