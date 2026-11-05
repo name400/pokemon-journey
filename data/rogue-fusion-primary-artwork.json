@@ -271,6 +271,21 @@
       "key": "mow",
       "native": "rotommow"
     },
+    "483:1": {
+      "id": 483,
+      "key": "origin",
+      "native": "dialgaorigin"
+    },
+    "484:1": {
+      "id": 484,
+      "key": "origin",
+      "native": "palkiaorigin"
+    },
+    "487:1": {
+      "id": 487,
+      "key": "origin",
+      "native": "giratinaorigin"
+    },
     "550:1": {
       "id": 10016,
       "key": "blue-striped",
@@ -1133,9 +1148,6 @@
     }
   },
   "blocked": [
-    "483:1",
-    "484:1",
-    "487:1",
     "492:1",
     "493:1",
     "493:2",

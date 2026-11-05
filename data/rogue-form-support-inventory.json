@@ -3,8 +3,8 @@
   "method": "Local exported source metadata versus runtime permission and enum-name mapping. Missing rows in the existing export and engine-effect parity are not inferred.",
   "counts": {
     "forms": 416,
-    "fusionForms": 358,
-    "unconnectedForms": 58,
+    "fusionForms": 361,
+    "unconnectedForms": 55,
     "staticFamilyForms": 95,
     "automaticHookForms": 28,
     "triggerHookForms": 9,
@@ -1612,26 +1612,26 @@
       "index": 1,
       "key": "origin",
       "native": "dialgaorigin",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 484,
       "index": 1,
       "key": "origin",
       "native": "palkiaorigin",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 485,
@@ -1651,13 +1651,13 @@
       "index": 1,
       "key": "origin",
       "native": "giratinaorigin",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "item",
       "triggers": [
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 491,
