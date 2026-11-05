@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 호출된 경혈찌르기가 원본처럼 자신 또는 아군을 대상으로 선택한다. 우유마시기의 추가 공격 도구·특성 및 현재 Z기술 동작도 별도 검사했다. [ACUPRESSURE_CALLED_TARGET_QA_20261105.md](ACUPRESSURE_CALLED_TARGET_QA_20261105.md) 참조.
+
 후속: 신규 도전의 흉내내기로 우유마시기를 복사할 때 원본의 싱글·더블 대상 차이를 반영하고, 지시의 원래 대상·PP를 검사했다. [MILK_DRINK_MIRROR_INSTRUCT_QA_20261105.md](MILK_DRINK_MIRROR_INSTRUCT_QA_20261105.md) 참조.
 
 후속: 신규 도전의 우유마시기는 선택한 아군이 기절하면 사용자에게 다시 지정하지 않고, 교체·변신과 손가락흔들기·따라하기·잠꼬대·조수 호출을 구분한다. [MILK_DRINK_TARGET_EDGES_QA_20261105.md](MILK_DRINK_TARGET_EDGES_QA_20261105.md) 참조.
