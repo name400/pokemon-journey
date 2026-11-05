@@ -603,3 +603,15 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
 /* Keep every current defensive type visible, including dual types and Stellar's base types. */
 .rc-shell.is-battle .battle-screen .bs-name>.bs-type-symbols{display:inline-flex;align-items:center;gap:2px;flex:none;margin-left:auto}
 @media(max-width:600px){.rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-name{flex-wrap:wrap}.rc-shell.is-battle .battle-screen .bs-multi-vitals .bs-name>span:last-child{margin-left:auto}}
+/* Compact portrait battle information while leaving a clear lane for opposing sprites. */
+@media (max-width:520px) and (orientation:portrait){
+ .rc-shell.is-battle .rogue-hud{padding:3px 7px;min-height:0}
+ .rc-shell.is-battle .rogue-hud-values{gap:8px;flex-wrap:wrap}
+ .rc-shell.is-battle .rogue-hud-values>div{min-width:0}
+ .rc-shell.is-battle .rogue-hud-values small{font-size:9px;line-height:1.1;margin-bottom:1px}
+ .rc-shell.is-battle .rogue-hud-values b{font-size:14px;line-height:1.2}
+ .rc-shell.is-battle .battle-screen .bs-header{padding:3px 6px;min-height:44px}
+ .rc-shell.is-battle .battle-screen .bs-scene .bs-hud-foe{max-width:46%}
+ .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-multi-vitals.is-foe{width:min(50%,190px)}
+ .rc-shell.is-battle .battle-screen .bs-log-lines{max-height:36px;overflow:auto}
+}
