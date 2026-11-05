@@ -757,7 +757,7 @@ validated-v1 도전의 이상한 꿈은 새 지속폼 융합을 처리한다. �
 
 6726fef에서 Mega8폼 읽기 조사를 멈추고 장애를 우선했다. v50 POST rogue-classic의 exceededMemory를 확인했다. native sim의 미사용 Learnsets/Legality를 빌드 plugin에서만 제외해 게임 모듈 Node 유지 힙 약32–34MiB를 줄였다. 소스 자체 학습/출전 판정과 전투 데이터는 유지한다. npm test와 npm run test:worker 각각765/765, 타입/빌드 통과. 로컬 production Worker에서도 합성 저장의 일반 전투와 마자용3턴·보상이 HTTP200으로 진행했다. 운영 성능/메모리 한도의 재측정과 같지는 않다.
 
-마자용은 현재 UI의 단일 actor turn/actions envelope를 기존 move로 정규화하며 기존 제한을 유지한다. baseline 엔진의 같은 명령 거부→route409를 재현했지만 운영409 여섯 건의 개별 원인은 본문이 없어 단정하지 않는다. 전투 시작/다음 전투 before roster의 들어올 개체 선표시를 지연해 첫 표시 뒤 다시 등장하는 경로를 수정했다. 모든 중복 재생의 실제 브라우저 검증은 남았다. HTML500의 JSON파싱 오류는 한국어 서버 오류로 표시하며 POST를 자동 재전송하지 않는다.
+마자용은 추가 단일 actor turn/actions envelope를 기존 move로 정규화하며 제한을 유지한다. 후속 정정: 실제 싱글 UI는 기존 flat move를 전송하고 이미 지원됐다. 추가 envelope의 baseline 거부를 운영409 원인으로 설명한 것은 잘못됐으며 실제 UI flat3회200/보상을 별도 검증했다. 운영409 여섯 건의 원인은 미확정이다. 전투 시작/다음 전투 before roster의 들어올 개체 선표시를 지연해 첫 표시 뒤 다시 등장하는 경로를 수정했다. 모든 중복 재생의 실제 브라우저 검증은 남았다. HTML500의 JSON파싱 오류는 한국어 서버 오류로 표시하며 POST를 자동 재전송하지 않는다.
 
 사용자가6726fef 배포를 알려줬고 Sites 재조회는v51/소스1951eb15를 반환했다. v50의 기존 오류와 구분하며 새 로그에는 게임 POST가 없어 신규 배포 재현은 미확정이다. 현재 사고 수정은 그 이후 변경이며 Sites는 쓰지 않는다. 상세 근거/제한은 WORKER_MEMORY_AND_EVENT_INCIDENT_QA_20261105.md, 최신 잔량은 REMAINING_IMPLEMENTATION_CURRENT.md. Mega8폼·지가르데 중간형/자동 변형·다른 진화/도구/이벤트/전투 차이는 여전히 남는다.
 
@@ -771,3 +771,16 @@ validated-v1 도전의 이상한 꿈은 새 지속폼 융합을 처리한다. �
 마지막 코드의 일반 전체770/770(161.5초), Worker 정책770/770(144.6초), 집중20/20, 타입·빌드·변경 린트·diff 통과. 로컬 production Worker의 암컷 냐오닉스/싸리용 메가 융합 GET/POST10건도200이었다. 상세 근거와 남은 범위는 DNA_MEGA_ALIASES_QA_20261105.md 및 REMAINING_IMPLEMENTATION_CURRENT.md. 다음 핵심은 지가르데 중간형/자동 변화와 진화·도구·이벤트·전투 차이다.
 
 추가 사용자 요청이 도착했다: PC 알 부화 결과 모아보기 카드/이미지/텍스트/버튼 확대와 모바일 유지, 기술 카드 i 버튼 넘침 수정, 트레이너 대사 확인 전 배경/이미지/포켓몬 순서 보호, PC 클라이언트 끊김 프로파일링이다. 메가 커밋 이후 이 요청을 우선 처리한다. Sites는 사용자가 직접 관리한다.
+
+
+### 2026-11-05 PC 결과·기술 정보·대사 순서·클라이언트 응답량
+
+08af752 뒤 사용자 UI요청을 처리했다. PC900px 이상 부화 결과의 카드/이미지/글자/버튼을 키우고 모바일 기존크기를 유지한다. 기술 i버튼은 고정크기 내부공간/상속padding제거/중앙정렬이며 툴팁을 자르지 않는다. 8개크기의 실제Page에서 페이지·확인·정보 열기·PP 비겹침을 검사했다.
+
+RogueClassic은 phase intro 대사 중 BattlePanel의 소개타이머/전투재생을 멈추며, 승리/패배/이벤트outro는 presentation key 완료뒤 연다. 실제승리phase는win이다. onPresentationComplete는 안정적인 React state setter다. 마지막NPC확인 뒤 추가2.6초소개를 반복하지 않고 포켓몬을1회씩 등장시킨다. 다른뷰에숨긴전투도재생하지않는다. PC/모바일6500ms미확인·최종기절뒤대사를검사했다.
+
+load는기본GET이며서버는saved.data.classic.selection일때catalog를자동포함한다. UI의selecting과저장의selection을혼동하지않는다. 실제로컬빌드Worker의기본전투GET/catalog선택중GET/명시starters1을검사했다. 합성rawUTF8약1.066MB→15.6KB감소. 정상CPU지속끊김은재현안됐고약1.5초순차연출이관측됐다. 무근거속도/scrollTo변경은하지않았다.
+
+중요정정: 7540272의추가turn/actions지원을실제싱글UI409원인으로설명한것은잘못됐다. hasMultiBattleDTO는실제2칸이필요해싱글은flatmove를전송한다. 실제production-client마자용3회flat/200/보상/다른데이터보존을확인했고운영409원인은미확정이다. 이전QA현재설명도수정했다.
+
+일반773/773·Worker773/773·타입·빌드,신규집중3/3와실제브라우저11경로통과. 상세수치/제한은 UI_PRESENTATION_AND_CLIENT_LATENCY_QA_20261105.md 및 tests/browser/ui-readability/README.md. 사용자가울트라볼=BeastBall이라고명확히확인했으므로이후그획득/포획/표시/저장을구현한다. 원본5볼과추가확장을구분하고기존저장보존/Sites직접배포금지를유지한다.

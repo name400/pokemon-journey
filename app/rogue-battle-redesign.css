@@ -585,3 +585,9 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
  .rc-shell.is-battle .battle-screen .bs-combatant-foe{max-width:min(15cqw,19dvh,165px)}
  .rc-shell.is-battle .battle-screen .bs-console:has(.bs-move-panel) .bs-narration{display:flex;flex-direction:column;min-height:0;max-height:100%;overflow:hidden}
 }
+
+/* Keep the separate info target inside each move without clipping its tooltip. */
+.rc-shell.is-battle .battle-screen .bs-move-wrap{--bs-info-size:28px}
+.rc-shell.is-battle .battle-screen .bs-move-wrap>.bs-move{padding-right:calc(var(--bs-info-size) + 20px)}
+.rc-shell.is-battle .battle-screen .bs-move-info{box-sizing:border-box;display:grid;place-items:center;width:var(--bs-info-size);min-width:var(--bs-info-size);height:var(--bs-info-size);min-height:var(--bs-info-size);padding:0;margin:0;line-height:1;right:7px;bottom:7px}
+@media(pointer:coarse){.rc-shell.is-battle .battle-screen .bs-move-wrap{--bs-info-size:44px}}
