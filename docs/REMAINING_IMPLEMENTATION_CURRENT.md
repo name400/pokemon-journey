@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 폴터가이스트가 이전 가능한 포켓로그식 소지 효과를 인식하고, 적 AI도 같은 조건으로 대상을 판정한다. 이전 불가 효과와 다이맥스는 구분한다. [POLTERGEIST_SOURCE_ITEMS_QA_20261105.md](POLTERGEIST_SOURCE_ITEMS_QA_20261105.md) 참조.
+
 후속 검사: 막말내뱉기·유턴·배턴터치·울부짖기·기절·위기회피 교체와 미스터리 이벤트 선봉 선택 후 만나자마자의 첫 턴·저장 복구를 확인했다. [FIRST_TURN_SWITCH_EDGES_QA_20261105.md](FIRST_TURN_SWITCH_EDGES_QA_20261105.md) 참조.
 
 후속: 최신 신규 도전의 속이다·만나자마자·다다미뒤집기는 행동하지 못한 첫 턴 뒤에도 웨이브 턴 기준으로 실패하며 AI 판단도 같은 기준을 쓴다. [FIRST_TURN_WAVE_RULE_QA_20261105.md](FIRST_TURN_WAVE_RULE_QA_20261105.md) 참조.
