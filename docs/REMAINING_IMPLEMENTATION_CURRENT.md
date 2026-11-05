@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 껍질방울 modifier에 대타의 실제 피해를 회복량으로 반영했다. native 슬롯 껍질방울은 아직 미지원이다. [SHELL_BELL_SUBSTITUTE_QA_20261105.md](SHELL_BELL_SUBSTITUTE_QA_20261105.md) 참조.
+
 후속: 새 도전의 집게손톱이 같은 편 대상의 점착으로 차단되지 않도록 원본 판정에 맞췄다. 적의 점착과 기존 진행 규칙은 보존한다. [GRIP_CLAW_ALLY_STICKY_HOLD_QA_20261105.md](GRIP_CLAW_ALLY_STICKY_HOLD_QA_20261105.md) 참조.
 
 후속: 신규 도전에서 타입 강화 도구의 위력 내림과 발버둥 제외를 원본에 맞췄다. 기존 도전은 기존 계산을 유지한다. [TYPE_ITEM_POWER_ROUNDING_QA_20261105.md](TYPE_ITEM_POWER_ROUNDING_QA_20261105.md) 참조.
