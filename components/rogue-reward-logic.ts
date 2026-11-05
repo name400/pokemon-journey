@@ -73,6 +73,7 @@ export type RogueClassicRewardsProps = {
   onService: (payload: ServicePayload) => Promise<unknown> | void;
   onReroll: () => Promise<unknown> | void;
   onOpenParty?: () => void;
+  onEmptyContinue?: () => Promise<unknown> | void;
 };
 
 export type ActionChoice = RewardChoice | ServiceChoice;

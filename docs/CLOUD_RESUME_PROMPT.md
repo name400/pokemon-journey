@@ -723,3 +723,11 @@ Absolute Avarice 선택 후 파티의 열매 보유 기록이 바뀐 경우 기�
 상세 근거·검증은 `DNA_PRIMARY_MEGA_AND_DREAM_QA_20261105.md`, 완료/미구현·부분지원/검증잔량은 `REMAINING_IMPLEMENTATION_CURRENT.md`. 원본 전체 난수·엔진 동등성이나 실계정·실기기 검증을 주장하지 않고 Sites는 변경하지 않는다.
 
 주체메가/융합꿈 최종: 전체728/728(134.8초), 집중8/8, 타입·빌드 통과. 마지막 정적 안내 문구 보완 뒤 타입·빌드를 재실행했다. 백엔드/테스트 변경파일린트0오류/0경고, 앱 파일은 기준·현재 모두 기존98오류/18경고로 신규 증가없음(저장소전체린트통과 주장하지 않음). diff 통과. `/tmp/mega-dream-final-full.log`, `/tmp/mega-dream-final-type.log`, `/tmp/mega-dream-final-build.log`. 승인 브랜치 일반push 후 원격SHA를 검증한다. 완료/잔량 목록을 기능별로 계속 함께 보고한다.
+
+### 2026-11-05 긴급: 사파리 종료 빈 보상 진행 복구
+
+독립 QA의 43웨이브 사파리 차단을 c292473 화면과 실제 게임 제어기로 만든 동일 저장 상태에서 재현했다. 서버 종료 저장/skipReward는 정상이지만 사파리의 빈 보상 진행 버튼이 화면에 없었다. 화면 하단에 단순 추가하면 모바일 메뉴에 가려져, 보상 화면 내부 제목 옆의 선택적 onEmptyContinue 버튼과 추가 보상 없음 안내로 고쳤다. 기존 막힌 reward/[]/safari-zone 저장은 마이그레이션·입장료 재청구·포획 반복·데이터 초기화 없이 진행한다. 실사용자 QA 저장에 직접 접근하지 않았으며 Sites는 변경하지 않는다.
+
+새 저장/복구 제어기9경계와 실제 화면4크기×5경로20개로 검사한다. 근거와 확정 결과는 `SAFARI_REWARD_RECOVERY_QA_20261105.md`; 잔량은 `REMAINING_IMPLEMENTATION_CURRENT.md`. 진행 중인 메타데이터 기반 Mega/Primal/Ultra/Gmax 융합·역변신·폼 도구 일반화는 이름 있는 stash `WIP persistent fusion forms before urgent safari recovery`에 보존했다. 해당 코드는 전투 중 Trace 능력 변경 보존 문제가 아직 조사 중이므로 완료/공개 기능으로 세지 않는다. 긴급 수정이 저장된 뒤 stash를 복구해 계속한다.
+
+사파리 최종 확정: 전체737/737(155.2초), 타입·production빌드 통과, 실제 화면4크기×5경로20/20, 새 테스트·harness·타입 파일 린트0오류/0경고. 화면 기존 진단은 앱98오류/18경고 및 보상 컴포넌트1오류로 신규 증가없다. 원본 QA 계정/물리기기/운영 배포는 미검증이다. 승인 브랜치에 일반push 후 원격SHA를 확인한다.

@@ -331,3 +331,5 @@
   .rogue-classic-rewards .rcr-key-help { padding: 8px 12px max(8px,env(safe-area-inset-bottom)); font-size: 10px; }
 }
 .rogue-classic-rewards .rcr-learning-detail{display:flex;flex-direction:column;gap:4px;margin-top:7px;color:#435e54;font-size:12px;line-height:1.45}.rogue-classic-rewards .rcr-learning-detail b{color:#254a3b}.rogue-classic-rewards .rcr-learning-detail span{overflow-wrap:anywhere}
+
+.rogue-classic-rewards .rcr-empty-continue { flex-shrink: 0; white-space: nowrap; }
