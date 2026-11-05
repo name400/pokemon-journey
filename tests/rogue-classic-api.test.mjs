@@ -23,13 +23,13 @@ function harness(options={}){
  }};},async batch(statements){sqlite.exec('BEGIN');try{const result=[];for(const statement of statements)result.push(await statement.run());sqlite.exec('COMMIT');return result;}catch(error){sqlite.exec('ROLLBACK');throw error;}}};
  const ranking={};new Function('require','exports',rankingSource)(()=>({env:{DB:db}}),ranking);
  const modules={
-  'cloudflare:workers':{env:{DB:db}},'@/app/chatgpt-auth':{getChatGPTUser:async()=>({userId:'private-account'})},
+  'cloudflare:workers':{env:{DB:db}},'@/app/chatgpt-auth':{getChatGPTUser:async()=>{if(options.authError)throw options.authError;return options.unauthenticated?null:{userId:'private-account'};}},
   '@/lib/request-origin.mjs':origin,'@/lib/game-storage.mjs':{...storage,...options.storage},
   '@/lib/rogue-classic-game.mjs':{applyClassicAction:options.apply||((doc)=>{doc.counter++;return {};}),classicGameView:options.view||((doc)=>({counter:doc.counter}))},
-  '@/lib/rogue-pickup-config':{getRoguePickup:async()=>({sourceId:null,version:0})},'@/lib/rogue-ranking':ranking,'@/lib/rogue-api-errors.mjs':errors,
+  '@/lib/rogue-pickup-config':{getRoguePickup:async()=>{if(options.pickupError)throw options.pickupError;return {sourceId:null,version:0};}},'@/lib/rogue-ranking':ranking,'@/lib/rogue-api-errors.mjs':errors,
  },route={};
- new Function('require','exports','console',routeSource)(name=>{assert.ok(modules[name],name);return modules[name];},route,{error:line=>logs.push(JSON.parse(line))});
- return {sqlite,logs,row:()=>sqlite.prepare('SELECT data,revision FROM saves').get(),post:(body={action:'turn',revision:0})=>route.POST(new Request('http://localhost/api/rogue-classic',{method:'POST',headers:{origin:'http://localhost','content-type':'application/json'},body:typeof body==='string'?body:JSON.stringify(body)}))};
+ new Function('require','exports','console',routeSource)(name=>{assert.ok(modules[name],name);return modules[name];},route,{error:(...args)=>{try{logs.push(JSON.parse(args[0]));}catch{logs.push({raw:args});}}});
+ return {sqlite,logs,get:(query='')=>route.GET(new Request('http://localhost/api/rogue-classic'+query)),row:()=>sqlite.prepare('SELECT data,revision FROM saves').get(),post:(body={action:'turn',revision:0})=>route.POST(new Request('http://localhost/api/rogue-classic',{method:'POST',headers:{origin:'http://localhost','content-type':'application/json'},body:typeof body==='string'?body:JSON.stringify(body)}))};
 }
 async function failure(h,body,status,code){const response=await h.post(body),data=await response.json();assert.equal(response.status,status);assert.equal(data.code,code);assert.match(data.requestId,/^[0-9a-f-]{36}$/);assert.equal(response.headers.get('x-request-id'),data.requestId);assert.equal(h.logs.at(-1).requestId,data.requestId);return data;}
 
@@ -81,4 +81,34 @@ test('unknown request fields and error metadata never enter diagnostics',async()
  const h=harness({apply(){throw {name:'private-name',message:'secret'};}});
  await failure(h,{action:'sensitiveAccountName',command:{type:'secret',token:'secret'},revision:0},500,'INTERNAL_ERROR');
  assert.equal(h.logs[0].action,'other');assert.equal(h.logs[0].errorType,'unknown');assert.ok(!JSON.stringify(h.logs).includes('secret'));h.sqlite.close();
+});
+
+test('GET auth, pickup, decode/read and view failures never disclose raw errors or stacks',async()=>{
+ const marker='synthetic-private-account-token-marker';
+ for(const [stage,options] of [['auth',{authError:Error(marker)}],['pickup',{pickupError:Error(marker)}],['read',{readError:Error(marker)}],['read',{storage:{decodeGameData:async()=>{throw new SyntaxError(marker);}}}],['view',{view(){throw Error(marker);}}],['view',{view:()=>({bad:1n})}]]){
+  const h=harness(options),before=h.row(),response=await h.get(),data=await response.json();
+  assert.equal(response.status,500);assert.equal(data.code,'INTERNAL_ERROR');assert.match(data.requestId,/^[0-9a-f-]{36}$/);assert.equal(response.headers.get('x-request-id'),data.requestId);assert.equal(response.headers.get('cache-control'),'private, no-store');
+  assert.equal(h.logs.length,1);assert.equal(h.logs[0].event,'classic_get_failure');assert.equal(h.logs[0].stage,stage);assert.equal(h.logs[0].requestId,data.requestId);assert.equal(h.logs[0].saveOutcome,'not_attempted');
+  const output=JSON.stringify({data,logs:h.logs});for(const value of [marker,'private-account','stack','raw'])assert.ok(!output.includes(value));assert.deepEqual(h.row(),before);h.sqlite.close();
+ }
+});
+test('GET retains successful game, pickup-only and unauthenticated contracts without writes',async()=>{
+ const h=harness({document:createFixture('battle'),view:game.classicGameView}),before=h.row();
+ const response=await h.get(),data=await response.json();assert.equal(response.status,200);assert.equal(data.revision,0);assert.ok(data.battle);assert.equal(data.starters,undefined);assert.equal(h.logs.length,0);assert.deepEqual(h.row(),before);
+ assert.deepEqual(await (await h.get('?pickupOnly=1')).json(),{pickupVersion:0});assert.deepEqual(h.row(),before);h.sqlite.close();
+ const loggedOut=harness({unauthenticated:true});assert.equal((await loggedOut.get()).status,401);assert.equal(loggedOut.logs.length,0);loggedOut.sqlite.close();
+});
+test('two otherwise valid battle actions at one revision produce one commit and a classified conflict',async()=>{
+ const h=harness({document:createFixture('battle'),apply:game.applyClassicAction,view:game.classicGameView});
+ const command={action:'turn',command:{type:'move',move:'disable'},revision:0};
+ const responses=await Promise.all([h.post(command),h.post(command)]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);
+ const success=await responses.find(r=>r.status===200).json(),conflict=await responses.find(r=>r.status===409).json();assert.equal(conflict.code,'REVISION_CONFLICT');assert.equal(success.revision,1);assert.equal(h.logs[0].stage,'write');assert.equal(h.logs[0].saveOutcome,'rejected');
+ const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].party[0].pp.disable,19);const restored=await(await h.get()).json();assert.equal(restored.revision,1);
+ assert.equal((await h.post({...command,revision:restored.revision})).status,200);assert.equal(h.row().revision,2);h.sqlite.close();
+});
+test('a real move during pending trainer dialogue is ACTION_FAILED, not a save conflict',async()=>{
+ const h=harness({document:createFixture('trainer'),apply:game.applyClassicAction,view:game.classicGameView}),before=h.row();
+ const rejected=await failure(h,{action:'turn',command:{type:'move',move:'disable'},revision:0},409,'ACTION_FAILED');assert.match(rejected.error,/대화/);assert.equal(h.logs[0].stage,'action');assert.equal(h.logs[0].saveOutcome,'not_attempted');assert.deepEqual(h.row(),before);
+ let current=await(await h.get()).json();while(current.run.npcDialogueQueue?.length){const dialogue=current.run.npcDialogueQueue[0],response=await h.post({action:'npcDialogueSkip',revision:current.revision,dialogueId:dialogue.id,index:dialogue.index});assert.equal(response.status,200);current=await response.json();}
+ assert.equal((await h.post({action:'turn',command:{type:'move',move:'disable'},revision:current.revision})).status,200);h.sqlite.close();
 });

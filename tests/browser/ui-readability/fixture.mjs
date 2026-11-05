@@ -7,6 +7,11 @@ import {starterCatalog} from '../../../lib/rogue-starter-system.mjs';
 import {applyClassicAction,activeClassicRun} from '../../../lib/rogue-classic-game.mjs';
 import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='profile-single'||scenario==='profile-double'){
+  const {doc,run}=fixture([makeReferenceMon(150,30,{boxId:'profile-own-150',moves:['Swift','Confusion','Recover','Disable']}),makeReferenceMon(440,30,{boxId:'profile-own-440',moves:['Splash']})]);
+  run.wave=38;run.screen='battle';run.encounter={kind:'trainer',name:'격리 성능 검사'};
+  run.combat=createClassicCombat(run,[674,264].map(id=>makeReferenceMon(id,100,{boxId:'profile-foe-'+id,moves:['Splash']})),{trainer:true,doubles:scenario==='profile-double'});return doc;
+ }
  if(['pp-empty','pp-all-empty','pp-restored'].includes(scenario)){
   const empty=scenario==='pp-all-empty',pp={tackle:empty?0:35,quickattack:empty?0:30,ember:empty?0:25,extremespeed:scenario==='pp-restored'?5:0};
   const {doc,run}=fixture([makeReferenceMon(813,9,{boxId:'bunny',moves:['Tackle','Quick Attack','Ember','Extreme Speed'],pp})]);

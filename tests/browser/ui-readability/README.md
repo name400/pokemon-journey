@@ -67,3 +67,67 @@ their full portrait containment; generic trainer and failed-image fallbacks are
 also covered. Pokémon artwork in this script is stubbed. Its legacy rival fixture
 uses the existing trainer battle/controller with old fallback metadata, testing
 the presentation repair without altering the saved trainer record.
+
+## Local performance investigation
+
+`node tests/browser/ui-readability/server-profile.mjs` measures 20 synthetic
+single/double controller turns, encode/decode, view projection and JSON stages.
+It does not call a database, account, Worker or production service.
+
+To measure the actual browser UI with cacheable, real GIF bytes:
+
+```sh
+node tests/browser/ui-readability/profile-artwork.mjs
+PROFILE_ART_ROOT=/tmp/pokerogue-profile-art npx vite --config tests/browser/ui-readability/vite.config.mjs --host 127.0.0.1 --port 5223 --strictPort
+UI_TEST_URL=http://127.0.0.1:5223 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/profile-browser.mjs
+```
+
+The setup downloads eight PokeAPI Showdown GIFs once and writes their source URLs,
+sizes and SHA-256 hashes beside the cache. The isolated server replaces only those
+fixture image URLs and serves identical bytes with normal HTTP caching. This
+avoids Playwright routing disabling the browser cache. Asset network latency is
+therefore controlled localhost latency, not production CDN availability/latency.
+Without `PROFILE_ART_ROOT` the ordinary fixture behavior is unchanged.
+
+For an optimized bundle comparison, build and then preview the same harness:
+
+```sh
+PROFILE_ART_ROOT=/tmp/pokerogue-profile-art npx vite build --config tests/browser/ui-readability/vite.config.mjs --outDir "$PWD/.sites-runtime/tests/ui-readability/perf-dist" --emptyOutDir
+PROFILE_ART_ROOT=/tmp/pokerogue-profile-art npx vite preview --config tests/browser/ui-readability/vite.config.mjs --outDir "$PWD/.sites-runtime/tests/ui-readability/perf-dist" --host 127.0.0.1 --port 5225 --strictPort
+PROFILE_VARIANT=production UI_TEST_URL=http://127.0.0.1:5225 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/profile-browser.mjs
+```
+
+The script separates cold opening, first turn, warm turn, immediate next turn,
+reconnect and an artificial 150ms request latency at normal and 4× CPU settings.
+It records click/request/body/JSON/ready timestamps, event counts, long tasks,
+rAF gaps, React development Profiler durations, CDP script/layout/style totals,
+and actual image-cache resource entries. Production React disables Profiler
+callbacks; zero callback counts there do not mean zero rendering cost. Each
+browser context has a fresh cache; reconnect verifies cache hits. The initial
+Vite transform warm-up is outside the measured contexts.
+
+`PROFILE_RATES=4 PROFILE_MODES=double PROFILE_LIGHT=1` runs a control without the
+document MutationObserver. `PROFILE_CPU_TRACE=1` samples one warmed turn's CPU
+call stacks; build first with `PROFILE_SOURCE_MAP=1` to map stack locations to
+source. CPU tracing adds overhead and is for attribution, not baseline timings.
+`PROFILE_LIGHT` and `PROFILE_CPU_TRACE` should be run separately. Output is under
+the ignored `performance*` directories; no request bodies, saved game payloads,
+cookies or raw response headers are retained.
+
+Do not run other tests/builds concurrently with timing measurements. The 4× CPU
+setting is a synthetic stress condition, not a model of a particular user's PC.
+The optimized harness uses the same React UI and local real controller, but does
+not replace deployed Worker/database/network or physical-device profiling.
+
+Error correlation and failed recovery can be checked separately on localhost5224:
+
+```sh
+npx vite --config tests/browser/ui-readability/vite.config.mjs --host 127.0.0.1 --port 5224 --strictPort
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/error-recovery.mjs
+```
+
+This uses the real Page/RogueClassic with synthetic POST409 and recovery GET200/500
+responses at375px and1280px. It checks that the first POST error/UUID remains visible,
+no POST is retried, saves are unchanged, and the UUID causes no horizontal overflow.
+Results/screenshots go to `.sites-runtime/tests/error-recovery/`. Keep its browser/CPU
+work separate from performance profiling runs.
