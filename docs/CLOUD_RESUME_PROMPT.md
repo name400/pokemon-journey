@@ -882,3 +882,8 @@ GET 실패의 원시 오류 노출을 제거하고, 클라이언트가 최초 PO
 여섯 분야 묶음의 표준 전체856/856(329.8초)·Worker 전체856/856(172.5초), 타입·production 빌드 통과. 이후 마자용 안내 잔류 후속은 표준집중7/7(신규4), Worker4/4, PC/모바일브라우저6/6으로 별도 검사했고 마지막 타입·production 빌드도 통과했다. 860개 전체를 실행했다고 합산하지 않는다. 새 이미지 화면은1280/375각각 폼72·융합38·트레이너14·BattlePanel2와누락fallback을검사했다. 실제기기/운영계정/200층 자연플레이와전수조합은별도다.
 
 최종기록: IMPLEMENTATION_SIX_STREAMS_QA_20261105.md 및 FUN_RESULT_LIFECYCLE_QA_20261105.md. 로그 /tmp/batch-six-{full,worker-final,type-final,build}.log, /tmp/batch-six-after-fun-{type,build}.log 및각항목QA. 모든격리브라우저서버는종료했다. 기존 화면lint진단과신규파일lint0을구분한다. Sites 저장·배포는하지않았다. 실제배포할커밋은최종git log/원격확인을따른다.
+
+
+### 두 번째 연속 구현 검증
+
+검증된 두 번째 묶음은 CONTINUATION_ROUND2_QA_20261105.md를 따른다. source 조건/폼341권한, 자동폼·패시브 복구, 도구 획득 cap/두 native 회복 도구, 꿈134종, 자연의힘/호출metadata, AI matchup/seedtie, 96메가+37변신 이미지·파트너가 포함된다. 표준/Worker전체각938/938, 마지막폼왕복집중각25/25와타입/빌드통과. 세부 범위/전체미실행 추가검사는 QA에구분한다. 활성폼도구·추가호출정책·일반폼 이미지는 다음 작업 트리에서 계속 진행 중이며 이 묶음 완료와 혼동하지 않는다. Sites는 사용자 담당이다.

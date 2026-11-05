@@ -1,0 +1,3340 @@
+{
+  "sourceCommit": "7c0881255af5cd51992e513ff93c2f71adbe40e0",
+  "scope": "Non-base source forms; image status is separate from game-mechanics support",
+  "counts": {
+    "verified-local-mega": 96,
+    "verified-local-transformation": 37,
+    "existing-explicit-external-source": 117,
+    "numeric-or-native-fallback-unverified": 166
+  },
+  "forms": [
+    {
+      "sourceId": 3,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "venusaurmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "3-mega"
+    },
+    {
+      "sourceId": 3,
+      "formIndex": 2,
+      "formKey": "gigantamax",
+      "native": "venusaurgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "3-gigantamax"
+    },
+    {
+      "sourceId": 6,
+      "formIndex": 1,
+      "formKey": "mega-x",
+      "native": "charizardmegax",
+      "imageStatus": "verified-local-mega",
+      "atlas": "6-mega-x"
+    },
+    {
+      "sourceId": 6,
+      "formIndex": 2,
+      "formKey": "mega-y",
+      "native": "charizardmegay",
+      "imageStatus": "verified-local-mega",
+      "atlas": "6-mega-y"
+    },
+    {
+      "sourceId": 6,
+      "formIndex": 3,
+      "formKey": "gigantamax",
+      "native": "charizardgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "6-gigantamax"
+    },
+    {
+      "sourceId": 9,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "blastoisemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "9-mega"
+    },
+    {
+      "sourceId": 9,
+      "formIndex": 2,
+      "formKey": "gigantamax",
+      "native": "blastoisegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "9-gigantamax"
+    },
+    {
+      "sourceId": 12,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "butterfreegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "12-gigantamax"
+    },
+    {
+      "sourceId": 15,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "beedrillmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "15-mega"
+    },
+    {
+      "sourceId": 18,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "pidgeotmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "18-mega"
+    },
+    {
+      "sourceId": 25,
+      "formIndex": 1,
+      "formKey": "partner",
+      "native": "pikachustarter",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 25,
+      "formIndex": 2,
+      "formKey": "cosplay",
+      "native": "pikachucosplay",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 25,
+      "formIndex": 3,
+      "formKey": "cool-cosplay",
+      "native": "pikachurockstar",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 25,
+      "formIndex": 4,
+      "formKey": "beauty-cosplay",
+      "native": "pikachubelle",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 25,
+      "formIndex": 5,
+      "formKey": "cute-cosplay",
+      "native": "pikachupopstar",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 25,
+      "formIndex": 6,
+      "formKey": "smart-cosplay",
+      "native": "pikachuphd",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 25,
+      "formIndex": 7,
+      "formKey": "tough-cosplay",
+      "native": "pikachulibre",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 25,
+      "formIndex": 8,
+      "formKey": "gigantamax",
+      "native": "pikachugmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "25-gigantamax"
+    },
+    {
+      "sourceId": 26,
+      "formIndex": 1,
+      "formKey": "mega-x",
+      "native": "raichumegax",
+      "imageStatus": "verified-local-mega",
+      "atlas": "26-mega-x"
+    },
+    {
+      "sourceId": 26,
+      "formIndex": 2,
+      "formKey": "mega-y",
+      "native": "raichumegay",
+      "imageStatus": "verified-local-mega",
+      "atlas": "26-mega-y"
+    },
+    {
+      "sourceId": 36,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "clefablemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "36-mega"
+    },
+    {
+      "sourceId": 52,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "meowthgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "52-gigantamax"
+    },
+    {
+      "sourceId": 65,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "alakazammega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "65-mega"
+    },
+    {
+      "sourceId": 68,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "machampgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "68-gigantamax"
+    },
+    {
+      "sourceId": 71,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "victreebelmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "71-mega"
+    },
+    {
+      "sourceId": 80,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "slowbromega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "80-mega"
+    },
+    {
+      "sourceId": 94,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "gengarmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "94-mega"
+    },
+    {
+      "sourceId": 94,
+      "formIndex": 2,
+      "formKey": "gigantamax",
+      "native": "gengargmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "94-gigantamax"
+    },
+    {
+      "sourceId": 99,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "kinglergmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "99-gigantamax"
+    },
+    {
+      "sourceId": 115,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "kangaskhanmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "115-mega"
+    },
+    {
+      "sourceId": 121,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "starmiemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "121-mega"
+    },
+    {
+      "sourceId": 127,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "pinsirmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "127-mega"
+    },
+    {
+      "sourceId": 130,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "gyaradosmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "130-mega"
+    },
+    {
+      "sourceId": 131,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "laprasgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "131-gigantamax"
+    },
+    {
+      "sourceId": 133,
+      "formIndex": 1,
+      "formKey": "partner",
+      "native": "eeveestarter",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 133,
+      "formIndex": 2,
+      "formKey": "gigantamax",
+      "native": "eeveegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "133-gigantamax"
+    },
+    {
+      "sourceId": 142,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "aerodactylmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "142-mega"
+    },
+    {
+      "sourceId": 143,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "snorlaxgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "143-gigantamax"
+    },
+    {
+      "sourceId": 149,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "dragonitemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "149-mega"
+    },
+    {
+      "sourceId": 150,
+      "formIndex": 1,
+      "formKey": "mega-x",
+      "native": "mewtwomegax",
+      "imageStatus": "verified-local-mega",
+      "atlas": "150-mega-x"
+    },
+    {
+      "sourceId": 150,
+      "formIndex": 2,
+      "formKey": "mega-y",
+      "native": "mewtwomegay",
+      "imageStatus": "verified-local-mega",
+      "atlas": "150-mega-y"
+    },
+    {
+      "sourceId": 154,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "meganiummega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "154-mega"
+    },
+    {
+      "sourceId": 160,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "feraligatrmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "160-mega"
+    },
+    {
+      "sourceId": 172,
+      "formIndex": 1,
+      "formKey": "spiky",
+      "native": "pichuspikyeared",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 181,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "ampharosmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "181-mega"
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 1,
+      "formKey": "b",
+      "native": "unownb",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 2,
+      "formKey": "c",
+      "native": "unownc",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 3,
+      "formKey": "d",
+      "native": "unownd",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 4,
+      "formKey": "e",
+      "native": "unowne",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 5,
+      "formKey": "f",
+      "native": "unownf",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 6,
+      "formKey": "g",
+      "native": "unowng",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 7,
+      "formKey": "h",
+      "native": "unownh",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 8,
+      "formKey": "i",
+      "native": "unowni",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 9,
+      "formKey": "j",
+      "native": "unownj",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 10,
+      "formKey": "k",
+      "native": "unownk",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 11,
+      "formKey": "l",
+      "native": "unownl",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 12,
+      "formKey": "m",
+      "native": "unownm",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 13,
+      "formKey": "n",
+      "native": "unownn",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 14,
+      "formKey": "o",
+      "native": "unowno",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 15,
+      "formKey": "p",
+      "native": "unownp",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 16,
+      "formKey": "q",
+      "native": "unownq",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 17,
+      "formKey": "r",
+      "native": "unownr",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 18,
+      "formKey": "s",
+      "native": "unowns",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 19,
+      "formKey": "t",
+      "native": "unownt",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 20,
+      "formKey": "u",
+      "native": "unownu",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 21,
+      "formKey": "v",
+      "native": "unownv",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 22,
+      "formKey": "w",
+      "native": "unownw",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 23,
+      "formKey": "x",
+      "native": "unownx",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 24,
+      "formKey": "y",
+      "native": "unowny",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 25,
+      "formKey": "z",
+      "native": "unownz",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 26,
+      "formKey": "exclamation",
+      "native": "unownexclamation",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 201,
+      "formIndex": 27,
+      "formKey": "question",
+      "native": "unownquestion",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 208,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "steelixmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "208-mega"
+    },
+    {
+      "sourceId": 212,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "scizormega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "212-mega"
+    },
+    {
+      "sourceId": 214,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "heracrossmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "214-mega"
+    },
+    {
+      "sourceId": 227,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "skarmorymega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "227-mega"
+    },
+    {
+      "sourceId": 229,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "houndoommega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "229-mega"
+    },
+    {
+      "sourceId": 248,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "tyranitarmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "248-mega"
+    },
+    {
+      "sourceId": 254,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "sceptilemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "254-mega"
+    },
+    {
+      "sourceId": 257,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "blazikenmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "257-mega"
+    },
+    {
+      "sourceId": 260,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "swampertmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "260-mega"
+    },
+    {
+      "sourceId": 282,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "gardevoirmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "282-mega"
+    },
+    {
+      "sourceId": 302,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "sableyemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "302-mega"
+    },
+    {
+      "sourceId": 303,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "mawilemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "303-mega"
+    },
+    {
+      "sourceId": 306,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "aggronmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "306-mega"
+    },
+    {
+      "sourceId": 308,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "medichammega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "308-mega"
+    },
+    {
+      "sourceId": 310,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "manectricmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "310-mega"
+    },
+    {
+      "sourceId": 319,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "sharpedomega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "319-mega"
+    },
+    {
+      "sourceId": 323,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "cameruptmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "323-mega"
+    },
+    {
+      "sourceId": 334,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "altariamega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "334-mega"
+    },
+    {
+      "sourceId": 351,
+      "formIndex": 1,
+      "formKey": "sunny",
+      "native": "castformsunny",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 351,
+      "formIndex": 2,
+      "formKey": "rainy",
+      "native": "castformrainy",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 351,
+      "formIndex": 3,
+      "formKey": "snowy",
+      "native": "castformsnowy",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 354,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "banettemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "354-mega"
+    },
+    {
+      "sourceId": 358,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "chimechomega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "358-mega"
+    },
+    {
+      "sourceId": 359,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "absolmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "359-mega"
+    },
+    {
+      "sourceId": 359,
+      "formIndex": 2,
+      "formKey": "mega-z",
+      "native": "absolmegaz",
+      "imageStatus": "verified-local-mega",
+      "atlas": "359-mega-z"
+    },
+    {
+      "sourceId": 362,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "glaliemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "362-mega"
+    },
+    {
+      "sourceId": 373,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "salamencemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "373-mega"
+    },
+    {
+      "sourceId": 376,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "metagrossmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "376-mega"
+    },
+    {
+      "sourceId": 380,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "latiasmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "380-mega"
+    },
+    {
+      "sourceId": 381,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "latiosmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "381-mega"
+    },
+    {
+      "sourceId": 382,
+      "formIndex": 1,
+      "formKey": "primal",
+      "native": "kyogreprimal",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "382-primal"
+    },
+    {
+      "sourceId": 383,
+      "formIndex": 1,
+      "formKey": "primal",
+      "native": "groudonprimal",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "383-primal"
+    },
+    {
+      "sourceId": 384,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "rayquazamega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "384-mega"
+    },
+    {
+      "sourceId": 386,
+      "formIndex": 1,
+      "formKey": "attack",
+      "native": "deoxysattack",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 386,
+      "formIndex": 2,
+      "formKey": "defense",
+      "native": "deoxysdefense",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 386,
+      "formIndex": 3,
+      "formKey": "speed",
+      "native": "deoxysspeed",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 398,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "staraptormega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "398-mega"
+    },
+    {
+      "sourceId": 412,
+      "formIndex": 1,
+      "formKey": "sandy",
+      "native": "burmysandy",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 412,
+      "formIndex": 2,
+      "formKey": "trash",
+      "native": "burmytrash",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 413,
+      "formIndex": 1,
+      "formKey": "sandy",
+      "native": "wormadamsandy",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 413,
+      "formIndex": 2,
+      "formKey": "trash",
+      "native": "wormadamtrash",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 421,
+      "formIndex": 1,
+      "formKey": "sunshine",
+      "native": "cherrimsunshine",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 422,
+      "formIndex": 1,
+      "formKey": "west",
+      "native": "shellos",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 423,
+      "formIndex": 1,
+      "formKey": "west",
+      "native": "gastrodon",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 428,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "lopunnymega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "428-mega"
+    },
+    {
+      "sourceId": 445,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "garchompmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "445-mega"
+    },
+    {
+      "sourceId": 445,
+      "formIndex": 2,
+      "formKey": "mega-z",
+      "native": "garchompmegaz",
+      "imageStatus": "verified-local-mega",
+      "atlas": "445-mega-z"
+    },
+    {
+      "sourceId": 448,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "lucariomega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "448-mega"
+    },
+    {
+      "sourceId": 448,
+      "formIndex": 2,
+      "formKey": "mega-z",
+      "native": "lucariomegaz",
+      "imageStatus": "verified-local-mega",
+      "atlas": "448-mega-z"
+    },
+    {
+      "sourceId": 460,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "abomasnowmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "460-mega"
+    },
+    {
+      "sourceId": 475,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "gallademega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "475-mega"
+    },
+    {
+      "sourceId": 478,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "froslassmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "478-mega"
+    },
+    {
+      "sourceId": 479,
+      "formIndex": 1,
+      "formKey": "heat",
+      "native": "rotomheat",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 479,
+      "formIndex": 2,
+      "formKey": "wash",
+      "native": "rotomwash",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 479,
+      "formIndex": 3,
+      "formKey": "frost",
+      "native": "rotomfrost",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 479,
+      "formIndex": 4,
+      "formKey": "fan",
+      "native": "rotomfan",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 479,
+      "formIndex": 5,
+      "formKey": "mow",
+      "native": "rotommow",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 483,
+      "formIndex": 1,
+      "formKey": "origin",
+      "native": "dialgaorigin",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 484,
+      "formIndex": 1,
+      "formKey": "origin",
+      "native": "palkiaorigin",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 485,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "heatranmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "485-mega"
+    },
+    {
+      "sourceId": 487,
+      "formIndex": 1,
+      "formKey": "origin",
+      "native": "giratinaorigin",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 491,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "darkraimega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "491-mega"
+    },
+    {
+      "sourceId": 492,
+      "formIndex": 1,
+      "formKey": "sky",
+      "native": "shayminsky",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 1,
+      "formKey": "fighting",
+      "native": "arceusfighting",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 2,
+      "formKey": "flying",
+      "native": "arceusflying",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 3,
+      "formKey": "poison",
+      "native": "arceuspoison",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 4,
+      "formKey": "ground",
+      "native": "arceusground",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 5,
+      "formKey": "rock",
+      "native": "arceusrock",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 6,
+      "formKey": "bug",
+      "native": "arceusbug",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 7,
+      "formKey": "ghost",
+      "native": "arceusghost",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 8,
+      "formKey": "steel",
+      "native": "arceussteel",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 9,
+      "formKey": "fire",
+      "native": "arceusfire",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 10,
+      "formKey": "water",
+      "native": "arceuswater",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 11,
+      "formKey": "grass",
+      "native": "arceusgrass",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 12,
+      "formKey": "electric",
+      "native": "arceuselectric",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 13,
+      "formKey": "psychic",
+      "native": "arceuspsychic",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 14,
+      "formKey": "ice",
+      "native": "arceusice",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 15,
+      "formKey": "dragon",
+      "native": "arceusdragon",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 16,
+      "formKey": "dark",
+      "native": "arceusdark",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 493,
+      "formIndex": 17,
+      "formKey": "fairy",
+      "native": "arceusfairy",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 500,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "emboarmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "500-mega"
+    },
+    {
+      "sourceId": 530,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "excadrillmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "530-mega"
+    },
+    {
+      "sourceId": 531,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "audinomega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "531-mega"
+    },
+    {
+      "sourceId": 545,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "scolipedemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "545-mega"
+    },
+    {
+      "sourceId": 550,
+      "formIndex": 1,
+      "formKey": "blue-striped",
+      "native": "basculinbluestriped",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 555,
+      "formIndex": 1,
+      "formKey": "zen",
+      "native": "darmanitanzen",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 560,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "scraftymega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "560-mega"
+    },
+    {
+      "sourceId": 569,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "garbodorgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "569-gigantamax"
+    },
+    {
+      "sourceId": 585,
+      "formIndex": 1,
+      "formKey": "summer",
+      "native": "deerlingsummer",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 585,
+      "formIndex": 2,
+      "formKey": "autumn",
+      "native": "deerlingautumn",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 585,
+      "formIndex": 3,
+      "formKey": "winter",
+      "native": "deerlingwinter",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 586,
+      "formIndex": 1,
+      "formKey": "summer",
+      "native": "sawsbucksummer",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 586,
+      "formIndex": 2,
+      "formKey": "autumn",
+      "native": "sawsbuckautumn",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 586,
+      "formIndex": 3,
+      "formKey": "winter",
+      "native": "sawsbuckwinter",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 604,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "eelektrossmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "604-mega"
+    },
+    {
+      "sourceId": 609,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "chandeluremega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "609-mega"
+    },
+    {
+      "sourceId": 623,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "golurkmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "623-mega"
+    },
+    {
+      "sourceId": 641,
+      "formIndex": 1,
+      "formKey": "therian",
+      "native": "tornadustherian",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 642,
+      "formIndex": 1,
+      "formKey": "therian",
+      "native": "thundurustherian",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 645,
+      "formIndex": 1,
+      "formKey": "therian",
+      "native": "landorustherian",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 646,
+      "formIndex": 1,
+      "formKey": "black",
+      "native": "kyuremblack",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 646,
+      "formIndex": 2,
+      "formKey": "white",
+      "native": "kyuremwhite",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 647,
+      "formIndex": 1,
+      "formKey": "resolute",
+      "native": "keldeoresolute",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 648,
+      "formIndex": 1,
+      "formKey": "pirouette",
+      "native": "meloettapirouette",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 649,
+      "formIndex": 1,
+      "formKey": "shock",
+      "native": "genesectshock",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 649,
+      "formIndex": 2,
+      "formKey": "burn",
+      "native": "genesectburn",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 649,
+      "formIndex": 3,
+      "formKey": "chill",
+      "native": "genesectchill",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 649,
+      "formIndex": 4,
+      "formKey": "douse",
+      "native": "genesectdouse",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 652,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "chesnaughtmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "652-mega"
+    },
+    {
+      "sourceId": 655,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "delphoxmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "655-mega"
+    },
+    {
+      "sourceId": 658,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "greninjamega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "658-mega"
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 1,
+      "formKey": "icy-snow",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 2,
+      "formKey": "polar",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 3,
+      "formKey": "tundra",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 4,
+      "formKey": "continental",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 5,
+      "formKey": "garden",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 6,
+      "formKey": "elegant",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 7,
+      "formKey": "modern",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 8,
+      "formKey": "marine",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 9,
+      "formKey": "archipelago",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 10,
+      "formKey": "high-plains",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 11,
+      "formKey": "sandstorm",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 12,
+      "formKey": "river",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 13,
+      "formKey": "monsoon",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 14,
+      "formKey": "savanna",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 15,
+      "formKey": "sun",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 16,
+      "formKey": "ocean",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 17,
+      "formKey": "jungle",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 18,
+      "formKey": "fancy",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 664,
+      "formIndex": 19,
+      "formKey": "poke-ball",
+      "native": "scatterbug",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 1,
+      "formKey": "icy-snow",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 2,
+      "formKey": "polar",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 3,
+      "formKey": "tundra",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 4,
+      "formKey": "continental",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 5,
+      "formKey": "garden",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 6,
+      "formKey": "elegant",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 7,
+      "formKey": "modern",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 8,
+      "formKey": "marine",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 9,
+      "formKey": "archipelago",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 10,
+      "formKey": "high-plains",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 11,
+      "formKey": "sandstorm",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 12,
+      "formKey": "river",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 13,
+      "formKey": "monsoon",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 14,
+      "formKey": "savanna",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 15,
+      "formKey": "sun",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 16,
+      "formKey": "ocean",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 17,
+      "formKey": "jungle",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 18,
+      "formKey": "fancy",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 665,
+      "formIndex": 19,
+      "formKey": "poke-ball",
+      "native": "spewpa",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 1,
+      "formKey": "icy-snow",
+      "native": "vivillonicysnow",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 2,
+      "formKey": "polar",
+      "native": "vivillonpolar",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 3,
+      "formKey": "tundra",
+      "native": "vivillontundra",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 4,
+      "formKey": "continental",
+      "native": "vivilloncontinental",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 5,
+      "formKey": "garden",
+      "native": "vivillongarden",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 6,
+      "formKey": "elegant",
+      "native": "vivillonelegant",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 7,
+      "formKey": "modern",
+      "native": "vivillonmodern",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 8,
+      "formKey": "marine",
+      "native": "vivillonmarine",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 9,
+      "formKey": "archipelago",
+      "native": "vivillonarchipelago",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 10,
+      "formKey": "high-plains",
+      "native": "vivillonhighplains",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 11,
+      "formKey": "sandstorm",
+      "native": "vivillonsandstorm",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 12,
+      "formKey": "river",
+      "native": "vivillonriver",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 13,
+      "formKey": "monsoon",
+      "native": "vivillonmonsoon",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 14,
+      "formKey": "savanna",
+      "native": "vivillonsavanna",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 15,
+      "formKey": "sun",
+      "native": "vivillonsun",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 16,
+      "formKey": "ocean",
+      "native": "vivillonocean",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 17,
+      "formKey": "jungle",
+      "native": "vivillonjungle",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 18,
+      "formKey": "fancy",
+      "native": "vivillonfancy",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 666,
+      "formIndex": 19,
+      "formKey": "poke-ball",
+      "native": "vivillonpokeball",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 668,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "pyroarmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "668-mega"
+    },
+    {
+      "sourceId": 669,
+      "formIndex": 1,
+      "formKey": "yellow",
+      "native": "flabebeyellow",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 669,
+      "formIndex": 2,
+      "formKey": "orange",
+      "native": "flabebeorange",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 669,
+      "formIndex": 3,
+      "formKey": "blue",
+      "native": "flabebeblue",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 669,
+      "formIndex": 4,
+      "formKey": "white",
+      "native": "flabebewhite",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 670,
+      "formIndex": 1,
+      "formKey": "yellow",
+      "native": "floetteyellow",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 670,
+      "formIndex": 2,
+      "formKey": "orange",
+      "native": "floetteorange",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 670,
+      "formIndex": 3,
+      "formKey": "blue",
+      "native": "floetteblue",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 670,
+      "formIndex": 4,
+      "formKey": "white",
+      "native": "floettewhite",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 671,
+      "formIndex": 1,
+      "formKey": "yellow",
+      "native": "florgesyellow",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 671,
+      "formIndex": 2,
+      "formKey": "orange",
+      "native": "florgesorange",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 671,
+      "formIndex": 3,
+      "formKey": "blue",
+      "native": "florgesblue",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 671,
+      "formIndex": 4,
+      "formKey": "white",
+      "native": "florgeswhite",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 1,
+      "formKey": "heart",
+      "native": "furfrouheart",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 2,
+      "formKey": "star",
+      "native": "furfroustar",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 3,
+      "formKey": "diamond",
+      "native": "furfroudiamond",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 4,
+      "formKey": "debutante",
+      "native": "furfroudebutante",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 5,
+      "formKey": "matron",
+      "native": "furfroumatron",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 6,
+      "formKey": "dandy",
+      "native": "furfroudandy",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 7,
+      "formKey": "la-reine",
+      "native": "furfroulareine",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 8,
+      "formKey": "kabuki",
+      "native": "furfroukabuki",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 676,
+      "formIndex": 9,
+      "formKey": "pharaoh",
+      "native": "furfroupharaoh",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 678,
+      "formIndex": 1,
+      "formKey": "female",
+      "native": "meowsticf",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 678,
+      "formIndex": 2,
+      "formKey": "mega",
+      "native": "meowsticmmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "678-mega"
+    },
+    {
+      "sourceId": 681,
+      "formIndex": 1,
+      "formKey": "blade",
+      "native": "aegislashblade",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 687,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "malamarmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "687-mega"
+    },
+    {
+      "sourceId": 689,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "barbaraclemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "689-mega"
+    },
+    {
+      "sourceId": 691,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "dragalgemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "691-mega"
+    },
+    {
+      "sourceId": 701,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "hawluchamega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "701-mega"
+    },
+    {
+      "sourceId": 710,
+      "formIndex": 1,
+      "formKey": "small",
+      "native": "pumpkaboosmall",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 710,
+      "formIndex": 2,
+      "formKey": "large",
+      "native": "pumpkaboolarge",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 710,
+      "formIndex": 3,
+      "formKey": "jumbo",
+      "native": "pumpkaboosuper",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 711,
+      "formIndex": 1,
+      "formKey": "small",
+      "native": "gourgeistsmall",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 711,
+      "formIndex": 2,
+      "formKey": "large",
+      "native": "gourgeistlarge",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 711,
+      "formIndex": 3,
+      "formKey": "jumbo",
+      "native": "gourgeistsuper",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 716,
+      "formIndex": 1,
+      "formKey": "active",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 718,
+      "formIndex": 1,
+      "formKey": "10",
+      "native": "zygarde10",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 718,
+      "formIndex": 2,
+      "formKey": "50-pc",
+      "native": "zygarde",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 718,
+      "formIndex": 3,
+      "formKey": "10-pc",
+      "native": "zygarde10",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 718,
+      "formIndex": 4,
+      "formKey": "complete",
+      "native": "zygardecomplete",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 718,
+      "formIndex": 5,
+      "formKey": "10-complete",
+      "native": "zygardecomplete",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 718,
+      "formIndex": 6,
+      "formKey": "mega",
+      "native": "zygardemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "718-mega"
+    },
+    {
+      "sourceId": 719,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "dianciemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "719-mega"
+    },
+    {
+      "sourceId": 720,
+      "formIndex": 1,
+      "formKey": "unbound",
+      "native": "hoopaunbound",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 740,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "crabominablemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "740-mega"
+    },
+    {
+      "sourceId": 741,
+      "formIndex": 1,
+      "formKey": "pompom",
+      "native": "oricoriopompom",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 741,
+      "formIndex": 2,
+      "formKey": "pau",
+      "native": "oricoriopau",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 741,
+      "formIndex": 3,
+      "formKey": "sensu",
+      "native": "oricoriosensu",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 744,
+      "formIndex": 1,
+      "formKey": "own-tempo",
+      "native": "rockruffdusk",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 745,
+      "formIndex": 1,
+      "formKey": "midnight",
+      "native": "lycanrocmidnight",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 745,
+      "formIndex": 2,
+      "formKey": "dusk",
+      "native": "lycanrocdusk",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 746,
+      "formIndex": 1,
+      "formKey": "school",
+      "native": "wishiwashischool",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 768,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "golisopodmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "768-mega"
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 1,
+      "formKey": "fighting",
+      "native": "silvallyfighting",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 2,
+      "formKey": "flying",
+      "native": "silvallyflying",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 3,
+      "formKey": "poison",
+      "native": "silvallypoison",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 4,
+      "formKey": "ground",
+      "native": "silvallyground",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 5,
+      "formKey": "rock",
+      "native": "silvallyrock",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 6,
+      "formKey": "bug",
+      "native": "silvallybug",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 7,
+      "formKey": "ghost",
+      "native": "silvallyghost",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 8,
+      "formKey": "steel",
+      "native": "silvallysteel",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 9,
+      "formKey": "fire",
+      "native": "silvallyfire",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 10,
+      "formKey": "water",
+      "native": "silvallywater",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 11,
+      "formKey": "grass",
+      "native": "silvallygrass",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 12,
+      "formKey": "electric",
+      "native": "silvallyelectric",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 13,
+      "formKey": "psychic",
+      "native": "silvallypsychic",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 14,
+      "formKey": "ice",
+      "native": "silvallyice",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 15,
+      "formKey": "dragon",
+      "native": "silvallydragon",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 16,
+      "formKey": "dark",
+      "native": "silvallydark",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 773,
+      "formIndex": 17,
+      "formKey": "fairy",
+      "native": "silvallyfairy",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 1,
+      "formKey": "orange-meteor",
+      "native": "miniormeteor",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 2,
+      "formKey": "yellow-meteor",
+      "native": "miniormeteor",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 3,
+      "formKey": "green-meteor",
+      "native": "miniormeteor",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 4,
+      "formKey": "blue-meteor",
+      "native": "miniormeteor",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 5,
+      "formKey": "indigo-meteor",
+      "native": "miniormeteor",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 6,
+      "formKey": "violet-meteor",
+      "native": "miniormeteor",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 7,
+      "formKey": "red",
+      "native": "minior",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 8,
+      "formKey": "orange",
+      "native": "miniororange",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 9,
+      "formKey": "yellow",
+      "native": "minioryellow",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 10,
+      "formKey": "green",
+      "native": "miniorgreen",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 11,
+      "formKey": "blue",
+      "native": "miniorblue",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 12,
+      "formKey": "indigo",
+      "native": "miniorindigo",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 774,
+      "formIndex": 13,
+      "formKey": "violet",
+      "native": "miniorviolet",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 778,
+      "formIndex": 1,
+      "formKey": "busted",
+      "native": "mimikyubusted",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 780,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "drampamega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "780-mega"
+    },
+    {
+      "sourceId": 800,
+      "formIndex": 1,
+      "formKey": "dusk-mane",
+      "native": "necrozmaduskmane",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 800,
+      "formIndex": 2,
+      "formKey": "dawn-wings",
+      "native": "necrozmadawnwings",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 800,
+      "formIndex": 3,
+      "formKey": "ultra",
+      "native": "necrozmaultra",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "800-ultra"
+    },
+    {
+      "sourceId": 801,
+      "formIndex": 1,
+      "formKey": "original",
+      "native": "magearnaoriginal",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 801,
+      "formIndex": 2,
+      "formKey": "mega",
+      "native": "magearnamega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "801-mega"
+    },
+    {
+      "sourceId": 801,
+      "formIndex": 3,
+      "formKey": "mega-original",
+      "native": "magearnaoriginalmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "801-mega-original"
+    },
+    {
+      "sourceId": 802,
+      "formIndex": 1,
+      "formKey": "zenith",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 807,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "zeraoramega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "807-mega"
+    },
+    {
+      "sourceId": 809,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "melmetalgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "809-gigantamax"
+    },
+    {
+      "sourceId": 812,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "rillaboomgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "812-gigantamax"
+    },
+    {
+      "sourceId": 815,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "cinderacegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "815-gigantamax"
+    },
+    {
+      "sourceId": 818,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "inteleongmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "818-gigantamax"
+    },
+    {
+      "sourceId": 823,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "corviknightgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "823-gigantamax"
+    },
+    {
+      "sourceId": 826,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "orbeetlegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "826-gigantamax"
+    },
+    {
+      "sourceId": 834,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "drednawgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "834-gigantamax"
+    },
+    {
+      "sourceId": 839,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "coalossalgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "839-gigantamax"
+    },
+    {
+      "sourceId": 841,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "flapplegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "841-gigantamax"
+    },
+    {
+      "sourceId": 842,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "appletungmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "842-gigantamax"
+    },
+    {
+      "sourceId": 844,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "sandacondagmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "844-gigantamax"
+    },
+    {
+      "sourceId": 845,
+      "formIndex": 1,
+      "formKey": "gulping",
+      "native": "cramorantgulping",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 845,
+      "formIndex": 2,
+      "formKey": "gorging",
+      "native": "cramorantgorging",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 849,
+      "formIndex": 1,
+      "formKey": "lowkey",
+      "native": "toxtricitylowkey",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 849,
+      "formIndex": 2,
+      "formKey": "gigantamax",
+      "native": "toxtricitygmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "849-gigantamax"
+    },
+    {
+      "sourceId": 851,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "centiskorchgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "851-gigantamax"
+    },
+    {
+      "sourceId": 854,
+      "formIndex": 1,
+      "formKey": "antique",
+      "native": "sinisteaantique",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 855,
+      "formIndex": 1,
+      "formKey": "antique",
+      "native": "polteageistantique",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 858,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "hatterenegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "858-gigantamax"
+    },
+    {
+      "sourceId": 861,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "grimmsnarlgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "861-gigantamax"
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 1,
+      "formKey": "ruby-cream",
+      "native": "alcremierubycream",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 2,
+      "formKey": "matcha-cream",
+      "native": "alcremiematchacream",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 3,
+      "formKey": "mint-cream",
+      "native": "alcremiemintcream",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 4,
+      "formKey": "lemon-cream",
+      "native": "alcremielemoncream",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 5,
+      "formKey": "salted-cream",
+      "native": "alcremiesaltedcream",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 6,
+      "formKey": "ruby-swirl",
+      "native": "alcremierubyswirl",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 7,
+      "formKey": "caramel-swirl",
+      "native": "alcremiecaramelswirl",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 8,
+      "formKey": "rainbow-swirl",
+      "native": "alcremierainbowswirl",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 869,
+      "formIndex": 9,
+      "formKey": "gigantamax",
+      "native": "alcremiegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "869-gigantamax"
+    },
+    {
+      "sourceId": 870,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "falinksmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "870-mega"
+    },
+    {
+      "sourceId": 875,
+      "formIndex": 1,
+      "formKey": "no-ice",
+      "native": "eiscuenoice",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 876,
+      "formIndex": 1,
+      "formKey": "female",
+      "native": "indeedeef",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 877,
+      "formIndex": 1,
+      "formKey": "hangry",
+      "native": "morpekohangry",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 879,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "copperajahgmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "879-gigantamax"
+    },
+    {
+      "sourceId": 884,
+      "formIndex": 1,
+      "formKey": "gigantamax",
+      "native": "duraludongmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "884-gigantamax"
+    },
+    {
+      "sourceId": 888,
+      "formIndex": 1,
+      "formKey": "crowned",
+      "native": "zaciancrowned",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 889,
+      "formIndex": 1,
+      "formKey": "crowned",
+      "native": "zamazentacrowned",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 890,
+      "formIndex": 1,
+      "formKey": "eternamax",
+      "native": "eternatuseternamax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "890-eternamax"
+    },
+    {
+      "sourceId": 892,
+      "formIndex": 1,
+      "formKey": "rapid-strike",
+      "native": "urshifurapidstrike",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 892,
+      "formIndex": 2,
+      "formKey": "gigantamax-single",
+      "native": "urshifugmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "892-gigantamax-single"
+    },
+    {
+      "sourceId": 892,
+      "formIndex": 3,
+      "formKey": "gigantamax-rapid",
+      "native": "urshifurapidstrikegmax",
+      "imageStatus": "verified-local-transformation",
+      "atlas": "892-gigantamax-rapid"
+    },
+    {
+      "sourceId": 893,
+      "formIndex": 1,
+      "formKey": "dada",
+      "native": "zarudedada",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 898,
+      "formIndex": 1,
+      "formKey": "ice",
+      "native": "calyrexice",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 898,
+      "formIndex": 2,
+      "formKey": "shadow",
+      "native": "calyrexshadow",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 902,
+      "formIndex": 1,
+      "formKey": "female",
+      "native": "basculegionf",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 905,
+      "formIndex": 1,
+      "formKey": "therian",
+      "native": "enamorustherian",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 916,
+      "formIndex": 1,
+      "formKey": "female",
+      "native": "oinkolognef",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 925,
+      "formIndex": 1,
+      "formKey": "three",
+      "native": "maushold",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 931,
+      "formIndex": 1,
+      "formKey": "blue-plumage",
+      "native": "squawkabillyblue",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 931,
+      "formIndex": 2,
+      "formKey": "yellow-plumage",
+      "native": "squawkabillyyellow",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 931,
+      "formIndex": 3,
+      "formKey": "white-plumage",
+      "native": "squawkabillywhite",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 952,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "scovillainmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "952-mega"
+    },
+    {
+      "sourceId": 964,
+      "formIndex": 1,
+      "formKey": "hero",
+      "native": "palafinhero",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 966,
+      "formIndex": 1,
+      "formKey": "segin-starmobile",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 966,
+      "formIndex": 2,
+      "formKey": "schedar-starmobile",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 966,
+      "formIndex": 3,
+      "formKey": "navi-starmobile",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 966,
+      "formIndex": 4,
+      "formKey": "ruchbah-starmobile",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 966,
+      "formIndex": 5,
+      "formKey": "caph-starmobile",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 970,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "glimmoramega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "970-mega"
+    },
+    {
+      "sourceId": 978,
+      "formIndex": 1,
+      "formKey": "droopy",
+      "native": "tatsugiridroopy",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 978,
+      "formIndex": 2,
+      "formKey": "stretchy",
+      "native": "tatsugiristretchy",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 978,
+      "formIndex": 3,
+      "formKey": "mega-curly",
+      "native": "tatsugiricurlymega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "978-mega-curly"
+    },
+    {
+      "sourceId": 978,
+      "formIndex": 4,
+      "formKey": "mega-droopy",
+      "native": "tatsugiridroopymega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "978-mega-droopy"
+    },
+    {
+      "sourceId": 978,
+      "formIndex": 5,
+      "formKey": "mega-stretchy",
+      "native": "tatsugiristretchymega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "978-mega-stretchy"
+    },
+    {
+      "sourceId": 982,
+      "formIndex": 1,
+      "formKey": "three-segment",
+      "native": "dudunsparcethreesegment",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 998,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "baxcaliburmega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "998-mega"
+    },
+    {
+      "sourceId": 999,
+      "formIndex": 1,
+      "formKey": "roaming",
+      "native": "gimmighoulroaming",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 1012,
+      "formIndex": 1,
+      "formKey": "artisan",
+      "native": "poltchageistartisan",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 1013,
+      "formIndex": 1,
+      "formKey": "masterpiece",
+      "native": "sinistchamasterpiece",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1017,
+      "formIndex": 1,
+      "formKey": "wellspring-mask",
+      "native": "ogerponwellspring",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1017,
+      "formIndex": 2,
+      "formKey": "hearthflame-mask",
+      "native": "ogerponhearthflame",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1017,
+      "formIndex": 3,
+      "formKey": "cornerstone-mask",
+      "native": "ogerponcornerstone",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1017,
+      "formIndex": 4,
+      "formKey": "teal-mask-tera",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1017,
+      "formIndex": 5,
+      "formKey": "wellspring-mask-tera",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1017,
+      "formIndex": 6,
+      "formKey": "hearthflame-mask-tera",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1017,
+      "formIndex": 7,
+      "formKey": "cornerstone-mask-tera",
+      "native": null,
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1024,
+      "formIndex": 1,
+      "formKey": "terastal",
+      "native": "terapagosterastal",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 1024,
+      "formIndex": 2,
+      "formKey": "stellar",
+      "native": "terapagosstellar",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 2658,
+      "formIndex": 1,
+      "formKey": "ash",
+      "native": "greninjaash",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 2670,
+      "formIndex": 1,
+      "formKey": "mega",
+      "native": "floettemega",
+      "imageStatus": "verified-local-mega",
+      "atlas": "2670-mega"
+    },
+    {
+      "sourceId": 4555,
+      "formIndex": 1,
+      "formKey": "zen",
+      "native": "darmanitangalarzen",
+      "imageStatus": "numeric-or-native-fallback-unverified",
+      "atlas": null
+    },
+    {
+      "sourceId": 8128,
+      "formIndex": 1,
+      "formKey": "blaze",
+      "native": "taurospaldeablaze",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    },
+    {
+      "sourceId": 8128,
+      "formIndex": 2,
+      "formKey": "aqua",
+      "native": "taurospaldeaaqua",
+      "imageStatus": "existing-explicit-external-source",
+      "atlas": null
+    }
+  ]
+}

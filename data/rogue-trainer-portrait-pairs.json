@@ -1,0 +1,438 @@
+{
+  "sourceCommit": "29441f7aa7482d9e816b253d324293788936dc3e",
+  "semantics": "Source getSpriteKey(false,false) plus getSpriteKey(true,true), except doubleOnly already contains the pair. Existing saved explicit primary portrait remains unchanged.",
+  "pairs": {
+    "1": {
+      "name": "엘리트 트레이너",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/acetrainerf.png"
+    },
+    "4": {
+      "name": "팬클럽",
+      "doubleOnly": true,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/backers.png"
+    },
+    "5": {
+      "name": "백팩커",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/backpackerf.png"
+    },
+    "10": {
+      "name": "태권왕",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/battlegirl.png"
+    },
+    "11": {
+      "name": "포켓몬 브리더",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/pokemonbreederf.png"
+    },
+    "14": {
+      "name": "비즈니스맨",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/clerkf.png"
+    },
+    "16": {
+      "name": "사이클링",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/cyclistf.png"
+    },
+    "19": {
+      "name": "의사",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/nurse.png"
+    },
+    "28": {
+      "name": "폭주족 & 빡빡이",
+      "doubleOnly": true,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "31": {
+      "name": "인터뷰어",
+      "doubleOnly": true,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "36": {
+      "name": "이상한 자매",
+      "doubleOnly": true,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "41": {
+      "name": "POKEFAN",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/pokefanf.png"
+    },
+    "42": {
+      "name": "보육원아",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/preschoolerf.png"
+    },
+    "43": {
+      "name": "초능력자",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/psychicf.png"
+    },
+    "44": {
+      "name": "포켓몬 레인저",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/pokemonrangerf.png"
+    },
+    "45": {
+      "name": "신사",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/madame.png"
+    },
+    "46": {
+      "name": "도련님",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/lady.png"
+    },
+    "50": {
+      "name": "연구원",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/scientistf.png"
+    },
+    "53": {
+      "name": "엘리트 트레이너",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/acetrainersnowf.png"
+    },
+    "54": {
+      "name": "작업원",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "56": {
+      "name": "학원끝난 아이",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/schoolkidf.png"
+    },
+    "57": {
+      "name": "수영팬티 소년",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/swimmerf.png"
+    },
+    "58": {
+      "name": "쌍둥이",
+      "doubleOnly": true,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "59": {
+      "name": "베테랑 트레이너",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/veteranf.png"
+    },
+    "60": {
+      "name": "웨이터",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/waitress.png"
+    },
+    "61": {
+      "name": "작업원",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/workerf-gen8.png"
+    },
+    "62": {
+      "name": "러브러브커플",
+      "doubleOnly": true,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "63": {
+      "name": "반바지 꼬마",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/lass.png"
+    },
+    "64": {
+      "name": "로켓단 조무래기",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/rocketgruntf.png"
+    },
+    "69": {
+      "name": "마그마단 조무래기",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/magmagruntf.png"
+    },
+    "72": {
+      "name": "아쿠아단 조무래기",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/aquagruntf.png"
+    },
+    "75": {
+      "name": "갤럭시단 조무래기",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/galacticgruntf.png"
+    },
+    "79": {
+      "name": "플라스마단 조무래기",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/plasmagruntf.png"
+    },
+    "82": {
+      "name": "플레어단 조무래기",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/flaregruntf.png"
+    },
+    "88": {
+      "name": "에테르재단 직원",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/aetheremployeef.png"
+    },
+    "90": {
+      "name": "스컬단 조무래기",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/skullgruntf.png"
+    },
+    "92": {
+      "name": "매크로코스모스 직원",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/pokerogue-macro_grunt_f.png"
+    },
+    "94": {
+      "name": "스타단 조무래기",
+      "doubleOnly": false,
+      "partnerId": null,
+      "partnerName": null,
+      "partnerSrc": null,
+      "hasGenders": true,
+      "femaleSrc": "/game/trainers/stargruntf-s.png"
+    },
+    "222": {
+      "name": "풍",
+      "doubleOnly": false,
+      "partnerId": 223,
+      "partnerName": "란",
+      "partnerSrc": "/game/trainers/liza.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "223": {
+      "name": "란",
+      "doubleOnly": false,
+      "partnerId": 222,
+      "partnerName": "풍",
+      "partnerSrc": "/game/trainers/tate.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "263": {
+      "name": "두송",
+      "doubleOnly": false,
+      "partnerId": 264,
+      "partnerName": "마리",
+      "partnerSrc": "/game/trainers/marnie.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "264": {
+      "name": "마리",
+      "doubleOnly": false,
+      "partnerId": 263,
+      "partnerName": "두송",
+      "partnerSrc": "/game/trainers/piers.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "350": {
+      "name": "그린",
+      "doubleOnly": false,
+      "partnerId": 351,
+      "partnerName": "레드",
+      "partnerSrc": "/game/trainers/red.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "351": {
+      "name": "레드",
+      "doubleOnly": false,
+      "partnerId": 350,
+      "partnerName": "그린",
+      "partnerSrc": "/game/trainers/blue-gen3champion.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "353": {
+      "name": "성호",
+      "doubleOnly": false,
+      "partnerId": 354,
+      "partnerName": "윤진",
+      "partnerSrc": "/game/trainers/wallace.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "354": {
+      "name": "윤진",
+      "doubleOnly": false,
+      "partnerId": 353,
+      "partnerName": "성호",
+      "partnerSrc": "/game/trainers/steven.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "356": {
+      "name": "노간주",
+      "doubleOnly": false,
+      "partnerId": 357,
+      "partnerName": "아이리스",
+      "partnerSrc": "/game/trainers/iris-gen5bw2.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    },
+    "357": {
+      "name": "아이리스",
+      "doubleOnly": false,
+      "partnerId": 356,
+      "partnerName": "노간주",
+      "partnerSrc": "/game/trainers/alder.png",
+      "hasGenders": false,
+      "femaleSrc": null
+    }
+  }
+}

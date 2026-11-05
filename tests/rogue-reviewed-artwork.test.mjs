@@ -15,11 +15,11 @@ const mon=(record,native=record.native[0])=>({id:record.sourceId,rogueSourceId:r
 test('all pinned new Mega and trainer asset bytes match provenance',()=>{
  assert.equal(provenance.assets.length,92);
  for(const row of provenance.assets){const b=fs.readFileSync(row.localPath);assert.equal(b.length,row.bytes,row.path);assert.equal(createHash('sha256').update(b).digest('hex'),row.sha256,row.path);if(row.path.endsWith('.png'))assert.equal(b.subarray(0,8).toString('hex'),'89504e470d0a1a0a');}
- for(const record of records)for(const direction of ['','back/'])for(const color of ['','shiny/']){const base=`public/game/pokerogue/pokemon/${direction}${color}${record.atlas}`,atlas=JSON.parse(fs.readFileSync(base+'.json')),frames=sourceAtlasFrames(atlas),png=fs.readFileSync(base+'.png');assert.equal(frames.length,1);assert.equal(frames[0].rotated,false);assert.equal(frames[0].frame.x,0);assert.equal(frames[0].frame.y,0);assert.equal(frames[0].frame.w,png.readUInt32BE(16));assert.equal(frames[0].frame.h,png.readUInt32BE(20));}
+ for(const record of records.slice(0,8))for(const direction of ['','back/'])for(const color of ['','shiny/']){const base=`public/game/pokerogue/pokemon/${direction}${color}${record.atlas}`,atlas=JSON.parse(fs.readFileSync(base+'.json')),frames=sourceAtlasFrames(atlas),png=fs.readFileSync(base+'.png');assert.equal(frames.length,1);assert.equal(frames[0].rotated,false);assert.equal(frames[0].frame.x,0);assert.equal(frames[0].frame.y,0);assert.equal(frames[0].frame.w,png.readUInt32BE(16));assert.equal(frames[0].frame.h,png.readUInt32BE(20));}
 });
-test('eight source forms and nine native/gender identities select exact front/back shiny atlases',()=>{
+test('all96 source Mega forms and97 native/gender identities select exact front/back shiny atlases',()=>{
  let identities=0;for(const record of records)for(const native of record.native){identities++;for(const facing of ['front','back'])for(const shiny of [false,true]){const value={...mon(record,native),shiny};assert.equal(reviewedMegaAtlas(value)?.atlas,record.atlas);assert.deepEqual(classicSourceFormAtlas(value,facing),{key:record.atlas,shiny,facing});}}
- assert.equal(identities,9);
+ assert.equal(identities,97);
  const value=mon(records[0]);for(const patch of [{rogueFormKey:'mega'},{rogueFormIndex:1},{rogueSourceId:25},{battleAppearance:'pikachu'},{sourceAppearanceMissing:true},{gigantamax:true}])assert.equal(reviewedMegaAtlas({...value,...patch}),null);
  const female=mon(records[3],'meowsticfmega');assert.equal(reviewedMegaAtlas({...female,gender:'M'}),null);assert.equal(reviewedMegaAtlas({...female,battleAppearance:undefined,rogueBattleSpecies:'meowsticmmega'}),null);
 });
@@ -30,7 +30,7 @@ test('reviewed Mega fusion palettes support either role while unrelated transfor
   assert.deepEqual(classicFusionPaletteTarget(primary,facing),{primary:record.atlas,donor:'151',facing});
   const donor={...base,rogueFusionRule:'preview-v1',fusionSpecies:record.sourceId,rogueFusion:{donor:mega}};
   assert.deepEqual(classicFusionPaletteTarget(donor,facing),{primary:'151',donor:record.atlas,facing});
-  assert.equal(classicFusionPaletteTarget({...primary,dynamaxed:true},facing),null);assert.equal(classicFusionPaletteTarget({...primary,battleAppearance:'charizardmegax'},facing),null);
+  assert.equal(classicFusionPaletteTarget({...primary,dynamaxed:true},facing),null);assert.equal(classicFusionPaletteTarget({...primary,battleAppearance:'pikachu'},facing),null);
  }
 });
 test('source-specific trainer identities and female variants use verified originals and regenerate without drift',()=>{

@@ -1,0 +1,705 @@
+[
+  {
+    "sourceId": 3,
+    "formIndex": 2,
+    "formKey": "gigantamax",
+    "atlas": "3-gigantamax",
+    "native": [
+      "venusaurgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 6,
+    "formIndex": 3,
+    "formKey": "gigantamax",
+    "atlas": "6-gigantamax",
+    "native": [
+      "charizardgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "sourceId": 9,
+    "formIndex": 2,
+    "formKey": "gigantamax",
+    "atlas": "9-gigantamax",
+    "native": [
+      "blastoisegmax"
+    ],
+    "variants": [
+      0,
+      1,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "sourceId": 12,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "12-gigantamax",
+    "native": [
+      "butterfreegmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 25,
+    "formIndex": 8,
+    "formKey": "gigantamax",
+    "atlas": "25-gigantamax",
+    "native": [
+      "pikachugmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 52,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "52-gigantamax",
+    "native": [
+      "meowthgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 68,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "68-gigantamax",
+    "native": [
+      "machampgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 94,
+    "formIndex": 2,
+    "formKey": "gigantamax",
+    "atlas": "94-gigantamax",
+    "native": [
+      "gengargmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 99,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "99-gigantamax",
+    "native": [
+      "kinglergmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 131,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "131-gigantamax",
+    "native": [
+      "laprasgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 133,
+    "formIndex": 2,
+    "formKey": "gigantamax",
+    "atlas": "133-gigantamax",
+    "native": [
+      "eeveegmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 143,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "143-gigantamax",
+    "native": [
+      "snorlaxgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 382,
+    "formIndex": 1,
+    "formKey": "primal",
+    "atlas": "382-primal",
+    "native": [
+      "kyogreprimal"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 383,
+    "formIndex": 1,
+    "formKey": "primal",
+    "atlas": "383-primal",
+    "native": [
+      "groudonprimal"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 569,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "569-gigantamax",
+    "native": [
+      "garbodorgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 800,
+    "formIndex": 3,
+    "formKey": "ultra",
+    "atlas": "800-ultra",
+    "native": [
+      "necrozmaultra"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 809,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "809-gigantamax",
+    "native": [
+      "melmetalgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 812,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "812-gigantamax",
+    "native": [
+      "rillaboomgmax"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 815,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "815-gigantamax",
+    "native": [
+      "cinderacegmax"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 818,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "818-gigantamax",
+    "native": [
+      "inteleongmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 823,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "823-gigantamax",
+    "native": [
+      "corviknightgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 826,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "826-gigantamax",
+    "native": [
+      "orbeetlegmax"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 834,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "834-gigantamax",
+    "native": [
+      "drednawgmax"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 839,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "839-gigantamax",
+    "native": [
+      "coalossalgmax"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 841,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "841-gigantamax",
+    "native": [
+      "flapplegmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 842,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "842-gigantamax",
+    "native": [
+      "appletungmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 844,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "844-gigantamax",
+    "native": [
+      "sandacondagmax"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 849,
+    "formIndex": 2,
+    "formKey": "gigantamax",
+    "atlas": "849-gigantamax",
+    "native": [
+      "toxtricitygmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 851,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "851-gigantamax",
+    "native": [
+      "centiskorchgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 858,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "858-gigantamax",
+    "native": [
+      "hatterenegmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 861,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "861-gigantamax",
+    "native": [
+      "grimmsnarlgmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 869,
+    "formIndex": 9,
+    "formKey": "gigantamax",
+    "atlas": "869-gigantamax",
+    "native": [
+      "alcremiegmax"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 879,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "879-gigantamax",
+    "native": [
+      "copperajahgmax"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 884,
+    "formIndex": 1,
+    "formKey": "gigantamax",
+    "atlas": "884-gigantamax",
+    "native": [
+      "duraludongmax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 890,
+    "formIndex": 1,
+    "formKey": "eternamax",
+    "atlas": "890-eternamax",
+    "native": [
+      "eternatuseternamax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 892,
+    "formIndex": 2,
+    "formKey": "gigantamax-single",
+    "atlas": "892-gigantamax-single",
+    "native": [
+      "urshifugmax"
+    ],
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      2,
+      2
+    ]
+  },
+  {
+    "sourceId": 892,
+    "formIndex": 3,
+    "formKey": "gigantamax-rapid",
+    "atlas": "892-gigantamax-rapid",
+    "native": [
+      "urshifurapidstrikegmax"
+    ],
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      2,
+      2
+    ]
+  }
+]

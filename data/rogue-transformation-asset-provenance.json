@@ -1,0 +1,4821 @@
+{
+  "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+  "sourceCodeCommit": "7c0881255af5cd51992e513ff93c2f71adbe40e0",
+  "sourceRepository": "pagefaultgames/pokerogue-assets",
+  "note": "Original bytes for 37 pinned Gigantamax, Primal, Ultra and Eternamax forms. Per-facing variant kinds preserved. Null attribution does not mean public domain.",
+  "attributionCatalog": {
+    "localPath": "data/rogue-asset-attribution-REUSE.toml",
+    "sourcePath": "images/REUSE.toml",
+    "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+    "sha256": "4f3053ee2f38afdadcaa5e13d8bfee9b850b5a635c1392f538363c84703aa6a9",
+    "index": "Zero-based [[annotations]] order; full original paths and comments are preserved in the unchanged catalog."
+  },
+  "assets": [
+    {
+      "path": "images/pokemon/12-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "6b22be9f344cefef27be90cb520ccc4291bc479903916a0393e4436693700ac0",
+      "localPath": "public/game/pokerogue/pokemon/12-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/12-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/12-gigantamax.png",
+      "status": 200,
+      "bytes": 1411,
+      "sha256": "a304355ce7745e5fa9693d899e29aa10e7aa4b1535139c5858a5ea1c77c37c85",
+      "localPath": "public/game/pokerogue/pokemon/12-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/131-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "b026910fd3d11540e2ffec52d0f226fbd76ac64a4da01f13123224dcc090e8fe",
+      "localPath": "public/game/pokerogue/pokemon/131-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/131-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/131-gigantamax.png",
+      "status": 200,
+      "bytes": 1180,
+      "sha256": "4a83420f92e7eb9bdfaac3ba848de3e956ae592c50c7e53397d9731071a90656",
+      "localPath": "public/game/pokerogue/pokemon/131-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/133-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "f65d6d4465292ce7429fd060d040e7a38bbd091904c4b2e57fd6c876f8e9c06c",
+      "localPath": "public/game/pokerogue/pokemon/133-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/133-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/133-gigantamax.png",
+      "status": 200,
+      "bytes": 979,
+      "sha256": "24fb62c433afa35b09dcb1dc8e5f6ab2c64d34520d7b2dad39020949e02a6048",
+      "localPath": "public/game/pokerogue/pokemon/133-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/143-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "9d41dc21121e7cc63b055d8525c0952c637e990b54271a59e35c74c39c38b176",
+      "localPath": "public/game/pokerogue/pokemon/143-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/143-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/143-gigantamax.png",
+      "status": 200,
+      "bytes": 1279,
+      "sha256": "42129bfbd4a7ac3bcc84f59f4a70b59cf54d658fd643e380d66f5afddb720499",
+      "localPath": "public/game/pokerogue/pokemon/143-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/25-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "34a36d6ff7dd5899876247e7b47ff0ba3962eb4dd4405f94a1aeac2288bd8e2e",
+      "localPath": "public/game/pokerogue/pokemon/25-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/25-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/25-gigantamax.png",
+      "status": 200,
+      "bytes": 988,
+      "sha256": "1937ab8a12ec6828e2d8e48d7ad33e807b859a8bcdc78e816637121315de424e",
+      "localPath": "public/game/pokerogue/pokemon/25-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/3-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "745cc3b1340da0b200081c935a1587d218019a2af6cd8ec90ea823c294031687",
+      "localPath": "public/game/pokerogue/pokemon/3-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/3-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/3-gigantamax.png",
+      "status": 200,
+      "bytes": 1587,
+      "sha256": "eeb2be7d65652ca961f1612948d1942fb9bf7272f442acffb50baeddaede58e1",
+      "localPath": "public/game/pokerogue/pokemon/3-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/382-primal.json",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "e8c2ffa4113dc21c6075d5f10699f965e592a7839038304c26f94dd4e3e38045",
+      "localPath": "public/game/pokerogue/pokemon/382-primal.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/382-primal.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/382-primal.png",
+      "status": 200,
+      "bytes": 1423,
+      "sha256": "32fa8283bbe2dcae17ed98bce438a4cbccc75d3584e4fe5a78e2a63d52e680a4",
+      "localPath": "public/game/pokerogue/pokemon/382-primal.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/383-primal.json",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "bed38efb2586cf29735f1918aaf3babef421e88fefc303c772f30d8a83ba1f6e",
+      "localPath": "public/game/pokerogue/pokemon/383-primal.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/383-primal.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/383-primal.png",
+      "status": 200,
+      "bytes": 1596,
+      "sha256": "765c0310ad1ee4ca1cb201ef4c242c6d6f3b88b055ec233f71f17f34fbe25145",
+      "localPath": "public/game/pokerogue/pokemon/383-primal.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/52-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "011bc5759386ade06aea6fdea243ab944a35eca13533edbec7e6d982766ff38a",
+      "localPath": "public/game/pokerogue/pokemon/52-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/52-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/52-gigantamax.png",
+      "status": 200,
+      "bytes": 1268,
+      "sha256": "733b72b6c7d7251325f0923f1d163e95e2199f4819f4a726ab3670c29b1cdf7d",
+      "localPath": "public/game/pokerogue/pokemon/52-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/569-gigantamax.json",
+      "status": 200,
+      "bytes": 42339,
+      "sha256": "4a8913a4f08ca623da2c47267eb5bbf28c16a2558f62f066ab4fcda0e821def1",
+      "localPath": "public/game/pokerogue/pokemon/569-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/569-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/569-gigantamax.png",
+      "status": 200,
+      "bytes": 9051,
+      "sha256": "66193c360f4eac2e15881b639d9da85e237ff6b23a1aa11ff52a7a36f996cde8",
+      "localPath": "public/game/pokerogue/pokemon/569-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/6-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "d705e1c3c0744e6e8116c16184d90d8fdc029581b29b3c1e40d09cf6a6bb3585",
+      "localPath": "public/game/pokerogue/pokemon/6-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/6-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/6-gigantamax.png",
+      "status": 200,
+      "bytes": 1833,
+      "sha256": "ae611d3deee90622664d606493d1ec86f6a712e4e6cd034f16e34bff1e710b58",
+      "localPath": "public/game/pokerogue/pokemon/6-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/68-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "7440cd510910011ea95d8c234c8701b574d8bccf65a74bef2567581b7e6d4c4c",
+      "localPath": "public/game/pokerogue/pokemon/68-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/68-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/68-gigantamax.png",
+      "status": 200,
+      "bytes": 1435,
+      "sha256": "36e3b22d731a67a09dd2735e68cbe0cb647e28b02855cd958cd89f5e4a2246bf",
+      "localPath": "public/game/pokerogue/pokemon/68-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/800-ultra.json",
+      "status": 200,
+      "bytes": 714,
+      "sha256": "b1d5ce4e6785ca96a843a66e8eb3f08a8c2ee4888f9bc3e600a7fba286f50fab",
+      "localPath": "public/game/pokerogue/pokemon/800-ultra.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/800-ultra.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/800-ultra.png",
+      "status": 200,
+      "bytes": 1743,
+      "sha256": "6b98f73ff83b2e70519a6db6f2e7bdda70327c9fc6c96cead7a30d2ee20f6703",
+      "localPath": "public/game/pokerogue/pokemon/800-ultra.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/809-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "89b829fce0a058915ab7aa0f8fa54305c56665dad19ffd1db651d324648b3e1f",
+      "localPath": "public/game/pokerogue/pokemon/809-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/809-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/809-gigantamax.png",
+      "status": 200,
+      "bytes": 1775,
+      "sha256": "8a7270d55d2073b60cdb613c00fc4af79897202e6727354e319ebfc5cb3b3f7c",
+      "localPath": "public/game/pokerogue/pokemon/809-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/812-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "1d85ed364d29611bb18edb3831ed02b7798b24b676b95c3008030e13d6c071ed",
+      "localPath": "public/game/pokerogue/pokemon/812-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/812-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/812-gigantamax.png",
+      "status": 200,
+      "bytes": 2391,
+      "sha256": "9fc865092ae669033701f1a0eb83ad341fd18962572c93f525bdbde2b3d3a851",
+      "localPath": "public/game/pokerogue/pokemon/812-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/815-gigantamax.json",
+      "status": 200,
+      "bytes": 18931,
+      "sha256": "efab1af2f8fae44cde8ab9299ef1ca1f5041d914b8368dd9e5da5d5bbd0204ce",
+      "localPath": "public/game/pokerogue/pokemon/815-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/815-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/815-gigantamax.png",
+      "status": 200,
+      "bytes": 27694,
+      "sha256": "3dabfbcc813f3425029956fccfd3af45d1e39787bce104967ddaa46c81c9d5f3",
+      "localPath": "public/game/pokerogue/pokemon/815-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/818-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "8d3edba95f778d363d699b0c9725c9ec2ab1dddf4088e7af54c0fd7192c508a1",
+      "localPath": "public/game/pokerogue/pokemon/818-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/818-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/818-gigantamax.png",
+      "status": 200,
+      "bytes": 1016,
+      "sha256": "53f0e549b53296bc418c99e00b12a4492968a1b2bd73964a3c7c6e7291b8253e",
+      "localPath": "public/game/pokerogue/pokemon/818-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/823-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "f6f7ec4181b7d20630502985d364516cf7abbd05fa91527c837404d3d7185e40",
+      "localPath": "public/game/pokerogue/pokemon/823-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/823-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/823-gigantamax.png",
+      "status": 200,
+      "bytes": 4281,
+      "sha256": "bd505589f3132758a68c95a525d7bfe09a6edb981f99d04f31c46242728e89d1",
+      "localPath": "public/game/pokerogue/pokemon/823-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/826-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "8bf2737c72453ac9daa8f4ad17ef0910872fb2fe872ceaeb430b16bea04166e2",
+      "localPath": "public/game/pokerogue/pokemon/826-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/826-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/826-gigantamax.png",
+      "status": 200,
+      "bytes": 1344,
+      "sha256": "21e398ba94f9423959072e7a94aeb53c95206aeb6cbf6d78d33cc8ec203cae72",
+      "localPath": "public/game/pokerogue/pokemon/826-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/834-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "ab0b77c2acbe23a8bb387285ae2778ecdc92507ea531cf11ada65fc963452ea1",
+      "localPath": "public/game/pokerogue/pokemon/834-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/834-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/834-gigantamax.png",
+      "status": 200,
+      "bytes": 1905,
+      "sha256": "179ef7102c3f9b223186ebe3e622ef92192227a77b69b16555fddfec3f07342d",
+      "localPath": "public/game/pokerogue/pokemon/834-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/839-gigantamax.json",
+      "status": 200,
+      "bytes": 23543,
+      "sha256": "997d189c73687fa127a69bc559ea0379bafd65302ec81b419579d6548aad7c03",
+      "localPath": "public/game/pokerogue/pokemon/839-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/839-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/839-gigantamax.png",
+      "status": 200,
+      "bytes": 56800,
+      "sha256": "fdeb7732464912c6cdd6b0e2b85bb17b994e569fb687631a70c11c4af378046d",
+      "localPath": "public/game/pokerogue/pokemon/839-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/841-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "9026b4523d56766f2fe15031ff45a9abbdc48fc0ceba7434eb4c10dde10285eb",
+      "localPath": "public/game/pokerogue/pokemon/841-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/841-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/841-gigantamax.png",
+      "status": 200,
+      "bytes": 994,
+      "sha256": "a120b3f3e5e91a3dec2e771face54dda05bdd1bf491abd9febe0faaf23c03c3d",
+      "localPath": "public/game/pokerogue/pokemon/841-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/842-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "fc4ee807e4ee90b9e21ab6f5b5dc709276aa931e48c68aae6b44f93a74dd925f",
+      "localPath": "public/game/pokerogue/pokemon/842-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/842-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/842-gigantamax.png",
+      "status": 200,
+      "bytes": 994,
+      "sha256": "a120b3f3e5e91a3dec2e771face54dda05bdd1bf491abd9febe0faaf23c03c3d",
+      "localPath": "public/game/pokerogue/pokemon/842-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/844-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "95bdbf854164141cee8084b7d5f4f5df1053700c66fae64932aa9f230e1ca401",
+      "localPath": "public/game/pokerogue/pokemon/844-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/844-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/844-gigantamax.png",
+      "status": 200,
+      "bytes": 1268,
+      "sha256": "2f51514cd35f273bc34576ac6b64ffe90d77bb7a43c4ce30fad8acb1cfb24bfe",
+      "localPath": "public/game/pokerogue/pokemon/844-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/849-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "60c2ec71dce7f01108b02667d2e0761c819d49d0c86c763b598f213494c5f249",
+      "localPath": "public/game/pokerogue/pokemon/849-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/849-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/849-gigantamax.png",
+      "status": 200,
+      "bytes": 1510,
+      "sha256": "26005bc07878e748c357b267fabfe1354f1a4e7f5ba1c88d7300f8631252f60a",
+      "localPath": "public/game/pokerogue/pokemon/849-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/851-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "91923138acf6fcc8bcb77bbbb8328206dc8fb7cedd95b75109343d92f02ffc4f",
+      "localPath": "public/game/pokerogue/pokemon/851-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/851-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/851-gigantamax.png",
+      "status": 200,
+      "bytes": 1895,
+      "sha256": "3c2d67b88e46082989e8f2e3bec03c0cbf4fae7612c081034542af420591d592",
+      "localPath": "public/game/pokerogue/pokemon/851-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/858-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "fad5434c53b32c1106341ff390f5f8c7177366b85dfc540375aa1dafd7287fa0",
+      "localPath": "public/game/pokerogue/pokemon/858-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/858-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/858-gigantamax.png",
+      "status": 200,
+      "bytes": 1213,
+      "sha256": "2f8cac10592a8b1520554fa60ae9e0dee80b39aeaf676b7b122dfc239fa669cd",
+      "localPath": "public/game/pokerogue/pokemon/858-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/861-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "9aa5ad2c6571e109f983b42dcfbcc02ec37a84760f925d1de62272e9921f7ae9",
+      "localPath": "public/game/pokerogue/pokemon/861-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/861-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/861-gigantamax.png",
+      "status": 200,
+      "bytes": 1288,
+      "sha256": "a35d8efb917abd12cbd074f8ccd76098719ebc3f239a60fa838762869d66611c",
+      "localPath": "public/game/pokerogue/pokemon/861-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/869-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "00e98a804b5dd3f53ae19da7e06b4c8c6b44410f833b91d319efdf71bd14ee71",
+      "localPath": "public/game/pokerogue/pokemon/869-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/869-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/869-gigantamax.png",
+      "status": 200,
+      "bytes": 1471,
+      "sha256": "7bbe5af5b48311c5668b0e81b2ea18c281ab7633d41810d9685a6efd249b28df",
+      "localPath": "public/game/pokerogue/pokemon/869-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/879-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "75ca4506ccfae2454e447ee4f9a410b071f16b405a0659d7a94ad8c1758b152f",
+      "localPath": "public/game/pokerogue/pokemon/879-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/879-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/879-gigantamax.png",
+      "status": 200,
+      "bytes": 1600,
+      "sha256": "542f182b9e0bde476297f97816293a18098447165fab199a757b40cf259c32d6",
+      "localPath": "public/game/pokerogue/pokemon/879-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/884-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "275b388e880aff5ec49ed845d0408e43bb097ca3d2d8f71fd9ee1760f20c8cb3",
+      "localPath": "public/game/pokerogue/pokemon/884-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/884-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/884-gigantamax.png",
+      "status": 200,
+      "bytes": 1299,
+      "sha256": "cc1c1bf0fbf0dbf0213fc0c9c1f391121fd98abc289fd76ce3c3f129f984c35a",
+      "localPath": "public/game/pokerogue/pokemon/884-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/890-eternamax.json",
+      "status": 200,
+      "bytes": 11730,
+      "sha256": "cf0aa8160d63bc413b827d1075db835893d53f751a39e2e430b3d8d74ce562c4",
+      "localPath": "public/game/pokerogue/pokemon/890-eternamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/890-eternamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/890-eternamax.png",
+      "status": 200,
+      "bytes": 34668,
+      "sha256": "3856f2753c5d55e91b300233c2a74d17893517f05e5ef9c1f0b540233c764e71",
+      "localPath": "public/game/pokerogue/pokemon/890-eternamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/892-gigantamax-rapid.json",
+      "status": 200,
+      "bytes": 726,
+      "sha256": "9e58a9daf5e5641fae5e13d3905c6c0e8f9074c7a69f10a49cef4f6bccc4bcd8",
+      "localPath": "public/game/pokerogue/pokemon/892-gigantamax-rapid.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/892-gigantamax-rapid.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/892-gigantamax-rapid.png",
+      "status": 200,
+      "bytes": 1428,
+      "sha256": "564c49e6be4d4c37ffa2dd50e0c56995b3161c76fb3922818138851365c95690",
+      "localPath": "public/game/pokerogue/pokemon/892-gigantamax-rapid.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/892-gigantamax-single.json",
+      "status": 200,
+      "bytes": 726,
+      "sha256": "e95b7c910db26464a1157b92cdf775e569c9c18dc9d0c2e662c493cd3e82cc86",
+      "localPath": "public/game/pokerogue/pokemon/892-gigantamax-single.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/892-gigantamax-single.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/892-gigantamax-single.png",
+      "status": 200,
+      "bytes": 1609,
+      "sha256": "a748a57457ab025f912e4d12a2e30a737269041d16bbed557634f9387731e7d9",
+      "localPath": "public/game/pokerogue/pokemon/892-gigantamax-single.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/9-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "f3ac4623fb1ac5822c6bf59bb5d5b6d721d0f1544856ffe16c43075f72bf321a",
+      "localPath": "public/game/pokerogue/pokemon/9-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/9-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/9-gigantamax.png",
+      "status": 200,
+      "bytes": 1737,
+      "sha256": "b97ac41912bf929fdba8d02ec7bea45aec8ccdc39c7c3ab8c49bf19631fc1e29",
+      "localPath": "public/game/pokerogue/pokemon/9-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/94-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "c64accd0158c08e7913897f0934580f0c12d49cbc8d51d76a8e0f8718d3521dd",
+      "localPath": "public/game/pokerogue/pokemon/94-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/94-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/94-gigantamax.png",
+      "status": 200,
+      "bytes": 1138,
+      "sha256": "4064c4331ba62c95d034075e72190f70d87126ea00183496014840e790182bfd",
+      "localPath": "public/game/pokerogue/pokemon/94-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/99-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "0d1ddc7cb5236e7ead7a42682fe9ea970d464dd8b2eec152eeed89604b7b8a02",
+      "localPath": "public/game/pokerogue/pokemon/99-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/99-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/99-gigantamax.png",
+      "status": 200,
+      "bytes": 1893,
+      "sha256": "06f7773f095983cf5f8f42129bc1982d4cd1548f8ffb8d0cc8ed5eea0a5fe0e6",
+      "localPath": "public/game/pokerogue/pokemon/99-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/12-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "787c1843f205abb14a8f68989075133e8f8b818e6f1cb7f1d800edf6b6ca0d11",
+      "localPath": "public/game/pokerogue/pokemon/back/12-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/12-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/12-gigantamax.png",
+      "status": 200,
+      "bytes": 1372,
+      "sha256": "dcc3b0237d190923df014bd04878c1699d2c836ee3d5b8d43b2dc5c8e65a7a2f",
+      "localPath": "public/game/pokerogue/pokemon/back/12-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/131-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "b5b2a2ef808d53ff12ebeee34c91ea59a50b5990a164bf222270bed4988956c4",
+      "localPath": "public/game/pokerogue/pokemon/back/131-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/131-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/131-gigantamax.png",
+      "status": 200,
+      "bytes": 1325,
+      "sha256": "e82e05a6f9a8e20e1e74b38de859cc6d1221f21e492f2e8e9c4fcf1be224a3d0",
+      "localPath": "public/game/pokerogue/pokemon/back/131-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/133-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "e33609f611e80eeaae5b60ca089a305c1fbde5565888deeb42e634e7cf2bbb30",
+      "localPath": "public/game/pokerogue/pokemon/back/133-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/133-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/133-gigantamax.png",
+      "status": 200,
+      "bytes": 862,
+      "sha256": "4e225b6e20adeee7bc9efe6cd9a30b07bbe15b5fbb4f4d65990a2339ef56c18a",
+      "localPath": "public/game/pokerogue/pokemon/back/133-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/143-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "d4c3eae9bb5b4fd856103f6ebcb6e50894250378cce7d61026a20e3e386dea2f",
+      "localPath": "public/game/pokerogue/pokemon/back/143-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/143-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/143-gigantamax.png",
+      "status": 200,
+      "bytes": 1006,
+      "sha256": "3e86f207dcdae8539b5239856083891f8ed9bbf08090d10fe160b8d03a00907c",
+      "localPath": "public/game/pokerogue/pokemon/back/143-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/25-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "704dac2df04451e34096a0f2ed8a642702f42a28fe9e1ec7addbd9400baf4a46",
+      "localPath": "public/game/pokerogue/pokemon/back/25-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/25-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/25-gigantamax.png",
+      "status": 200,
+      "bytes": 939,
+      "sha256": "27a2ed401547a97694c51abac8f8da126298740e7942c3a64b2d4b506bc76cf4",
+      "localPath": "public/game/pokerogue/pokemon/back/25-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/3-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "78b66544a591bc268dec89f623ee2c5c0b859edbc277b6c7b18c210acaebbcd3",
+      "localPath": "public/game/pokerogue/pokemon/back/3-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/3-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/3-gigantamax.png",
+      "status": 200,
+      "bytes": 1405,
+      "sha256": "c5a3cb1dea34463ea6db2443d5022c23ede87be1da41425c27528fb0e79b2c11",
+      "localPath": "public/game/pokerogue/pokemon/back/3-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/382-primal.json",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "2a25deab4d35b6c704a0f81a3adadf7bd191a63ac38bb07466fe09d0b3ac311a",
+      "localPath": "public/game/pokerogue/pokemon/back/382-primal.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/382-primal.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/382-primal.png",
+      "status": 200,
+      "bytes": 1162,
+      "sha256": "49be2d096906cc0bccab1740f447d402f7ca527d823c97955a12e24f0878ebbd",
+      "localPath": "public/game/pokerogue/pokemon/back/382-primal.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/383-primal.json",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "5e18b7276305353af9b831c018f04ed81c30d74fd03a6c885be7b76823a42ad6",
+      "localPath": "public/game/pokerogue/pokemon/back/383-primal.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/383-primal.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/383-primal.png",
+      "status": 200,
+      "bytes": 1362,
+      "sha256": "6a1c61a21ed90e46ac426b3be02e492c8116c84339aea51df0778dbab8c36a78",
+      "localPath": "public/game/pokerogue/pokemon/back/383-primal.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/52-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "cbdc610e6c1402fdc76c24dfb95ba76bff7df757a4e7cfc51f506b536dd3c911",
+      "localPath": "public/game/pokerogue/pokemon/back/52-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/52-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/52-gigantamax.png",
+      "status": 200,
+      "bytes": 992,
+      "sha256": "a1b7423eea74b26ce2623967d0c7d4a73cb3c8be1eb3c2bfdf3d4dd334aec91f",
+      "localPath": "public/game/pokerogue/pokemon/back/52-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/569-gigantamax.json",
+      "status": 200,
+      "bytes": 42292,
+      "sha256": "5333f209a06e69152972fdce1edc0bde128644dea205774bf76332c80cd861d6",
+      "localPath": "public/game/pokerogue/pokemon/back/569-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/569-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/569-gigantamax.png",
+      "status": 200,
+      "bytes": 7711,
+      "sha256": "4b6623c370dc933c15a30daaf544a2d432487d5fa9bf9f9bacb0e9c56bb66cef",
+      "localPath": "public/game/pokerogue/pokemon/back/569-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/6-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "e838676bc705c82b8ce36aa3a4c827f0a73a2540db798c7b7041752948e97e0d",
+      "localPath": "public/game/pokerogue/pokemon/back/6-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/6-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/6-gigantamax.png",
+      "status": 200,
+      "bytes": 1545,
+      "sha256": "95f98769f21faaac3a9a6c0806e06ab4fe6a88926321d214c6efedfe184aa28d",
+      "localPath": "public/game/pokerogue/pokemon/back/6-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/68-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "a8c951e18e7186b08466f31fa9be0b82818a47530b89227eb6e386c4eedf4430",
+      "localPath": "public/game/pokerogue/pokemon/back/68-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/68-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/68-gigantamax.png",
+      "status": 200,
+      "bytes": 1392,
+      "sha256": "e47d9092b3c83d67d8b6f9c498be86fe7eaeaab76125349978090be620fed6d7",
+      "localPath": "public/game/pokerogue/pokemon/back/68-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/800-ultra.json",
+      "status": 200,
+      "bytes": 714,
+      "sha256": "835ebb287ea24bccc4285e01560cb1f89c084e363a4583f60ca041696763b7e2",
+      "localPath": "public/game/pokerogue/pokemon/back/800-ultra.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/800-ultra.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/800-ultra.png",
+      "status": 200,
+      "bytes": 1592,
+      "sha256": "2a641ae8a2c3fa123dadce915176fd433b8625d2e3c8eaae3be3a0ac599a0b01",
+      "localPath": "public/game/pokerogue/pokemon/back/800-ultra.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/809-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "42d3954ac45f5b0077005e5e00599a5b6e7db845a250e708bb0ad95c5096d4d6",
+      "localPath": "public/game/pokerogue/pokemon/back/809-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/809-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/809-gigantamax.png",
+      "status": 200,
+      "bytes": 1425,
+      "sha256": "3d70f4a9fec168a1e9b1382a5ae89ec868c2ed95c8d79afed7a02ec1f6a203c5",
+      "localPath": "public/game/pokerogue/pokemon/back/809-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/812-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "2d8e428ef29857af4161b6e1a587fd61da4e61334fec6643583884c7d0ee31bb",
+      "localPath": "public/game/pokerogue/pokemon/back/812-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/812-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/812-gigantamax.png",
+      "status": 200,
+      "bytes": 1861,
+      "sha256": "592d7ff14acefdeb8123ab4e53c33dcb206c58992eb644701dac160180259ff8",
+      "localPath": "public/game/pokerogue/pokemon/back/812-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/815-gigantamax.json",
+      "status": 200,
+      "bytes": 18971,
+      "sha256": "aa9d2e34d7a1fa3e641276b80c00e3976e19f8d0b828e6cdba6de708f6634dc4",
+      "localPath": "public/game/pokerogue/pokemon/back/815-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/815-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/815-gigantamax.png",
+      "status": 200,
+      "bytes": 28755,
+      "sha256": "f18659f384a825c9b69144dd312f183a98cf397f8e6719c85ee4fddf7557e995",
+      "localPath": "public/game/pokerogue/pokemon/back/815-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/818-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "3a5e6c5bed53f0a6da2e973527637e91462a30f6972dd2bb9d596aaa99e54537",
+      "localPath": "public/game/pokerogue/pokemon/back/818-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/818-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/818-gigantamax.png",
+      "status": 200,
+      "bytes": 869,
+      "sha256": "6439fbaa0f51d8e7ab3f77994817062051cf4d23a9b8946976ebd79900cf5c82",
+      "localPath": "public/game/pokerogue/pokemon/back/818-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/823-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "31592dda19d6ce51beb2699daba225ce166427afb9cc40a0a57eca34ba446988",
+      "localPath": "public/game/pokerogue/pokemon/back/823-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/823-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/823-gigantamax.png",
+      "status": 200,
+      "bytes": 1562,
+      "sha256": "9645757b5ec94fbd546412e9772583e6d77e40c8da6ed9f94ee2ade6a1f393db",
+      "localPath": "public/game/pokerogue/pokemon/back/823-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/826-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "8ccea0762e1b7d2636c1d789b650942115e0540ba3001e44c76168db34bf67fd",
+      "localPath": "public/game/pokerogue/pokemon/back/826-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/826-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/826-gigantamax.png",
+      "status": 200,
+      "bytes": 958,
+      "sha256": "2b6e853c2c8cb44c2d4e563cac7a5185b5e060e82eedacd292ed61d0d8f8c550",
+      "localPath": "public/game/pokerogue/pokemon/back/826-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/834-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "a1e309c482627ff1872da58c72af7b4771113870d329d24964f6dd7fb52ec4e4",
+      "localPath": "public/game/pokerogue/pokemon/back/834-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/834-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/834-gigantamax.png",
+      "status": 200,
+      "bytes": 1379,
+      "sha256": "d5ae2923cb3ad38dbd223313334c46b2981531e1e94738ca11450d861cdda9b1",
+      "localPath": "public/game/pokerogue/pokemon/back/834-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/839-gigantamax.json",
+      "status": 200,
+      "bytes": 23616,
+      "sha256": "7938da6d0fb3c016c52ba2d017786082825265dabb0ff1e1ed90293126519229",
+      "localPath": "public/game/pokerogue/pokemon/back/839-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/839-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/839-gigantamax.png",
+      "status": 200,
+      "bytes": 42497,
+      "sha256": "912aa8d991cf52d01eabaae0aab9e873dfed7f20fdfb02628ba410b0b75b9ccd",
+      "localPath": "public/game/pokerogue/pokemon/back/839-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/841-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "9026b4523d56766f2fe15031ff45a9abbdc48fc0ceba7434eb4c10dde10285eb",
+      "localPath": "public/game/pokerogue/pokemon/back/841-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/841-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/841-gigantamax.png",
+      "status": 200,
+      "bytes": 797,
+      "sha256": "a7a0b00e5272f62c1c3707c669cc3d0a38cdd84912d92b1b4c95ff5b9fd0787d",
+      "localPath": "public/game/pokerogue/pokemon/back/841-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/842-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "fc4ee807e4ee90b9e21ab6f5b5dc709276aa931e48c68aae6b44f93a74dd925f",
+      "localPath": "public/game/pokerogue/pokemon/back/842-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/842-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/842-gigantamax.png",
+      "status": 200,
+      "bytes": 797,
+      "sha256": "a7a0b00e5272f62c1c3707c669cc3d0a38cdd84912d92b1b4c95ff5b9fd0787d",
+      "localPath": "public/game/pokerogue/pokemon/back/842-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/844-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "1c94682784d7aaf44100080983cb9d87cc4715e7c9b1153dbeaa41f5ba9e03ad",
+      "localPath": "public/game/pokerogue/pokemon/back/844-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/844-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/844-gigantamax.png",
+      "status": 200,
+      "bytes": 1357,
+      "sha256": "9b7e353f538fee2a29b3b11705e45f56c852341c4f99745fe12af99e0a8fcbd6",
+      "localPath": "public/game/pokerogue/pokemon/back/844-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/849-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "df609698111bc3f45d1ff273d70ffcf78ae7425ecdc47cde6b0e862b676cfd04",
+      "localPath": "public/game/pokerogue/pokemon/back/849-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/849-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/849-gigantamax.png",
+      "status": 200,
+      "bytes": 1376,
+      "sha256": "2610c7ca5a620cf02d4bcc38f4c311fa53dcd6dfaa62da4794b525e7a35fce28",
+      "localPath": "public/game/pokerogue/pokemon/back/849-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/851-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "f20e616ebb8017ea1d392f7649fef634522881484e32128eee153da7f9a2eff4",
+      "localPath": "public/game/pokerogue/pokemon/back/851-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/851-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/851-gigantamax.png",
+      "status": 200,
+      "bytes": 1920,
+      "sha256": "7b32634f8d95ef3e09cfa8e7727b61cb7f9343249ff9f5318938d6bf121d06ef",
+      "localPath": "public/game/pokerogue/pokemon/back/851-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/858-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "ceedd96e17da7b723b4342f152b2f268608844e83bdc30eb3d4343b693e6a385",
+      "localPath": "public/game/pokerogue/pokemon/back/858-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/858-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/858-gigantamax.png",
+      "status": 200,
+      "bytes": 1017,
+      "sha256": "5df776f35d57cca969a9c81b8c316d0c0ab8d6ef24fb57bdcc3534b6ad0f41c5",
+      "localPath": "public/game/pokerogue/pokemon/back/858-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/861-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "03137a6d76fc22eab7a3fcea663da569e95987e967d033cc98b9a9aefc79dc15",
+      "localPath": "public/game/pokerogue/pokemon/back/861-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/861-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/861-gigantamax.png",
+      "status": 200,
+      "bytes": 1092,
+      "sha256": "d1e6807489afaa75c46e0291de0fc2de1356215336110a33427ce56d0a136401",
+      "localPath": "public/game/pokerogue/pokemon/back/861-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/869-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "04ab0aad0b5207ac24e6cf2dbdcce5b33637685f4da725da241f54f454a963d3",
+      "localPath": "public/game/pokerogue/pokemon/back/869-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/869-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/869-gigantamax.png",
+      "status": 200,
+      "bytes": 932,
+      "sha256": "b12386759438eb31499148466e06d3c624de66753d78f4cba3f28972565fd60d",
+      "localPath": "public/game/pokerogue/pokemon/back/869-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/879-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "a336926ac238df1101acdd267eece49f739ecc4b2a50ea4e35c5ba542d872ce2",
+      "localPath": "public/game/pokerogue/pokemon/back/879-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/879-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/879-gigantamax.png",
+      "status": 200,
+      "bytes": 1383,
+      "sha256": "f89f7082e1336bc82564b1a188e2dc4e1ee921e1b0cab15004900f192608ed4a",
+      "localPath": "public/game/pokerogue/pokemon/back/879-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/884-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "3e1d65dff6753b28913ff84f35481c6feb1e4de5123519bf561350ddb3559a8f",
+      "localPath": "public/game/pokerogue/pokemon/back/884-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/884-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/884-gigantamax.png",
+      "status": 200,
+      "bytes": 1116,
+      "sha256": "c12b4c7b3fccdc5b27b47e94a165fdb4048924f70f0754d68708c966e96f568d",
+      "localPath": "public/game/pokerogue/pokemon/back/884-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/890-eternamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "18dc0f29f585af1347df7399c9f719cb161bdaab21229dd07e8b4741b10bd86d",
+      "localPath": "public/game/pokerogue/pokemon/back/890-eternamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/890-eternamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/890-eternamax.png",
+      "status": 200,
+      "bytes": 1619,
+      "sha256": "fbc31a85b9dd2ce5df8eb30aad06fdaca8c47eaecbd067a4df5af1dd6b409924",
+      "localPath": "public/game/pokerogue/pokemon/back/890-eternamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/892-gigantamax-rapid.json",
+      "status": 200,
+      "bytes": 726,
+      "sha256": "8f90eae5cc8743e8eb584d13b3cbc79d8e4cce4cb9e4becf619c2b220a42c0df",
+      "localPath": "public/game/pokerogue/pokemon/back/892-gigantamax-rapid.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/892-gigantamax-rapid.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/892-gigantamax-rapid.png",
+      "status": 200,
+      "bytes": 1380,
+      "sha256": "7dd590bcbab64bdd1e03e0782b454a0918b036a9a0af588d883a0fc0564eb072",
+      "localPath": "public/game/pokerogue/pokemon/back/892-gigantamax-rapid.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/892-gigantamax-single.json",
+      "status": 200,
+      "bytes": 726,
+      "sha256": "80605e9e5d0810243c722e972c4b05fe2090660efca69c576cfcc3cd4d6cb4d5",
+      "localPath": "public/game/pokerogue/pokemon/back/892-gigantamax-single.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/892-gigantamax-single.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/892-gigantamax-single.png",
+      "status": 200,
+      "bytes": 1532,
+      "sha256": "f9117b49ac52ae21d6863d71c3b5db9e42d1a4ecb2921c3a32aef5b3f11bb474",
+      "localPath": "public/game/pokerogue/pokemon/back/892-gigantamax-single.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/9-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "030da42bab27ca2e3dfe2ce00363d0de6022102f1fe10f54746a85522fcbd8a2",
+      "localPath": "public/game/pokerogue/pokemon/back/9-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/9-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/9-gigantamax.png",
+      "status": 200,
+      "bytes": 1896,
+      "sha256": "de581c670bac3b81b23c94ac3c05483198e1635ac1ebe23d2a9f887ab4b63c2b",
+      "localPath": "public/game/pokerogue/pokemon/back/9-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/94-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "0902251e6542d1475a466542d2ada50ce9f5788d45e29f3f91bec635ea66c713",
+      "localPath": "public/game/pokerogue/pokemon/back/94-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/94-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/94-gigantamax.png",
+      "status": 200,
+      "bytes": 867,
+      "sha256": "2eb7103ad493bea95a877ef9a3b1cd2c96ab6855d84ad5cef546fef834ac1efa",
+      "localPath": "public/game/pokerogue/pokemon/back/94-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/99-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "87a91be29835dce7ae4583c624becddbbc43d6329a137b28c100ec7bce7731f1",
+      "localPath": "public/game/pokerogue/pokemon/back/99-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/99-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/99-gigantamax.png",
+      "status": 200,
+      "bytes": 1700,
+      "sha256": "4ca4c2b95e147ddebb396360013b7a478843841fa5b15e3bc756104a493e305a",
+      "localPath": "public/game/pokerogue/pokemon/back/99-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/12-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "fcfd3aed677be05da4d08961cf8029c526ebfc5454819e607f84bc32641a1ab5",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/12-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/12-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/12-gigantamax.png",
+      "status": 200,
+      "bytes": 1340,
+      "sha256": "9d6a98d22da236c1a8e364a8a7ee132a28750950a896cbddef480ffcf4ebcfae",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/12-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/131-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "6adf6299a9fa56f5690a6fdcc9d50291fc3e8db346664ac1538819772b09a45b",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/131-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/131-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/131-gigantamax.png",
+      "status": 200,
+      "bytes": 1435,
+      "sha256": "700455095096b00e92234934f5a2e239e720f7a05b1ec8086095493965149563",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/131-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/133-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "0d4d27af4798f68de0caa630925d99e0eb8eb3c90bf508ba714dc77668bc5ee2",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/133-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/133-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/133-gigantamax.png",
+      "status": 200,
+      "bytes": 825,
+      "sha256": "3b41e2aed8435442ed5b441fea56356eadf0d99cecc2d7e600d6a0d960f98357",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/133-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/143-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "90fece4ed7384433071c0a4f7df80221c05b04d0b8f22b60a66910014d254cbe",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/143-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/143-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/143-gigantamax.png",
+      "status": 200,
+      "bytes": 1040,
+      "sha256": "c4e8a5bf77cf9ef8c0924de2a01db3a968093025e1945a1739ba107d9ef1550f",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/143-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/25-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "a9b60d237a45a565cee6ae00eb9a2c2c398d98f1065a22cf68df3d423e057012",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/25-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/25-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/25-gigantamax.png",
+      "status": 200,
+      "bytes": 911,
+      "sha256": "d8534b255314279e62a59fcf0bf4024b84b581768c3b10b257309e7ab0dc3eeb",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/25-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/3-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "9158e2bc63fdc495e74b6787a5ef06368d4a6eb1d51a7a47aea2004fa4212088",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/3-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/3-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/3-gigantamax.png",
+      "status": 200,
+      "bytes": 1391,
+      "sha256": "acb2722eaf207817419d475d366fa992a55be6cf645c7811fdf895cf8c6e8de0",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/3-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/382-primal.json",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "4724b4317d2f573c25247be9403fbdf588ab28d2172d22baad6b7019bd09f1c9",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/382-primal.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/382-primal.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/382-primal.png",
+      "status": 200,
+      "bytes": 1162,
+      "sha256": "ef0634aca2d3e3f15d03a45c00bd4963dc81fcc1b793b5fd5d7698590eb74b71",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/382-primal.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/383-primal.json",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "b41067cc2495e3514010dae6254fa5b2e259ae254fc4bea07c9a419a28718d87",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/383-primal.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/383-primal.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/383-primal.png",
+      "status": 200,
+      "bytes": 1362,
+      "sha256": "83b807db413ada704d9be41c7edf42eca9c369001ed0822062fa07cdabe248d0",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/383-primal.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/52-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "49b774c6254fb18ce0bf8406ece147f05076b7641b56b97ea4c25080a2d25cbc",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/52-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/52-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/52-gigantamax.png",
+      "status": 200,
+      "bytes": 994,
+      "sha256": "df364232f9e97e87b43e7b799b4d29c7181041c20b01e00499e83a5a8bc29217",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/52-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/569-gigantamax.json",
+      "status": 200,
+      "bytes": 42292,
+      "sha256": "5333f209a06e69152972fdce1edc0bde128644dea205774bf76332c80cd861d6",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/569-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/569-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/569-gigantamax.png",
+      "status": 200,
+      "bytes": 7680,
+      "sha256": "c3faf92fdb747958e940ba7a0aec98375f94a4869073d12cbc902012524912cc",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/569-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/6-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "40587463601fd10564f5234bc2693ac68a744647b0c7dacc41033972c5b4c1d8",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/6-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/6-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/6-gigantamax.png",
+      "status": 200,
+      "bytes": 1542,
+      "sha256": "0d1b876e5d6e78e0cfda9b0b7f72b0db838785130e9e6c31c9cea1e0160abfb5",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/6-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/68-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "ca15bbe7ee431e84b31f4e89ae65e0c8eb226e854d627dbf41c32357c64eb688",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/68-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/68-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/68-gigantamax.png",
+      "status": 200,
+      "bytes": 1390,
+      "sha256": "76b970a09d400cb3b0d1fe6e65ba8fb5688659482bae2a266f00d979af87513b",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/68-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/800-ultra.json",
+      "status": 200,
+      "bytes": 714,
+      "sha256": "ec2f24478356bfdfc02f4e5c078a65992d987d2ed7fdd4c0db405135aaa79c9c",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/800-ultra.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/800-ultra.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/800-ultra.png",
+      "status": 200,
+      "bytes": 1593,
+      "sha256": "d67a9290040e0c8264f8bbb85a3e74d719fc56dc37ac242df30ce7b6aa261270",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/800-ultra.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/809-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "c2be7cd523c791068cc23caea064c2570ecf78b3019ff81ec8101902ed274549",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/809-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/809-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/809-gigantamax.png",
+      "status": 200,
+      "bytes": 1424,
+      "sha256": "ae4a67503a2e77da0e836ecfe239d606bbd4891584908da2a28125325e0ba5e8",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/809-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/812-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "1e4b9adc20f78e031a0382b99025bb3daebf57bed0eb4c2231dc5f7ce8e2678e",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/812-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/812-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/812-gigantamax.png",
+      "status": 200,
+      "bytes": 1865,
+      "sha256": "0583dfff42448d9c090d10fc6b685ce24b11bf28fa63f27adb9d6543b999644f",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/812-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/815-gigantamax.json",
+      "status": 200,
+      "bytes": 18971,
+      "sha256": "aa9d2e34d7a1fa3e641276b80c00e3976e19f8d0b828e6cdba6de708f6634dc4",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/815-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/815-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/815-gigantamax.png",
+      "status": 200,
+      "bytes": 28722,
+      "sha256": "661eb89600628d10879196410bbc0ce16328295f0996913efda105c3ea54aca8",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/815-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/818-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "0126161323ed17b424431c6f9d7607c6a79ca385003fde9420fbd4e261e90434",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/818-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/818-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/818-gigantamax.png",
+      "status": 200,
+      "bytes": 870,
+      "sha256": "1b951536fdca2e6af036a5c8001e88db167f1271eead7482ce87b3c520fb0c59",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/818-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/823-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "fe78f8233b07b47705c381046be37168eebc2ba47d15cd40083afef375a1ab1b",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/823-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/823-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/823-gigantamax.png",
+      "status": 200,
+      "bytes": 1562,
+      "sha256": "b5174005771f61aecaabe9270ef38078e39f304802848aa2bfa81a10d5f915cf",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/823-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/826-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "8c7643b6fc5c14be9d41cdcfea276d2428a4a152351fcdad5a35e9337654cd68",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/826-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/826-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/826-gigantamax.png",
+      "status": 200,
+      "bytes": 956,
+      "sha256": "3b5a361c1a8f6d932b2b07d217dac1d75b648c621fd8a76d313a4b7458ea298c",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/826-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/834-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "6d80b9fc168410a8e410c571ffe926d3b914c98573e47c6cbea791534c6a146e",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/834-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/834-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/834-gigantamax.png",
+      "status": 200,
+      "bytes": 1377,
+      "sha256": "b4869c4e3846b460abfc81f5fbc65c31082917abef97b52ee9558f59118297da",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/834-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/839-gigantamax.json",
+      "status": 200,
+      "bytes": 23616,
+      "sha256": "7938da6d0fb3c016c52ba2d017786082825265dabb0ff1e1ed90293126519229",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/839-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/839-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/839-gigantamax.png",
+      "status": 200,
+      "bytes": 42501,
+      "sha256": "322a11aaa27e0c63eaef93e56d7362d54dda3a49534a9a95d72b7a23e471782d",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/839-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/841-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "9026b4523d56766f2fe15031ff45a9abbdc48fc0ceba7434eb4c10dde10285eb",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/841-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/841-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/841-gigantamax.png",
+      "status": 200,
+      "bytes": 794,
+      "sha256": "5017bab2cd953173b91d8083b6dc296dc33fe0c05d2760ab217de4f7a15ecec7",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/841-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/842-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "fc4ee807e4ee90b9e21ab6f5b5dc709276aa931e48c68aae6b44f93a74dd925f",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/842-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/842-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/842-gigantamax.png",
+      "status": 200,
+      "bytes": 794,
+      "sha256": "5017bab2cd953173b91d8083b6dc296dc33fe0c05d2760ab217de4f7a15ecec7",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/842-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/844-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "1cbb6b52941d761d25e613b0683a1454b1b27e0bc30c9852d8378c490a0ec39a",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/844-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/844-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/844-gigantamax.png",
+      "status": 200,
+      "bytes": 1353,
+      "sha256": "aca6093d6b7a306d5921489a035456502e4324b2214ae563a632da45c7f947b5",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/844-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/849-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "22a279de2dff527c18d778ec28634115861e38ed93497627dedca5d37926c006",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/849-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/849-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/849-gigantamax.png",
+      "status": 200,
+      "bytes": 1379,
+      "sha256": "b3cf0bc0aa92bf8f6780746bcb078d1130ad742fc9ebb7f47c1f2016f29df8d1",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/849-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/851-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "4714ec449384126e310470baf05735d4c8278938c193fd7020a2efd8bbd3872a",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/851-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/851-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/851-gigantamax.png",
+      "status": 200,
+      "bytes": 1919,
+      "sha256": "4b1f21bf6772cea5cd5160eb8709e11ee481615b71f1ac032ca40bbdced8d2ad",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/851-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/858-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "03a969dc4d727c4d4ee94499895fb017249ddea0bf43b34303f12a7fc147eead",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/858-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/858-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/858-gigantamax.png",
+      "status": 200,
+      "bytes": 1017,
+      "sha256": "70432a60246ad42e0645f83a676d0a2d3c1fe83d39b19a90b2aa6c2a6b768e4c",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/858-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/861-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "2db064807b58063dea462eca34d6a75638abbe75fa55ee83965bc417ce5f2f8a",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/861-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/861-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/861-gigantamax.png",
+      "status": 200,
+      "bytes": 1092,
+      "sha256": "a938ef92d77df7db693b5c17942996c4ef7c8e48b235db9d088edc8fbaade7f8",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/861-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/869-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "79ab8a4c8e7d76ee960c145ec6eb539b20ead4d59f4445672c8b5339fad9e32c",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/869-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/869-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/869-gigantamax.png",
+      "status": 200,
+      "bytes": 933,
+      "sha256": "cbb62bc1a8ec10b792e4033776c2f11df7784866df713d9347c9c18ab21a7995",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/869-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/879-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "04a503b017e6c39b7043a025aaca4d794b41db6deed45ae58806d6d0e361c31a",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/879-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/879-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/879-gigantamax.png",
+      "status": 200,
+      "bytes": 1384,
+      "sha256": "43d979b88607559031e51489696c277be701a560098e5d071e15eed6954e0426",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/879-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/884-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "b89655616bb09c8cffbeb2fb2dde6c936d972e85e593a8d5c96ffdd10f5d3388",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/884-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/884-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/884-gigantamax.png",
+      "status": 200,
+      "bytes": 1117,
+      "sha256": "b9db53adac222c514c4be3b26a113ba21913c6e9f2191f69ef7af057e1d2ef78",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/884-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/890-eternamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "38f928089d8b7eef9727fcedf46c61d0597426dbd8555c252cbc1b99a0fab840",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/890-eternamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/890-eternamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/890-eternamax.png",
+      "status": 200,
+      "bytes": 1618,
+      "sha256": "f7229f00dce36eced22e757e6c367645faa4e94d92e5540ebb3cee9ccf367c7f",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/890-eternamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/892-gigantamax-rapid.json",
+      "status": 200,
+      "bytes": 726,
+      "sha256": "47d3a753c0a4288d04ef37c01aeb8e771c906739f5d65ee14e73cb2dc567bcf9",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/892-gigantamax-rapid.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/892-gigantamax-rapid.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/892-gigantamax-rapid.png",
+      "status": 200,
+      "bytes": 1380,
+      "sha256": "e07f59d0b6dbe2728e29fbd2f84d2283c0285bda6b691e2d23d6ed12c7a2836e",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/892-gigantamax-rapid.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/892-gigantamax-single.json",
+      "status": 200,
+      "bytes": 726,
+      "sha256": "e49c9f8e693e00e947fe82afd4a22cfc27e0e3d23cceaa1a41f24c8d2a3e3d22",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/892-gigantamax-single.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/892-gigantamax-single.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/892-gigantamax-single.png",
+      "status": 200,
+      "bytes": 1532,
+      "sha256": "f40d7fcdc70fd392c0fe6119f5bbbca698479dce9cb1822b16e0941ece54ce65",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/892-gigantamax-single.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/9-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "dbee8348774c16229b7f3e71a80dfcde834d8f966646928afb6e555e767a0384",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/9-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/9-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/9-gigantamax.png",
+      "status": 200,
+      "bytes": 1896,
+      "sha256": "3d6c060614f50cf4b3ae130e889a4bcdfb04628b1bb687b6cb2039ac41420512",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/9-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/94-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "9f785fc4c0b0b10f9f373fe3113b796df7c6e647be2d49514dbb4b1c1f3bb3d1",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/94-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/94-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/94-gigantamax.png",
+      "status": 200,
+      "bytes": 866,
+      "sha256": "d51e5479187a53c4b6ab97c331bc7ed943f8aa2a763d8b33a733c0a2a7f2568f",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/94-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/back/shiny/99-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "06af56b334d91c697e1f4d69e4a126f5d617d0be1987d44620f663672c7c7bb1",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/99-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/back/shiny/99-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/back/shiny/99-gigantamax.png",
+      "status": 200,
+      "bytes": 1704,
+      "sha256": "33fc99ba0fd0e7a9162441cf597f49a7ac28c97e3c77780a9da1a012ece5650a",
+      "localPath": "public/game/pokerogue/pokemon/back/shiny/99-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/12-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "60f6016c1ed78679e992ed004e38acb855a4b6cf457662f98fd13624ae2323da",
+      "localPath": "public/game/pokerogue/pokemon/shiny/12-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/12-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/12-gigantamax.png",
+      "status": 200,
+      "bytes": 1447,
+      "sha256": "6173d519ca75f487ee95910d07312dd7c02be034bf3b769256693ad47595843d",
+      "localPath": "public/game/pokerogue/pokemon/shiny/12-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/131-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "37d27dab619bc7e5c9813cfcdd27e121dede7ead58f380c70aff477f5d53b2df",
+      "localPath": "public/game/pokerogue/pokemon/shiny/131-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/131-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/131-gigantamax.png",
+      "status": 200,
+      "bytes": 1278,
+      "sha256": "34a84066ec2235b9d2d551ba4ff65d2ec9053388920d7046c1e824058879363d",
+      "localPath": "public/game/pokerogue/pokemon/shiny/131-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/133-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "846518b2d462f662bd60611afbff7fd06ec59841a92f867d2a91ae77b95517a4",
+      "localPath": "public/game/pokerogue/pokemon/shiny/133-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/133-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/133-gigantamax.png",
+      "status": 200,
+      "bytes": 979,
+      "sha256": "1bfe7015f8fe801347141d725f32ac4997cd2a1828effbea53308bf75bdc6422",
+      "localPath": "public/game/pokerogue/pokemon/shiny/133-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/143-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "87411710692764f37b21f55be9e147c6a5f5b17717ac828b248ec7f1fee0f922",
+      "localPath": "public/game/pokerogue/pokemon/shiny/143-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/143-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/143-gigantamax.png",
+      "status": 200,
+      "bytes": 1362,
+      "sha256": "450e3aa485458069c3661f102fcdfb7c91f3260b18de903dda1eabbc61698844",
+      "localPath": "public/game/pokerogue/pokemon/shiny/143-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/25-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "534a0e85a67d10f2ac75b1709ef4176ceadf30ae12f7b0d9ea4877ff34c767ff",
+      "localPath": "public/game/pokerogue/pokemon/shiny/25-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/25-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/25-gigantamax.png",
+      "status": 200,
+      "bytes": 1058,
+      "sha256": "31e49dcaf9db35feb22644ca192e2863a56e466c4095d2f27b3c994fa4cc820e",
+      "localPath": "public/game/pokerogue/pokemon/shiny/25-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/3-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "8470398fdc4a6133415035e28b87a20aa9c88d74b2b6e17c218101b48f260cca",
+      "localPath": "public/game/pokerogue/pokemon/shiny/3-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/3-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/3-gigantamax.png",
+      "status": 200,
+      "bytes": 1694,
+      "sha256": "ec0a1b3c13ce133e041a791640ff269e7c08daa9f681f8e81ccb08b8ec35c129",
+      "localPath": "public/game/pokerogue/pokemon/shiny/3-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/382-primal.json",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "05c681fae941dc1bc3cd5bb5ec734d748f84c7b7d60db5387aea1ec62872769b",
+      "localPath": "public/game/pokerogue/pokemon/shiny/382-primal.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/382-primal.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/382-primal.png",
+      "status": 200,
+      "bytes": 1315,
+      "sha256": "557dddd217726a2942e05b93e652ce517f68fa1c6af3e17d0a935ae746a94cad",
+      "localPath": "public/game/pokerogue/pokemon/shiny/382-primal.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/383-primal.json",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "c8897965948e5f79a43fda6e2c25a3b2d5005ab0966eaa7c5d5d377559803c27",
+      "localPath": "public/game/pokerogue/pokemon/shiny/383-primal.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/383-primal.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/383-primal.png",
+      "status": 200,
+      "bytes": 1598,
+      "sha256": "7e78c602c482c82a2dfe742c27058dd096f598d729615a3c8ac291762ce4c464",
+      "localPath": "public/game/pokerogue/pokemon/shiny/383-primal.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/52-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "ed6a6a05ecdb002bc0027ed8533864caccd3d93e6f2f8990d818fccd21073bd3",
+      "localPath": "public/game/pokerogue/pokemon/shiny/52-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/52-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/52-gigantamax.png",
+      "status": 200,
+      "bytes": 1267,
+      "sha256": "c9a1f6354dd055d6a3ae4c9760627a5fa7b181a8d670bcbb691416426e83a2e4",
+      "localPath": "public/game/pokerogue/pokemon/shiny/52-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/569-gigantamax.json",
+      "status": 200,
+      "bytes": 42339,
+      "sha256": "4a8913a4f08ca623da2c47267eb5bbf28c16a2558f62f066ab4fcda0e821def1",
+      "localPath": "public/game/pokerogue/pokemon/shiny/569-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/569-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/569-gigantamax.png",
+      "status": 200,
+      "bytes": 9049,
+      "sha256": "7ff524a381bb96fef69de0b69459cac34136ab63b159edded6f2dc370187999b",
+      "localPath": "public/game/pokerogue/pokemon/shiny/569-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/6-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "78327d0b1a07d7352473c5218553eb74c14ab70321539a7517711116b1c3e2a9",
+      "localPath": "public/game/pokerogue/pokemon/shiny/6-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/6-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/6-gigantamax.png",
+      "status": 200,
+      "bytes": 1835,
+      "sha256": "4c3153d7127c41c897e7ca00ba06b8941c665aac5ea6044e0532b9fccfe72a76",
+      "localPath": "public/game/pokerogue/pokemon/shiny/6-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/68-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "e3d01663082940577069e9c1b3ee10d2cb5dfd9e4ebd94c0008bc8844cc35351",
+      "localPath": "public/game/pokerogue/pokemon/shiny/68-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/68-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/68-gigantamax.png",
+      "status": 200,
+      "bytes": 1435,
+      "sha256": "b3cfe08fca7af3869eac08daa2909cd140c530e756870ab460a406140942c711",
+      "localPath": "public/game/pokerogue/pokemon/shiny/68-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/800-ultra.json",
+      "status": 200,
+      "bytes": 714,
+      "sha256": "f6b180aca7e9f8b07651b19ad7489952c1e59f1258337e52855d5090981e478a",
+      "localPath": "public/game/pokerogue/pokemon/shiny/800-ultra.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/800-ultra.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/800-ultra.png",
+      "status": 200,
+      "bytes": 1748,
+      "sha256": "335296ea8e2c13209304c0e672a72680f3c68244b1008acf4cfab8af77e674ab",
+      "localPath": "public/game/pokerogue/pokemon/shiny/800-ultra.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/809-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "cff2b4932b0eaa69aebce46de3552dad4a6c72b4e77107eade88e78b1ef95211",
+      "localPath": "public/game/pokerogue/pokemon/shiny/809-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/809-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/809-gigantamax.png",
+      "status": 200,
+      "bytes": 1776,
+      "sha256": "06eec4b7f63f39eb821f0f355bb9a6527b23be24b77702582e2f1eba6e7bd3c3",
+      "localPath": "public/game/pokerogue/pokemon/shiny/809-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/812-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "ff2bd0c81d05ddb47bafe2e9f998755f1fb54f7d3a32887d4e47d7f8d6c7b4ad",
+      "localPath": "public/game/pokerogue/pokemon/shiny/812-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/812-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/812-gigantamax.png",
+      "status": 200,
+      "bytes": 2394,
+      "sha256": "c94bbc4664ba9f0bda4f922be2b3751b809ec231e776bf061ece4a77ca7b0539",
+      "localPath": "public/game/pokerogue/pokemon/shiny/812-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/815-gigantamax.json",
+      "status": 200,
+      "bytes": 18931,
+      "sha256": "efab1af2f8fae44cde8ab9299ef1ca1f5041d914b8368dd9e5da5d5bbd0204ce",
+      "localPath": "public/game/pokerogue/pokemon/shiny/815-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/815-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/815-gigantamax.png",
+      "status": 200,
+      "bytes": 27666,
+      "sha256": "2cbb46c0c1b21df598cb0a04656eb32f383ffe3e2725c5e58d0063402de9b55e",
+      "localPath": "public/game/pokerogue/pokemon/shiny/815-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/818-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "55fceb557fd6bccedb13bf7f636b3908adc65ad77e2a9a80c7ee9d9f0273c44a",
+      "localPath": "public/game/pokerogue/pokemon/shiny/818-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/818-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/818-gigantamax.png",
+      "status": 200,
+      "bytes": 1016,
+      "sha256": "db5062f34e5dbf4d4dba80327728ca48b463b07558b95ecf031f78e7f53a8d4d",
+      "localPath": "public/game/pokerogue/pokemon/shiny/818-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/823-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "fee1cb19c115a64252e467adde5d40665650bb431a471d392c5ad1b17efa9a0d",
+      "localPath": "public/game/pokerogue/pokemon/shiny/823-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/823-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/823-gigantamax.png",
+      "status": 200,
+      "bytes": 4220,
+      "sha256": "44bdf73b979a078183a728706b78b3b76d2cafe1bcc2dbac08840a1100bfc9af",
+      "localPath": "public/game/pokerogue/pokemon/shiny/823-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/826-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "de3179bcde47bf31222f02805b7e3fdce4489194cbda3e7d17c877342e385e1e",
+      "localPath": "public/game/pokerogue/pokemon/shiny/826-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/826-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/826-gigantamax.png",
+      "status": 200,
+      "bytes": 1344,
+      "sha256": "24f03a6826ace2da180980a5ab49496ce7eee8ca229dafd361174ee659637133",
+      "localPath": "public/game/pokerogue/pokemon/shiny/826-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/834-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "a46c042abd27ed492f4fb6e1c4968b2d64d452131402c37047cd197f00552167",
+      "localPath": "public/game/pokerogue/pokemon/shiny/834-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/834-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/834-gigantamax.png",
+      "status": 200,
+      "bytes": 1904,
+      "sha256": "fb461a5d5d37025a6d3ce575f18fdcf049e4d01f5237d80e57f726befba33bb9",
+      "localPath": "public/game/pokerogue/pokemon/shiny/834-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/839-gigantamax.json",
+      "status": 200,
+      "bytes": 23543,
+      "sha256": "997d189c73687fa127a69bc559ea0379bafd65302ec81b419579d6548aad7c03",
+      "localPath": "public/game/pokerogue/pokemon/shiny/839-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/839-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/839-gigantamax.png",
+      "status": 200,
+      "bytes": 56801,
+      "sha256": "951eb2a7577ddb0d2baae17f69dbf1f25b44b5d2df9faf7187d7764f609dff0a",
+      "localPath": "public/game/pokerogue/pokemon/shiny/839-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/841-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "9026b4523d56766f2fe15031ff45a9abbdc48fc0ceba7434eb4c10dde10285eb",
+      "localPath": "public/game/pokerogue/pokemon/shiny/841-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/841-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/841-gigantamax.png",
+      "status": 200,
+      "bytes": 994,
+      "sha256": "7a2306803776abf6871014fa77a676f92b18c5016bd0bea994e94954e3f7fb3f",
+      "localPath": "public/game/pokerogue/pokemon/shiny/841-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/842-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "fc4ee807e4ee90b9e21ab6f5b5dc709276aa931e48c68aae6b44f93a74dd925f",
+      "localPath": "public/game/pokerogue/pokemon/shiny/842-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/842-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/842-gigantamax.png",
+      "status": 200,
+      "bytes": 994,
+      "sha256": "7a2306803776abf6871014fa77a676f92b18c5016bd0bea994e94954e3f7fb3f",
+      "localPath": "public/game/pokerogue/pokemon/shiny/842-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/844-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "161a0047a2ffb60f2cec3db04c6a8c79019107b3d165756504f5c20b2ab22bfe",
+      "localPath": "public/game/pokerogue/pokemon/shiny/844-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/844-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/844-gigantamax.png",
+      "status": 200,
+      "bytes": 1264,
+      "sha256": "91a87577ad74f5f8debde8ba856fdf5b008373a51df6082a28c7faf69d9e16a5",
+      "localPath": "public/game/pokerogue/pokemon/shiny/844-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/849-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "e141cc9a8aec0305168b1fb70353528efd6a268cab08468099c702b32c5724c9",
+      "localPath": "public/game/pokerogue/pokemon/shiny/849-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/849-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/849-gigantamax.png",
+      "status": 200,
+      "bytes": 1538,
+      "sha256": "431019ff763ce60386d3b04f8cb59f25c1c9d24d261f6e60cb1403abb6106043",
+      "localPath": "public/game/pokerogue/pokemon/shiny/849-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/851-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "5fbc4bf3762d4dd2c6f37701e4afd3a2fb5cc3278b3cc3753654b572a8ecdd19",
+      "localPath": "public/game/pokerogue/pokemon/shiny/851-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/851-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/851-gigantamax.png",
+      "status": 200,
+      "bytes": 1895,
+      "sha256": "82a9ea8ef57de6afe475b7050dc46a2e6165fc42dc39673e15a56cbec08cbc6e",
+      "localPath": "public/game/pokerogue/pokemon/shiny/851-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/858-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "462f5942b7cbdf81c7f12e4f26eb9891376efe7fe379cde524bd136685f1744e",
+      "localPath": "public/game/pokerogue/pokemon/shiny/858-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/858-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/858-gigantamax.png",
+      "status": 200,
+      "bytes": 1213,
+      "sha256": "2341f9ac1a45b6f2492d05a4503d712cec46e49ad14a11c66db41af93d1d1593",
+      "localPath": "public/game/pokerogue/pokemon/shiny/858-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/861-gigantamax.json",
+      "status": 200,
+      "bytes": 720,
+      "sha256": "07321a9595735d5a9ab5489e764413f6af485885603b98eaa73f1558540b1c49",
+      "localPath": "public/game/pokerogue/pokemon/shiny/861-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/861-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/861-gigantamax.png",
+      "status": 200,
+      "bytes": 1289,
+      "sha256": "921e29809e4a65755b9fcded6f807052bbcd1c7f8f81f093be02b3ebce4caf8b",
+      "localPath": "public/game/pokerogue/pokemon/shiny/861-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/869-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "00e98a804b5dd3f53ae19da7e06b4c8c6b44410f833b91d319efdf71bd14ee71",
+      "localPath": "public/game/pokerogue/pokemon/shiny/869-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/869-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/869-gigantamax.png",
+      "status": 200,
+      "bytes": 1470,
+      "sha256": "f593ad0860af05dd97c2a468b3507fd50ca46f415c7d2146272f606098ba3705",
+      "localPath": "public/game/pokerogue/pokemon/shiny/869-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/879-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "3383dbe64d06f3562f4f69ecc1bd170d3b2bd52eac13b310d08ef57659940917",
+      "localPath": "public/game/pokerogue/pokemon/shiny/879-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/879-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/879-gigantamax.png",
+      "status": 200,
+      "bytes": 1600,
+      "sha256": "ba3b2a952b781c03bc0a78a56ed4fc19d05fee42bcbc509a98733eac6e30cfec",
+      "localPath": "public/game/pokerogue/pokemon/shiny/879-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/884-gigantamax.json",
+      "status": 200,
+      "bytes": 719,
+      "sha256": "0f6edc867109aa022965d5e76f25c046bc7c5e65e88b477c97591d33786ee93a",
+      "localPath": "public/game/pokerogue/pokemon/shiny/884-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/884-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/884-gigantamax.png",
+      "status": 200,
+      "bytes": 1295,
+      "sha256": "4fcabd796a1c6aae62545aa92ec3cf9bcaf089b4678a8d417fdc8b2e312f51ae",
+      "localPath": "public/game/pokerogue/pokemon/shiny/884-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/890-eternamax.json",
+      "status": 200,
+      "bytes": 11730,
+      "sha256": "147c262118160931d12201b1b1a5d211f2d6e9d34e24946d0238708afa224893",
+      "localPath": "public/game/pokerogue/pokemon/shiny/890-eternamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/890-eternamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/890-eternamax.png",
+      "status": 200,
+      "bytes": 34669,
+      "sha256": "4c292ec696752eeae336ff13e02b01a4a4f9df8da996b110ad699c7885985ff5",
+      "localPath": "public/game/pokerogue/pokemon/shiny/890-eternamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/892-gigantamax-rapid.json",
+      "status": 200,
+      "bytes": 726,
+      "sha256": "e229d7dff404ca61fff50562f919aca5b1aa87bbb8d76cba3f0b66035e812b1d",
+      "localPath": "public/game/pokerogue/pokemon/shiny/892-gigantamax-rapid.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/892-gigantamax-rapid.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/892-gigantamax-rapid.png",
+      "status": 200,
+      "bytes": 1428,
+      "sha256": "2883b26eb4a6671525fdd763f3405bba957f7e5461f6d6ea9c66b0fc93f46136",
+      "localPath": "public/game/pokerogue/pokemon/shiny/892-gigantamax-rapid.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/892-gigantamax-single.json",
+      "status": 200,
+      "bytes": 726,
+      "sha256": "bbe96ef60f52335ee593373ef15b637cd57b058890639d09077012f96413e2da",
+      "localPath": "public/game/pokerogue/pokemon/shiny/892-gigantamax-single.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/892-gigantamax-single.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/892-gigantamax-single.png",
+      "status": 200,
+      "bytes": 1609,
+      "sha256": "4068fb0ab2c91335a9b398be5ddc051bfb1b57c4fd1669067441a342c403ae23",
+      "localPath": "public/game/pokerogue/pokemon/shiny/892-gigantamax-single.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/9-gigantamax.json",
+      "status": 200,
+      "bytes": 717,
+      "sha256": "695d5de262f7916a5625141ad557a4124e4c05764ae3e3ccd1ceefa61bb32384",
+      "localPath": "public/game/pokerogue/pokemon/shiny/9-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/9-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/9-gigantamax.png",
+      "status": 200,
+      "bytes": 1737,
+      "sha256": "72312ce5e7b6490f9b850b1b1501f57180d86854ad8df8b5b507fa36a2ea0004",
+      "localPath": "public/game/pokerogue/pokemon/shiny/9-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/94-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "5d25b7f2c6d25f2d1ce37f1ef79c2ee2ae4cc5037e5e5687aa5317548823e55c",
+      "localPath": "public/game/pokerogue/pokemon/shiny/94-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/94-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/94-gigantamax.png",
+      "status": 200,
+      "bytes": 1127,
+      "sha256": "0572d2c3b131682a93b28825d3662ba063664b03a667003f72cced727419ed17",
+      "localPath": "public/game/pokerogue/pokemon/shiny/94-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/shiny/99-gigantamax.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "5cc05ec5e1be7a0073fbab7055cd141002b29476faf602fd0d9eb5077eb25ee1",
+      "localPath": "public/game/pokerogue/pokemon/shiny/99-gigantamax.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/shiny/99-gigantamax.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/shiny/99-gigantamax.png",
+      "status": 200,
+      "bytes": 1891,
+      "sha256": "8c8a24592d37cd45e7821b036e464db008983611cfd25a769b9927c9a374ed94",
+      "localPath": "public/game/pokerogue/pokemon/shiny/99-gigantamax.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/12-gigantamax.json",
+      "status": 200,
+      "bytes": 838,
+      "sha256": "1ef0bf3af16bc803844d486cb6e2985d418eeceeaacb64d5346845fa4cbc930c",
+      "localPath": "public/game/pokerogue/pokemon/variant/12-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/131-gigantamax.json",
+      "status": 200,
+      "bytes": 706,
+      "sha256": "a04d88d71f931df1eb9c6442d6faae42d4cc8525480c0c03176150020e18aa69",
+      "localPath": "public/game/pokerogue/pokemon/variant/131-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/133-gigantamax.json",
+      "status": 200,
+      "bytes": 552,
+      "sha256": "a28c17936ab25c329d9c6cace09f24cd98c31c2ee0cf204e61a802663ee17887",
+      "localPath": "public/game/pokerogue/pokemon/variant/133-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/143-gigantamax.json",
+      "status": 200,
+      "bytes": 1268,
+      "sha256": "9bec6b75f837925ceb6939c52bb6f1a7a8b35a607bc598e77729d0ea547299ba",
+      "localPath": "public/game/pokerogue/pokemon/variant/143-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/25-gigantamax.json",
+      "status": 200,
+      "bytes": 684,
+      "sha256": "85c4185e45fa137aea20c500a156e6deb0962410442df49e02235e7666661916",
+      "localPath": "public/game/pokerogue/pokemon/variant/25-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/3-gigantamax.json",
+      "status": 200,
+      "bytes": 728,
+      "sha256": "ed9a5f7324f6935add15441bb530e307c07d5af01c9138614397d4b0d341db0a",
+      "localPath": "public/game/pokerogue/pokemon/variant/3-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/382-primal.json",
+      "status": 200,
+      "bytes": 596,
+      "sha256": "e733217c3640a2b855c4f21adb6828dec7f1f1f7bff088507db00e0c1fdbda56",
+      "localPath": "public/game/pokerogue/pokemon/variant/382-primal.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/383-primal.json",
+      "status": 200,
+      "bytes": 508,
+      "sha256": "612e938d6a67ebfdf07be76b5974d146770646fdb3429ae137d14837d4f3f156",
+      "localPath": "public/game/pokerogue/pokemon/variant/383-primal.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/52-gigantamax.json",
+      "status": 200,
+      "bytes": 552,
+      "sha256": "5fe79ef5d180cb10bd3646cde9d6a08ade6dd1278e404ca91f2e8075c0d1a345",
+      "localPath": "public/game/pokerogue/pokemon/variant/52-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/569-gigantamax.json",
+      "status": 200,
+      "bytes": 1168,
+      "sha256": "9672a6bc8019fd38c55beeab90b4afb5234459aa72b56f4113f4fc2b358cc126",
+      "localPath": "public/game/pokerogue/pokemon/variant/569-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/6-gigantamax.json",
+      "status": 200,
+      "bytes": 299,
+      "sha256": "6a016c6de47d77752859c4a51a0f1790b0dc1bc55c2aa96fa9f06f132dbd05fa",
+      "localPath": "public/game/pokerogue/pokemon/variant/6-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/6-gigantamax_3.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "9668c8fdbad17e59657a6225d39ba2242b48226febc1b3183397ee3a8bf799ae",
+      "localPath": "public/game/pokerogue/pokemon/variant/6-gigantamax_3.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/6-gigantamax_3.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/6-gigantamax_3.png",
+      "status": 200,
+      "bytes": 1843,
+      "sha256": "6689ba4deb2a8b71770513cf8d64d1a5d28f71264c275641b7b65cf77f44a38c",
+      "localPath": "public/game/pokerogue/pokemon/variant/6-gigantamax_3.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/68-gigantamax.json",
+      "status": 200,
+      "bytes": 640,
+      "sha256": "56bed21cb4ae7f649004ad87bbaf39a6a7e304fe7d790f484fb7be9a2a763ced",
+      "localPath": "public/game/pokerogue/pokemon/variant/68-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/800-ultra.json",
+      "status": 200,
+      "bytes": 442,
+      "sha256": "fcfc3a13c2f64a91800976ff4b297aaded2ae6132b9d059d5f45bfadb6f53ac5",
+      "localPath": "public/game/pokerogue/pokemon/variant/800-ultra.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/809-gigantamax.json",
+      "status": 200,
+      "bytes": 574,
+      "sha256": "d6677afb3c85d0e1301fce879582d3a34b8cc074b0ce5e960f942a88dfd7e7bc",
+      "localPath": "public/game/pokerogue/pokemon/variant/809-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/818-gigantamax.json",
+      "status": 200,
+      "bytes": 684,
+      "sha256": "551e7c49f45e5dc94d182197e9cfefff075495fbc3385f0e4721b0def71ee1e7",
+      "localPath": "public/game/pokerogue/pokemon/variant/818-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/823-gigantamax.json",
+      "status": 200,
+      "bytes": 618,
+      "sha256": "ac7f0008054e54e2341cbabc11648aeb3d06ed9c5658628c6d60abdb222192b0",
+      "localPath": "public/game/pokerogue/pokemon/variant/823-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/841-gigantamax.json",
+      "status": 200,
+      "bytes": 992,
+      "sha256": "5d04919a99dc412bb58a05644528d39dd31e1b321a903f606b125ac7ec3f66cc",
+      "localPath": "public/game/pokerogue/pokemon/variant/841-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/842-gigantamax.json",
+      "status": 200,
+      "bytes": 992,
+      "sha256": "5d04919a99dc412bb58a05644528d39dd31e1b321a903f606b125ac7ec3f66cc",
+      "localPath": "public/game/pokerogue/pokemon/variant/842-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/849-gigantamax.json",
+      "status": 200,
+      "bytes": 640,
+      "sha256": "e5da65474851fad6e3f992a4356132f410ede510637a0de6243d2aaa567eb761",
+      "localPath": "public/game/pokerogue/pokemon/variant/849-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/851-gigantamax.json",
+      "status": 200,
+      "bytes": 486,
+      "sha256": "21bbc0be99b1b33257957e8b756c3cf99259a1aeb1216a2ef60101b1651cfe22",
+      "localPath": "public/game/pokerogue/pokemon/variant/851-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/858-gigantamax.json",
+      "status": 200,
+      "bytes": 552,
+      "sha256": "a952a3e2e1c47a121cd5bef01b1361d4e4d88215c72f1f433966e283fecfa035",
+      "localPath": "public/game/pokerogue/pokemon/variant/858-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/861-gigantamax.json",
+      "status": 200,
+      "bytes": 530,
+      "sha256": "921cb55b3ae8ff9107cdf176492fb08b4341726bb91726d10b0dd5124965bd96",
+      "localPath": "public/game/pokerogue/pokemon/variant/861-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/884-gigantamax.json",
+      "status": 200,
+      "bytes": 618,
+      "sha256": "e28c24127be94f435e86a1eb40c85408a4e9aa423b1748ba67b29b4c76fabe59",
+      "localPath": "public/game/pokerogue/pokemon/variant/884-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/890-eternamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "3922e92d3c05fb14749f4f5af3486e5bde321f13a3e2ff34ce57e8f4c5df58f0",
+      "localPath": "public/game/pokerogue/pokemon/variant/890-eternamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/892-gigantamax-rapid_2.json",
+      "status": 200,
+      "bytes": 727,
+      "sha256": "cb92b6b3fdc9255d5c44e63caa8829ca0feeff98bc396f8883b23488b3f1dc26",
+      "localPath": "public/game/pokerogue/pokemon/variant/892-gigantamax-rapid_2.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/892-gigantamax-rapid_2.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/892-gigantamax-rapid_2.png",
+      "status": 200,
+      "bytes": 1405,
+      "sha256": "9d0e7907b99876bc5343d99cf84b03d24a01e30fb85e4363272980f81a19d14a",
+      "localPath": "public/game/pokerogue/pokemon/variant/892-gigantamax-rapid_2.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/892-gigantamax-rapid_3.json",
+      "status": 200,
+      "bytes": 727,
+      "sha256": "0d8fbb6bd4cab1f4fbfecd8a3510edf007a4e268eed49caf14695b89c5447773",
+      "localPath": "public/game/pokerogue/pokemon/variant/892-gigantamax-rapid_3.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/892-gigantamax-rapid_3.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/892-gigantamax-rapid_3.png",
+      "status": 200,
+      "bytes": 1437,
+      "sha256": "b53da8a7572b6010e96ecb0e99714d924f560ee09211c37a77c37412ca6b143e",
+      "localPath": "public/game/pokerogue/pokemon/variant/892-gigantamax-rapid_3.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/892-gigantamax-single_2.json",
+      "status": 200,
+      "bytes": 727,
+      "sha256": "3669506f7a33ce83f37178e19bb4a03b93edc408b211f717a949842726d3f0a6",
+      "localPath": "public/game/pokerogue/pokemon/variant/892-gigantamax-single_2.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/892-gigantamax-single_2.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/892-gigantamax-single_2.png",
+      "status": 200,
+      "bytes": 1618,
+      "sha256": "19a5195f17f406818ec2c19330a57da8965c416e32c6612ce5e9684ccfdbf90e",
+      "localPath": "public/game/pokerogue/pokemon/variant/892-gigantamax-single_2.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/892-gigantamax-single_3.json",
+      "status": 200,
+      "bytes": 727,
+      "sha256": "6e520034a8893ff033f89e20efcfc7238d0070246071974eb9c60e778f094021",
+      "localPath": "public/game/pokerogue/pokemon/variant/892-gigantamax-single_3.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/892-gigantamax-single_3.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/892-gigantamax-single_3.png",
+      "status": 200,
+      "bytes": 1618,
+      "sha256": "0efc4c14fde9145c1e7ddae61cb8518591f346fd09eb032cb91670ccf63346ce",
+      "localPath": "public/game/pokerogue/pokemon/variant/892-gigantamax-single_3.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/9-gigantamax.json",
+      "status": 200,
+      "bytes": 211,
+      "sha256": "61849955048ed85027c702f89c6407a00b52dd0d6ae1ef90d5cce099ca71d6ec",
+      "localPath": "public/game/pokerogue/pokemon/variant/9-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/9-gigantamax_3.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "3ab1d654d6b1289b23c0f73c10306912726c48cbca15274db04ee3ea58ec8945",
+      "localPath": "public/game/pokerogue/pokemon/variant/9-gigantamax_3.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/9-gigantamax_3.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/9-gigantamax_3.png",
+      "status": 200,
+      "bytes": 1590,
+      "sha256": "715b253484f9015a129dac0f0d90f91c7797d9f9305d15a09e1f01a0820933a3",
+      "localPath": "public/game/pokerogue/pokemon/variant/9-gigantamax_3.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/94-gigantamax.json",
+      "status": 200,
+      "bytes": 728,
+      "sha256": "3bb1f0dc312718ed5de250e84762ccf2eacfd38cb7f4cab00862bf70b76d9c85",
+      "localPath": "public/game/pokerogue/pokemon/variant/94-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/99-gigantamax.json",
+      "status": 200,
+      "bytes": 640,
+      "sha256": "80e8e29f2b476c0c822d22bb04c0346498a6d7fe2923cd0b04daf959a6f320e4",
+      "localPath": "public/game/pokerogue/pokemon/variant/99-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/12-gigantamax.json",
+      "status": 200,
+      "bytes": 530,
+      "sha256": "a0f08f7a4e9ff3bfb4b12804644ec417b9cf01364c672c131d8ec85a56a2719a",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/12-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/131-gigantamax.json",
+      "status": 200,
+      "bytes": 684,
+      "sha256": "4587529cbf51f017f139e27d17cb9037bf95b552797bbf7c4a82eb1099b18a73",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/131-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/133-gigantamax.json",
+      "status": 200,
+      "bytes": 508,
+      "sha256": "00baf43864ca99073919b5bf6662439be9a7df949a31cc0aef9494dea352f5f7",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/133-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/143-gigantamax.json",
+      "status": 200,
+      "bytes": 1604,
+      "sha256": "325b0828a9bc1f62662e00d8ea07685f05dac6f439ae1d532197d7e26d3d6fdb",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/143-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/25-gigantamax.json",
+      "status": 200,
+      "bytes": 640,
+      "sha256": "245a25a6c789525edca23c8e154235da7fdd8c78fbfd0d70f23ce9450ef2639b",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/25-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/3-gigantamax.json",
+      "status": 200,
+      "bytes": 684,
+      "sha256": "025264f722e7678168f12b596274ef551ddab0071c0d823e25b58a3bc8493383",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/3-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/382-primal.json",
+      "status": 200,
+      "bytes": 596,
+      "sha256": "6cfaba672d1eb2d63927b2ee825dffe37c693a7a7953034578c2abd66532b5b1",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/382-primal.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/383-primal.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "3b5ecf44a26704fc668d93e58931b074ee898be43e153f54fdae57903f6d25f4",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/383-primal.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/52-gigantamax.json",
+      "status": 200,
+      "bytes": 464,
+      "sha256": "776cc40bddc8bb8bf8946afd731763de854ed6346349c2977df0463abfc452f0",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/52-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/569-gigantamax.json",
+      "status": 200,
+      "bytes": 662,
+      "sha256": "18a4e35970f23e88866560b67cd525181228bc33fc4d1edef56ce48d04793ff7",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/569-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/6-gigantamax.json",
+      "status": 200,
+      "bytes": 299,
+      "sha256": "980d4728629354e3291044939cb162b62986d4cf9f2eee480430c1964aac7259",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/6-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/6-gigantamax_3.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "52bf1375fa82ae1cb466b21b7c6396f96b04ea572f03e2cd0c875367ff427e59",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/6-gigantamax_3.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/back/6-gigantamax_3.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/back/6-gigantamax_3.png",
+      "status": 200,
+      "bytes": 1424,
+      "sha256": "5efe586204b88da68a6c5290c4b2367d1b9cfaa5dfa11e5f4e8388aed160204f",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/6-gigantamax_3.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/68-gigantamax.json",
+      "status": 200,
+      "bytes": 596,
+      "sha256": "faf64a1380bb5449bba37d3861684c4636aaf78e993a03d03fc357ab4de920d4",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/68-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/800-ultra.json",
+      "status": 200,
+      "bytes": 420,
+      "sha256": "85f235a6f12c9145200ad0ee91f8434e134159ecb655ca185110367c046484de",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/800-ultra.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/809-gigantamax.json",
+      "status": 200,
+      "bytes": 530,
+      "sha256": "9eb719e19a6420b654381981bb388a0fdebf937170b43b1ff250fbdc00a455be",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/809-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/818-gigantamax.json",
+      "status": 200,
+      "bytes": 684,
+      "sha256": "19a4bfcf834c2abd044cedf7d144744054f0277416e707802875c08f7b88f3e7",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/818-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/823-gigantamax.json",
+      "status": 200,
+      "bytes": 618,
+      "sha256": "0b5dbabc8553aa1f3999093310c248c69a0ef06c119f34df4406b7ff2a3c608b",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/823-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/841-gigantamax.json",
+      "status": 200,
+      "bytes": 772,
+      "sha256": "3bfe8ae3ce8bfff1a40755bd8db5fb84ac0d1fa111e5b462ff095dd912c6db66",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/841-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/842-gigantamax.json",
+      "status": 200,
+      "bytes": 772,
+      "sha256": "3bfe8ae3ce8bfff1a40755bd8db5fb84ac0d1fa111e5b462ff095dd912c6db66",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/842-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/849-gigantamax.json",
+      "status": 200,
+      "bytes": 640,
+      "sha256": "06b880e08367efb719476bf54e5fc96c906d3d3fbe9f798f0d5c78dfa8b869b9",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/849-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/851-gigantamax.json",
+      "status": 200,
+      "bytes": 486,
+      "sha256": "87a8d1d8c4f4439c76b8f25e99665e3f591588c5e83dcb83d8eab575679627fa",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/851-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/858-gigantamax.json",
+      "status": 200,
+      "bytes": 508,
+      "sha256": "0c0146e6227ffaaf3372dd65aa4771bb02663ffea820574e162278198e33d409",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/858-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/861-gigantamax.json",
+      "status": 200,
+      "bytes": 200,
+      "sha256": "5ee30d958c4627bb8b7eea3f6234dbb6618ca921ba8758fca0b961034d689c4b",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/861-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/884-gigantamax.json",
+      "status": 200,
+      "bytes": 508,
+      "sha256": "2134d6bc99fdd2725e01a9aadffb0a200da5b1093367ac6ee62eb6b3503ef6de",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/884-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/890-eternamax.json",
+      "status": 200,
+      "bytes": 508,
+      "sha256": "85b51c190d768449da35681778dea4b133a5c6f854741cc7da780875c0804bb4",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/890-eternamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/892-gigantamax-rapid_2.json",
+      "status": 200,
+      "bytes": 727,
+      "sha256": "528ed49b121cb6615bdbbbd49c25c3e12fa5c711005bf51cc5342a6fc2f716db",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/892-gigantamax-rapid_2.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/back/892-gigantamax-rapid_2.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/back/892-gigantamax-rapid_2.png",
+      "status": 200,
+      "bytes": 1365,
+      "sha256": "2cf9a7d6403953bbf2e0c52e99d470cc02166edd15267e568d193194a481a67b",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/892-gigantamax-rapid_2.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/892-gigantamax-rapid_3.json",
+      "status": 200,
+      "bytes": 727,
+      "sha256": "d137d9e7fa86cced5d1515853fea07815a13f24831c8727021c4d56bbec530b0",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/892-gigantamax-rapid_3.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/back/892-gigantamax-rapid_3.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/back/892-gigantamax-rapid_3.png",
+      "status": 200,
+      "bytes": 1288,
+      "sha256": "489e724037073833d79c73758532c47c1ea0573490cd2667b4c264f1e2fd1800",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/892-gigantamax-rapid_3.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/892-gigantamax-single_2.json",
+      "status": 200,
+      "bytes": 727,
+      "sha256": "c29ee3c70970a467b13fede33e7ea0363ee4124fae178292aaadfe8e055ffaef",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/892-gigantamax-single_2.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/back/892-gigantamax-single_2.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/back/892-gigantamax-single_2.png",
+      "status": 200,
+      "bytes": 1395,
+      "sha256": "25ff2bcfd15ab5c7cf793432cbc970176edee0f5c027a6eb13ec1a08cb0701ae",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/892-gigantamax-single_2.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/892-gigantamax-single_3.json",
+      "status": 200,
+      "bytes": 727,
+      "sha256": "7f02eb3ac365b124a88dd3a9918413d74c6c6cf36c7f0f3b243eb80e1face829",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/892-gigantamax-single_3.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/back/892-gigantamax-single_3.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/back/892-gigantamax-single_3.png",
+      "status": 200,
+      "bytes": 1404,
+      "sha256": "34a202a7dee7deae8b5676f4157eb88fefdced9760eb8bd3e010321d24f685b3",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/892-gigantamax-single_3.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/9-gigantamax.json",
+      "status": 200,
+      "bytes": 233,
+      "sha256": "ab980f4592468f2e77fdc240e57da1a84c212cfc20ccb86b551aefcd4d24fb33",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/9-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/9-gigantamax_3.json",
+      "status": 200,
+      "bytes": 718,
+      "sha256": "a3eb43825868727ea835ac89870012b0f384efd8c4ba10a6a65f6b153ecc0780",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/9-gigantamax_3.json",
+      "modified": false,
+      "attribution": [
+        {
+          "catalogAnnotation": 7,
+          "path": [
+            "pokemon/variant/back/9-gigantamax_3.json"
+          ],
+          "SPDX-FileCopyrightText": "2024-2026 Pagefault Games",
+          "SPDX-License-Identifier": "AGPL-3.0-only"
+        }
+      ]
+    },
+    {
+      "path": "images/pokemon/variant/back/9-gigantamax_3.png",
+      "status": 200,
+      "bytes": 1769,
+      "sha256": "0c8f6e793beab84a5f433b5c75b72165f4299e32ff1627ffef8cff4e26149c9b",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/9-gigantamax_3.png",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/94-gigantamax.json",
+      "status": 200,
+      "bytes": 332,
+      "sha256": "76f5a7e03633b74d7039fe20f32e071e04507e4662b87b74ffaed4bcfddea189",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/94-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    },
+    {
+      "path": "images/pokemon/variant/back/99-gigantamax.json",
+      "status": 200,
+      "bytes": 581,
+      "sha256": "7e827b86c862f44e036cad095e2ff5cb1fafaa3c582f5409ba08b0a8f6e422a1",
+      "localPath": "public/game/pokerogue/pokemon/variant/back/99-gigantamax.json",
+      "modified": false,
+      "attribution": null
+    }
+  ]
+}

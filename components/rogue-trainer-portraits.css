@@ -1,0 +1,5 @@
+.battle-screen .bs-trainer-portraits{display:inline-flex;flex-shrink:0;align-items:flex-end;gap:2px}
+.battle-screen .bs-trainer-portraits img{width:42px;height:42px;object-fit:contain;image-rendering:pixelated}
+.battle-screen .bs-trainer-intro-portrait.is-partner-first{right:37%;width:25%;height:70%}
+.battle-screen .bs-trainer-intro-portrait.is-partner-second{right:12%;width:25%;height:70%}
+@media(max-width:600px){.battle-screen .bs-trainer-portraits img{width:30px;height:34px}.battle-screen .bs-trainer-intro-portrait.is-partner-first{right:36%;width:27%}.battle-screen .bs-trainer-intro-portrait.is-partner-second{right:8%;width:27%}}

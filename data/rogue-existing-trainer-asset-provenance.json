@@ -1,0 +1,45 @@
+{
+  "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+  "note": "Existing local PNGs verified again against pinned originals; Rival1..6 share the source key, one frame per gender, no separate expression keys in source TrainerConfig.",
+  "assets": [
+    {
+      "path": "images/trainer/rival_m.png",
+      "localPath": "public/game/trainers/rival-m.png",
+      "sha256": "d29aba544d36d1682de0294deac6c69252bc3dcd5e87fb3154ae6d18dcec0b20",
+      "bytes": 865,
+      "attribution": null,
+      "atlasEvidence": {
+        "path": "images/trainer/rival_m.json",
+        "sha256": "9b12a7ab088f2494f0e827d0c4f2019a02c0f410970b6bf7836b1c9d68221bb3",
+        "frames": 1
+      }
+    },
+    {
+      "path": "images/trainer/rival_f.png",
+      "localPath": "public/game/trainers/rival-f.png",
+      "sha256": "bde5c3965dfc3609f34b12a46c85504f4bfb2e5e8e7b636d731e043cad0309d0",
+      "bytes": 721,
+      "attribution": null,
+      "atlasEvidence": {
+        "path": "images/trainer/rival_f.json",
+        "sha256": "3efa7b8d6299b0c47f6bb593218d470cc717c88465f772bae8727115fd0f100d",
+        "frames": 1
+      }
+    },
+    {
+      "path": "images/trainer/bug_type_superfan.png",
+      "localPath": "public/game/trainers/bug-superfan.png",
+      "sha256": "795716268ed715f6203e8c9a3bca1cdf1b6a5d31b0170328206b9a10a56fb306",
+      "bytes": 1187,
+      "attribution": [
+        {
+          "path": [
+            "trainer/bug_type_superfan.png"
+          ],
+          "SPDX-FileCopyrightText": "2025 Chani von Karpa",
+          "SPDX-License-Identifier": "CC-BY-NC-SA-4.0"
+        }
+      ]
+    }
+  ]
+}

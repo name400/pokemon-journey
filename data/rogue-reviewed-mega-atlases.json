@@ -111,5 +111,1677 @@
       1,
       1
     ]
+  },
+  {
+    "sourceId": 3,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "3-mega",
+    "native": [
+      "venusaurmega"
+    ],
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      2,
+      2
+    ]
+  },
+  {
+    "sourceId": 6,
+    "formIndex": 1,
+    "formKey": "mega-x",
+    "atlas": "6-mega-x",
+    "native": [
+      "charizardmegax"
+    ],
+    "variants": [
+      0,
+      1,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "sourceId": 6,
+    "formIndex": 2,
+    "formKey": "mega-y",
+    "atlas": "6-mega-y",
+    "native": [
+      "charizardmegay"
+    ],
+    "variants": [
+      0,
+      1,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "sourceId": 9,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "9-mega",
+    "native": [
+      "blastoisemega"
+    ],
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      2,
+      2
+    ]
+  },
+  {
+    "sourceId": 15,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "15-mega",
+    "native": [
+      "beedrillmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 18,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "18-mega",
+    "native": [
+      "pidgeotmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 26,
+    "formIndex": 1,
+    "formKey": "mega-x",
+    "atlas": "26-mega-x",
+    "native": [
+      "raichumegax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 26,
+    "formIndex": 2,
+    "formKey": "mega-y",
+    "atlas": "26-mega-y",
+    "native": [
+      "raichumegay"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 36,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "36-mega",
+    "native": [
+      "clefablemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 65,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "65-mega",
+    "native": [
+      "alakazammega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 71,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "71-mega",
+    "native": [
+      "victreebelmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 80,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "80-mega",
+    "native": [
+      "slowbromega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 94,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "94-mega",
+    "native": [
+      "gengarmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 115,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "115-mega",
+    "native": [
+      "kangaskhanmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 121,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "121-mega",
+    "native": [
+      "starmiemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 127,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "127-mega",
+    "native": [
+      "pinsirmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 130,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "130-mega",
+    "native": [
+      "gyaradosmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 142,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "142-mega",
+    "native": [
+      "aerodactylmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 149,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "149-mega",
+    "native": [
+      "dragonitemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 150,
+    "formIndex": 1,
+    "formKey": "mega-x",
+    "atlas": "150-mega-x",
+    "native": [
+      "mewtwomegax"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 150,
+    "formIndex": 2,
+    "formKey": "mega-y",
+    "atlas": "150-mega-y",
+    "native": [
+      "mewtwomegay"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 154,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "154-mega",
+    "native": [
+      "meganiummega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 160,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "160-mega",
+    "native": [
+      "feraligatrmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 181,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "181-mega",
+    "native": [
+      "ampharosmega"
+    ],
+    "variants": [
+      0,
+      1,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "sourceId": 208,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "208-mega",
+    "native": [
+      "steelixmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 212,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "212-mega",
+    "native": [
+      "scizormega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 214,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "214-mega",
+    "native": [
+      "heracrossmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 227,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "227-mega",
+    "native": [
+      "skarmorymega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 229,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "229-mega",
+    "native": [
+      "houndoommega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 248,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "248-mega",
+    "native": [
+      "tyranitarmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 254,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "254-mega",
+    "native": [
+      "sceptilemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 257,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "257-mega",
+    "native": [
+      "blazikenmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 260,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "260-mega",
+    "native": [
+      "swampertmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 282,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "282-mega",
+    "native": [
+      "gardevoirmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 302,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "302-mega",
+    "native": [
+      "sableyemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 303,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "303-mega",
+    "native": [
+      "mawilemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 306,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "306-mega",
+    "native": [
+      "aggronmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 308,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "308-mega",
+    "native": [
+      "medichammega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 310,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "310-mega",
+    "native": [
+      "manectricmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 319,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "319-mega",
+    "native": [
+      "sharpedomega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 323,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "323-mega",
+    "native": [
+      "cameruptmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 334,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "334-mega",
+    "native": [
+      "altariamega"
+    ],
+    "variants": [
+      0,
+      2,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 354,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "354-mega",
+    "native": [
+      "banettemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 358,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "358-mega",
+    "native": [
+      "chimechomega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 359,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "359-mega",
+    "native": [
+      "absolmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 362,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "362-mega",
+    "native": [
+      "glaliemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 373,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "373-mega",
+    "native": [
+      "salamencemega"
+    ],
+    "variants": [
+      0,
+      2,
+      2
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 376,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "376-mega",
+    "native": [
+      "metagrossmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 380,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "380-mega",
+    "native": [
+      "latiasmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 381,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "381-mega",
+    "native": [
+      "latiosmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 384,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "384-mega",
+    "native": [
+      "rayquazamega"
+    ],
+    "variants": [
+      0,
+      2,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 398,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "398-mega",
+    "native": [
+      "staraptormega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 428,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "428-mega",
+    "native": [
+      "lopunnymega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 445,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "445-mega",
+    "native": [
+      "garchompmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 448,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "448-mega",
+    "native": [
+      "lucariomega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 460,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "460-mega",
+    "native": [
+      "abomasnowmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 475,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "475-mega",
+    "native": [
+      "gallademega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 478,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "478-mega",
+    "native": [
+      "froslassmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 485,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "485-mega",
+    "native": [
+      "heatranmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 491,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "491-mega",
+    "native": [
+      "darkraimega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 500,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "500-mega",
+    "native": [
+      "emboarmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 530,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "530-mega",
+    "native": [
+      "excadrillmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 531,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "531-mega",
+    "native": [
+      "audinomega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 545,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "545-mega",
+    "native": [
+      "scolipedemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 560,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "560-mega",
+    "native": [
+      "scraftymega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 604,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "604-mega",
+    "native": [
+      "eelektrossmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 609,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "609-mega",
+    "native": [
+      "chandeluremega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 623,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "623-mega",
+    "native": [
+      "golurkmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 652,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "652-mega",
+    "native": [
+      "chesnaughtmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 655,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "655-mega",
+    "native": [
+      "delphoxmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 658,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "658-mega",
+    "native": [
+      "greninjamega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 668,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "668-mega",
+    "native": [
+      "pyroarmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 687,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "687-mega",
+    "native": [
+      "malamarmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 689,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "689-mega",
+    "native": [
+      "barbaraclemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 691,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "691-mega",
+    "native": [
+      "dragalgemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 701,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "701-mega",
+    "native": [
+      "hawluchamega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 718,
+    "formIndex": 6,
+    "formKey": "mega",
+    "atlas": "718-mega",
+    "native": [
+      "zygardemega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 719,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "719-mega",
+    "native": [
+      "dianciemega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 740,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "740-mega",
+    "native": [
+      "crabominablemega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 768,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "768-mega",
+    "native": [
+      "golisopodmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 780,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "780-mega",
+    "native": [
+      "drampamega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 801,
+    "formIndex": 2,
+    "formKey": "mega",
+    "atlas": "801-mega",
+    "native": [
+      "magearnamega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 807,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "807-mega",
+    "native": [
+      "zeraoramega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 870,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "870-mega",
+    "native": [
+      "falinksmega"
+    ],
+    "variants": [
+      0,
+      0,
+      0
+    ],
+    "backVariants": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "sourceId": 952,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "952-mega",
+    "native": [
+      "scovillainmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 970,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "970-mega",
+    "native": [
+      "glimmoramega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 998,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "998-mega",
+    "native": [
+      "baxcaliburmega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "sourceId": 2670,
+    "formIndex": 1,
+    "formKey": "mega",
+    "atlas": "2670-mega",
+    "native": [
+      "floettemega"
+    ],
+    "variants": [
+      0,
+      1,
+      1
+    ],
+    "backVariants": [
+      0,
+      1,
+      1
+    ]
   }
 ]

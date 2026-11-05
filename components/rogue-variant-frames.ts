@@ -10,7 +10,7 @@ export function variantFrames(key:string,variant:number,facing:'front'|'back'):P
  if(!/^[0-9]+(?:-[a-z0-9-]+)?$/i.test(key)||![1,2].includes(variant))return Promise.resolve(null);
  const cacheKey=`${key}:${variant}:${facing}`,previous=cache.get(cacheKey);if(previous)return previous;
  const task=(async()=>{try{
-  const local=reviewedAtlasRoot(key),localKind=reviewedAtlasVariant(key,variant);
+  const local=reviewedAtlasRoot(key),localKind=reviewedAtlasVariant(key,variant,facing);
   const master=local?null:await (masterPromise ||= json<Master>(`${root}/variant/_masterlist.json`).catch(error=>{masterPromise=null;throw error;}));
   const section=(facing==='back'?master?.back:master) as Record<string,number[]>|undefined,kind=local?localKind:section?.[key]?.[variant];if(kind!==1&&kind!==2)return null;
   const assetRoot=local||root,folder=facing==='back'?'back/':'',base=kind===2?`${assetRoot}/variant/${folder}${key}_${variant+1}`:`${assetRoot}/${folder}${key}`;

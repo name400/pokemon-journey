@@ -55,7 +55,7 @@ test('overflow and ambiguous held metadata refuse the whole fusion without consu
 });
 test('empty-slot native transfers and unreviewed native conflicts keep their existing behavior',()=>{
  const empty=fixture().run;empty.party[0].item='';const transferred=stageClassicDnaFusion(empty,{primaryBoxId:'primary',donorBoxId:'donor'}).run;assert.equal(transferred.party[0].item,'leftovers');assert.equal(transferred.modifiers.length,0);
- for(const item of ['shellbell','oranberry','charizarditex']){const {run}=fixture();run.party[1].item=item;const before=structuredClone(run);assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));assert.deepEqual(run,before);}
+ for(const item of ['lifeorb','oranberry','charizarditex']){const {run}=fixture();run.party[1].item=item;const before=structuredClone(run);assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));assert.deepEqual(run,before);}
 });
 
 test('reward and direct grants include the retained native Leftovers in the four-copy cap',()=>{

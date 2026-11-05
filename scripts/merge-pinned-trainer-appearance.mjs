@@ -2,13 +2,14 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import provenance from '../data/rogue-reviewed-asset-provenance.json' with {type:'json'};
+import existing from '../data/rogue-existing-trainer-asset-provenance.json' with {type:'json'};
 const root=new URL('../',import.meta.url),commit=provenance.sourceCommit;
-const mappings={MYSTERIOUS_SISTERS:['mysterious_sisters',null,'mysterious_sisters'],ALIANA:['aliana'],CELOSIA:['celosia'],MACRO_GRUNT:['macro_grunt_m','macro_grunt_f'],VICTOR:['victor'],VICTORIA:['victoria'],VIVI:['vivi'],VICKY:['vicky'],VITO:['vito'],EXPERT_POKEMON_BREEDER:['expert_pokemon_breeder'],PLAYER_M_ALTERNATE:['player_m_alternate'],PLAYER_F_ALTERNATE:['player_f_alternate'],BIRD_KEEPER:[null,'bird_keeper_f']};
+const mappings={BUG_TYPE_SUPERFAN:['bug_type_superfan'],...Object.fromEntries(['RIVAL','RIVAL_2','RIVAL_3','RIVAL_4','RIVAL_5','RIVAL_6'].map(name=>[name,['rival_m','rival_f']])),MYSTERIOUS_SISTERS:['mysterious_sisters',null,'mysterious_sisters'],ALIANA:['aliana'],CELOSIA:['celosia'],MACRO_GRUNT:['macro_grunt_m','macro_grunt_f'],VICTOR:['victor'],VICTORIA:['victoria'],VIVI:['vivi'],VICKY:['vicky'],VITO:['vito'],EXPERT_POKEMON_BREEDER:['expert_pokemon_breeder'],PLAYER_M_ALTERNATE:['player_m_alternate'],PLAYER_F_ALTERNATE:['player_f_alternate'],BIRD_KEEPER:[null,'bird_keeper_f']};
 export function mergePinnedTrainerAppearance(manifest){
  for(const [name,keys] of Object.entries(mappings)){
   const record=manifest.byEnumName[name];if(!record)throw Error('Missing source trainer '+name);
   for(const [i,key]of keys.entries()){
-   if(!key)continue;const sourcePath=`images/trainer/${key}.png`,source=provenance.assets.find(r=>r.path===sourcePath);if(!source)throw Error('Unverified trainer '+key);
+   if(!key)continue;const sourcePath=`images/trainer/${key}.png`,source=[...provenance.assets,...existing.assets].find(r=>r.path===sourcePath);if(!source)throw Error('Unverified trainer '+key);
    const bytes=fs.readFileSync(new URL(source.localPath,root)),sha256=createHash('sha256').update(bytes).digest('hex');if(sha256!==source.sha256)throw Error('Asset hash mismatch '+key);
    const spriteKey='pokerogue-'+key,src='/'+source.localPath.slice('public/'.length),sourceUrl=`https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/${commit}/${sourcePath}`;
    manifest.assets[spriteKey]={spriteKey,localUrl:src,sourceUrl,sourceDirectory:`https://github.com/pagefaultgames/pokerogue-assets/tree/${commit}/images/trainer`,artist:source.attribution?.[0]?.['SPDX-FileCopyrightText']||null,sha256,bytes:bytes.length,width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),sourceCommit:commit,sourcePath,license:source.attribution?.[0]?.['SPDX-License-Identifier']||null,verification:{method:'pinned-source-byte-hash',status:200,contentType:'image/png'}};

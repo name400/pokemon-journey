@@ -1,0 +1,29 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {Dex} from '@pkmn/sim';
+import {classicAiMatchupScore,classicAiHazardMultiplier,classicAiSwitchDecision,classicAiTieIndex} from '../lib/rogue-ai-matchup.mjs';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {createClassicCombat,playClassicCombat} from '../lib/rogue-battle-engine.mjs';
+import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
+const chart=(type,target)=>Dex.getImmunity(type,target.types)?2**Dex.getEffectiveness(type,target.types):0;
+const mon=(types,moves,hp=100,speed=100,active=true)=>({types,moves:moves.map(type=>({type,category:'Special',pp:10,variableType:false})),hp,maxHp:100,speed,active});
+test('source matchup uses damaging PP-positive moves, STAB, speed and dying/sacrifice ratios',()=>{
+ const fire=mon(['Fire'],['Fire'],100,100),water=mon(['Water'],['Water'],100,100);assert.equal(classicAiMatchupScore(water,fire,chart),5);
+ const dying=mon(['Grass'],['Grass'],10,90);assert.ok(Math.abs(classicAiMatchupScore(dying,fire,chart)-.10625)<1e-10);
+ dying.speed=110;assert.equal(classicAiMatchupScore(dying,fire,chart),1.25);
+ const weakened=mon(['Water'],['Water'],30,90);assert.ok(Math.abs(classicAiMatchupScore(weakened,fire,chart)-.75)<1e-10);
+ const fixed=mon(['Water'],['Water']);fixed.moves.push({type:'Normal',category:'Status',pp:10},{type:'Electric',category:'Special',pp:0});assert.equal(classicAiMatchupScore(fixed,fire,chart),5);
+ fixed.moves[0].variableType=true;assert.equal(classicAiMatchupScore(fixed,fire,chart),4);
+});
+test('switch thresholds and decaying switch counter match source including exact ties',()=>{const options=[{slot:2,score:29},{slot:3,score:30}];assert.equal(classicAiSwitchDecision(10,options,{randomInt:()=>0}).slot,3);assert.equal(classicAiSwitchDecision(10,[{slot:2,score:20}],{boss:true,randomInt:()=>0}).slot,2);assert.equal(classicAiSwitchDecision(10,[{slot:2,score:30}],{counter:1,randomInt:()=>0}),null);assert.equal(classicAiSwitchDecision(10,[{slot:2,score:40}],{counter:2,randomInt:()=>0}),null);assert.equal(classicAiSwitchDecision(10,[{slot:2,score:50}],{counter:2,randomInt:()=>0}).slot,2);assert.equal(classicAiSwitchDecision(1,[{slot:2,score:10},{slot:3,score:10}],{randomInt:()=>1}).slot,3);});
+test('hazard source formulas retain the pinned grounded policy instead of substituting guessed entry damage',()=>{const candidate={...mon(['Flying'],['Flying'],50),grounded:false,canPoison:true};assert.equal(classicAiHazardMultiplier(candidate,[{id:'spikes',layers:2}],chart),.25);candidate.grounded=true;assert.equal(classicAiHazardMultiplier(candidate,[{id:'spikes',layers:2}],chart),1);candidate.grounded=false;candidate.canPoison=false;assert.equal(classicAiHazardMultiplier(candidate,[{id:'toxicspikes',layers:2}],chart),1);});
+test('trainer switches out a weak matchup and restores its counter',async t=>{t.mock.timers.enable({apis:['Date'],now:1793884000000});
+ const party=[makeReferenceMon(9,50,{boxId:'player-water',moves:['Splash']})],enemies=[makeReferenceMon(4,50,{boxId:'fire',moves:['Ember']}),makeReferenceMon(1,50,{boxId:'grass',moves:['Vine Whip']})];
+ const run={seed:'matchup',rng:123,wave:30,biome:0,party,modifiers:[],tools:{},encounter:{kind:'trainer',trainer:{}},enemyAiMatchupRule:'source-matchup-v1'};run.combat=createClassicCombat(run,enemies,{trainer:true});const restored=await decodeGameData(await encodeGameData(run));
+ const next=playClassicCombat(run,{type:'move',move:'splash'}),nextRestored=playClassicCombat(restored,{type:'move',move:'splash'});assert.deepEqual(next,nextRestored);assert.equal(next.teams[1][next.activeBySide[1][0]].boxId,'grass');assert.equal(next.enemySwitchCounter,1);
+ const legacy={...structuredClone(run),enemyAiMatchupRule:undefined};legacy.combat=createClassicCombat(legacy,enemies,{trainer:true});assert.equal(legacy.combat.enemyAiMatchupRule,null);
+});
+
+test('double partner AI switches only into each trainer’s reserve',()=>{const make=(id,boxId,owner)=>({...makeReferenceMon(id,50,{boxId,moves:[id===4?'Ember':'Vine Whip']}),rogueTrainerSlot:owner}),party=[9,7].map((id,i)=>makeReferenceMon(id,50,{boxId:'double-own'+i,moves:['Splash']})),run={seed:'matchup-double',rng:123,wave:50,biome:0,party,modifiers:[],tools:{},encounter:{kind:'trainer',trainer:{}},enemyAiMatchupRule:'source-matchup-v1'};run.combat=createClassicCombat(run,[make(4,'fire-a',0),make(4,'fire-b',1),make(1,'grass-a',0),make(1,'grass-b',1)],{trainer:true,doubles:true});const next=playClassicCombat(run,{type:'turn',actions:[{actor:0,type:'move',move:'splash'},{actor:1,type:'move',move:'splash'}]});assert.deepEqual(next.activeBySide[1].map(i=>next.teams[1][i].boxId),['grass-a','grass-b']);assert.equal(next.enemySwitchCounter,2);});
+
+test('source tie seed is stable across UTF16 serialization and does not mutate caller PRNG',()=>{const seed='가나다abc';for(let turn=1;turn<20;turn++){const first=classicAiTieIndex(seed,turn,4);assert.ok(first>=0&&first<4);assert.equal(classicAiTieIndex(JSON.parse(JSON.stringify(seed)),turn,4),first);}assert.equal(classicAiTieIndex(seed,1,1),0);assert.throws(()=>classicAiTieIndex(seed,1,0));});

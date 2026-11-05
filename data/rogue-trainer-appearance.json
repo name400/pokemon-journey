@@ -12,15 +12,15 @@
     },
     "counts": {
       "sourceTrainers": 272,
-      "mapped": 264,
-      "unmatched": 8,
-      "localAssets": 281,
+      "mapped": 271,
+      "unmatched": 1,
+      "localAssets": 284,
       "gym": 74,
       "eliteFour": 42,
       "champion": 16,
       "unmatchedPriority": 0,
       "httpFailures": 0,
-      "pinnedOriginalAssets": 14
+      "pinnedOriginalAssets": 17
     },
     "useConditions": {
       "notice": "Many sprites are not from the games. Credit the appropriate artist; do not edit without permission.",
@@ -3292,18 +3292,24 @@
       "sourceType": 130,
       "enumName": "BUG_TYPE_SUPERFAN",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-bug_type_superfan",
+      "src": "/game/trainers/bug-superfan.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/bug_type_superfan.png",
+      "canonicalIdentity": "bug_type_superfan",
+      "reason": null,
       "variants": {
         "female": null,
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-bug_type_superfan",
+          "src": "/game/trainers/bug-superfan.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/bug_type_superfan.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "EXPERT_POKEMON_BREEDER": {
       "sourceType": 131,
@@ -6434,103 +6440,169 @@
       "sourceType": 375,
       "enumName": "RIVAL",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-rival_m",
+      "src": "/game/trainers/rival-m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+      "canonicalIdentity": "rival_m",
+      "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokerogue-rival_f",
+          "src": "/game/trainers/rival-f.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_f.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-rival_m",
+          "src": "/game/trainers/rival-m.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "RIVAL_2": {
       "sourceType": 376,
       "enumName": "RIVAL_2",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-rival_m",
+      "src": "/game/trainers/rival-m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+      "canonicalIdentity": "rival_m",
+      "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokerogue-rival_f",
+          "src": "/game/trainers/rival-f.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_f.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-rival_m",
+          "src": "/game/trainers/rival-m.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "RIVAL_3": {
       "sourceType": 377,
       "enumName": "RIVAL_3",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-rival_m",
+      "src": "/game/trainers/rival-m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+      "canonicalIdentity": "rival_m",
+      "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokerogue-rival_f",
+          "src": "/game/trainers/rival-f.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_f.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-rival_m",
+          "src": "/game/trainers/rival-m.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "RIVAL_4": {
       "sourceType": 378,
       "enumName": "RIVAL_4",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-rival_m",
+      "src": "/game/trainers/rival-m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+      "canonicalIdentity": "rival_m",
+      "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokerogue-rival_f",
+          "src": "/game/trainers/rival-f.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_f.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-rival_m",
+          "src": "/game/trainers/rival-m.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "RIVAL_5": {
       "sourceType": 379,
       "enumName": "RIVAL_5",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-rival_m",
+      "src": "/game/trainers/rival-m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+      "canonicalIdentity": "rival_m",
+      "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokerogue-rival_f",
+          "src": "/game/trainers/rival-f.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_f.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-rival_m",
+          "src": "/game/trainers/rival-m.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     },
     "RIVAL_6": {
       "sourceType": 380,
       "enumName": "RIVAL_6",
       "category": "trainer",
-      "status": "unmatched",
-      "spriteKey": null,
-      "src": null,
-      "sourceUrl": null,
-      "canonicalIdentity": null,
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent",
+      "status": "matched",
+      "spriteKey": "pokerogue-rival_m",
+      "src": "/game/trainers/rival-m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+      "canonicalIdentity": "rival_m",
+      "reason": null,
       "variants": {
-        "female": null,
+        "female": {
+          "spriteKey": "pokerogue-rival_f",
+          "src": "/game/trainers/rival-f.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_f.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        },
         "double": null,
-        "default": null
+        "default": {
+          "spriteKey": "pokerogue-rival_m",
+          "src": "/game/trainers/rival-m.png",
+          "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+          "matchRule": "pinned-source-getSpriteKey"
+        }
       },
-      "variantLimitations": []
+      "variantLimitations": [],
+      "matchRule": "pinned-source-getSpriteKey"
     }
   },
   "byTrainerType": {
@@ -11612,54 +11684,69 @@
         "status": 200,
         "contentType": "image/png"
       }
+    },
+    "pokerogue-bug_type_superfan": {
+      "spriteKey": "pokerogue-bug_type_superfan",
+      "localUrl": "/game/trainers/bug-superfan.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/bug_type_superfan.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": "2025 Chani von Karpa",
+      "sha256": "795716268ed715f6203e8c9a3bca1cdf1b6a5d31b0170328206b9a10a56fb306",
+      "bytes": 1187,
+      "width": 70,
+      "height": 70,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/bug_type_superfan.png",
+      "license": "CC-BY-NC-SA-4.0",
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-rival_m": {
+      "spriteKey": "pokerogue-rival_m",
+      "localUrl": "/game/trainers/rival-m.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_m.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "d29aba544d36d1682de0294deac6c69252bc3dcd5e87fb3154ae6d18dcec0b20",
+      "bytes": 865,
+      "width": 69,
+      "height": 69,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/rival_m.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
+    },
+    "pokerogue-rival_f": {
+      "spriteKey": "pokerogue-rival_f",
+      "localUrl": "/game/trainers/rival-f.png",
+      "sourceUrl": "https://raw.githubusercontent.com/pagefaultgames/pokerogue-assets/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer/rival_f.png",
+      "sourceDirectory": "https://github.com/pagefaultgames/pokerogue-assets/tree/fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba/images/trainer",
+      "artist": null,
+      "sha256": "bde5c3965dfc3609f34b12a46c85504f4bfb2e5e8e7b636d731e043cad0309d0",
+      "bytes": 721,
+      "width": 70,
+      "height": 70,
+      "sourceCommit": "fb8ccb6d0703ffe48cdf80a8102d5ed943c82dba",
+      "sourcePath": "images/trainer/rival_f.png",
+      "license": null,
+      "verification": {
+        "method": "pinned-source-byte-hash",
+        "status": 200,
+        "contentType": "image/png"
+      }
     }
   },
   "unmatched": [
     {
       "sourceType": 0,
       "enumName": "UNKNOWN",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 130,
-      "enumName": "BUG_TYPE_SUPERFAN",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 375,
-      "enumName": "RIVAL",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 376,
-      "enumName": "RIVAL_2",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 377,
-      "enumName": "RIVAL_3",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 378,
-      "enumName": "RIVAL_4",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 379,
-      "enumName": "RIVAL_5",
-      "category": "trainer",
-      "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
-    },
-    {
-      "sourceType": 380,
-      "enumName": "RIVAL_6",
       "category": "trainer",
       "reason": "Source-specific identity: no verified matching Showdown portrait; same-name characters are not assumed equivalent"
     }

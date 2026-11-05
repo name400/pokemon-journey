@@ -1,0 +1,4907 @@
+{
+  "policy": "reviewed-native-v2",
+  "nativeVersion": "0.10.12",
+  "itemsSha256": "413eacdb67dfb43a841867f912f5932aece4f80b3cf2bb1a6d6523dd0f401e71",
+  "items": [
+    {
+      "id": "abilityshield",
+      "gen": 9,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onSetAbility"
+      ]
+    },
+    {
+      "id": "abomasite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "absolite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "absolitez",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "absorbbulb",
+      "gen": 5,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onDamagingHit"
+      ]
+    },
+    {
+      "id": "adamantcrystal",
+      "gen": 8,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "adamantorb",
+      "gen": 4,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "adrenalineorb",
+      "gen": 7,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onAfterBoost"
+      ]
+    },
+    {
+      "id": "aerodactylite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "aggronite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "aguavberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "airballoon",
+      "gen": 5,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onStart",
+        "onDamagingHit",
+        "onAfterSubDamage"
+      ]
+    },
+    {
+      "id": "alakazite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "aloraichiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "altarianite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "ampharosite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "apicotberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "armorfossil",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "aspearberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "assaultvest",
+      "gen": 6,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onModifySpD",
+        "onDisableMove"
+      ]
+    },
+    {
+      "id": "audinite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "auspiciousarmor",
+      "gen": 9,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "babiriberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "banettite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "barbaracite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "baxcalibrite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "beastball",
+      "gen": 7,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "beedrillite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "belueberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "berry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onResidual",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "berryjuice",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate"
+      ]
+    },
+    {
+      "id": "berrysweet",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "berserkgene",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate"
+      ]
+    },
+    {
+      "id": "bignugget",
+      "gen": 5,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "bigroot",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onTryHeal"
+      ]
+    },
+    {
+      "id": "bindingband",
+      "gen": 5,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "bitterberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "blackaugurite",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "blackbelt",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "blackglasses",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "blacksludge",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onResidual"
+      ]
+    },
+    {
+      "id": "blankplate",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "blastoisinite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "blazikenite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "blueorb",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onSwitchIn",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "blukberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "blunderpolicy",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "boosterenergy",
+      "gen": 9,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onStart",
+        "onUpdate",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "bottlecap",
+      "gen": 7,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "brightpowder",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifyAccuracy"
+      ]
+    },
+    {
+      "id": "buggem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "buginiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "bugmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "burndrive",
+      "gen": 5,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "burntberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "cameruptite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "cellbattery",
+      "gen": 5,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onDamagingHit"
+      ]
+    },
+    {
+      "id": "chandelurite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "charcoal",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "charizarditex",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "charizarditey",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "chartiberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "cheriberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "cherishball",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "chesnaughtite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "chestoberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "chilanberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "chilldrive",
+      "gen": 5,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "chimechite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "chippedpot",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "choiceband",
+      "gen": 3,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onStart",
+        "onModifyMove",
+        "onModifyAtk"
+      ]
+    },
+    {
+      "id": "choicescarf",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onStart",
+        "onModifyMove",
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "choicespecs",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onStart",
+        "onModifyMove",
+        "onModifySpA"
+      ]
+    },
+    {
+      "id": "chopleberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "clawfossil",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "clearamulet",
+      "gen": 9,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onTryBoost"
+      ]
+    },
+    {
+      "id": "clefablite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "cloversweet",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "cobaberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "colburberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "cornerstonemask",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "cornnberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "coverfossil",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "covertcloak",
+      "gen": 9,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifySecondaries"
+      ]
+    },
+    {
+      "id": "crabominite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "crackedpot",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "crucibellite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "custapberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onFractionalPriority",
+        "onEat"
+      ]
+    },
+    {
+      "id": "damprock",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "darkgem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "darkiniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "darkmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "darkranite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "dawnstone",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "decidiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "deepseascale",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifySpD"
+      ]
+    },
+    {
+      "id": "deepseatooth",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifySpA"
+      ]
+    },
+    {
+      "id": "delphoxite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "destinyknot",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onAttract"
+      ]
+    },
+    {
+      "id": "diancite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "diveball",
+      "gen": 3,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "domefossil",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "dousedrive",
+      "gen": 5,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "dracoplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "dragalgite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "dragonfang",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "dragongem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "dragoninite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "dragoniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "dragonmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "dragonscale",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "drampanite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "dreadplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "dreamball",
+      "gen": 5,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "dubiousdisc",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "durinberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "duskball",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "duskstone",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "earthplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "eelektrossite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "eeviumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "ejectbutton",
+      "gen": 5,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onAfterMoveSecondary"
+      ]
+    },
+    {
+      "id": "ejectpack",
+      "gen": 8,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onAfterBoost",
+        "onAnySwitchIn",
+        "onAnyAfterMega",
+        "onAnyAfterMove",
+        "onResidual",
+        "onUseItem",
+        "onUse",
+        "onEnd"
+      ]
+    },
+    {
+      "id": "electirizer",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "electricgem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "electricmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "electricseed",
+      "gen": 7,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onStart",
+        "onTerrainChange"
+      ]
+    },
+    {
+      "id": "electriumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "emboarite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "enigmaberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onHit",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "eviolite",
+      "gen": 5,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onModifyDef",
+        "onModifySpD"
+      ]
+    },
+    {
+      "id": "excadrite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "expertbelt",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onModifyDamage"
+      ]
+    },
+    {
+      "id": "fairiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "fairyfeather",
+      "gen": 9,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "fairygem",
+      "gen": 6,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "fairymemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "falinksite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "fastball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "feraligite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "fightinggem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "fightingmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "fightiniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "figyberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "firegem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "firememory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "firestone",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "firiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "fistplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "flameorb",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onResidual"
+      ]
+    },
+    {
+      "id": "flameplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "floatstone",
+      "gen": 5,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifyWeight"
+      ]
+    },
+    {
+      "id": "floettite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "flowersweet",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "flyinggem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "flyingmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "flyiniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "focusband",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onDamage"
+      ]
+    },
+    {
+      "id": "focussash",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onDamage"
+      ]
+    },
+    {
+      "id": "fossilizedbird",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "fossilizeddino",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "fossilizeddrake",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "fossilizedfish",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "friendball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "froslassite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "fullincense",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "galaricacuff",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "galaricawreath",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "galladite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "ganlonberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "garchompite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "garchompitez",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "gardevoirite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "gengarite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "ghostgem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "ghostiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "ghostmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "glalitite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "glimmoranite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "goldberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onResidual",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "goldbottlecap",
+      "gen": 7,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "golisopite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "golurkite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "grassgem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "grassiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "grassmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "grassyseed",
+      "gen": 7,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onStart",
+        "onTerrainChange"
+      ]
+    },
+    {
+      "id": "greatball",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "greninjite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "grepaberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "gripclaw",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "griseouscore",
+      "gen": 8,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "griseousorb",
+      "gen": 4,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "groundgem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "groundiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "groundmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "gyaradosite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "habanberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "hardstone",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "hawluchanite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "healball",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "hearthflamemask",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "heatranite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "heatrock",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "heavyball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "heavydutyboots",
+      "gen": 8,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": []
+    },
+    {
+      "id": "helixfossil",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "heracronite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "hondewberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "houndoominite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "iapapaberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "iceberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "icegem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "icememory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "icestone",
+      "gen": 7,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "icicleplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "iciumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "icyrock",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "inciniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "insectplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "ironball",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onEffectiveness",
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "ironplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "jabocaberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onDamagingHit",
+        "onEat"
+      ]
+    },
+    {
+      "id": "jawfossil",
+      "gen": 6,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "kangaskhanite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "kasibberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "kebiaberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "keeberry",
+      "gen": 6,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onAfterMoveSecondary",
+        "onEat"
+      ]
+    },
+    {
+      "id": "kelpsyberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "kingsrock",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifyMove"
+      ]
+    },
+    {
+      "id": "kommoniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "laggingtail",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "lansatberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "latiasite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "latiosite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "laxincense",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifyAccuracy"
+      ]
+    },
+    {
+      "id": "leafstone",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "leek",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifyCritRatio"
+      ]
+    },
+    {
+      "id": "leftovers",
+      "gen": 2,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onResidual"
+      ]
+    },
+    {
+      "id": "legendplate",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "leppaberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "levelball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "liechiberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "lifeorb",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onModifyDamage",
+        "onAfterMoveSecondarySelf"
+      ]
+    },
+    {
+      "id": "lightball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onModifyAtk",
+        "onModifySpA"
+      ]
+    },
+    {
+      "id": "lightclay",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "loadeddice",
+      "gen": 9,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifyMove"
+      ]
+    },
+    {
+      "id": "lopunnite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "loveball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "lovesweet",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "lucarionite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "lucarionitez",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "luckypunch",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifyCritRatio"
+      ]
+    },
+    {
+      "id": "lumberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onAfterSetStatus",
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "luminousmoss",
+      "gen": 6,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onDamagingHit"
+      ]
+    },
+    {
+      "id": "lunaliumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "lureball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "lustrousglobe",
+      "gen": 8,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "lustrousorb",
+      "gen": 4,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "luxuryball",
+      "gen": 3,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "lycaniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "machobrace",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "magearnite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "magmarizer",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "magnet",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "magoberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "magostberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "mail",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "malamarite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "maliciousarmor",
+      "gen": 9,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "manectite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "marangaberry",
+      "gen": 6,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onAfterMoveSecondary",
+        "onEat"
+      ]
+    },
+    {
+      "id": "marshadiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "masterball",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "masterpieceteacup",
+      "gen": 9,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "mawilite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "meadowplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "medichamite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "meganiumite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "mentalherb",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate"
+      ]
+    },
+    {
+      "id": "meowsticite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "metagrossite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "metalalloy",
+      "gen": 9,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "metalcoat",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "metalpowder",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifyDef"
+      ]
+    },
+    {
+      "id": "metronome",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onStart"
+      ]
+    },
+    {
+      "id": "mewniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "mewtwonitex",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "mewtwonitey",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "micleberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onResidual",
+        "onEat"
+      ]
+    },
+    {
+      "id": "mimikiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "mindplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "mintberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "miracleberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "miracleseed",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "mirrorherb",
+      "gen": 9,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onFoeAfterBoost",
+        "onAnySwitchIn",
+        "onAnyAfterMega",
+        "onAnyAfterTerastallization",
+        "onAnyAfterMove",
+        "onResidual",
+        "onUse",
+        "onEnd"
+      ]
+    },
+    {
+      "id": "mistyseed",
+      "gen": 7,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onStart",
+        "onTerrainChange"
+      ]
+    },
+    {
+      "id": "moonball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "moonstone",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "muscleband",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "mysteryberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "mysticwater",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "nanabberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "nestball",
+      "gen": 3,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "netball",
+      "gen": 3,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "nevermeltice",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "nomelberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "normalgem",
+      "gen": 5,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "normaliumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "occaberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "oddincense",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "oldamber",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "oranberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "ovalstone",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "pamtreberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "parkball",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "passhoberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "payapaberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "peatblock",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "pechaberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "persimberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "petayaberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "pidgeotite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "pikaniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "pikashuniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "pinapberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "pinkbow",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "pinsirite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "pixieplate",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "plumefossil",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "poisonbarb",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "poisongem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "poisoniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "poisonmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "pokeball",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "polkadotbow",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "pomegberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "poweranklet",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "powerband",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "powerbelt",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "powerbracer",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "powerherb",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onChargeMove"
+      ]
+    },
+    {
+      "id": "powerlens",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "powerweight",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "premierball",
+      "gen": 3,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "prettyfeather",
+      "gen": 5,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "primariumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "prismscale",
+      "gen": 5,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "protectivepads",
+      "gen": 7,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "protector",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "przcureberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "psncureberry",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "psychicgem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "psychicmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "psychicseed",
+      "gen": 7,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onStart",
+        "onTerrainChange"
+      ]
+    },
+    {
+      "id": "psychiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "punchingglove",
+      "gen": 9,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower",
+        "onModifyMove"
+      ]
+    },
+    {
+      "id": "pyroarite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "qualotberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "quickball",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "quickclaw",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onFractionalPriority"
+      ]
+    },
+    {
+      "id": "quickpowder",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifySpe"
+      ]
+    },
+    {
+      "id": "rabutaberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "raichunitex",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "raichunitey",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "rarebone",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "rawstberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "razorclaw",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifyCritRatio"
+      ]
+    },
+    {
+      "id": "razorfang",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifyMove"
+      ]
+    },
+    {
+      "id": "razzberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "reapercloth",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "redcard",
+      "gen": 5,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onAfterMoveSecondary"
+      ]
+    },
+    {
+      "id": "redorb",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onSwitchIn",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "repeatball",
+      "gen": 3,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "ribbonsweet",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "rindoberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "ringtarget",
+      "gen": 5,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "rockgem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "rockincense",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "rockiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "rockmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "rockyhelmet",
+      "gen": 5,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onDamagingHit"
+      ]
+    },
+    {
+      "id": "roomservice",
+      "gen": 8,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onStart",
+        "onAnyPseudoWeatherChange"
+      ]
+    },
+    {
+      "id": "rootfossil",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "roseincense",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "roseliberry",
+      "gen": 6,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "rowapberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onDamagingHit",
+        "onEat"
+      ]
+    },
+    {
+      "id": "rustedshield",
+      "gen": 8,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "rustedsword",
+      "gen": 8,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "sablenite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "sachet",
+      "gen": 6,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "safariball",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "safetygoggles",
+      "gen": 6,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onImmunity",
+        "onTryHit"
+      ]
+    },
+    {
+      "id": "sailfossil",
+      "gen": 6,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "salacberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "salamencite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "sceptilite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "scizorite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "scolipite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "scopelens",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onModifyCritRatio"
+      ]
+    },
+    {
+      "id": "scovillainite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "scraftinite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "seaincense",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "sharpbeak",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "sharpedonite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "shedshell",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onTrapPokemon",
+        "onMaybeTrapPokemon"
+      ]
+    },
+    {
+      "id": "shellbell",
+      "gen": 3,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onAfterMoveSecondarySelf"
+      ]
+    },
+    {
+      "id": "shinystone",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "shockdrive",
+      "gen": 5,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "shucaberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "silkscarf",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "silverpowder",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "sitrusberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "skarmorite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "skullfossil",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "skyplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "slowbronite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "smoothrock",
+      "gen": 4,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "snorliumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "snowball",
+      "gen": 6,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onDamagingHit"
+      ]
+    },
+    {
+      "id": "softsand",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "solganiumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "souldew",
+      "gen": 3,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "spelltag",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "spelonberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "splashplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "spookyplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "sportball",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "staraptite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "starfberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onEat"
+      ]
+    },
+    {
+      "id": "starminite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "starsweet",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "steelgem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "steeliumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "steelixite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "steelmemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "stick",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifyCritRatio"
+      ]
+    },
+    {
+      "id": "stickybarb",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onResidual",
+        "onHit"
+      ]
+    },
+    {
+      "id": "stoneplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "strangeball",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "strawberrysweet",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "sunstone",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "swampertite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "sweetapple",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "syrupyapple",
+      "gen": 9,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "tamatoberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "tangaberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "tapuniumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "tartapple",
+      "gen": 8,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "tatsugirinite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "terrainextender",
+      "gen": 7,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "thickclub",
+      "gen": 2,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onModifyAtk"
+      ]
+    },
+    {
+      "id": "throatspray",
+      "gen": 8,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onAfterMoveSecondarySelf"
+      ]
+    },
+    {
+      "id": "thunderstone",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "timerball",
+      "gen": 3,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "toxicorb",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onResidual"
+      ]
+    },
+    {
+      "id": "toxicplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "tr00",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr01",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr02",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr03",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr04",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr05",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr06",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr07",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr08",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr09",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr10",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr11",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr12",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr13",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr14",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr15",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr16",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr17",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr18",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr19",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr20",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr21",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr22",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr23",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr24",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr25",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr26",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr27",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr28",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr29",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr30",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr31",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr32",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr33",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr34",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr35",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr36",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr37",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr38",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr39",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr40",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr41",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr42",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr43",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr44",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr45",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr46",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr47",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr48",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr49",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr50",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr51",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr52",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr53",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr54",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr55",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr56",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr57",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr58",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr59",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr60",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr61",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr62",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr63",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr64",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr65",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr66",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr67",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr68",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr69",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr70",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr71",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr72",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr73",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr74",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr75",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr76",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr77",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr78",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr79",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr80",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr81",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr82",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr83",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr84",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr85",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr86",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr87",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr88",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr89",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr90",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr91",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr92",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr93",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr94",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr95",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr96",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr97",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr98",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "tr99",
+      "gen": 8,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "twistedspoon",
+      "gen": 2,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "tyranitarite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "ultraball",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "ultranecroziumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "unremarkableteacup",
+      "gen": 9,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "upgrade",
+      "gen": 2,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "utilityumbrella",
+      "gen": 8,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onStart",
+        "onUpdate",
+        "onEnd"
+      ]
+    },
+    {
+      "id": "venusaurite",
+      "gen": 6,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "victreebelite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "vilevial",
+      "gen": 8,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "wacanberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "watergem",
+      "gen": 5,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onSourceTryPrimaryHit"
+      ]
+    },
+    {
+      "id": "wateriumz",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": []
+    },
+    {
+      "id": "watermemory",
+      "gen": 7,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "waterstone",
+      "gen": 1,
+      "allowed": false,
+      "reason": "no-reviewed-held-effect",
+      "hooks": []
+    },
+    {
+      "id": "watmelberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "waveincense",
+      "gen": 4,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "weaknesspolicy",
+      "gen": 6,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onDamagingHit"
+      ]
+    },
+    {
+      "id": "wellspringmask",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "wepearberry",
+      "gen": 3,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "whippeddream",
+      "gen": 6,
+      "allowed": false,
+      "reason": "outside-current-native-catalog",
+      "hooks": []
+    },
+    {
+      "id": "whiteherb",
+      "gen": 3,
+      "allowed": false,
+      "reason": "species-or-form-hook-needs-review",
+      "hooks": [
+        "onStart",
+        "onAnySwitchIn",
+        "onAnyAfterMega",
+        "onAnyAfterMove",
+        "onResidual",
+        "onUse"
+      ]
+    },
+    {
+      "id": "widelens",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyAccuracy"
+      ]
+    },
+    {
+      "id": "wikiberry",
+      "gen": 3,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onUpdate",
+        "onTryEatItem",
+        "onEat"
+      ]
+    },
+    {
+      "id": "wiseglasses",
+      "gen": 4,
+      "allowed": true,
+      "reason": "previously-reviewed",
+      "hooks": [
+        "onBasePower"
+      ]
+    },
+    {
+      "id": "yacheberry",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyDamage",
+        "onEat"
+      ]
+    },
+    {
+      "id": "zapplate",
+      "gen": 4,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onBasePower",
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "zeraorite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    },
+    {
+      "id": "zoomlens",
+      "gen": 4,
+      "allowed": true,
+      "reason": "general-held-effect",
+      "hooks": [
+        "onSourceModifyAccuracy"
+      ]
+    },
+    {
+      "id": "zygardite",
+      "gen": 9,
+      "allowed": false,
+      "reason": "form-or-special-item",
+      "hooks": [
+        "onTakeItem"
+      ]
+    }
+  ]
+}
