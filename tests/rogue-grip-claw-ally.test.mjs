@@ -24,8 +24,8 @@ test('real doubles Earthquake transfers exactly one ally item and survives battl
  const run=fixture('source-v2'),b=restoreClassicNativeBattle(run.combat,run),random=b.randomChance;
  b.randomChance=function(n,d){return d===10?true:random.call(this,n,d);};b.makeChoices('move earthquake, move splash','move splash, move splash');
  assert.equal(amount(run.modifiers,'hero'),1);assert.equal(amount(run.modifiers,'ally'),1);assert.equal(amount(run.combat.modifiers,'foe'),2);
- run.combat=snapshotClassicNativeBattle(b,run.combat);const restored=await decodeGameData(await encodeGameData({run}));
- assert.equal(amount(restored.run.modifiers,'hero'),1);assert.equal(amount(restored.run.modifiers,'ally'),1);
+ run.combat.snapshot=snapshotClassicNativeBattle(b);const restored=await decodeGameData(await encodeGameData({run}));
+ assert.equal(amount(restored.run.modifiers,'hero'),1);assert.equal(amount(restored.run.modifiers,'ally'),1);const resumed=restoreClassicNativeBattle(restored.run.combat,restored.run);assert.equal(amount(restored.run.combat.modifiers,'hero'),1);assert.equal(amount(restored.run.combat.modifiers,'ally'),1);assert.ok(resumed.p1.active[0]);
 });
 test('combat snapshot keeps the ally rule without its parent run',()=>{
  const run=fixture('source-v2'),b=restoreClassicNativeBattle(run.combat),hero=b.p1.active[0],ally=b.p1.active[1];b.randomChance=()=>true;

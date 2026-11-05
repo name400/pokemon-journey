@@ -6,6 +6,8 @@
 
 후속: 신규 도전의 껍질방울은 대타 피해를 포함하고 native 슬롯과 modifier를 합산해 치유 부적을 한 번 적용한다. 기존 진행은 이전 규칙을 보존한다. [SHELL_BELL_NATIVE_MIX_QA_20261105.md](SHELL_BELL_NATIVE_MIX_QA_20261105.md) 참조.
 
+후속 검사: 다단 공격 중 native 껍질방울 획득과 modifier·치유 부적의 합산, 전투 재접속 후 다음 공격을 확인했다. 집게손톱 복구 테스트의 스냅샷 구성도 수정해 전투 재개를 검사했다. 다른 도구 이전·특수 폼 조합은 남아 있다.
+
 후속: 새 도전의 집게손톱이 같은 편 대상의 점착으로 차단되지 않도록 원본 판정에 맞췄다. 적의 점착과 기존 진행 규칙은 보존한다. [GRIP_CLAW_ALLY_STICKY_HOLD_QA_20261105.md](GRIP_CLAW_ALLY_STICKY_HOLD_QA_20261105.md) 참조.
 
 후속: 신규 도전에서 타입 강화 도구의 위력 내림과 발버둥 제외를 원본에 맞췄다. 기존 도전은 기존 계산을 유지한다. [TYPE_ITEM_POWER_ROUNDING_QA_20261105.md](TYPE_ITEM_POWER_ROUNDING_QA_20261105.md) 참조.
