@@ -4,7 +4,7 @@
 
 ## 현재 완료 범위
 
-후속: 신규 도전의 찌릿찌릿액셀은 원본 위력 50·확정 급소이며 회피율을 올리지 않는다. 원본 PP 15 연결은 아직 남아 있다. [ZIPPY_ZAP_SOURCE_QA_20261105.md](ZIPPY_ZAP_SOURCE_QA_20261105.md) 참조.
+후속: 신규 도전의 찌릿찌릿액셀은 원본 위력 50·확정 급소이며 회피율을 올리지 않고 기본 PP 15를 사용한다. 기존 도전의 PP와 저장값은 보존한다. [ZIPPY_ZAP_SOURCE_QA_20261105.md](ZIPPY_ZAP_SOURCE_QA_20261105.md) 참조.
 
 후속: 신규 도전의 껍질방울은 대타 피해를 포함하고 native 슬롯과 modifier를 합산해 치유 부적을 한 번 적용한다. 기존 진행은 이전 규칙을 보존한다. [SHELL_BELL_NATIVE_MIX_QA_20261105.md](SHELL_BELL_NATIVE_MIX_QA_20261105.md) 참조.
 
