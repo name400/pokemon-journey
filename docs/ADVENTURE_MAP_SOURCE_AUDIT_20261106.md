@@ -710,3 +710,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 야생 구역 5 지하 경유길 (초안)
 
 [Thonky](https://www.thonky.com/pokemon-legends-z-a/side-mission-057-the-camerupt-entrepreneur)와 [PowerPyx](https://www.powerpyx.com/pokemon-legends-z-a-how-to-return-to-lumiose-sewers/)는 물 기술로 오염물을 제거하고 아래 통로·휠구 쪽을 지나 하수도 입구에 접근하는 경로를 설명한다. 구역 5 지하 계단, 두 차례 오염물과 하수도 접근 통로를 연결했다. 지형·계단·갈림길의 정밀 좌표와 높이 표현은 초안이며, 원작의 지하 휠구 배치는 아직 반영되지 않았다.
+
+### 블루 구역 7과 야생 구역 12 남문 (초안)
+
+[Poképédia 구역 12](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12)는 남쪽 출입구가 블루 구역 7로 이어진다고 설명한다. [Bleu Sector 7 연결 목록](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-7.html)은 인접한 북서쪽 구역 5와 동쪽 Vernal Avenue도 명시한다. 세 연결을 반영했지만 정확한 도로·건물·출입구 좌표는 초안이다. 원작의 분수와 포켓몬센터는 기존 임시 위치를 유지하며 구역 7에 아직 구현하지 않았다.
