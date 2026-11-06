@@ -615,4 +615,8 @@ The yard, fixed encounter positions and probabilities are provisional. TM039 and
 
 [Altissimo's location guide](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/wild-zone-15.html) describes the narrow boulevard, central grassy oval, western grassy square and Café Ultimo; [Pokémon GO Hub](https://pokemongohub.net/post/guide/all-wild-zones-pokemon-legends-z-a/) lists Pumpkaboo and the day/night split between Scolipede and Shuppet. Rank D access and those representative encounters are implemented.
 
-The grid, approximate café exterior and link from the existing North Boulevard are provisional; other original entrances, exact geometry and Café Ultimo interior/services are incomplete. Rooftop Larvitar, original roaming behaviours, alphas and items remain unimplemented.
+The grid, approximate café exterior and link from the existing North Boulevard are provisional; other original entrances, exact geometry and Café Ultimo interior/services are incomplete. Original roaming behaviours and the remaining items are not yet implemented.
+
+#### Zone 15 alphas and rooftop route
+
+[GameWith](https://gamewith.jp/pokemon-za/524974) documents Side Mission 80 after the Mission 26 Asami battle, the Ampharos/Manectric encounter and Holovator unlock; [All Things How](https://allthings.how/pokemon-legends-z-a-wild-zone-15-spawns-alphas-and-rooftop-larvitar/) describes the web route, Larvitar and day/night alpha locations. The encounter uses the user's requested turn-based battle and grants the documented 3,500 currency, four Quick Balls and Lumiose Galette. The temporary elevator position, separate rooftop map and web geometry are draft. Opening the web currently accepts a Fire attack; the original permits ranged attacks more broadly, and true range is not represented. The city approach, real field movement, TM052, Café Ultimo interior and remaining items are incomplete.
