@@ -325,4 +325,10 @@
 
 원작의 티켓포인트 32,000점, 밤의 랭크 F 배틀존, Canari 퀴즈·승급전과 미션 15는 미구현이며 랭크는 F로 유지한다. 이번 변경은 지형을 원작에 맞게 추가 수정하지 않았다. 위 절의 미션 14 미구현 서술 중 호텔 앞 배틀은 이 절로 갱신된다.
 
+## 미션 14 랭크 E 승급 — 부분 구현
+
+[랭크 F 상대 자료](https://bulbapedia.bulbagarden.net/wiki/List_of_Z-A_Royale_Trainers/F)의 Arthur·Manon·Leandro와 32,000점 도전권을 배틀존에 연결했다. 승리당 3,200점과 재입장 방식은 원작 값이 확인되지 않은 임시 규칙이다. [미션 14 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-14-reaching-rank-e)와 [상대 기술 자료](https://www.serebii.net/legendsz-a/mainmissions/reachingranke.shtml)에 따라 암호, OX 문제, 특별한 미르갈레트, Mani·Tarragon·Canari 턴제 전투, 랭크 E, 기술머신 066과 사인 인형을 연결했다. 틀린 답은 단계를 유지한다. 보상은 가방 용량을 확인해 원자적으로 지급한다.
+
+변전소·카페 갈랑·Racine Construction의 구체적 위치와 실내는 미확인으로 기존 도시 초안의 표식에 연결했다. 암호 입력은 단일 버튼이며 지형 이동 퀴즈와 실제 파트너 동행은 미구현이다. Z-A의 무특성·실시간 전투 규칙 대신 사용자 요청의 기존 턴제 엔진을 사용한다. 기술머신 사용 기능과 미션 15 이후 이야기는 미구현이다. 위 절의 미션 14 도전권·퀴즈·승급전 미구현 서술은 이 절로 갱신된다.
+
 앱솔 조건은 [원작 필수 파티 안내](https://bulbapedia.bulbagarden.net/wiki/Required_Party_Pok%C3%A9mon)에서 앱솔나이트를 지닌 앱솔의 파티 보유로 확인했다. 따라서 실제 첫 출전을 강제하지 않고 기존 파티 검사 방식을 유지한다.
