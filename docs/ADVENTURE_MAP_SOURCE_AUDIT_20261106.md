@@ -623,7 +623,7 @@ The grid, approximate café exterior and link from the existing North Boulevard 
 
 ## Wild Zone 16 — Bleu Plaza (draft)
 
-- [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-16-guide-all-pokemon-and-alphas) identifies Bleu Plaza south of Wild Zone 5 and a rank C unlock. The zone-5-to-zone-16 transition in this build is a **provisional shortcut**, not evidence of the exact original entrance.
+- [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-16-guide-all-pokemon-and-alphas) identifies Bleu Plaza south of Wild Zone 5 and a rank C unlock. The zone-5-to-zone-16 street in this build is a **provisional connection**, not evidence of the exact original entrance.
 - [Pokémon France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) describes the central monument, surrounding water and Florges Fountain, and lists Flaaffy, Falinks and Medicham. [TheGamer](https://www.thegamer.com/pokemon-legends-z-a-wild-zones-pokemon-list-collection-location-guide/) locates the fountain to the northeast.
 - The rectangular water ring, crossings, path widths and tile coordinates are approximations. The fountain sculpture, further entrances, other species, other alpha encounters and items remain to be researched and implemented; this layout is not a verified reproduction of the original map.
 
@@ -656,3 +656,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ## Jaune Plaza to Zone 19 street (draft)
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-19-guide-all-pokemon-and-alphas) places Zone 19 northeast of Zone 8 near Café Acton. The previous direct zone-to-zone shortcut is replaced by an intermediate street; exact road alignment, street width, facade positions, café entrance and both gate coordinates remain unverified. Café Acton is not implemented as an accessible facility.
+
+## Zone 5, Bleu Plaza and Rust Syndicate approach (draft)
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-16-guide-all-pokemon-and-alphas) places Bleu Plaza immediately south of Zone 5 near the Rust Syndicate Office. The direct transition is replaced by a walkable street linking the two zone drafts and the existing Rust approach. The street shape, widths, gate coordinates and exact route to the office are provisional and are not established by the cited location description.
