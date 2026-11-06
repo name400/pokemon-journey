@@ -404,3 +404,9 @@ Vernal에 배치한 배틀코트 표식과 상대 기술은 초안이다. 메가
 [미션 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-35-reaching-rank-a)와 [상대 구성](https://www.serebii.net/legendsz-a/mainmissions/reachingranka.shtml)을 따라 Emma와의 턴제 배틀, Mable과 누보 카페의 단서, Griselle 배틀과 배틀 후 파티 회복을 연결했다. 기존 연구소 기록 기능은 유지하고, 전투 실패 후 재도전과 단계 저장을 지원한다.
 
 Emma 전투는 탐정사무소 안의 기존 표식, Mable은 기존 연구소 연구원 표식, Griselle은 공사 현장의 임시 표식을 사용한다. 원작의 옥외 전투·연구소 소장실·카페 실제 위치는 재현하지 않았으며 상대 기술과 메가진화도 초안이다. Lysandre Labs 탐색, 열쇠와 문서, AZ 장면, 45,000점 도전권 및 Grisham 승급전과 미션 36은 미구현이다. 야생 구역 16~19 역시 남아 있으며 실제 기기·운영 검증은 하지 않았다. 이 절이 위 절의 미션 35 미구현 서술을 일부 갱신한다.
+
+## 미션 35 연구소 — 축약 구현
+
+[원작 진행 자료](https://www.thonky.com/pokemon-legends-z-a/main-mission-35-reaching-rank-a)에 따라 별도의 연구소 초안에서 키카드 세 장, 포획 불가 Lv.50 킬가르도, 승강기 열쇠, B3F 자료 네 개와 L의 설명을 연결했다. 카페에서 Grisham과 대화한 뒤 Hotel Z에서 AZ의 설명을 들을 수 있다. 카드·층·전투 상태와 진행은 저장된다.
+
+연구소는 단순한 초안 지도이며 원작의 방·보안문·워프·야생 조우·옥상 AZ 장면을 재현하지 않았다. 키카드와 자료의 개수·필수 순서만 연결한 것이므로 원작 공간 구현으로 간주하지 않는다. 45,000점 도전권과 Grisham 승급전 및 미션 36은 아직 미구현이다. 이 절이 위 절의 연구소·AZ 미구현 서술을 일부 갱신한다.
