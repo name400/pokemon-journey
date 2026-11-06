@@ -10,3 +10,11 @@ test('zone seventeen gate, field and save migration',()=>{
  assert.equal(zone17Visible(s,'a').species,650);assert.equal(zone17Encounter(s,()=>0).speciesId,650);
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:11,y:8},2),2);assert.deepEqual([saved.district,saved.x,saved.y],['lumiose-zone17',11,8]);assert.equal(stepField(s,'down').district,'lumiose-vert2');
 });
+
+test('Zone 17 draft paths and stairs preserve existing travel and saved positions',()=>{
+ const s={area:3,district:'lumiose-zone17',interior:null,x:11,y:10,zaRoyaleRank:'C',teamIds:['kept']};
+ const map=zone17Map(s);assert.equal(map[10][11],':');assert.equal(map[3][4],'^');assert.equal(map[3][18],'^');
+ assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:1}).length);
+ assert.ok(fieldPath(map,{x:6,y:1},{x:16,y:1}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,3),3);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone17',11,10,['kept']]);
+});
