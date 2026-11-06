@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 폭음파·오물웨이브 멀티렌즈 첫 타격과 오물웨이브 독 적용 대상 순서를 보완했다. [MULTILENS_BOOMBURST_SLUDGE_QA_20261106.md](MULTILENS_BOOMBURST_SLUDGE_QA_20261106.md) 참조.
+
 후속: 신규 도전에서 멀티렌즈 코어퍼니셔의 후속 타격도 대상별 특성 억제를 다음 대상 피해 전에 적용한다. [MULTILENS_CORE_ENFORCER_LATER_QA_20261106.md](MULTILENS_CORE_ENFORCER_LATER_QA_20261106.md) 참조.
 
 후속: 신규 도전 멀티렌즈 코어퍼니셔의 첫 대상 특성 억제를 다음 대상 피해 계산 전에 적용한다. [MULTILENS_CORE_ENFORCER_EARLY_QA_20261106.md](MULTILENS_CORE_ENFORCER_EARLY_QA_20261106.md) 참조.
