@@ -83,3 +83,7 @@
 ## Rouge Plaza의 야생 구역 3 남쪽 입구 — 부분 구현
 
 [구역 3 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 Rouge Plaza의 야생 구역 3 남쪽 입구를 명시한다. Centrico 방면에서 구역 3으로 갈 때 남쪽 입구로 들어가고 이 입구로 돌아가도록 연결했다. 기존 구역 3의 동쪽 출구는 이전 진행과 저장의 접근성을 위해 남겨 두었으며, 그 정확한 원작 연결은 검증되지 않았다. 남쪽 입구 좌표와 주변 도로·광장 윤곽도 초안이다.
+
+## Centrico 센터와 프리즘타워 — 위치 관계 반영
+
+[임무 20 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-20-a-request-from-the-rust-syndicate)는 Centrico 포켓몬센터가 프리즘타워 북쪽에 있다고 명시한다. 연결 구역 초안에서 센터 남쪽에 이동할 수 없는 탑 표식을 추가했다. 이는 확인된 방향 관계만 나타내며 실제 탑의 규모·윤곽·센터까지의 거리와 도로 폭은 검증되지 않았다. 표식 자리에 있던 이전 저장은 리비전이 일치하면 같은 구역의 인접한 보행 가능 위치로 복구한다.
