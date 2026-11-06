@@ -17,3 +17,12 @@ test('glazed arcade connects Sector 3 north entrance to Sector 1 south entrance'
  const tiles=fieldMap(inside).join('');for(const key of Object.keys(OMBRAGE_SHOPS))assert.ok(tiles.includes(key),`missing ${key}`);
  assert.equal(Object.keys(OMBRAGE_SHOPS).length,15);
 });
+
+test('north entrance item is present until collected and does not disturb shop signs',()=>{
+ const s={area:3,district:'lumiose-ombrage-arcade',interior:null,x:14,y:4,facing:'up',zaEmmaMet:true,adventureBalls:{duskball:4}};
+ assert.equal(fieldDialogue(s).action,'ombrageDuskBall');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,zaOmbrageDuskBall:true,adventureBalls:{duskball:5}},70),70);
+ assert.equal(saved.adventureBalls.duskball,5);assert.equal(saved.zaOmbrageDuskBall,true);
+ assert.notEqual(fieldMap(saved)[3][14],'u');
+ assert.equal(fieldDialogue({...saved,x:7,y:2,facing:'left'}).name,'Glammor Pretti');
+});
