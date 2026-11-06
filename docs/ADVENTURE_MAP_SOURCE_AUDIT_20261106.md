@@ -79,3 +79,7 @@
 ## 구역 2에서 Rouge Plaza 방면의 Centrico 연결 — 부분 구현
 
 [임무 5 안내](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_5)는 야생 구역 2 이후 핸섬 탐정사무소로 향할 때 Centrico 포켓몬센터를 지나고 Rouge Plaza에서 Josée를 만난다고 설명한다. 기존 Vert Sector 2와 구역 3의 즉시 연결 사이에 Centrico 방면 초안과 회복 가능한 센터를 연결했다. 센터와 도로의 정확한 좌표·폭 및 실제 전체 경로는 확인되지 않았다. 기존 구역 3 저장은 유지되고 동쪽 출구로 새 연결 구역을 이용할 수 있다. 구역 3과 Rouge Plaza는 여전히 임시로 합쳐진 상태다.
+
+## Rouge Plaza의 야생 구역 3 남쪽 입구 — 부분 구현
+
+[구역 3 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 Rouge Plaza의 야생 구역 3 남쪽 입구를 명시한다. Centrico 방면에서 구역 3으로 갈 때 남쪽 입구로 들어가고 이 입구로 돌아가도록 연결했다. 기존 구역 3의 동쪽 출구는 이전 진행과 저장의 접근성을 위해 남겨 두었으며, 그 정확한 원작 연결은 검증되지 않았다. 남쪽 입구 좌표와 주변 도로·광장 윤곽도 초안이다.

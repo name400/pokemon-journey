@@ -61,7 +61,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if(c==='b'){ctx.fillStyle='#765e81';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('탐정',px+tile/2,py+20);}
      if(c==='Y'||c==='Z'){ctx.fillStyle='#8d684d';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('안내',px+tile/2,py+20);}
      if(c==='E'||c==='W'){ctx.fillStyle='#537b85';ctx.font='bold 23px sans-serif';ctx.textAlign='center';ctx.fillText(w.district==='lumiose-zone2'?(c==='E'?'↓':'↑'):(c==='E'?'›':'‹'),px+tile/2,py+25);}
-     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(w.district==='lumiose-royale'?'광장':w.district==='lumiose-bureau'?'출구':w.district==='lumiose-rooftop'?'광장':w.district==='lumiose-vernal'?'연구소':'항구',px+tile/2,py+20);}
+     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(w.district==='lumiose-royale'?'광장':w.district==='lumiose-bureau'?'출구':w.district==='lumiose-rooftop'?'광장':w.district==='lumiose-zone3'?'시내':w.district==='lumiose-vernal'?'연구소':'항구',px+tile/2,py+20);}
      return;
     }
     if(c==='.'||'EW HMGNLCPQSI'.includes(c)){ctx.fillStyle=palette[2];ctx.fillRect(px,py,tile,tile);sprite('path',px,py);}
