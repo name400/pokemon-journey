@@ -362,3 +362,9 @@ Syndicate 사무소, 빈집과 세 사건의 좌표·상세 구조, 보스 및 �
 [미션 진행 자료](https://www.thonky.com/pokemon-legends-z-a/main-mission-20-a-request-from-the-rust-syndicate)와 [상대 팀 자료](https://www.serebii.net/legendsz-a/mainmissions/arequestfromtherustsyndicate.shtml)에 따라 하수도 결정 27개 정리, SBC의 François·Vivica 연속 전투, 은행 안전요원 전투와 호텔·Philippe 보고를 연결했다. 결정별 진행을 저장하며, SBC 두 전투 사이에는 회복하거나 파티를 변경할 수 없다. 패배·취소 시 재도전할 수 있고 첫 전투 보상은 중복 지급하지 않는다. 보고 후 기존 미션 24 관련 식당 해금 플래그가 켜진다.
 
 하수도 구조와 결정 좌표, SBC·은행 사건의 지도 위치 및 상대 기술은 초안이다. 결정 파괴 경험치와 원작의 상세 은행·호텔 연출은 미구현이며, 미션 24의 랭크 C 스토리 진행도 아직 구현하지 않았다. 이번 절이 위 절의 하수도·SBC·은행 사건 미구현 서술을 갱신한다. 기존 포켓몬식 턴제 전투를 사용하며 실제 기기와 운영 저장은 검증하지 않았다.
+
+## 미션 24 랭크 C 승급 — 부분 구현
+
+[진행 안내](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Reaching_Rank_C)와 [상대 기술](https://www.serebii.net/legendsz-a/mainmissions/reachingrankc.shtml)에 따라 밤 배틀존에서 38,000점의 도전권을 얻고 Corbeau의 아보크·갸라도스·로즈레이드·펜드라와 턴제 승급전을 치른다. 승리 시 랭크 C와 3,744원을 받고, 사무소에서 기술머신 100을 수령하면 호텔 축하 장면의 간략한 요약과 미션 25 시작이 연결된다. 보상은 중복 지급되지 않는다.
+
+배틀존 승리당 3,800점과 일반 상대의 기술, 사무소 지도는 초안이다. 원작의 보너스 카드와 메가펜드라 변신, 상세 호텔 연출 및 기술머신을 가르치는 기능은 미구현이다. 위 절의 미션 24 미구현 서술은 이 절로 갱신한다. 미션 25의 배틀코트 전투는 아직 미구현이며 실기기·운영 검증도 남았다.
