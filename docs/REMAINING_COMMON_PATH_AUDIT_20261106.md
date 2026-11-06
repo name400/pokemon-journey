@@ -10,7 +10,9 @@
 
 `PrepareHit`, 공통 `getSpreadDamage` 순차 처리, `spreadDamage`와 후속 효과가 공통 지점이다. 현재는 최초 타격의 대상 순서를 검토된 기술 집합에 한정하며, 단순히 모든 기술로 확장하면 자해·드레인·대상별 추가 효과·기술 실패·난수 순서를 바꿀 수 있다. 스케일노이즈처럼 자기 효과가 대상 사이에 들어가는 처리는 여전히 별도 검증이 필요하다.
 
-`scripts/audit-classic-spread-candidates.mjs`는 현재 게임의 기술표와 네이티브 메타데이터에서 일반 전체 공격 후보를 재현 가능하게 열거한다. 현 시점 63개 중 48개가 최신 검토 집합에 있고 나머지 15개는 `breakingswipe`, `brutalswing`, `magnitude`, `matchagotcha`, `mindblown`, `mortalspin`, `nihillight`, `paraboliccharge`, `relicsong`, `searingshot`, `shelltrap`, `sparklingaria`, `synchronoise`, `thousandarrows`, `thousandwaves`다. 이 숫자는 메타데이터 기반 **후보**이며 원본의 출현·멀티렌즈 적격성 또는 실제 미구현 확정 수가 아니다. 고정 피해, 차지·다단·Z/다이맥스와 다른 대상 표기는 이 목록 밖이다. 원본 효과를 비교해 대상 부가 효과·자기 피해/회복·조건부 피해 등을 묶어 공통 처리하고 경계 사례부터 검사한다.
+`scripts/audit-classic-spread-candidates.mjs`는 현재 게임의 기술표와 네이티브 메타데이터에서 일반 전체 공격 후보를 재현 가능하게 열거한다. 기존 15개 후보의 원본 기술 정의는 15개 모두 확인했다. 그중 `brutalswing`, `searingshot`, `breakingswipe`, `relicsong` 4개는 신규 도전에서 공통 첫 타격 피해 순서에 연결했다. 현재 후보 63개 중 첫 타격 검토 집합 52개, 이 집합 밖 후보 11개다. 남은 후보는 `magnitude`, `matchagotcha`, `mindblown`, `mortalspin`, `nihillight`, `paraboliccharge`, `shelltrap`, `sparklingaria`, `synchronoise`, `thousandarrows`, `thousandwaves`다.
+
+이 숫자는 메타데이터 기반 **후보**이며 원본 출현·멀티렌즈 적격성 또는 실제 미구현 확정 수가 아니다. 첫 피해 순서 연결은 전체 원본 동등성을 뜻하지 않는다. 특히 부가 효과가 각 대상 피해 사이에 발생하는 순서와 난수는 추가 대조가 필요하다. 고정 피해, 차지·다단·Z/다이맥스와 다른 대상 표기는 이 목록 밖이다. 원본 효과를 비교해 대상 부가 효과·자기 피해/회복·조건부 피해 등을 묶어 공통 처리하고 경계 사례부터 검사한다.
 
 ## AI와 꿈 이벤트
 
