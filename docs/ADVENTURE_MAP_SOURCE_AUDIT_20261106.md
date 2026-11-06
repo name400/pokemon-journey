@@ -565,4 +565,8 @@ The round 2D terrain, field positions, probabilities and city connection are dra
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-9-guide-all-pokemon-and-alphas) describes construction scaffolding, a southern entrance, northwest entrance and ladders linking the ground to rooftops. It places Sableye beneath scaffolding, Mawile on the southwestern roofs, and Carbink on northeastern roofs. [GameWith](https://gamewith.jp/pokemon-za/524512) also identifies the southeastern Kadabra rooftop and these ladder approaches.
 
-This is a provisional two-layer interpretation: tile sizes, ladder and city-connector coordinates, roof silhouettes and the scaffold connection are not surveyed. The second original entrance is not connected to the city yet. Alpha Meowstic and Manectric, field items, rock obstacles and the real-time field behaviours remain unimplemented. Existing mission 40's research encounter is unchanged.
+This is a provisional two-layer interpretation: tile sizes, ladder and city-connector coordinates, roof silhouettes and the scaffold connection are not surveyed. The second original entrance is not connected to the city yet. Rock obstacles, most field items and field behaviours remain unimplemented. Existing mission 40's research encounter is unchanged.
+
+#### Zone 9 alphas and selected items
+
+[PokeQuery](https://pokequery.com/games/legends-za/wild-zones/9) places alpha Meowstic on the middle rooftop and alpha Manectric on the northwest rooftop; [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists a Hyper Potion near the southern ladder, a Heal Ball on northern scaffolding, and a Great Ball on a western roof. Tile coordinates and roof/platform outlines are draft. Actual surrounding street connections and the northwest city entrance remain unverified. Alpha levels are representative; sex/form and all fixed spawn conditions are not yet fully reproduced.
