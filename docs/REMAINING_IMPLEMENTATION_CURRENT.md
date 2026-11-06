@@ -449,3 +449,5 @@ GET 실패의 원시 오류 노출을 제거하고, 클라이언트가 최초 PO
 호출 충전 후속: 원본 FOLLOW_UP은 첫 실패 검사 중 회복봉인·목막힘·중력을 유지하고 풀죽음·헤롱헤롱·사슬묶기·게으름·도발·봉인을 건너뛴다. 실제 손가락흔들기 후 충전 및 저장 복구에서 각 경계를 대조해 연결했고, 일반·패시브 게으름과 직접 선택 충전 기술의 기존 상태 판정을 별도 확인했다. 다른 호출 기술·특수 대상 조합과 원본 난수 일치는 계속 미완성이다.
 
 호출 대상·폼 경계 검증: 실제 더블 전투에서 지시 대상의 기존 상대가 기절하면 남은 상대를 공격하고, 기존 아군 대상이 기절한 경우에는 상대에게 임의로 바꾸지 않는 것을 codec과 함께 확인했다. 손가락흔들기로 부른 테라스타스톰의 단독·융합 양역할/더블/복구, 아르세우스·실버디 12개 역할·기술 조합의 심판의뭉치·멀티어택, 흉내내기의 사용자 폼 기준 타입을 검사했다. 랜덤 패시브 테라셸·테라스탈포밍도 기본 발동을 확인했다. 이번 범위에서 새 제품 수정은 필요하지 않았으며 다른 대상 소실·반사·폼 조합과 난수 동등성은 남는다.
+
+Active move-alias review now also covers first idle single turns in verified trainer-test and weird-dream battles (representative isolated tests). Later turns, double battles, live Sketch/fusion, and other active event combinations remain unsupported. Natural event play and physical-device checks remain separate validation work.

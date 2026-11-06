@@ -112,3 +112,5 @@ API 검사에서 읽기 전용 조회, 확인 누락, 성공 저장, 동시 수�
 후속: 일반 단일 야생전 첫 턴에 미행동·비변신·잠금 없는 출전 포켓몬의 기술 별칭은 사용자 확인 후 정리한다. 전투팀·네이티브 기술 슬롯과 명령 요청을 원자적으로 갱신하며 실패 시 저장하지 않는다. 대표 일반/무작위화 포켓몬, 행동 계속, 저장 충돌·재생성 실패 및 PC/모바일 에뮬레이션 화면을 검사한다. 이후 턴·더블·트레이너·이벤트 및 출전 중 스케치·융합, 실기기는 보류한다.
 
 후속: 같은 첫 턴의 미행동·비변신·잠금 없는 출전 정리를 단일 트레이너·라이벌전에도 연결한다. 대표 일반·무작위화 포켓몬, 대화·교체 대기 거부, 명령 갱신과 실제 행동·저장/API 및 PC/모바일 에뮬레이션을 검사했다. 이후 턴·더블·이벤트, 출전 스케치·융합과 실기기는 보류한다.
+
+Fresh active lead review also supports the first idle turn of verified single trainer-test and weird-dream battles. It requires matching event metadata, no unresolved opening action, dialogue or switch selection, and the same strict untransformed, unused move-slot checks. Representative isolated snapshots check request refresh, reloaded continuation, RNG and unrelated save preservation, plus rejection of ambiguous states. Real-device and natural event play remain unverified; later turns, doubles, live Sketch and fusion remain excluded.
