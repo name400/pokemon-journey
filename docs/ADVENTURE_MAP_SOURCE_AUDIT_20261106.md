@@ -705,4 +705,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 블루 구역 3 하수도 연결 (초안)
 
-[PowerPyx](https://www.powerpyx.com/pokemon-legends-z-a-how-to-return-to-lumiose-sewers/)는 구역 3 지하 통로 끝에서 사이드 미션 57을 시작해 문을 여는 경로를 설명하고, [Bulbapedia 미션 목록](https://bulbapedia.bulbagarden.net/wiki/Task_%28Legends%3A_Z-A%29)은 의뢰가 미션 19 완료 후 열림을 명시한다. 기존 하수도 맵과 연결하고 출구 복귀를 저장한다. 거리·입구·의뢰인 좌표와 지하 통로 형상은 초안이다. 지하 접근 및 물 기술로 치우는 오염물, 사이드 미션 57의 폭타 배틀과 보상을 연결했다. [Thonky의 공략](https://www.thonky.com/pokemon-legends-z-a/side-mission-057-the-camerupt-entrepreneur)과 [Serebii](https://www.serebii.net/legendsz-a/sidemissions/thecameruptentrepreneur.shtml)는 폭타의 레벨 46과 보상·기술을 뒷받침한다. 원작과 같은 상세한 계단·지하 분기, 구역 5 경유길 및 빠른 이동은 아직 미구현이다. 기존 분수 경로는 진행 호환을 위해 유지한다.
+[PowerPyx](https://www.powerpyx.com/pokemon-legends-z-a-how-to-return-to-lumiose-sewers/)는 구역 3 지하 통로 끝에서 사이드 미션 57을 시작해 문을 여는 경로를 설명하고, [Bulbapedia 미션 목록](https://bulbapedia.bulbagarden.net/wiki/Task_%28Legends%3A_Z-A%29)은 의뢰가 미션 19 완료 후 열림을 명시한다. 기존 하수도 맵과 연결하고 출구 복귀를 저장한다. 거리·입구·의뢰인 좌표와 지하 통로 형상은 초안이다. 지하 접근 및 물 기술로 치우는 오염물, 사이드 미션 57의 폭타 배틀과 보상을 연결했다. [Thonky의 공략](https://www.thonky.com/pokemon-legends-z-a/side-mission-057-the-camerupt-entrepreneur)과 [Serebii](https://www.serebii.net/legendsz-a/sidemissions/thecameruptentrepreneur.shtml)는 폭타의 레벨 46과 보상·기술을 뒷받침한다. 구역 5의 첫 오염물·계단·두 번째 오염물 이후 하수도 접근 통로로 이어지는 경로를 추가했다. 계단 위치, 통로 윤곽 및 분기는 초안이며, 구역 5의 우두머리 휠구는 기존 임시 지상 위치에 남아 있고 빠른 이동은 미구현이다. 기존 분수 경로는 진행 호환을 위해 유지한다.
+
+### 야생 구역 5 지하 경유길 (초안)
+
+[Thonky](https://www.thonky.com/pokemon-legends-z-a/side-mission-057-the-camerupt-entrepreneur)와 [PowerPyx](https://www.powerpyx.com/pokemon-legends-z-a-how-to-return-to-lumiose-sewers/)는 물 기술로 오염물을 제거하고 아래 통로·휠구 쪽을 지나 하수도 입구에 접근하는 경로를 설명한다. 구역 5 지하 계단, 두 차례 오염물과 하수도 접근 통로를 연결했다. 지형·계단·갈림길의 정밀 좌표와 높이 표현은 초안이며, 원작의 지하 휠구 배치는 아직 반영되지 않았다.
