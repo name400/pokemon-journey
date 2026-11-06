@@ -26,3 +26,14 @@ test('Alpha Pidgey appears on the roof after the three requests and stays spent 
  const loaded=restoreAdventurePosition(storeAdventurePosition({...roof,zaZone1RoofAlphaSpent:true},54),54);
  assert.equal(loaded.zaZone1RoofAlphaSpent,true);assert.notEqual(fieldMap(loaded)[5][18],'p');
 });
+
+test('Zone 1 courtyard links the rooftop drop and street while preserving location',()=>{
+ const roof={area:3,district:'lumiose-zone1-roof',interior:null,x:4,y:5,facing:'up',teamIds:['kept']};
+ assert.equal(fieldDialogue(roof).action,'zone1CourtyardDrop');
+ const yard={...roof,district:'lumiose-zone1-courtyard',x:4,y:5,facing:'down'};
+ assert.ok(fieldPath(fieldMap(yard),yard,{x:21,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(yard,55),55);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone1-courtyard',4,5,['kept']]);
+ const road=stepField({...saved,x:21,y:8},'right');assert.deepEqual([road.district,road.x,road.y],['lumiose-vernal',1,10]);
+ const back=stepField({...saved,...road},'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone1-courtyard',21,8]);
+});
