@@ -628,3 +628,7 @@ The grid, approximate café exterior and link from the existing North Boulevard 
 - The rectangular water ring, crossings, path widths and tile coordinates are approximations. The fountain sculpture, further entrances, other species, other alpha encounters and items remain to be researched and implemented; this layout is not a verified reproduction of the original map.
 
 - Fixed Alpha Ampharos (Lv. 52–53) occurs near the Florges Fountain; an Ultra Ball is opposite the Sector 4 battle area. Their exact tile positions in this draft are unverified. TM076 behind the fountain and the other documented items still need implementation. [Pokémon France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/)
+
+## Wild Zone 17 — Vert Sector 7 (draft)
+
+[Pokémon France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists this zone in Vert Sector 7 from mission 25, its stairs, rooftop access and species. The temporary connection from Vert Sector 2 and the boundary, buildings, route widths and exact Pokémon positions are unverified approximations, not a faithful completed map. The second entrance, stairs and traversable rooftops, fixed alpha Pyroar and Mawile, and items remain to implement against location evidence.
