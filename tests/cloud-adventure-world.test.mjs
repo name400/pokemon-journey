@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseVernalMap,lumioseCentricoRouteMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,zone2IslandAlphaTarget,lumioseZone3Map,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseVernalMap,lumioseCentricoRouteMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,zone2IslandAlphaTarget,lumioseZone3Map,lumioseZone3TowerMap,fieldMap,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/cloud-adventure/adventure-story.mjs';
 
@@ -193,8 +193,15 @@ test('Vernal waterside retains cafe and plaza access and safely restores old sav
 
 
 test('Rouge Plaza draft has a round garden and a reachable northern healing stall',()=>{
- const map=lumioseZone3Map();assert.equal(map[2][11],'H');assert.equal(map[8][11],'g');assert.equal(map[4][8],'k');assert.notEqual(map[4][8],'g');assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:2}).length);
+ const map=lumioseZone3Map();assert.equal(map[2][11],'H');assert.equal(map[8][11],'i');assert.equal(map[4][8],'k');assert.notEqual(map[4][8],'g');assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:2}).length);
  const old=storeAdventurePosition({area:3,district:'lumiose-zone3',x:8,y:4,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},19);const loaded=restoreAdventurePosition(old,19);assert.deepEqual([loaded.x,loaded.y],[8,4]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);
+});
+
+test('Rouge Plaza tower ladder has a saved upper floor and preserves old ground positions',()=>{
+ const ground={area:3,district:'lumiose-zone3',x:11,y:9,facing:'up',regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42};assert.equal(interactionAt(ground).tile,'i');assert.equal(lumioseZone3Map()[8][11],'i');
+ const upper={...ground,x:11,y:10,zaZone3TowerUpper:true};assert.equal(fieldMap(upper)[9][11],'i');assert.equal(lumioseZone3TowerMap()[5][8],'.');assert.equal(interactionAt(upper).tile,'i');
+ const saved=storeAdventurePosition(upper,21),loaded=restoreAdventurePosition(saved,21);assert.equal(loaded.zaZone3TowerUpper,true);assert.deepEqual([loaded.x,loaded.y],[11,10]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);assert.equal(restoreAdventurePosition(structuredClone(saved),22).district,null);
+ const old=storeAdventurePosition({...ground,x:11,y:8},20),restored=restoreAdventurePosition(old,20);assert.deepEqual([restored.x,restored.y],[11,8]);
 });
 
 test('provisional zone three respects story and older saves, and round-trips its position',()=>{
