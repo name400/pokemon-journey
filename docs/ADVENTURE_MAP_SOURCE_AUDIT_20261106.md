@@ -386,3 +386,9 @@ Vernal에 배치한 배틀코트 표식과 상대 기술은 초안이다. 메가
 [미션 26](https://www.thonky.com/pokemon-legends-z-a/main-mission-26-an-invitation-from-the-sbc) 및 [눈여아](https://www.thonky.com/pokemon-legends-z-a/main-mission-27-a-rogue-mega-froslass), [파비코리](https://www.thonky.com/pokemon-legends-z-a/main-mission-28-a-rogue-mega-altaria), [이상해꽃](https://www.thonky.com/pokemon-legends-z-a/main-mission-29-a-rogue-mega-venusaur) 안내에 따라 세 폭주 포켓몬과 턴제 배틀하고 메가스톤을 개별 수령하도록 연결했다. 이후 Hotel Z에서 Livia·Gérald·Lebanne과 순서대로 대결하고 각 승리와 보상을 저장하며, 세 번째 승리 후 미션 30 시작 상태를 기록한다. 패배한 상대에게 재도전할 수 있다.
 
 세 현장 위치·접근 동선과 보스 Lv.55·기술은 초안이다. 상세 옥상 경로, 동료 동시 참전, 의상 지급, 메가진화 조건 및 Lebanne의 메가드래캄은 미구현이다. SBC 전투 사이 회복 제한의 원작 여부도 미확인이다. 야생 구역 16·17과 미션 30 랭크 B 진행은 미구현이며 실제 기기·운영은 검증하지 않았다. 이 절이 바로 위 절의 세 사건과 SBC 배틀 미구현 서술을 갱신한다.
+
+## 미션 30 랭크 B 승급 — 부분 구현
+
+[진행 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-30-reaching-rank-b)와 [상대 구성](https://www.serebii.net/legendsz-a/mainmissions/reachingrankb.shtml)에 따라 41,000점 도전권, Canari·Ivor·Corbeau, 50%폼 지가르데, Jacinthe 순서의 턴제 전투와 랭크 B 승급, 기술머신 020 수령을 연결했다. 각 승리와 보상을 저장하고 패배 시 현재 상대에게 재도전한다. 보상 수령 후 미션 31 시작 상태를 기록한다.
+
+배틀존 승리당 4,100점과 상대 기술, 호텔 위치는 초안이다. 보너스 카드, 토너먼트의 상세 연출과 상대 메가진화는 미구현이며 지가르데 전투도 기존 턴제 규칙이다. 실제 기기·운영 검증과 미션 31 이야기는 남아 있다. 야생 구역 16·17도 미구현이다. 이 절이 위 절의 미션 30 미구현 서술을 갱신한다.
