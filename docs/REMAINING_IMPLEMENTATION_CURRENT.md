@@ -480,6 +480,8 @@ Switched-active safety: move-use flags can reset on switch-in. Review now also r
 
 신규 `weighted-local-v10` AI는 방어·특수방어 하락의 물리 기술 보유 조건과 능력치 하한을 원본 점수에 반영한다. 변신·불명 기술, 다른 복합 효과와 원본 난수 흐름은 부분 지원이다.
 
-A switched Pokémon with a used duplicate may be reviewed if both duplicate PP values have become equal and all party/team/combat records agree. The representative test simulates PP restoration; real PP-item use remains unverified. Differing PP and unidentifiable history remain protected and unsupported.
+A switched Pokémon with a used duplicate may be reviewed if both duplicate PP values have become equal and all party/team/combat records agree. An actual Leppa Berry path was later checked in an isolated constructed save. Differing PP is supported only under the explicit-choice conditions below; unidentifiable history remains protected.
 
-Actual held Leppa Berry consumption was verified in an isolated constructed unequal-PP battle snapshot through switch, reload, confirmed equal-PP review and next action. For still-unequal values, explicit slot/PP selection with complete backup and atomic updates is not implemented; no value is automatically chosen.
+Actual held Leppa Berry consumption was verified in an isolated constructed unequal-PP battle snapshot through switch, reload, confirmed equal-PP review and next action. For still-unequal values, explicit slot/PP selection is now available under the narrow conditions below; no value is automatically chosen.
+
+다른 PP의 중복 기술은 일반 싱글 전투에서 교체 직후 출전한 비융합·비스케치 포켓몬의 첫 두 슬롯에 한해, 전투 로그와 저장이 일치하면 사용자가 남길 슬롯을 직접 선택할 수 있다. 원본 슬롯·PP와 파티 PP를 백업하고 파티·전투·명령을 함께 갱신한다. 이벤트·더블·융합·스케치 및 다른 슬롯 위치의 PP 불일치는 보류한다.
