@@ -178,6 +178,10 @@ test('zone two eastern island is gated by a rock and old locations return to the
  const after=storeAdventurePosition(s,20),loaded=restoreAdventurePosition(after,20);assert.deepEqual([loaded.x,loaded.y],[20,11]);assert.equal(loaded.zaZone2RockCleared,true);
 });
 
+test('zone two island alpha requires the route and Emma requests and preserves existing saves',()=>{
+ const base={zaZone2RockCleared:true,zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3};assert.equal(lumioseZone2Map(base)[11][20],'p');assert.equal(lumioseZone2Map({...base,zaSableyeQuest:2})[11][20],'g');assert.equal(lumioseZone2Map({...base,zaZone2RockCleared:false})[11][20],'g');assert.equal(lumioseZone2Map({...base,zaZone2AlphaSpent:true})[11][20],'g');
+});
+
 test('Vernal waterside retains cafe and plaza access and safely restores old saves',()=>{
  const map=lumioseVernalMap();assert.equal(map[5][18],'~');assert.ok(fieldPath(map,{x:12,y:6},findTile(map,'E')).length);assert.ok(fieldPath(map,{x:1,y:8},findTile(map,'q')).length);
  assert.equal(stepField({area:3,district:'lumiose-vernal',x:18,y:7},'up').blocked,true);

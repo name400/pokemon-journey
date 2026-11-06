@@ -143,3 +143,9 @@
 [구역 2 설명](https://www.wikidex.net/wiki/Zona_salvaje_2)은 동쪽의 분리된 구역이 바위깨기와 얕은 물을 지나 접근할 수 있다고 설명한다. [구역 2 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)는 그곳을 동남쪽 물가라고 설명한다. 동남쪽에 바위로 막힌 입구, 건널 수 있는 얕은 물과 작은 섬을 추가했다. 선두 포켓몬이 바위깨기를 알아야 바위를 제거할 수 있으며, 통로 개방은 저장된다.
 
 구체적인 타일 좌표·섬 크기·물 깊이와 지형 연결은 초안이며 원작 지도에 정확히 일치한다고 볼 수 없다. 야생 우두머리 잉어킹·별가사리와 출현 조건은 아직 추가하지 않았다. 예전 버전에서 새 지형의 동남쪽 칸에 저장한 경우 같은 구역의 접근 가능한 육지로 좌표를 옮기고 파티·지갑·진행을 보존한다. 리비전 불일치는 기존과 같이 복구하지 않는다. Rouge Plaza·Centrico 도로, Café Woof의 실제 위치와 내부 역시 미완성이다.
+
+## 구역 2 동남쪽 섬의 우두머리 — 부분 구현
+
+[구역 2 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)는 Emma의 의뢰를 마친 뒤 동남쪽에 낮의 우두머리 잉어킹 Lv.30과 밤의 우두머리 별가사리 Lv.32가 나타난다고 설명한다. [우두머리 잉어킹 보도](https://www.gamesradar.com/games/pokemon/a-brave-alpha-magikarp-in-pokemon-legends-z-a-is-getting-revenge-by-blasting-unsuspecting-players-with-hydro-pump-instead-of-the-usual-splash-attack/)는 하이드로펌프 사용을 확인한다. 바위 통로를 열고 기존 세 의뢰를 마치면 섬에서 시간에 맞는 우두머리와 전투·포획할 수 있다. 전투 도주 시 재도전할 수 있고 처치·포획 후 구역을 벗어나면 재출현한다.
+
+섬 좌표·의뢰 완료를 판별하는 세부 경계·재출현 방식은 임시다. 직접 필드에서 투구, 우두머리의 접근·실시간 공격과 별가사리의 고유 기술은 아직 구현하지 않았다. 위치의 정확한 도트 전환 및 Rouge Plaza·Centrico·Café Woof는 여전히 미완성이다.
