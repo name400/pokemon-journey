@@ -12,7 +12,7 @@ import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemon.mjs';
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 export function createFixture(scenario='eggs'){
- if(scenario==='randomized-fusion-active-alias-review')return randomizedFusionAliasFixture({boxId:'alias',active:true,abilityRandom:true}).doc;
+ if(['randomized-fusion-active-alias-review','randomized-fusion-active-sketch-review'].includes(scenario))return randomizedFusionAliasFixture({boxId:'alias',active:true,abilityRandom:true,sketch:scenario.includes('sketch')}).doc;
  if(['randomized-alias-review','randomized-ended-alias-review','randomized-active-alias-review','randomized-sketch-review','randomized-active-sketch-review'].includes(scenario))return randomizedAliasFixture({boxId:'alias',ended:scenario==='randomized-ended-alias-review',active:scenario==='randomized-active-alias-review'||scenario==='randomized-active-sketch-review',sketch:scenario.includes('sketch')});
  if(scenario==='randomized-event-alias-review')return wildEventReviewFixture('fiery-fallout',{randomMoves:1,reserveId:'alias'});
  if(scenario==='active-breeder-alias'||scenario==='active-breeder-sketch')return wildEventReviewFixture('expert-breeder',{sketch:scenario.endsWith('sketch'),reserveId:'alias'});
