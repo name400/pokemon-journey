@@ -13,7 +13,7 @@ import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemon.mjs';
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 export function createFixture(scenario='eggs'){
- if(['active-lead-alias-review','active-lead-randomized-review'].includes(scenario))return activeLeadAliasFixture({boxId:'alias',randomized:scenario==='active-lead-randomized-review'});
+ if(['active-lead-alias-review','active-lead-randomized-review','active-lead-rival-randomized-review'].includes(scenario))return activeLeadAliasFixture({boxId:'alias',randomized:scenario.includes('randomized'),kind:scenario.includes('rival')?'rival':'wild'});
  if(['randomized-fusion-active-alias-review','randomized-fusion-active-sketch-review'].includes(scenario))return randomizedFusionAliasFixture({boxId:'alias',active:true,abilityRandom:true,sketch:scenario.includes('sketch')}).doc;
  if(['randomized-alias-review','randomized-ended-alias-review','randomized-active-alias-review','randomized-sketch-review','randomized-active-sketch-review'].includes(scenario))return randomizedAliasFixture({boxId:'alias',ended:scenario==='randomized-ended-alias-review',active:scenario==='randomized-active-alias-review'||scenario==='randomized-active-sketch-review',sketch:scenario.includes('sketch')});
  if(scenario==='randomized-fusion-form-event-sketch-review')return wildEventReviewFixture('berries',{randomMoves:1,randomFusion:true,randomForm:{id:479,key:'wash'},formAsDonor:true,sketch:true,reserveId:'alias'});
