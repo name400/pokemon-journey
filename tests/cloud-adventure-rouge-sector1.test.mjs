@@ -39,3 +39,15 @@ test('Centrico and Rouge Sector 1 connect while mission 20 and old saves remain 
  const restored=restoreAdventurePosition(storeAdventurePosition({...sector,x:15,y:5,zaMission20SBCSeries:'vivica'},63),63);
  assert.deepEqual([restored.district,restored.x,restored.y,restored.zaMission20SBCSeries,restored.teamIds],['lumiose-rouge-sector1',15,5,'vivica',['kept']]);
 });
+
+test('repaired Rouge Holovator roof connects to Le Yeah roof and survives reload',()=>{
+ const roof={area:3,district:'lumiose-rouge-sector1-roof',interior:null,x:3,y:12,zaSide04Won:true,zaRouge1Tm005:true,teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(roof),roof,{x:21,y:8}).length);
+ const crossing=stepField({...roof,x:21,y:8},'right');assert.deepEqual([crossing.district,crossing.x,crossing.y],['lumiose-rouge-sector3-roof',1,8]);
+ const next={...roof,...crossing};const map=fieldMap(next);assert.ok(fieldPath(map,next,{x:20,y:6}).length);
+ assert.deepEqual([map[8][4],map[8][10],map[8][16]],['w','b','v']);
+ assert.match(fieldDialogue({...next,x:20,y:6,facing:'up'}).name,/르 예/);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...next,x:20,y:6},64),64);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaSide04Won,saved.zaRouge1Tm005,saved.teamIds],['lumiose-rouge-sector3-roof',20,6,true,true,['kept']]);
+ assert.deepEqual([stepField(next,'left').district,stepField(next,'left').x],['lumiose-rouge-sector1-roof',21]);
+});
