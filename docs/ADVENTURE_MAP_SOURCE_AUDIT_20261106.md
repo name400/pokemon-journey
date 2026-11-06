@@ -131,3 +131,9 @@
 [구역 2 안내](https://allthings.how/pokemon-legends-z-a-wild-zone-2-every-spawn-and-where-to-find-them/)는 보르쥐가 작은 무리로 이동하며 거북손손은 대체로 단독 출현한다고 설명한다. [별도 안내](https://thephrasemaker.com/2025/10/17/pokemon-legends-z-a-wild-zone-2-guide/)는 보르쥐가 발견 시 공격할 수 있고 별가사리는 물가 근처에서 떠다닌다고 설명한다. 공통 필드 개체 처리에 보르쥐 두 마리의 육지 이동과 접촉 시 전투, 밤의 별가사리 수역 이동을 연결했다. 위치와 개체별 포획 상태는 서버 저장에 남고 재접속 시 복원된다. 기존 보르쥐의 포획 상태는 유지한다.
 
 [다른 보도](https://www.theverge.com/games/802089/pokemon-legends-z-a-shiny-hunting)는 보르쥐가 접근 시 도주하기도 한다고 하므로, 접촉 시 전투를 언제 시작하는지에 관한 원작의 세부 조건은 미확인이다. 두 마리라는 수, 동선·속도·감지 거리와 별가사리 이동 규칙도 초안이다. 시간은 실제 경과 시간이 아닌 플레이어 이동에 의해 진행된다. 거북손손의 세부 행동, 원작 실시간 전투와 지형·도시 동선은 여전히 미완성이다.
+
+## 구역 2 북동쪽 다리 — 부분 구현
+
+[구역 2 안내](https://xboxplay.games/pokemon-legends-za/how-to-100-wild-zone-2-in-pokemon-legends-za-68012)는 북동쪽 다리와 중앙의 여러 다리가 모이는 구간을 설명한다. [별도 안내](https://gamingpromax.com/pokemon-legends-z-a-wild-zone-2-complete-guide/)도 북동쪽 다리를 언급한다. 기존 남동쪽 다리 외에 북동쪽 바깥쪽과 중앙 섬을 잇는 두 번째 보행 다리를 추가했다. 기존 수면 세 칸을 통행 가능하게 한 것이므로 이전 보행 가능 좌표는 그대로 유지된다.
+
+이는 원작에 다리가 여러 개 있고 북동쪽 연결이 있다는 방향 관계만 반영한다. 실제 다리의 정확한 위치·각도·폭, 수역 경계와 바깥쪽 도로는 미확인 초안이다. 구역 밖 Rouge Plaza·Centrico 도로와 Café Woof의 실제 위치·내부도 이 변경에서 완성하지 않았다. 보르쥐 공격과 도주의 세부 조건 및 거북손손 반응은 추가 자료 확인이 필요하다.
