@@ -331,4 +331,10 @@
 
 변전소·카페 갈랑·Racine Construction의 구체적 위치와 실내는 미확인으로 기존 도시 초안의 표식에 연결했다. 암호 입력은 단일 버튼이며 지형 이동 퀴즈와 실제 파트너 동행은 미구현이다. Z-A의 무특성·실시간 전투 규칙 대신 사용자 요청의 기존 턴제 엔진을 사용한다. 기술머신 사용 기능과 미션 15 이후 이야기는 미구현이다. 위 절의 미션 14 도전권·퀴즈·승급전 미구현 서술은 이 절로 갱신된다.
 
+## 미션 15~18 폭주 메가진화 — 부분 구현
+
+[미션 15 개요](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/A_Job_for_Team_MZ%21)에 따라 랭크 E 승급 후 호텔 회의·옥상 안내·세 사건·호텔 보고를 연결했다. [독침붕](https://www.thonky.com/pokemon-legends-z-a/main-mission-16-a-rogue-mega-beedrill), [루차불](https://www.thonky.com/pokemon-legends-z-a/main-mission-17-a-rogue-mega-hawlucha), [다크펫](https://www.thonky.com/pokemon-legends-z-a/main-mission-18-a-rogue-mega-banette)과 턴제 배틀하고 각 메가스톤을 별도로 받을 수 있다. 패배 시 재도전, 가방 용량 부족 시 수령 대기 및 호텔 보고 후 미수령 보상 재방문을 보존한다.
+
+기존 옥상·북쪽 큰길·공사 현장의 사건 표식은 임시 위치로 원작의 Vert Sector 5·Magenta Sector 3·Jaune Sector 9를 재현한 것이 아니다. 상대 Lv.41과 기술도 임시다. 원작의 로토글라이드 실제 조작, 동료 동시 참전, 보스 기믹과 세 사건 후 옥상의 지가르데·L 장면은 미구현이다. 호텔 보고는 이 생략을 표시한 간략 연결이며 미션 19와 기술머신 사용도 미구현이다. 실기기·운영에서는 검증하지 않았다.
+
 앱솔 조건은 [원작 필수 파티 안내](https://bulbapedia.bulbagarden.net/wiki/Required_Party_Pok%C3%A9mon)에서 앱솔나이트를 지닌 앱솔의 파티 보유로 확인했다. 따라서 실제 첫 출전을 강제하지 않고 기존 파티 검사 방식을 유지한다.
