@@ -465,3 +465,5 @@ Switched-active safety: move-use flags can reset on switch-in. Review now also r
 신규 `weighted-local-v2` AI는 기본 상태 이상 대상 점수에 미스트·일렉트릭 필드 접지 및 햇살의 얼음 면역을 반영한다. 기존 `weighted-local-v1` 저장은 종전 규칙을 유지한다. 특성·패시브·복합 효과와 대상 후보 및 난수 흐름은 별도 구현이 필요하다.
 
 신규 `weighted-local-v3` AI는 확인된 단일 상태 이상 자기 면역 특성과 특성 억제를 반영한다. 다른 특성·패시브·복합 효과, 대상 후보와 난수 흐름은 여전히 부분 지원이며 기존 버전 저장은 변경하지 않는다.
+
+신규 `weighted-local-v4`는 확인된 원본 상태 기술 점수에 한해 아군 후보를 반대 부호로 평가한다. 다른 기술의 후보 범위, 원본 점수와 난수 호출 순서는 부분 지원이며 기존 도전의 규칙은 유지한다.
