@@ -37,3 +37,13 @@ test('Zone 1 courtyard links the rooftop drop and street while preserving locati
  const road=stepField({...saved,x:21,y:8},'right');assert.deepEqual([road.district,road.x,road.y],['lumiose-vernal',1,10]);
  const back=stepField({...saved,...road},'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone1-courtyard',21,8]);
 });
+
+test('Zone 1 pond safely relocates older saves and rooftop TM remains collected',()=>{
+ const ground={area:3,district:'lumiose-zone1',interior:null,x:3,y:2,facing:'down',teamIds:['kept']};
+ const old=storeAdventurePosition(ground,56);delete old.districtPosition.zone1Layout;
+ const loaded=restoreAdventurePosition(old,56);
+ assert.equal(loaded.district,'lumiose-zone1');assert.deepEqual(loaded.teamIds,['kept']);assert.notEqual(fieldMap(loaded)[loaded.y][loaded.x],'~');
+ assert.equal(stepField({...ground,x:3,y:1},'down').blocked,true);
+ const roof={...ground,district:'lumiose-zone1-roof',x:7,y:7,facing:'down'};
+ assert.equal(fieldDialogue(roof).action,'zone1RoofTM103');assert.equal(fieldMap({...roof,zaZone1Tm103:true})[8][7],'.');
+});
