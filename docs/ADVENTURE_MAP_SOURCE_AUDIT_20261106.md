@@ -580,3 +580,9 @@ The two-layer grid and west connector are a provisional interpretation; city str
 #### Zone 10 alphas and selected items
 
 [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) and [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_10) describe fixed alpha Sharpedo in the canal and alpha Arbok and Watchog on rooftops, plus Quick Ball, Net Ball, Hyper Potion and Ultra Ball pickups. Coordinates and exact terrain remain provisional; the water alpha is a static encounter rather than original field behaviour. The eastern city entrance, TM034, Revive, other items and full roof/shore alignment remain unimplemented.
+
+### Wild Zone 12: provisional snowy Aymlis Park
+
+[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Wild_Zone_12) gives the park, unlock at mission 15 and encounter levels; [Pokémon GO Hub](https://pokemongohub.net/post/guide/all-wild-zones-pokemon-legends-z-a/) describes the battle court, water and western/northern/southern gates. The [Japanese item guide](https://gamepedia.jp/pokemon-legends-z-a/items) locates the battle court in the northwest.
+
+The snowy grid, water outline, field coordinates and the sole west connector to the existing city draft are provisional, not a surveyed original. The northern and southern city connections, exact topography, roofs, alpha Avalugg and Abomasnow, and items are not yet implemented. Bergmite is an approachable water encounter; water remains impassable.
