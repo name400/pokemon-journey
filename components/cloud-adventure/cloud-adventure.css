@@ -28,3 +28,5 @@
 .cloud-adventure-view .adv-story-sheet .adv-dialogue p{font-size:16px;line-height:1.7;margin:0;overflow-wrap:anywhere}
 .cloud-adventure-view .adv-story-sheet .adv-sheet-actions{justify-content:flex-end}
 @media(max-width:560px){.cloud-adventure-view .adv-story-sheet{width:calc(100vw - 16px);bottom:max(8px,env(safe-area-inset-bottom));max-height:75dvh}.cloud-adventure-view .adv-story-sheet .adv-sheet-body{padding:10px 12px 12px}.cloud-adventure-view .adv-story-sheet .adv-dialogue p{font-size:15px}}
+
+.cloud-adventure-view .adv-secondary-actions{display:flex;flex-direction:column;align-items:center;gap:5px}.cloud-adventure-view .adv-dodge{min-width:52px;min-height:44px;border:1px solid #4d7775;border-radius:9px;background:#d6eae5;color:#244948;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}.cloud-adventure-view .adv-dodge kbd{font-size:10px}.cloud-adventure-view .adv-dodge:disabled{opacity:.5}@media(max-width:740px){.cloud-adventure-view .adv-dodge{min-width:48px;min-height:44px}}
