@@ -1,3 +1,4 @@
+import {cafeWoofDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
 import {shardExchangeItem,shardExchangeOpen} from '@/lib/cloud-adventure/adventure-mega-exchange.mjs';
 import {zone4Encounter,zone4Research} from '@/lib/cloud-adventure/adventure-zone4.mjs';
 import {zone3Encounter,zone3Research} from '@/lib/cloud-adventure/adventure-zone3.mjs';
@@ -128,6 +129,12 @@ else if(b.action==='useFreshWater'){if(s.combat)throw Error('전투 후 도구�
 else if(b.action==='enterHotel'){if(s.combat||s.interior||s.district!=='lumiose'||cell()!=='J')throw Error('미르시티 호텔 입구에서 들어가세요.');s.interior='hotel';s.x=11;s.y=13;s.facing='up';s.log=['호텔 로비에 들어왔다. 남쪽 출구로 광장에 돌아갈 수 있다.'];}
 else if(['hotelLiftUp','hotelLiftDown','hotelLiftRoof'].includes(b.action)){const destination=b.action==='hotelLiftUp'?'hotel2f':b.action==='hotelLiftDown'?'hotel':'hotelRoof';if(s.combat||s.district!=='lumiose'||cell()!=='i'||!['hotel','hotel2f','hotelRoof'].includes(s.interior)||s.interior===destination)throw Error('호텔 엘리베이터 앞에서 다른 층을 선택하세요.');s.interior=destination;s.x=destination==='hotel'?14:11;s.y=destination==='hotel'?6:12;s.facing='down';s.log=[destination==='hotel2f'?'엘리베이터를 타고 호텔 2층에 왔다. 왼쪽 문은 202호다.':destination==='hotelRoof'?'엘리베이터를 타고 호텔 옥상에 왔다. 가구 배치는 초안이다.':'엘리베이터를 타고 호텔 로비로 돌아왔다.'];}
 else if(b.action==='enterHotel202'){if(s.combat||s.district!=='lumiose'||s.interior!=='hotel2f'||cell()!=='o')throw Error('호텔 2층의 202호 앞에서 들어가세요.');s.interior='hotel202';s.x=11;s.y=13;s.facing='up';s.log=['호텔 202호에 들어왔다. 남쪽 문으로 복도에 돌아갈 수 있다.'];}
+else if(cafeWoofDrink(b.action)){
+ const drink=cafeWoofDrink(b.action)!;if(s.combat||s.interior||s.district!=='lumiose-vernal'||cell()!=='q')throw Error('뚜뚜 카페에서 음료를 주문하세요.');
+ const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
+ for(const id of s.teamIds){const before=mons.get(id);if(!before)throw Error('파티를 확인하세요.');const mon=heal(before);if(id===s.activeId)mon.friendship=friendshipGain(mon,1);mons.set(id,mon);changed.set(id,mon);}
+ reward=-drink.price;s.log=[`${drink.name}을(를) 주문했다. 파티가 회복되고 선두 포켓몬과 친해졌다.`];
+}
 else if(b.action==='hotelRest'){if(s.combat||s.interior!=='hotel'||s.district!=='lumiose'||cell()!=='F')throw Error('호텔 안내 직원 앞에서 쉬어 주세요.');for(const id of s.teamIds){const m=heal(mons.get(id));mons.set(id,m);changed.set(id,m);}s.log=['호텔에서 파티의 HP·상태·PP를 회복했다.'];}
 else if(['cityProjectStart','cityProjectBoard','cityProjectDetour','cityProjectHours','cityProjectGarden','cityProjectReport'].includes(b.action)){
  const stage=cityProjectStage(s),spot=cell();if(s.combat)throw Error('전투 후 조사해 주세요.');
