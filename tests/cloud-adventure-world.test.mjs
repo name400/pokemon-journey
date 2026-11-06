@@ -145,6 +145,15 @@ test('zone one west links Floral Avenue and zone two preserves its location',()=
  for(const [oldX,newX] of [[0,1],[22,21]]){const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x:oldX,y:8,regionId:6,districtReturnRegion:1},9),restored=restoreAdventurePosition(old,9);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone2',newX,8]);}
 });
 
+test('zone two northwest stairs preserve movement and saved positions',()=>{
+ const map=lumioseZone2Map();for(let y=1;y<=3;y++)assert.equal(map[y][4],':');
+ const initial={area:3,district:'lumiose-zone2',x:4,y:1,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:12};
+ assert.deepEqual([stepField(initial,'down').x,stepField(initial,'down').y],[4,2]);
+ assert.equal(stepField(initial,'up').district,'lumiose-vert2');
+ const restored=restoreAdventurePosition(storeAdventurePosition(initial,14),14);
+ assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone2',4,1]);assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,12);
+});
+
 
 test('provisional zone three respects story and older saves, and round-trips its position',()=>{
  const source={area:3,district:'lumiose-zone2',x:4,y:1,zaRoyaleRank:'Y'};

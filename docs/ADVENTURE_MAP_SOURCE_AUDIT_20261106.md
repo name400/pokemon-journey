@@ -63,3 +63,7 @@
 [친밀도 자료](https://bulbapedia.bulbagarden.net/wiki/Friendship)의 Legends: Z-A 항목에 따라 카페 주문 시 선두 포켓몬 친밀도를 30 올리고 255에서 제한한다. 파티 회복·결제의 원자성과 이전 저장은 유지한다. 이전 주문을 구분할 기록은 없으므로 과거 주문의 친밀도를 추정해 바꾸지 않는다. 대표 잔액 부족·리비전 충돌·100→130·240→255·재접속을 검사했다.
 
 [임무 5 진행](https://bulbapedia.bulbagarden.net/wiki/Walkthrough%3APok%C3%A9mon_Legends%3A_Z-A/Part_5)에서 Josée를 Rouge Plaza에서 만나 승리한 뒤 야생 구역 3을 탐색하는 순서를 확인했다. Josée를 구역 2에서 Rouge Plaza 쪽 구역 3 초안으로 옮기고, 필수 진행 중에는 풀숲 진입을 막되 이미 풀숲에 저장된 기존 플레이어는 갇히지 않게 했다. 탐정사무소 진입 조건과 이전 배틀 진행 데이터는 유지한다. NPC의 정확한 좌표, Rouge Plaza와 Vert Sector 2 사이의 실제 도로, 구역 2 수역 윤곽 및 Café Woof 건물·내부 위치는 여전히 미확정이다. 실제 기기·운영 사이트 검증은 하지 않았다.
+
+## 구역 2 북서쪽 입구 계단
+
+[구역 2 안내](https://thegameslayer.com/guides/pokemon-legends-z-a-all-wild-zone-2-pokemon/)는 Vert Sector 2에 인접한 북서쪽 입구 바로 앞에 계단이 있다고 설명한다. 해당 입구 안쪽에 이동 가능한 계단 타일을 추가했다. 계단의 정확한 폭·길이와 주변 지형은 자료로 확인하지 못해 초안이며, 수역·다리의 정확한 윤곽과 Vert Sector 2에서 Rouge Plaza까지의 도시 경로 및 Café Woof 내부는 여전히 미구현이다. 기존 타일의 이동 가능 여부는 바꾸지 않는다.
