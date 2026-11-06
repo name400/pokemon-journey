@@ -942,3 +942,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 루주 3번지와 루주 광장 서쪽 (초안)
 
 [루주 지구 위치 안내](https://allthings.how/modest-mint-locations-in-pokemon-legends-z-a/)는 구역 3 서쪽의 시장을 루주 3번지로 설명하면서 1번지로 표기하는 자료도 있다고 밝힌다. 루주 3번지 초안과 구역 3 서쪽을 양방향 연결했다. 시장의 정확한 구역 경계·입구 위치와 지형은 미확정이며 원작 지도 대조가 필요하다.
+
+### 야생 구역 4 남쪽 납골당 (초안)
+
+[묘지 구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-4-guide-all-pokemon-and-alphas)는 남쪽에 큰 납골당이 있다고 설명한다. 남쪽 지형에 통과할 수 없는 구조물을 추가하고 기존 저장이 해당 부지에 있을 때 인접 통행 칸으로 복구한다. 건물 윤곽·방향·정확한 위치는 원작 영상과 대조해야 할 초안이다.
