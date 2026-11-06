@@ -252,3 +252,9 @@
 [야생 구역 4 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-4-guide-all-pokemon-and-alphas)는 묘지가 구역 3 북쪽에 있고 음식점 너머에 있다고 설명한다. [별도 안내](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/rogue-plaza/all-wild-zone-3-pokemon-locations)는 묘지를 Looker Bureau 북동쪽으로 설명한다. 기존 구역 3 서쪽의 묘지 직결 출구를 제거하고 북쪽 거리에서 동쪽 묘지로 왕복하도록 연결했다. 구역 3의 옛 서쪽 출구 칸에 저장된 유효한 위치는 인접한 보행 칸으로 복구한다.
 
 북쪽 거리의 폭과 묘지 출구의 정확한 위치는 초안이며, 음식점 건물과 상세 동선은 아직 구현하지 않았다. 야생 구역 3 동쪽의 다른 임시 연결과 Centrico 도로도 원작 위치에 맞는지 추가 대조가 필요하다.
+
+## 묘지 서쪽 입구 의뢰인 — 부분 수정
+
+[사이드 미션 위치 목록](https://www.gamerguides.com/pokemon-legends-z-a/checklists/side-missions-locations)은 묘지의 깜까미 의뢰인 Moire가 야생 구역 4의 서쪽 게이트에 있다고 설명한다. 기존에 루주 광장 서쪽에 배치된 의뢰인을 북쪽 거리의 묘지 진입점 근처로 옮겼다. 의뢰 수락·반지 반환은 새 위치에서 처리하며 기존 의뢰 상태와 보상 진행은 보존한다.
+
+묘지 입구와 의뢰인의 정확한 타일 좌표, 북쪽 거리 음식점의 건물 위치와 외형은 초안이다. 음식점의 식사·연속 배틀 기능은 아직 구현하지 않았다.

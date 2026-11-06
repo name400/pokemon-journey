@@ -289,6 +289,7 @@ test('cemetery draft connects through the northern street and preserves location
  const entered=stepField({...source,district:'lumiose-rouge-north',x:21,y:4},'right');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone4',21,8]);
  assert.ok(fieldPath(lumioseZone4Map(),{x:21,y:8},findTile(lumioseZone4Map(),'z')).length);
  assert.equal(stepField({area:3,district:'lumiose-zone4',x:21,y:8},'right').district,'lumiose-rouge-north');
+ const street=fieldMap({area:3,district:'lumiose-rouge-north'});assert.deepEqual(findTile(street,'m'),{x:19,y:6});assert.equal(findTile(lumioseZone3Map(),'m'),null);assert.ok(fieldPath(street,{x:21,y:4},{x:19,y:6}).length);
  const old=storeAdventurePosition({...source,x:0,y:8,teamIds:['keep'],steps:42},8);old.districtPosition.zone3Layout=1;const restored=restoreAdventurePosition(old,8);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone3',1,8]);assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone4',x:18,y:6,regionId:6,districtReturnRegion:1,zaSableyeQuest:1},8),loaded=restoreAdventurePosition(structuredClone(saved),8);
  assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaSableyeQuest],['lumiose-zone4',18,6,1]);
