@@ -605,4 +605,8 @@ Actual city-connector position, path and tree shapes, and other entrances are no
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas) identifies the Magenta District substation, northern entrance, central converters, sandy patches and representative species; [Pokémon Kingdom](https://pente.koro-pokemon.com/legendsz-a/map-wild-zone-14.shtml) lists the encounters. Access begins after rank D. The connection from the existing North Boulevard substation story landmark is a draft; neither that precise street nor the building and equipment coordinates are surveyed.
 
-The yard, fixed encounter positions and probabilities are provisional. The alpha Excadrill, sunny-day Helioptile, boulder/field moves, TM039 and other items are not yet implemented. The existing substation quiz is preserved.
+The yard, fixed encounter positions and probabilities are provisional. TM039 and other pickups are not yet implemented. The existing substation quiz is preserved.
+
+#### Zone 14 weather, alpha and rock route
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas) describes alpha Excadrill near the central converters and sunny-day Helioptile; [All Things How](https://allthings.how/pokemon-legends-z-a-100-wild-zone-14-power-station-guide/) describes rocks broken by Fighting, Ground or Rock attacks. [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists a Mastery Seed behind a building among rocks, and Ultra and Luxury Balls. The simplified rock enclosure, item coordinates and equipment are draft. TM039 and other items remain incomplete. The existing adventure weather engine treats no rain as clear and does not yet produce independent city weather cycles; the rainy condition was checked using its existing rain-producing biome. Old stored positions in the new enclosure relocate to adjacent safe ground.
