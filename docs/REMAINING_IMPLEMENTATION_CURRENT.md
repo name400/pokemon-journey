@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 코어퍼니셔의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_CORE_ENFORCER_FIRST_QA_20261106.md](MULTILENS_CORE_ENFORCER_FIRST_QA_20261106.md) 참조.
+
 후속: 신규 도전의 골드러시 멀티렌즈 첫 타격과 특수공격 하락을 보완하고 최초 적중 재화의 저장을 검사했다. [MULTILENS_MAKE_IT_RAIN_QA_20261106.md](MULTILENS_MAKE_IT_RAIN_QA_20261106.md) 참조.
 
 후속: 신규 도전의 다이아스톰 멀티렌즈 첫 타격과 방어 상승 추첨을 타격당 한 번으로 보완했다. [MULTILENS_DIAMOND_STORM_QA_20261106.md](MULTILENS_DIAMOND_STORM_QA_20261106.md) 참조.
