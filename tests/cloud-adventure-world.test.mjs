@@ -193,15 +193,21 @@ test('Vernal waterside retains cafe and plaza access and safely restores old sav
 
 
 test('Rouge Plaza draft has a round garden and a reachable northern healing stall',()=>{
- const map=lumioseZone3Map();assert.equal(map[2][11],'H');assert.equal(map[8][11],'i');assert.equal(map[4][8],'k');assert.notEqual(map[4][8],'g');assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:2}).length);
+ const map=lumioseZone3Map();assert.equal(map[2][11],'H');assert.equal(map[8][11],'g');assert.equal(map[7][7],'i');assert.equal(map[4][8],'k');assert.notEqual(map[4][8],'g');assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:2}).length);
  const old=storeAdventurePosition({area:3,district:'lumiose-zone3',x:8,y:4,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},19);const loaded=restoreAdventurePosition(old,19);assert.deepEqual([loaded.x,loaded.y],[8,4]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);
 });
 
 test('Rouge Plaza tower ladder has a saved upper floor and preserves old ground positions',()=>{
- const ground={area:3,district:'lumiose-zone3',x:11,y:9,facing:'up',regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42};assert.equal(interactionAt(ground).tile,'i');assert.equal(lumioseZone3Map()[8][11],'i');
- const upper={...ground,x:11,y:10,zaZone3TowerUpper:true};assert.equal(fieldMap(upper)[9][11],'i');assert.equal(lumioseZone3TowerMap()[5][8],'.');assert.equal(interactionAt(upper).tile,'i');
- const saved=storeAdventurePosition(upper,21),loaded=restoreAdventurePosition(saved,21);assert.equal(loaded.zaZone3TowerUpper,true);assert.deepEqual([loaded.x,loaded.y],[11,10]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);assert.equal(restoreAdventurePosition(structuredClone(saved),22).district,null);
+ const ground={area:3,district:'lumiose-zone3',x:7,y:6,facing:'down',regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42};assert.equal(interactionAt(ground).tile,'i');assert.equal(lumioseZone3Map()[7][7],'i');
+ const upper={...ground,x:11,y:10,facing:'up',zaZone3TowerUpper:true};assert.equal(fieldMap(upper)[9][11],'i');assert.equal(lumioseZone3TowerMap()[5][8],'.');assert.equal(interactionAt(upper).tile,'i');
+ const saved=storeAdventurePosition(upper,21),loaded=restoreAdventurePosition(saved,21);assert.equal(loaded.zaZone3TowerUpper,true);assert.deepEqual([loaded.x,loaded.y],[11,10]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);const legacyUpper=structuredClone(saved);delete legacyUpper.districtPosition.zone3Layout;const restoredUpper=restoreAdventurePosition(legacyUpper,21);assert.equal(restoredUpper.zaZone3TowerUpper,true);assert.deepEqual([restoredUpper.x,restoredUpper.y],[11,10]);assert.equal(restoreAdventurePosition(structuredClone(saved),22).district,null);
  const old=storeAdventurePosition({...ground,x:11,y:8},20),restored=restoreAdventurePosition(old,20);assert.deepEqual([restored.x,restored.y],[11,8]);
+});
+
+test('Rouge gardens have blocked fences, reachable gates and safe legacy-position migration',()=>{
+ const map=lumioseZone3Map();assert.equal(map[5][9],'|');assert.equal(stepField({area:3,district:'lumiose-zone3',x:10,y:5},'left').blocked,true);assert.equal(stepField({area:3,district:'lumiose-zone3',x:10,y:6,zaRoyaleRank:'Y',zaJoseeRequired:true},'left').blocked,true);
+ for(const target of [{x:7,y:6},{x:15,y:6},{x:7,y:10},{x:15,y:10}])assert.ok(fieldPath(map,{x:11,y:8},target).length);
+ const old=storeAdventurePosition({area:3,district:'lumiose-zone3',x:9,y:5,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},17);delete old.districtPosition.zone3Layout;const loaded=restoreAdventurePosition(structuredClone(old),17);assert.equal(loaded.district,'lumiose-zone3');assert.ok(walkable(map[loaded.y][loaded.x]));assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);assert.equal(restoreAdventurePosition(structuredClone(old),18).district,null);
 });
 
 test('provisional zone three respects story and older saves, and round-trips its position',()=>{
@@ -217,7 +223,7 @@ test('provisional zone three respects story and older saves, and round-trips its
  const roadMap=lumioseCentricoRouteMap();for(const tile of [',',';','k'])assert.equal(walkable(tile),true);assert.ok(fieldPath(roadMap,{x:1,y:8},{x:21,y:8}).length);assert.ok(fieldPath(roadMap,{x:1,y:8},{x:11,y:6}).length);
  const old=storeAdventurePosition({...center,x:11,y:12},7);delete old.districtPosition.centricoLayout;const restored=restoreAdventurePosition(structuredClone(old),7);assert.equal(restored.district,'lumiose-centrico-route');assert.ok(walkable(lumioseCentricoRouteMap()[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,23);assert.equal(restoreAdventurePosition(structuredClone(old),8).district,null);
  assert.equal(stepField({area:3,district:'lumiose-vert2',x:21,y:8},'right').district,'lumiose-zone2');
- const grass={area:3,district:'lumiose-zone3',x:17,y:8,zaRoyaleRank:'Y',zaJoseeRequired:true};assert.equal(stepField(grass,'left').blocked,true);assert.equal(stepField({...grass,zaJoseeComplete:true},'left').blocked,undefined);assert.equal(stepField({...grass,x:15},'left').blocked,undefined);
+ const grass={area:3,district:'lumiose-zone3',x:17,y:8,zaRoyaleRank:'Y',zaJoseeRequired:true};assert.equal(stepField(grass,'left').blocked,true);assert.equal(stepField({...grass,zaJoseeComplete:true},'left').blocked,undefined);assert.equal(stepField({...grass,x:15,y:6},'left').blocked,undefined);
  assert.ok(fieldPath(lumioseZone3Map(),{x:21,y:8},findTile(lumioseZone3Map(),'g')).length);
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone3',x:17,y:8,regionId:6,districtReturnRegion:1},10),loaded=restoreAdventurePosition(structuredClone(saved),10);
  assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone3',17,8]);
