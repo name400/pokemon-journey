@@ -23,10 +23,11 @@ test('mission 28 marker follows battle and reward state without changing saved p
 });
 test('draft holovator connects the street to a saved rooftop route and back',()=>{
  const s={area:3,district:'lumiose-magenta-sector4',interior:null,x:10,y:8,facing:'left',zaMission26Stage:3,teamIds:['kept']};
- const roof=stepField(s,'left');assert.deepEqual([roof.district,roof.x,roof.y],['lumiose-magenta-sector4-roof',1,13]);
- const upper={...s,...roof};assert.ok(fieldPath(fieldMap(upper),upper,{x:19,y:5}).length);
+ assert.equal(fieldDialogue(s).action,'magenta4Holovator');
+ const step=stepField(s,'left');assert.notEqual(step.district,'lumiose-magenta-sector4-roof');
+ const upper={...s,district:'lumiose-magenta-sector4-roof',x:1,y:13,facing:'down'};assert.equal(fieldDialogue(upper).action,'magenta4Holovator');assert.ok(fieldPath(fieldMap(upper),upper,{x:19,y:5}).length);
  const saved=restoreAdventurePosition(storeAdventurePosition({...upper,x:19,y:5,facing:'up'},74),74);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector4-roof',19,5,['kept']]);
  assert.equal(fieldDialogue(saved).action,'mission26CaseBattle');
- const back=stepField({...upper,x:1,y:13},'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector4',10,8]);
+ const back=stepField(upper,'down');assert.notEqual(back.district,'lumiose-magenta-sector4');
 });
