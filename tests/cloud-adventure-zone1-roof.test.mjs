@@ -47,3 +47,15 @@ test('Zone 1 pond safely relocates older saves and rooftop TM remains collected'
  const roof={...ground,district:'lumiose-zone1-roof',x:7,y:7,facing:'down'};
  assert.equal(fieldDialogue(roof).action,'zone1RoofTM103');assert.equal(fieldMap({...roof,zaZone1Tm103:true})[8][7],'.');
 });
+
+test('Zone 1 north gate links Vert Sector 9 to Vernal and the courtyard',()=>{
+ const ground={area:3,district:'lumiose-zone1',interior:null,x:11,y:1,facing:'up',teamIds:['kept']};
+ const north=stepField(ground,'up');assert.deepEqual([north.district,north.x,north.y],['lumiose-vert-sector9',11,15]);
+ const sector={...ground,...north};assert.ok(fieldPath(fieldMap(sector),sector,{x:1,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(sector,57),57);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector9',11,15,['kept']]);
+ assert.deepEqual([stepField(saved,'down').district,stepField(saved,'down').x],['lumiose-zone1',11]);
+ const vernal=stepField({...saved,x:1,y:8},'left');assert.deepEqual([vernal.district,vernal.x,vernal.y],['lumiose-vernal',21,10]);
+ assert.equal(stepField({...saved,...vernal},'right').district,'lumiose-vert-sector9');
+ assert.ok(fieldPath(fieldMap({...saved,...vernal}),vernal,{x:1,y:10}).length);
+ assert.equal(stepField({...saved,...vernal,x:1,y:10},'left').district,'lumiose-zone1-courtyard');
+});
