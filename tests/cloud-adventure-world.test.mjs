@@ -164,6 +164,17 @@ test('zone two southeastern bridge connects the southern shore to the central is
  const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x:10,y:14,regionId:6,districtReturnRegion:1,teamIds:['keep']},6);old.districtPosition.zone2Layout=3;const restored=restoreAdventurePosition(old,6);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone2',10,14]);assert.deepEqual(restored.teamIds,['keep']);
 });
 
+test('zone two south entrance has a western crossing to the central island',()=>{
+ const map=lumioseZone2Map();
+ for(let y=9;y<=12;y++)assert.equal(map[y][8],'=');
+ let s={area:3,district:'lumiose-zone2',x:8,y:13,teamIds:['kept'],steps:42};
+ for(const direction of ['up','up','up','up','right','right']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}
+ assert.deepEqual([s.x,s.y],[10,9]);
+ assert.ok(fieldPath(map,{x:11,y:15},{x:8,y:13}).length);
+ const saved=storeAdventurePosition(s,9),restored=restoreAdventurePosition(structuredClone(saved),9);
+ assert.deepEqual([restored.x,restored.y],[10,9]);assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,42);
+});
+
 test('zone two northeastern crossing joins the outer bank to the island without invalidating old positions',()=>{
  const map=lumioseZone2Map();assert.equal(map[5][14],'=');assert.equal(map[6][14],'=');let s={area:3,district:'lumiose-zone2',x:14,y:4};
  for(const direction of ['down','down','down','left']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}assert.deepEqual([s.x,s.y],[13,7]);
