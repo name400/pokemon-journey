@@ -91,7 +91,7 @@ else if(b.action==='move'){
   if(tile==='g'&&random()<.25){
    const area=s.expedition?{min:40,max:65}:['lumiose-wild','lumiose-observation'].includes(s.district)?{min:19,max:25}:AREAS[s.area];
    const candidates=s.expedition?species.filter(p=>p.defaultForm&&!p.legendary&&p.generation===(s.regionId>=9?s.regionId-1:s.regionId)):['lumiose-wild','lumiose-observation'].includes(s.district)?species.filter(p=>p.defaultForm&&!p.legendary&&p.types.some(t=>['풀','벌레'].includes(t))&&(p.hp+p.atk+p.def+p.spd)<260):encounterPool(s.area);
-   const pool=candidates.length?candidates:encounterPool(s.area),zone=s.district==='lumiose-zone1'?zone1Encounter(random):s.district==='lumiose-zone2'?zone2Encounter(gameTime().period,random):s.district==='lumiose-zone3'?zone3Encounter(gameTime().period,random):s.district==='lumiose-zone4'?zone4Encounter(gameTime().period,random):null,foe=zone?makeMon(zone.speciesId,zone.level):makeMon(pool[Math.floor(random()*pool.length)].id,area.min+Math.floor(random()*(area.max-area.min+1)));
+   const pool=candidates.length?candidates:encounterPool(s.area),zone=s.district==='lumiose-zone1'?zone1Encounter(random):s.district==='lumiose-zone2'?zone2Encounter(gameTime().period,random,{x:s.x,y:s.y}):s.district==='lumiose-zone3'?zone3Encounter(gameTime().period,random):s.district==='lumiose-zone4'?zone4Encounter(gameTime().period,random):null,foe=zone?makeMon(zone.speciesId,zone.level):makeMon(pool[Math.floor(random()*pool.length)].id,area.min+Math.floor(random()*(area.max-area.min+1)));
    foe.boxId='wild';s.combat=createAdventureCombat(s,mons,[foe],{weather:s.weather==='rain'?'raindance':undefined});s.encounter=foe;s.trainer=null;s.log=[`야생 ${foe.name}이(가) 나타났다!`];break;
   }
   if(transitioned)break;
