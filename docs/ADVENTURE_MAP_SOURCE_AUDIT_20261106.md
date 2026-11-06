@@ -954,3 +954,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 존느 거리와 북쪽 대로 교차로 (초안)
 
 [미르시티 도로 설명](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City)은 북쪽 대로에서 존느 거리로 이어지는 길을 명시한다. 기존 두 도로 지도 사이 왕복 경로를 추가했다. 교차로의 타일 좌표·폭·주변 건물은 원작 시각 자료 대조가 필요한 초안이다.
+
+### 로즈 8번지와 마젠타 거리·포켓몬센터 (초안)
+
+[로즈 8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_8)는 이 지역이 마젠타 거리와 북쪽 대로에 접하고 교차점에 포켓몬센터가 있다고 설명한다. 기존 운하변 거리 초안과 번지를 왕복 연결하고 기존 회복 처리를 적용했다. 출입 좌표·센터 건물 형상은 초안이며 상점·벤치·회수원은 미구현이다.
