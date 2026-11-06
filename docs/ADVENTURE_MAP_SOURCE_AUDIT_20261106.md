@@ -962,3 +962,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 로즈 8·9번지 연결 (초안)
 
 [8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_8)와 [9번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_9)는 두 번지의 남북 인접을 설명한다. 기존 지상 지도에 왕복 통행을 추가했고 구역 18의 랭크 B 제한은 유지했다. 실제 도로 선형·출입 좌표는 별도 지도·영상 대조가 필요한 초안이다.
+
+### 로즈 9번지와 북쪽 대로 (초안)
+
+[로즈 9번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_9)는 이 번지가 북쪽 대로와 오토널 애비뉴에 인접한다고 설명한다. 기존 두 지도에 왕복 지상 연결을 추가했고 구역 18의 랭크 B 제한을 유지했다. 정확한 출입구 위치·선형은 원작 지도·영상 대조가 필요한 초안이다.

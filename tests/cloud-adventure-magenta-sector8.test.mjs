@@ -28,3 +28,11 @@ test('Magenta sectors 8 and 9 connect without bypassing Zone 18 rank gate',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition(state,66),66);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector9',3,15,['kept']]);
  assert.equal(stepField(saved,'down').district,'lumiose-magenta-sector8-route');
 });
+
+test('Magenta Sector 9 connects North Boulevard while retaining Zone 18 gate',()=>{
+ const nine={area:3,district:'lumiose-magenta-sector9',interior:null,x:1,y:8,zaRoyaleRank:'C',teamIds:['kept']};
+ const road=stepField(nine,'left');assert.deepEqual([road.district,road.x,road.y],['lumiose-north-boulevard',3,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...nine,...road},67),67);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-north-boulevard',3,15,['kept']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector9',1,8]);
+ assert.equal(stepField({...nine,x:11,y:1},'up').blocked,true);
+});
