@@ -479,3 +479,5 @@ Switched-active safety: move-use flags can reset on switch-in. Review now also r
 신규 `weighted-local-v9` AI는 추가 효과 없는 단일 대상 능력치 하락 기술의 확인된 원본 대상 점수를 공통 계산한다. 방어 관련 조건·자폭/교체·다른 복합 효과와 원본 난수는 부분 지원이다.
 
 신규 `weighted-local-v10` AI는 방어·특수방어 하락의 물리 기술 보유 조건과 능력치 하한을 원본 점수에 반영한다. 변신·불명 기술, 다른 복합 효과와 원본 난수 흐름은 부분 지원이다.
+
+A switched Pokémon with a used duplicate may be reviewed if both duplicate PP values have become equal and all party/team/combat records agree. The representative test simulates PP restoration; real PP-item use remains unverified. Differing PP and unidentifiable history remain protected and unsupported.
