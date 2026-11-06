@@ -590,3 +590,9 @@ The snowy grid, water outline, field coordinates and the sole west connector to 
 #### Zone 12 southwestern pond, alphas and selected items
 
 [Pokémon Kingdom](https://pente.koro-pokemon.com/legendsz-a/map-wild-zone-12.shtml) places alpha Avalugg in the southwest pond and alpha Abomasnow south of the court; [Game8](https://game8.jp/pokemon-legends-z-a/729694) and [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Wild_Zone_12) support representative levels 55 and 44. The earlier eastern pond draft is replaced by a southwestern pond. Old stored positions in the affected footprint move to nearby dry land without discarding the saved run. [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists a Super Potion near the south entrance, Quick Ball in the southwest, and Ultra Ball in the court. Their exact tiles are provisional. The city street, the other entrances, ice stone, TM013, other pickups and original field behaviours remain incomplete.
+
+### Wild Zone 13: provisional North Boulevard woodland
+
+[Gamer Guides](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/aymlis-park) locates the zone along North Boulevard, Heracross near the western entrance and Pinsir south of the path, and describes day/night species. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_13) lists encounter levels. Rank E access, a west entrance, forest strips, visible Heracross and Pinsir, and day/night grass encounters are represented.
+
+Actual city-connector position, path and tree shapes, and other entrances are not surveyed. This is a provisional path layout; alpha Trevenant and Weepinbell, original field behaviour, tools and terrain obstacles remain unimplemented.
