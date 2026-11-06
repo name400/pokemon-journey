@@ -34,23 +34,22 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
    const buildings:Array<{x:number;y:number;kind:string}>=[];
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{
     const px=x*tile,py=y*tile;ctx.fillStyle=palette[0];ctx.fillRect(px,py,tile,tile);
-    if(w.interior==='lab'||['hotel','hotel2f','hotel202','hotelRoof'].includes(w.interior)){
-     ctx.fillStyle=c==='#'?(w.interior!=='lab'?'#a78375':'#64817e'):(x+y)%2?'#e6e2cc':'#f0ecd9';ctx.fillRect(px,py,tile,tile);
-     if(c==='#'){ctx.fillStyle=w.interior!=='lab'?'#ddc0a1':'#a3bcb1';ctx.fillRect(px+3,py+4,tile-6,tile-8);}
+    if(['lab','lumioseLab'].includes(w.interior)||['hotel','hotel2f','hotel202','hotelRoof'].includes(w.interior)){
+     ctx.fillStyle=c==='#'?(!['lab','lumioseLab'].includes(w.interior)?'#a78375':'#64817e'):(x+y)%2?'#e6e2cc':'#f0ecd9';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){ctx.fillStyle=!['lab','lumioseLab'].includes(w.interior)?'#ddc0a1':'#a3bcb1';ctx.fillRect(px+3,py+4,tile-6,tile-8);}
      if(w.interior==='hotelRoof'&&'12345'.includes(c)){ctx.fillStyle=({1:'#8b6a70',2:'#9b5844',3:'#8b6a70',4:'#765b48',5:'#70935c'} as Record<string,string>)[c];ctx.fillRect(px+3,py+5,tile-6,tile-9);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(({1:'의자',2:'화로',3:'소파',4:'탁자',5:'화분'} as Record<string,string>)[c],px+tile/2,py+20);}
      if(c==='i'||c==='o'||(c==='b'&&w.interior==='hotel2f')||(c==='z'&&w.interior==='hotel202')){ctx.fillStyle=c==='i'?'#796b82':c==='o'||c==='b'?'#875d46':'#af746f';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='i'?'승강기':c==='o'?'202':c==='b'?'객실':'침대',px+tile/2,py+20);}
      if(c==='X'){ctx.fillStyle='#a95850';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+21);}
      return;
     }
-    if(w.district==='lumiose'||w.district==='lumiose-rooftop'||w.district==='lumiose-zone1'||w.district==='lumiose-zone2'||w.district==='lumiose-zone3'||w.district==='lumiose-zone4'||w.district==='lumiose-bureau'||w.district==='lumiose-garden'||w.district==='lumiose-site'||w.district==='lumiose-wild'||w.district==='lumiose-observation'||w.district==='lumiose-royale'){
+    if(w.district==='lumiose'||w.district==='lumiose-floral'||w.district==='lumiose-rooftop'||w.district==='lumiose-zone1'||w.district==='lumiose-zone2'||w.district==='lumiose-zone3'||w.district==='lumiose-zone4'||w.district==='lumiose-bureau'||w.district==='lumiose-garden'||w.district==='lumiose-site'||w.district==='lumiose-wild'||w.district==='lumiose-observation'||w.district==='lumiose-royale'){
      ctx.fillStyle=(x+y)%2?'#e7dfce':'#ded7c5';ctx.fillRect(px,py,tile,tile);
      if(c==='#'){ctx.fillStyle='#8e9c91';ctx.fillRect(px,py,tile,tile);}if(c==='r'){ctx.fillStyle='#757b78';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.4,tile*.33,-.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c7cbc5';ctx.fillRect(px+8,py+10,9,3);}
      if(c==='k'||c==='K'){ctx.fillStyle=c==='K'?'#79a36d':'#a6c692';ctx.fillRect(px+2,py+2,tile-4,tile-4);if(c==='K'){ctx.fillStyle='#fff3be';ctx.fillRect(px+8,py+10,5,5);ctx.fillRect(px+20,py+16,5,5);}}
      if(c==='~'){ctx.fillStyle='#76abc1';ctx.fillRect(px,py,tile,tile);}
      if(c==='g'){ctx.fillStyle='#92b97c';ctx.fillRect(px,py,tile,tile);sprite('bush',px,py);sprite('grassDetail',px,py);}
-     if('HMJ'.includes(c))buildings.push({x,y,kind:c});
+     if('HMJ'.includes(c)||(c==='P'&&w.district==='lumiose-floral'))buildings.push({x,y,kind:c});
      if(c==='a'&&!w.zaWildAlphaSpent){ctx.fillStyle='#8e4939';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.38,tile*.30,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';const arrow=({up:'↑',down:'↓',left:'←',right:'→'} as any)[wildAlphaPosition(w).facing];ctx.fillText((w.zaWildAlphaAlert?'!':'왕')+arrow,px+tile/2,py+20);}if(c==='T'){ctx.fillStyle='#769b88';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('광장',px+tile/2,py+20);}
-     if(c==='W'&&w.district==='lumiose-zone1'){ctx.fillStyle='#8c7367';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('준비 중',px+tile/2,py+20);}
      if(c==='s'&&w.district==='lumiose'){ctx.fillStyle='#438766';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('구역 1',px+tile/2,py+20);}
      if(c==='d'){ctx.fillStyle='#273e35';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,11,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('?',px+tile/2,py+21);}
      if(c==='h'||c==='c'||c==='x'){ctx.fillStyle=c==='c'?'#d67aad':'#786884';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='c'?'결정':c==='x'?'교환':'옥상',px+tile/2,py+20);}
@@ -59,7 +58,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if(c==='q'){ctx.fillStyle='#6e7780';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('골목',px+tile/2,py+20);}
      if(c==='b'){ctx.fillStyle='#765e81';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('탐정',px+tile/2,py+20);}
      if(c==='Y'||c==='Z'){ctx.fillStyle='#8d684d';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('안내',px+tile/2,py+20);}
-     if(c==='E'||(c==='W'&&!['lumiose','lumiose-zone1'].includes(w.district))){ctx.fillStyle='#537b85';ctx.font='bold 23px sans-serif';ctx.textAlign='center';ctx.fillText(c==='E'?'›':'‹',px+tile/2,py+25);}
+     if(c==='E'||(c==='W'&&w.district!=='lumiose')){ctx.fillStyle='#537b85';ctx.font='bold 23px sans-serif';ctx.textAlign='center';ctx.fillText(c==='E'?'›':'‹',px+tile/2,py+25);}
      if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(w.district==='lumiose-royale'?'광장':w.district==='lumiose-bureau'?'출구':w.district==='lumiose-rooftop'?'광장':'항구',px+tile/2,py+20);}
      return;
     }

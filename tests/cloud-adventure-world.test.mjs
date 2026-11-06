@@ -136,9 +136,8 @@ test('provisional Wild Zone 1 connects to plaza and preserves safe stored locati
  const saved=storeAdventurePosition(state,8);assert.deepEqual([saved.x,saved.y,saved.regionId],[5,9,1]);const loaded=restoreAdventurePosition(structuredClone(saved),8);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone1',17,8]);assert.deepEqual(loaded.adventureDexSpecies,[13]);
 });
 
-test('zone two opens after rank Y and preserves its location',()=>{
- const source={area:3,district:'lumiose-zone1',x:1,y:8};assert.equal(stepField(source,'left').blocked,true);assert.equal(stepField({...source,zaRoyaleRank:'Z'},'left').blocked,true);
- const open=stepField({...source,zaRoyaleRank:'Y'},'left');assert.equal(open.blocked,true);assert.match(open.reason,/동쪽 출구/);
+test('zone one west links Floral Avenue and zone two preserves its location',()=>{
+ const source={area:3,district:'lumiose-zone1',x:1,y:8};const street=stepField(source,'left');assert.deepEqual([street.district,street.x,street.y],['lumiose-floral',21,8]);assert.equal(stepField({...source,zaRoyaleRank:'Y'},'left').district,'lumiose-floral');const returnZone=stepField({area:3,district:'lumiose-floral',x:21,y:8},'right');assert.deepEqual([returnZone.district,returnZone.x,returnZone.y],['lumiose-zone1',1,8]);
  assert.ok(fieldPath(lumioseZone2Map(),{x:21,y:8},findTile(lumioseZone2Map(),'g')).length);
  const back=stepField({area:3,district:'lumiose-zone2',x:21,y:8},'right');assert.deepEqual([back.district,back.x,back.y],['lumiose',14,7]);
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone2',x:17,y:8,regionId:6,districtReturnRegion:1},9),loaded=restoreAdventurePosition(structuredClone(saved),9);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone2',17,8]);

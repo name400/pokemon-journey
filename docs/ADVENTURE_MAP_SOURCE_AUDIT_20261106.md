@@ -29,3 +29,7 @@
 ## 구역 1과 구역 2의 임시 직결 제거
 
 [임무 5 안내](https://pokequery.com/games/legends-za/walkthrough)는 옥상 길을 통해 구역 2로 이동하는 순서를 설명하며, [구역 위치 안내](https://pokemongohub.net/post/guide/all-wild-zones-pokemon-legends-z-a/)는 구역 2를 Vert Plaza로 구분한다. 기존의 구역 1 서쪽 → 구역 2 직결을 제거했다. 구역 1 서쪽은 연결 준비 중으로 표시하며 동쪽으로 나갈 수 있고, 구역 2는 기존 옥상 경로에서 접근한다. 기존 구역 2 저장은 동쪽에서 현재 도시 초안으로 돌아갈 수 있다. 이 귀환 좌표는 원작 도로의 위치를 재현한 것이 아니며 해당 도로와 구역 1 서쪽의 연구소 방면 연결은 추가 구현이 필요하다. 도시·구역 2의 전체 지형 역시 미완성이다.
+
+## Floral Avenue와 포켓몬 연구소 — 동선 부분 구현
+
+[구역 1 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-1-guide-all-pokemon-and-alphas)에서 구역 1이 Floral Avenue의 연구소 동쪽에 있다는 관계를 확인해, 구역 1 서쪽 출구 → Floral Avenue → 연구소 입구를 왕복하도록 연결했다. 구역 1에서는 기존 동쪽의 호텔 방면 출구도 유지한다. 연구소 내부는 기존 연구소 화면을 재사용하는 초안이며 원작 Mable의 대화·시설을 재현한 것이 아니다. 도로 폭·건물 모양과 좌표 및 거리의 다른 시설은 미확정이다. 거리·연구소에서 재접속과 이동, 파티·지갑 보존을 격리 API로 검사했다. 구역 2의 실제 Vert Plaza 거리 연결 및 도시 전체 맵은 아직 구현되지 않았다.
