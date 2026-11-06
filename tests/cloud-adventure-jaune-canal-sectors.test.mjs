@@ -100,3 +100,12 @@ test('Vert Sector 1 connects Vert Sector 3 and Vert Street',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,...one,x:11,y:8},17),17);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector1',11,8,['kept']]);
 });
+test('Vert Sector 6 bridge leads to Sector 7 without altering Zone 17 gate',()=>{
+ const s={area:3,district:'lumiose-vert-sector6',interior:null,x:21,y:3,teamIds:['kept'],zaRoyaleRank:'F'};
+ const seven=stepField(s,'right');assert.equal(seven.district,'lumiose-vert-sector7');
+ assert.equal(stepField({...s,...seven},'left').district,'lumiose-vert-sector6');
+ assert.ok(fieldPath(fieldMap(s),{x:11,y:15},{x:21,y:3}).length);
+ assert.equal(stepField({...s,x:11,y:15},'down').blocked,true);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...seven,x:11,y:8},18),18);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector7',11,8,['kept']]);
+});

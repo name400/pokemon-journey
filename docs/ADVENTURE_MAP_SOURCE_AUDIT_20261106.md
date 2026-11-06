@@ -802,3 +802,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르 구역 1과 구역 3·베르 스트리트 (초안)
 
 [구역 3 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_3)는 구역 1이 바로 서쪽에 있다고 설명한다. [도시 탐색 자료](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Exploring_Lumiose_City)는 구역 1에 베르 스트리트와 누보 카페 부근에서 접근하는 경로를 설명한다. 구역 1을 추가하고 구역 3·베르 스트리트와 왕복 연결했다. 건물의 규모·형상과 지상 출입구 정확한 위치는 초안이며 옥상·발판 및 시설은 아직 미구현이다.
+
+### 베르 구역 6·7 다리와 잔디 광장 (초안)
+
+[도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/stat-boosters.html)는 구역 6에서 구역 7로 가는 다리와 구역 7의 잔디 광장을 명시한다. 기존 구역 6 수역·다리와 새 구역 7을 왕복 연결했다. 지도의 물길과 다리의 정확한 방향·길이, 광장 윤곽과 건물 좌표는 초안이며 구역 7의 옥상·홀로베이터와 시설은 미구현이다.
