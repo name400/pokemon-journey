@@ -253,6 +253,15 @@ test('north Rouge Street joins Zone 3 to a provisional boulevard and saves safel
  const save=storeAdventurePosition({...out,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},22),loaded=restoreAdventurePosition(structuredClone(save),22);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-rouge-north',11,15]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);assert.equal(restoreAdventurePosition(structuredClone(save),23).district,null);
 });
 
+test('northern street connects through boulevard to the company and preserves the court save',()=>{
+ let s={area:3,district:'lumiose-rouge-north',x:1,y:4,regionId:6,districtReturnRegion:1,teamIds:['keep'],zaMission10Stage:2};
+ s={...s,...stepField(s,'left')};assert.deepEqual([s.district,s.x,s.y],['lumiose-north-boulevard',21,8]);
+ s={...s,...stepField({...s,x:1,y:8},'left')};assert.deepEqual([s.district,s.x,s.y],['lumiose-quasartico',21,8]);
+ const map=fieldMap(s);assert.ok(fieldPath(map,s,{x:11,y:7}).length);assert.equal(map[6][11],'y');
+ const saved=storeAdventurePosition({...s,x:11,y:7,steps:42},9),loaded=restoreAdventurePosition(saved,9);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-quasartico',11,7]);assert.deepEqual(loaded.teamIds,['keep']);assert.equal(loaded.steps,42);
+ const back=stepField({...s,x:21,y:8},'right');assert.equal(back.district,'lumiose-north-boulevard');assert.equal(stepField({...back,x:21,y:8},'right').district,'lumiose-rouge-north');
+});
+
 test('provisional zone three respects story and older saves, and round-trips its position',()=>{
  const source={area:3,district:'lumiose-zone2',x:4,y:1,zaRoyaleRank:'Y'};
  assert.equal(stepField(source,'up').district,'lumiose-vert2');const road={area:3,district:'lumiose-vert2',x:1,y:8,zaRoyaleRank:'Y'};
