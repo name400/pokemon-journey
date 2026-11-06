@@ -56,3 +56,11 @@ test('Vernal Avenue connects the eastern ground entrance of Zone 5',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition(state,52),52);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone5',21,13,['kept']]);
  const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-vernal',1,13]);
 });
+
+test('Bleu Street reaches the western ground edge of Zone 5',()=>{
+ const road={area:3,district:'lumiose-bleu-street',interior:null,x:21,y:4,teamIds:['kept']};
+ const zone=stepField(road,'right');assert.deepEqual([zone.district,zone.x,zone.y,zone.zaZone5Upper],['lumiose-zone5',1,12,false]);
+ const state={...road,...zone};assert.ok(fieldPath(fieldMap(state),state,{x:11,y:15}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,53),53);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone5',1,12,['kept']]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-street',21,4]);
+});

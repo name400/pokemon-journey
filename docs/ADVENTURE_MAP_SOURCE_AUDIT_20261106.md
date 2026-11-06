@@ -922,3 +922,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르날 애비뉴와 야생 구역 5 (초안)
 
 [구역 5 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-5-guide-all-pokemon-and-alphas)는 베르날 애비뉴 끝에서 구역으로 접근할 수 있다고 설명한다. 애비뉴와 구역 5 지상을 양방향으로 연결했다. 동쪽 물가의 정확한 입구·수역 윤곽과 타일 좌표는 지도·영상으로 추가 확인할 초안이다.
+
+### 블르 거리와 야생 구역 5 (초안)
+
+[블르 1번지 자료](https://bulbapedia.bulbagarden.net/wiki/Bleu_Sector_1)는 구역 5가 대부분을 차지하는 번지가 블르 거리와 인접한다고 설명한다. 지상 통행을 양방향 연결했다. 구체적인 입구 좌표와 거리 형태는 원작 시각 자료로 추가 대조가 필요한 초안이다.
