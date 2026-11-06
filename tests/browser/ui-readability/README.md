@@ -149,4 +149,4 @@ section; it is not a replay of hundreds of actual game turns. `PROFILE_LOG_COUNT
 See `docs/PC_REAL_ARTWORK_PERFORMANCE_QA_20261105.md` for the measured limits and the
 memo candidate that was rejected and reverted because it did not improve the long log.
 
-The active alias script checks the conditional battle button, confirmation, saved reserve and return to the same turn in synthetic desktop and mobile layouts.
+The active alias script checks the conditional battle button, cancellation, normal and Sketch confirmation, saved reserve and return to the same turn in synthetic desktop and mobile layouts.
