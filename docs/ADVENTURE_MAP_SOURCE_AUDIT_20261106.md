@@ -934,3 +934,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 루주 3번지의 식당과 볼 부티크 (위치 초안)
 
 [르 예 식당](https://bulbapedia.bulbagarden.net/wiki/Restaurant_Le_Yeah)과 [루주 3번지](https://bulbapedia.bulbagarden.net/wiki/Rouge_Sector_3) 자료는 두 시설의 존재를 확인한다. 거리 초안에 시설 표식과 이름을 추가했다. 입구 좌표·외관은 추정이며 내부·음식 배틀·판매는 구현되지 않았다.
+
+### 오토널 애비뉴와 콰자르티코 (초안)
+
+[오토널 애비뉴 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/autumnal-avenue.html)는 서쪽 접근처로 콰자르티코를 명시한다. 기존 거리와 콰자르티코 맵을 왕복 연결했다. 지형 선형과 출입 타일은 원작 영상으로 추가 확인할 초안이다.

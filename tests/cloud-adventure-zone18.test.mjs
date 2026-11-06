@@ -59,3 +59,11 @@ test('Zone 18 scaffold alley leads to the ladder and preserves roof saves',()=>{
  const restored=restoreAdventurePosition(storeAdventurePosition({...upper,x:12,y:5},38),38);
  assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone18Upper],['lumiose-zone18',12,5,true]);
 });
+
+test('Autumnal Avenue reaches Quasartico and preserves existing mission state',()=>{
+ const s={area:3,district:'lumiose-autumnal-approach',interior:null,x:1,y:4,zaMission10Stage:3,teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(s),{x:11,y:8},s).length);
+ const office=stepField(s,'left');assert.deepEqual([office.district,office.x,office.y],['lumiose-quasartico',21,4]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...office},57),57);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission10Stage,saved.teamIds],['lumiose-quasartico',21,4,3,['kept']]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-autumnal-approach',1,4]);
+});
