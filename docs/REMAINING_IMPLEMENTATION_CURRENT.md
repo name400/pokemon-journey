@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전의 멀티렌즈 얼어붙은세계 첫 타격 순서를 보완했다. [MULTILENS_GLACIATE_FIRST_QA_20261106.md](MULTILENS_GLACIATE_FIRST_QA_20261106.md) 참조.
+
 후속: 신규 도전의 멀티렌즈 눈보라 첫 타격 순서를 보완했다. [MULTILENS_BLIZZARD_FIRST_QA_20261106.md](MULTILENS_BLIZZARD_FIRST_QA_20261106.md) 참조.
 
 후속: 신규 도전 AI가 강풍의 비행 타입 상성 보정에서 환영이 아닌 실제 타입을 확인한다. [AI_ILLUSION_STRONG_WINDS_QA_20261105.md](AI_ILLUSION_STRONG_WINDS_QA_20261105.md) 참조.
