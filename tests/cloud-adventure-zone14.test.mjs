@@ -24,3 +24,12 @@ test('Magenta Sector 6 reaches the southern substation approach after rank D',()
  const saved=restoreAdventurePosition(storeAdventurePosition(state,43),43);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone14',17,15,['kept']]);
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector6',4,1]);
 });
+test('South Boulevard connects to the western substation approach without bypassing its gate',()=>{
+ const road={area:3,district:'lumiose-south-boulevard',interior:null,x:21,y:14,zaRoyaleRank:'E',teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(road),road,{x:20,y:8}).length);
+ assert.equal(stepField(road,'right').blocked,true);
+ const zone=stepField({...road,zaRoyaleRank:'D'},'right');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone14',1,8]);
+ const state={...road,...zone,zaRoyaleRank:'D'};assert.ok(fieldPath(fieldMap(state),state,{x:12,y:10}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,44),44);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone14',1,8,['kept']]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-south-boulevard',21,14]);
+});
