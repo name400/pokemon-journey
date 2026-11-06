@@ -156,6 +156,17 @@ test('zone two northwest stairs preserve movement and saved positions',()=>{
  assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone2',4,1]);assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,12);
 });
 
+test('Café Woof terrace keeps the existing café and saved routes accessible',()=>{
+ const map=lumioseVernalMap();assert.equal(map[5][12],'q');
+ for(let y=6;y<=8;y++)for(let x=10;x<=14;x++)assert.equal(map[y][x],',');
+ assert.ok(fieldPath(map,{x:1,y:8},{x:12,y:6}).length);
+ assert.ok(fieldPath(map,{x:12,y:6},{x:21,y:8}).length);
+ const s={area:3,district:'lumiose-vernal',x:12,y:6,facing:'up',teamIds:['keep'],steps:42,regionId:6,districtReturnRegion:1};
+ assert.equal(interactionAt(s).tile,'q');
+ const restored=restoreAdventurePosition(storeAdventurePosition(s,11),11);
+ assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-vernal',12,6]);assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);
+});
+
 test('zone two southeastern bridge connects the southern shore to the central island',()=>{
  let s={area:3,district:'lumiose-zone2',x:14,y:13};
  for(const direction of ['up','up','up','up','left','left']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}
