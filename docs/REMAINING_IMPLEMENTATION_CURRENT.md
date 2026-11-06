@@ -481,3 +481,5 @@ Switched-active safety: move-use flags can reset on switch-in. Review now also r
 신규 `weighted-local-v10` AI는 방어·특수방어 하락의 물리 기술 보유 조건과 능력치 하한을 원본 점수에 반영한다. 변신·불명 기술, 다른 복합 효과와 원본 난수 흐름은 부분 지원이다.
 
 A switched Pokémon with a used duplicate may be reviewed if both duplicate PP values have become equal and all party/team/combat records agree. The representative test simulates PP restoration; real PP-item use remains unverified. Differing PP and unidentifiable history remain protected and unsupported.
+
+Actual held Leppa Berry consumption was verified in an isolated constructed unequal-PP battle snapshot through switch, reload, confirmed equal-PP review and next action. For still-unequal values, explicit slot/PP selection with complete backup and atomic updates is not implemented; no value is automatically chosen.
