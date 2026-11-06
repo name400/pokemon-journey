@@ -741,4 +741,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 사우스 불르바르·베르 구역 6·야생 구역 17 (초안)
 
-[구역 17 안내](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17)는 북쪽 세 출입구 가운데 하나가 베르 구역 6으로 이어진다고 설명한다. [도구 위치 목록](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)은 베르 구역 6과 South Boulevard 사이 계단을 명시한다. 이 관계를 연결하고 물과 다리를 도트로 표현했다. 계단 높이, 다리와 수역 윤곽, 도로·출입구 좌표는 초안이다. 구역 17의 다른 북쪽 수로 출입구와 실제 다리 위치는 아직 대조·구현하지 않았다.
+[구역 17 안내](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17)는 북쪽 세 출입구 가운데 하나가 베르 구역 6으로 이어진다고 설명한다. [도구 위치 목록](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)은 베르 구역 6과 South Boulevard 사이 계단을 명시한다. 이 관계를 연결하고 물과 다리를 도트로 표현했다. 계단 높이, 다리와 수역 윤곽, 도로·출입구 좌표는 초안이다. 구역 17의 다른 북쪽 수로 출입구도 연결했지만 실제 다리·계단 위치와 높이는 아직 정밀 대조되지 않았다.
+
+### 야생 구역 17 북쪽 수로 출입구 (초안)
+
+[Poképédia 구역 17](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17)은 북쪽에 쿨랑 수로의 다리와 계단으로 향하는 별도 출입구를 설명한다. 기존 수로 지도에 두 경로를 연결하고 랭크 C 진입 제한을 유지했다. 다리·계단의 정확한 좌표와 높이 차, 주변 지형의 형태는 초안이다.

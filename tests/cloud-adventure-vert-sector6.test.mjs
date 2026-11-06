@@ -13,3 +13,12 @@ test('Vert Sector 6 joins South Boulevard to the north entrance of Zone 17',()=>
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector6',11,8,['kept']]);
  assert.equal(stepField({...boulevard,district:'lumiose-zone17',x:11,y:15},'down').district,'lumiose-vert2');
 });
+test('Zone 17 has two rank-gated northern Coulant exits in addition to Sector 6',()=>{
+ for(const x of [6,16]){
+  const canal={area:3,district:'lumiose-coulant-route',interior:null,x,y:15,zaRoyaleRank:'F',teamIds:['kept']};
+  assert.equal(stepField(canal,'down').blocked,true);
+  const zone=stepField({...canal,zaRoyaleRank:'C'},'down');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone17',x,1]);
+  const back=stepField({...canal,...zone},'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-coulant-route',x,15]);
+  const saved=restoreAdventurePosition(storeAdventurePosition({...canal,...zone},9),9);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone17',x,1,['kept']]);
+ }
+});
