@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 찬바람폭풍·번개폭풍·열사의폭풍의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_STORMS_FIRST_QA_20261106.md](MULTILENS_STORMS_FIRST_QA_20261106.md) 참조.
+
 후속: 신규 도전에서 질투의불꽃의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_BURNING_JEALOUSY_FIRST_QA_20261106.md](MULTILENS_BURNING_JEALOUSY_FIRST_QA_20261106.md) 참조.
 
 후속: 신규 도전에서 타오르는분노·참방참방서핑의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_WRATH_SPLASH_FIRST_QA_20261106.md](MULTILENS_WRATH_SPLASH_FIRST_QA_20261106.md) 참조.
