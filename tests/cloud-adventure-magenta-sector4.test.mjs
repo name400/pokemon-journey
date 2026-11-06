@@ -40,3 +40,11 @@ test('draft rooftop circuit and scaffolding retain earlier rooftop saves',()=>{
   assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[s.district,x,y,['kept']]);
  }
 });
+test('Quasartico connects south to Sector 4 while Zone 7 stays gated',()=>{
+ const office={area:3,district:'lumiose-quasartico',interior:null,x:11,y:15,facing:'down',zaMission10Stage:3,zaRoyaleRank:'V',teamIds:['kept']};
+ const sector=stepField(office,'down');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-magenta-sector4',11,1]);
+ const state={...office,...sector};assert.ok(fieldPath(fieldMap(state),state,{x:11,y:15}).length);
+ assert.equal(stepField({...state,x:11,y:15},'down').blocked,true);
+ const loaded=restoreAdventurePosition(storeAdventurePosition(state,76),76);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaMission10Stage,loaded.teamIds],['lumiose-magenta-sector4',11,1,3,['kept']]);
+ const back=stepField(loaded,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-quasartico',11,15]);
+});
