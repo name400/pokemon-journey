@@ -484,8 +484,10 @@ A switched Pokémon with a used duplicate may be reviewed if both duplicate PP v
 
 Actual held Leppa Berry consumption was verified in an isolated constructed unequal-PP battle snapshot through switch, reload, confirmed equal-PP review and next action. For still-unequal values, explicit slot/PP selection is now available under the narrow conditions below; no value is automatically chosen.
 
-다른 PP의 중복 기술은 일반 싱글 전투에서 교체 직후 출전한 비스케치 포켓몬의 한 쌍의 중복 슬롯에 한해, 전투 로그와 저장이 일치하면 사용자가 남길 슬롯을 직접 선택할 수 있다. 원본 슬롯·PP와 파티 PP를 백업하고 파티·전투·명령을 함께 갱신한다. 이벤트·더블·스케치 상태의 PP 불일치는 보류한다.
+다른 PP의 중복 기술은 일반 싱글 전투에서 교체 직후 출전한 비스케치 포켓몬의 한 쌍의 중복 슬롯에 한해, 전투 로그와 저장이 일치하면 사용자가 남길 슬롯을 직접 선택할 수 있다. 원본 슬롯·PP와 파티 PP를 백업하고 파티·전투·명령을 함께 갱신한다. 이벤트·더블 상태의 PP 불일치는 보류한다.
 
 다른 위치의 중복 슬롯도 양쪽 선택을 지원한다. 첫 슬롯 제거로 전투 선택 위치가 바뀌면 남긴 기술을 가리키도록 보정하고 기존 위치는 백업한다.
 
 검증된 융합체의 PP 불일치도 일반 싱글 전투에서 선택 정리할 수 있다. 파티와 전투의 융합·기증자·시드·폼 정보가 일치해야 하며 원본 PP 백업, 분리, 저장 경쟁을 검사했다.
+
+일반 싱글 전투에서 스케치 중복 기술을 사용한 뒤 교체된 포켓몬도 슬롯별 PP를 확인해 양쪽 중 정리할 칸을 고를 수 있다. 검증된 융합체도 지원하며 원본 슬롯·PP·전투 선택 위치를 백업한다. 이벤트·더블 등 다른 조건은 별도 확인이 필요하다.
