@@ -810,3 +810,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르 구역 7과 사우스 불르바르 (초안)
 
 [미션 40 위치 자료](https://www.pokemon-france.com/guides/legendes-pokemon-z-a/missions-secondaires/)는 구역 7이 사우스 불르바르에 접한다고 설명하고, [탐색 공략](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Exploring_Lumiose_City)은 불르바르의 홀로베이터에서 구역 7 옥상으로 가는 길을 설명한다. 구역 7과 기존 도로를 왕복 연결했다. 실제 지상 출입 위치·경로 형상은 초안이며 홀로베이터 미션과 옥상 경로는 아직 구현하지 않았다.
+
+### 베르 구역 2 정원과 야생 구역 2 북서 입구 (초안)
+
+[원작 구역 공략](https://thegameslayer.com/guides/pokemon-legends-z-a-all-wild-zone-2-pokemon/)은 야생 구역 2 북서 출입구가 베르 구역 2 옆에 있고 입구 안쪽에 계단이 있다고 설명한다. [현장 경로 자료](https://esports.gg/guides/pokemon/how-to-catch-larvitar-in-pokemon-legends-z-a/)는 구역 2 서북쪽 정원과 계단을 설명한다. 기존 연결을 유지하며 빈 도시 지도에 정원과 접근 계단을 표현했다. 정원 윤곽·계단 폭과 좌표는 초안이며 건물·옥상과 높이 차는 아직 추가 검증·구현이 필요하다.

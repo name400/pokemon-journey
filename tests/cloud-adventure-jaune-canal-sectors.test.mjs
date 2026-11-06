@@ -118,3 +118,12 @@ test('Vert Sector 7 connects South Boulevard without disrupting the Sector 6 rou
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,...road},19),19);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-south-boulevard',18,1,['kept']]);
 });
+test('Vert Sector 2 garden keeps the northwest Zone 2 gate and old saves walkable',()=>{
+ const s={area:3,district:'lumiose-vert2',interior:null,x:21,y:8,teamIds:['kept']};
+ const map=fieldMap(s);assert.equal(map[4][8],'k');assert.equal(map[8][19],':');
+ const zone=stepField(s,'right');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone2',4,1]);
+ assert.equal(stepField({...s,...zone},'up').district,'lumiose-vert2');
+ assert.ok(fieldPath(map,{x:1,y:8},s).length);
+ const restored=restoreAdventurePosition(storeAdventurePosition({...s,x:8,y:4},20),20);
+ assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-vert2',8,4,['kept']]);
+});
