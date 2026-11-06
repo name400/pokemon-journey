@@ -560,3 +560,9 @@ The round 2D terrain, field positions, probabilities and city connection are dra
 #### Zone 8 alpha and item placement
 
 [Pokémon Kingdom](https://pente.koro-pokemon.com/legendsz-a/map-wild-zone-08.shtml) places alpha Camerupt in the southwest of the central sand and alpha Krokorok in the outer sand, and identifies stalls on the east and south. [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists two Great Balls, a Hyper Potion and a Heal Ball, among other items. The tile coordinates and stall/entrance geometry remain draft. Alpha Krokorok is static rather than circling; the precise late-game appearance condition for alpha Camerupt remains unverified and it is provisionally always present. TM036, Revive, remaining stalls, original entry streets, and exact geometry remain to be implemented.
+
+### Wild Zone 9: provisional Magenta Sector 5
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-9-guide-all-pokemon-and-alphas) describes construction scaffolding, a southern entrance, northwest entrance and ladders linking the ground to rooftops. It places Sableye beneath scaffolding, Mawile on the southwestern roofs, and Carbink on northeastern roofs. [GameWith](https://gamewith.jp/pokemon-za/524512) also identifies the southeastern Kadabra rooftop and these ladder approaches.
+
+This is a provisional two-layer interpretation: tile sizes, ladder and city-connector coordinates, roof silhouettes and the scaffold connection are not surveyed. The second original entrance is not connected to the city yet. Alpha Meowstic and Manectric, field items, rock obstacles and the real-time field behaviours remain unimplemented. Existing mission 40's research encounter is unchanged.
