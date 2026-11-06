@@ -773,7 +773,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 쉐종 운하변과 센트리코·존느 구역 6 (초안)
 
-[Poképédia](https://www.pokepedia.fr/Quai_du_Canal_des_Saisons)는 운하변이 서쪽 센트리코 광장과 북쪽 존느 구역 6을 잇고 위쪽 길·물가 길과 나무 발판이 있다고 설명한다. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Saison_Canalside)도 센트리코에서 운하 북쪽 강변으로 이어진다고 설명한다. 두 출입과 산책로·수역·발판을 추가했다. 정확한 좌표와 폭·높이 차·발판 개수는 초안이다. 존느 구역 2도 연결했으나 베르 구역 3 방면 다리와 주변 시설은 미구현이다.
+[Poképédia](https://www.pokepedia.fr/Quai_du_Canal_des_Saisons)는 운하변이 서쪽 센트리코 광장과 북쪽 존느 구역 6을 잇고 위쪽 길·물가 길과 나무 발판이 있다고 설명한다. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Saison_Canalside)도 센트리코에서 운하 북쪽 강변으로 이어진다고 설명한다. 두 출입과 산책로·수역·발판을 추가했다. 정확한 좌표와 폭·높이 차·발판 개수는 초안이다. 존느 구역 2도 연결했으나 베르 구역 3 방면 다리는 연결했으나 주변 시설은 미구현이다.
 
 ### 존느 구역 2와 쉐종 운하변 (초안)
 
@@ -790,3 +790,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 존느 스트리트와 야생 구역 8 출입구 (초안)
 
 [구역 8 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_8)는 존느 광장 내 구역이 존느 스트리트 양쪽에서 접근 가능하다고 설명한다. 기존 센트리코·광장 접근로 출구를 저장 호환을 위해 유지하면서 존느 스트리트에서 직접 들어가는 왕복 경로를 추가했고 기존 랭크 제한을 적용했다. 출입구의 정확한 좌표·도로 형상은 초안이며, 두 출입구를 포함한 광장 전체 형상은 원작 지도·영상과 추가 대조가 필요하다.
+
+### 쉐종 운하 다리와 베르 구역 3 (초안)
+
+[쉐종 운하변 자료](https://www.pokepedia.fr/Quai_du_Canal_des_Saisons)는 베르 구역 3과 운하변을 잇는 다리를 명시한다. [도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 구역 3 잔디 지대와 베르 광장 사이 계단을 설명한다. 운하를 건너는 길과 구역 3, 기존 광장을 왕복 연결하고 잔디를 표현했다. 다리 폭·계단과 지형의 정확한 좌표는 초안이며 카페·옥상·시설은 미구현이다.
