@@ -974,3 +974,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 사우스 불르바르와 마젠타 거리 (초안)
 
 [미르시티 도로 설명](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City)은 변전소·구역 14를 사우스 불르바르와 마젠타 거리의 시설로 설명한다. 기존 운하변 마젠타 거리 초안과 사우스 불르바르를 연결해 하나의 구역 14 입구로 접근하도록 했다. 교차점 좌표·실제 선형은 원작 시각 대조가 필요한 초안이다.
+
+### 로즈 3번지와 야생 구역 7 (초안)
+
+[스토리 안내](https://pokemundo.com.br/detonado/pokemon-legends-z-a)와 [구역 안내](https://www.pokemythology.net/detonados/detonado-legends-z-a/)는 로즈 광장 구역 7이 3번지와 4번지 사이에 있다고 설명한다. 기존 3번지와 구역 7을 왕복 연결하고 랭크 F 제한을 유지했다. 정확한 출입구 위치·거리 선형은 원작 지도·영상 대조가 필요한 초안이다.
