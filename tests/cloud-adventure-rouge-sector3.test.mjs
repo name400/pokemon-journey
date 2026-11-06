@@ -19,3 +19,12 @@ test('Rouge Sector 3 landmarks can be reached without changing stored state',()=
   assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-rouge-sector3',x,y,['kept']]);
  }
 });
+
+test('Rouge Sector 3 and the west of Rouge Plaza connect and restore saves',()=>{
+ const s={area:3,district:'lumiose-rouge-sector3',interior:null,x:21,y:8,teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(s),{x:1,y:8},s).length);
+ const plaza=stepField(s,'right');assert.deepEqual([plaza.district,plaza.x,plaza.y,plaza.zaZone3TowerUpper],['lumiose-zone3',1,8,false]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...plaza},58),58);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone3',1,8,['kept']]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-rouge-sector3',21,8]);
+ assert.equal(stepField({...saved,x:7,y:5,zaRoyaleRank:'Y',zaJoseeRequired:true},'down').blocked,true);
+});

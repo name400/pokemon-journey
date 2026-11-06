@@ -938,3 +938,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 오토널 애비뉴와 콰자르티코 (초안)
 
 [오토널 애비뉴 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/autumnal-avenue.html)는 서쪽 접근처로 콰자르티코를 명시한다. 기존 거리와 콰자르티코 맵을 왕복 연결했다. 지형 선형과 출입 타일은 원작 영상으로 추가 확인할 초안이다.
+
+### 루주 3번지와 루주 광장 서쪽 (초안)
+
+[루주 지구 위치 안내](https://allthings.how/modest-mint-locations-in-pokemon-legends-z-a/)는 구역 3 서쪽의 시장을 루주 3번지로 설명하면서 1번지로 표기하는 자료도 있다고 밝힌다. 루주 3번지 초안과 구역 3 서쪽을 양방향 연결했다. 시장의 정확한 구역 경계·입구 위치와 지형은 미확정이며 원작 지도 대조가 필요하다.
