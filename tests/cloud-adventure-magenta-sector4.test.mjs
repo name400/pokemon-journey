@@ -31,3 +31,12 @@ test('draft holovator connects the street to a saved rooftop route and back',()=
  assert.equal(fieldDialogue(saved).action,'mission26CaseBattle');
  const back=stepField(upper,'down');assert.notEqual(back.district,'lumiose-magenta-sector4');
 });
+test('draft rooftop circuit and scaffolding retain earlier rooftop saves',()=>{
+ const s={area:3,district:'lumiose-magenta-sector4-roof',interior:null,x:1,y:13,teamIds:['kept'],zaMission26Stage:3};
+ const map=fieldMap(s);assert.ok(fieldPath(map,s,{x:13,y:12}).length);assert.ok(fieldPath(map,{x:13,y:12},{x:19,y:5}).length);
+ assert.equal(map[4][15],',');assert.equal(map[4][16],',');
+ for(const [x,y] of [[1,13],[3,8],[10,4],[15,4],[19,5]]){
+  const restored=restoreAdventurePosition(storeAdventurePosition({...s,x,y},75),75);
+  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[s.district,x,y,['kept']]);
+ }
+});
