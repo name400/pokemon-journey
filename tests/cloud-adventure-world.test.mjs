@@ -296,6 +296,10 @@ test('cemetery draft connects through the northern street and preserves location
  const source={area:3,district:'lumiose-zone3',x:1,y:8,zaEmmaMet:true};const west=stepField(source,'left');assert.deepEqual([west.district,west.x,west.y],['lumiose-rouge-sector3',21,8]);assert.equal(stepField({...source,...west},'right').district,'lumiose-zone3');
  const north=stepField({...source,x:11,y:1},'up');assert.equal(north.district,'lumiose-rouge-north');
  const northStreet=fieldMap({area:3,district:'lumiose-rouge-north'});assert.ok(fieldPath(northStreet,{x:19,y:5},{x:15,y:1}).length);const northEntry=stepField({...source,district:'lumiose-rouge-north',x:15,y:1},'up');assert.deepEqual([northEntry.district,northEntry.x,northEntry.y],['lumiose-zone4',11,15]);assert.equal(stepField({...northEntry,area:3},'down').district,'lumiose-rouge-north');assert.ok(fieldPath(lumioseZone4Map(),northEntry,{x:11,y:10}).length);
+ const northGate=stepField({...source,district:'lumiose-zone4',x:11,y:1},'up');assert.deepEqual([northGate.district,northGate.x,northGate.y],['lumiose-north-boulevard',7,15]);
+ assert.ok(fieldPath(fieldMap({...source,...northGate}),northGate,{x:5,y:1}).length);
+ const cemeteryReturn=stepField({...source,...northGate},'down');assert.deepEqual([cemeteryReturn.district,cemeteryReturn.x,cemeteryReturn.y],['lumiose-zone4',11,1]);
+ const northSaved=restoreAdventurePosition(storeAdventurePosition({...source,...northGate,teamIds:['keep'],zaSableyeQuest:1},9),9);assert.deepEqual([northSaved.district,northSaved.x,northSaved.y,northSaved.zaSableyeQuest,northSaved.teamIds],['lumiose-north-boulevard',7,15,1,['keep']]);
  const entered=stepField({...source,district:'lumiose-rouge-north',x:21,y:4},'right');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone4',21,8]);
  assert.ok(fieldPath(lumioseZone4Map(),{x:21,y:8},findTile(lumioseZone4Map(),'z')).length);
  assert.equal(stepField({area:3,district:'lumiose-zone4',x:21,y:8},'right').district,'lumiose-rouge-north');
