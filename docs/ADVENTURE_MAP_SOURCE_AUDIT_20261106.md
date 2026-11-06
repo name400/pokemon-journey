@@ -906,3 +906,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르 거리와 사우스 불르바르 교차로 (초안)
 
 [베르 포켓몬센터 위치 자료](https://bulbapedia.bulbagarden.net/wiki/Lost_Pok%C3%A9_Ball_collector)는 센터가 두 도로의 교차점에 있다고 설명한다. 기존 베르 거리와 사우스 불르바르 지도를 왕복 연결했다. 교차로의 실제 위치·폭과 센터 건물까지의 동선은 추가 원작 시각 대조가 필요한 초안이다.
+
+### 베르 포켓몬센터의 도로변 접근 (초안)
+
+[베르 8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_8)는 베르 거리 쪽 포켓몬센터의 파티 회복을 설명한다. 기존 회복 처리를 교차로 근처 초안 타일에 연결했다. 같은 자료는 Station Front와의 교차점을, [회수원 자료](https://bulbapedia.bulbagarden.net/wiki/Lost_Pok%C3%A9_Ball_collector)는 South Boulevard와의 교차점을 언급하므로 정확한 입구 좌표와 도로 이름은 미확정이다. 센터 상점·벤치·회수원은 별도 구현이 필요하다.
