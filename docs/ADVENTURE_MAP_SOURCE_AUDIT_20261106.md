@@ -672,3 +672,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ## Rouge Street to Wild Zone 4 (draft)
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-4-guide-all-pokemon-and-alphas) places Wild Zone 4 north of Zone 3 on the far side of Sushi High Roller, and [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City) lists the cemetery entrance on Rouge Street. A northern street exit and southern cemetery approach now represent that relationship; the old eastern transition is preserved for existing travel. Gate tile coordinates, street widths, and cemetery geometry are still provisional and are not established by these descriptions.
+
+## Saison Canal: Magenta Plaza to Wild Zone 14 (draft)
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas) describes following the Saison Canal northwest from Prism Tower past Zone 7 to reach the Zone 14 substation. A canal-side route now connects the Zone 7 and Zone 14 drafts, retaining their previous city entrances. The canal shape, walkway width, buildings and gate coordinates remain unverified approximations; the existing North Boulevard connector is also not evidence of an original entrance.
