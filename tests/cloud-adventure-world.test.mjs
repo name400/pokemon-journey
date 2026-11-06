@@ -170,6 +170,14 @@ test('zone two northeastern crossing joins the outer bank to the island without 
  const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x:14,y:4,regionId:6,districtReturnRegion:1,teamIds:['keep'],steps:42},7);old.districtPosition.zone2Layout=3;const restored=restoreAdventurePosition(old,7);assert.deepEqual([restored.x,restored.y],[14,4]);assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);
 });
 
+test('zone two eastern island is gated by a rock and old locations return to the accessible bank',()=>{
+ const base={area:3,district:'lumiose-zone2',x:18,y:12,facing:'right',regionId:6,districtReturnRegion:1,teamIds:['keep'],steps:42};
+ assert.equal(stepField(base,'right').blocked,true);assert.equal(interactionAt(base).tile,'r');
+ let s={...base,zaZone2RockCleared:true};for(const d of ['right','right','up']){const p=stepField(s,d);assert.equal(p.blocked,undefined);s={...s,...p};}assert.deepEqual([s.x,s.y],[20,11]);
+ const before=storeAdventurePosition({...base,x:20,y:11},17);before.districtPosition.zone2Layout=3;const restored=restoreAdventurePosition(structuredClone(before),17);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone2',18,12]);assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);assert.equal(restoreAdventurePosition(structuredClone(before),18).district,null);
+ const after=storeAdventurePosition(s,20),loaded=restoreAdventurePosition(after,20);assert.deepEqual([loaded.x,loaded.y],[20,11]);assert.equal(loaded.zaZone2RockCleared,true);
+});
+
 test('Vernal waterside retains cafe and plaza access and safely restores old saves',()=>{
  const map=lumioseVernalMap();assert.equal(map[5][18],'~');assert.ok(fieldPath(map,{x:12,y:6},findTile(map,'E')).length);assert.ok(fieldPath(map,{x:1,y:8},findTile(map,'q')).length);
  assert.equal(stepField({area:3,district:'lumiose-vernal',x:18,y:7},'up').blocked,true);
