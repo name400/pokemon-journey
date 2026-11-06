@@ -48,3 +48,11 @@ test('Whirlipede occupies the clearing past the second sludge and keeps its spen
  assert.equal(saved.zaZone5Spent['whirlipede-alpha'],true);
  assert.notEqual(fieldMap(saved)[5][18],'v');
 });
+
+test('Vernal Avenue connects the eastern ground entrance of Zone 5',()=>{
+ const road={area:3,district:'lumiose-vernal',interior:null,x:1,y:13,teamIds:['kept']};
+ const zone=stepField(road,'left');assert.deepEqual([zone.district,zone.x,zone.y,zone.zaZone5Upper],['lumiose-zone5',21,13,false]);
+ const state={...road,...zone};assert.ok(fieldPath(fieldMap(state),state,{x:11,y:15}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,52),52);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone5',21,13,['kept']]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-vernal',1,13]);
+});

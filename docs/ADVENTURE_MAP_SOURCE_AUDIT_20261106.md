@@ -918,3 +918,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 블르 3번지와 베르날 애비뉴 (초안)
 
 [Aymlis Park 자료](https://bulbapedia.bulbagarden.net/wiki/Aymlis_Park)는 베르날 애비뉴와 블르 3번지가 공원 포켓몬센터 인근에서 만난다고 설명한다. 기존 두 도시 맵을 별도 야생 구역 진입 없이 왕복 연결했다. 교차로 좌표·형상과 센터 출입구는 원작 영상 대조가 필요한 초안이다.
+
+### 베르날 애비뉴와 야생 구역 5 (초안)
+
+[구역 5 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-5-guide-all-pokemon-and-alphas)는 베르날 애비뉴 끝에서 구역으로 접근할 수 있다고 설명한다. 애비뉴와 구역 5 지상을 양방향으로 연결했다. 동쪽 물가의 정확한 입구·수역 윤곽과 타일 좌표는 지도·영상으로 추가 확인할 초안이다.
