@@ -637,7 +637,7 @@ The grid, approximate café exterior and link from the existing North Boulevard 
 
 ## Wild Zone 18 — Magenta Sector 9 (draft)
 
-[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-18-guide-all-pokemon-and-alphas) documents a Northern Street entrance, Bagon in grass beside the road, Alpha Salamence on the ground and rank B access after mission 30. This implementation approximates the road, grass, building outlines, entrance coordinates and encounter positions. The Magenta Sector 8 entrance, precise elevated access and scaffolding geometry, most rooftop Pokémon and most items remain unimplemented; the map is not an exact reproduction.
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-18-guide-all-pokemon-and-alphas) documents a Northern Street entrance, Bagon in grass beside the road, Alpha Salamence on the ground and rank B access after mission 30. This implementation approximates the road, grass, building outlines, entrance coordinates and encounter positions. The precise Magenta Sector 8 entrance location, elevated access and scaffolding geometry, most rooftop Pokémon and most items remain unimplemented; the map is not an exact reproduction.
 
 - [VGC](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-18/) describes an alley left of Salamence, Alpha Lopunny and a scaffolding ladder leading to the rooftop entrance; [Pokémon France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists a Quick Ball on the rooftop. The alley and ladder are compressed into this draft map; exact positions and the separate outer gate are unverified.
 
@@ -664,3 +664,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ## Hotel Z and Vert Street to Wild Zone 17 (draft)
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-17-guide-all-pokemon-and-alphas) places Zone 17 northeast of Hotel Z and southwest of Zone 2, behind Racine Construction. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City) lists a Wild Zone 17 entrance on Vert Street. This build adds a street connection from the Hotel Z area to a Zone 17 entrance while preserving the prior Vert Sector 2 connection. The street alignment, building and gate tile coordinates are provisional; Racine Construction and exact surroundings are not yet implemented.
+
+## Magenta Sector 8 to Wild Zone 18 (draft)
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-18-guide-all-pokemon-and-alphas) lists North Boulevard and Magenta Sector 8 as distinct approaches to Zone 18. The new Sector 8 road and its connection to the existing North Boulevard map represent that relationship provisionally. Exact street alignment, building shapes, transition coordinates, and the rooftop entrance remain unverified.
