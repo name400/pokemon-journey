@@ -7,10 +7,10 @@ import {starterCatalog} from '../../../lib/rogue-starter-system.mjs';
 import {applyClassicAction,activeClassicRun} from '../../../lib/rogue-classic-game.mjs';
 import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 export function createFixture(scenario='eggs'){
- if(['active-alias-repair','active-sketch-repair'].includes(scenario)){
-  const reserve=scenario==='active-sketch-repair'?makeReferenceMon(235,50,{boxId:'alias',moves:['Tackle','Sketch','몸통박치기'],rogueSketchRule:'source-v1',rogueSketchPP:[2,1,17]}):makeReferenceMon(1,50,{boxId:'alias',moves:['Tackle','몸통박치기','Growl'],pp:{tackle:3,growl:5},roguePPUps:{tackle:2}});
+ if(['active-alias-repair','active-sketch-repair','active-trainer-alias-repair','active-trainer-sketch-repair'].includes(scenario)){
+  const reserve=scenario.includes('sketch')?makeReferenceMon(235,50,{boxId:'alias',moves:['Tackle','Sketch','몸통박치기'],rogueSketchRule:'source-v1',rogueSketchPP:[2,1,17]}):makeReferenceMon(1,50,{boxId:'alias',moves:['Tackle','몸통박치기','Growl'],pp:{tackle:3,growl:5},roguePPUps:{tackle:2}});
   const {doc,run}=fixture([makeReferenceMon(151,50,{boxId:'lead',moves:['Tackle']}),reserve]);
-  run.screen='battle';run.encounter={kind:'wild'};run.mystery=null;run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+  const trainer=scenario.startsWith('active-trainer-');run.screen='battle';run.encounter=trainer?{kind:'trainer',trainer:{id:1,name:'Trainer'}}:{kind:'wild'};run.mystery=null;run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})],{trainer});run.party=run.combat.teams[0];return doc;
  }
  if(/^profile-log-(0|300|1500)$/.test(scenario)){const doc=createFixture('profile-double'),run=activeClassicRun(doc),count=Number(scenario.split('-').at(-1));run.waveLog=Array.from({length:count},(_,i)=>`뮤츠의 스피드스타! · ${i+1}번째 행동 · HP 120/300`);run.waveLogTurnStart=count;return doc;}
  if(scenario==='profile-single'||scenario==='profile-double'){
