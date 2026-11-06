@@ -714,3 +714,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 블루 구역 7과 야생 구역 12 남문 (초안)
 
 [Poképédia 구역 12](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12)는 남쪽 출입구가 블루 구역 7로 이어진다고 설명한다. [Bleu Sector 7 연결 목록](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-7.html)은 인접한 북서쪽 구역 5와 동쪽 Vernal Avenue도 명시한다. 세 연결을 반영했지만 정확한 도로·건물·출입구 좌표는 초안이다. 원작의 분수와 포켓몬센터는 기존 임시 위치를 유지하며 구역 7에 아직 구현하지 않았다.
+
+### 블루 구역 7 남쪽과 사우스 불르바르 (초안)
+
+[Bleu Sector 7 위치 목록](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-7.html)은 구역 남쪽을 South Boulevard로 표시한다. [도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 연구소 입구가 South Boulevard에 있음을 뒷받침한다. 구역 7 남쪽과 새 거리, 기존 연구소 앞 구간을 이어 기존 연구소·저장 위치를 보존했다. 도로의 실제 길이·연구소에 이르는 방향과 건물·출입구 좌표는 초안이며, 다른 도로 및 주변 시설은 아직 미구현이다.
