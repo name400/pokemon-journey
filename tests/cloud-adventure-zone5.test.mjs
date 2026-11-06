@@ -1,6 +1,7 @@
 import test from 'node:test';
+import {moves} from '../lib/game.mjs';
 import assert from 'node:assert/strict';
-import {zone5Map,zone5Encounter} from '../lib/cloud-adventure/adventure-zone5.mjs';
+import {zone5Map,zone5Encounter,canClearZone5Sludge} from '../lib/cloud-adventure/adventure-zone5.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('zone five preserves separate ground and rooftop, entrances and saved locations',()=>{
@@ -74,4 +75,12 @@ test('Café Gallant is reachable from the Zone 5 approach without moving saved p
  const saved=restoreAdventurePosition(storeAdventurePosition(cafe,54),54);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-bleu-street',18,10,['kept']]);
  assert.equal(fieldDialogue({...cafe,district:'lumiose-centrico-route',x:18,y:6,facing:'up'}).action,'rankEGalette');
  assert.equal(stepField({...state,x:21,y:4},'right').district,'lumiose-zone5');
+});
+
+
+test('sludge accepts water attacks and Confusion but not Psybeam or fainted Pokémon',()=>{
+ assert.equal(canClearZone5Sludge({hp:1,moves:['물대포']},moves),true);
+ assert.equal(canClearZone5Sludge({hp:1,moves:['염동력']},moves),true);
+ assert.equal(canClearZone5Sludge({hp:1,moves:['환상빔']},moves),false);
+ assert.equal(canClearZone5Sludge({hp:0,moves:['염동력']},moves),false);
 });
