@@ -11,10 +11,13 @@ test('zone seven gate, plaza and stored location',()=>{
 });
 
 test('Magenta Sector 3 reaches Zone 7 without bypassing its rank gate',()=>{
- const city={area:3,district:'lumiose-magenta-sector3',interior:null,x:12,y:15,zaRoyaleRank:'V',teamIds:['kept']};
- assert.equal(stepField(city,'down').blocked,true);
- const zone=stepField({...city,zaRoyaleRank:'F'},'down');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone7',17,1]);
+ const city={area:3,district:'lumiose-magenta-sector3',interior:null,x:4,y:1,zaRoyaleRank:'V',teamIds:['kept']};
+ assert.equal(stepField(city,'up').blocked,true);
+ const zone=stepField({...city,zaRoyaleRank:'F'},'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone7',17,15]);
  const state={...city,...zone,zaRoyaleRank:'F'};assert.ok(fieldPath(zone7Map(state),state,{x:10,y:10}).length);
- const saved=restoreAdventurePosition(storeAdventurePosition(state,71),71);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone7',17,1,['kept']]);
- const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector3',12,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,71),71);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone7',17,15,['kept']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector3',4,1]);
+ for(const [district,x,y,safeY] of [['lumiose-zone7',17,0,1],['lumiose-magenta-sector3',12,16,15]]){
+  const old=restoreAdventurePosition(storeAdventurePosition({...city,district,x,y},72),72);assert.deepEqual([old.district,old.x,old.y,old.teamIds],[district,x,safeY,['kept']]);
+ }
 });
