@@ -870,3 +870,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 오토널 애비뉴와 북쪽 대로 (초안)
 
 [오토널 애비뉴 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/autumnal-avenue.html)는 북서쪽 끝이 북쪽 대로라고 설명한다. 두 구역을 왕복 연결했다. 출입 타일과 주변 건물·도로의 구체적인 형상은 원작 영상 대조가 필요한 초안이다.
+
+### 야생 구역 18 남동쪽 콰자르티코 골목 (초안)
+
+[구역 18 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_18)는 남동쪽의 콰자르티코 방면 작은 골목을 별도 출입구로 설명한다. 지상에서 양방향 연결하고 랭크 B 제한을 적용했다. 골목 선형과 2D 출입 좌표, 높이 차는 원작 영상 대조가 필요한 초안이다.

@@ -38,3 +38,12 @@ test('Autumnal Avenue and North Boulevard connect both ways and preserve saves',
  const returned=stepField(restored,'up');assert.deepEqual([returned.district,returned.x,returned.y],['lumiose-autumnal-approach',1,8]);
  assert.ok(fieldPath(fieldMap(road),{x:1,y:8},{x:11,y:15}).length);
 });
+
+test('Zone 18 southeast alley reaches Quasartico and keeps rank and saved state',()=>{
+ const zone={area:3,district:'lumiose-zone18',interior:null,x:20,y:15,zaRoyaleRank:'B',teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(zone),{x:11,y:8},{x:20,y:15}).length);
+ const office=stepField(zone,'down');assert.deepEqual([office.district,office.x,office.y],['lumiose-quasartico',20,1]);
+ assert.equal(stepField({...zone,...office,zaRoyaleRank:'C'},'up').blocked,true);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...office},37),37);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-quasartico',20,1,['kept']]);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaZone18Upper],['lumiose-zone18',20,15,false]);
+});
