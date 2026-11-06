@@ -59,3 +59,20 @@ test('Zone 1 north gate links Vert Sector 9 to Vernal and the courtyard',()=>{
  assert.ok(fieldPath(fieldMap({...saved,...vernal}),vernal,{x:1,y:10}).length);
  assert.equal(stepField({...saved,...vernal,x:1,y:10},'left').district,'lumiose-zone1-courtyard');
 });
+
+test('second roof and Side Mission 17 preserve ladder and shiny encounter state',()=>{
+ const npc={area:3,district:'lumiose-vert-sector9',interior:null,x:14,y:15,facing:'up',zaRoyaleRank:'W'};
+ assert.equal(fieldDialogue(npc).action,undefined);
+ assert.equal(fieldDialogue({...npc,zaRoyaleRank:'V'}).action,'zone1Mission17Start');
+ const lower={...npc,district:'lumiose-zone1-roof',x:15,y:5,facing:'up',zaSide17Stage:1};
+ assert.equal(fieldDialogue(lower).action,'zone1RoofHighLadder');
+ const upper={...lower,district:'lumiose-zone1-high-roof',x:15,y:9,facing:'down'};
+ assert.equal(fieldDialogue(upper).action,'zone1RoofHighLadder');
+ assert.ok(fieldPath(fieldMap(upper),upper,{x:8,y:6}).length);
+ const mareep={...upper,x:8,y:6,facing:'up'};
+ assert.equal(fieldDialogue(mareep).action,'zone1Mission17Observe');
+ assert.equal(fieldDialogue({...mareep,zaSide17Stage:2}).action,'zone1Mission17Battle');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...mareep,zaSide17Stage:2,zaSide17MareepCaught:true,teamIds:['kept']},58),58);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaSide17MareepCaught,saved.teamIds],['lumiose-zone1-high-roof',8,6,true,['kept']]);
+ assert.notEqual(fieldMap(saved)[5][8],'m');
+});
