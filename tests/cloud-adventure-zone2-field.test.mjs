@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {zone2FieldMonsters,zone2FieldTarget} from '../lib/cloud-adventure/adventure-world.mjs';
 test('shared zone two field encounters respect habitat, time, distance and spent state',()=>{
  const s={district:'lumiose-zone2',x:12,y:8};
- assert.deepEqual(zone2FieldMonsters(s,'day').map(m=>m.id),['patrat','binacle','magikarp']);
+ assert.deepEqual(zone2FieldMonsters(s,'day').map(m=>m.id),['patrat','patrat2','binacle','magikarp']);
  assert.equal(zone2FieldTarget(s,'day','patrat').distance,1);
  assert.equal(zone2FieldTarget(s,'day','staryu'),null);
  assert.ok(zone2FieldTarget({ ...s,x:7,y:8 },'night','staryu'));
@@ -23,4 +23,13 @@ test('bridge reaction moves Magikarp to the bridge and restores the water positi
  s.x=13;s.y=9;for(let i=0;i<3;i++)stepZone2Field(s,'day');
  fish=zone2FieldMonsters(s,'day').find(m=>m.id==='magikarp');assert.deepEqual([fish.x,fish.y,fish.water],[15,10,true]);
  assert.equal(stepZone2Field({...s,zaZone2FieldSpent:{magikarp:true},x:14,y:11},'day'),false);
+});
+
+
+test('Patrat and Staryu move within their habitats and contact is detected',async()=>{
+ const {stepZone2Field,zone2FieldContact}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const s={district:'lumiose-zone2',x:14,y:12,steps:3};assert.equal(zone2FieldContact(s,'night'),null);stepZone2Field(s,'night');
+ const group=zone2FieldMonsters(s,'night'),first=group.find(m=>m.id==='patrat'),second=group.find(m=>m.id==='patrat2'),star=group.find(m=>m.id==='staryu');
+ assert.notDeepEqual([first.x,first.y],[11,8]);assert.notDeepEqual([star.x,star.y],[8,8]);assert.notDeepEqual([first.x,first.y],[second.x,second.y]);
+ s.x=first.x;s.y=first.y;assert.equal(zone2FieldContact(s,'night').id,'patrat');s.zaZone2FieldSpent={patrat:true};assert.equal(zone2FieldContact(s,'night'),null);
 });
