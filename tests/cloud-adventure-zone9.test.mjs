@@ -17,3 +17,13 @@ test('Zone 9 connects Estival Avenue while retaining rank and rooftop boundaries
  const saved=restoreAdventurePosition(storeAdventurePosition({...road,...zone,zaRoyaleRank:'F'},31),31);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone9',15,15,['kept']]);
 });
+test('Zone 9 north gate links Magenta Sector 6 and the canal route',()=>{
+ const z={area:3,district:'lumiose-zone9',interior:null,x:11,y:1,zaRoyaleRank:'F',teamIds:['kept']};
+ const sector=stepField(z,'up');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-magenta-sector6',11,15]);
+ assert.equal(stepField({...z,...sector},'down').district,'lumiose-zone9');
+ assert.equal(stepField({...z,...sector,zaRoyaleRank:'V'},'down').blocked,true);
+ const canal=stepField({...z,...sector,x:11,y:1},'up');assert.equal(canal.district,'lumiose-magenta-canal-route');
+ assert.equal(stepField({...z,...canal},'left').district,'lumiose-magenta-sector6');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...z,...sector,x:11,y:7},32),32);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector6',11,7,['kept']]);
+});
