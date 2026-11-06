@@ -698,3 +698,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 블루 구역 5와 야생 구역 12 서쪽 (초안)
 
 [Poképédia의 구역 12 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12)과 [Bulbapedia의 Aymlis Park](https://bulbapedia.bulbagarden.net/wiki/Aymlis_Park)를 근거로 구역 12 서쪽과 블루 구역 5의 관계를 반영했다. Poképédia는 서쪽 출입구 두 곳을 명시한다. 두 입구 및 이를 잇는 거리의 타일 좌표, 크기, 건물 윤곽은 초안이다. 기존 센트리코 임시 연결은 저장과 이동 호환성을 위해 유지한다. 카페와 다른 거리로의 실제 지상 연결 및 상세 지형은 미확인·미구현이다.
+
+### 블루 구역 3과 야생 구역 12 북쪽 (초안)
+
+[Poképédia 구역 12](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12)는 북쪽에 블루 구역 3으로 이어지는 출입구 두 곳을 명시하고, [Aymlis Park](https://bulbapedia.bulbagarden.net/wiki/Aymlis_Park)는 그 인접 관계를 확인한다. 두 입구를 연결했으며, 타일 좌표·거리 및 건물 윤곽은 초안이다. 블루 구역 3의 하수도 입구와 주변 도로의 실제 위치·연결은 아직 구현하지 않았다.
