@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 스케일노이즈의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_CLANGING_SCALES_FIRST_QA_20261106.md](MULTILENS_CLANGING_SCALES_FIRST_QA_20261106.md) 참조.
+
 후속: 신규 도전에서 꽃보라·봄의폭풍의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_PETAL_SPRING_FIRST_QA_20261106.md](MULTILENS_PETAL_SPRING_FIRST_QA_20261106.md) 참조.
 
 후속: 신규 도전에서 찬바람폭풍·번개폭풍·열사의폭풍의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_STORMS_FIRST_QA_20261106.md](MULTILENS_STORMS_FIRST_QA_20261106.md) 참조.
