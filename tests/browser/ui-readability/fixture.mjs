@@ -7,6 +7,10 @@ import {starterCatalog} from '../../../lib/rogue-starter-system.mjs';
 import {applyClassicAction,activeClassicRun} from '../../../lib/rogue-classic-game.mjs';
 import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='active-alias-repair'){
+  const {doc,run}=fixture([makeReferenceMon(151,50,{boxId:'lead',moves:['Tackle']}),makeReferenceMon(1,50,{boxId:'alias',moves:['Tackle','몸통박치기','Growl'],pp:{tackle:3,growl:5},roguePPUps:{tackle:2}})]);
+  run.screen='battle';run.encounter={kind:'wild'};run.mystery=null;run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
  if(/^profile-log-(0|300|1500)$/.test(scenario)){const doc=createFixture('profile-double'),run=activeClassicRun(doc),count=Number(scenario.split('-').at(-1));run.waveLog=Array.from({length:count},(_,i)=>`뮤츠의 스피드스타! · ${i+1}번째 행동 · HP 120/300`);run.waveLogTurnStart=count;return doc;}
  if(scenario==='profile-single'||scenario==='profile-double'){
   const {doc,run}=fixture([makeReferenceMon(150,30,{boxId:'profile-own-150',moves:['Swift','Confusion','Recover','Disable']}),makeReferenceMon(440,30,{boxId:'profile-own-440',moves:['Splash']})]);

@@ -10,6 +10,7 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readabilit
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/double-layout.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/types-and-motion.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/pp-and-trainers.mjs
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/active-alias-repair.mjs
 ```
 
 `CHROMIUM_PATH` defaults to `/usr/bin/chromium`; `UI_TEST_URL` defaults to localhost5222.
@@ -147,3 +148,5 @@ section; it is not a replay of hundreds of actual game turns. `PROFILE_LOG_COUNT
 200 supersede/duplicate/cancel cycles and counts pending timers and retained keys.
 See `docs/PC_REAL_ARTWORK_PERFORMANCE_QA_20261105.md` for the measured limits and the
 memo candidate that was rejected and reverted because it did not improve the long log.
+
+The active alias script checks the conditional battle button, confirmation, saved reserve and return to the same turn in synthetic desktop and mobile layouts.
