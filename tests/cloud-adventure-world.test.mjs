@@ -293,7 +293,7 @@ test('bureau map has reachable Emma and exits to the provisional third zone',()=
 
 test('cemetery draft connects through the northern street and preserves locations',()=>{
  assert.equal(findTile(lumioseZone4Map(),'p'),null);assert.ok(findTile(lumioseZone4Map({zaBunnelbyQuest:3}),'p'));assert.equal(findTile(lumioseZone4Map({zaBunnelbyQuest:3,zaZone4AlphaSpent:true}),'p'),null);
- const source={area:3,district:'lumiose-zone3',x:1,y:8,zaEmmaMet:true};assert.equal(stepField(source,'left').blocked,true);
+ const source={area:3,district:'lumiose-zone3',x:1,y:8,zaEmmaMet:true};const west=stepField(source,'left');assert.deepEqual([west.district,west.x,west.y],['lumiose-rouge-sector3',21,8]);assert.equal(stepField({...source,...west},'right').district,'lumiose-zone3');
  const north=stepField({...source,x:11,y:1},'up');assert.equal(north.district,'lumiose-rouge-north');
  const northStreet=fieldMap({area:3,district:'lumiose-rouge-north'});assert.ok(fieldPath(northStreet,{x:19,y:5},{x:15,y:1}).length);const northEntry=stepField({...source,district:'lumiose-rouge-north',x:15,y:1},'up');assert.deepEqual([northEntry.district,northEntry.x,northEntry.y],['lumiose-zone4',11,15]);assert.equal(stepField({...northEntry,area:3},'down').district,'lumiose-rouge-north');assert.ok(fieldPath(lumioseZone4Map(),northEntry,{x:11,y:10}).length);
  const entered=stepField({...source,district:'lumiose-rouge-north',x:21,y:4},'right');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone4',21,8]);
