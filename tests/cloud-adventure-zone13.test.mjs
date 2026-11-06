@@ -17,3 +17,11 @@ test('Zone 13 east gate preserves rank restriction and connects both ends',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...open,...east},23),23);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone13',21,8,['kept']]);
 });
+test('Zone 13 south gate connects Rouge Sector 7 and respects rank',()=>{
+ const zone={area:3,district:'lumiose-zone13',interior:null,x:11,y:15,zaRoyaleRank:'E',teamIds:['kept']};
+ const sector=stepField(zone,'down');assert.equal(sector.district,'lumiose-rouge-sector7');
+ assert.equal(stepField({...zone,...sector,zaRoyaleRank:'F'},'up').blocked,true);
+ assert.equal(stepField({...zone,...sector},'up').district,'lumiose-zone13');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...sector},24),24);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-rouge-sector7',11,1,['kept']]);
+});
