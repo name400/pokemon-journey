@@ -1,3 +1,4 @@
+import {doubleUnequalAliasFixture} from '../../fixtures/double-unequal-alias.mjs';
 import {activeLeadAliasFixture} from '../../fixtures/active-lead-alias.mjs';
 import {randomizedFusionAliasFixture} from '../../fixtures/randomized-fusion-alias.mjs';
 import {randomizedAliasFixture} from '../../fixtures/randomized-alias.mjs';
@@ -13,6 +14,7 @@ import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemon.mjs';
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='active-unequal-pp-double-review')return doubleUnequalAliasFixture({boxId:'alias',targetSlot:1});
  if(scenario==='active-switched-sketch-fusion-review'){const f=randomizedFusionAliasFixture({boxId:'alias',active:true,leadActive:true,abilityRandom:true,sketch:true}),doc=f.doc,run=doc.classic.slots[0];applyClassicAction(doc,{action:'turn',command:{type:'move',move:f.key}});for(let i=0;i<2;i++)applyClassicAction(doc,{action:'turn',command:{type:'switch',slot:run.combat.requests[0].actors[0].switches[0].slot}});return doc;}
  if(scenario==='active-unequal-pp-fusion-review'){const f=randomizedFusionAliasFixture({boxId:'alias',active:true,leadActive:true,abilityRandom:true}),doc=f.doc,run=doc.classic.slots[0];applyClassicAction(doc,{action:'turn',command:{type:'move',move:f.key}});for(let i=0;i<2;i++)applyClassicAction(doc,{action:'turn',command:{type:'switch',slot:run.combat.requests[0].actors[0].switches[0].slot}});return doc;}
  if(scenario==='active-unequal-pp-separated-review'){const doc=activeLeadAliasFixture({boxId:'alias'}),run=doc.classic.slots[0];run.party[0].moves=['Tackle','Growl','몸통박치기'];run.combat=createClassicCombat(run,[makeReferenceMon(143,30,{boxId:'foe',moves:['Splash']})]);run.party=run.combat.teams[0];applyClassicAction(doc,{action:'turn',command:{type:'move',move:'tackle'}});for(let i=0;i<2;i++)applyClassicAction(doc,{action:'turn',command:{type:'switch',slot:run.combat.requests[0].actors[0].switches[0].slot}});return doc;}
