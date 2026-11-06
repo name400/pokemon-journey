@@ -476,3 +476,9 @@ Emma 전투는 탐정사무소 안의 기존 표식, Mable은 기존 연구소 �
 [원작 상대 순서](https://bulbapedia.bulbagarden.net/wiki/Infinite_Z-A_Royale)와 [상대 구성](https://www.serebii.net/legendsz-a/z-aroyale/rankinfinity.shtml)에 따라 Lida와 Tarragon을 연결했다. 각 배틀에서 도전권을 다시 모으고, 패배 시 보존하며 승리 시 경험사탕M 10개를 받는다. 사탕은 가방에서 사용할 수 있다. 이전 저장의 두 번째 승리 기록도 유지한다.
 
 상대의 기술과 메가진화, 추첨 도구 보상, 기존 첫 두 배틀의 경험사탕 보상은 미구현이다. 다섯 번째부터 20번째까지와 이후 무작위 상대, 15번째의 영원의꽃 플라엣테·플라엣테나이트 및 미션 39 완료 처리는 아직 남는다. 배틀존 포인트는 임시값이고 운영 및 실기기 검증은 하지 않았다. 이 절이 위 절의 세 번째·네 번째 배틀 미구현 서술을 갱신한다.
+
+## 무한 로열 다섯 번째부터 열네 번째 배틀
+
+[원작 고정 순서](https://bulbapedia.bulbagarden.net/wiki/Infinite_Z-A_Royale)와 [초기 상대 구성](https://www.serebii.net/legendsz-a/z-aroyale/rankinfinity.shtml)에 따라 Xavi, Gwynn, Lebanne, Naveen, Yvon, Rintaro, Canari, Mani, Emma, Corbeau를 기존 턴제 보상 배틀에 연결했다. 11~14승의 경험사탕M 보상은 15개이며 이전의 승리 기록과 도전권 상태를 보존한다.
+
+상대 기술·메가진화와 Mani 라이츄의 세부 폼은 초안이다. 15번째 동료 배틀과 영원의꽃 플라엣테·플라엣테나이트, 16~20번째 및 그 이후 무작위 반복, 추첨 도구 보상과 첫 두 배틀 경험사탕은 여전히 미구현이다. 미션 39는 완료 처리하지 않는다. 기존 배틀존 점수도 임시값이며 실기기·운영 검증은 하지 않았다. 이 절이 위 절의 5~14번째 배틀 미구현 서술을 갱신한다.
