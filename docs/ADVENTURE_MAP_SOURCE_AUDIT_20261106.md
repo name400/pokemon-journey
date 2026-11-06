@@ -43,3 +43,11 @@
 [야생 구역 2 안내](https://thegameslayer.com/guides/pokemon-legends-z-a-all-wild-zone-2-pokemon/)의 남쪽·북서쪽 입구와 남동쪽 물가 목조 다리, [Vernal Avenue 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)의 Café Woof 위치 관계를 근거로, 구역 2의 출입 타일을 남쪽과 북서쪽으로 옮기고 기존 수면에 다리를 놓았다. Café Woof는 Vernal Avenue의 표식·설명만 추가했으며 건물 내부와 정확한 좌표는 미구현이다. 광장에서 구역 2 진입 시 랭크 Y 제한은 제거했다. 랭크·진행 및 저장 데이터는 그대로 둔다.
 
 구역 2는 기존에 걸을 수 있던 내부 타일을 막지 않으며 이전 좌우 경계 출입 타일에 저장된 경우 각각 인접한 내부 타일로 복구한다. 기존 북서쪽 출구의 구역 3 직결은 기존 진행을 보존하는 임시 연결이고, 실제 도시 경유 경로는 미구현이다. 수면은 기존의 작은 사각형으로 전체 원형 물·섬·다리 구조를 재현하지 못했고 건물과 도로 좌표도 여전히 초안이다. 실제 기기·배포 사이트 검증은 하지 않았다.
+
+## Vert Plaza 수역과 북서쪽 출구 — 부분 구현
+
+[구역 2 지형 안내](https://allthings.how/pokemon-legends-z-a-wild-zone-2-every-spawn-and-where-to-find-them/)의 원형 수역·중앙 섬·다리와 [출입구 안내](https://thegameslayer.com/guides/pokemon-legends-z-a-all-wild-zone-2-pokemon/)의 북서쪽 Vert Sector 2 연결을 바탕으로 수역과 중앙 섬, 남쪽 다리를 초안으로 바꾸고 출구 뒤에 별도의 Vert Sector 2를 추가했다. 정확한 수역 경계·다리 위치와 거리의 실제 건물은 확인되지 않았으며 임시 타일이다. 이 거리와 구역 3 사이의 나머지 경로 역시 기존 진행을 유지하는 초안이다. Josée와 랭크 진행 조건은 구역 3으로 가는 쪽에 유지된다.
+
+물 확장으로 예전 저장 좌표가 수면이 되는 경우, 이전 타일 배치에서 유효했고 저장 리비전이 일치하는 위치만 같은 구역의 가까운 이동 가능 타일로 옮긴다. 신규 저장에는 지형 버전을 기록하며 충돌한 리비전이나 원래 유효하지 않은 좌표를 추측해 복구하지 않는다. 옛 경계 출구 좌표 복구도 유지한다. 대표 저장 복구, 구역·거리 왕복과 기존 퀘스트 경로를 격리 API 및 지도 테스트로 검사했다.
+
+[Café Woof 안내](https://bulbapedia.bulbagarden.net/wiki/Caf%C3%A9_Woof)에서 Vernal Avenue의 Bleu Sector 3, 실제 카페 메뉴와 회복 기능을 확인했다. 실제 건물 좌표·내부 배치를 검증하지 못해 현재 표식은 그대로 초안이며, 내부·메뉴와 연결 도로의 정확한 재현은 미구현이다. 실제 기기 검증은 하지 않았다.
