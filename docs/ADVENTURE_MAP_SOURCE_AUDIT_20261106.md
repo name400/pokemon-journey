@@ -874,3 +874,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 야생 구역 18 남동쪽 콰자르티코 골목 (초안)
 
 [구역 18 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_18)는 남동쪽의 콰자르티코 방면 작은 골목을 별도 출입구로 설명한다. 지상에서 양방향 연결하고 랭크 B 제한을 적용했다. 골목 선형과 2D 출입 좌표, 높이 차는 원작 영상 대조가 필요한 초안이다.
+
+### 야생 구역 18 도로변과 비계 (초안)
+
+[구역 18 지형 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_18)와 [출현 위치 자료](https://pokequery.com/games/legends-za/wild-zones/18)는 도로변 아공이·보만다와 남동쪽 공사 비계의 이어롭을 구분한다. 도로변 정원 및 남쪽 비계 접근을 표현하고 이어롭을 상층으로 이동했다. 비계와 옥상은 현재 하나의 상층으로 근사하며 경계·높이·정확한 좌표는 미확인이다.

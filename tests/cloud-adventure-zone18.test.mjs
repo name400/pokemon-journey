@@ -47,3 +47,16 @@ test('Zone 18 southeast alley reaches Quasartico and keeps rank and saved state'
  const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...office},37),37);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-quasartico',20,1,['kept']]);
  const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaZone18Upper],['lumiose-zone18',20,15,false]);
 });
+
+test('Zone 18 roadside dragon and scaffold alpha use separate levels',()=>{
+ const ground={area:3,district:'lumiose-zone18',interior:null,x:11,y:8,zaRoyaleRank:'B'};
+ const upper={...ground,zaZone18Upper:true,x:6,y:9};
+ assert.equal(zone18Visible(ground,'b').species,373);assert.equal(zone18Visible(ground,'c'),null);
+ assert.equal(zone18Visible(upper,'c').species,428);assert.equal(zone18Visible(upper,'b'),null);
+ assert.ok(fieldPath(fieldMap(upper),upper,{x:12,y:6}).length);
+ assert.equal(zone18Visible({...upper,zaZone18Spent:{'lopunny-alpha':true}},'c'),null);
+ const legacy=restoreAdventurePosition(storeAdventurePosition({...upper,x:12,y:5},38),38);
+ assert.equal(legacy.district,'lumiose-zone18');assert.equal(legacy.zaZone18Upper,true);assert.ok([11,12,13].includes(legacy.x));assert.ok(fieldMap(legacy)[legacy.y][legacy.x]!== 'c');
+ const restored=restoreAdventurePosition(storeAdventurePosition(upper,38),38);
+ assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone18Upper],['lumiose-zone18',6,9,true]);
+});
