@@ -38,3 +38,13 @@ test('northern Zone 5 exit reaches Centrico while keeping existing routes',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition(z,8),8);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone5',11,1,['kept']]);
 });
+test('Whirlipede occupies the clearing past the second sludge and keeps its spent flag',()=>{
+ const ground={area:3,district:'lumiose-zone5',zaZone5Upper:false};
+ assert.notEqual(zone5Map(ground)[13][16],'v');
+ const drain={...ground,district:'lumiose-zone5-drain'};
+ assert.equal(fieldMap(drain)[5][18],'v');
+ assert.equal(stepField({...drain,x:11,y:5},'right').blocked,true);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...drain,x:18,y:6,zaZone5DrainSecondCleared:true,zaZone5Spent:{'whirlipede-alpha':true}},10),10);
+ assert.equal(saved.zaZone5Spent['whirlipede-alpha'],true);
+ assert.notEqual(fieldMap(saved)[5][18],'v');
+});
