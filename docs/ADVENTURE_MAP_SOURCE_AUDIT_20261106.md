@@ -380,3 +380,9 @@ Vernal에 배치한 배틀코트 표식과 상대 기술은 초안이다. 메가
 [진행 자료](https://www.thonky.com/pokemon-legends-z-a/main-mission-26-an-invitation-from-the-sbc)에 따라 Asami의 Lv.50 플라제스와 턴제 배틀, 200원 보상, Lebanne의 초대 확인 및 Hotel Z 작전 회의를 연결했다. 패배 시 재도전하며 각 단계는 저장된다.
 
 부티크와 호텔 위치·실내, 상대 기술 및 대사는 초안이다. 원작의 Asami 전투 중 메가진화 필수 조건과 의상 지급은 탐험 턴제 전투에 아직 없어 적용되지 않는다. 세 폭주 사건(미션 27~29), 이후 SBC 배틀과 미션 30, 야생 구역 16·17은 미구현이다. 이 절이 위 절의 SBC 초대 미구현 서술을 일부 갱신한다. 실기기·운영은 검증하지 않았다.
+
+## 미션 26 후반과 미션 27~29 — 부분 구현
+
+[미션 26](https://www.thonky.com/pokemon-legends-z-a/main-mission-26-an-invitation-from-the-sbc) 및 [눈여아](https://www.thonky.com/pokemon-legends-z-a/main-mission-27-a-rogue-mega-froslass), [파비코리](https://www.thonky.com/pokemon-legends-z-a/main-mission-28-a-rogue-mega-altaria), [이상해꽃](https://www.thonky.com/pokemon-legends-z-a/main-mission-29-a-rogue-mega-venusaur) 안내에 따라 세 폭주 포켓몬과 턴제 배틀하고 메가스톤을 개별 수령하도록 연결했다. 이후 Hotel Z에서 Livia·Gérald·Lebanne과 순서대로 대결하고 각 승리와 보상을 저장하며, 세 번째 승리 후 미션 30 시작 상태를 기록한다. 패배한 상대에게 재도전할 수 있다.
+
+세 현장 위치·접근 동선과 보스 Lv.55·기술은 초안이다. 상세 옥상 경로, 동료 동시 참전, 의상 지급, 메가진화 조건 및 Lebanne의 메가드래캄은 미구현이다. SBC 전투 사이 회복 제한의 원작 여부도 미확인이다. 야생 구역 16·17과 미션 30 랭크 B 진행은 미구현이며 실제 기기·운영은 검증하지 않았다. 이 절이 바로 위 절의 세 사건과 SBC 배틀 미구현 서술을 갱신한다.
