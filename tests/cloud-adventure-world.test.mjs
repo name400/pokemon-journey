@@ -236,6 +236,9 @@ test('Rouge Plaza draft has a round garden and a reachable northern healing stal
 test('Rouge Plaza tower ladder has a saved upper floor and preserves old ground positions',()=>{
  const ground={area:3,district:'lumiose-zone3',x:7,y:6,facing:'down',regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42};assert.equal(interactionAt(ground).tile,'i');assert.equal(lumioseZone3Map()[7][7],'i');
  const upper={...ground,x:11,y:10,facing:'up',zaZone3TowerUpper:true};assert.equal(fieldMap(upper)[9][11],'i');assert.equal(lumioseZone3TowerMap()[5][8],'.');assert.equal(interactionAt(upper).tile,'i');
+ assert.equal(fieldMap(upper)[6][10],'t');assert.equal(fieldDialogue({...upper,x:10,y:7,facing:'up'}).action,'zone3TM022');
+ assert.equal(fieldMap({...upper,zaZone3Tm022:true})[6][10],'.');
+ const oldItemTile=restoreAdventurePosition(storeAdventurePosition({...upper,x:10,y:6},23),23);assert.deepEqual([oldItemTile.x,oldItemTile.y],[10,6]);
  const saved=storeAdventurePosition(upper,21),loaded=restoreAdventurePosition(saved,21);assert.equal(loaded.zaZone3TowerUpper,true);assert.deepEqual([loaded.x,loaded.y],[11,10]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);const legacyUpper=structuredClone(saved);delete legacyUpper.districtPosition.zone3Layout;const restoredUpper=restoreAdventurePosition(legacyUpper,21);assert.equal(restoredUpper.zaZone3TowerUpper,true);assert.deepEqual([restoredUpper.x,restoredUpper.y],[11,10]);assert.equal(restoreAdventurePosition(structuredClone(saved),22).district,null);
  const old=storeAdventurePosition({...ground,x:11,y:8},20),restored=restoreAdventurePosition(old,20);assert.deepEqual([restored.x,restored.y],[11,8]);
 });
