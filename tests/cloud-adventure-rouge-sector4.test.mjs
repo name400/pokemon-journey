@@ -6,7 +6,7 @@ test('Rouge Sector 4 links the boutique and bureau approaches with safe saves',(
  const old={area:3,district:'lumiose-rouge-sector3',interior:null,x:16,y:15,facing:'down',teamIds:['kept'],zaEmmaMet:true};
  const gate=stepField(old,'down');assert.deepEqual([gate.district,gate.x,gate.y],['lumiose-rouge-sector4',1,8]);
  const sector={...old,...gate};assert.ok(fieldPath(fieldMap(sector),sector,{x:21,y:8}).length);
- assert.match(fieldDialogue({...sector,x:11,y:6,facing:'up'}).name,/옹브라제/);
+ assert.match(fieldDialogue({...sector,x:11,y:6,facing:'up'}).name,/롬브레/);
  const s5=stepField({...sector,x:21,y:8},'right');assert.deepEqual([s5.district,s5.x,s5.y],['lumiose-rouge-sector5',1,8]);
  assert.equal(stepField({...sector,...s5},'left').district,'lumiose-rouge-sector4');
  assert.equal(stepField(sector,'left').district,'lumiose-rouge-sector3');
