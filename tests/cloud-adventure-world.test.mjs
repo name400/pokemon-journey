@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseVernalMap,lumioseCentricoRouteMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,zone2IslandAlphaTarget,lumioseZone3Map,lumioseZone3TowerMap,fieldMap,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseVernalMap,lumioseCentricoRouteMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,zone2IslandAlphaTarget,lumioseZone3Map,lumioseZone3TowerMap,lumioseRougeNorthMap,fieldMap,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/cloud-adventure/adventure-story.mjs';
 
@@ -208,6 +208,13 @@ test('Rouge gardens have blocked fences, reachable gates and safe legacy-positio
  const map=lumioseZone3Map();assert.equal(map[5][9],'|');assert.equal(stepField({area:3,district:'lumiose-zone3',x:10,y:5},'left').blocked,true);assert.equal(stepField({area:3,district:'lumiose-zone3',x:10,y:6,zaRoyaleRank:'Y',zaJoseeRequired:true},'left').blocked,true);
  for(const target of [{x:7,y:6},{x:15,y:6},{x:7,y:10},{x:15,y:10}])assert.ok(fieldPath(map,{x:11,y:8},target).length);
  const old=storeAdventurePosition({area:3,district:'lumiose-zone3',x:9,y:5,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},17);delete old.districtPosition.zone3Layout;const loaded=restoreAdventurePosition(structuredClone(old),17);assert.equal(loaded.district,'lumiose-zone3');assert.ok(walkable(map[loaded.y][loaded.x]));assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);assert.equal(restoreAdventurePosition(structuredClone(old),18).district,null);
+});
+
+test('north Rouge Street joins Zone 3 to a provisional boulevard and saves safely',()=>{
+ const map=lumioseRougeNorthMap();assert.equal(map[7][16],'H');assert.ok(fieldPath(map,{x:11,y:15},{x:16,y:7}).length);
+ const out=stepField({area:3,district:'lumiose-zone3',x:11,y:1},'up');assert.deepEqual([out.district,out.x,out.y],['lumiose-rouge-north',11,15]);const back=stepField({...out,x:11,y:15},'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone3',11,1]);
+ const old=storeAdventurePosition({area:3,district:'lumiose-zone3',x:11,y:1,regionId:6,districtReturnRegion:1,teamIds:['kept']},21),prior=restoreAdventurePosition(old,21);assert.deepEqual([prior.district,prior.x,prior.y],['lumiose-zone3',11,1]);
+ const save=storeAdventurePosition({...out,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},22),loaded=restoreAdventurePosition(structuredClone(save),22);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-rouge-north',11,15]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);assert.equal(restoreAdventurePosition(structuredClone(save),23).district,null);
 });
 
 test('provisional zone three respects story and older saves, and round-trips its position',()=>{

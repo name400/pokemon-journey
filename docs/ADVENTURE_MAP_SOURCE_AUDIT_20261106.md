@@ -176,3 +176,13 @@
 [WikiDex 구역 3 설명](https://www.wikidex.net/wiki/Zona_salvaje_3)은 원형 구역이 중앙 통로와 담장으로 나뉜 네 개의 정원으로 구성되고, 탑이 서쪽에 있으며 출입구가 남북에 있다고 설명한다. [현장 안내](https://www.screenhype.co.uk/how-to-catch-all-the-pokemon-in-wild-zone-3/)도 구역이 분할돼 있고 서쪽 건물에 우두머리가 있다고 설명한다. 기존의 중앙 탑 표식을 서쪽으로 옮기고 남북 통로와 양쪽 정원을 나누는 이동 불가 담장 및 통과할 수 있는 틈을 추가했다. 탑 위층의 기존 저장은 그대로 복원하며, 새 담장에 겹치는 이전 버전 저장은 같은 구역의 인접한 이동 가능 위치로 복구한다.
 
 담장의 개별 좌표·틈·간격, 탑의 정확한 크기와 사다리 방향은 초안이다. 일부 자료는 탑을 동쪽이라고 설명하므로 원작 화면을 통한 정밀 위치 확인도 남아 있다. 남쪽 출입은 기존 경로로 연결되지만 북쪽 출입구와 Rouge Street의 실제 경로는 아직 구현되지 않았다. 구역 2 수역 전체, Centrico 도로 및 Café Woof의 건물·내부와 실시간 전투·회피도 미완성이다.
+
+## 구역 3 탑 방향 대조 — 미확정
+
+[게임 화면과 지도를 싣는 GamesRadar 안내](https://www.gamesradar.com/games/pokemon/pokemon-legends-z-a-yoga-master-guidance/)와 [Nintendo Life 구역 3 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-3-guide-all-pokemon-and-alphas)는 탑 건물이 서쪽에 있다고 설명한다. 반면 [Pokémon Central Wiki](https://wiki.pokemoncentral.it/Zona_selvaggia_3)는 동쪽이라고 설명해 서로 충돌한다. 서쪽 설명이 여러 자료에서 확인되지만, 이번 조사에서는 게임 내 지도 방향을 직접 판독하거나 영상으로 동선을 대조하지 못했다. 현재 서쪽 배치는 계속 초안으로 둔다. 탑의 정확한 좌표·출입 방향과 주변 담장의 위치도 미확정이다.
+
+## Rouge Plaza 북쪽 Rouge Street — 부분 구현
+
+[구역 3 설명](https://www.wikidex.net/wiki/Zona_salvaje_3)은 남북 출입구가 각각 Rouge Street의 남북 구간으로 이어진다고 설명하고, [미르시티 도로 설명](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City)은 Rouge Street 북쪽이 North Boulevard와 연결되고 인근에 포켓몬센터가 있다고 설명한다. 구역 3 북쪽 문과 북쪽 도로 구간을 왕복 가능하게 연결하고 회복 가능한 센터를 배치했다. 이 구간에서 재접속해도 위치와 파티·지갑을 보존한다.
+
+도로와 센터의 정확한 폭·좌표·건물 외형은 초안이고 North Boulevard의 좌우 구간으로는 아직 연결되지 않는다. 센터의 상세 내부, 주변 시설, 루주 광장 담장의 정확한 형상도 미완성이다. 구역 2 수역과 Café Woof의 실제 형태, 실시간 전투·회피도 남아 있다.
