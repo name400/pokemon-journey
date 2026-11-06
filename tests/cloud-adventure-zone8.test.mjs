@@ -9,3 +9,12 @@ test('zone eight gate, central area and saved location',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:11,y:8},42),42);assert.deepEqual([saved.district,saved.x,saved.y],['lumiose-zone8',11,8]);assert.equal(stepField(s,'down').district,'lumiose-centrico-route');
  assert.equal(zone8Encounter({x:11,y:8},()=>0).speciesId,66);assert.equal(zone8Encounter({x:3,y:8},()=>0).speciesId,322);
 });
+test('Jaune Street entrance honors Zone 8 access and reconnects on exit',()=>{
+ const street={area:3,district:'lumiose-jaune-street',interior:null,x:11,y:1,zaRoyaleRank:'V',teamIds:['kept']};
+ assert.equal(stepField(street,'up').blocked,true);
+ const open={...street,zaRoyaleRank:'F'},zone=stepField(open,'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone8',9,15]);
+ assert.equal(stepField({...open,...zone},'down').district,'lumiose-jaune-street');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...open,...zone},22),22);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone8',9,15,['kept']]);
+ assert.ok(fieldPath(zone8Map(open),zone,{x:11,y:8}).length);
+});
