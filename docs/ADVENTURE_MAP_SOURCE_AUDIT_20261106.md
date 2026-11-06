@@ -702,3 +702,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 블루 구역 3과 야생 구역 12 북쪽 (초안)
 
 [Poképédia 구역 12](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12)는 북쪽에 블루 구역 3으로 이어지는 출입구 두 곳을 명시하고, [Aymlis Park](https://bulbapedia.bulbagarden.net/wiki/Aymlis_Park)는 그 인접 관계를 확인한다. 두 입구를 연결했으며, 타일 좌표·거리 및 건물 윤곽은 초안이다. 블루 구역 3의 하수도 입구와 주변 도로의 실제 위치·연결은 아직 구현하지 않았다.
+
+### 블루 구역 3 하수도 연결 (초안)
+
+[PowerPyx](https://www.powerpyx.com/pokemon-legends-z-a-how-to-return-to-lumiose-sewers/)는 구역 3 지하 통로 끝에서 사이드 미션 57을 시작해 문을 여는 경로를 설명하고, [Bulbapedia 미션 목록](https://bulbapedia.bulbagarden.net/wiki/Task_%28Legends%3A_Z-A%29)은 의뢰가 미션 19 완료 후 열림을 명시한다. 기존 하수도 맵과 연결하고 출구 복귀를 저장한다. 거리·입구·의뢰인 좌표는 초안이며, 원작의 계단·지하 통로·오염물 장애물과 미션 57 배틀·보상 및 빠른 이동은 아직 미구현이다. 기존 분수 경로는 진행 호환을 위해 유지한다.
