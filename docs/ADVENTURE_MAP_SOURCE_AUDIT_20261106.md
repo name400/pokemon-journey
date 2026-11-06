@@ -264,3 +264,9 @@
 [Nintendo Life의 구역 4 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-4-guide-all-pokemon-and-alphas)는 음식점 너머가 구역 4라고 설명하고, [Bulbapedia 음식점 안내](https://bulbapedia.bulbagarden.net/wiki/Sushi_High_Roller_%28Lumiose_City%29)는 이 음식점이 Rouge Street에 있다고 설명한다. 북쪽 거리 초안의 묘지 접근로 근처에 건물과 상호작용 지점을 추가했다. 기존 도로·의뢰인·센터로 이동할 수 있으며 건물 부지에 저장된 옛 위치는 가까운 통행 가능 칸으로 복구한다.
 
 정확한 건물 위치·크기·외형과 내부는 확인하지 못해 초안이다. 실내 입장과 사이드 미션 73 및 식사 연속 배틀은 아직 구현되지 않았다. 확인된 자료에 따르면 원작의 재도전은 5코스와 비용이 있으므로 임의의 단일 전투를 완성된 식사 배틀로 취급하지 않는다.
+
+## Sushi High Roller 실내 — 부분 구현
+
+[원작 음식점 설명](https://bulbapedia.bulbagarden.net/wiki/Sushi_High_Roller_%28Lumiose_City%29)은 실내에 배틀 코트가 있다고 설명하고, [미션 목록](https://www.gamerguides.com/pokemon-legends-z-a/checklists/side-missions-locations)은 접수원을 통해 미션 73을 시작한다고 설명한다. 북쪽 거리의 음식점 입구에서 접수원과 배틀 코트가 있는 별도 실내로 입장하고 남쪽 출구로 돌아갈 수 있게 했다. 실내 재접속 시 위치·파티·지갑을 보존한다.
+
+접수원과 코트의 정확한 좌표, 방 크기·가구·외형은 초안이다. 미션 73의 해금 조건, 5코스 진행과 연속 턴제 배틀·보상·패배/저장 복구는 아직 미구현이다. 따라서 접수원은 현재 안내만 제공하고 비용을 청구하지 않는다.

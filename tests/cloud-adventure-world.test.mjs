@@ -304,6 +304,14 @@ test('Rouge Street restaurant remains reachable and restores old positions safel
  const stale=storeAdventurePosition({...base,x:19,y:2},8);delete stale.districtPosition.rougeNorthLayout;assert.equal(restoreAdventurePosition(stale,9).district,null);
 });
 
+test('restaurant interior keeps its district and returns to the entrance',()=>{
+ const s={area:3,district:'lumiose-rouge-north',interior:'sushi',x:11,y:14,facing:'up',regionId:6,districtReturnRegion:1,teamIds:['keep'],steps:42};
+ const map=fieldMap(s);assert.equal(map[5][16],'R');assert.ok(fieldPath(map,s,{x:16,y:5}).length);assert.ok(fieldPath(map,s,{x:11,y:15}).length);
+ const loaded=restoreAdventurePosition(storeAdventurePosition(s,12),12);assert.deepEqual([loaded.district,loaded.interior,loaded.x,loaded.y],['lumiose-rouge-north','sushi',11,14]);assert.deepEqual(loaded.teamIds,['keep']);assert.equal(loaded.steps,42);
+ const exit=stepField({...s,y:15},'down');assert.deepEqual([exit.district,exit.interior,exit.x,exit.y],[undefined,null,19,5]);
+ const stale=restoreAdventurePosition(storeAdventurePosition(s,12),13);assert.equal(stale.district,null);
+});
+
 
 test('rooftop crystal blocks the provisional shortcut until cleared',()=>{
  const blocked=lumioseRooftopMap(),cleared=lumioseRooftopMap({zaRooftopCrystalCleared:true});

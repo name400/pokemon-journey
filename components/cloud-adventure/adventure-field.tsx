@@ -37,9 +37,10 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
    const buildings:Array<{x:number;y:number;kind:string}>=[];
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{
     const px=x*tile,py=y*tile;ctx.fillStyle=palette[0];ctx.fillRect(px,py,tile,tile);
-    if(['lab','lumioseLab'].includes(w.interior)||['hotel','hotel2f','hotel202','hotelRoof'].includes(w.interior)){
+    if(['lab','lumioseLab','sushi'].includes(w.interior)||['hotel','hotel2f','hotel202','hotelRoof'].includes(w.interior)){
      ctx.fillStyle=c==='#'?(!['lab','lumioseLab'].includes(w.interior)?'#a78375':'#64817e'):(x+y)%2?'#e6e2cc':'#f0ecd9';ctx.fillRect(px,py,tile,tile);
      if(c==='#'){ctx.fillStyle=!['lab','lumioseLab'].includes(w.interior)?'#ddc0a1':'#a3bcb1';ctx.fillRect(px+3,py+4,tile-6,tile-8);}
+     if(w.interior==='sushi'&&c===';'){ctx.fillStyle=(x+y)%2?'#ac8581':'#bb9690';ctx.fillRect(px,py,tile,tile);ctx.strokeStyle='#e8d8b8';ctx.strokeRect(px+1,py+1,tile-2,tile-2);}
      if(w.interior==='hotelRoof'&&'12345'.includes(c)){ctx.fillStyle=({1:'#8b6a70',2:'#9b5844',3:'#8b6a70',4:'#765b48',5:'#70935c'} as Record<string,string>)[c];ctx.fillRect(px+3,py+5,tile-6,tile-9);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(({1:'의자',2:'화로',3:'소파',4:'탁자',5:'화분'} as Record<string,string>)[c],px+tile/2,py+20);}
      if(c==='i'||c==='o'||(c==='b'&&w.interior==='hotel2f')||(c==='z'&&w.interior==='hotel202')){ctx.fillStyle=c==='i'?'#796b82':c==='o'||c==='b'?'#875d46':'#af746f';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='i'?'승강기':c==='o'?'202':c==='b'?'객실':'침대',px+tile/2,py+20);}
      if(c==='X'){ctx.fillStyle='#a95850';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+21);}
