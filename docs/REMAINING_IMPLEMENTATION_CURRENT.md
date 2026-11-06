@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 진행된 저장에서 서로 다른 이름이 같은 기술을 가리키는 일부 사례는 파티 화면에서 사용자가 직접 확인한 후 정리할 수 있다. 원래 기술과 PP 기록은 저장되며 전투 스냅샷·융합·스케치·기술 무작위화 등 불확실한 경우는 제외한다. [WEIRD_DREAM_MOVE_ALIAS_REPAIR_QA_20261106.md](WEIRD_DREAM_MOVE_ALIAS_REPAIR_QA_20261106.md) 참조.
+
 후속: 과거 이상한 꿈 변환 직후의 명확한 영문·한국어 기술 중복은 원본 목록·PP 백업을 남기고 교정한다. 진행된 저장과 불명확한 사례는 보류한다. [WEIRD_DREAM_MOVE_ALIAS_REPAIR_QA_20261106.md](WEIRD_DREAM_MOVE_ALIAS_REPAIR_QA_20261106.md) 참조.
 
 후속: 신규 도전의 이상한 꿈이 영문·한국어가 다른 같은 기술을 ID로 비교해 중복 배정을 피한다. 기존 중복 저장을 임의 교정하지 않는다. [WEIRD_DREAM_MOVE_IDENTITY_QA_20261106.md](WEIRD_DREAM_MOVE_IDENTITY_QA_20261106.md) 참조.
