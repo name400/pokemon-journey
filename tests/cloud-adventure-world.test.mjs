@@ -192,6 +192,11 @@ test('Vernal waterside retains cafe and plaza access and safely restores old sav
 });
 
 
+test('Rouge Plaza draft has a round garden and a reachable northern healing stall',()=>{
+ const map=lumioseZone3Map();assert.equal(map[2][11],'H');assert.equal(map[8][11],'g');assert.equal(map[4][8],'k');assert.notEqual(map[4][8],'g');assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:2}).length);
+ const old=storeAdventurePosition({area:3,district:'lumiose-zone3',x:8,y:4,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},19);const loaded=restoreAdventurePosition(old,19);assert.deepEqual([loaded.x,loaded.y],[8,4]);assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);
+});
+
 test('provisional zone three respects story and older saves, and round-trips its position',()=>{
  const source={area:3,district:'lumiose-zone2',x:4,y:1,zaRoyaleRank:'Y'};
  assert.equal(stepField(source,'up').district,'lumiose-vert2');const road={area:3,district:'lumiose-vert2',x:1,y:8,zaRoyaleRank:'Y'};
