@@ -11,7 +11,7 @@ import {configure} from '../lib/pokemon-config.mjs';
 import {createCombat} from '../lib/party-battle.mjs';
 import {Battle} from '@pkmn/sim';
 import {expToNext} from '../lib/growth.mjs';
-import {fieldPath,findTile} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldPath,findTile,storeAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url)),sql=new DatabaseSync(':memory:');
@@ -286,4 +286,19 @@ test('world route: save migration, atomic purchases, actual battle/capture/growt
  assert.equal(state.world.completed,true);assert.equal(state.world.badges.length,8);assert.equal(state.world.hallOfFame.length,1);for(const id of ids)assert.equal(rawMon(id).level,100);
  await call('expedition',{locationId:state.expeditions[0].id});assert.ok(state.world.expedition);await walkTo('W');assert.equal(state.world.area,9);assert.equal(state.world.expedition,null);
  console.log(`Adventure save/economy/evolution/capture + 8 gyms + 5 league opponents: passed (${totalTurns} turns)`);
+});
+
+test('restaurant course state persists, blocks between-course healing and pays once',async()=>{
+ globalThis.__adventureUser={userId:'adventure-qa',displayName:'식당검증'};globalThis.__adventureRandom=()=>.999;
+ await get();if(!state.world)await call('start',{species:1});const id=state.world.activeId;
+ const strongBase=makeMon(150,99),strong={...strongBase,experience:expToNext(strongBase)-1,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);
+ const fixture={...rawWorld(),area:3,district:'lumiose-rouge-north',interior:'sushi',x:16,y:5,facing:'down',regionId:6,districtReturnRegion:1,teamIds:[id],activeId:id};
+ seedWorld(storeAdventurePosition(fixture,state.revision+1));await get();await call('sushiStart',{},409);
+ seedWorld({zaMission24Started:true,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+ assert.equal(state.world.interior,'sushi');assert.equal(state.world.interaction?.name,'음식점 안내원');await call('sushiStart');assert.equal(state.world.zaSushiRun.course,0);assert.ok(state.battle);await get();assert.ok(state.battle);await battle();
+ assert.equal(state.world.zaSushiRun.course,1);const afterFirst=rawMon(id);assert.equal(afterFirst.level,100);await call('use',{item:'potion'},409);await call('team',{ids:[id]},409);assert.deepEqual(rawMon(id),afterFirst);
+ await get();assert.equal(state.world.zaSushiRun.course,1);seedWorld({districtPosition:{...rawWorld().districtPosition,x:11,y:15,revision:state.revision+1}});await get();await call('move',{direction:'down'},409);assert.equal(state.world.interior,'sushi');seedWorld({adventurePendingMoves:[{boxId:id,move:'파동탄'}],districtPosition:{...rawWorld().districtPosition,x:16,y:5,revision:state.revision+1}});await get();await call('sushiNext',{},409);await call('resolveAdventureMove',{slot:null});assert.equal(state.world.adventurePendingMoves.length,0);for(let course=1;course<5;course++){await call('sushiNext');assert.equal(state.world.zaSushiRun.course,course);await battle();await get();}
+ assert.equal(state.world.zaSushiCompleted,true);assert.equal(state.world.zaSushiRewardPending,'mission');const before=structuredClone(state.inventory),berryKey=JSON.stringify(['adventure-qa','qualotberry']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?) ON CONFLICT(key) DO UPDATE SET quantity=excluded.quantity').run(berryKey,'adventure-qa','qualotberry',995);await get();await call('claimSushiReward',{},409);await get();assert.equal(state.world.zaSushiRewardPending,'mission');assert.equal(state.inventory.grepaberry||0,before.grepaberry||0);if(before.qualotberry)sql.prepare('UPDATE inventory SET quantity=? WHERE key=?').run(before.qualotberry,berryKey);else sql.prepare('DELETE FROM inventory WHERE key=?').run(berryKey);await get();await call('claimSushiReward');
+ for(const item of ['qualotberry','grepaberry','kelpsyberry'])assert.equal(state.inventory[item],(before[item]||0)+10);await call('claimSushiReward',{},409);
+ sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(29999,'adventure-qa');seedMon(id,strong);await get();await call('sushiRepeat',{},409);await get();assert.equal(state.wallet.coins,29999);assert.equal(state.world.zaSushiRun,undefined);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(30000,'adventure-qa');await get();await call('sushiRepeat');assert.equal(state.wallet.coins,0);for(let course=0;course<5;course++){if(course)await call('sushiNext');await battle();}assert.equal(state.world.zaSushiRewardPending,'repeat');const beforeRepeat=structuredClone(state.inventory);await call('claimSushiReward');assert.equal(state.inventory.bignugget,(beforeRepeat.bignugget||0)+2);assert.equal(state.inventory.seedofmasteryza,(beforeRepeat.seedofmasteryza||0)+1);await call('claimSushiReward',{},409);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(30000,'adventure-qa');seedMon(id,strong);await get();await call('sushiRepeat');await call('forfeit');assert.equal(state.world.zaSushiRun,undefined);assert.equal(state.world.zaSushiRewardPending,undefined);assert.equal(state.world.district,'lumiose');
 });
