@@ -910,3 +910,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르 포켓몬센터의 도로변 접근 (초안)
 
 [베르 8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_8)는 베르 거리 쪽 포켓몬센터의 파티 회복을 설명한다. 기존 회복 처리를 교차로 근처 초안 타일에 연결했다. 같은 자료는 Station Front와의 교차점을, [회수원 자료](https://bulbapedia.bulbagarden.net/wiki/Lost_Pok%C3%A9_Ball_collector)는 South Boulevard와의 교차점을 언급하므로 정확한 입구 좌표와 도로 이름은 미확정이다. 센터 상점·벤치·회수원은 별도 구현이 필요하다.
+
+### 블르 7번지 포켓몬센터 (초안)
+
+[블르 7번지 자료](https://bulbapedia.bulbagarden.net/wiki/Bleu_Sector_7)는 블르 거리와 사우스 불르바르 교차점의 포켓몬센터를 설명한다. 해당 번지 내 회복 지점을 기존 회복 처리로 연결했다. 건물 외관·정확한 좌표와 상점·벤치·회수원은 미구현이다.
