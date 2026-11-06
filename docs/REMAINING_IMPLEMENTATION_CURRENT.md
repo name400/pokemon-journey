@@ -502,3 +502,5 @@ Actual held Leppa Berry consumption was verified in an isolated constructed uneq
 광대 이벤트 더블의 떨어진 중복 슬롯도 공유 선택 위치를 유지한 채 양쪽 선택을 대표 검사했다. 다른 이벤트의 미확인 상태와 비9세대 전투 형식은 보류한다.
 
 신규 `source-target-first-v1` AI는 검토된 대상 점수만 있는 기술 풀에서 원본의 대상 우선 추첨 순서를 사용한다. 미확인 기술은 종전 경로로 돌아간다. PRNG 자체와 기술 점수·후보는 여전히 로컬 구현이므로 전체 원본 동등성은 미완료다.
+
+신규 `source-target-first-v2`는 검토된 싱글 전투 기술의 단일 상대에도 대상 우선 추첨을 적용한다. 기존 저장 규칙을 유지하며, 원본 PRNG 및 전체 점수·후보 동등성은 미완료다.
