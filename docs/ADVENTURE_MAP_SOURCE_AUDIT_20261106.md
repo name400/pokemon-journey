@@ -631,4 +631,6 @@ The grid, approximate café exterior and link from the existing North Boulevard 
 
 ## Wild Zone 17 — Vert Sector 7 (draft)
 
-[Pokémon France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists this zone in Vert Sector 7 from mission 25, its stairs, rooftop access and species. The temporary connection from Vert Sector 2 and the boundary, buildings, route widths and exact Pokémon positions are unverified approximations, not a faithful completed map. The second entrance, stairs and traversable rooftops, fixed alpha Pyroar and Mawile, and items remain to implement against location evidence.
+[Pokémon France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists this zone in Vert Sector 7 from mission 25, its stairs, rooftop access and species. The temporary connection from Vert Sector 2 and the boundary, buildings, route widths and exact Pokémon positions are unverified approximations, not a faithful completed map. The second entrance, exact stairs and rooftop geometry, and most items remain to implement against location evidence.
+
+- [PowerPyx](https://www.powerpyx.com/pokemon-legends-z-a-mawile-location/) places fixed Alpha Mawile on a rooftop reached by a ladder near Pyroar. [Pokémon France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists fixed Alpha Pyroar, Alpha Mawile and a Timer Ball near the stairs. The ladder, rooftop shape, individual placements and city connection in this implementation remain provisional. TM062 behind Mawile is not yet implemented.
