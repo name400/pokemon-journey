@@ -22,3 +22,11 @@ test('Zone 17 has two rank-gated northern Coulant exits in addition to Sector 6'
   const saved=restoreAdventurePosition(storeAdventurePosition({...canal,...zone},9),9);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone17',x,1,['kept']]);
  }
 });
+test('Vert Sector 6 connects to the southern bank of Zone 11 without crossing the canal',()=>{
+ const city={area:3,district:'lumiose-vert-sector6',interior:null,x:21,y:12,zaRoyaleRank:'F',teamIds:['kept']};
+ assert.equal(stepField(city,'right').blocked,true);
+ const zone=stepField({...city,zaRoyaleRank:'E'},'right');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone11',21,12]);
+ const back=stepField({...city,...zone},'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector6',21,12]);
+ assert.equal(fieldPath(fieldMap({...city,...zone}),zone,{x:5,y:1}).length,0);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...city,...zone},9),9);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone11',21,12,['kept']]);
+});
