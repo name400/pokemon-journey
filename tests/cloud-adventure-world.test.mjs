@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,lumioseZone3Map,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseVernalMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,lumioseZone3Map,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/cloud-adventure/adventure-story.mjs';
 
@@ -160,6 +160,15 @@ test('zone two southeastern bridge connects the southern shore to the central is
  let s={area:3,district:'lumiose-zone2',x:14,y:13};
  for(const direction of ['up','up','up','up','left','left']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}
  assert.deepEqual([s.x,s.y],[12,9]);
+});
+
+test('Vernal waterside retains cafe and plaza access and safely restores old saves',()=>{
+ const map=lumioseVernalMap();assert.equal(map[5][18],'~');assert.ok(fieldPath(map,{x:12,y:6},findTile(map,'E')).length);assert.ok(fieldPath(map,{x:1,y:8},findTile(map,'q')).length);
+ assert.equal(stepField({area:3,district:'lumiose-vernal',x:18,y:7},'up').blocked,true);
+ const old=storeAdventurePosition({area:3,district:'lumiose-vernal',x:18,y:5,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},17);delete old.districtPosition.vernalLayout;
+ const restored=restoreAdventurePosition(structuredClone(old),17);assert.equal(restored.district,'lumiose-vernal');assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,42);
+ assert.equal(restoreAdventurePosition(structuredClone(old),18).district,null);
+ const safe=storeAdventurePosition({area:3,district:'lumiose-vernal',x:12,y:6,regionId:6,districtReturnRegion:1},17);const loaded=restoreAdventurePosition(safe,17);assert.deepEqual([loaded.x,loaded.y],[12,6]);
 });
 
 

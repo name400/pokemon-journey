@@ -71,3 +71,7 @@
 ## 구역 2 동남쪽 다리 — 부분 수정
 
 [구역 2 안내](https://thegameslayer.com/guides/pokemon-legends-z-a-all-wild-zone-2-pokemon/)는 남쪽 입구에서 동남쪽 목조 다리를 건너 중앙으로 향하는 경로를 설명한다. 기존 정남쪽 중앙에 있던 다리를 동남쪽 중앙 섬 방향으로 옮겼다. 다리의 정확한 각도와 물가 경계는 자료상 확인하지 못한 초안이다. 이전 버전 다리 위에 저장한 위치가 새 수면에 해당하면 같은 구역의 가장 가까운 보행 가능 타일로 복구하며, 저장 리비전이 다를 때는 이전과 같이 복구를 거부한다. 다른 저장 데이터는 보존한다. 전체 수역 윤곽, 도시 도로 및 카페 위치·내부는 미완성이다.
+
+## Vernal Avenue 동쪽 물가 — 부분 구현
+
+[Nintendo Life의 구역 2 접근 경로](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)는 Café Woof 부근에서 물가 옆 동쪽 길로 Vert Plaza에 간다고 설명한다. Vernal Avenue 초안의 동쪽 길 옆에 물가를 추가했다. 물가의 모양과 좌표, 카페 건물·내부의 정확한 배치는 확인되지 않은 초안이다. 새 물가 위에 저장된 구버전 위치는 리비전이 일치하는 경우 같은 구역의 가까운 보행 가능 위치로 옮긴다. 기존 지갑·파티·진행은 변경하지 않는다.
