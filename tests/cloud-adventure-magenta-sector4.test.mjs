@@ -11,3 +11,13 @@ test('Magenta Sector 4 links Autumnal Avenue and gated Zone 7 with safe saves',(
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:5,y:6},72),72);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector4',5,6,['kept']]);
  assert.equal(fieldDialogue({...saved,facing:'up'}).name,'카페 포켓몬아미 (위치 초안)');
 });
+test('mission 28 marker follows battle and reward state without changing saved position',()=>{
+ const s={area:3,district:'lumiose-magenta-sector4',interior:null,x:14,y:9,facing:'up',zaMission26Stage:3,teamIds:['kept']};
+ assert.equal(fieldMap(s)[8][14],'8');
+ assert.equal(fieldDialogue(s).action,'mission26CaseBattle');
+ const pending={...s,zaMission28Complete:true,zaMission28RewardPending:true};
+ assert.equal(fieldDialogue(pending).action,'mission26ClaimStone');
+ const saved=restoreAdventurePosition(storeAdventurePosition(pending,73),73);
+ assert.deepEqual([saved.x,saved.y,saved.teamIds],[14,9,['kept']]);
+ assert.notEqual(fieldMap({...pending,zaMission28RewardPending:false})[8][14],'8');
+});
