@@ -761,12 +761,16 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 야생 구역 11 북쪽과 존느 구역 10·12 (초안)
 
-[구역 11 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11)는 북쪽 서쪽·동쪽 출입구가 각각 존느 구역 10·12로 이어진다고 설명한다. [구역 6 출현 자료](https://pokemongohub.net/post/guide/all-wild-zones-pokemon-legends-z-a/)는 구역 6이 존느 구역 12에 있음을 명시한다. 두 북쪽 출구와 구역 12·구역 6 연결을 추가했다. 거리와 각 출입구의 정밀 좌표·주변 건물은 초안이며, 존느 구역 10의 서쪽 구역 6·동쪽 구역 12 연결은 추가했으나 북쪽 구역 9와 수로변 방면은 미구현이다. 기존 임시 출구는 저장·이동 호환을 위해 유지한다.
+[구역 11 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11)는 북쪽 서쪽·동쪽 출입구가 각각 존느 구역 10·12로 이어진다고 설명한다. [구역 6 출현 자료](https://pokemongohub.net/post/guide/all-wild-zones-pokemon-legends-z-a/)는 구역 6이 존느 구역 12에 있음을 명시한다. 두 북쪽 출구와 구역 12·구역 6 연결을 추가했다. 거리와 각 출입구의 정밀 좌표·주변 건물은 초안이며, 존느 구역 10의 서쪽 구역 6·동쪽 구역 12 연결은 추가했으나 북쪽 구역 9와 쉐종 운하변 연결은 추가했으나 상세 지형은 초안이다. 기존 임시 출구는 저장·이동 호환을 위해 유지한다.
 
 ### 존느 구역 6·10·12 도시 연결 (초안)
 
-[존느 구역 10 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-sector-10.html)는 구역 6이 북서쪽, 구역 12가 동쪽이라고 설명한다. 야생 구역 11을 통과하지 않는 두 도시 연결을 추가해 야생 구역 제한과 분리했다. 구체적인 도로 형태·건물과 출구 좌표는 초안이다. 북쪽 존느 구역 9는 연결했으나 세종 수로변은 아직 연결하지 않았다.
+[존느 구역 10 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-sector-10.html)는 구역 6이 북서쪽, 구역 12가 동쪽이라고 설명한다. 야생 구역 11을 통과하지 않는 두 도시 연결을 추가해 야생 구역 제한과 분리했다. 구체적인 도로 형태·건물과 출구 좌표는 초안이다. 북쪽 존느 구역 9는 연결했으나 쉐종 운하변은 연결했으나 상세 지형은 초안이다.
 
 ### 존느 구역 10·9와 광장 접근로 (초안)
 
-[존느 구역 10 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-sector-10.html)는 북쪽에 구역 9가 있다고 설명한다. [존느 광장에서 구역 9로 가는 안내](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Exploring_Lumiose_City)도 참고해 구역 10·9 및 기존 광장 근처 접근로를 연결했다. 실제 거리의 폭·구간·계단과 건물 좌표는 초안이며, 세종 수로변과 구역 9의 상세 지형은 미구현이다.
+[존느 구역 10 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-sector-10.html)는 북쪽에 구역 9가 있다고 설명한다. [존느 광장에서 구역 9로 가는 안내](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Exploring_Lumiose_City)도 참고해 구역 10·9 및 기존 광장 근처 접근로를 연결했다. 실제 거리의 폭·구간·계단과 건물 좌표는 초안이며, 쉐종 운하변의 정확한 지형과 구역 9의 상세 지형은 미구현이다.
+
+### 쉐종 운하변과 센트리코·존느 구역 6 (초안)
+
+[Poképédia](https://www.pokepedia.fr/Quai_du_Canal_des_Saisons)는 운하변이 서쪽 센트리코 광장과 북쪽 존느 구역 6을 잇고 위쪽 길·물가 길과 나무 발판이 있다고 설명한다. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Saison_Canalside)도 센트리코에서 운하 북쪽 강변으로 이어진다고 설명한다. 두 출입과 산책로·수역·발판을 추가했다. 정확한 좌표와 폭·높이 차·발판 개수는 초안이다. 존느 구역 2 및 베르 구역 3 방면 다리와 주변 시설은 미구현이다.
