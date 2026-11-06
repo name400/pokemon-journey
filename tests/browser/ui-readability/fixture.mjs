@@ -1,3 +1,4 @@
+import {wildEventReviewFixture} from '../../fixtures/wild-event-alias.mjs';
 import {CLASSIC_REWARD_REGISTRY} from '../../../lib/rogue-classic-rewards.mjs';
 import {fixture} from '../../fixtures/dna-persistent.mjs';
 import {makeReferenceMon} from '../../../lib/rogue-reference.mjs';
@@ -9,6 +10,7 @@ import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemon.mjs';
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario.startsWith('active-wild-event-')){const item=scenario.slice('active-wild-event-'.length),type=['mysterious-chest','berries','fight-or-flight','uncommon-breed'].find(t=>item===t+'-normal'||item===t+'-sketch');if(type)return wildEventReviewFixture(type,{sketch:item.endsWith('-sketch'),reserveId:'alias'});}
  if(['active-alias-repair','active-sketch-repair','active-trainer-alias-repair','active-trainer-sketch-repair','active-challenge-alias-repair','active-ability-alias-repair','active-ability-sketch-repair','active-ability-fusion-alias-repair','active-ability-fusion-sketch-repair','active-event-alias-repair','active-event-sketch-repair','active-dream-alias-repair','active-dream-sketch-repair','active-event-challenge-alias-repair','active-event-ability-sketch-repair'].includes(scenario)){
   const reserve=scenario.includes('sketch')?makeReferenceMon(235,50,{boxId:'alias',moves:['Tackle','Sketch','몸통박치기'],rogueSketchRule:'source-v1',rogueSketchPP:[2,1,17]}):makeReferenceMon(1,50,{boxId:'alias',moves:['Tackle','몸통박치기','Growl'],pp:{tackle:3,growl:5},roguePPUps:{tackle:2}});
   const challenge=scenario==='active-challenge-alias-repair'||scenario==='active-event-challenge-alias-repair',abilityChallenge=scenario.startsWith('active-ability-')||scenario==='active-event-ability-sketch-repair',{doc,run}=fixture([makeReferenceMon(challenge||abilityChallenge?1:151,50,{boxId:'lead',moves:['Tackle']}),reserve]);
