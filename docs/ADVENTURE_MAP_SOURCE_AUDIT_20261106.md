@@ -550,3 +550,9 @@ The grid is a conceptual circular plaza, not a measured map. The single city con
 #### Zone 7 central landmark and approach paths
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-7-guide-all-pokemon-and-alphas) describes the sandy plaza and level 33 alpha Fletchinder perched on its central statue. The draft now shows the alpha on the obelisk and a sandy centre, with west and northwest approach paths inspired by the entrance descriptions above. Tile dimensions, their exact alignment and connections to the surrounding streets have not been established. Only the existing provisional south city connector is functional; the western and northwestern approaches are not yet city exits. Alpha respawn occurs on leaving and returning to the district, an approximation of the original's time/distance behaviour.
+
+### Wild Zone 8: provisional Jaune Plaza
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-8-guide-all-pokemon-and-alphas) locates the zone northeast of Centrico on Jaune Street, behind the Justice Dojo, and describes its central dirt and outer sand ring. [PokeQuery](https://pokequery.com/games/legends-za/wild-zones/8) distinguishes Numel on approaches, Machop and Gible in the center, and Sandile/Krokorok around the ring. Rank F and species levels follow these sources and Pokémon-France.
+
+The round 2D terrain, field positions, probabilities and city connection are draft approximations. The exact city street and entrance orientations remain unverified; the sole connector through the existing Centrico draft is temporary, not a claim of original placement. Alpha Krokorok and Camerupt, their behaviours, other entrances, items and precise geography remain unimplemented.
