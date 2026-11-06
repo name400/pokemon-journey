@@ -37,3 +37,9 @@
 ## Vernal Avenue 및 Vert Plaza 연결 — 경로 초안
 
 [야생 구역 2 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)는 Vernal Avenue에서 동쪽 길로 Vert Plaza에 접근한다고 설명한다. Floral Avenue의 연구소가 Vernal Avenue 남쪽에 있다는 [구역 1 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-1-guide-all-pokemon-and-alphas)와 함께, 연구소 방면 → Vernal Avenue → Vert Plaza → 구역 2와 귀환을 연결했다. 기존 구역 2 저장은 동쪽 출구로 Vert Plaza에 도착하며, 광장 서쪽과 Vernal Avenue 서쪽을 통해 기존 도시로 돌아갈 수 있다. 호텔 주변 지구와 Vernal의 연결점 및 각 지역의 모양·거리·건물은 임의 좌표의 초안이며 원작의 정확한 맵이 아니다. Vert Plaza의 원형 지형·물·다리와 남쪽 및 북서쪽 출입구, Café Woof, 연구소 주변 및 호텔 주변 실제 지형은 아직 만들어지지 않았다. 기존 게임의 구역 2 랭크 Y 제한은 유지했지만, 위 안내는 원작에서 초반 접근 가능하다고 설명하므로 정책 차이가 남아 있다. 옥상 첫 방문은 기존 경로를 유지한다.
+
+## 야생 구역 2 출입구와 Vernal Avenue 표식 — 부분 수정
+
+[야생 구역 2 안내](https://thegameslayer.com/guides/pokemon-legends-z-a-all-wild-zone-2-pokemon/)의 남쪽·북서쪽 입구와 남동쪽 물가 목조 다리, [Vernal Avenue 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)의 Café Woof 위치 관계를 근거로, 구역 2의 출입 타일을 남쪽과 북서쪽으로 옮기고 기존 수면에 다리를 놓았다. Café Woof는 Vernal Avenue의 표식·설명만 추가했으며 건물 내부와 정확한 좌표는 미구현이다. 광장에서 구역 2 진입 시 랭크 Y 제한은 제거했다. 랭크·진행 및 저장 데이터는 그대로 둔다.
+
+구역 2는 기존에 걸을 수 있던 내부 타일을 막지 않으며 이전 좌우 경계 출입 타일에 저장된 경우 각각 인접한 내부 타일로 복구한다. 기존 북서쪽 출구의 구역 3 직결은 기존 진행을 보존하는 임시 연결이고, 실제 도시 경유 경로는 미구현이다. 수면은 기존의 작은 사각형으로 전체 원형 물·섬·다리 구조를 재현하지 못했고 건물과 도로 좌표도 여전히 초안이다. 실제 기기·배포 사이트 검증은 하지 않았다.
