@@ -575,4 +575,8 @@ This is a provisional two-layer interpretation: tile sizes, ladder and city-conn
 
 [Pokémon Kingdom](https://pente.koro-pokemon.com/legendsz-a/map-wild-zone-10.shtml) places Slowpoke and Bellsprout in the western courtyard, Carvanha and Staryu in the canal, and Arbok and Watchog on rooftops. [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) identifies west and east entrances and a ladder.
 
-The two-layer grid and west connector are a provisional interpretation; city street alignment, shoreline and roof coordinates, eastern exit, ladder positions and full terrain are not established. The water encounter markers are approached from shore and do not allow walking through water. Alphas, items, the eastern entrance and free field movement of Pokémon remain unimplemented.
+The two-layer grid and west connector are a provisional interpretation; city street alignment, shoreline and roof coordinates, eastern exit, ladder positions and full terrain are not established. The water encounter markers are approached from shore and do not allow walking through water. The eastern entrance and free field movement of Pokémon remain unimplemented.
+
+#### Zone 10 alphas and selected items
+
+[Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) and [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_10) describe fixed alpha Sharpedo in the canal and alpha Arbok and Watchog on rooftops, plus Quick Ball, Net Ball, Hyper Potion and Ultra Ball pickups. Coordinates and exact terrain remain provisional; the water alpha is a static encounter rather than original field behaviour. The eastern city entrance, TM034, Revive, other items and full roof/shore alignment remain unimplemented.
