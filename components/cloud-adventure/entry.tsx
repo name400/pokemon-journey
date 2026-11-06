@@ -14,7 +14,7 @@ import {TRAINERS} from '@/lib/campaign.mjs';
 import {fieldPath,stepField,wildAlphaTarget} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {ADVENTURE_BALLS} from '@/lib/cloud-adventure/adventure-balls.mjs';
 import './cloud-adventure.css';
-import {predictCloudStep} from '@/lib/cloud-adventure/adventure-prediction.mjs';
+import {predictCloudStep,createCloudMoveBuffer} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 
 type Screen='party'|'manage'|'bag'|'shop'|'journal'|null;
 async function api(body?:any,light=false){
@@ -36,9 +36,9 @@ export default function Adventure(){
  const [alphaAimKey,setAlphaAimKey]=useState(''),[catchBall,setCatchBall]=useState('pokeball');
  const [battleResult,setBattleResult]=useState<any>(null),resultRef=useRef<any>(null);
  const lock=useRef(false),mounted=useRef(true),revision=useRef(-1),snapshot=useRef<any>(null),screenRef=useRef<Screen>(null),dialogueRef=useRef<any>(null);
- const heldDirection=useRef(''),pathQueue=useRef<string[]>([]),lastFacing=useRef('');
+ const heldDirection=useRef(''),pathQueue=useRef<string[]>([]),lastFacing=useRef(''),movementEpoch=useRef(0);
  snapshot.current=data;screenRef.current=screen;dialogueRef.current=dialogue;
- const stop=useCallback(()=>{heldDirection.current='';pathQueue.current=[];},[]);
+ const stop=useCallback(()=>{heldDirection.current='';pathQueue.current=[];movementEpoch.current++;},[]);
  const accept=useCallback((d:any)=>{
   if(!mounted.current||d.revision<revision.current)return;revision.current=d.revision;setPrediction(null);
   setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()].filter((p:any)=>p.boxId!==d.world?.zaTradedPikachuId)};});
@@ -72,14 +72,21 @@ export default function Adventure(){
     const step=stepField(d.world,direction);
     if(step.blocked){pathQueue.current=[];if(lastFacing.current!==direction||d.world.facing!==direction){lastFacing.current=direction;await act('face',{direction});}setHint(step.reason);}
     else{
-     // A selected route can be sent in small batches; held controls remain one step
-     // at a time so releasing a key or touch never queues extra movement.
+     // Route steps are bounded; held input buffers only safe steps already shown.
      const path=heldDirection.current?[direction]:pathQueue.current.splice(0,4);
      if(heldDirection.current&&pathQueue.current[0]===direction)pathQueue.current.shift();
      lastFacing.current=path.at(-1)||direction;
-     const projected=predictCloudStep(d.world,path[0]);if(projected)setPrediction({revision:d.revision,...projected});moved=true;const r=await act('move',{path});
+     const projected=predictCloudStep(d.world,path[0]),epoch=movementEpoch.current,buffer=createCloudMoveBuffer(d.world,projected,direction);
+     if(projected)setPrediction({revision:d.revision,...projected});
+     // Accumulate only displayed steps while held; stop before encounters and exits.
+     const previewTimer=heldDirection.current&&projected?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||heldDirection.current!==direction)return;const next=buffer.push();if(next)setPrediction({revision:d.revision,...next});},100):null;
+     moved=true;let r=await act('move',{path});if(previewTimer)clearInterval(previewTimer);
+     if(alive&&mounted.current&&movementEpoch.current===epoch&&buffer.path.length&&buffer.matches(r)){
+      const pending=buffer.path;setPrediction({revision:r.revision,...buffer.position});const before=r;r=await act('move',{path:pending});
+      if(!r||r.battle||r.world?.area!==before.world.area||r.world?.interior!==before.world.interior||r.world?.district!==before.world.district||(r.world?.steps||0)-(before.world.steps||0)<pending.length)stop();
+     }
      // The server may stop early for an encounter, transition, or obstacle.
-     if(r&&(r.battle||r.world?.area!==d.world.area||r.world?.interior!==d.world.interior||r.world?.district!==d.world.district||(r.world?.steps||0)-(d.world.steps||0)<path.length))stop();
+     if(!r||r.battle||r.world?.area!==d.world.area||r.world?.interior!==d.world.interior||r.world?.district!==d.world.district||(r.world?.steps||0)-(d.world.steps||0)<path.length)stop();
     }
    }
    if(alive)timer=setTimeout(tick,moved?Math.max(0,100-(performance.now()-started)):16);

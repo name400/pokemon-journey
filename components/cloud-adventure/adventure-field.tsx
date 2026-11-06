@@ -14,7 +14,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,frame=0,last=0,width=736,height=544;
   for(const src of [...new Set([manifest.image,...Object.values(manifest.tiles).map((t:any)=>t.image||manifest.image)])]){const img=new Image();img.onload=()=>images.set(src,img);img.onerror=()=>setAssetError(true);img.src=src;}
-  const observer=new ResizeObserver(([entry])=>{width=Math.max(280,Math.round(entry.contentRect.width));height=Math.round(width*(width<560?.87:17/23));el.width=width*2;el.height=height*2;});observer.observe(el);
+  const observer=new ResizeObserver(([entry])=>{width=Math.max(280,Math.round(entry.contentRect.width));height=Math.round(width*(width<560?.87:17/23));if(el.width!==width*2||el.height!==height*2){el.width=width*2;el.height=height*2;}});observer.observe(el);
   function draw(time:number){
    if(disposed||!ctx||!el)return;const {w}=props.current,s=scene.current,dt=Math.min(48,time-last||16);last=time;
    const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0)||s.interior!==(w.interior||null)||s.district!==(w.district||null);
