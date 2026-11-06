@@ -765,4 +765,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 존느 구역 6·10·12 도시 연결 (초안)
 
-[존느 구역 10 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-sector-10.html)는 구역 6이 북서쪽, 구역 12가 동쪽이라고 설명한다. 야생 구역 11을 통과하지 않는 두 도시 연결을 추가해 야생 구역 제한과 분리했다. 구체적인 도로 형태·건물과 출구 좌표는 초안이다. 북쪽 존느 구역 9 및 세종 수로변은 아직 연결하지 않았다.
+[존느 구역 10 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-sector-10.html)는 구역 6이 북서쪽, 구역 12가 동쪽이라고 설명한다. 야생 구역 11을 통과하지 않는 두 도시 연결을 추가해 야생 구역 제한과 분리했다. 구체적인 도로 형태·건물과 출구 좌표는 초안이다. 북쪽 존느 구역 9는 연결했으나 세종 수로변은 아직 연결하지 않았다.
+
+### 존느 구역 10·9와 광장 접근로 (초안)
+
+[존느 구역 10 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-sector-10.html)는 북쪽에 구역 9가 있다고 설명한다. [존느 광장에서 구역 9로 가는 안내](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Exploring_Lumiose_City)도 참고해 구역 10·9 및 기존 광장 근처 접근로를 연결했다. 실제 거리의 폭·구간·계단과 건물 좌표는 초안이며, 세종 수로변과 구역 9의 상세 지형은 미구현이다.

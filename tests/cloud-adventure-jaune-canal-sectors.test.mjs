@@ -19,3 +19,12 @@ test('Jaune Sectors 6, 10 and 12 connect outside Zone 11 even before its rank ga
  assert.equal(stepField({...s,x:21,y:8},'right').blocked,true);
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,...six},9),9);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-jaune-sector6',21,8,['kept']]);
 });
+test('Jaune Sector 9 connects Sector 10 to the Jaune Plaza approach',()=>{
+ const s={area:3,district:'lumiose-jaune-sector10',interior:null,x:11,y:1,teamIds:['kept']};
+ const nine=stepField(s,'up');assert.deepEqual([nine.district,nine.x,nine.y],['lumiose-jaune-sector9',11,15]);
+ assert.equal(stepField({...s,...nine},'down').district,'lumiose-jaune-sector10');
+ assert.ok(fieldPath(fieldMap({...s,...nine}),nine,{x:11,y:1}).length);
+ const plaza=stepField({...s,...nine,x:11,y:1},'up');assert.equal(plaza.district,'lumiose-jaune-garden-route');
+ assert.equal(stepField({...s,...plaza},'left').district,'lumiose-jaune-sector9');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...nine,x:11,y:8},10),10);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-jaune-sector9',11,8,['kept']]);
+});
