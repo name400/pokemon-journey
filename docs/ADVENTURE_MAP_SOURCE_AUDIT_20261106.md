@@ -773,4 +773,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 쉐종 운하변과 센트리코·존느 구역 6 (초안)
 
-[Poképédia](https://www.pokepedia.fr/Quai_du_Canal_des_Saisons)는 운하변이 서쪽 센트리코 광장과 북쪽 존느 구역 6을 잇고 위쪽 길·물가 길과 나무 발판이 있다고 설명한다. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Saison_Canalside)도 센트리코에서 운하 북쪽 강변으로 이어진다고 설명한다. 두 출입과 산책로·수역·발판을 추가했다. 정확한 좌표와 폭·높이 차·발판 개수는 초안이다. 존느 구역 2 및 베르 구역 3 방면 다리와 주변 시설은 미구현이다.
+[Poképédia](https://www.pokepedia.fr/Quai_du_Canal_des_Saisons)는 운하변이 서쪽 센트리코 광장과 북쪽 존느 구역 6을 잇고 위쪽 길·물가 길과 나무 발판이 있다고 설명한다. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Saison_Canalside)도 센트리코에서 운하 북쪽 강변으로 이어진다고 설명한다. 두 출입과 산책로·수역·발판을 추가했다. 정확한 좌표와 폭·높이 차·발판 개수는 초안이다. 존느 구역 2도 연결했으나 베르 구역 3 방면 다리와 주변 시설은 미구현이다.
+
+### 존느 구역 2와 쉐종 운하변 (초안)
+
+[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_2)는 구역 2 남쪽이 쉐종 운하변에 접한다고 설명하고, [도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 서쪽 건물군으로 둘러싸인 안뜰을 명시한다. 두 구간을 왕복 연결하고 안뜰을 표현했다. 건물·안뜰·입구의 정확한 크기와 위치는 초안이며 북쪽 존느 스트리트와 저스티스 도장의 상세 구조·기능은 미구현이다.

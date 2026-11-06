@@ -39,3 +39,11 @@ test('Saison promenade joins Centrico to Jaune Sector 6 while retaining save dat
  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-saison-canalside',10,9,['kept']]);
  assert.equal(fieldMap({...s,...canal})[14][10],'~');
 });
+test('Jaune Sector 2 joins the Saison promenade and preserves saved position',()=>{
+ const s={area:3,district:'lumiose-saison-canalside',interior:null,x:5,y:1,teamIds:['kept']};
+ const two=stepField(s,'up');assert.deepEqual([two.district,two.x,two.y],['lumiose-jaune-sector2',11,15]);
+ assert.equal(stepField({...s,...two},'down').district,'lumiose-saison-canalside');
+ assert.ok(fieldPath(fieldMap({...s,...two}),two,{x:5,y:6}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...two,x:5,y:6},12),12);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-jaune-sector2',5,6,['kept']]);
+});
