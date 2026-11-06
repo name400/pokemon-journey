@@ -878,3 +878,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 야생 구역 18 도로변과 비계 (초안)
 
 [구역 18 지형 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_18)와 [출현 위치 자료](https://pokequery.com/games/legends-za/wild-zones/18)는 도로변 아공이·보만다와 남동쪽 공사 비계의 이어롭을 구분한다. 도로변 정원 및 남쪽 비계 접근을 표현하고 이어롭을 상층으로 이동했다. 비계와 옥상은 현재 하나의 상층으로 근사하며 경계·높이·정확한 좌표는 미확인이다.
+
+### 구역 18 이어롭 배치 정정
+
+[실플레이 안내](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-18/)는 이어롭을 비계 사다리를 오르기 전 골목에서 만난다고 설명한다. 따라서 직전의 상층 배치를 지상 골목으로 정정했다. 골목의 정확한 형상·좌표와 실제 비계 높이 연결은 여전히 초안이다.

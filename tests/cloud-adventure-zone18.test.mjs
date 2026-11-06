@@ -48,15 +48,14 @@ test('Zone 18 southeast alley reaches Quasartico and keeps rank and saved state'
  const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaZone18Upper],['lumiose-zone18',20,15,false]);
 });
 
-test('Zone 18 roadside dragon and scaffold alpha use separate levels',()=>{
+test('Zone 18 scaffold alley leads to the ladder and preserves roof saves',()=>{
  const ground={area:3,district:'lumiose-zone18',interior:null,x:11,y:8,zaRoyaleRank:'B'};
  const upper={...ground,zaZone18Upper:true,x:6,y:9};
- assert.equal(zone18Visible(ground,'b').species,373);assert.equal(zone18Visible(ground,'c'),null);
- assert.equal(zone18Visible(upper,'c').species,428);assert.equal(zone18Visible(upper,'b'),null);
- assert.ok(fieldPath(fieldMap(upper),upper,{x:12,y:6}).length);
- assert.equal(zone18Visible({...upper,zaZone18Spent:{'lopunny-alpha':true}},'c'),null);
- const legacy=restoreAdventurePosition(storeAdventurePosition({...upper,x:12,y:5},38),38);
- assert.equal(legacy.district,'lumiose-zone18');assert.equal(legacy.zaZone18Upper,true);assert.ok([11,12,13].includes(legacy.x));assert.ok(fieldMap(legacy)[legacy.y][legacy.x]!== 'c');
- const restored=restoreAdventurePosition(storeAdventurePosition(upper,38),38);
- assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone18Upper],['lumiose-zone18',6,9,true]);
+ assert.equal(zone18Visible(ground,'b').species,373);assert.equal(zone18Visible(ground,'c').species,428);
+ assert.equal(zone18Visible(upper,'c'),null);assert.equal(zone18Visible(upper,'b'),null);
+ assert.ok(fieldPath(fieldMap(ground),ground,{x:13,y:6}).length);
+ assert.equal(zone18Visible({...ground,zaZone18Spent:{'lopunny-alpha':true}},'c'),null);
+ const oldGround=restoreAdventurePosition(storeAdventurePosition({...ground,x:12,y:5},38),38);assert.equal(oldGround.district,'lumiose-zone18');assert.notDeepEqual([oldGround.x,oldGround.y],[12,5]);
+ const restored=restoreAdventurePosition(storeAdventurePosition({...upper,x:12,y:5},38),38);
+ assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone18Upper],['lumiose-zone18',12,5,true]);
 });
