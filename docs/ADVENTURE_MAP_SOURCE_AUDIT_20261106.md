@@ -534,3 +534,9 @@ Emma 전투는 탐정사무소 안의 기존 표식, Mable은 기존 연구소 �
 [구역 6 현장 자료](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-6/)에 따라 지상에서 다리 아래 수로와 옥상으로 이동하는 별도 층을 추가했다. 수로에 잉어킹·거북손손, 옥상에 보송송·파비코가 보이며, 수중 잉어킹의 칸은 걸어서 들어갈 수 없다. [기술머신 위치 자료](https://raiderking.com/pokemon-legends-z-a-all-tms-locations/)에 따라 옥상 남쪽의 기술머신 041 물의파동을 획득하고 반복 학습할 수 있다. 층별 위치와 획득 여부는 저장된다.
 
 정확한 지도 좌표·높낮이와 사다리·옥상 연결 방식은 초안이다. 원작의 홀로베이터·낙하 동선과 다리 아래에서 바깥으로 이어지는 별도 출입구, 우두머리와 다른 도구는 아직 미구현이다. 대표 전투·기술 학습·층별 저장을 격리 검사했으며 실기기·운영 검사는 하지 않았다. 이 절이 위 절의 수로·옥상 미구현 서술을 일부 갱신한다.
+
+### Wild Zone 6: alphas and rooftop access
+
+- [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Wild_Zone_6) lists fixed alpha Pikachu (40–42), Houndoom (32–33), and Binacle (32–34). [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-6-guide-all-pokemon-and-alphas) places them at the café roof, street stalls, and waterside respectively. The map uses fixed representative levels and approximate tile positions; conflicting reports of time restrictions remain unresolved.
+- [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists two Super Potions near the south entrance and tunnel and a Luxury Ball behind the alpha Pikachu. Their tile coordinates and roof positioning are provisional.
+- [Pocket Tactics](https://www.pockettactics.com/pokemon-legends-z-a/wild-zone-6) describes a holovator, high roof and a drop to the southern rooftop TM041. The added elevator and fixed drop represent that route; roof shapes, landing coordinates, and the pre-existing alternate roof connection are provisional and do not claim exact original geometry. Free gliding and other zone items remain incomplete.

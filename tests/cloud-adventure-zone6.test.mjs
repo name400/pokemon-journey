@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone6Map,zone6Encounter,zone6Layer,zone6Visible} from '../lib/cloud-adventure/adventure-zone6.mjs';
+import {zone6Map,zone6Encounter,zone6Layer,zone6Visible,zone6Item} from '../lib/cloud-adventure/adventure-zone6.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('zone six connects city and gated northern zone eleven via its bridge',()=>{
@@ -12,4 +12,10 @@ test('zone six connects city and gated northern zone eleven via its bridge',()=>
  const saved=storeAdventurePosition({...z,x:11,y:10},42),restored=restoreAdventurePosition(saved,42);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone6',11,10]);assert.equal(restoreAdventurePosition(saved,43).district,null);
  const canal={...z,zaZone6Layer:'canal',x:3,y:6},under=zone6Map(canal);assert.equal(zone6Layer(z),'ground');assert.ok(fieldPath(under,canal,{x:19,y:7}).length);assert.equal(stepField({...canal,x:12,y:7},'down').blocked,true);assert.equal(zone6Visible(canal,'a').species,129);const roof={...z,zaZone6Layer:'roof',x:17,y:4};assert.equal(zone6Map(roof)[12][12],'t');assert.equal(zone6Visible(roof,'a').species,180);for(const v of [canal,roof]){const r=restoreAdventurePosition(storeAdventurePosition(v,51),51);assert.deepEqual([r.district,r.zaZone6Layer,r.x,r.y],[v.district,v.zaZone6Layer,v.x,v.y]);}
  assert.equal(zone6Encounter(()=>0).speciesId,228);assert.equal(zone6Encounter(()=>.999).speciesId,427);
+});
+
+test('zone six high roof keeps alpha, items and saved layer',()=>{
+ const high={area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'high',x:17,y:4,facing:'up'};
+ const map=zone6Map(high);assert.equal(map[3][17],'j');assert.equal(map[10][12],'v');assert.equal(zone6Visible(high,'a').species,25);assert.equal(zone6Visible(high,'a').alpha,true);assert.equal(zone6Item(high,'i').id,'roof-luxury');
+ assert.equal(zone6Item({...high,zaZone6Items:['roof-luxury']},'i'),null);const saved=restoreAdventurePosition(storeAdventurePosition(high,72),72);assert.deepEqual([saved.zaZone6Layer,saved.x,saved.y],['high',17,4]);
 });
