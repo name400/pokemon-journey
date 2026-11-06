@@ -826,3 +826,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 루주 구역 7과 루주 스트리트 (초안)
 
 [구역 7 의뢰 위치 자료](https://www.dexerto.com/wikis/pokemon-legends-z-a/all-hyperspace-side-missions-walkthrough-in-mega-dimension-dlc/)는 루주 구역 7이 루주 스트리트에 접하는 것을 명시한다. 구역 7과 기존 루주 거리 지도 사이에 왕복 경로를 추가했다. 출입 위치·건물 및 길의 모양은 초안이며, 확인된 근거는 지역 관계이지 정밀한 지상 경로가 아니다. 다른 주변 거리와 옥상 경로는 미구현이다.
+
+### 야생 구역 14 단일 진입 경로
+
+[구역 14 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_14)는 마젠타 스트리트 쪽 출입구 하나를 명시한다. [현장 공략](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas)은 프리즘타워에서 운하를 따라 접근한다고 설명한다. 노스 불르바르에서 구역 14로 즉시 들어가던 초안 경로를 마젠타 운하 접근로로 바꾸고, 구역 입구의 랭크 D 제한을 유지했다. 기존 구역 내 저장 위치 복구를 위해 북쪽 레거시 출구는 유지한다. 정밀 지형과 거리 방향은 여전히 초안이다.
