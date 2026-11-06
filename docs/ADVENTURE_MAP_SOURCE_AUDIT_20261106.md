@@ -970,3 +970,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 마젠타 거리의 미르 지하 수도 입구 (초안)
 
 [하수도 자료](https://bulbapedia.bulbagarden.net/wiki/The_Sewers)는 마젠타 거리의 독립된 작은 하수도 구간을 명시한다. 기존 결정 정리 하수도의 미션 20 시작·재진입·보고를 마젠타 운하변에서도 연결하고 출입 위치를 기억한다. 기존 베르날 입구와 옛 저장의 귀환은 유지한다. 정확한 입구·지하 구조는 초안이다.
+
+### 사우스 불르바르와 마젠타 거리 (초안)
+
+[미르시티 도로 설명](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City)은 변전소·구역 14를 사우스 불르바르와 마젠타 거리의 시설로 설명한다. 기존 운하변 마젠타 거리 초안과 사우스 불르바르를 연결해 하나의 구역 14 입구로 접근하도록 했다. 교차점 좌표·실제 선형은 원작 시각 대조가 필요한 초안이다.
