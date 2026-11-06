@@ -23,8 +23,8 @@ test('Autumnal Avenue connects Centrico, Magenta Sector 9 and Zone 18',()=>{
  assert.equal(stepField(road,'up').blocked,true);
  const zone=stepField({...road,zaRoyaleRank:'B'},'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone18',11,1]);
  assert.equal(stepField({...road,...zone,zaRoyaleRank:'B'},'up').district,'lumiose-autumnal-approach');
- const sector=stepField({...road,x:21,y:8},'right');assert.equal(sector.district,'lumiose-magenta-sector9');
- assert.equal(stepField({...road,...sector},'left').district,'lumiose-autumnal-approach');
+ const sector=stepField({...road,x:1,y:12},'left');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-magenta-sector9',21,8]);
+ assert.equal(stepField({...road,...sector},'right').district,'lumiose-autumnal-approach');
  const centrico=stepField({...road,x:11,y:15},'down');assert.equal(centrico.district,'lumiose-centrico-route');
  assert.equal(stepField({...road,...centrico},'up').district,'lumiose-autumnal-approach');
  const saved=restoreAdventurePosition(storeAdventurePosition({...road,x:11,y:8},35),35);

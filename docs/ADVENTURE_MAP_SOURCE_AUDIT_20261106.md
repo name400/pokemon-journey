@@ -882,3 +882,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 구역 18 이어롭 배치 정정
 
 [실플레이 안내](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-18/)는 이어롭을 비계 사다리를 오르기 전 골목에서 만난다고 설명한다. 따라서 직전의 상층 배치를 지상 골목으로 정정했다. 골목의 정확한 형상·좌표와 실제 비계 높이 연결은 여전히 초안이다.
+
+### 오토널 애비뉴 서쪽 마젠타 9번지 (방향 정정)
+
+[오토널 애비뉴 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/autumnal-avenue.html)는 마젠타 9번지를 애비뉴 서쪽으로 설명한다. 이전 초안의 동쪽 연결을 서쪽으로 정정했다. 분기 선형과 타일 좌표는 원작 영상에 의한 추가 대조가 필요한 초안이다.
