@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone6Map,zone6Encounter,zone6Layer,zone6Visible,zone6Item} from '../lib/cloud-adventure/adventure-zone6.mjs';
-import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('zone six connects city and gated northern zone eleven via its bridge',()=>{
  const city={area:3,district:'lumiose-vert2',interior:null,x:17,y:1,facing:'up'},enter=stepField(city,'up');assert.deepEqual([enter.district,enter.x,enter.y],['lumiose-zone6',11,1]);
@@ -35,4 +35,16 @@ test('Jaune Sector 11 connects its neighbouring streets and sector',()=>{
   const saved=restoreAdventurePosition(storeAdventurePosition({...s,...a},62),62);assert.deepEqual(saved.teamIds,['kept']);
   const back=stepField(saved,reverse);assert.equal(back.district,'lumiose-jaune-sector11');
  }
+});
+
+
+test('Zone 6 southern canal approach crosses into the lower layer and preserves saves',()=>{
+ const road={area:3,district:'lumiose-saison-canalside',interior:null,x:17,y:1,facing:'up',teamIds:['kept']};
+ const lower=stepField(road,'up');assert.deepEqual([lower.district,lower.zaZone6Layer,lower.x,lower.y],['lumiose-zone6','canal',3,15]);
+ const state={...road,...lower};assert.ok(fieldPath(zone6Map(state),state,{x:3,y:6}).length);
+ assert.equal(zone6Map(state)[16][3],'X');assert.notEqual(zone6Map({...state,zaZone6Layer:'ground'})[16][3],'X');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...state,zaZone6Items:['canal-potion']},63),63);
+ assert.deepEqual([saved.district,saved.zaZone6Layer,saved.x,saved.y,saved.teamIds,saved.zaZone6Items],['lumiose-zone6','canal',3,15,['kept'],['canal-potion']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-saison-canalside',17,1]);
+ assert.ok(fieldPath(fieldMap({...saved,...back}),back,{x:5,y:1}).length);
 });
