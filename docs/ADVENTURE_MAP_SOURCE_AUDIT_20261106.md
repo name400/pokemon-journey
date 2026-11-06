@@ -33,3 +33,7 @@
 ## Floral Avenue와 포켓몬 연구소 — 동선 부분 구현
 
 [구역 1 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-1-guide-all-pokemon-and-alphas)에서 구역 1이 Floral Avenue의 연구소 동쪽에 있다는 관계를 확인해, 구역 1 서쪽 출구 → Floral Avenue → 연구소 입구를 왕복하도록 연결했다. 구역 1에서는 기존 동쪽의 호텔 방면 출구도 유지한다. 연구소 내부는 기존 연구소 화면을 재사용하는 초안이며 원작 Mable의 대화·시설을 재현한 것이 아니다. 도로 폭·건물 모양과 좌표 및 거리의 다른 시설은 미확정이다. 거리·연구소에서 재접속과 이동, 파티·지갑 보존을 격리 API로 검사했다. 구역 2의 실제 Vert Plaza 거리 연결 및 도시 전체 맵은 아직 구현되지 않았다.
+
+## Vernal Avenue 및 Vert Plaza 연결 — 경로 초안
+
+[야생 구역 2 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)는 Vernal Avenue에서 동쪽 길로 Vert Plaza에 접근한다고 설명한다. Floral Avenue의 연구소가 Vernal Avenue 남쪽에 있다는 [구역 1 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-1-guide-all-pokemon-and-alphas)와 함께, 연구소 방면 → Vernal Avenue → Vert Plaza → 구역 2와 귀환을 연결했다. 기존 구역 2 저장은 동쪽 출구로 Vert Plaza에 도착하며, 광장 서쪽과 Vernal Avenue 서쪽을 통해 기존 도시로 돌아갈 수 있다. 호텔 주변 지구와 Vernal의 연결점 및 각 지역의 모양·거리·건물은 임의 좌표의 초안이며 원작의 정확한 맵이 아니다. Vert Plaza의 원형 지형·물·다리와 남쪽 및 북서쪽 출입구, Café Woof, 연구소 주변 및 호텔 주변 실제 지형은 아직 만들어지지 않았다. 기존 게임의 구역 2 랭크 Y 제한은 유지했지만, 위 안내는 원작에서 초반 접근 가능하다고 설명하므로 정책 차이가 남아 있다. 옥상 첫 방문은 기존 경로를 유지한다.

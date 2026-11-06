@@ -130,7 +130,7 @@ test('alert alpha pursues over saved tiles and aiming follows its new direction'
 
 test('provisional Wild Zone 1 connects to plaza and preserves safe stored location',()=>{
  const map=lumioseZone1Map();assert.ok(fieldPath(map,{x:21,y:8},findTile(map,'g')).length);
- const wrong=stepField({area:3,district:'lumiose',x:1,y:8},'left');assert.equal(wrong.blocked,true);const enter=stepField({area:3,district:'lumiose',x:8,y:14},'down');assert.deepEqual([enter.district,enter.x,enter.y],['lumiose-zone1',21,8]);
+ const west=stepField({area:3,district:'lumiose',x:1,y:8},'left');assert.equal(west.district,'lumiose-vernal');const enter=stepField({area:3,district:'lumiose',x:8,y:14},'down');assert.deepEqual([enter.district,enter.x,enter.y],['lumiose-zone1',21,8]);
  const leave=stepField({area:3,district:'lumiose-zone1',x:21,y:8},'right');assert.deepEqual([leave.district,leave.x,leave.y],['lumiose',8,14]);
  const state={area:3,district:'lumiose-zone1',x:17,y:8,regionId:6,districtReturnRegion:1,adventureDexSpecies:[13]};
  const saved=storeAdventurePosition(state,8);assert.deepEqual([saved.x,saved.y,saved.regionId],[5,9,1]);const loaded=restoreAdventurePosition(structuredClone(saved),8);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone1',17,8]);assert.deepEqual(loaded.adventureDexSpecies,[13]);
@@ -139,7 +139,7 @@ test('provisional Wild Zone 1 connects to plaza and preserves safe stored locati
 test('zone one west links Floral Avenue and zone two preserves its location',()=>{
  const source={area:3,district:'lumiose-zone1',x:1,y:8};const street=stepField(source,'left');assert.deepEqual([street.district,street.x,street.y],['lumiose-floral',21,8]);assert.equal(stepField({...source,zaRoyaleRank:'Y'},'left').district,'lumiose-floral');const returnZone=stepField({area:3,district:'lumiose-floral',x:21,y:8},'right');assert.deepEqual([returnZone.district,returnZone.x,returnZone.y],['lumiose-zone1',1,8]);
  assert.ok(fieldPath(lumioseZone2Map(),{x:21,y:8},findTile(lumioseZone2Map(),'g')).length);
- const back=stepField({area:3,district:'lumiose-zone2',x:21,y:8},'right');assert.deepEqual([back.district,back.x,back.y],['lumiose',14,7]);
+ const back=stepField({area:3,district:'lumiose-zone2',x:21,y:8},'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-plaza',21,8]);const gate={area:3,district:'lumiose-vert-plaza',x:21,y:8};assert.equal(stepField(gate,'right').blocked,true);assert.equal(stepField({...gate,zaRoyaleRank:'Y'},'right').district,'lumiose-zone2');
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone2',x:17,y:8,regionId:6,districtReturnRegion:1},9),loaded=restoreAdventurePosition(structuredClone(saved),9);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone2',17,8]);
 });
 
