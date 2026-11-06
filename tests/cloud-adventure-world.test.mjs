@@ -149,11 +149,12 @@ test('zone one west links Floral Avenue and zone two preserves its location',()=
 test('provisional zone three respects story and older saves, and round-trips its position',()=>{
  const source={area:3,district:'lumiose-zone2',x:4,y:1,zaRoyaleRank:'Y'};
  assert.equal(stepField(source,'up').district,'lumiose-vert2');const road={area:3,district:'lumiose-vert2',x:1,y:8,zaRoyaleRank:'Y'};
- assert.equal(stepField({...road,zaJoseeRequired:true},'left').blocked,true);
+ assert.equal(stepField({...road,zaJoseeRequired:true},'left').district,'lumiose-zone3');
  assert.equal(stepField({...road,zaRoyaleRank:'Z'},'left').blocked,true);
  for(const oldOrComplete of [road,{...road,zaJoseeRequired:true,zaJoseeComplete:true}])assert.equal(stepField(oldOrComplete,'left').district,'lumiose-zone3');
  assert.equal(stepField({area:3,district:'lumiose-zone3',x:21,y:8},'right').district,'lumiose-vert2');
  assert.equal(stepField({area:3,district:'lumiose-vert2',x:21,y:8},'right').district,'lumiose-zone2');
+ const grass={area:3,district:'lumiose-zone3',x:17,y:8,zaRoyaleRank:'Y',zaJoseeRequired:true};assert.equal(stepField(grass,'left').blocked,true);assert.equal(stepField({...grass,zaJoseeComplete:true},'left').blocked,undefined);assert.equal(stepField({...grass,x:15},'left').blocked,undefined);
  assert.ok(fieldPath(lumioseZone3Map(),{x:21,y:8},findTile(lumioseZone3Map(),'g')).length);
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone3',x:17,y:8,regionId:6,districtReturnRegion:1},10),loaded=restoreAdventurePosition(structuredClone(saved),10);
  assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone3',17,8]);

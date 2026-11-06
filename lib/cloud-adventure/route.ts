@@ -132,7 +132,7 @@ else if(b.action==='enterHotel202'){if(s.combat||s.district!=='lumiose'||s.inter
 else if(cafeWoofDrink(b.action)){
  const drink=cafeWoofDrink(b.action)!;if(s.combat||s.interior||s.district!=='lumiose-vernal'||cell()!=='q')throw Error('뚜뚜 카페에서 음료를 주문하세요.');
  const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
- for(const id of s.teamIds){const before=mons.get(id);if(!before)throw Error('파티를 확인하세요.');const mon=heal(before);if(id===s.activeId)mon.friendship=friendshipGain(mon,1);mons.set(id,mon);changed.set(id,mon);}
+ for(const id of s.teamIds){const before=mons.get(id);if(!before)throw Error('파티를 확인하세요.');const mon=heal(before);if(id===s.activeId)mon.friendship=Math.min(255,(mon.friendship??70)+30);mons.set(id,mon);changed.set(id,mon);}
  reward=-drink.price;s.log=[`${drink.name}을(를) 주문했다. 파티가 회복되고 선두 포켓몬과 친해졌다.`];
 }
 else if(b.action==='hotelRest'){if(s.combat||s.interior!=='hotel'||s.district!=='lumiose'||cell()!=='F')throw Error('호텔 안내 직원 앞에서 쉬어 주세요.');for(const id of s.teamIds){const m=heal(mons.get(id));mons.set(id,m);changed.set(id,m);}s.log=['호텔에서 파티의 HP·상태·PP를 회복했다.'];}
@@ -174,7 +174,7 @@ else if(b.action==='royaleJoin'){
  s.zaRoyaleRank='Z';s.zaRoyaleZWins=[];s.log=['Z-A 로열에 랭크 Z로 참가했다. 밤에 광장의 임시 접수처를 찾자.'];
 }
 else if(b.action==='battleJosee'){
- if(s.combat||s.district!=='lumiose-zone2'||s.interior||cell()!=='j'||!joseeAction(s))throw Error('야생 구역 2에서 Josée를 만나세요.');
+ if(s.combat||s.district!=='lumiose-zone3'||s.interior||cell()!=='j'||!joseeAction(s))throw Error('야생 구역 3에서 Josée를 만나세요.');
  const trainer=ROYALE_JOSEE,team=trainerTeam({...trainer,strategy:'balanced'});team.forEach((m:any,i:number)=>{m.gender='F';m.moves=trainer.moves[i];m.pp={};});
  s.combat=createAdventureCombat(s,mons,team,{heals:0,strategy:'balanced'});s.trainer={id:trainer.id,name:trainer.name,title:'정의단 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=['Josée와의 배틀이 시작됐다!'];
 }
@@ -193,7 +193,7 @@ else if(b.action==='battleLida'){
  s.combat=createAdventureCombat(s,mons,team,{heals:0,strategy:'balanced'});s.trainer={id:trainer.id,name:trainer.name,title:'팀 MZ 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=['Lida에게 물건을 전하고 배틀을 시작했다!'];
 }
 else if(b.action==='enterRoyaleZone'){
- if(s.combat||s.district!=='lumiose'||s.interior||cell()!=='T'||!['Z','Y','X','W'].includes(s.zaRoyaleRank)||royaleZReady(s)||royaleYReady(s)||royaleXReady(s)||royaleWReady(s)||naveenRequired(s)||lidaRequired(s)||joseeRequired(s))throw Error(joseeRequired(s)?'먼저 야생 구역 2에서 Josée와 배틀하세요.':naveenRequired(s)?'먼저 호텔 앞에서 Naveen과 배틀하세요.':lidaRequired(s)?'먼저 Lida에게 물건을 전하고 배틀하세요.':'광장의 로열 접수처를 확인하세요.');
+ if(s.combat||s.district!=='lumiose'||s.interior||cell()!=='T'||!['Z','Y','X','W'].includes(s.zaRoyaleRank)||royaleZReady(s)||royaleYReady(s)||royaleXReady(s)||royaleWReady(s)||naveenRequired(s)||lidaRequired(s)||joseeRequired(s))throw Error(joseeRequired(s)?'먼저 야생 구역 3에서 Josée와 배틀하세요.':naveenRequired(s)?'먼저 호텔 앞에서 Naveen과 배틀하세요.':lidaRequired(s)?'먼저 Lida에게 물건을 전하고 배틀하세요.':'광장의 로열 접수처를 확인하세요.');
  if(gameTime().period!=='night')throw Error('로열 배틀 존은 밤에 열립니다.');
  if(s.zaRoyaleRank==='Y')s.zaRoyaleYSessionWins=[];if(s.zaRoyaleRank==='X')s.zaRoyaleXSessionWins=[];if(s.zaRoyaleRank==='W')s.zaRoyaleWSessionWins=[];s.district='lumiose-royale';s.x=11;s.y=14;s.facing='up';s.log=['밤의 배틀 존에 들어왔다. 트레이너를 찾아 대화하자.'];
 }
@@ -201,7 +201,7 @@ else if(['royaleBattle','royaleZach','royaleYvon','royaleXavi','royaleRintaro','
  const promo=['royaleZach','royaleYvon','royaleXavi','royaleRintaro'].includes(b.action),legacy=b.action==='royaleBattle';
  if(s.combat||s.interior||!['Z','Y','X','W'].includes(s.zaRoyaleRank)||(promo||legacy?(s.district!=='lumiose'||cell()!=='T'):(s.district!=='lumiose-royale'||cell()!==({royaleErica:'O',royaleDaniel:'U',royaleJean:'V'} as any)[b.action])))throw Error('배틀 존의 트레이너를 찾아가세요.');
  if(gameTime().period!=='night')throw Error('로열 배틀은 밤에 열립니다.');
- if(joseeRequired(s))throw Error('먼저 야생 구역 2에서 Josée와 배틀하세요.');if(naveenRequired(s))throw Error('먼저 호텔 앞에서 Naveen과 배틀하세요.');if(lidaRequired(s))throw Error('먼저 Lida에게 물건을 전하고 배틀하세요.');
+ if(joseeRequired(s))throw Error('먼저 야생 구역 3에서 Josée와 배틀하세요.');if(naveenRequired(s))throw Error('먼저 호텔 앞에서 Naveen과 배틀하세요.');if(lidaRequired(s))throw Error('먼저 Lida에게 물건을 전하고 배틀하세요.');
  if((b.action==='royaleZach'&&!royaleZReady(s))||(b.action==='royaleYvon'&&!royaleYReady(s))||(b.action==='royaleXavi'&&!royaleXReady(s))||(b.action==='royaleRintaro'&&!royaleWReady(s)))throw Error('티켓포인트를 모아 도전권을 얻으세요.');
  const id=({royaleErica:'royale-z-erica',royaleDaniel:'royale-z-daniel',royaleJean:'royale-z-jean'} as any)[b.action];
  const slot=({royaleErica:0,royaleDaniel:1,royaleJean:2} as any)[b.action];const trainer=promo?(b.action==='royaleZach'?ROYALE_Z_PROMOTION:b.action==='royaleYvon'?ROYALE_Y_PROMOTION:b.action==='royaleXavi'?ROYALE_X_PROMOTION:ROYALE_W_PROMOTION):s.zaRoyaleRank==='W'?(legacy?undefined:ROYALE_W_TRAINERS[slot]):s.zaRoyaleRank==='X'?(legacy?undefined:ROYALE_X_TRAINERS[slot]):s.zaRoyaleRank==='Y'?(legacy?undefined:ROYALE_Y_TRAINERS[slot]):legacy?ROYALE_Z_TRAINERS.find(t=>!royaleZWins(s).includes(t.id)):ROYALE_Z_TRAINERS.find(t=>t.id===id);if(!trainer||(!promo&&(s.zaRoyaleRank==='W'?(royaleWReady(s)||royaleWWins(s).includes(trainer.id)):s.zaRoyaleRank==='X'?(royaleXReady(s)||royaleXWins(s).includes(trainer.id)):s.zaRoyaleRank==='Y'?(royaleYReady(s)||royaleYWins(s).includes(trainer.id)):royaleZWins(s).includes(trainer.id))))throw Error('이미 마친 배틀입니다.');
