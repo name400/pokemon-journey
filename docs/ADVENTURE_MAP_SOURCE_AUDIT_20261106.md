@@ -270,3 +270,9 @@
 [원작 음식점 설명](https://bulbapedia.bulbagarden.net/wiki/Sushi_High_Roller_%28Lumiose_City%29)은 실내에 배틀 코트가 있다고 설명하고, [미션 목록](https://www.gamerguides.com/pokemon-legends-z-a/checklists/side-missions-locations)은 접수원을 통해 미션 73을 시작한다고 설명한다. 북쪽 거리의 음식점 입구에서 접수원과 배틀 코트가 있는 별도 실내로 입장하고 남쪽 출구로 돌아갈 수 있게 했다. 실내 재접속 시 위치·파티·지갑을 보존한다.
 
 접수원과 코트의 정확한 좌표, 방 크기·가구·외형은 초안이다. 미션 73의 해금 조건, 5코스 진행과 연속 턴제 배틀·보상·패배/저장 복구는 아직 미구현이다. 따라서 접수원은 현재 안내만 제공하고 비용을 청구하지 않는다.
+
+## Sushi High Roller 코스 상대 데이터 — 전투 연결 전
+
+[원작 식당 배틀 목록](https://bulbapedia.bulbagarden.net/wiki/Sushi_High_Roller_%28Lumiose_City%29)에 기재된 다섯 코스의 상대 포켓몬 15마리와 레벨·기술을 `adventure-sushi.mjs`에 등록했다. 기존 턴제 엔진에서 대표 코스 팀을 생성할 수 있는지 확인했다. 원작은 상대 셋이 동시에 등장하지만 현재 모험 엔진은 싱글 턴제이므로 실제 배틀 연출·규칙과의 연결은 아직 하지 않았다.
+
+[미션 안내](https://www.gamerguides.com/pokemon-legends-z-a/database/missions/side-missions/full-course-of-battles-high-rolling)에 따르면 미션 73은 메인 미션 24부터 가능하며 첫 완료 보상은 시마·파비·로매열매 각 10개다. 현재 메인 스토리는 미션 10 단계까지 부분 연결되어 있어 미션 24 도달을 판정할 수 없다. 코스 간 회복 금지, 5연전 진행·승패·저장 복구, 최초 보상과 3만 코인 재도전 및 재도전 보상 지급은 아직 미구현이다. 상대의 성별과 Z-A의 무특성 규칙도 턴제 엔진에 아직 반영하지 않았다.
