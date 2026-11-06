@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 과거 이상한 꿈 변환 직후의 명확한 영문·한국어 기술 중복은 원본 목록·PP 백업을 남기고 교정한다. 진행된 저장과 불명확한 사례는 보류한다. [WEIRD_DREAM_MOVE_ALIAS_REPAIR_QA_20261106.md](WEIRD_DREAM_MOVE_ALIAS_REPAIR_QA_20261106.md) 참조.
+
 후속: 신규 도전의 이상한 꿈이 영문·한국어가 다른 같은 기술을 ID로 비교해 중복 배정을 피한다. 기존 중복 저장을 임의 교정하지 않는다. [WEIRD_DREAM_MOVE_IDENTITY_QA_20261106.md](WEIRD_DREAM_MOVE_IDENTITY_QA_20261106.md) 참조.
 
 후속 검증: 이상한 꿈의 융합 파티가 전투 승리 후 주체의 패시브를 현재 도전에만 얻고 저장 복구·다음 전투까지 유지하는 경로를 확인했다. 후보 0·1·2명의 난수 소비와 다른 슬롯도 검사했다. [WEIRD_DREAM_FUSION_PASSIVE_QA_20261106.md](WEIRD_DREAM_FUSION_PASSIVE_QA_20261106.md) 참조.
