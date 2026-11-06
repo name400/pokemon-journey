@@ -16,3 +16,13 @@ test('Zone 3 west entrance reaches Sommi and preserves previous connections',()=
  assert.equal(fieldDialogue(roof).action,'side04Holovator');assert.ok(fieldPath(fieldMap(roof),roof,{x:12,y:6}).length);
  const loaded=restoreAdventurePosition(storeAdventurePosition(roof,60),60);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaSide04Won],['lumiose-rouge-sector1-roof',3,12,true]);
 });
+
+test('western rooftop TM remains collected and older roof positions are safe',()=>{
+ const roof={area:3,district:'lumiose-rouge-sector1-roof',interior:null,x:3,y:12,facing:'down',zaSide04Won:true,teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(roof),roof,{x:5,y:5}).length);
+ assert.equal(fieldDialogue({...roof,x:5,y:5,facing:'up'}).action,'rouge1RoofTM005');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...roof,x:5,y:5,zaRouge1Tm005:true},61),61);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaRouge1Tm005],['lumiose-rouge-sector1-roof',5,5,['kept'],true]);
+ assert.notEqual(fieldMap(saved)[4][5],'t');
+ const old=restoreAdventurePosition(storeAdventurePosition({...roof,x:5,y:4},62),62);assert.deepEqual([old.x,old.y],[5,4]);
+});
