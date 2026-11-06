@@ -570,3 +570,9 @@ This is a provisional two-layer interpretation: tile sizes, ladder and city-conn
 #### Zone 9 alphas and selected items
 
 [PokeQuery](https://pokequery.com/games/legends-za/wild-zones/9) places alpha Meowstic on the middle rooftop and alpha Manectric on the northwest rooftop; [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists a Hyper Potion near the southern ladder, a Heal Ball on northern scaffolding, and a Great Ball on a western roof. Tile coordinates and roof/platform outlines are draft. Actual surrounding street connections and the northwest city entrance remain unverified. Alpha levels are representative; sex/form and all fixed spawn conditions are not yet fully reproduced.
+
+### Wild Zone 10: provisional canal and rooftops
+
+[Pokémon Kingdom](https://pente.koro-pokemon.com/legendsz-a/map-wild-zone-10.shtml) places Slowpoke and Bellsprout in the western courtyard, Carvanha and Staryu in the canal, and Arbok and Watchog on rooftops. [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) identifies west and east entrances and a ladder.
+
+The two-layer grid and west connector are a provisional interpretation; city street alignment, shoreline and roof coordinates, eastern exit, ladder positions and full terrain are not established. The water encounter markers are approached from shore and do not allow walking through water. Alphas, items, the eastern entrance and free field movement of Pokémon remain unimplemented.
