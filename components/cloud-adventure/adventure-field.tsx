@@ -53,6 +53,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if(c==='k'||c==='K'){ctx.fillStyle=c==='K'?'#79a36d':'#a6c692';ctx.fillRect(px+2,py+2,tile-4,tile-4);if(c==='K'){ctx.fillStyle='#fff3be';ctx.fillRect(px+8,py+10,5,5);ctx.fillRect(px+20,py+16,5,5);}}
      if(c==='~'||c==='w'){ctx.fillStyle=c==='w'?'#a0ccd0':'#76abc1';ctx.fillRect(px,py,tile,tile);if(c==='w'){ctx.fillStyle='#d8eeee';ctx.fillRect(px+5,py+15,tile-10,2);}}if(c==='='&&w.district==='lumiose-zone2'){ctx.fillStyle='#94704e';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#cfa87b';for(let i=3;i<tile;i+=7)ctx.fillRect(px,py+i,tile,2);}
      if(c===':'&&w.district==='lumiose-zone2'){ctx.fillStyle='#c9c2ae';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#8f8a7c';for(let i=5;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}
+     if(c===';'&&w.district==='lumiose-zone2'){ctx.fillStyle='#b5aa90';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#ded6be';ctx.fillRect(px+2,py+2,tile-4,tile-7);ctx.fillStyle='#837f70';ctx.fillRect(px+2,py+tile-5,tile-4,3);}
      if(c==='g'){ctx.fillStyle='#92b97c';ctx.fillRect(px,py,tile,tile);sprite('bush',px,py);sprite('grassDetail',px,py);}
      if(('HMJ'.includes(c)&&!(c==='H'&&w.district==='lumiose-zone3'))||(c==='P'&&w.district==='lumiose-floral'))buildings.push({x,y,kind:c});
      if(c==='|'&&w.district==='lumiose-zone3'){ctx.fillStyle='#397b56';ctx.fillRect(px+2,py+12,tile-4,6);ctx.fillRect(px+5,py+7,3,17);ctx.fillRect(px+tile-8,py+7,3,17);ctx.fillStyle='#a4e0a9';ctx.fillRect(px+4,py+12,tile-8,2);}

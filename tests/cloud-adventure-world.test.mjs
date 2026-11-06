@@ -139,7 +139,7 @@ test('provisional Wild Zone 1 connects to plaza and preserves safe stored locati
 test('zone one west links Floral Avenue and zone two preserves its location',()=>{
  const source={area:3,district:'lumiose-zone1',x:1,y:8};const street=stepField(source,'left');assert.deepEqual([street.district,street.x,street.y],['lumiose-floral',21,8]);assert.equal(stepField({...source,zaRoyaleRank:'Y'},'left').district,'lumiose-floral');const returnZone=stepField({area:3,district:'lumiose-floral',x:21,y:8},'right');assert.deepEqual([returnZone.district,returnZone.x,returnZone.y],['lumiose-zone1',1,8]);
  assert.ok(fieldPath(lumioseZone2Map(),{x:21,y:8},findTile(lumioseZone2Map(),'g')).length);
- const back=stepField({area:3,district:'lumiose-zone2',x:11,y:15},'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-plaza',21,8]);const gate={area:3,district:'lumiose-vert-plaza',x:21,y:8};assert.deepEqual([stepField(gate,'right').district,stepField(gate,'right').x,stepField(gate,'right').y],['lumiose-zone2',11,15]);assert.equal(lumioseZone2Map()[10][14],'=');
+ const back=stepField({area:3,district:'lumiose-zone2',x:11,y:15},'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-plaza',21,8]);const gate={area:3,district:'lumiose-vert-plaza',x:21,y:8};assert.deepEqual([stepField(gate,'right').district,stepField(gate,'right').x,stepField(gate,'right').y],['lumiose-zone2',11,15]);assert.equal(lumioseZone2Map()[10][14],'~');
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone2',x:17,y:8,regionId:6,districtReturnRegion:1},9),loaded=restoreAdventurePosition(structuredClone(saved),9);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone2',17,8]);
  const previous=storeAdventurePosition({area:3,district:'lumiose-zone2',x:15,y:8,regionId:6,districtReturnRegion:1,custom:'keep'},9);delete previous.districtPosition.zone2Layout;const migrated=restoreAdventurePosition(previous,9);assert.equal(migrated.district,'lumiose-zone2');assert.equal(migrated.custom,'keep');assert.ok(walkable(lumioseZone2Map()[migrated.y][migrated.x]));assert.notDeepEqual([migrated.x,migrated.y],[15,8]);
  const oldBridge=storeAdventurePosition({area:3,district:'lumiose-zone2',x:11,y:10,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},9);oldBridge.districtPosition.zone2Layout=2;const bridgeRestored=restoreAdventurePosition(structuredClone(oldBridge),9);assert.equal(bridgeRestored.district,'lumiose-zone2');assert.ok(walkable(lumioseZone2Map()[bridgeRestored.y][bridgeRestored.x]));assert.deepEqual(bridgeRestored.teamIds,['kept']);assert.equal(bridgeRestored.steps,42);
@@ -167,12 +167,16 @@ test('Café Woof terrace keeps the existing café and saved routes accessible',(
  assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-vernal',12,6]);assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);
 });
 
-test('zone two southeastern bridge connects the southern shore to the central island',()=>{
- let s={area:3,district:'lumiose-zone2',x:14,y:13};
- for(const direction of ['up','up','up','up','left','left']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}
- assert.deepEqual([s.x,s.y],[12,9]);
+test('zone two replaces the southeast crossing and safely restores its old saves',()=>{
+ for(const y of [9,10,11]){const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x:14,y,regionId:6,districtReturnRegion:1,teamIds:['keep'],steps:42},6);old.districtPosition.zone2Layout=4;const restored=restoreAdventurePosition(old,6);assert.equal(restored.district,'lumiose-zone2');assert.ok(walkable(lumioseZone2Map()[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);}
+ const conflict=storeAdventurePosition({area:3,district:'lumiose-zone2',x:14,y:10,regionId:6,districtReturnRegion:1,teamIds:['keep']},6);conflict.districtPosition.zone2Layout=4;assert.equal(restoreAdventurePosition(conflict,7).district,null);
  const map=lumioseZone2Map();assert.equal(map[14][10],'g');assert.ok(fieldPath(map,{x:11,y:15},{x:10,y:14}).length);assert.equal(stepField({area:3,district:'lumiose-zone2',x:11,y:15},'up').blocked,undefined);
  const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x:10,y:14,regionId:6,districtReturnRegion:1,teamIds:['keep']},6);old.districtPosition.zone2Layout=3;const restored=restoreAdventurePosition(old,6);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone2',10,14]);assert.deepEqual(restored.teamIds,['keep']);
+});
+
+test('zone two northwest bridge connects its bank and the island',()=>{
+ const map=lumioseZone2Map();for(let y=5;y<=7;y++)assert.equal(map[y][8],'=');assert.equal(map[4][8],';');assert.ok(fieldPath(map,{x:4,y:3},{x:8,y:4}).length);
+ let s={area:3,district:'lumiose-zone2',x:8,y:4};for(const direction of ['down','down','down','right']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}assert.deepEqual([s.x,s.y],[9,7]);
 });
 
 test('zone two south entrance has a western crossing to the central island',()=>{
