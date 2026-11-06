@@ -3,8 +3,8 @@
   "method": "Local exported source metadata versus runtime permission and enum-name mapping. Missing rows in the existing export and engine-effect parity are not inferred.",
   "counts": {
     "forms": 416,
-    "fusionForms": 409,
-    "unconnectedForms": 7,
+    "fusionForms": 410,
+    "unconnectedForms": 6,
     "staticFamilyForms": 95,
     "automaticHookForms": 28,
     "triggerHookForms": 11,
@@ -4535,14 +4535,14 @@
       "index": 1,
       "key": "eternamax",
       "native": "eternatuseternamax",
-      "fusion": false,
-      "category": "not-connected",
+      "fusion": true,
+      "category": "eternamax",
       "triggers": [
         "SpeciesFormChangeManualTrigger",
         "SpeciesFormChangeItemTrigger"
       ],
       "validation": "metadata permission; see dedicated QA for exercised paths",
-      "remaining": "fusion transition/validation not connected; standalone item or native support may exist"
+      "remaining": null
     },
     {
       "species": 892,
