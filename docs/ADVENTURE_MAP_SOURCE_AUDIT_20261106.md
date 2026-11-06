@@ -781,4 +781,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 존느 스트리트와 구역 2 (초안)
 
-[존느 스트리트 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Street)는 이 거리가 센트리코 광장에서 존느 광장을 거쳐 노스 불르바르로 이어지며 구역 2를 지난다고 설명한다. [구역 2 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_2)는 북쪽 경계가 존느 스트리트라고 명시한다. 구역 2·센트리코·기존 존느 광장 접근로를 왕복 연결했다. 세부 타일·방향과 광장 접근 경로는 초안이며, 노스 불르바르 방면과 존느 포켓몬센터는 미구현이다.
+[존느 스트리트 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Street)는 이 거리가 센트리코 광장에서 존느 광장을 거쳐 노스 불르바르로 이어지며 구역 2를 지난다고 설명한다. [구역 2 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_2)는 북쪽 경계가 존느 스트리트라고 명시한다. 구역 2·센트리코·기존 존느 광장 접근로를 왕복 연결했다. 세부 타일·방향과 광장 접근 경로는 초안이며, 광장 접근로에서 노스 불르바르 방면을 연결했으나 존느 포켓몬센터는 미구현이다.
+
+### 존느 광장 접근로와 노스 불르바르 (초안)
+
+[존느 광장 자료](https://www.pokepedia.fr/Place_Jaune)는 광장 남쪽 길이 존느 구역 6으로 이어진다고 설명한다. [존느 스트리트 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Street)는 광장을 거쳐 노스 불르바르로 이어진다고 설명한다. 구역 6과 기존 광장 접근로, 노스 불르바르를 왕복 연결했다. 임시 접근로는 광장 자체가 아니며 도로의 방향·길이와 출입구 좌표는 초안이다. 존느 포켓몬센터와 실제 광장 주변 상세 지형은 미구현이다.
