@@ -127,3 +127,12 @@ test('Vert Sector 2 garden keeps the northwest Zone 2 gate and old saves walkabl
  const restored=restoreAdventurePosition(storeAdventurePosition({...s,x:8,y:4},20),20);
  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-vert2',8,4,['kept']]);
 });
+
+test('Jaune Street meets North Boulevard without affecting saved progress',()=>{
+ const street={area:3,district:'lumiose-jaune-street',interior:null,x:15,y:1,zaRoyaleRank:'D',teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(street),street,{x:11,y:8}).length);
+ const north=stepField(street,'up');assert.deepEqual([north.district,north.x,north.y],['lumiose-north-boulevard',19,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...street,...north},64),64);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaRoyaleRank,saved.teamIds],['lumiose-north-boulevard',19,15,'D',['kept']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-jaune-street',15,1]);
+});

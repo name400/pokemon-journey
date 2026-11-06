@@ -950,3 +950,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 팔레 통로와 루주 거리·북쪽 대로 (초안)
 
 [시설 위치 자료](https://www.dbltap.com/guides/pokemon-legends-za-clothing-store-locations)와 [루주 8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Rouge_Sector_8)는 팔레 통로가 두 도로 교차점 부근에 있고 여덟 상점이 있다고 설명한다. 2D 통로, 양쪽 도로 연결과 상점 이름을 추가했다. 출입구 좌표·실내 배치·상점 외형은 초안이며 판매·의상 변경은 미구현이다.
+
+### 존느 거리와 북쪽 대로 교차로 (초안)
+
+[미르시티 도로 설명](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City)은 북쪽 대로에서 존느 거리로 이어지는 길을 명시한다. 기존 두 도로 지도 사이 왕복 경로를 추가했다. 교차로의 타일 좌표·폭·주변 건물은 원작 시각 자료 대조가 필요한 초안이다.
