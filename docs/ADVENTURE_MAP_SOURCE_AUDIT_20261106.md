@@ -834,3 +834,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 야생 구역 15 남서쪽과 존느 구역 7 (초안)
 
 [구역 15 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_15)는 남서쪽 출입구가 존느 구역 7로 이어진다고 설명한다. [존느 구역 7 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_7)는 구역이 존느 스트리트와 인접한다고 설명한다. 구역 7을 추가하고 기존 도시 거리·구역 15를 연결하며 랭크 D 제한과 옥상 상태를 유지했다. 정확한 입구 좌표·건물과 공원 형상은 초안이며 옥상 입구와 카페 시설은 미구현이다.
+
+### 이베르날 애비뉴와 야생 구역 15 북쪽 (초안)
+
+[구역 15 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_15)는 북쪽 지상 출입구가 이베르날 애비뉴로 이어진다고 설명한다. [현장 공략](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-15-guide-all-pokemon-and-alphas)은 프리즘타워에서 이베르날 애비뉴를 따라 구역으로 가는 경로를 설명한다. 센트리코 접근로·새 애비뉴·구역 15를 연결하며 랭크 D 제한을 보존했다. 도로 폭·방향과 정밀 좌표는 초안이고 옥상 출입구는 미구현이다.

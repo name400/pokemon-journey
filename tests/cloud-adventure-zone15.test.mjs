@@ -17,3 +17,13 @@ test('Zone 15 connects Jaune Sector 7 and its city street with rank gate',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...sector},26),26);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-jaune-sector7',11,1,['kept']]);
 });
+test('Hibernal Avenue connects Centrico to the north ground gate of Zone 15',()=>{
+ const road={area:3,district:'lumiose-hibernal-approach',interior:null,x:11,y:1,zaRoyaleRank:'E',teamIds:['kept']};
+ assert.equal(stepField(road,'up').blocked,true);
+ const open={...road,zaRoyaleRank:'D'},zone=stepField(open,'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone15',11,1]);
+ assert.equal(stepField({...open,...zone},'up').district,'lumiose-hibernal-approach');
+ const centrico=stepField({...open,x:11,y:15},'down');assert.equal(centrico.district,'lumiose-centrico-route');
+ assert.equal(stepField({...open,...centrico},'up').district,'lumiose-hibernal-approach');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:11,y:8},27),27);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-hibernal-approach',11,8,['kept']]);
+});
