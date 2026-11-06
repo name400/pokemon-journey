@@ -821,4 +821,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 야생 구역 13 남쪽과 루주 구역 7 (초안)
 
-[구역 13 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_13)는 남쪽 출입구가 루주 구역 7로 이어진다고 설명한다. [기술머신 위치 안내](https://www.psypokes.com/plza/tm.php)는 구역 7에 훈련 코트가 있음을 설명한다. 남쪽 출구와 구역 7 왕복 연결을 추가하고 코트를 도식적으로 표시했다. 코트·건물·출입구의 정확한 위치와 구역 7의 다른 거리·옥상 연결은 미확인·미구현이다.
+[구역 13 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_13)는 남쪽 출입구가 루주 구역 7로 이어진다고 설명한다. [기술머신 위치 안내](https://www.psypokes.com/plza/tm.php)는 구역 7에 훈련 코트가 있음을 설명한다. 남쪽 출구와 구역 7 왕복 연결을 추가하고 코트를 도식적으로 표시했다. 코트·건물·출입구의 정확한 위치와 구역 7의 루주 스트리트 접근을 추가했으나 옥상 연결은 미구현이다.
+
+### 루주 구역 7과 루주 스트리트 (초안)
+
+[구역 7 의뢰 위치 자료](https://www.dexerto.com/wikis/pokemon-legends-z-a/all-hyperspace-side-missions-walkthrough-in-mega-dimension-dlc/)는 루주 구역 7이 루주 스트리트에 접하는 것을 명시한다. 구역 7과 기존 루주 거리 지도 사이에 왕복 경로를 추가했다. 출입 위치·건물 및 길의 모양은 초안이며, 확인된 근거는 지역 관계이지 정밀한 지상 경로가 아니다. 다른 주변 거리와 옥상 경로는 미구현이다.

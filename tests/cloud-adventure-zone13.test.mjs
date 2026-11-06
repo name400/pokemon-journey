@@ -25,3 +25,11 @@ test('Zone 13 south gate connects Rouge Sector 7 and respects rank',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...sector},24),24);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-rouge-sector7',11,1,['kept']]);
 });
+test('Rouge Sector 7 connects Rouge Street independent of Zone 13 rank',()=>{
+ const sector={area:3,district:'lumiose-rouge-sector7',interior:null,x:1,y:8,zaRoyaleRank:'F',teamIds:['kept']};
+ const street=stepField(sector,'left');assert.deepEqual([street.district,street.x,street.y],['lumiose-rouge-north',21,10]);
+ assert.equal(stepField({...sector,...street},'right').district,'lumiose-rouge-sector7');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...street},25),25);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-rouge-north',21,10,['kept']]);
+ assert.equal(stepField({...sector,x:11,y:1},'up').blocked,true);
+});
