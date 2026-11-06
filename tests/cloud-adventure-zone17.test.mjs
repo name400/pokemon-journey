@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {stepField,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {zone17Map,zone17Visible,zone17Encounter} from '../lib/cloud-adventure/adventure-zone17.mjs';
 test('zone seventeen gate, field and save migration',()=>{
  const base={area:3,district:'lumiose-vert2',interior:null,x:1,y:5,facing:'left',zaRoyaleRank:'D'};
@@ -25,4 +25,12 @@ test('Vert Sector 7 leads into Zone 17 with rank gate and preserved saves',()=>{
  const zone=stepField({...road,zaRoyaleRank:'C'},'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone17',21,8]);
  const saved=restoreAdventurePosition(storeAdventurePosition({...road,...zone,zaRoyaleRank:'C'},44),44);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone17',21,8,['kept']]);
  const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector7',11,1]);
+});
+
+test('Vert 6 and 7 bridge stays walkable and keeps saved positions',()=>{
+ const six={area:3,district:'lumiose-vert-sector6',interior:null,x:21,y:3,teamIds:['kept']};
+ assert.equal(fieldMap(six)[3][21],':');const seven=stepField(six,'right');assert.deepEqual([seven.district,seven.x,seven.y],['lumiose-vert-sector7',1,8]);
+ const state={...six,...seven};assert.equal(fieldMap(state)[8][1],':');
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,45),45);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector7',1,8,['kept']]);
+ assert.equal(stepField(saved,'left').district,'lumiose-vert-sector6');
 });

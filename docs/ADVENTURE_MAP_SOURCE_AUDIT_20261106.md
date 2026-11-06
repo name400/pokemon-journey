@@ -898,3 +898,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르 7번지와 야생 구역 17 (초안)
 
 [베르 7번지 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_7)는 구역 17이 이 번지 안에 있다고 설명한다. 기존 지도에서 두 구역 사이 지상 이동을 추가하고 랭크 C 제한을 유지했다. 출입 위치·통로 선형은 원작 지도나 영상으로 추가 확인할 초안이다.
+
+### 베르 6·7번지 다리 접근 (초안)
+
+[원작 도구 위치 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/stat-boosters.html)는 베르 6번지에서 7번지로 가는 다리를 언급한다. 기존 양방향 연결 양쪽에 걸을 수 있는 다리 접근 타일을 표현했다. 다리의 폭·정확한 선형과 수면 윤곽은 초안이다.
