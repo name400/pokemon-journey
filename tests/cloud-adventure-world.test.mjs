@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureMap,labMap,lumioseMap,lumioseVernalMap,lumioseCentricoRouteMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,zone2IslandAlphaTarget,lumioseZone3Map,lumioseZone3TowerMap,lumioseRougeNorthMap,fieldMap,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {adventureMap,labMap,lumioseMap,lumioseVernalMap,lumioseCentricoRouteMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,zone2IslandAlphaTarget,lumioseZone3Map,lumioseZone3TowerMap,lumioseRougeNorthMap,fieldMap,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,fieldDialogue,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/cloud-adventure/adventure-story.mjs';
 
@@ -329,4 +329,12 @@ test('rooftop crystal blocks the provisional shortcut until cleared',()=>{
  assert.equal(stepField({area:3,district:'lumiose-rooftop',x:1,y:8,zaRooftopCrystalCleared:true},'left').district,'lumiose-zone2');
  const saved=storeAdventurePosition({area:3,district:'lumiose-rooftop',x:11,y:10,regionId:6,districtReturnRegion:1},8),loaded=restoreAdventurePosition(structuredClone(saved),8);
  assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-rooftop',11,10]);
+});
+
+test('legacy completed mission 15 can see L without resetting progress',()=>{
+ const s={area:3,district:'lumiose-rooftop',interior:null,x:18,y:6,facing:'up',zaRoyaleRank:'E',zaMission15Stage:3,zaMission15Complete:true,zaMission16Complete:true,zaMission17Complete:true,zaMission18Complete:true};
+ assert.equal(fieldDialogue(s).action,'mission15MeetL');
+ const lobby={...s,district:'lumiose',interior:'hotel',x:11,y:6,facing:'up',zaMission15SceneSeen:true};
+ assert.ok(fieldDialogue(lobby).actions.some(a=>a.action==='mission15Continue19'));
+ assert.equal(lobby.zaMission15Complete,true);
 });

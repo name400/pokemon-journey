@@ -337,4 +337,10 @@
 
 기존 옥상·북쪽 큰길·공사 현장의 사건 표식은 임시 위치로 원작의 Vert Sector 5·Magenta Sector 3·Jaune Sector 9를 재현한 것이 아니다. 상대 Lv.41과 기술도 임시다. 원작의 로토글라이드 실제 조작, 동료 동시 참전, 보스 기믹과 세 사건 후 옥상의 지가르데·L 장면은 미구현이다. 호텔 보고는 이 생략을 표시한 간략 연결이며 미션 19와 기술머신 사용도 미구현이다. 실기기·운영에서는 검증하지 않았다.
 
+## 미션 15 후반과 미션 19 도입 — 부분 구현
+
+[미션 15 안내](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/A_Job_for_Team_MZ%21)에 따라 세 사건 뒤 옥상의 지가르데·L 대화와 호텔 보고를 연결했다. 이미 이전 버전에서 호텔 보고를 마친 저장도 기존 완료·보상 기록을 유지한 채 옥상 장면을 본 뒤 미션 19로 진행할 수 있다. 옥상 위치·대사와 연출은 초안이다.
+
+[미션 19 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-19-reaching-rank-d)와 [목표 점수 자료](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Reaching_Rank_D)에 따라 랭크 E 배틀존의 35,000점 도전권, Josée의 Lv.43 근육몬·요가램 전투와 2,064원·숙달의씨, Emma와 Ivor의 탐정사무소 대화까지 연결했다. [랭크 E 트레이너 자료](https://bulbapedia.bulbagarden.net/wiki/List_of_Z-A_Royale_Trainers/E)에서 Henri·Clarisse·Apolline의 종과 레벨을 사용했다. 승리당 3,500점, 상대 기술, 정의단 도장 위치는 임시이며 원작과 일치한다고 확인되지 않았다. 시청 수색·카페·하수도·Gwynn·Ivor 승급전과 이후 스토리는 미구현이다. 기존 로토글라이드·동료 동시 참전 등의 미구현도 남아 있다.
+
 앱솔 조건은 [원작 필수 파티 안내](https://bulbapedia.bulbagarden.net/wiki/Required_Party_Pok%C3%A9mon)에서 앱솔나이트를 지닌 앱솔의 파티 보유로 확인했다. 따라서 실제 첫 출전을 강제하지 않고 기존 파티 검사 방식을 유지한다.
