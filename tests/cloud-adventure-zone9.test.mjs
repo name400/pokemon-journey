@@ -27,3 +27,13 @@ test('Zone 9 north gate links Magenta Sector 6 and the canal route',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...z,...sector,x:11,y:7},32),32);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector6',11,7,['kept']]);
 });
+test('Zone 9 east gate and Magenta Sector 6 both connect Sector 3',()=>{
+ const z={area:3,district:'lumiose-zone9',interior:null,x:21,y:8,zaRoyaleRank:'F',teamIds:['kept']};
+ const sector=stepField(z,'right');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-magenta-sector3',1,12]);
+ assert.equal(stepField({...z,...sector,zaRoyaleRank:'V'},'left').blocked,true);
+ assert.equal(stepField({...z,...sector},'left').district,'lumiose-zone9');
+ const six=stepField({...z,...sector,x:1,y:8},'left');assert.equal(six.district,'lumiose-magenta-sector6');
+ assert.equal(stepField({...z,...six},'right').district,'lumiose-magenta-sector3');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...z,...sector},33),33);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector3',1,12,['kept']]);
+});

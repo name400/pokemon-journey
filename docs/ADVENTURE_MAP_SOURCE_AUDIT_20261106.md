@@ -845,8 +845,12 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 야생 구역 9와 에스티발 애비뉴 (초안)
 
-[구역 9 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_9)는 남쪽 출입구 두 곳이 에스티발 애비뉴로 이어진다고 설명한다. 기존 임시 센트리코 출구를 저장 호환을 위해 유지하면서 에스티발 지도와의 왕복 연결을 추가하고 랭크 F 제한을 적용했다. 출입구의 정밀 위치·도로와 고저차는 초안이며 북쪽 마젠타 구역 6 출입구는 추가했으나 동쪽 구역 3 출입구는 아직 미구현이다.
+[구역 9 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_9)는 남쪽 출입구 두 곳이 에스티발 애비뉴로 이어진다고 설명한다. 기존 임시 센트리코 출구를 저장 호환을 위해 유지하면서 에스티발 지도와의 왕복 연결을 추가하고 랭크 F 제한을 적용했다. 출입구의 정밀 위치·도로와 고저차는 초안이며 북쪽 마젠타 구역 6 출입구는 추가했으나 동쪽 구역 3 출입구도 추가했으나 지형은 초안이다.
 
 ### 야생 구역 9 북쪽과 마젠타 구역 6 (초안)
 
-[구역 9 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_9)는 북쪽 출입구가 마젠타 구역 6으로 이어진다고 설명한다. [마젠타 구역 6 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/magenta-sector-6.html)는 북쪽 마젠타 스트리트·운하와 안뜰이 있는 건물군을 설명한다. 지상 출입구와 기존 운하 접근로를 연결하고 안뜰을 도식적으로 표현했다. 정확한 크기·길·출입구 좌표는 초안이며 옥상·상점·동쪽 구역 3 연결은 미구현이다.
+[구역 9 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_9)는 북쪽 출입구가 마젠타 구역 6으로 이어진다고 설명한다. [마젠타 구역 6 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/magenta-sector-6.html)는 북쪽 마젠타 스트리트·운하와 안뜰이 있는 건물군을 설명한다. 지상 출입구와 기존 운하 접근로를 연결하고 안뜰을 도식적으로 표현했다. 정확한 크기·길·출입구 좌표는 초안이며 옥상·상점·동쪽 구역 3 연결은 추가했으나 지형은 초안이다.
+
+### 야생 구역 9 동쪽과 마젠타 구역 3 (초안)
+
+[구역 9 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_9)는 동쪽 출입구가 마젠타 구역 3으로 이어진다고 설명하고 [구역 6 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/magenta-sector-6.html)는 구역 3이 구역 6 동쪽에 있다고 설명한다. 두 관계를 왕복 연결하고 구역 9의 랭크 F 제한을 유지했다. 건물·안뜰의 정확한 위치와 길 폭은 초안이며 옥상·시설은 미구현이다.
