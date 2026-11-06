@@ -620,3 +620,9 @@ The grid, approximate café exterior and link from the existing North Boulevard 
 #### Zone 15 alphas and rooftop route
 
 [GameWith](https://gamewith.jp/pokemon-za/524974) documents Side Mission 80 after the Mission 26 Asami battle, the Ampharos/Manectric encounter and Holovator unlock; [All Things How](https://allthings.how/pokemon-legends-z-a-wild-zone-15-spawns-alphas-and-rooftop-larvitar/) describes the web route, Larvitar and day/night alpha locations. The encounter uses the user's requested turn-based battle and grants the documented 3,500 currency, four Quick Balls and Lumiose Galette. The temporary elevator position, separate rooftop map and web geometry are draft. Opening the web currently accepts a Fire attack; the original permits ranged attacks more broadly, and true range is not represented. The city approach, real field movement, TM052, Café Ultimo interior and remaining items are incomplete.
+
+## Wild Zone 16 — Bleu Plaza (draft)
+
+- [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-16-guide-all-pokemon-and-alphas) identifies Bleu Plaza south of Wild Zone 5 and a rank C unlock. The zone-5-to-zone-16 transition in this build is a **provisional shortcut**, not evidence of the exact original entrance.
+- [Pokémon France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) describes the central monument, surrounding water and Florges Fountain, and lists Flaaffy, Falinks and Medicham. [TheGamer](https://www.thegamer.com/pokemon-legends-z-a-wild-zones-pokemon-list-collection-location-guide/) locates the fountain to the northeast.
+- The rectangular water ring, crossings, path widths and tile coordinates are approximations. The fountain sculpture, further entrances, other species, alpha encounters and items remain to be researched and implemented; this layout is not a verified reproduction of the original map.
