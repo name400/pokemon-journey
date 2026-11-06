@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 멀티렌즈 스케일노이즈의 자기 방어 하락을 적중한 타격마다 적용한다. 대상별 효과를 끼워 넣는 원본 순서는 남아 있다. [MULTILENS_CLANGING_SCALES_SELF_QA_20261106.md](MULTILENS_CLANGING_SCALES_SELF_QA_20261106.md) 참조.
+
 후속: 신규 도전에서 스케일노이즈의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_CLANGING_SCALES_FIRST_QA_20261106.md](MULTILENS_CLANGING_SCALES_FIRST_QA_20261106.md) 참조.
 
 후속: 신규 도전에서 꽃보라·봄의폭풍의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_PETAL_SPRING_FIRST_QA_20261106.md](MULTILENS_PETAL_SPRING_FIRST_QA_20261106.md) 참조.
