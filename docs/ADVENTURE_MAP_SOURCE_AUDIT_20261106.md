@@ -610,3 +610,9 @@ The yard, fixed encounter positions and probabilities are provisional. TM039 and
 #### Zone 14 weather, alpha and rock route
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas) describes alpha Excadrill near the central converters and sunny-day Helioptile; [All Things How](https://allthings.how/pokemon-legends-z-a-100-wild-zone-14-power-station-guide/) describes rocks broken by Fighting, Ground or Rock attacks. [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists a Mastery Seed behind a building among rocks, and Ultra and Luxury Balls. The simplified rock enclosure, item coordinates and equipment are draft. TM039 and other items remain incomplete. The existing adventure weather engine treats no rain as clear and does not yet produce independent city weather cycles; the rainy condition was checked using its existing rain-producing biome. Old stored positions in the new enclosure relocate to adjacent safe ground.
+
+### Wild Zone 15: provisional North Boulevard / Jaune Sector
+
+[Altissimo's location guide](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/wild-zone-15.html) describes the narrow boulevard, central grassy oval, western grassy square and Café Ultimo; [Pokémon GO Hub](https://pokemongohub.net/post/guide/all-wild-zones-pokemon-legends-z-a/) lists Pumpkaboo and the day/night split between Scolipede and Shuppet. Rank D access and those representative encounters are implemented.
+
+The grid, approximate café exterior and link from the existing North Boulevard are provisional; other original entrances, exact geometry and Café Ultimo interior/services are incomplete. Rooftop Larvitar, original roaming behaviours, alphas and items remain unimplemented.
