@@ -29,3 +29,12 @@ test('Zone 5 underground route has two barriers and connects back to the sewer a
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone5-drain',8,11,['kept']]);
  assert.equal(stepField({...open,x:1,y:12},'left').district,'lumiose-zone5');
 });
+test('northern Zone 5 exit reaches Centrico while keeping existing routes',()=>{
+ const z={area:3,district:'lumiose-zone5',interior:null,x:11,y:1,zaZone5Upper:false,teamIds:['kept']};
+ const road=stepField(z,'up');assert.deepEqual([road.district,road.x,road.y],['lumiose-centrico-route',12,15]);
+ const back=stepField({...z,...road},'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone5',11,1]);
+ assert.equal(stepField({...z,x:17,y:15},'down').district,'lumiose-bleu-plaza-route');
+ assert.equal(stepField({...z,x:11,y:15},'down').district,'lumiose-centrico-route');
+ const saved=restoreAdventurePosition(storeAdventurePosition(z,8),8);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone5',11,1,['kept']]);
+});

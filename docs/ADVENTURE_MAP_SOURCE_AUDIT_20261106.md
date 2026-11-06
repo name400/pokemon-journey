@@ -721,4 +721,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 블루 스트리트와 광장·사우스 불르바르 (초안)
 
-[Bleu Plaza](https://bulbapedia.bulbagarden.net/wiki/Bleu_Plaza)는 광장이 Bleu Street로 South Boulevard에 연결된다고 설명한다. [Bleu Sector 7 연결 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-7.html)는 서쪽에 Bleu Street가 있다고 설명한다. 기존 광장 접근로·사우스 불르바르·구역 7 사이에 왕복 가능한 거리를 추가했다. 정확한 도로 길이·갈림길·건물과 출구 좌표는 초안이며 Centrico Plaza 방면의 실제 블루 스트리트는 아직 미구현이다.
+[Bleu Plaza](https://bulbapedia.bulbagarden.net/wiki/Bleu_Plaza)는 광장이 Bleu Street로 South Boulevard에 연결된다고 설명한다. [Bleu Sector 7 연결 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-7.html)는 서쪽에 Bleu Street가 있다고 설명한다. 기존 광장 접근로·사우스 불르바르·구역 7 사이에 왕복 가능한 거리를 추가했다. 정확한 도로 길이·갈림길·건물과 출구 좌표는 초안이며 Centrico Plaza 방면은 야생 구역 5 안을 통과하므로 구역 5 북쪽 출입구를 별도 연결했다. 구역 5 내부의 실제 거리 형상과 기존 임시 출입구 정리는 아직 남아 있다.
+
+### 블루 스트리트 북쪽과 야생 구역 5 (초안)
+
+[Bleu Street](https://bulbapedia.bulbagarden.net/wiki/Bleu_Street)와 [Wild Zone 5](https://bulbapedia.bulbagarden.net/wiki/Wild_Zone_5)는 블루 광장과 센트리코 광장 사이 거리의 북쪽 일부가 구역 5에 들어간다고 설명한다. 구역 5 지상 북쪽에 센트리코 방면 출입구와 도로 표시를 추가했다. 기존 임시 출구는 이동·저장 호환을 위해 유지하며 실제 위치와 거리 윤곽은 초안이다.
