@@ -930,3 +930,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 루주 3번지와 오토널 애비뉴·북쪽 대로 (초안)
 
 [루주 3번지 자료](https://bulbapedia.bulbagarden.net/wiki/Rouge_Sector_3)는 오토널 애비뉴 북동쪽의 이 번지를 설명하고 [북쪽 대로 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 번지 북쪽의 대로를 언급한다. 두 도로에 연결되는 2D 지상 초안을 추가했다. 실제 교차로·건물 좌표와 상점·식당은 미구현이며 영상 대조가 필요하다.
+
+### 루주 3번지의 식당과 볼 부티크 (위치 초안)
+
+[르 예 식당](https://bulbapedia.bulbagarden.net/wiki/Restaurant_Le_Yeah)과 [루주 3번지](https://bulbapedia.bulbagarden.net/wiki/Rouge_Sector_3) 자료는 두 시설의 존재를 확인한다. 거리 초안에 시설 표식과 이름을 추가했다. 입구 좌표·외관은 추정이며 내부·음식 배틀·판매는 구현되지 않았다.
