@@ -398,3 +398,9 @@ Vernal에 배치한 배틀코트 표식과 상대 기술은 초안이다. 메가
 [미션 31 진행 자료](https://www.serebii.net/legendsz-a/mainmissions/asummonsfromvinnie.shtml)를 따라 콰자르티코 앞 Vinnie, 사무실의 Jett, Hotel Z 작전 회의를 연결했다. 이어 [망나뇽](https://www.thonky.com/pokemon-legends-z-a/main-mission-32-a-rogue-mega-dragonite), [마기라스](https://www.thonky.com/pokemon-legends-z-a/main-mission-33-a-rogue-mega-tyranitar), [아쿠스타](https://www.thonky.com/pokemon-legends-z-a/main-mission-34-a-rogue-mega-starmie)의 폭주 사건을 기존 턴제 전투로 연결하고 각 메가스톤을 별도로 수령한다. 아쿠스타 전에 Philippe와 대결하며, 세 사건을 해결하고 호텔에 보고하면 미션 35 시작 상태를 기록한다. 사건 완료·보상 대기는 저장되며 패배 후 재도전과 보상 중복 방지를 지원한다.
 
 세 현장 표식과 Lv.60·기술, 사무실과 대사는 초안이며 실제 옥상·골목·홀로베이터 경로와 미션 34의 홀로베이터 선행 의뢰는 미구현이다. Philippe의 메가무장조 변신, 동료 동시 참전과 상세 연출도 미구현이다. 야생 구역 16~19와 미션 35 진행은 아직 구현하지 않았고 실기기·운영 검증은 남았다. 이 절이 위 절의 미션 31 미구현 서술을 갱신한다.
+
+## 미션 35 Grisham 수색 — 도입 부분 구현
+
+[미션 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-35-reaching-rank-a)와 [상대 구성](https://www.serebii.net/legendsz-a/mainmissions/reachingranka.shtml)을 따라 Emma와의 턴제 배틀, Mable과 누보 카페의 단서, Griselle 배틀과 배틀 후 파티 회복을 연결했다. 기존 연구소 기록 기능은 유지하고, 전투 실패 후 재도전과 단계 저장을 지원한다.
+
+Emma 전투는 탐정사무소 안의 기존 표식, Mable은 기존 연구소 연구원 표식, Griselle은 공사 현장의 임시 표식을 사용한다. 원작의 옥외 전투·연구소 소장실·카페 실제 위치는 재현하지 않았으며 상대 기술과 메가진화도 초안이다. Lysandre Labs 탐색, 열쇠와 문서, AZ 장면, 45,000점 도전권 및 Grisham 승급전과 미션 36은 미구현이다. 야생 구역 16~19 역시 남아 있으며 실제 기기·운영 검증은 하지 않았다. 이 절이 위 절의 미션 35 미구현 서술을 일부 갱신한다.
