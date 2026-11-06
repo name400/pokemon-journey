@@ -15,6 +15,7 @@ import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemon.mjs';
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='active-unequal-pp-double-separated-review')return doubleUnequalAliasFixture({boxId:'alias',targetSlot:1,separated:true});
  if(scenario==='active-unequal-pp-event-double-review')return eventDoubleUnequalAliasFixture('clowning-around',{boxId:'alias'});
  if(['active-unequal-pp-event-review','active-switched-sketch-event-review'].includes(scenario)){const doc=wildEventReviewFixture('berries',{activeSlot:0,sketch:scenario.includes('sketch'),reserveId:'alias'}),run=doc.classic.slots[0];applyClassicAction(doc,{action:'turn',command:{type:'move',move:'tackle'}});for(const id of ['fighter','alias']){const choice=run.combat.requests[0].actors[0].switches.find(s=>run.party[s.index].boxId===id);applyClassicAction(doc,{action:'turn',command:{type:'switch',slot:choice.slot}});}return doc;}
  if(scenario==='active-unequal-pp-double-review')return doubleUnequalAliasFixture({boxId:'alias',targetSlot:1});
