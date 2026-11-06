@@ -890,3 +890,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 야생 구역 6 북쪽 존느 11번지 (초안)
 
 [구역 6 자료](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-6-guide-all-pokemon-and-alphas)는 북쪽 출입구가 존느 11번지에 있다고 설명한다. 양방향 이동을 연결했다. 거리의 건물·폭·타일 좌표는 원작 지도·영상으로 더 대조해야 할 초안이며 기존 임시 이동 연결은 보존한다.
+
+### 존느 11번지 주변 도로 (초안)
+
+[존느 11번지 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_11)는 9번지가 서쪽에 인접하고 존느 거리가 북쪽, 북쪽 대로가 동쪽 면을 지난다고 설명한다. 세 방향을 기존 지도와 양방향으로 연결했다. 정확한 분기 위치·거리 선형·건물은 영상 대조가 필요한 초안이다.

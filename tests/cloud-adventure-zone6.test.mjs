@@ -27,3 +27,12 @@ test('Zone 6 north exit connects Jaune Sector 11 and restores its position',()=>
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y,back.zaZone6Layer],['lumiose-zone6',15,1,'ground']);
  assert.ok(fieldPath(zone6Map({...zone,...back}),back,{x:11,y:15}).length);
 });
+
+test('Jaune Sector 11 connects its neighbouring streets and sector',()=>{
+ const s={area:3,district:'lumiose-jaune-sector11',interior:null,teamIds:['kept']};
+ for(const [x,y,dir,district,reverse] of [[1,8,'left','lumiose-jaune-sector9','right'],[11,1,'up','lumiose-jaune-street','down'],[21,8,'right','lumiose-north-boulevard','down']]){
+  const a=stepField({...s,x,y},dir);assert.equal(a.district,district);
+  const saved=restoreAdventurePosition(storeAdventurePosition({...s,...a},62),62);assert.deepEqual(saved.teamIds,['kept']);
+  const back=stepField(saved,reverse);assert.equal(back.district,'lumiose-jaune-sector11');
+ }
+});
