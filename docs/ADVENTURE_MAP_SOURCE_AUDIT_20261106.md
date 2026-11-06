@@ -186,3 +186,10 @@
 [구역 3 설명](https://www.wikidex.net/wiki/Zona_salvaje_3)은 남북 출입구가 각각 Rouge Street의 남북 구간으로 이어진다고 설명하고, [미르시티 도로 설명](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City)은 Rouge Street 북쪽이 North Boulevard와 연결되고 인근에 포켓몬센터가 있다고 설명한다. 구역 3 북쪽 문과 북쪽 도로 구간을 왕복 가능하게 연결하고 회복 가능한 센터를 배치했다. 이 구간에서 재접속해도 위치와 파티·지갑을 보존한다.
 
 도로와 센터의 정확한 폭·좌표·건물 외형은 초안이고 North Boulevard의 좌우 구간으로는 아직 연결되지 않는다. 센터의 상세 내부, 주변 시설, 루주 광장 담장의 정확한 형상도 미완성이다. 구역 2 수역과 Café Woof의 실제 형태, 실시간 전투·회피도 남아 있다.
+
+
+## Rouge Plaza 네 정원의 위치별 조우 — 부분 구현
+
+[구역 3 위치 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-3-guide-all-pokemon-and-alphas)는 사자코·판짱을 북서, 냐스퍼를 북동, 메이클을 남서, 피카츄를 남동, 플라베베를 중앙에서 찾는다고 설명한다. [다른 안내](https://www.screenhype.co.uk/how-to-catch-all-the-pokemon-in-wild-zone-3/)는 판짱을 남서쪽에서도 발견할 수 있다고 설명한다. 현재 초안의 담장과 통로 안에서 풀숲 위치에 따라 이 출현 후보를 사용하도록 연결했다.
+
+이는 기존 풀숲 무작위 전투의 위치 구분이며 원작처럼 화면에 보이는 개체와 반응을 구현한 것은 아니다. 정원 좌표·정확한 출현 비율·레벨은 초안이다. 중앙의 기존 플라베베 낮 제한은 유지했으나 자료에 따라 시간 정보가 달라 재확인이 필요하다. 지형의 정확한 윤곽, 탑 방향의 충돌 해결, Rouge Street와 구역 2·Centrico·Café Woof의 정밀 재현, 실시간 전투·회피는 여전히 미완성이다.
