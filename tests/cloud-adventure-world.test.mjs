@@ -282,12 +282,14 @@ test('bureau map has reachable Emma and exits to the provisional third zone',()=
 });
 
 
-test('cemetery draft connects to the third zone and preserves its location',()=>{
+test('cemetery draft connects through the northern street and preserves locations',()=>{
  assert.equal(findTile(lumioseZone4Map(),'p'),null);assert.ok(findTile(lumioseZone4Map({zaBunnelbyQuest:3}),'p'));assert.equal(findTile(lumioseZone4Map({zaBunnelbyQuest:3,zaZone4AlphaSpent:true}),'p'),null);
- const source={area:3,district:'lumiose-zone3',x:1,y:8,zaEmmaMet:true};
- const entered=stepField(source,'left');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone4',21,8]);
+ const source={area:3,district:'lumiose-zone3',x:1,y:8,zaEmmaMet:true};assert.equal(stepField(source,'left').blocked,true);
+ const north=stepField({...source,x:11,y:1},'up');assert.equal(north.district,'lumiose-rouge-north');
+ const entered=stepField({...source,district:'lumiose-rouge-north',x:21,y:4},'right');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone4',21,8]);
  assert.ok(fieldPath(lumioseZone4Map(),{x:21,y:8},findTile(lumioseZone4Map(),'z')).length);
- assert.equal(stepField({area:3,district:'lumiose-zone4',x:21,y:8},'right').district,'lumiose-zone3');
+ assert.equal(stepField({area:3,district:'lumiose-zone4',x:21,y:8},'right').district,'lumiose-rouge-north');
+ const old=storeAdventurePosition({...source,x:0,y:8,teamIds:['keep'],steps:42},8);old.districtPosition.zone3Layout=1;const restored=restoreAdventurePosition(old,8);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone3',1,8]);assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone4',x:18,y:6,regionId:6,districtReturnRegion:1,zaSableyeQuest:1},8),loaded=restoreAdventurePosition(structuredClone(saved),8);
  assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaSableyeQuest],['lumiose-zone4',18,6,1]);
 });
