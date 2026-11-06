@@ -21,3 +21,7 @@
 ## Hotel Z 옥상 — 부분 구현
 
 [Hotel Z 시설 설명](https://bulbapedia.bulbagarden.net/wiki/Hotel_Z)과 [엘리베이터 화면](https://www.nintendolife.com/guides/pokemon-legends-z-a-how-to-start-the-mega-dimension-dlc)에 따라 로비·2층·호텔 전용 옥상 사이의 엘리베이터를 연결했다. 옥상에 화로와 의자 두 개, 소파와 탁자, 화분을 표시한다. 자료에서 확인된 가구의 종류와 연결만 반영했으며 정확한 도트 좌표와 옥상 경계는 초안이다. 이 공간은 기존 `lumiose-rooftop` 시범 길과 별개로 취급한다. 두 공간을 연결하는 원작 경로와 조건은 미확인이다. 옥상에서 저장·재접속 후 엘리베이터 복귀, 파티·지갑 보존을 격리 API 검사로 확인했다. 도심과 야생 구역 1의 잘못된 연결은 이 변경에서 수정하지 않았다.
+
+## 야생 구역 1 출입 방향 — 부분 수정
+
+[구역 1 위치 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-1-guide-all-pokemon-and-alphas)는 호텔 남쪽, [동쪽 출입구 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-03-a-new-life-in-lumiose-city)는 구역 동쪽에서 나와 북쪽으로 호텔로 가는 동선을 확인한다. 기존 광장 서쪽 출입을 막고 호텔 남쪽 임시 입구와 구역 1 동쪽 출구의 왕복을 연결했다. 기존 구역 1 저장도 출구를 이용할 수 있으며 좌표나 저장 데이터를 이주하지 않는다. 광장·입구의 정확한 배치와 크기는 여전히 임시다. 구역 1 서쪽에서 구역 2로 이어지는 기존 시범 연결 역시 원작의 도시 지리와 일치하는 것으로 확인되지 않아 후속 수정 대상이다.

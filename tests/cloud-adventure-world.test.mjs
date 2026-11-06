@@ -130,8 +130,8 @@ test('alert alpha pursues over saved tiles and aiming follows its new direction'
 
 test('provisional Wild Zone 1 connects to plaza and preserves safe stored location',()=>{
  const map=lumioseZone1Map();assert.ok(fieldPath(map,{x:21,y:8},findTile(map,'g')).length);
- const enter=stepField({area:3,district:'lumiose',x:1,y:8},'left');assert.deepEqual([enter.district,enter.x,enter.y],['lumiose-zone1',21,8]);
- const leave=stepField({area:3,district:'lumiose-zone1',x:21,y:8},'right');assert.deepEqual([leave.district,leave.x,leave.y],['lumiose',1,8]);
+ const wrong=stepField({area:3,district:'lumiose',x:1,y:8},'left');assert.equal(wrong.blocked,true);const enter=stepField({area:3,district:'lumiose',x:8,y:14},'down');assert.deepEqual([enter.district,enter.x,enter.y],['lumiose-zone1',21,8]);
+ const leave=stepField({area:3,district:'lumiose-zone1',x:21,y:8},'right');assert.deepEqual([leave.district,leave.x,leave.y],['lumiose',8,14]);
  const state={area:3,district:'lumiose-zone1',x:17,y:8,regionId:6,districtReturnRegion:1,adventureDexSpecies:[13]};
  const saved=storeAdventurePosition(state,8);assert.deepEqual([saved.x,saved.y,saved.regionId],[5,9,1]);const loaded=restoreAdventurePosition(structuredClone(saved),8);assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone1',17,8]);assert.deepEqual(loaded.adventureDexSpecies,[13]);
 });
