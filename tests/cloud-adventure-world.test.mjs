@@ -176,7 +176,8 @@ test('provisional zone three respects story and older saves, and round-trips its
  const source={area:3,district:'lumiose-zone2',x:4,y:1,zaRoyaleRank:'Y'};
  assert.equal(stepField(source,'up').district,'lumiose-vert2');const road={area:3,district:'lumiose-vert2',x:1,y:8,zaRoyaleRank:'Y'};
  assert.equal(stepField({...road,zaJoseeRequired:true},'left').district,'lumiose-centrico-route');
- assert.equal(stepField({...road,zaRoyaleRank:'Z'},'left').blocked,true);
+ assert.equal(stepField({...road,zaRoyaleRank:'Z'},'left').district,'lumiose-centrico-route');
+ assert.equal(stepField({...road,zaRoyaleRank:undefined},'left').district,'lumiose-centrico-route');
  for(const oldOrComplete of [road,{...road,zaJoseeRequired:true,zaJoseeComplete:true}])assert.equal(stepField(oldOrComplete,'left').district,'lumiose-centrico-route');
  assert.equal(stepField({area:3,district:'lumiose-zone3',x:21,y:8},'right').district,'lumiose-centrico-route');
  const south=stepField({area:3,district:'lumiose-centrico-route',x:1,y:8},'left');assert.deepEqual([south.district,south.x,south.y],['lumiose-zone3',11,15]);assert.equal(stepField({area:3,district:'lumiose-zone3',x:11,y:15},'down').district,'lumiose-centrico-route');assert.equal(stepField({area:3,district:'lumiose-centrico-route',x:21,y:8},'right').district,'lumiose-vert2');
