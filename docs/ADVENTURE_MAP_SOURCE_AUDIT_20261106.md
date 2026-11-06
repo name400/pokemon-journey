@@ -392,3 +392,9 @@ Vernal에 배치한 배틀코트 표식과 상대 기술은 초안이다. 메가
 [진행 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-30-reaching-rank-b)와 [상대 구성](https://www.serebii.net/legendsz-a/mainmissions/reachingrankb.shtml)에 따라 41,000점 도전권, Canari·Ivor·Corbeau, 50%폼 지가르데, Jacinthe 순서의 턴제 전투와 랭크 B 승급, 기술머신 020 수령을 연결했다. 각 승리와 보상을 저장하고 패배 시 현재 상대에게 재도전한다. 보상 수령 후 미션 31 시작 상태를 기록한다.
 
 배틀존 승리당 4,100점과 상대 기술, 호텔 위치는 초안이다. 보너스 카드, 토너먼트의 상세 연출과 상대 메가진화는 미구현이며 지가르데 전투도 기존 턴제 규칙이다. 실제 기기·운영 검증과 미션 31 이야기는 남아 있다. 야생 구역 16·17도 미구현이다. 이 절이 위 절의 미션 30 미구현 서술을 갱신한다.
+
+## 미션 31~34 Vinnie의 요청 — 부분 구현
+
+[미션 31 진행 자료](https://www.serebii.net/legendsz-a/mainmissions/asummonsfromvinnie.shtml)를 따라 콰자르티코 앞 Vinnie, 사무실의 Jett, Hotel Z 작전 회의를 연결했다. 이어 [망나뇽](https://www.thonky.com/pokemon-legends-z-a/main-mission-32-a-rogue-mega-dragonite), [마기라스](https://www.thonky.com/pokemon-legends-z-a/main-mission-33-a-rogue-mega-tyranitar), [아쿠스타](https://www.thonky.com/pokemon-legends-z-a/main-mission-34-a-rogue-mega-starmie)의 폭주 사건을 기존 턴제 전투로 연결하고 각 메가스톤을 별도로 수령한다. 아쿠스타 전에 Philippe와 대결하며, 세 사건을 해결하고 호텔에 보고하면 미션 35 시작 상태를 기록한다. 사건 완료·보상 대기는 저장되며 패배 후 재도전과 보상 중복 방지를 지원한다.
+
+세 현장 표식과 Lv.60·기술, 사무실과 대사는 초안이며 실제 옥상·골목·홀로베이터 경로와 미션 34의 홀로베이터 선행 의뢰는 미구현이다. Philippe의 메가무장조 변신, 동료 동시 참전과 상세 연출도 미구현이다. 야생 구역 16~19와 미션 35 진행은 아직 구현하지 않았고 실기기·운영 검증은 남았다. 이 절이 위 절의 미션 31 미구현 서술을 갱신한다.
