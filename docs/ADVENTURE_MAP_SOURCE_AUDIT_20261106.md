@@ -894,3 +894,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 존느 11번지 주변 도로 (초안)
 
 [존느 11번지 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_11)는 9번지가 서쪽에 인접하고 존느 거리가 북쪽, 북쪽 대로가 동쪽 면을 지난다고 설명한다. 세 방향을 기존 지도와 양방향으로 연결했다. 정확한 분기 위치·거리 선형·건물은 영상 대조가 필요한 초안이다.
+
+### 베르 7번지와 야생 구역 17 (초안)
+
+[베르 7번지 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_7)는 구역 17이 이 번지 안에 있다고 설명한다. 기존 지도에서 두 구역 사이 지상 이동을 추가하고 랭크 C 제한을 유지했다. 출입 위치·통로 선형은 원작 지도나 영상으로 추가 확인할 초안이다.

@@ -18,3 +18,11 @@ test('Zone 17 draft paths and stairs preserve existing travel and saved position
  assert.ok(fieldPath(map,{x:6,y:1},{x:16,y:1}).length);
  const saved=restoreAdventurePosition(storeAdventurePosition(s,3),3);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone17',11,10,['kept']]);
 });
+
+test('Vert Sector 7 leads into Zone 17 with rank gate and preserved saves',()=>{
+ const road={area:3,district:'lumiose-vert-sector7',interior:null,x:11,y:1,zaRoyaleRank:'D',teamIds:['kept']};
+ assert.equal(stepField(road,'up').blocked,true);
+ const zone=stepField({...road,zaRoyaleRank:'C'},'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone17',21,8]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...road,...zone,zaRoyaleRank:'C'},44),44);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone17',21,8,['kept']]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector7',11,1]);
+});
