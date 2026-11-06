@@ -15,3 +15,13 @@ test('Bleu Street connects plaza, South Boulevard, and Sector 7 with safe saves'
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-bleu-street',11,8,['kept']]);
  assert.equal(stepField({...city,x:1,y:8},'left').district,'lumiose-bleu6-approach');
 });
+
+test('Bleu Street joins Sector 6 and retains its existing Espace Vide connection',()=>{
+ const street={area:3,district:'lumiose-bleu-street',interior:null,x:1,y:8,teamIds:['kept']};
+ const b6=stepField(street,'left');assert.deepEqual([b6.district,b6.x,b6.y],['lumiose-bleu6-approach',21,8]);
+ assert.equal(stepField({...street,...b6},'right').district,'lumiose-bleu-street');
+ assert.ok(fieldPath(fieldMap({...street,...b6}),b6,{x:11,y:1}).length);
+ assert.equal(stepField({...street,...b6,x:11,y:1},'up').district,'lumiose-espace-vide');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...street,...b6},9),9);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-bleu6-approach',21,8,['kept']]);
+});

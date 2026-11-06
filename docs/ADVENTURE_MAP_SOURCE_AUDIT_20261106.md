@@ -726,3 +726,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 블루 스트리트 북쪽과 야생 구역 5 (초안)
 
 [Bleu Street](https://bulbapedia.bulbagarden.net/wiki/Bleu_Street)와 [Wild Zone 5](https://bulbapedia.bulbagarden.net/wiki/Wild_Zone_5)는 블루 광장과 센트리코 광장 사이 거리의 북쪽 일부가 구역 5에 들어간다고 설명한다. 구역 5 지상 북쪽에 센트리코 방면 출입구와 도로 표시를 추가했다. 기존 임시 출구는 이동·저장 호환을 위해 유지하며 실제 위치와 거리 윤곽은 초안이다.
+
+### 블루 스트리트와 블루 구역 6 (초안)
+
+[Bleu Street 위치 설명](https://bulbapedia.bulbagarden.net/wiki/Bleu_Street)은 도로가 블루 구역 6을 지난다고 설명하며, [시설 위치 자료](https://psypokes.com/plza/servicenpcs.php)는 구역 6의 Passage de la Félicité 출입구가 블루 스트리트에 있다고 설명한다. 기존 블루 구역 6 접근로와 블루 스트리트에 왕복 연결을 추가했다. 출입구의 정확한 위치와 도로 폭은 초안이며 쇼핑 아케이드와 내부 상점은 구현하지 않았다.
