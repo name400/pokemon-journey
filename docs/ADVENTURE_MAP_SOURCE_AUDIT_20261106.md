@@ -676,3 +676,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ## Saison Canal: Magenta Plaza to Wild Zone 14 (draft)
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas) describes following the Saison Canal northwest from Prism Tower past Zone 7 to reach the Zone 14 substation. A canal-side route now connects the Zone 7 and Zone 14 drafts, retaining their previous city entrances. The canal shape, walkway width, buildings and gate coordinates remain unverified approximations; the existing North Boulevard connector is also not evidence of an original entrance.
+
+## Vernal Avenue: opposite Wild Zones 1 and 12 (draft)
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-12-guide-all-pokemon-and-alphas) places Zone 12 across the street from Zone 1 along Vernal Avenue. [Poképédia](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12) lists an east Zone 12 entrance onto that avenue. The existing avenue now connects to the eastern entrance of the Zone 12 draft and to Zone 1 on the opposite side, preserving previous entrances. Tile coordinates, road width and exact entrance placement are provisional.
