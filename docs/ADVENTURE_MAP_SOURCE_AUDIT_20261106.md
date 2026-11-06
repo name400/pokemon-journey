@@ -75,3 +75,7 @@
 ## Vernal Avenue 동쪽 물가 — 부분 구현
 
 [Nintendo Life의 구역 2 접근 경로](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)는 Café Woof 부근에서 물가 옆 동쪽 길로 Vert Plaza에 간다고 설명한다. Vernal Avenue 초안의 동쪽 길 옆에 물가를 추가했다. 물가의 모양과 좌표, 카페 건물·내부의 정확한 배치는 확인되지 않은 초안이다. 새 물가 위에 저장된 구버전 위치는 리비전이 일치하는 경우 같은 구역의 가까운 보행 가능 위치로 옮긴다. 기존 지갑·파티·진행은 변경하지 않는다.
+
+## 구역 2에서 Rouge Plaza 방면의 Centrico 연결 — 부분 구현
+
+[임무 5 안내](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_5)는 야생 구역 2 이후 핸섬 탐정사무소로 향할 때 Centrico 포켓몬센터를 지나고 Rouge Plaza에서 Josée를 만난다고 설명한다. 기존 Vert Sector 2와 구역 3의 즉시 연결 사이에 Centrico 방면 초안과 회복 가능한 센터를 연결했다. 센터와 도로의 정확한 좌표·폭 및 실제 전체 경로는 확인되지 않았다. 기존 구역 3 저장은 유지되고 동쪽 출구로 새 연결 구역을 이용할 수 있다. 구역 3과 Rouge Plaza는 여전히 임시로 합쳐진 상태다.

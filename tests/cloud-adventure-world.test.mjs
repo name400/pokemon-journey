@@ -175,10 +175,12 @@ test('Vernal waterside retains cafe and plaza access and safely restores old sav
 test('provisional zone three respects story and older saves, and round-trips its position',()=>{
  const source={area:3,district:'lumiose-zone2',x:4,y:1,zaRoyaleRank:'Y'};
  assert.equal(stepField(source,'up').district,'lumiose-vert2');const road={area:3,district:'lumiose-vert2',x:1,y:8,zaRoyaleRank:'Y'};
- assert.equal(stepField({...road,zaJoseeRequired:true},'left').district,'lumiose-zone3');
+ assert.equal(stepField({...road,zaJoseeRequired:true},'left').district,'lumiose-centrico-route');
  assert.equal(stepField({...road,zaRoyaleRank:'Z'},'left').blocked,true);
- for(const oldOrComplete of [road,{...road,zaJoseeRequired:true,zaJoseeComplete:true}])assert.equal(stepField(oldOrComplete,'left').district,'lumiose-zone3');
- assert.equal(stepField({area:3,district:'lumiose-zone3',x:21,y:8},'right').district,'lumiose-vert2');
+ for(const oldOrComplete of [road,{...road,zaJoseeRequired:true,zaJoseeComplete:true}])assert.equal(stepField(oldOrComplete,'left').district,'lumiose-centrico-route');
+ assert.equal(stepField({area:3,district:'lumiose-zone3',x:21,y:8},'right').district,'lumiose-centrico-route');
+ assert.equal(stepField({area:3,district:'lumiose-centrico-route',x:1,y:8},'left').district,'lumiose-zone3');assert.equal(stepField({area:3,district:'lumiose-centrico-route',x:21,y:8},'right').district,'lumiose-vert2');
+ const center={area:3,district:'lumiose-centrico-route',x:11,y:6,facing:'up',regionId:6,districtReturnRegion:1,teamIds:['keep'],steps:23};assert.equal(interactionAt(center).tile,'H');const savedCenter=storeAdventurePosition(center,7),loadedCenter=restoreAdventurePosition(savedCenter,7);assert.equal(loadedCenter.district,'lumiose-centrico-route');assert.deepEqual(loadedCenter.teamIds,['keep']);assert.equal(loadedCenter.steps,23);
  assert.equal(stepField({area:3,district:'lumiose-vert2',x:21,y:8},'right').district,'lumiose-zone2');
  const grass={area:3,district:'lumiose-zone3',x:17,y:8,zaRoyaleRank:'Y',zaJoseeRequired:true};assert.equal(stepField(grass,'left').blocked,true);assert.equal(stepField({...grass,zaJoseeComplete:true},'left').blocked,undefined);assert.equal(stepField({...grass,x:15},'left').blocked,undefined);
  assert.ok(fieldPath(lumioseZone3Map(),{x:21,y:8},findTile(lumioseZone3Map(),'g')).length);
