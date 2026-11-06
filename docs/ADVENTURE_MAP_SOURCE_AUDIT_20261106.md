@@ -830,3 +830,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 야생 구역 14 단일 진입 경로
 
 [구역 14 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_14)는 마젠타 스트리트 쪽 출입구 하나를 명시한다. [현장 공략](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas)은 프리즘타워에서 운하를 따라 접근한다고 설명한다. 노스 불르바르에서 구역 14로 즉시 들어가던 초안 경로를 마젠타 운하 접근로로 바꾸고, 구역 입구의 랭크 D 제한을 유지했다. 기존 구역 내 저장 위치 복구를 위해 북쪽 레거시 출구는 유지한다. 정밀 지형과 거리 방향은 여전히 초안이다.
+
+### 야생 구역 15 남서쪽과 존느 구역 7 (초안)
+
+[구역 15 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_15)는 남서쪽 출입구가 존느 구역 7로 이어진다고 설명한다. [존느 구역 7 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_7)는 구역이 존느 스트리트와 인접한다고 설명한다. 구역 7을 추가하고 기존 도시 거리·구역 15를 연결하며 랭크 D 제한과 옥상 상태를 유지했다. 정확한 입구 좌표·건물과 공원 형상은 초안이며 옥상 입구와 카페 시설은 미구현이다.
