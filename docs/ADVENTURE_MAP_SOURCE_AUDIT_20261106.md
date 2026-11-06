@@ -958,3 +958,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 로즈 8번지와 마젠타 거리·포켓몬센터 (초안)
 
 [로즈 8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_8)는 이 지역이 마젠타 거리와 북쪽 대로에 접하고 교차점에 포켓몬센터가 있다고 설명한다. 기존 운하변 거리 초안과 번지를 왕복 연결하고 기존 회복 처리를 적용했다. 출입 좌표·센터 건물 형상은 초안이며 상점·벤치·회수원은 미구현이다.
+
+### 로즈 8·9번지 연결 (초안)
+
+[8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_8)와 [9번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_9)는 두 번지의 남북 인접을 설명한다. 기존 지상 지도에 왕복 통행을 추가했고 구역 18의 랭크 B 제한은 유지했다. 실제 도로 선형·출입 좌표는 별도 지도·영상 대조가 필요한 초안이다.

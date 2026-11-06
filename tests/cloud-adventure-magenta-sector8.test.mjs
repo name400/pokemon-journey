@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {magentaSector8RouteMap} from '../lib/cloud-adventure/adventure-magenta-sector8-route.mjs';
 test('North Boulevard to Magenta Sector 8 and Zone 18 keeps gate and saves',()=>{
  const start={area:3,district:'lumiose-north-boulevard',interior:null,x:8,y:1,facing:'up',zaRoyaleRank:'C'};
@@ -18,4 +18,13 @@ test('Magenta Sector 8 links the canal street and nearby healing point',()=>{
  const center={...s,x:12,y:14,facing:'up'};assert.equal(fieldDialogue(center).action,'heal');
  assert.ok(fieldPath(magentaSector8RouteMap(),{x:11,y:15},{x:12,y:14}).length);
  assert.equal(stepField({...s,x:21,y:8},'right').blocked,true);
+});
+
+test('Magenta sectors 8 and 9 connect without bypassing Zone 18 rank gate',()=>{
+ const s={area:3,district:'lumiose-magenta-sector8-route',interior:null,x:11,y:1,zaRoyaleRank:'C',teamIds:['kept']};
+ const nine=stepField(s,'up');assert.deepEqual([nine.district,nine.x,nine.y],['lumiose-magenta-sector9',3,15]);
+ const state={...s,...nine};assert.ok(fieldPath(fieldMap(state),state,{x:11,y:1}).length);
+ assert.equal(stepField({...state,x:11,y:1},'up').blocked,true);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,66),66);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector9',3,15,['kept']]);
+ assert.equal(stepField(saved,'down').district,'lumiose-magenta-sector8-route');
 });
