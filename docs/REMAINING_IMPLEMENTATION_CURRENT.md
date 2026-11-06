@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전에서 질투의불꽃의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_BURNING_JEALOUSY_FIRST_QA_20261106.md](MULTILENS_BURNING_JEALOUSY_FIRST_QA_20261106.md) 참조.
+
 후속: 신규 도전에서 타오르는분노·참방참방서핑의 멀티렌즈 첫 타격 순서를 보완했다. [MULTILENS_WRATH_SPLASH_FIRST_QA_20261106.md](MULTILENS_WRATH_SPLASH_FIRST_QA_20261106.md) 참조.
 
 후속: 신규 도전 AI가 상대의 일반·스텔라 테라스탈 타입을 공격 점수와 방어 상성에 구분해 사용한다. [AI_TERA_MATCHUP_TYPES_QA_20261106.md](AI_TERA_MATCHUP_TYPES_QA_20261106.md) 참조.
