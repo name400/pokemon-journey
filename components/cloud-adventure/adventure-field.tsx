@@ -37,6 +37,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
    const buildings:Array<{x:number;y:number;kind:string}>=[];
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{
     const px=x*tile,py=y*tile;ctx.fillStyle=palette[0];ctx.fillRect(px,py,tile,tile);
+    if(w.district==='lumiose-sewer'&&!w.interior){ctx.fillStyle=c==='#'?'#526a6c':(x+y)%2?'#a1ada5':'#afbab0';ctx.fillRect(px,py,tile,tile);if('tabediquX'.includes(c)){ctx.fillStyle=c==='X'?'#8a5e50':'#55787b';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(({t:'문',a:'전기판',b:'기계',e:'파이프',d:'상자',i:'벽',q:'클레피',u:'Gwynn',X:'출구'} as Record<string,string>)[c]||'',px+tile/2,py+20);}return;}
     if(['lab','lumioseLab','sushi','quasarticoOffice'].includes(w.interior)||['hotel','hotel2f','hotel202','hotelRoof'].includes(w.interior)){
      ctx.fillStyle=c==='#'?(!['lab','lumioseLab'].includes(w.interior)?'#a78375':'#64817e'):(x+y)%2?'#e6e2cc':'#f0ecd9';ctx.fillRect(px,py,tile,tile);
      if(c==='#'){ctx.fillStyle=!['lab','lumioseLab'].includes(w.interior)?'#ddc0a1':'#a3bcb1';ctx.fillRect(px+3,py+4,tile-6,tile-8);}
@@ -64,7 +65,8 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if(c==='f'&&w.district==='lumiose-floral'){ctx.fillStyle='#537b85';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('북쪽',px+tile/2,py+20);}
      if(c==='s'&&w.district==='lumiose'){ctx.fillStyle='#438766';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('구역 1',px+tile/2,py+20);}
      if(c==='d'){ctx.fillStyle='#273e35';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,11,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('?',px+tile/2,py+21);}
-     if(c==='h'||c==='c'||c==='x'){ctx.fillStyle=c==='c'?'#d67aad':'#786884';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='c'?'결정':c==='x'?'교환':'옥상',px+tile/2,py+20);}
+     if(c==='h'||c==='c'||c==='x'){ctx.fillStyle=c==='c'?'#d67aad':'#786884';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='c'?'결정':c==='x'?'교환':w.district==='lumiose-vernal'?'분수':'옥상',px+tile/2,py+20);}
+     if(c==='t'&&w.district==='lumiose-rouge-north'){ctx.fillStyle='#667c99';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('시청',px+tile/2,py+20);}
      if(c==='p'){ctx.fillStyle='#94534b';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.38,tile*.3,0,0,Math.PI*2);ctx.fill();if(w.district==='lumiose-zone2'){const img=fieldImages[props.current.period==='night'?120:129];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-10,py-18,tile+20,tile+20);}ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('왕',px+tile/2,py+20);}
      if(c==='z'){ctx.fillStyle='#777d73';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('묘지',px+tile/2,py+20);}
      if(c==='y'&&w.district==='lumiose-quasartico'){const img=fieldImages[702];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-4,py-8,tile+8,tile+8);else{ctx.fillStyle='#dfaa45';ctx.fillRect(px+8,py+8,tile-16,tile-12);}}

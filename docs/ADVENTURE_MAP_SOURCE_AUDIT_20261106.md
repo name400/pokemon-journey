@@ -343,4 +343,10 @@
 
 [미션 19 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-19-reaching-rank-d)와 [목표 점수 자료](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Reaching_Rank_D)에 따라 랭크 E 배틀존의 35,000점 도전권, Josée의 Lv.43 근육몬·요가램 전투와 2,064원·숙달의씨, Emma와 Ivor의 탐정사무소 대화까지 연결했다. [랭크 E 트레이너 자료](https://bulbapedia.bulbagarden.net/wiki/List_of_Z-A_Royale_Trainers/E)에서 Henri·Clarisse·Apolline의 종과 레벨을 사용했다. 승리당 3,500점, 상대 기술, 정의단 도장 위치는 임시이며 원작과 일치한다고 확인되지 않았다. 시청 수색·카페·하수도·Gwynn·Ivor 승급전과 이후 스토리는 미구현이다. 기존 로토글라이드·동료 동시 참전 등의 미구현도 남아 있다.
 
+## 미션 19 Gwynn 수색과 승급전 — 부분 구현
+
+[미션 진행 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-19-reaching-rank-d)와 [상대 팀·기술](https://www.serebii.net/legendsz-a/mainmissions/reachingrankd.shtml)을 대조해 시청 단서, 누보 카페, Canari 재대결, 냉동빔으로 분수 얼리기, 하수도 잠긴 문과 클레피 포획, 네 곳 조사·환상 벽, Gwynn 및 Ivor의 턴제 배틀을 연결했다. 클레피를 포획해야 진행하며 일반 전투 포획과 기절 후 포획 기회 양쪽을 지원한다. 승급 후 랭크 D와 기술머신 011을 지급한다.
+
+하수도 지도, 시청·분수·도장의 좌표와 클레피 레벨은 초안이며 원작의 상세 통로·문·동행 장면을 재현하지 않았다. 기존의 턴제 엔진을 사용하고 도구·스토리 단계는 저장된다. 하수도 진입 후 나갔다 다시 들어와도 진행 단계를 보존한다. 호텔에서 받는 퍼포먼스 스니커는 낮에 지급되지만 실제 날짜가 바뀌었는지는 추적하지 않으며 이동 속도 효과도 미구현이다. 기술머신은 지급되지만 가르치는 기능은 미구현이고 미션 20 이후도 미구현이다. 위 미션 19 도입 절의 시청 수색부터 승급전까지 미구현 서술은 이 절로 갱신된다. 실제 기기·운영에서는 검증하지 않았다.
+
 앱솔 조건은 [원작 필수 파티 안내](https://bulbapedia.bulbagarden.net/wiki/Required_Party_Pok%C3%A9mon)에서 앱솔나이트를 지닌 앱솔의 파티 보유로 확인했다. 따라서 실제 첫 출전을 강제하지 않고 기존 파티 검사 방식을 유지한다.
