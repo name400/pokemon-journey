@@ -690,3 +690,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ## Estival Avenue and Bleu Sector 6 network connections (draft)
 
 [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City) describes Estival Avenue as one of the avenues connecting the boulevards to Centrico Plaza. The Estival draft now connects to the existing Centrico route; transition coordinates and the approach are provisional. [Poképédia](https://www.pokepedia.fr/Valcyan) describes rooftops accessed from Bleu Sector 6 facing Bleu Plaza, indicating proximity only; it does not establish a ground route. The new ground connection to the existing Bleu Plaza street is an unverified playable approximation, not a confirmed original route. The Coulant Waterway source refers to Vert Sector 6, not Bleu Sector 6, and is not used as evidence for this connection.
+
+## Coulant Waterway: Vert Street and Wild Zone 11 (draft)
+
+[Poképédia](https://www.pokepedia.fr/Canal_Lacoul%C3%A9e) places Coulant Waterway in the Vert District with two bridges and a connection to Vert Street; its [Zone 11 description](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11) lists a south-bank entrance from this waterway. A draft path now links Vert Street and Zone 11’s south bank and preserves existing entrances. Water shape, bridge lengths, street alignment and tile coordinates remain approximate; the rest of the waterway’s district connections are not implemented.

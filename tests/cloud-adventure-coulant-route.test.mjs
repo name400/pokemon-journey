@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {coulantRouteMap} from '../lib/cloud-adventure/adventure-coulant-route.mjs';
+test('Coulant route links Vert Street and the south bank of Zone 11',()=>{
+ const start={area:3,district:'lumiose-vert-street-route',interior:null,x:21,y:8,facing:'right',zaRoyaleRank:'F'};
+ const route=stepField(start,'right');assert.equal(route.district,'lumiose-coulant-route');const s={...start,...route};const map=coulantRouteMap();
+ assert.equal(map[8][10],'~');assert.equal(map[8][6],':');assert.equal(map[8][16],':');assert.ok(fieldPath(map,s,{x:10,y:1}).length);
+ assert.equal(stepField(s,'left').district,'lumiose-vert-street-route');const gate={...s,x:10,y:1,facing:'up'};assert.equal(stepField(gate,'up').blocked,true);
+ const zone=stepField({...gate,zaRoyaleRank:'E'},'up');assert.equal(zone.district,'lumiose-zone11');assert.equal(stepField({...gate,...zone},'down').district,'lumiose-coulant-route');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:6,y:8,teamIds:['kept']},4),4);assert.deepEqual([saved.district,saved.x,saved.y],['lumiose-coulant-route',6,8]);assert.deepEqual(saved.teamIds,['kept']);
+});
