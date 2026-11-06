@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone5Map,zone5Encounter} from '../lib/cloud-adventure/adventure-zone5.mjs';
-import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('zone five preserves separate ground and rooftop, entrances and saved locations',()=>{
  const state={area:3,district:'lumiose-centrico-route',interior:null,x:18,y:15,facing:'down'};
@@ -63,4 +63,15 @@ test('Bleu Street reaches the western ground edge of Zone 5',()=>{
  const state={...road,...zone};assert.ok(fieldPath(fieldMap(state),state,{x:11,y:15}).length);
  const saved=restoreAdventurePosition(storeAdventurePosition(state,53),53);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone5',1,12,['kept']]);
  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-street',21,4]);
+});
+
+
+test('Café Gallant is reachable from the Zone 5 approach without moving saved positions',()=>{
+ const zone={area:3,district:'lumiose-zone5',interior:null,x:1,y:12,facing:'left',zaMission14Stage:6,teamIds:['kept']};
+ const road=stepField(zone,'left');assert.deepEqual([road.district,road.x,road.y],['lumiose-bleu-street',21,4]);
+ const state={...zone,...road};assert.ok(fieldPath(fieldMap(state),state,{x:18,y:10}).length);
+ const cafe={...state,x:18,y:10,facing:'down'};assert.equal(fieldDialogue(cafe).action,'rankEGalette');
+ const saved=restoreAdventurePosition(storeAdventurePosition(cafe,54),54);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-bleu-street',18,10,['kept']]);
+ assert.equal(fieldDialogue({...cafe,district:'lumiose-centrico-route',x:18,y:6,facing:'up'}).action,'rankEGalette');
+ assert.equal(stepField({...state,x:21,y:4},'right').district,'lumiose-zone5');
 });
