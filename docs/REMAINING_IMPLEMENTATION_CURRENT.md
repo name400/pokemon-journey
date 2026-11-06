@@ -4,6 +4,8 @@
 
 ## 현재 완료 범위
 
+후속: 신규 도전 AI의 스텔라 테라스탈 자속 점수를 원본 타입 판정에 맞췄다. [AI_STELLAR_MATCHUP_STAB_QA_20261106.md](AI_STELLAR_MATCHUP_STAB_QA_20261106.md) 참조.
+
 후속: 신규 도전의 멀티렌즈 얼어붙은세계 첫 타격 순서를 보완했다. [MULTILENS_GLACIATE_FIRST_QA_20261106.md](MULTILENS_GLACIATE_FIRST_QA_20261106.md) 참조.
 
 후속: 신규 도전의 멀티렌즈 눈보라 첫 타격 순서를 보완했다. [MULTILENS_BLIZZARD_FIRST_QA_20261106.md](MULTILENS_BLIZZARD_FIRST_QA_20261106.md) 참조.
