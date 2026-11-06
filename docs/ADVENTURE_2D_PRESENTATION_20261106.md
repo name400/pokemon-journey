@@ -9,3 +9,7 @@
 ## 필드 캐릭터 방향 — 부분 구현
 
 [pret 에메랄드의 필드 이동 구조](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/src/field_player_avatar.c)에서 정지·방향 전환·이동을 구분하는 구조를 참고했다. 이 프로젝트의 독자 도트에 정면·뒷면·좌우 측면을 각각 적용한다. 좌우는 서로 반전되며 이동할 때 기존 다리 애니메이션을 유지한다. 기존 게임의 스프라이트나 코드를 복사하지 않았고, Z-A 플레이어와 등장인물의 정확한 외형은 아직 구현하지 않았다.
+
+## Centrico 연결 구역의 도시 거리 — 표현 초안
+
+[PokeZ-ARecomp 공개 스크린샷](https://github.com/Hexveil404/PokeZ-ARecomp/blob/dfb47e9d8130d6ecde1c0afa1010fb1a102e50f6/docs/screenshots/lumiose.jpg)에서 차도·보도와 그 사이 녹지의 시각적 구성을 참고했다. 이 화면의 정확한 도시 위치는 확인하지 못했으므로 Centrico의 원작 거리 배치 근거로 사용하지 않는다. 현재 Centrico 연결 구역 초안에 독자적인 차도·횡단보도·녹지 타일을 표현했으며 모두 기존처럼 걸을 수 있다. 도로 폭·횡단보도와 건물의 실제 위치는 별도 대조가 필요하다. 원본 이미지는 프로젝트에 포함하지 않았다.
