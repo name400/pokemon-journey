@@ -680,3 +680,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ## Vernal Avenue: opposite Wild Zones 1 and 12 (draft)
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-12-guide-all-pokemon-and-alphas) places Zone 12 across the street from Zone 1 along Vernal Avenue. [Poképédia](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12) lists an east Zone 12 entrance onto that avenue. The existing avenue now connects to the eastern entrance of the Zone 12 draft and to Zone 1 on the opposite side, preserving previous entrances. Tile coordinates, road width and exact entrance placement are provisional.
+
+## Espace Vide and the eastern Wild Zone 10 entrance (draft)
+
+[Poképédia’s Zone 10 description](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_10) places the eastern entrance towards Espace Vide. Its [Espace Vide entry](https://www.pokepedia.fr/All%C3%A9e_Ranavoir) describes a narrow street between buildings, stairs at its north and south ends, and a lower route to the Zone 10 canal. This draft connects the existing ground-level Zone 10 map to a small lane while retaining the old west entrance. Exact coordinates, detailed stairs and underground elevation are not verified; the lane’s connections to Estival Avenue and Bleu Sectors 4 and 6 remain unimplemented.
