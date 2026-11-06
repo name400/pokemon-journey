@@ -160,6 +160,8 @@ test('zone two southeastern bridge connects the southern shore to the central is
  let s={area:3,district:'lumiose-zone2',x:14,y:13};
  for(const direction of ['up','up','up','up','left','left']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}
  assert.deepEqual([s.x,s.y],[12,9]);
+ const map=lumioseZone2Map();assert.equal(map[14][10],'g');assert.ok(fieldPath(map,{x:11,y:15},{x:10,y:14}).length);assert.equal(stepField({area:3,district:'lumiose-zone2',x:11,y:15},'up').blocked,undefined);
+ const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x:10,y:14,regionId:6,districtReturnRegion:1,teamIds:['keep']},6);old.districtPosition.zone2Layout=3;const restored=restoreAdventurePosition(old,6);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone2',10,14]);assert.deepEqual(restored.teamIds,['keep']);
 });
 
 test('Vernal waterside retains cafe and plaza access and safely restores old saves',()=>{

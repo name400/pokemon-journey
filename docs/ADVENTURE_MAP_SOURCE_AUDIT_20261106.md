@@ -91,3 +91,7 @@
 ## 야생 구역 3의 초반 접근
 
 [Nintendo Life 구역 3 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-3-guide-all-pokemon-and-alphas)는 이 구역이 초반부터 열려 있다고 설명한다. Vert Sector 2에서 Centrico 방면으로 나가는 데 임의로 붙였던 랭크 Y 제한을 제거했다. 임무 5의 Josée 전투가 실제로 필요한 상태에서는 구역 3 내부의 기존 스토리 진입 판정을 그대로 유지한다. 랭크 Z에서 구역 접근·재접속과 파티·지갑 보존을 격리 API로 검사한다. 도시와 광장의 실제 지형은 별도 미완성이다.
+
+## 구역 2 남쪽 입구 풀밭 — 부분 구현
+
+[구역 2 동선 안내](https://thegameslayer.com/guides/pokemon-legends-z-a-all-wild-zone-2-pokemon/)는 남쪽 입구 바로 안쪽에 풀이 있고 꼬몽울을 만날 수 있다고 설명한다. 남쪽 입구 부근에 걸을 수 있는 풀밭을 추가하고 기존 남쪽 통로와 동남쪽 다리를 유지했다. 풀밭의 정확한 면적·좌표는 초안이다. 기존 풀밭 조우 풀을 사용하므로 위치별 포켓몬 출현이나 원작의 필드 개체 행동을 구현했다는 뜻은 아니다. 해당 위치의 구버전 저장은 좌표 그대로 복원된다.
