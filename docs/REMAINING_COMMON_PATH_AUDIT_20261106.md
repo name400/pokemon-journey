@@ -10,8 +10,8 @@
 
 `rogue-classic-game.mjs`의 전투 종료 분기에 나타나는 서로 다른 이벤트 21개를 후보로 집계했다. 이 수는 중복 기술 정리 경로의 검토 범위이며, 전체 이벤트 구현의 완료율이 아니다.
 
-- 검증된 대기 포켓몬 정리 지원: 8개 — `a-trainers-test`, `weird-dream`, `mysterious-chest`, `berries`, `fight-or-flight`, `uncommon-breed`, `bug-superfan`, `dark-deal`. 기존 전투 상태와 기술·PP가 일치하고 사용자가 확인해야 한다. 트레이너 시험과 야생 이벤트 4개는 검증된 챌린지 결합도 검사했다. 이상한 꿈·벌레 마니아·수상한 거래의 챌린지 결합은 지원하지 않는다.
-- 검토할 후보: 13개 — `clowning-around`, `expert-breeder`, `training-session`, `trash-to-treasure`, `winstrate`, `dancing-lessons`, `absolute-avarice`, `mysterious-challengers`, `slumbering-snorlax`, `the-strong-stuff`, `fiery-fallout`, `teleport`, `fun-and-games`. 전투 참가 제한, 시작 효과, 상대 구성, 보상과 복구를 대조해 공통 처리가 안전한 경우에만 추가한다. 이 후보 수는 모두 구현해야 할 기능 수가 아니다. 마자용 미니게임처럼 교체를 제한하는 경우에는 일반 전투와 다르게 판단한다.
+- 검증된 대기 포켓몬 정리 지원: 10개 — `a-trainers-test`, `weird-dream`, `mysterious-chest`, `berries`, `fight-or-flight`, `uncommon-breed`, `bug-superfan`, `dark-deal`, `slumbering-snorlax`, `teleport`. 기존 전투 상태와 기술·PP가 일치하고 사용자가 확인해야 한다. 트레이너 시험과 야생 이벤트 4개는 검증된 챌린지 결합도 검사했다. 이상한 꿈·벌레 마니아·수상한 거래의 챌린지 결합은 지원하지 않는다.
+- 검토할 후보: 11개 — `clowning-around`, `expert-breeder`, `training-session`, `trash-to-treasure`, `winstrate`, `dancing-lessons`, `absolute-avarice`, `mysterious-challengers`, `the-strong-stuff`, `fiery-fallout`, `fun-and-games`. 전투 참가 제한, 시작 효과, 상대 구성, 보상과 복구를 대조해 공통 처리가 안전한 경우에만 추가한다. 이 후보 수는 모두 구현해야 할 기능 수가 아니다. 마자용 미니게임처럼 교체를 제한하는 경우에는 일반 전투와 다르게 판단한다. `absolute-avarice`는 절대 탐욕, `dancing-lessons`는 춤 수업(춤추새), `fun-and-games`는 마자용 미니게임으로 위 후보에 각각 한 번 포함된다.
 - 안전상 보류: 현재 출전 중인 포켓몬, 기술 무작위화, 불일치 또는 출처 불명확 스냅샷은 데이터만으로 안전하게 판단할 수 없다. 자동으로 기술을 삭제하지 않는다. 안전한 판별 근거와 복구 방식이 확보되면 지원 여부를 다시 검토한다.
 
 예전 작업일 추정은 범위와 소요 시간을 실측한 값이 아니므로 삭제한다. 검사 실행 시간과 실제 구현 소요 시간은 구분한다. 전체 원본 동등성의 완료 시점은 아직 산정할 근거가 없다.
