@@ -946,3 +946,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 야생 구역 4 남쪽 납골당 (초안)
 
 [묘지 구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-4-guide-all-pokemon-and-alphas)는 남쪽에 큰 납골당이 있다고 설명한다. 남쪽 지형에 통과할 수 없는 구조물을 추가하고 기존 저장이 해당 부지에 있을 때 인접 통행 칸으로 복구한다. 건물 윤곽·방향·정확한 위치는 원작 영상과 대조해야 할 초안이다.
+
+### 팔레 통로와 루주 거리·북쪽 대로 (초안)
+
+[시설 위치 자료](https://www.dbltap.com/guides/pokemon-legends-za-clothing-store-locations)와 [루주 8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Rouge_Sector_8)는 팔레 통로가 두 도로 교차점 부근에 있고 여덟 상점이 있다고 설명한다. 2D 통로, 양쪽 도로 연결과 상점 이름을 추가했다. 출입구 좌표·실내 배치·상점 외형은 초안이며 판매·의상 변경은 미구현이다.
