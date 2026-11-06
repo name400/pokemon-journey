@@ -28,3 +28,12 @@ test('Bleu sewer approach preserves the barrier, unlock and return after restore
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y,back.zaSewerReturn],['lumiose-bleu3-sewer-approach',21,8,null]);
  assert.equal(stepField({...saved,zaSewerReturn:null},'down').district,'lumiose-vernal');
 });
+
+test('Bleu Sector 3 and Vernal Avenue connect without entering locked Zone 12',()=>{
+ const city={area:3,district:'lumiose-bleu-sector3',interior:null,x:21,y:8,zaRoyaleRank:'F',teamIds:['kept']};
+ assert.equal(stepField({...city,x:6,y:15},'down').blocked,true);
+ const avenue=stepField(city,'right');assert.deepEqual([avenue.district,avenue.x,avenue.y],['lumiose-vernal',1,5]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...city,...avenue},49),49);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vernal',1,5,['kept']]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-sector3',21,8]);
+});

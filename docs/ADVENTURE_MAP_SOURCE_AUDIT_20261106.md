@@ -914,3 +914,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 블르 7번지 포켓몬센터 (초안)
 
 [블르 7번지 자료](https://bulbapedia.bulbagarden.net/wiki/Bleu_Sector_7)는 블르 거리와 사우스 불르바르 교차점의 포켓몬센터를 설명한다. 해당 번지 내 회복 지점을 기존 회복 처리로 연결했다. 건물 외관·정확한 좌표와 상점·벤치·회수원은 미구현이다.
+
+### 블르 3번지와 베르날 애비뉴 (초안)
+
+[Aymlis Park 자료](https://bulbapedia.bulbagarden.net/wiki/Aymlis_Park)는 베르날 애비뉴와 블르 3번지가 공원 포켓몬센터 인근에서 만난다고 설명한다. 기존 두 도시 맵을 별도 야생 구역 진입 없이 왕복 연결했다. 교차로 좌표·형상과 센터 출입구는 원작 영상 대조가 필요한 초안이다.
