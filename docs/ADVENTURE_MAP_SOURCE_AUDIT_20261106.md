@@ -886,3 +886,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 오토널 애비뉴 서쪽 마젠타 9번지 (방향 정정)
 
 [오토널 애비뉴 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/autumnal-avenue.html)는 마젠타 9번지를 애비뉴 서쪽으로 설명한다. 이전 초안의 동쪽 연결을 서쪽으로 정정했다. 분기 선형과 타일 좌표는 원작 영상에 의한 추가 대조가 필요한 초안이다.
+
+### 야생 구역 6 북쪽 존느 11번지 (초안)
+
+[구역 6 자료](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-6-guide-all-pokemon-and-alphas)는 북쪽 출입구가 존느 11번지에 있다고 설명한다. 양방향 이동을 연결했다. 거리의 건물·폭·타일 좌표는 원작 지도·영상으로 더 대조해야 할 초안이며 기존 임시 이동 연결은 보존한다.

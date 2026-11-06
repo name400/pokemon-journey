@@ -19,3 +19,11 @@ test('zone six high roof keeps alpha, items and saved layer',()=>{
  const map=zone6Map(high);assert.equal(map[3][17],'j');assert.equal(map[10][12],'v');assert.equal(zone6Visible(high,'a').species,25);assert.equal(zone6Visible(high,'a').alpha,true);assert.equal(zone6Item(high,'i').id,'roof-luxury');
  assert.equal(zone6Item({...high,zaZone6Items:['roof-luxury']},'i'),null);const saved=restoreAdventurePosition(storeAdventurePosition(high,72),72);assert.deepEqual([saved.zaZone6Layer,saved.x,saved.y],['high',17,4]);
 });
+
+test('Zone 6 north exit connects Jaune Sector 11 and restores its position',()=>{
+ const zone={area:3,district:'lumiose-zone6',interior:null,x:15,y:1,zaZone6Layer:'ground',teamIds:['kept']};
+ const road=stepField(zone,'up');assert.deepEqual([road.district,road.x,road.y],['lumiose-jaune-sector11',11,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...road},61),61);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-jaune-sector11',11,15,['kept']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y,back.zaZone6Layer],['lumiose-zone6',15,1,'ground']);
+ assert.ok(fieldPath(zone6Map({...zone,...back}),back,{x:11,y:15}).length);
+});
