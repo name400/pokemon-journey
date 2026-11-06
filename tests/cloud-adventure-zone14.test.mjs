@@ -9,10 +9,18 @@ test('zone fourteen substation gate and saved position',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:12,y:10},42),42);assert.deepEqual([saved.district,saved.x,saved.y],['lumiose-zone14',12,10]);assert.equal(stepField({...s,x:11,y:15},'down').district,'lumiose-magenta-canal-route');assert.equal(stepField({...s,x:11,y:1},'up').district,'lumiose-north-boulevard');assert.equal(zone14Encounter(s,()=>0).speciesId,304);
 });
 
-test('North Boulevard leads to the canal route before the single Zone 14 entrance',()=>{
+test('North Boulevard leads to the canal route and respects the Zone 14 gate',()=>{
  const road={area:3,district:'lumiose-north-boulevard',interior:null,x:12,y:1,zaRoyaleRank:'E',teamIds:['kept']};
  const canal=stepField(road,'up');assert.deepEqual([canal.district,canal.x,canal.y],['lumiose-magenta-canal-route',10,15]);
  assert.equal(stepField({...road,...canal},'down').district,'lumiose-north-boulevard');
  assert.ok(fieldPath(fieldMap({...road,...canal}),canal,{x:10,y:1}).length);
  assert.equal(stepField({...road,...canal,x:10,y:1},'up').blocked,true);
+});
+test('Magenta Sector 6 reaches the southern substation approach after rank D',()=>{
+ const sector={area:3,district:'lumiose-magenta-sector6',interior:null,x:4,y:1,zaRoyaleRank:'E',teamIds:['kept']};
+ assert.equal(stepField(sector,'up').blocked,true);
+ const zone=stepField({...sector,zaRoyaleRank:'D'},'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone14',17,15]);
+ const state={...sector,...zone,zaRoyaleRank:'D'};assert.ok(fieldPath(fieldMap(state),state,{x:12,y:10}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,43),43);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone14',17,15,['kept']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector6',4,1]);
 });
