@@ -111,3 +111,9 @@
 [구역 2 안내](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-2/)와 [출현 위치 안내](https://allthings.how/pokemon-legends-z-a-wild-zone-2-every-spawn-and-where-to-find-them/)는 딱충이가 구역의 나무에 매달려 나타난다고 설명한다. 구역 북서쪽 경계 나무에 대표 개체를 표시하고 가까이서 조준해 볼을 던지도록 연결했다. 포획과 볼 수량은 서버에서 함께 저장하고, 실패하면 기존 야생 전투로 이어진다. 구역을 벗어나면 개체가 초기화된다.
 
 정확한 나무 좌표·레벨·조준 거리·재출현 및 포획 실패 후의 세부 동작은 초안이다. 실제 3D 지형에 맞춘 나무와 수역의 윤곽, 다른 야생 개체의 화면 표시·행동, 원작 실시간 전투는 아직 미완성이다. 이 표시는 기존 경계 타일을 이용하므로 기존 저장의 통행 가능 위치는 바꾸지 않는다.
+
+## 구역 2 중앙·물가의 보이는 야생 포켓몬 — 부분 구현
+
+[구역 2 위치 안내](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-2/)와 [출현 위치 안내](https://allthings.how/pokemon-legends-z-a-wild-zone-2-every-spawn-and-where-to-find-them/)를 바탕으로 중앙의 보르쥐·거북손손과 물가의 잉어킹·밤 별가사리를 공통 목록으로 화면에 표시한다. 가까운 포켓몬을 조준해 볼을 던지면 서버에서 구역·거리·시간·개체 소진 여부를 다시 검사하고 결과와 볼 수량을 함께 저장한다. 포획 실패 시 기존 야생 전투로 연결되고 구역을 벗어나면 필드 개체 상태가 초기화된다.
+
+정확한 좌표·출현 수·레벨·조준 거리와 포획 실패 후 반응은 임시다. 네 개체는 현재 고정 위치에서 대기하며, 보르쥐 무리 이동과 잉어킹의 다리 뛰기 등 실제 행동은 아직 구현하지 않았다. 수역·다리의 실제 윤곽과 Rouge Plaza·Centrico·Café Woof의 정확한 위치·동선도 미완성이다.
