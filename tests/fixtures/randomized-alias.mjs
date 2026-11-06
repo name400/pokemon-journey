@@ -1,8 +1,9 @@
+import {createClassicCombat,playClassicCombat} from '../../lib/rogue-battle-engine.mjs';
 import {fixture} from './dna-persistent.mjs';
 import {makeReferenceMon} from '../../lib/rogue-reference.mjs';
 import {applyClassicPokemonChallenges} from '../../lib/rogue-challenge-pokemon.mjs';
-export function randomizedAliasFixture({value=1,boxId='one'}={}){
+export function randomizedAliasFixture({value=1,boxId='one',ended=false}={}){
  const {doc,run}=fixture([]);run.seed='audit-0';run.challenges=[{id:11,value}];run.challengeEligibilityRule='source-subset-v1';
  const mon=applyClassicPokemonChallenges(makeReferenceMon(1,50,{boxId}),run),ally=applyClassicPokemonChallenges(makeReferenceMon(7,50,{boxId:'ally'}),run);
- if(mon.moves[0]!=='비밀이야기')throw Error('randomizer fixture changed');mon.moves=[mon.moves[0],'Confide',mon.moves[1]];mon.pp={confide:3};mon.roguePPUps={confide:2};mon.rogueMoveHistory=['Splash'];mon.rogueUsedTMs=['Thunderbolt'];run.party=[mon,ally];return doc;
+ if(mon.moves[0]!=='비밀이야기')throw Error('randomizer fixture changed');mon.moves=[mon.moves[0],'Confide',mon.moves[1]];mon.pp={confide:3};mon.roguePPUps={confide:2};mon.rogueMoveHistory=['Splash'];mon.rogueUsedTMs=['Thunderbolt'];run.party=[mon,ally];if(ended){const lead=applyClassicPokemonChallenges(makeReferenceMon(151,80,{boxId:'lead'}),run),foe=makeReferenceMon(143,5,{boxId:'foe',moves:['Splash']});lead.moves=['Tackle'];lead.pp={};foe.hp=1;run.party=[lead,mon];run.screen='battle';run.combat=createClassicCombat(run,[foe]);run.combat=playClassicCombat(run,{type:'move',move:'tackle'});run.party=run.combat.teams[0];run.screen='reward';}return doc;
 }
