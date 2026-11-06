@@ -54,3 +54,12 @@ test('Magenta Sector 3 and Autumnal Avenue connect in both directions',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...avenue},34),34);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-autumnal-approach',1,6,['kept']]);
  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector3',21,8]);
 });
+test('Magenta Sector 6 connects west to South Boulevard without bypassing Zone 9',()=>{
+ const sector={area:3,district:'lumiose-magenta-sector6',interior:null,x:1,y:8,zaRoyaleRank:'V',zaMission10Stage:3,teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(sector),sector,{x:11,y:15}).length);
+ assert.equal(stepField({...sector,x:11,y:15},'down').blocked,true);
+ const road=stepField(sector,'left');assert.deepEqual([road.district,road.x,road.y],['lumiose-south-boulevard',21,12]);
+ assert.ok(fieldPath(fieldMap({...sector,...road}),road,{x:15,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...road},35),35);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission10Stage,saved.teamIds],['lumiose-south-boulevard',21,12,3,['kept']]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector6',1,8]);
+});
