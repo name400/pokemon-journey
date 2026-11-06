@@ -761,4 +761,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 야생 구역 11 북쪽과 존느 구역 10·12 (초안)
 
-[구역 11 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11)는 북쪽 서쪽·동쪽 출입구가 각각 존느 구역 10·12로 이어진다고 설명한다. [구역 6 출현 자료](https://pokemongohub.net/post/guide/all-wild-zones-pokemon-legends-z-a/)는 구역 6이 존느 구역 12에 있음을 명시한다. 두 북쪽 출구와 구역 12·구역 6 연결을 추가했다. 거리와 각 출입구의 정밀 좌표·주변 건물은 초안이며, 존느 구역 10의 다른 거리 연결은 아직 확인·구현하지 않았다. 기존 임시 출구는 저장·이동 호환을 위해 유지한다.
+[구역 11 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11)는 북쪽 서쪽·동쪽 출입구가 각각 존느 구역 10·12로 이어진다고 설명한다. [구역 6 출현 자료](https://pokemongohub.net/post/guide/all-wild-zones-pokemon-legends-z-a/)는 구역 6이 존느 구역 12에 있음을 명시한다. 두 북쪽 출구와 구역 12·구역 6 연결을 추가했다. 거리와 각 출입구의 정밀 좌표·주변 건물은 초안이며, 존느 구역 10의 서쪽 구역 6·동쪽 구역 12 연결은 추가했으나 북쪽 구역 9와 수로변 방면은 미구현이다. 기존 임시 출구는 저장·이동 호환을 위해 유지한다.
+
+### 존느 구역 6·10·12 도시 연결 (초안)
+
+[존느 구역 10 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-sector-10.html)는 구역 6이 북서쪽, 구역 12가 동쪽이라고 설명한다. 야생 구역 11을 통과하지 않는 두 도시 연결을 추가해 야생 구역 제한과 분리했다. 구체적인 도로 형태·건물과 출구 좌표는 초안이다. 북쪽 존느 구역 9 및 세종 수로변은 아직 연결하지 않았다.
