@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {stepField,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {zone18Map,zone18Visible,zone18Encounter} from '../lib/cloud-adventure/adventure-zone18.mjs';
 test('zone eighteen gate, road and saved position',()=>{
  const base={area:3,district:'lumiose-north-boulevard',interior:null,x:2,y:1,facing:'up',zaRoyaleRank:'C'};
@@ -29,4 +29,12 @@ test('Autumnal Avenue connects Centrico, Magenta Sector 9 and Zone 18',()=>{
  assert.equal(stepField({...road,...centrico},'up').district,'lumiose-autumnal-approach');
  const saved=restoreAdventurePosition(storeAdventurePosition({...road,x:11,y:8},35),35);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-autumnal-approach',11,8,['kept']]);
+});
+
+test('Autumnal Avenue and North Boulevard connect both ways and preserve saves',()=>{
+ const road={area:3,district:'lumiose-autumnal-approach',interior:null,x:1,y:8,zaRoyaleRank:'C',teamIds:['kept']};
+ const boulevard=stepField(road,'left');assert.deepEqual([boulevard.district,boulevard.x,boulevard.y],['lumiose-north-boulevard',9,1]);
+ const restored=restoreAdventurePosition(storeAdventurePosition({...road,...boulevard},36),36);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-north-boulevard',9,1,['kept']]);
+ const returned=stepField(restored,'up');assert.deepEqual([returned.district,returned.x,returned.y],['lumiose-autumnal-approach',1,8]);
+ assert.ok(fieldPath(fieldMap(road),{x:1,y:8},{x:11,y:15}).length);
 });

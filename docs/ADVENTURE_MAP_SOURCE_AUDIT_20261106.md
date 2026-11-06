@@ -866,3 +866,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 오토널 애비뉴와 야생 구역 18 북쪽 (초안)
 
 [구역 18 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_18)는 북쪽 오토널 애비뉴를 명시하고 [오토널 애비뉴 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/autumnal-avenue.html)는 센트리코 및 마젠타 구역 9 인접을 설명한다. 애비뉴·센트리코·구역 9와 구역 18 지상 북쪽을 연결하고 기존 랭크 B 제한을 유지했다. 방향·길 폭·출입 좌표는 초안이며 상점·실제 건물과 옥상은 미구현이다.
+
+### 오토널 애비뉴와 북쪽 대로 (초안)
+
+[오토널 애비뉴 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/autumnal-avenue.html)는 북서쪽 끝이 북쪽 대로라고 설명한다. 두 구역을 왕복 연결했다. 출입 타일과 주변 건물·도로의 구체적인 형상은 원작 영상 대조가 필요한 초안이다.
