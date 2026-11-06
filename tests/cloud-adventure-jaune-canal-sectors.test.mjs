@@ -109,3 +109,12 @@ test('Vert Sector 6 bridge leads to Sector 7 without altering Zone 17 gate',()=>
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,...seven,x:11,y:8},18),18);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector7',11,8,['kept']]);
 });
+test('Vert Sector 7 connects South Boulevard without disrupting the Sector 6 route',()=>{
+ const s={area:3,district:'lumiose-vert-sector7',interior:null,x:11,y:15,teamIds:['kept']};
+ const road=stepField(s,'down');assert.deepEqual([road.district,road.x,road.y],['lumiose-south-boulevard',18,1]);
+ assert.equal(stepField({...s,...road},'up').district,'lumiose-vert-sector7');
+ assert.ok(fieldPath(fieldMap(s),s,{x:1,y:8}).length);
+ assert.equal(stepField({...s,x:1,y:8},'left').district,'lumiose-vert-sector6');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...road},19),19);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-south-boulevard',18,1,['kept']]);
+});

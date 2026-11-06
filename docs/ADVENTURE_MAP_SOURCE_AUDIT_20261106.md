@@ -806,3 +806,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르 구역 6·7 다리와 잔디 광장 (초안)
 
 [도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/stat-boosters.html)는 구역 6에서 구역 7로 가는 다리와 구역 7의 잔디 광장을 명시한다. 기존 구역 6 수역·다리와 새 구역 7을 왕복 연결했다. 지도의 물길과 다리의 정확한 방향·길이, 광장 윤곽과 건물 좌표는 초안이며 구역 7의 옥상·홀로베이터와 시설은 미구현이다.
+
+### 베르 구역 7과 사우스 불르바르 (초안)
+
+[미션 40 위치 자료](https://www.pokemon-france.com/guides/legendes-pokemon-z-a/missions-secondaires/)는 구역 7이 사우스 불르바르에 접한다고 설명하고, [탐색 공략](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Exploring_Lumiose_City)은 불르바르의 홀로베이터에서 구역 7 옥상으로 가는 길을 설명한다. 구역 7과 기존 도로를 왕복 연결했다. 실제 지상 출입 위치·경로 형상은 초안이며 홀로베이터 미션과 옥상 경로는 아직 구현하지 않았다.
