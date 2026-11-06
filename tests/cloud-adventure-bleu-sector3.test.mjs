@@ -17,13 +17,14 @@ test('both Aymlis north gates connect to Bleu Sector 3 and preserve save positio
  assert.equal(stepField(old,'left').district,'lumiose-centrico-route');
  assert.deepEqual([restoreAdventurePosition(storeAdventurePosition(old,4),4).x,restoreAdventurePosition(storeAdventurePosition(old,4),4).y],[1,10]);
 });
-test('Bleu sewer entrance requires the requester and returns through the same entrance after restore',()=>{
+test('Bleu sewer approach preserves the barrier, unlock and return after restore',()=>{
  const city={area:3,district:'lumiose-bleu-sector3',interior:null,x:21,y:3,facing:'right',zaMission19Complete:true,teamIds:['kept']};
- assert.equal(stepField(city,'right').blocked,true);
- const sewer=stepField({...city,zaBleuSewerOpened:true},'right');
+ const tunnel=stepField(city,'right');assert.equal(tunnel.district,'lumiose-bleu3-sewer-approach');
+ assert.equal(stepField({...city,...tunnel,x:8,y:8},'right').blocked,true);
+ const gate={...city,...tunnel,x:21,y:8};assert.equal(stepField(gate,'right').blocked,true);
+ const sewer=stepField({...gate,zaBleuSewerOpened:true},'right');
  assert.deepEqual([sewer.district,sewer.x,sewer.y,sewer.zaSewerReturn],['lumiose-sewer',11,15,'bleu3']);
- const saved=restoreAdventurePosition(storeAdventurePosition({...city,...sewer,zaBleuSewerOpened:true},7),7);
- assert.equal(saved.zaSewerReturn,'bleu3');
- const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y,back.zaSewerReturn],['lumiose-bleu-sector3',21,3,null]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...gate,...sewer,zaBleuSewerOpened:true},7),7);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y,back.zaSewerReturn],['lumiose-bleu3-sewer-approach',21,8,null]);
  assert.equal(stepField({...saved,zaSewerReturn:null},'down').district,'lumiose-vernal');
 });
