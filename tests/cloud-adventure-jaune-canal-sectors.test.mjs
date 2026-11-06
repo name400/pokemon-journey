@@ -90,3 +90,13 @@ test('Vert Sector 3 connects Coulant Waterway and Vert Street',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,...canal},16),16);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-coulant-route',1,4,['kept']]);
 });
+test('Vert Sector 1 connects Vert Sector 3 and Vert Street',()=>{
+ const s={area:3,district:'lumiose-vert-sector3',interior:null,x:1,y:7,teamIds:['kept']};
+ const one=stepField(s,'left');assert.equal(one.district,'lumiose-vert-sector1');
+ assert.equal(stepField({...s,...one},'right').district,'lumiose-vert-sector3');
+ assert.ok(fieldPath(fieldMap({...s,...one}),one,{x:11,y:15}).length);
+ const street=stepField({...s,...one,x:11,y:15},'down');assert.equal(street.district,'lumiose-vert-street-route');
+ assert.equal(stepField({...s,...street},'up').district,'lumiose-vert-sector1');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...one,x:11,y:8},17),17);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector1',11,8,['kept']]);
+});

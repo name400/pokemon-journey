@@ -798,3 +798,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르 구역 3·쿨레 수로·베르 스트리트 (초안)
 
 [베르 구역 3 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_3)는 동쪽에 쿨레 수로, 남쪽에 베르 스트리트가 있다고 설명한다. [수로 자료](https://bulbapedia.bulbagarden.net/wiki/Coulant_Waterway)도 구역 3 동쪽과 베르 스트리트 방면의 관계를 확인한다. 기존 경로를 보존하며 양쪽에 왕복 연결을 추가했다. 정확한 도로·수로 윤곽과 출입 좌표, 구역 내 카페·옥상은 초안 또는 미구현이다.
+
+### 베르 구역 1과 구역 3·베르 스트리트 (초안)
+
+[구역 3 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_3)는 구역 1이 바로 서쪽에 있다고 설명한다. [도시 탐색 자료](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Exploring_Lumiose_City)는 구역 1에 베르 스트리트와 누보 카페 부근에서 접근하는 경로를 설명한다. 구역 1을 추가하고 구역 3·베르 스트리트와 왕복 연결했다. 건물의 규모·형상과 지상 출입구 정확한 위치는 초안이며 옥상·발판 및 시설은 아직 미구현이다.
