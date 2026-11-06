@@ -600,3 +600,9 @@ Actual city-connector position, path and tree shapes, and other entrances are no
 #### Zone 13 time-specific alphas and selected items
 
 [Game8](https://game8.jp/pokemon-legends-z-a/729772) and [PokeQuery](https://pokequery.com/games/legends-za/wild-zones/13) place alpha Trevenant north at night and alpha Weepinbell south during the day. The current draft mirrors those time conditions and preserves an already-started turn-based battle if the clock changes. [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists a Luxury Ball north, Ultra Ball west and Hyper Potion in the zone. Tile coordinates, original field movement, entrance alignments, TM081 and other pickups remain provisional or unimplemented.
+
+### Wild Zone 14: provisional Electrical Substation
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas) identifies the Magenta District substation, northern entrance, central converters, sandy patches and representative species; [Pokémon Kingdom](https://pente.koro-pokemon.com/legendsz-a/map-wild-zone-14.shtml) lists the encounters. Access begins after rank D. The connection from the existing North Boulevard substation story landmark is a draft; neither that precise street nor the building and equipment coordinates are surveyed.
+
+The yard, fixed encounter positions and probabilities are provisional. The alpha Excadrill, sunny-day Helioptile, boulder/field moves, TM039 and other items are not yet implemented. The existing substation quiz is preserved.
