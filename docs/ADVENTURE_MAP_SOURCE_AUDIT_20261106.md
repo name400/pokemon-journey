@@ -858,3 +858,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 야생 구역 9의 두 남쪽 출입구 (초안)
 
 [구역 9 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_9)는 두 남쪽 출입구가 에스티발 애비뉴에 연결된다고 설명한다. 기존 센트리코 직결을 에스티발 경유로 바꾸고 두 출입구의 왕복 연결과 랭크 F 제한을 유지했다. 기존 저장은 보존되며 도로·출입구의 정확한 형태와 좌표는 초안이다.
+
+### 야생 구역 18 남쪽과 마젠타 구역 9 (초안)
+
+[구역 18 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_18)는 남쪽에 마젠타 구역 9가 있다고 설명한다. [구역 9 위치 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_9)는 구역 9가 콰자르티코 북쪽에 있다고 명시한다. 지상 경로를 왕복 연결하고 구역 18의 랭크 B 제한을 유지했다. 건물·골목과 출입구 좌표는 초안이며 원작의 옥상·비계 연결은 미구현이다.
