@@ -660,3 +660,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ## Zone 5, Bleu Plaza and Rust Syndicate approach (draft)
 
 [Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-16-guide-all-pokemon-and-alphas) places Bleu Plaza immediately south of Zone 5 near the Rust Syndicate Office. The direct transition is replaced by a walkable street linking the two zone drafts and the existing Rust approach. The street shape, widths, gate coordinates and exact route to the office are provisional and are not established by the cited location description.
+
+## Hotel Z and Vert Street to Wild Zone 17 (draft)
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-17-guide-all-pokemon-and-alphas) places Zone 17 northeast of Hotel Z and southwest of Zone 2, behind Racine Construction. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Lumiose_City) lists a Wild Zone 17 entrance on Vert Street. This build adds a street connection from the Hotel Z area to a Zone 17 entrance while preserving the prior Vert Sector 2 connection. The street alignment, building and gate tile coordinates are provisional; Racine Construction and exact surroundings are not yet implemented.
