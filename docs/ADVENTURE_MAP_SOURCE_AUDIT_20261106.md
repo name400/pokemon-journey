@@ -148,4 +148,11 @@
 
 [구역 2 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-2-guide-all-pokemon-and-alphas)는 Emma의 의뢰를 마친 뒤 동남쪽에 낮의 우두머리 잉어킹 Lv.30과 밤의 우두머리 별가사리 Lv.32가 나타난다고 설명한다. [우두머리 잉어킹 보도](https://www.gamesradar.com/games/pokemon/a-brave-alpha-magikarp-in-pokemon-legends-z-a-is-getting-revenge-by-blasting-unsuspecting-players-with-hydro-pump-instead-of-the-usual-splash-attack/)는 하이드로펌프 사용을 확인한다. 바위 통로를 열고 기존 세 의뢰를 마치면 섬에서 시간에 맞는 우두머리와 전투·포획할 수 있다. 전투 도주 시 재도전할 수 있고 처치·포획 후 구역을 벗어나면 재출현한다.
 
-섬 좌표·의뢰 완료를 판별하는 세부 경계·재출현 방식은 임시다. 직접 필드에서 투구, 우두머리의 접근·실시간 공격과 별가사리의 고유 기술은 아직 구현하지 않았다. 위치의 정확한 도트 전환 및 Rouge Plaza·Centrico·Café Woof는 여전히 미완성이다.
+섬 좌표·의뢰 완료를 판별하는 세부 경계·재출현 방식은 임시다. 우두머리의 접근·실시간 공격과 별가사리의 고유 기술은 아직 구현하지 않았다. 직접 필드 투구는 아래 항목을 참조한다. 위치의 정확한 도트 전환 및 Rouge Plaza·Centrico·Café Woof는 여전히 미완성이다.
+
+
+## 구역 2 섬 우두머리 필드 투구 — 부분 구현
+
+[포켓몬 공식 안내](https://legends.pokemon.com/en-us/news/adventure)는 필드에서 야생 포켓몬을 조준해 볼을 던질 수 있고 우두머리는 발견 시 추격·공격한다고 설명한다. 섬 우두머리를 가까이서 직접 조준해 볼을 던질 수 있도록 연결했다. 서버는 위치·출현 조건·볼 수량을 재확인하고 포획과 소모를 함께 저장한다. 실패하면 해당 우두머리와 기존 전투가 시작된다.
+
+조준 사거리·실패 시 즉시 전투·개체 출현 조건은 초안이다. 현재 전투는 턴 방식이며 우두머리의 실시간 추격·공격과 플레이어 회피, 뒤쪽 판정은 아직 구현되지 않았다. 구역 2 수역의 정확한 윤곽과 Rouge Plaza·Centrico·Café Woof의 실제 지형도 미완성이다.
