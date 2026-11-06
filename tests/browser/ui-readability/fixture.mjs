@@ -1,3 +1,4 @@
+import {randomizedAliasFixture} from '../../fixtures/randomized-alias.mjs';
 import {wildEventReviewFixture} from '../../fixtures/wild-event-alias.mjs';
 import {CLASSIC_REWARD_REGISTRY} from '../../../lib/rogue-classic-rewards.mjs';
 import {fixture} from '../../fixtures/dna-persistent.mjs';
@@ -10,6 +11,7 @@ import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemon.mjs';
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='randomized-alias-review')return randomizedAliasFixture({boxId:'alias'});
  if(scenario==='active-breeder-alias'||scenario==='active-breeder-sketch')return wildEventReviewFixture('expert-breeder',{sketch:scenario.endsWith('sketch'),reserveId:'alias'});
  if(scenario.startsWith('active-wild-event-')){const item=scenario.slice('active-wild-event-'.length),type=['mysterious-chest','berries','fight-or-flight','uncommon-breed'].find(t=>item===t+'-normal'||item===t+'-sketch');if(type)return wildEventReviewFixture(type,{sketch:item.endsWith('-sketch'),reserveId:'alias'});}
  if(['active-alias-repair','active-sketch-repair','active-trainer-alias-repair','active-trainer-sketch-repair','active-challenge-alias-repair','active-ability-alias-repair','active-ability-sketch-repair','active-ability-fusion-alias-repair','active-ability-fusion-sketch-repair','active-event-alias-repair','active-event-sketch-repair','active-dream-alias-repair','active-dream-sketch-repair','active-event-challenge-alias-repair','active-event-ability-sketch-repair'].includes(scenario)){
