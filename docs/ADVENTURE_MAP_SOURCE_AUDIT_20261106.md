@@ -902,3 +902,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 베르 6·7번지 다리 접근 (초안)
 
 [원작 도구 위치 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/stat-boosters.html)는 베르 6번지에서 7번지로 가는 다리를 언급한다. 기존 양방향 연결 양쪽에 걸을 수 있는 다리 접근 타일을 표현했다. 다리의 폭·정확한 선형과 수면 윤곽은 초안이다.
+
+### 베르 거리와 사우스 불르바르 교차로 (초안)
+
+[베르 포켓몬센터 위치 자료](https://bulbapedia.bulbagarden.net/wiki/Lost_Pok%C3%A9_Ball_collector)는 센터가 두 도로의 교차점에 있다고 설명한다. 기존 베르 거리와 사우스 불르바르 지도를 왕복 연결했다. 교차로의 실제 위치·폭과 센터 건물까지의 동선은 추가 원작 시각 대조가 필요한 초안이다.
