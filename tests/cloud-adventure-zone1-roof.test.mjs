@@ -17,3 +17,12 @@ test('Zone 1 rock and rooftop ladder preserve the old ground route and saved roo
  const old=restoreAdventurePosition(storeAdventurePosition({...ground,x:1,y:3},53),53);
  assert.deepEqual([old.district,old.x,old.y,old.teamIds],['lumiose-zone1',1,3,['kept']]);
 });
+
+
+test('Alpha Pidgey appears on the roof after the three requests and stays spent on reload',()=>{
+ const roof={area:3,district:'lumiose-zone1-roof',interior:null,x:18,y:6,facing:'up',zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3,teamIds:['kept']};
+ assert.notEqual(fieldMap({...roof,zaTradeQuest:1})[5][18],'p');
+ assert.equal(fieldMap(roof)[5][18],'p');assert.equal(fieldDialogue(roof).action,'zone1RoofAlpha');
+ const loaded=restoreAdventurePosition(storeAdventurePosition({...roof,zaZone1RoofAlphaSpent:true},54),54);
+ assert.equal(loaded.zaZone1RoofAlphaSpent,true);assert.notEqual(fieldMap(loaded)[5][18],'p');
+});
