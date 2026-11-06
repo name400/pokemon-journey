@@ -204,6 +204,16 @@ test('zone two eastern island is gated by a rock and old locations return to the
  const after=storeAdventurePosition(s,20),loaded=restoreAdventurePosition(after,20);assert.deepEqual([loaded.x,loaded.y],[20,11]);assert.equal(loaded.zaZone2RockCleared,true);
 });
 
+test('zone two eastern bank connects through the northeast side and old shore saves remain safe',()=>{
+ const map=lumioseZone2Map(),shore=[...[8,9,10,11,12,13].map(y=>[16,y]),[17,13],[17,14],[18,14],[18,15]];for(const [x,y] of shore)assert.equal(map[y][x],'~');
+ const route=fieldPath(map,{x:11,y:8},{x:18,y:12});assert.ok(route.length);
+ let s={area:3,district:'lumiose-zone2',x:11,y:8};let crossed=false;
+ for(const d of route){const step=stepField(s,d);assert.equal(step.blocked,undefined);s={...s,...step};if(s.x===14&&s.y>=5&&s.y<=7)crossed=true;}
+ assert.equal(crossed,true);assert.equal(interactionAt({...s,facing:'right'}).tile,'r');assert.equal(stepField(s,'right').blocked,true);
+ for(const [x,y] of shore){const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x,y,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},9);old.districtPosition.zone2Layout=5;const restored=restoreAdventurePosition(old,9);assert.equal(restored.district,'lumiose-zone2');assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,42);}
+ const stale=storeAdventurePosition({area:3,district:'lumiose-zone2',x:16,y:10,regionId:6,districtReturnRegion:1},9);stale.districtPosition.zone2Layout=5;assert.equal(restoreAdventurePosition(stale,10).district,null);
+});
+
 test('zone two island alpha requires the route and Emma requests and preserves existing saves',()=>{
  const base={district:'lumiose-zone2',x:20,y:12,zaZone2RockCleared:true,zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3};assert.equal(zone2IslandAlphaTarget(base).distance,1);assert.equal(zone2IslandAlphaTarget({...base,x:17,y:8}),null);assert.equal(zone2IslandAlphaTarget({...base,zaZone2AlphaSpent:true}),null);assert.equal(lumioseZone2Map(base)[11][20],'p');assert.equal(lumioseZone2Map({...base,zaSableyeQuest:2})[11][20],'g');assert.equal(lumioseZone2Map({...base,zaZone2RockCleared:false})[11][20],'g');assert.equal(lumioseZone2Map({...base,zaZone2AlphaSpent:true})[11][20],'g');
 });
