@@ -14,6 +14,7 @@ import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 export function createFixture(scenario='eggs'){
  if(['randomized-fusion-active-alias-review','randomized-fusion-active-sketch-review'].includes(scenario))return randomizedFusionAliasFixture({boxId:'alias',active:true,abilityRandom:true,sketch:scenario.includes('sketch')}).doc;
  if(['randomized-alias-review','randomized-ended-alias-review','randomized-active-alias-review','randomized-sketch-review','randomized-active-sketch-review'].includes(scenario))return randomizedAliasFixture({boxId:'alias',ended:scenario==='randomized-ended-alias-review',active:scenario==='randomized-active-alias-review'||scenario==='randomized-active-sketch-review',sketch:scenario.includes('sketch')});
+ if(scenario==='randomized-fusion-form-event-sketch-review')return wildEventReviewFixture('berries',{randomMoves:1,randomFusion:true,randomForm:{id:479,key:'wash'},formAsDonor:true,sketch:true,reserveId:'alias'});
  if(scenario==='randomized-fusion-event-sketch-review')return wildEventReviewFixture('fiery-fallout',{randomMoves:1,randomFusion:true,sketch:true,reserveId:'alias'});
  if(scenario==='randomized-fusion-event-alias-review')return wildEventReviewFixture('fiery-fallout',{randomMoves:1,randomFusion:true,reserveId:'alias'});
  if(scenario==='randomized-event-alias-review')return wildEventReviewFixture('fiery-fallout',{randomMoves:1,reserveId:'alias'});
