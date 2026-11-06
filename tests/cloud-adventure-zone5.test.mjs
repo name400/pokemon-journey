@@ -84,3 +84,16 @@ test('sludge accepts water attacks and Confusion but not Psybeam or fainted Pok�
  assert.equal(canClearZone5Sludge({hp:1,moves:['환상빔']},moves),false);
  assert.equal(canClearZone5Sludge({hp:0,moves:['염동력']},moves),false);
 });
+
+
+test('Zone 5 draft web reaches a second rooftop and retains older rooftop saves',()=>{
+ const roof={area:3,district:'lumiose-zone5',interior:null,zaZone5Upper:true,x:11,y:5,facing:'down',teamIds:['kept']};
+ assert.equal(fieldDialogue(roof).action,'zone5OpenWeb');
+ assert.equal(fieldPath(fieldMap(roof),roof,{x:12,y:8}).length,0);
+ const open={...roof,zaZone5WebOpen:true};assert.ok(fieldPath(fieldMap(open),open,{x:12,y:8}).length);
+ assert.equal(fieldDialogue({...open,x:12,y:8,facing:'down'}).action,'zone5WebFullHeal');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:12,y:8,zaZone5WebFullHeal:true},64),64);
+ assert.deepEqual([saved.x,saved.y,saved.zaZone5WebOpen,saved.zaZone5WebFullHeal,saved.teamIds],[12,8,true,true,['kept']]);
+ assert.notEqual(fieldMap(saved)[9][12],'k');
+ for(const [x,y] of [[4,5],[11,4],[18,5]]){const old=restoreAdventurePosition(storeAdventurePosition({...roof,x,y},65),65);assert.deepEqual([old.x,old.y],[x,y]);}
+});
