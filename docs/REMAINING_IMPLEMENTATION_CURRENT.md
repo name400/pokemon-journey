@@ -455,3 +455,5 @@ Active move-alias review now also covers first idle single turns in verified tra
 Switched-active safety: move-use flags can reset on switch-in. Review now also requires a turn-one battle log and requires all earlier moves by the same logged label to be identifiable current moves other than the duplicate. Duplicate use and ambiguous histories remain excluded.
 
 신규 도전의 AI 대상 선택은 로컬 대상 점수에 가중 추첨을 적용한다. 점수 계산과 추첨 시점·난수 스트림은 원본과 달라 완전한 동등성은 미구현이며, 기존 도전의 규칙은 유지한다.
+
+신규 도전 AI의 단순 혼란 상태 기술은 원본의 고정 대상 이득 점수를 사용한다. 다른 속성과 기술의 원본 점수, 대상 후보 범위, 추첨 순서 및 난수 흐름은 여전히 별도 구현이 필요하다.
