@@ -115,7 +115,7 @@ API 검사에서 읽기 전용 조회, 확인 누락, 성공 저장, 동시 수�
 
 Fresh active lead review also supports the first idle turn of verified single trainer-test and weird-dream battles. It requires matching event metadata, no unresolved opening action, dialogue or switch selection, and the same strict untransformed, unused move-slot checks. Representative isolated snapshots check request refresh, reloaded continuation, RNG and unrelated save preservation, plus rejection of ambiguous states. Real-device and natural event play remain unverified; unverified event opening outcomes remain excluded.
 
-Fresh idle single-battle active Sketch review supports explicit removal of a verified duplicate slot while preserving the other slot’s PP and retaining a backup. Representative randomized fixture and mismatched/stale records were tested; switched-active turns remain excluded.
+Fresh idle single-battle active Sketch review supports explicit removal of a verified duplicate slot while preserving the other slot’s PP and retaining a backup. Representative randomized fixture and mismatched/stale records were tested; ambiguous switched-active histories remain excluded.
 
 Fresh idle single-battle active fusion, including a representative combined randomization and Sketch case, supports confirmed review when donor and battle records agree. The donor, unsplice preview, move/PP records and combat state are preserved; invalid donor records or mismatched snapshots remain blocked. Other fusion forms and natural gameplay have not been exhaustively verified.
 
@@ -123,10 +123,12 @@ Fresh idle ordinary double battles support confirmed active-slot review when bot
 
 Clown and volcano double battles permit active review only when both opening effects and exact sources are verified and the selected active has no unrelated volatile effect. Representative both-position continuations and damaged evidence were tested. Selected-active misses and verified Flash Fire / Well-Baked Body are supported when both opening traces, weather and enemy boosts agree; natural gameplay and physical devices remain unverified.
 
-Later idle ordinary single-battle active review is supported for an unchanged lead with unused duplicate slots and matching recorded history. Representative turn-two wild and trainer tests preserve the prior move, PP, usage and combat state; locked, changed or ambiguous histories remain blocked. Switched-active cases are not supported.
+Later idle ordinary single-battle active review is supported for an unchanged lead with unused duplicate slots and matching recorded history. Representative turn-two wild and trainer tests preserve the prior move, PP, usage and combat state; locked, changed or ambiguous histories remain blocked. Previously used or ambiguous switched-active cases are not supported.
 
 Later idle ordinary double-battle review supports either active slot when both requests agree and the selected Pokémon has not switched or used the duplicate. Representative turn-two tests checked both actors, preserved history and rejected mismatched partner state.
 
 Later ordinary-battle active review also supports validated fusion and Sketch when duplicate slots remain unused and all recorded PP, donor and combat history agree. Representative single battles with combined ability/move randomization were checked; double and other form combinations have not been exhaustively verified.
 
 Later active review allows trainer-test, weird-dream and verified wild-event records only when no opening move or volatile effect remains and unused duplicate/history checks pass. Representative berries and fight-or-flight turn-two continuations and mismatched-event rejections were tested. Other event and form combinations were not exhaustively verified.
+
+Newly switched active Pokémon with no prior move use can be reviewed only when the immediately previous active slot, switch log, move slots and direct history agree. Representative single wild and trainer battles were tested through a switch, review, reload and next action. Previously used and ambiguous cases remain blocked.
