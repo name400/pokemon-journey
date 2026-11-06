@@ -595,4 +595,8 @@ The snowy grid, water outline, field coordinates and the sole west connector to 
 
 [Gamer Guides](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/aymlis-park) locates the zone along North Boulevard, Heracross near the western entrance and Pinsir south of the path, and describes day/night species. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_13) lists encounter levels. Rank E access, a west entrance, forest strips, visible Heracross and Pinsir, and day/night grass encounters are represented.
 
-Actual city-connector position, path and tree shapes, and other entrances are not surveyed. This is a provisional path layout; alpha Trevenant and Weepinbell, original field behaviour, tools and terrain obstacles remain unimplemented.
+Actual city-connector position, path and tree shapes, and other entrances are not surveyed. This is a provisional path layout; original field behaviour, most tools and terrain obstacles remain unimplemented.
+
+#### Zone 13 time-specific alphas and selected items
+
+[Game8](https://game8.jp/pokemon-legends-z-a/729772) and [PokeQuery](https://pokequery.com/games/legends-za/wild-zones/13) place alpha Trevenant north at night and alpha Weepinbell south during the day. The current draft mirrors those time conditions and preserves an already-started turn-based battle if the clock changes. [Pokémon-France](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/) lists a Luxury Ball north, Ultra Ball west and Hyper Potion in the zone. Tile coordinates, original field movement, entrance alignments, TM081 and other pickups remain provisional or unimplemented.
