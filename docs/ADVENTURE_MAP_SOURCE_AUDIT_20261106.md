@@ -349,4 +349,10 @@
 
 하수도 지도, 시청·분수·도장의 좌표와 클레피 레벨은 초안이며 원작의 상세 통로·문·동행 장면을 재현하지 않았다. 기존의 턴제 엔진을 사용하고 도구·스토리 단계는 저장된다. 하수도 진입 후 나갔다 다시 들어와도 진행 단계를 보존한다. 호텔에서 받는 퍼포먼스 스니커는 낮에 지급되지만 실제 날짜가 바뀌었는지는 추적하지 않으며 이동 속도 효과도 미구현이다. 기술머신은 지급되지만 가르치는 기능은 미구현이고 미션 20 이후도 미구현이다. 위 미션 19 도입 절의 시청 수색부터 승급전까지 미구현 서술은 이 절로 갱신된다. 실제 기기·운영에서는 검증하지 않았다.
 
+## 미션 20~23 Syndicate와 폭주 사건 — 부분 구현
+
+[미션 20 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-20-a-request-from-the-rust-syndicate)와 [상대 기술 자료](https://www.serebii.net/legendsz-a/mainmissions/arequestfromtherustsyndicate.shtml)를 대조해 단원·Philippe 턴제 배틀, 빚에 관한 설명과 호텔 회의를 연결했다. 미션 21~23의 [입치트](https://www.thonky.com/pokemon-legends-z-a/main-mission-21-a-rogue-mega-mawile), [거북손데스](https://www.thonky.com/pokemon-legends-z-a/main-mission-22-a-rogue-mega-barbaracle), [전룡과 선행 Gwynn 배틀](https://www.thonky.com/pokemon-legends-z-a/main-mission-23-a-rogue-mega-ampharos), 각 메가스톤과 호텔 보고를 구현했다. 세 사건 후 Philippe의 빈집 의뢰에서 고오스·고우스트·팬텀을 각각 포획하고 입주자에게 이야기하는 흐름까지 연결했다. 포획은 기존 파티·보유함 경로를 사용하며, 일반 포획과 기절 후 포획 기회를 모두 지원한다.
+
+Syndicate 사무소, 빈집과 세 사건의 좌표·상세 구조, 보스 및 빈집 포켓몬 Lv.49, Gwynn 재대결의 기술·보상은 임시다. 사무소 앞의 두 단원은 한 번의 싱글 배틀로 간략화했고 동료의 동시 참전과 활공·보스 기믹은 미구현이다. 빚 대화는 실제 지갑을 차감하지 않는다. 세 사건을 보고해도 미션 20을 완료 처리하지 않으며, 이어지는 하수도 결정 정리·SBC 연전·은행 사건 및 미션 24는 미구현이다. 위 미션 19 절의 미션 20 이후 미구현 서술은 이 절로 일부 갱신된다. 실기기·운영에서는 검증하지 않았다.
+
 앱솔 조건은 [원작 필수 파티 안내](https://bulbapedia.bulbagarden.net/wiki/Required_Party_Pok%C3%A9mon)에서 앱솔나이트를 지닌 앱솔의 파티 보유로 확인했다. 따라서 실제 첫 출전을 강제하지 않고 기존 파티 검사 방식을 유지한다.
