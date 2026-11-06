@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Magenta Sector 4 links Autumnal Avenue and gated Zone 7 with safe saves',()=>{
+ const avenue={area:3,district:'lumiose-autumnal-approach',interior:null,x:1,y:14,zaRoyaleRank:'V',teamIds:['kept']};
+ const sector=stepField(avenue,'left');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-magenta-sector4',21,8]);
+ const s={...avenue,...sector};assert.ok(fieldPath(fieldMap(s),s,{x:11,y:15}).length);
+ assert.equal(stepField(s,'right').district,'lumiose-autumnal-approach');assert.equal(stepField({...s,x:11,y:15},'down').blocked,true);
+ const zone=stepField({...s,x:11,y:15,zaRoyaleRank:'F'},'down');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone7',5,1]);
+ assert.equal(stepField({...s,...zone,zaRoyaleRank:'F'},'up').district,'lumiose-magenta-sector4');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:5,y:6},72),72);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector4',5,6,['kept']]);
+ assert.equal(fieldDialogue({...saved,facing:'up'}).name,'카페 포켓몬아미 (위치 초안)');
+});

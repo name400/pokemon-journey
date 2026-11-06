@@ -978,3 +978,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 로즈 3번지와 야생 구역 7 (초안)
 
 [스토리 안내](https://pokemundo.com.br/detonado/pokemon-legends-z-a)와 [구역 안내](https://www.pokemythology.net/detonados/detonado-legends-z-a/)는 로즈 광장 구역 7이 3번지와 4번지 사이에 있다고 설명한다. 기존 3번지와 구역 7을 왕복 연결하고 랭크 F 제한을 유지했다. 정확한 출입구 위치·거리 선형은 원작 지도·영상 대조가 필요한 초안이다.
+
+### 로즈 4번지와 광장·오토널 애비뉴 (초안)
+
+[로즈 4번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_4)는 이 번지가 로즈 광장 북쪽, 오토널 애비뉴 인근에 있으며 카페 포켓몬아미가 있다고 설명한다. 두 지역에 왕복 연결되는 거리 초안을 추가하고 구역 7의 랭크 F 제한을 유지했다. 정확한 좌표·건물 형상은 초안이며 카페 내부·서비스와 이 번지의 미션 28 현장 이전은 미완료다. 기존 미션 경로는 보존한다.
