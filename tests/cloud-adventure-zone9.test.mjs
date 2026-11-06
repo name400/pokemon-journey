@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone9Map,zone9Encounter,zone9Visible,zone9Item} from '../lib/cloud-adventure/adventure-zone9.mjs';
-import {stepField,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldMap,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone nine entry and rooftop keep saved positions',()=>{
  const base={area:3,district:'lumiose-estival-approach',interior:null,x:21,y:12,facing:'right',zaRoyaleRank:'V'};
  assert.equal(stepField(base,'right').blocked,true);const entered=stepField({...base,zaRoyaleRank:'F'},'right');assert.equal(entered.district,'lumiose-zone9');
@@ -44,4 +44,13 @@ test('Centrico access routes through Estival before reaching the second south ga
  assert.equal(stepField({...s,...road},'right').blocked,true);
  const zone=stepField({...s,...road,zaRoyaleRank:'F'},'right');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone9',11,15]);
  assert.equal(stepField({...s,...zone,zaRoyaleRank:'F'},'down').district,'lumiose-estival-approach');
+});
+
+test('Magenta Sector 3 and Autumnal Avenue connect in both directions',()=>{
+ const sector={area:3,district:'lumiose-magenta-sector3',interior:null,x:21,y:8,zaRoyaleRank:'V',teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(sector),{x:4,y:1},sector).length);
+ const avenue=stepField(sector,'right');assert.deepEqual([avenue.district,avenue.x,avenue.y],['lumiose-autumnal-approach',1,6]);
+ assert.ok(fieldPath(fieldMap({...sector,...avenue}),avenue,{x:11,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...avenue},34),34);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-autumnal-approach',1,6,['kept']]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector3',21,8]);
 });
