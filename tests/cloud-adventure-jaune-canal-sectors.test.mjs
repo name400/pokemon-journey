@@ -47,3 +47,15 @@ test('Jaune Sector 2 joins the Saison promenade and preserves saved position',()
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,...two,x:5,y:6},12),12);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-jaune-sector2',5,6,['kept']]);
 });
+test('Jaune Street links Sector 2, Centrico and the Jaune Plaza approach',()=>{
+ const s={area:3,district:'lumiose-jaune-sector2',interior:null,x:11,y:1,teamIds:['kept'],zaRoyaleRank:'F'};
+ const street=stepField(s,'up');assert.equal(street.district,'lumiose-jaune-street');
+ assert.equal(stepField({...s,...street},'down').district,'lumiose-jaune-sector2');
+ assert.ok(fieldPath(fieldMap({...s,...street}),street,{x:1,y:8}).length);
+ const plaza=stepField({...s,...street,x:1,y:8},'left');assert.equal(plaza.district,'lumiose-centrico-route');
+ assert.equal(stepField({...s,...plaza},'up').district,'lumiose-jaune-street');
+ const garden=stepField({...s,...street,x:21,y:8},'right');assert.equal(garden.district,'lumiose-jaune-garden-route');
+ assert.equal(stepField({...s,...garden},'down').district,'lumiose-jaune-street');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...street,x:11,y:8},13),13);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-jaune-street',11,8,['kept']]);
+});

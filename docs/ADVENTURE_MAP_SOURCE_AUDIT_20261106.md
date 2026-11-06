@@ -777,4 +777,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 존느 구역 2와 쉐종 운하변 (초안)
 
-[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_2)는 구역 2 남쪽이 쉐종 운하변에 접한다고 설명하고, [도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 서쪽 건물군으로 둘러싸인 안뜰을 명시한다. 두 구간을 왕복 연결하고 안뜰을 표현했다. 건물·안뜰·입구의 정확한 크기와 위치는 초안이며 북쪽 존느 스트리트와 저스티스 도장의 상세 구조·기능은 미구현이다.
+[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_2)는 구역 2 남쪽이 쉐종 운하변에 접한다고 설명하고, [도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 서쪽 건물군으로 둘러싸인 안뜰을 명시한다. 두 구간을 왕복 연결하고 안뜰을 표현했다. 건물·안뜰·입구의 정확한 크기와 위치는 초안이며 북쪽 존느 스트리트는 연결했으나 저스티스 도장의 상세 구조·기능은 미구현이다.
+
+### 존느 스트리트와 구역 2 (초안)
+
+[존느 스트리트 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Street)는 이 거리가 센트리코 광장에서 존느 광장을 거쳐 노스 불르바르로 이어지며 구역 2를 지난다고 설명한다. [구역 2 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_2)는 북쪽 경계가 존느 스트리트라고 명시한다. 구역 2·센트리코·기존 존느 광장 접근로를 왕복 연결했다. 세부 타일·방향과 광장 접근 경로는 초안이며, 노스 불르바르 방면과 존느 포켓몬센터는 미구현이다.
