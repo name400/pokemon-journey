@@ -729,4 +729,8 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 
 ### 블루 스트리트와 블루 구역 6 (초안)
 
-[Bleu Street 위치 설명](https://bulbapedia.bulbagarden.net/wiki/Bleu_Street)은 도로가 블루 구역 6을 지난다고 설명하며, [시설 위치 자료](https://psypokes.com/plza/servicenpcs.php)는 구역 6의 Passage de la Félicité 출입구가 블루 스트리트에 있다고 설명한다. 기존 블루 구역 6 접근로와 블루 스트리트에 왕복 연결을 추가했다. 출입구의 정확한 위치와 도로 폭은 초안이며 쇼핑 아케이드와 내부 상점은 구현하지 않았다.
+[Bleu Street 위치 설명](https://bulbapedia.bulbagarden.net/wiki/Bleu_Street)은 도로가 블루 구역 6을 지난다고 설명하며, [시설 위치 자료](https://psypokes.com/plza/servicenpcs.php)는 구역 6의 Passage de la Félicité 출입구가 블루 스트리트에 있다고 설명한다. 기존 블루 구역 6 접근로와 블루 스트리트에 왕복 연결을 추가했다. 출입구의 정확한 위치와 도로 폭은 초안이며 쇼핑 아케이드 연결은 추가했으나 상점 기능과 정확한 구조는 미구현이다.
+
+### 파사주 드 라 펠리시테 (초안)
+
+[블루 스트리트](https://bulbapedia.bulbagarden.net/wiki/Bleu_Street)는 파사주 드 라 펠리시테 입구를 명시하고 [구역 6 옥상 경로 안내](https://raiderking.com/pokemon-legends-z-a-all-flabebe-flower-color-locations/)는 블루 스트리트에서 통로를 지나 구역 6 쪽으로 갈 수 있다고 설명한다. 두 쪽 출입을 연결하되 기존 직접 연결도 유지한다. 실내 상점 위치와 통로 크기·출입구 좌표는 초안이며 상점 기능은 아직 없다.
