@@ -123,7 +123,7 @@ Fresh idle ordinary double battles support confirmed active-slot review when bot
 
 Clown and volcano double battles permit active review only when both opening effects and exact sources are verified and the selected active has no unrelated volatile effect. Representative both-position continuations and damaged evidence were tested. Selected-active misses and verified Flash Fire / Well-Baked Body are supported when both opening traces, weather and enemy boosts agree; natural gameplay and physical devices remain unverified.
 
-Later idle ordinary single-battle active review is supported for an unchanged lead with unused duplicate slots and matching recorded history. Representative turn-two wild and trainer tests preserve the prior move, PP, usage and combat state; locked, changed or ambiguous histories remain blocked. Previously used or ambiguous switched-active cases are not supported.
+Later idle ordinary single-battle active review is supported for an unchanged lead with unused duplicate slots and matching recorded history. Representative turn-two wild and trainer tests preserve the prior move, PP, usage and combat state; locked, changed or ambiguous histories remain blocked. Duplicate-used or ambiguous switched-active cases are not supported.
 
 Later idle ordinary double-battle review supports either active slot when both requests agree and the selected Pokémon has not switched or used the duplicate. Representative turn-two tests checked both actors, preserved history and rejected mismatched partner state.
 
@@ -131,6 +131,8 @@ Later ordinary-battle active review also supports validated fusion and Sketch wh
 
 Later active review allows trainer-test, weird-dream and verified wild-event records only when no opening move or volatile effect remains and unused duplicate/history checks pass. Representative berries and fight-or-flight turn-two continuations and mismatched-event rejections were tested. Other event and form combinations were not exhaustively verified.
 
-Newly switched active Pokémon with no prior move use can be reviewed only when the immediately previous active slot, switch log, move slots and direct history agree. Representative single wild and trainer battles were tested through a switch, review, reload and next action. Previously used and ambiguous cases remain blocked.
+Newly switched active Pokémon with no prior move use can be reviewed only when the immediately previous active slot, switch log, move slots and direct history agree. Representative single wild and trainer battles were tested through a switch, review, reload and next action. Duplicate-used and ambiguous cases remain blocked.
 
-Safety correction: move-slot `used` flags and the direct history ledger can reset when switching in. Fresh-switch review additionally requires a complete turn-one battle log and rejects any earlier move by the same logged Pokémon label. This is deliberately conservative when labels collide; missing or ambiguous evidence remains unchanged. A use → switch out → switch back regression checks the reset-flag case.
+Safety correction: move-slot `used` flags and the direct history ledger can reset when switching in. Fresh-switch review additionally requires a complete turn-one battle log and rejects earlier moves by the same logged Pokémon label unless they resolve to a current nonduplicate move. This is deliberately conservative when labels collide; missing or ambiguous evidence remains unchanged. A use → switch out → switch back regression checks the reset-flag case.
+
+For switched actives with prior use, a complete battle log may establish that every earlier move resolves to a current nonduplicate move. Representative use → switch out → switch back → review and next-action flow preserves the log and PP; prior duplicate use remains blocked.
