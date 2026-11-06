@@ -80,3 +80,13 @@ test('Saison bridge connects Vert Sector 3 and Vert Plaza',()=>{
  const restored=restoreAdventurePosition(storeAdventurePosition({...s,...sector,x:11,y:8},15),15);
  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-vert-sector3',11,8,['kept']]);
 });
+test('Vert Sector 3 connects Coulant Waterway and Vert Street',()=>{
+ const s={area:3,district:'lumiose-vert-sector3',interior:null,x:21,y:7,teamIds:['kept']};
+ const canal=stepField(s,'right');assert.equal(canal.district,'lumiose-coulant-route');
+ assert.equal(stepField({...s,...canal},'left').district,'lumiose-vert-sector3');
+ assert.ok(fieldPath(fieldMap(s),s,{x:17,y:15}).length);
+ const street=stepField({...s,x:17,y:15},'down');assert.equal(street.district,'lumiose-vert-street-route');
+ assert.equal(stepField({...s,...street},'up').district,'lumiose-vert-sector3');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...canal},16),16);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-coulant-route',1,4,['kept']]);
+});

@@ -794,3 +794,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 쉐종 운하 다리와 베르 구역 3 (초안)
 
 [쉐종 운하변 자료](https://www.pokepedia.fr/Quai_du_Canal_des_Saisons)는 베르 구역 3과 운하변을 잇는 다리를 명시한다. [도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 구역 3 잔디 지대와 베르 광장 사이 계단을 설명한다. 운하를 건너는 길과 구역 3, 기존 광장을 왕복 연결하고 잔디를 표현했다. 다리 폭·계단과 지형의 정확한 좌표는 초안이며 카페·옥상·시설은 미구현이다.
+
+### 베르 구역 3·쿨레 수로·베르 스트리트 (초안)
+
+[베르 구역 3 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_3)는 동쪽에 쿨레 수로, 남쪽에 베르 스트리트가 있다고 설명한다. [수로 자료](https://bulbapedia.bulbagarden.net/wiki/Coulant_Waterway)도 구역 3 동쪽과 베르 스트리트 방면의 관계를 확인한다. 기존 경로를 보존하며 양쪽에 왕복 연결을 추가했다. 정확한 도로·수로 윤곽과 출입 좌표, 구역 내 카페·옥상은 초안 또는 미구현이다.
