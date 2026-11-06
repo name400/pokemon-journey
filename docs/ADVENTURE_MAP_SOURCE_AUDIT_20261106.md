@@ -718,3 +718,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 블루 구역 7 남쪽과 사우스 불르바르 (초안)
 
 [Bleu Sector 7 위치 목록](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-7.html)은 구역 남쪽을 South Boulevard로 표시한다. [도구 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 연구소 입구가 South Boulevard에 있음을 뒷받침한다. 구역 7 남쪽과 새 거리, 기존 연구소 앞 구간을 이어 기존 연구소·저장 위치를 보존했다. 도로의 실제 길이·연구소에 이르는 방향과 건물·출입구 좌표는 초안이며, 다른 도로 및 주변 시설은 아직 미구현이다.
+
+### 블루 스트리트와 광장·사우스 불르바르 (초안)
+
+[Bleu Plaza](https://bulbapedia.bulbagarden.net/wiki/Bleu_Plaza)는 광장이 Bleu Street로 South Boulevard에 연결된다고 설명한다. [Bleu Sector 7 연결 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-7.html)는 서쪽에 Bleu Street가 있다고 설명한다. 기존 광장 접근로·사우스 불르바르·구역 7 사이에 왕복 가능한 거리를 추가했다. 정확한 도로 길이·갈림길·건물과 출구 좌표는 초안이며 Centrico Plaza 방면의 실제 블루 스트리트는 아직 미구현이다.
