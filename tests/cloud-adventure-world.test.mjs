@@ -295,6 +295,15 @@ test('cemetery draft connects through the northern street and preserves location
  assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaSableyeQuest],['lumiose-zone4',18,6,1]);
 });
 
+test('Rouge Street restaurant remains reachable and restores old positions safely',()=>{
+ const base={area:3,district:'lumiose-rouge-north',regionId:6,districtReturnRegion:1,teamIds:['keep'],steps:42};
+ const map=fieldMap(base);assert.deepEqual(findTile(map,'l'),{x:19,y:4});
+ assert.ok(fieldPath(map,{x:11,y:15},{x:19,y:5}).length);assert.ok(fieldPath(map,{x:19,y:5},{x:21,y:4}).length);
+ assert.equal(interactionAt({...base,x:19,y:5,facing:'up'}).tile,'l');
+ for(let y=1;y<=3;y++)for(let x=18;x<=20;x++){const saved=storeAdventurePosition({...base,x,y},8);delete saved.districtPosition.rougeNorthLayout;const restored=restoreAdventurePosition(saved,8);assert.equal(restored.district,base.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);}
+ const stale=storeAdventurePosition({...base,x:19,y:2},8);delete stale.districtPosition.rougeNorthLayout;assert.equal(restoreAdventurePosition(stale,9).district,null);
+});
+
 
 test('rooftop crystal blocks the provisional shortcut until cleared',()=>{
  const blocked=lumioseRooftopMap(),cleared=lumioseRooftopMap({zaRooftopCrystalCleared:true});

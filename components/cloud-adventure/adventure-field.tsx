@@ -55,7 +55,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if(c===':'&&w.district==='lumiose-zone2'){ctx.fillStyle='#c9c2ae';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#8f8a7c';for(let i=5;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}
      if(c===';'&&w.district==='lumiose-zone2'){ctx.fillStyle='#b5aa90';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#ded6be';ctx.fillRect(px+2,py+2,tile-4,tile-7);ctx.fillStyle='#837f70';ctx.fillRect(px+2,py+tile-5,tile-4,3);}
      if(c==='g'){ctx.fillStyle='#92b97c';ctx.fillRect(px,py,tile,tile);sprite('bush',px,py);sprite('grassDetail',px,py);}
-     if(('HMJ'.includes(c)&&!(c==='H'&&w.district==='lumiose-zone3'))||(c==='P'&&w.district==='lumiose-floral'))buildings.push({x,y,kind:c});
+     if(('HMJ'.includes(c)&&!(c==='H'&&w.district==='lumiose-zone3'))||(c==='P'&&w.district==='lumiose-floral')||(c==='l'&&w.district==='lumiose-rouge-north'))buildings.push({x,y,kind:c});
      if(c==='|'&&w.district==='lumiose-zone3'){ctx.fillStyle='#397b56';ctx.fillRect(px+2,py+12,tile-4,6);ctx.fillRect(px+5,py+7,3,17);ctx.fillRect(px+tile-8,py+7,3,17);ctx.fillStyle='#a4e0a9';ctx.fillRect(px+4,py+12,tile-8,2);}
      if(c==='i'&&w.district==='lumiose-zone3'){ctx.fillStyle=w.zaZone3TowerUpper?'#c4bfb0':'#eee9d9';ctx.fillRect(px+3,py+2,tile-6,tile-4);ctx.fillStyle='#70857e';ctx.fillRect(px+11,py+8,10,18);ctx.fillStyle='#d8ccb3';for(let j=10;j<25;j+=5)ctx.fillRect(px+11,py+j,10,2);}
      if(c==='H'&&w.district==='lumiose-zone3'){ctx.fillStyle='#e4d8b9';ctx.fillRect(px+2,py+10,tile-4,tile-10);ctx.fillStyle='#cc6559';ctx.fillRect(px+1,py+5,tile-2,7);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('회복',px+tile/2,py+24);}
@@ -90,7 +90,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
     for(let y=0;y<4;y++)for(let x=0;x<3;x++)sprite(layout[y][x],(b.x+x-1)*tile,(b.y+y-3)*tile);
     // Red clinic / blue shop signs, independent of the source sheet roof colors.
     ctx.fillStyle=b.kind==='H'?'#d44e4c':b.kind==='M'?'#417fae':b.kind==='G'?'#bd8c37':b.kind==='J'?'#ad8865':'#6e7d8c';ctx.fillRect((b.x-1)*tile,(b.y-3)*tile,3*tile,4);
-    const label=b.kind==='H'?'포켓몬 센터':b.kind==='M'?'프렌들리숍':b.kind==='G'?'GYM':b.kind==='J'?'호텔 안내소':'연구소';
+    const label=b.kind==='H'?'포켓몬 센터':b.kind==='M'?'프렌들리숍':b.kind==='G'?'GYM':b.kind==='J'?'호텔 안내소':b.kind==='l'?'스시 식당':'연구소';
     ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillStyle='#253e3c';ctx.fillRect(b.x*tile-24,(b.y+1)*tile-2,80,19);ctx.fillStyle='#ffffff';ctx.fillText(label,b.x*tile+16,(b.y+1)*tile+11);
    }
    if(w.area===9&&!w.expedition){for(let y=1;y<=4;y++)for(let x=7;x<=21;x++)sprite(y===1?'castleBattlement':y===3?'castleWindow':'castleWall',x*tile,y*tile);[8,11,14,17,20].forEach((x,i)=>{sprite('castleDoor',x*tile,4*tile);ctx.fillStyle='#fff4bc';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText(i===4?'챔피언':`${i+1} 사천왕`,x*tile+16,6*tile-8);});}

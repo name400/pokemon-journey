@@ -258,3 +258,9 @@
 [사이드 미션 위치 목록](https://www.gamerguides.com/pokemon-legends-z-a/checklists/side-missions-locations)은 묘지의 깜까미 의뢰인 Moire가 야생 구역 4의 서쪽 게이트에 있다고 설명한다. 기존에 루주 광장 서쪽에 배치된 의뢰인을 북쪽 거리의 묘지 진입점 근처로 옮겼다. 의뢰 수락·반지 반환은 새 위치에서 처리하며 기존 의뢰 상태와 보상 진행은 보존한다.
 
 묘지 입구와 의뢰인의 정확한 타일 좌표, 북쪽 거리 음식점의 건물 위치와 외형은 초안이다. 음식점의 식사·연속 배틀 기능은 아직 구현하지 않았다.
+
+## 북쪽 거리 Sushi High Roller — 건물 초안
+
+[Nintendo Life의 구역 4 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-4-guide-all-pokemon-and-alphas)는 음식점 너머가 구역 4라고 설명하고, [Bulbapedia 음식점 안내](https://bulbapedia.bulbagarden.net/wiki/Sushi_High_Roller_%28Lumiose_City%29)는 이 음식점이 Rouge Street에 있다고 설명한다. 북쪽 거리 초안의 묘지 접근로 근처에 건물과 상호작용 지점을 추가했다. 기존 도로·의뢰인·센터로 이동할 수 있으며 건물 부지에 저장된 옛 위치는 가까운 통행 가능 칸으로 복구한다.
+
+정확한 건물 위치·크기·외형과 내부는 확인하지 못해 초안이다. 실내 입장과 사이드 미션 73 및 식사 연속 배틀은 아직 구현되지 않았다. 확인된 자료에 따르면 원작의 재도전은 5코스와 비용이 있으므로 임의의 단일 전투를 완성된 식사 배틀로 취급하지 않는다.
