@@ -3,7 +3,8 @@ import {Dex} from '@pkmn/sim';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
 function fixture(move='Flamethrower',ability='thickfat',modern=true,passive=false,breaker=false){
- const hero=makeReferenceMon(151,70,{boxId:'hero',moves:[move,'Splash'],ability:breaker?'moldbreaker':'pressure'});
+ // Level 71 exposes the one-point rounding difference between calculation stages.
+ const hero=makeReferenceMon(151,71,{boxId:'hero',moves:[move,'Splash'],ability:breaker?'moldbreaker':'pressure'});
  const foe=makeReferenceMon(151,100,{boxId:'foe',moves:['Splash'],ability:passive?'pressure':ability});if(passive)foe.roguePassiveAbility=ability;
  const r={id:'type-resistance',wave:30,biome:1,rng:1234,screen:'battle',party:[hero],modifiers:[],tools:{},balls:{},participants:[],awardedFoes:[],expNotices:[],encounter:{kind:'trainer'}};if(modern)r.typeResistRule='source-subset-v1';r.combat=createClassicCombat(r,[foe],{trainer:true});return r;
 }
