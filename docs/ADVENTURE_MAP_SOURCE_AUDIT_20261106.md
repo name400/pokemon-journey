@@ -1002,3 +1002,7 @@ The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/bl
 ### Canal beneath Prism Tower (draft)
 
 The [Saison Canal reference](https://bulbapedia.bulbagarden.net/wiki/Saison_Canal) says the waterway runs directly beneath Prism Tower. The Centrico draft now shows water on both sides of its existing tower footprint, with walkable approaches retained around it. These are short, compressed tile segments: the waterline, bridge structure, tower dimensions and exact screen-to-screen alignment have not been surveyed. This updates the previous entry's statement that the water was not rendered. Legacy floor positions newly covered by water are moved to walkable ground only if the save revision matches; original encounter tiles are not changed.
+
+### Saison promenade and Wild Zone 11 map edges
+
+The [Wild Zone 11 reference](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11) places the zone on both sides of the Saison Canal, without a crossing within the zone. The existing water now extends to the edges of the promenade and Zone 11 screens rather than ending against an artificial wall. Those boundary cells were already blocked; the bridge exit and the separation of the banks are unchanged. This improves visual continuity only: the precise shoreline and connections to adjacent screens remain draft.

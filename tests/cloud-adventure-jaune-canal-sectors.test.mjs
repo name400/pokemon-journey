@@ -170,3 +170,11 @@ test('Saison Canal street joins Magenta and Jaune approaches through Centrico wi
  const toSaison=stepField({...restored,x:9,y:1},'up');assert.deepEqual([toSaison.district,toSaison.x,toSaison.y],['lumiose-saison-canalside',1,8]);
  const toCenterAgain=stepField({...restored,...toSaison},'left');assert.deepEqual([toCenterAgain.district,toCenterAgain.x,toCenterAgain.y],['lumiose-centrico-route',9,1]);
 });
+
+test('Saison water reaches the screen edge without creating a walkable crossing',()=>{
+ const canal=fieldMap({district:'lumiose-saison-canalside'});
+ assert.equal(canal[12][0],'~');assert.equal(canal[12][22],'~');assert.equal(canal[16][10],'~');assert.equal(canal[16][19],'X');
+ const zone=fieldMap({district:'lumiose-zone11'});for(const y of [7,8,9]){assert.equal(zone[y][0],'~');assert.equal(zone[y][22],'~');}
+ assert.equal(stepField({area:3,district:'lumiose-zone11',x:10,y:6},'down').blocked,true);
+ assert.equal(stepField({area:3,district:'lumiose-zone11',x:10,y:10},'up').blocked,true);
+});
