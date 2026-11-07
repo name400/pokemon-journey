@@ -19,21 +19,24 @@ import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer} from '@/lib/cloud-adventure/adventure-zone6.mjs';
 import {zone2WaterEdges,zone2BridgeAxis} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
+import {createFieldScheduler} from '@/lib/adventure-render.mjs';
 
 type Props={world:any;disabled:boolean;onPath:(path:string[])=>void;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;period:string};
 const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 
 export default function AdventureField({world:w,disabled,onPath,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),props=useRef({w,disabled,onPath,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
+ const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,disabled,onPath,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
  props.current={w,disabled,onPath,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
-  const images=new Map<string,HTMLImageElement>();let disposed=false,frame=0,last=0,width=736,height=544;
-  const fieldImages:Record<number,HTMLImageElement>={};for(const id of [656,504,662,688,322,323,552,66,443,302,303,64,703,678,310,318,319,24,505,225,67,459,460,712,713,361,673,214,127,709,70,304,305,529,530,95,587,694,710,545,353,711,15,354,246,870,308,181,650,660,707,668,303,371,373,428,653,115,531,35,1,4,448,282,306,129,120,667,674,677,672,25,669,702,63,309,17,69,544,79,618,676,716,228,229,307,427,180,333]){const img=new Image();img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;fieldImages[id]=img;}
-  const kakunaImage=new Image();kakunaImage.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/14.png';
-  const budewImage=new Image();budewImage.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/406.png';
-  for(const src of [...new Set([manifest.image,...Object.values(manifest.tiles).map((t:any)=>t.image||manifest.image)])]){const img=new Image();img.onload=()=>images.set(src,img);img.onerror=()=>setAssetError(true);img.src=src;}
-  const observer=new ResizeObserver(([entry])=>{width=Math.max(280,Math.round(entry.contentRect.width));height=Math.round(width*(width<560?.87:17/23));if(el.width!==width*2||el.height!==height*2){el.width=width*2;el.height=height*2;}});observer.observe(el);
+  const images=new Map<string,HTMLImageElement>();let disposed=false,last=0,width=736,height=544;
+  const scheduler=createFieldScheduler(requestAnimationFrame,cancelAnimationFrame,draw);invalidate.current=scheduler.invalidate;
+  const fieldImages:Record<number,HTMLImageElement>={};for(const id of [656,504,662,688,322,323,552,66,443,302,303,64,703,678,310,318,319,24,505,225,67,459,460,712,713,361,673,214,127,709,70,304,305,529,530,95,587,694,710,545,353,711,15,354,246,870,308,181,650,660,707,668,303,371,373,428,653,115,531,35,1,4,448,282,306,129,120,667,674,677,672,25,669,702,63,309,17,69,544,79,618,676,716,228,229,307,427,180,333]){const img=new Image();img.onload=scheduler.invalidate;img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;fieldImages[id]=img;}
+  const kakunaImage=new Image();kakunaImage.onload=scheduler.invalidate;kakunaImage.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/14.png';
+  const budewImage=new Image();budewImage.onload=scheduler.invalidate;budewImage.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/406.png';
+  for(const src of [...new Set([manifest.image,...Object.values(manifest.tiles).map((t:any)=>t.image||manifest.image)])]){const img=new Image();img.onload=()=>{images.set(src,img);scheduler.invalidate();};img.onerror=()=>{if(!disposed)setAssetError(true);};img.src=src;}
+  const observer=new ResizeObserver(([entry])=>{const nextWidth=Math.max(280,Math.round(entry.contentRect.width)),nextHeight=Math.round(nextWidth*(nextWidth<560?.87:17/23));if(width!==nextWidth||height!==nextHeight||el.width!==nextWidth*2||el.height!==nextHeight*2){width=nextWidth;height=nextHeight;el.width=width*2;el.height=height*2;scheduler.invalidate();}});observer.observe(el);
+  const motion=window.matchMedia('(prefers-reduced-motion: reduce)');motion.addEventListener('change',scheduler.invalidate);
   function draw(time:number){
    if(disposed||!ctx||!el)return;const {w}=props.current,s=scene.current,dt=Math.min(48,time-last||16);last=time;
    const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0)||s.interior!==(w.interior||null)||s.district!==(w.district||null);
@@ -232,9 +235,10 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
    ctx.restore();
    // Soft border is part of the camera, never a fullscreen tint over sprites.
    ctx.strokeStyle='#284d3b55';ctx.lineWidth=4;ctx.strokeRect(2,2,width-4,height-4);
-   frame=requestAnimationFrame(draw);
+   return moving&&!reduce;
   }
-  frame=requestAnimationFrame(draw);return()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();};
+  scheduler.invalidate();return()=>{disposed=true;invalidate.current=null;scheduler.dispose();observer.disconnect();motion.removeEventListener('change',scheduler.invalidate);};
  },[]);
+ useEffect(()=>{invalidate.current?.();},[w,period]);
  return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. 방향키 또는 WASD로 이동, E로 대화. 현재 위치 ${w.x}, ${w.y}${zone2BudewPosition(w)?'. 야생 꼬몽울이 보입니다.':''}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile),budew=zone2BudewPosition(w);if(budew&&budew.x===x&&budew.y===y){onAimBudew();return;}const kakuna=zone2KakunaPosition(w);if(kakuna&&kakuna.x===x&&kakuna.y===y){onAimKakuna();return;}const fieldMon=zone2FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(fieldMon){onAimField(fieldMon.id);return;}const zone3Mon=zone3FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(zone3Mon){onAimZone3(zone3Mon.id);return;}if(w.district==='lumiose-zone2'&&w.map[y]?.[x]==='p'){onAimIslandAlpha();return;}if(w.district==='lumiose-wild'&&w.map[y]?.[x]==='a'&&!w.zaWildAlphaSpent){onAimAlpha();return;}if(x===w.x&&y===w.y){onInteract();return;}onPath(fieldPath(w.map,{x:w.x,y:w.y},{x,y}));}}/><div className="adv-field-hint">필드를 누르면 그곳까지 걷습니다</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
 }
