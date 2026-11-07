@@ -150,3 +150,7 @@
 ### 베르날 애비뉴 동쪽 C자 옥상
 
 [위치 안내](https://allthings.how/find-larvitar-and-evolve-it-to-tyranitar-in-pokemon-legends-z-a/)는 베르날 애비뉴 동쪽의 C자형 옥상과 아래쪽 구간에 필요한 활공을 설명한다. 카페 뒤 기존 사다리와 별도로 동쪽 사다리 및 두 높이 구간을 추가하고 기존 로토글라이드 해금 이후 정해진 지점에서 왕복하게 했다. 사다리와 지붕의 좌표·크기 및 반대 방향 활공은 초안이며 원작의 정확한 높이와 지붕 외형은 추가 대조가 필요하다. 기존 거리 저장 위치와 카페 옥상 접근은 유지한다.
+
+### 베르 4·5번지 거리 연결 초안
+
+[베르 4번지 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_4)는 베르 2번지 남쪽, 5번지 서쪽과 Café Classe를 명시하고, [베르 5번지 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_5)는 4번지 동쪽과 베르 광장 남쪽을 설명한다. 두 지상 화면과 베르 2번지·광장 사이 왕복 연결을 추가했다. 정확한 도로 선형, 출입 타일, 카페 외형과 안뜰 배치는 확인되지 않은 초안이다. 카페 실내와 [자료상 옥상에서 내려가는 안뜰](https://game8.co/games/Pokemon-Legends-Z-A/archives/558130)의 실제 높이·접근 경로는 구현하지 않았다.

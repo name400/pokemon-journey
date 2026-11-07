@@ -772,3 +772,13 @@ test('Vernal east rooftop ladder and glide preserve layer after reload',async()=
   await call('vernalEastRoofLadder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaVernalEastRoof],[17,4,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vert 4 and 5 city connections retain party and wallet through reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert45-city-qa',displayName:'베르거리테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert2',interior:null,x:7,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-vert-sector4');
+  assert.equal(state.world.areaInfo.name,'베르 4번지 (배치 초안)');await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-vert-sector5');
+  assert.equal(state.world.areaInfo.name,'베르 5번지 (배치 초안)');await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-vert-plaza');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
