@@ -11,3 +11,17 @@ test('held prediction is bounded, stops before hazards, and requires server conf
 });
 
 test('sneaker cadence follows earned state without changing movement validation',()=>{assert.equal(adventureMovementInterval({}),100);assert.equal(adventureMovementInterval({zaMission19Sneakers:true}),75);assert.equal(adventureMovementInterval({zaMission19Sneakers:false}),100);});
+
+test('successive held batches remain bounded and require each server position',async()=>{
+ const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const world={area:3,district:'lumiose',x:2,y:8,facing:'right',badges:[]};
+ const first=predictCloudStep(world,'right'),buffer=createCloudMoveBuffer(world,first,'right');
+ assert.ok(buffer.push());assert.ok(buffer.push());
+ assert.equal(buffer.matches({world:{...world,...first}}),true);
+ const accepted={...world,...first},next=createCloudMoveBuffer(accepted,buffer.position,'right');
+ assert.ok(next.push());assert.ok(next.push());
+ assert.equal(next.matches({world:{...accepted,...buffer.position}}),true);
+ assert.equal(next.matches({world:{...accepted,x:buffer.position.x-1,y:buffer.position.y}}),false);
+ assert.equal(next.matches({world:{...accepted,...buffer.position},battle:{}}),false);
+ assert.ok(next.path.length<=4);
+});

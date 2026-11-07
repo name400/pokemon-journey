@@ -81,14 +81,20 @@ export default function Adventure(){
      const path=heldDirection.current?[direction]:pathQueue.current.splice(0,4);
      if(heldDirection.current&&pathQueue.current[0]===direction)pathQueue.current.shift();
      lastFacing.current=path.at(-1)||direction;
-     const projected=predictCloudStep(d.world,path[0]),epoch=movementEpoch.current,buffer=createCloudMoveBuffer(d.world,projected,direction);
+     const projected=predictCloudStep(d.world,path[0]),epoch=movementEpoch.current;let buffer=createCloudMoveBuffer(d.world,projected,direction);
      if(projected)setPrediction({revision:d.revision,...projected});
      // Accumulate only displayed steps while held; stop before encounters and exits.
      const previewTimer=heldDirection.current&&projected?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||heldDirection.current!==direction)return;const next=buffer.push();if(next)setPrediction({revision:d.revision,...next});},adventureMovementInterval(d.world)):null;
      moved=true;let r=await act('move',{path});if(previewTimer)clearInterval(previewTimer);
-     if(alive&&mounted.current&&movementEpoch.current===epoch&&buffer.path.length&&buffer.matches(r)){
-      const pending=buffer.path;setPrediction({revision:r.revision,...buffer.position});const before=r;r=await act('move',{path:pending});
-      if(!r||r.battle||r.world?.area!==before.world.area||r.world?.interior!==before.world.interior||r.world?.district!==before.world.district||(r.world?.steps||0)-(before.world.steps||0)<pending.length)stop();
+     while(alive&&mounted.current&&movementEpoch.current===epoch&&buffer.path.length&&buffer.matches(r)){
+      const pending=buffer.path,before=r,nextBuffer=createCloudMoveBuffer(before.world,buffer.position,direction);
+      setPrediction({revision:before.revision,...buffer.position});
+      // Continue buffering while the previously displayed batch is in flight.
+      // Each next batch still requires the server to confirm the full prior batch.
+      const nextTimer=heldDirection.current===direction?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||heldDirection.current!==direction)return;const next=nextBuffer.push();if(next)setPrediction({revision:before.revision,...next});},adventureMovementInterval(before.world)):null;
+      r=await act('move',{path:pending});if(nextTimer)clearInterval(nextTimer);
+      if(!r||r.battle||r.world?.area!==before.world.area||r.world?.interior!==before.world.interior||r.world?.district!==before.world.district||(r.world?.steps||0)-(before.world.steps||0)<pending.length){stop();break;}
+      buffer=nextBuffer;
      }
      // The server may stop early for an encounter, transition, or obstacle.
      if(!r||r.battle||r.world?.area!==d.world.area||r.world?.interior!==d.world.interior||r.world?.district!==d.world.district||(r.world?.steps||0)-(d.world.steps||0)<path.length)stop();
