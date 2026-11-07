@@ -6,7 +6,7 @@ test('held prediction is bounded, stops before hazards, and requires server conf
  for(let i=0;i<4;i++)assert.ok(buffer.push());assert.equal(buffer.push(),null);assert.deepEqual(buffer.path,['right','right','right','right']);
  assert.equal(buffer.matches({world:{...w,...first},battle:null}),true);
  for(const result of [{world:{...w,...first,x:3}},{world:{...w,...first,district:'other'}},{world:{...w,...first,adventureCatchWindow:{}}},{world:{...w,...first},battle:{}}])assert.equal(buffer.matches(result),false);
- const unsafe=createCloudMoveBuffer({area:0,x:5,y:2,badges:[]},{x:6,y:2,facing:'right'},'right');assert.equal(unsafe.push(),null);
+ const unsafe=createCloudMoveBuffer({area:3,district:'lumiose-zone13',x:20,y:8,badges:[]},{x:21,y:8,facing:'right'},'right');assert.equal(unsafe.push(),null);
  assert.equal(createCloudMoveBuffer({...w,district:'lumiose-wild'},first,'right').push(),null);
 });
 
@@ -24,4 +24,14 @@ test('successive held batches remain bounded and require each server position',a
  assert.equal(next.matches({world:{...accepted,x:buffer.position.x-1,y:buffer.position.y}}),false);
  assert.equal(next.matches({world:{...accepted,...buffer.position},battle:{}}),false);
  assert.ok(next.path.length<=4);
+});
+
+test('grass preview is bounded and pending steps require server authority',async()=>{
+ const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const world={area:3,district:'lumiose-zone13',x:2,y:3,facing:'right',badges:[]},copy=structuredClone(world);
+ assert.equal(predictCloudStep(world,'right'),null);
+ const first=predictCloudStep(world,'right',{allowGrass:true});assert.deepEqual(first,{x:3,y:3,facing:'right'});assert.deepEqual(world,copy);
+ const buffer=createCloudMoveBuffer(world,first,'right');for(let i=0;i<4;i++)assert.ok(buffer.push());assert.equal(buffer.push(),null);assert.deepEqual(buffer.path,['right','right','right','right']);
+ assert.equal(buffer.matches({world:{...world,...first},battle:{}}),false);assert.equal(buffer.matches({world:{...world,...first,x:2}}),false);
+ const gate={area:3,district:'lumiose-zone13',x:21,y:8,facing:'right'};assert.equal(predictCloudStep(gate,'right',{allowGrass:true}),null);
 });
