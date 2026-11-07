@@ -136,3 +136,17 @@ test('Jaune Street meets North Boulevard without affecting saved progress',()=>{
  assert.deepEqual([saved.district,saved.x,saved.y,saved.zaRoyaleRank,saved.teamIds],['lumiose-north-boulevard',19,15,'D',['kept']]);
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-jaune-street',15,1]);
 });
+
+test('canal building drafts retain approaches and safely migrate legacy positions',()=>{
+ for(const [district,old,starts,targets] of [
+  ['lumiose-magenta-canal-route',{x:3,y:3},{x:10,y:8},[{x:10,y:1},{x:1,y:8},{x:1,y:12},{x:10,y:15},{x:21,y:8},{x:21,y:12}]],
+  ['lumiose-saison-canalside',{x:7,y:2},{x:10,y:8},[{x:5,y:1},{x:11,y:1},{x:17,y:1},{x:1,y:8},{x:19,y:15}]],
+ ]){
+  const base={area:3,district,interior:null,...old,regionId:6,districtReturnRegion:1,teamIds:['kept'],zaRoyaleRank:'E'};
+  const map=fieldMap(base);assert.equal(map[old.y][old.x],'%');
+  for(const target of targets)assert.ok(fieldPath(map,starts,target).length,`${district} ${target.x},${target.y}`);
+  const saved=storeAdventurePosition(base,7);delete saved.districtPosition.canalBuildingsLayout;
+  const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,district);assert.notEqual(map[restored.y][restored.x],'%');assert.deepEqual(restored.teamIds,['kept']);
+  assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.canalBuildingsLayout,1);
+ }
+});
