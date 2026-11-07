@@ -380,3 +380,16 @@ test('Centrico and Vert Plaza keep their road approaches and existing save locat
   const restored=restoreAdventurePosition(saved,7);assert.deepEqual([restored.district,restored.x,restored.y],[district,4,9]);assert.deepEqual(restored.teamIds,['kept']);
  }
 });
+
+test('Rouge garden cross passage and cemetery approach preserve existing exits and saves',()=>{
+ const garden=lumioseZone3Map();
+ for(let x=6;x<=15;x++)assert.ok(walkable(garden[8][x]),`garden x=${x}`);
+ assert.equal(garden[8][9],'g');assert.equal(garden[8][13],'g');
+ const boulevard=fieldMap({district:'lumiose-north-boulevard'});
+ for(let y=10;y<=15;y++)assert.equal(boulevard[y][7],',');
+ assert.equal(stepField({area:3,district:'lumiose-north-boulevard',x:7,y:15},'down').district,'lumiose-zone4');
+ for(const [district,x,y] of [['lumiose-zone3',8,7],['lumiose-north-boulevard',7,12]]){
+  const saved=storeAdventurePosition({area:3,district,x,y,regionId:6,districtReturnRegion:1,teamIds:['kept']},4);
+  const restored=restoreAdventurePosition(saved,4);assert.deepEqual([restored.district,restored.x,restored.y],[district,x,y]);assert.deepEqual(restored.teamIds,['kept']);
+ }
+});
