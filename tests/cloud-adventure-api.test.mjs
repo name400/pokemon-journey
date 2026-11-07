@@ -675,3 +675,17 @@ test('Zone 12 pond stairs keep layer and inventory across reloads',async()=>{
   assert.deepEqual([state.world.x,state.world.y,state.world.zaZone12PondLower],[9,13,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 12 icicle requires an active physical move and preserves bridge across reloads',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone12-ice-qa',displayName:'얼음다리테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,original=rawMon(id),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedMon(id,{...original,moves:['물대포']});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:8,y:14,facing:'left',zaRoyaleRank:'E',zaZone12PondLower:true},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'zone12IceBridge');await call('zone12IceBridge',{},409);assert.notEqual(rawWorld().zaZone12IceBridge,true);
+  seedMon(id,{...original,hp:0,moves:['몸통박치기']});await get();await call('zone12IceBridge',{},409);assert.notEqual(rawWorld().zaZone12IceBridge,true);
+  seedMon(id,{...original,moves:['몸통박치기']});await get();await call('zone12IceBridge');await get();assert.equal(state.world.zaZone12IceBridge,true);
+  await call('move',{direction:'up'});await call('move',{direction:'left'});await get();assert.deepEqual([state.world.x,state.world.y],[7,13]);assert.equal(state.world.zaZone12IceBridge,true);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

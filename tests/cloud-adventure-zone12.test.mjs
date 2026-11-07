@@ -49,3 +49,12 @@ test('pond stairs expose a separate lower bank without moving old saves or water
  assert.equal(restoreAdventurePosition(storeAdventurePosition(lower,61),62).district,null);
  assert.equal(zone12Map({...lower,zaZone12Spent:{'avalugg-alpha':true}})[12][6],'~');
 });
+
+
+test('draft icicle becomes a traversable bridge while water encounters remain blocked',()=>{
+ const base={area:3,district:'lumiose-zone12',interior:null,x:8,y:14,facing:'left',zaZone12PondLower:true,teamIds:['kept']};
+ assert.equal(zone12Map(base)[14][7],'r');assert.equal(fieldDialogue(base).action,'zone12IceBridge');assert.equal(stepField(base,'left').blocked,true);
+ const open={...base,zaZone12IceBridge:true};for(let x=4;x<=7;x++)assert.equal(zone12Map(open)[13][x],'=');
+ assert.ok(fieldPath(zone12Map(open),open,{x:4,y:13}).length);assert.equal(stepField({...open,x:7,y:13},'up').blocked,true);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:5,y:13},71),71);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower,saved.zaZone12IceBridge,saved.teamIds],[5,13,true,true,['kept']]);
+});
