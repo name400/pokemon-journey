@@ -86,3 +86,13 @@ test('Sector 9 outside scaffold keeps the street walkable and older positions',(
  const map=fieldMap(street);assert.equal(map[13][14],'l');assert.ok(fieldPath(map,street,{x:11,y:1}).length);
  const old=restoreAdventurePosition(storeAdventurePosition({...street,x:14},48),48);assert.deepEqual([old.district,old.x,old.y,old.teamIds],[street.district,14,13,['kept']]);
 });
+
+
+test('outside roof and Zone 18 rooftop gate preserve layer and rank',()=>{
+ const outside={area:3,district:'lumiose-magenta-sector9',interior:null,x:11,y:1,zaMagenta9Upper:true,zaRoyaleRank:'C',teamIds:['kept']};
+ assert.equal(stepField(outside,'up').blocked,true);const entered=stepField({...outside,zaRoyaleRank:'B'},'up');
+ assert.deepEqual([entered.district,entered.x,entered.y,entered.zaZone18Upper],['lumiose-zone18',1,8,true]);
+ const state={...outside,...entered,zaRoyaleRank:'B'};const saved=restoreAdventurePosition(storeAdventurePosition(state,99),99);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone18Upper,saved.teamIds],['lumiose-zone18',1,8,true,['kept']]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y,back.zaMagenta9Upper],['lumiose-magenta-sector9',11,1,true]);
+ const resumed=restoreAdventurePosition(storeAdventurePosition({...saved,...back},100),100);assert.deepEqual([resumed.x,resumed.y,resumed.zaMagenta9Upper],[11,1,true]);
+});

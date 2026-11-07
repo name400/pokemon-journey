@@ -697,9 +697,14 @@ test('Zone 18 outside scaffold checks rank and returns to its street after reloa
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector9',interior:null,x:13,y:13,facing:'right',zaRoyaleRank:'C'},state.revision+1));await get();
   assert.equal(state.world.interaction.action,'zone18OutsideLadder');await call('zone18OutsideLadder',{},409);assert.equal(rawWorld().district,'lumiose-magenta-sector9');
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector9',interior:null,x:13,y:13,facing:'right',zaRoyaleRank:'B'},state.revision+1));await get();
-  await call('zone18OutsideLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone18Upper,state.world.zaZone18LadderReturn],['lumiose-zone18',6,9,true,'external']);
-  assert.equal(state.world.interaction.action,'zone18Ladder');await call('zone18Ladder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone18Upper],['lumiose-magenta-sector9',13,13,false]);
+  await call('zone18OutsideLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaMagenta9Upper],['lumiose-magenta-sector9',6,9,true]);
+  await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone18Upper],['lumiose-zone18',1,8,true]);
+  await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaMagenta9Upper],['lumiose-magenta-sector9',11,1,true]);
+  await walkTo({x:6,y:9});await call('move',{direction:'down'});await get();assert.equal(state.world.interaction.action,'zone18OutsideLadder');await call('zone18OutsideLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaMagenta9Upper],['lumiose-magenta-sector9',13,13,false]);
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  // Existing saves made before the outside roof existed still return safely.
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:6,y:9,facing:'down',zaRoyaleRank:'B',zaZone18Upper:true,zaZone18LadderReturn:'external'},state.revision+1));await get();
+  await call('zone18Ladder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaMagenta9Upper],['lumiose-magenta-sector9',13,13,false]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
