@@ -1022,3 +1022,7 @@ The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/bl
 ### Movement timing check (local mock)
 
 On 2026-11-07 a headless Chromium fixture with mocked 350 ms movement-response delay showed the current client first displaying movement in 30 ms in one run, reaching x=18 over the two-second sample; the mock server reached x=19 after queued requests completed. This is a single local synthetic observation, not a production or real-device measurement, and does not demonstrate all network or reconnect conditions. The workspace does not identify an accessible authenticated production session; live timing remains unmeasured.
+
+### Wild Zones 12 and 13: terrain rendering
+
+[Wild Zone 12's guide](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/aymlis-park/all-wild-zone-12-pokemon-locations/) identifies the northern battle court and icy water west of the south entrance; [Wild Zone 13's guide](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/north-boulevard-2/) places its wooded area along North Boulevard. The existing court and water now use distinct ice rendering, and the road through Zone 13 is visually separated from its wooded sides. These changes only affect rendering: collision, encounters, existing map shape and saved positions are unchanged. Exact court, shoreline, tree and road geometry remain drafts.
