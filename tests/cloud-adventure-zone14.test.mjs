@@ -43,3 +43,16 @@ test('Discharge TM is behind the breakable rock and stays collected after save',
  assert.deepEqual(saved.zaZone14Items,['rock-mastery','rock-tm039']);assert.equal(zone14Item(saved,'l'),null);
  assert.deepEqual(saved.teamIds,['kept']);
 });
+
+test('three rocks keep independent progress while legacy cleared saves stay open',()=>{
+ const state={area:3,district:'lumiose-zone14',interior:null,x:15,y:10,teamIds:['kept']};
+ for(const y of [9,10,11])assert.equal(zone14Map(state)[y][16],'r');
+ const partial={...state,zaZone14RockCleared:true,zaZone14RocksCleared:['16,10']};
+ assert.deepEqual([9,10,11].map(y=>zone14Map(partial)[y][16]),['r','.','r']);
+ assert.equal(stepField({...partial,y:9},'right').blocked,true);
+ const saved=restoreAdventurePosition(storeAdventurePosition(partial,57),57);
+ assert.deepEqual(saved.zaZone14RocksCleared,['16,10']);assert.deepEqual(saved.teamIds,['kept']);
+ const legacy={...state,zaZone14RockCleared:true};
+ assert.deepEqual([9,10,11].map(y=>zone14Map(legacy)[y][16]),['.','.','.']);
+ assert.ok(fieldPath(zone14Map(legacy),legacy,{x:17,y:11}).length);
+});
