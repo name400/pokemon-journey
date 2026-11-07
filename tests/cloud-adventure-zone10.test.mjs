@@ -18,6 +18,20 @@ test('Centrico route reaches Zone 10 via South Boulevard while preserving the ga
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-south-boulevard',14,1,['kept']]);
 });
 
+test('Estival Avenue links opposite Zones 9 and 10 without bypassing rank',()=>{
+ const road={area:3,district:'lumiose-estival-approach',interior:null,x:1,y:8,zaRoyaleRank:'V',teamIds:['kept']};
+ assert.equal(stepField(road,'left').blocked,true);
+ assert.equal(stepField({...road,x:21},'right').blocked,true);
+ const opened={...road,zaRoyaleRank:'F'};
+ const ten=stepField(opened,'left');assert.deepEqual([ten.district,ten.x,ten.y],['lumiose-zone10',11,1]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...opened,...ten},88),88);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone10',11,1,['kept']]);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-estival-approach',1,8]);
+ assert.ok(fieldPath(fieldMap({...saved,...back}),back,{x:21,y:8}).length);
+ assert.equal(stepField({...saved,...back,x:21,y:8},'right').district,'lumiose-zone9');
+ assert.equal(stepField({...saved,zaZone10Upper:true,x:11,y:1},'up').blocked,true);
+});
+
 test('roof benches preserve old saved positions and access to the ladder and potion',()=>{
  const roof={area:3,district:'lumiose-zone10',interior:null,zaZone10Upper:true,teamIds:['kept'],zaZone10Items:[]};
  const map=zone10Map(roof);assert.equal(map[3][17],'^');assert.equal(map[3][19],'^');
