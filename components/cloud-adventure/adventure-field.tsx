@@ -140,6 +140,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if(c==='^'&&w.district==='lumiose-zone4'){ctx.fillStyle='#777d7d';ctx.fillRect(px+1,py+1,tile-2,tile-2);ctx.fillStyle='#9da4a0';ctx.fillRect(px+3,py+3,tile-6,5);ctx.fillRect(px+4,py+tile-8,tile-8,4);}
      if(c==='#'){ctx.fillStyle=w.district==='lumiose-zone3'?'#547e60':'#8e9c91';ctx.fillRect(px,py,tile,tile);if(w.district==='lumiose-zone3'){ctx.fillStyle='#78a47a';ctx.fillRect(px+3,py+5,tile-6,4);ctx.fillRect(px+5,py+tile-9,tile-10,3);}}if(c==='r'){ctx.fillStyle='#757b78';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.4,tile*.33,-.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c7cbc5';ctx.fillRect(px+8,py+10,9,3);}
      if(c==='k'||c==='K'){ctx.fillStyle=c==='K'?'#79a36d':w.district==='lumiose-zone3'?'#78a66f':'#a6c692';ctx.fillRect(px+2,py+2,tile-4,tile-4);if(c==='K'||w.district==='lumiose-zone3'){ctx.fillStyle=c==='K'?'#fff3be':'#e7c6b4';ctx.fillRect(px+8,py+10,4,4);ctx.fillRect(px+20,py+16,4,4);}}
+     if(c==='k'&&w.district==='lumiose-zone1'){ctx.fillStyle='#92b97c';ctx.fillRect(px,py,tile,tile);sprite('grassDetail',px,py);}
      if(c==='~'||c==='w'){
       ctx.fillStyle=w.district==='lumiose-zone2'?(c==='w'?'#91c7bf':'#68a8af'):(c==='w'?'#a0ccd0':'#76abc1');ctx.fillRect(px,py,tile,tile);
       if(w.district==='lumiose-zone2'){
