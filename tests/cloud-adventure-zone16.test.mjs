@@ -35,6 +35,17 @@ test('rounded Bleu Plaza water safely restores older positions',()=>{
   const state={area:3,district:'lumiose-zone16',interior:null,x,y,regionId:6,districtReturnRegion:1,zaRoyaleRank:'C',teamIds:['kept']};
   const old=storeAdventurePosition(state,9);delete old.districtPosition.zone16Layout;
   const restored=restoreAdventurePosition(structuredClone(old),9);assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
-  assert.equal(restoreAdventurePosition(structuredClone(old),10).district,null);assert.equal(storeAdventurePosition(restored,10).districtPosition.zone16Layout,1);
+  assert.equal(restoreAdventurePosition(structuredClone(old),10).district,null);assert.equal(storeAdventurePosition(restored,10).districtPosition.zone16Layout,2);
  }
+});
+
+
+test('Bleu Plaza island has three draft crossings and safely restores earlier paths',()=>{
+ const map=zone16Map();for(const [x,y] of [[8,5],[16,8],[8,11]])assert.equal(map[y][x],',');
+ for(const [x,y] of [[11,4],[11,12],[6,8],[14,5],[14,11]]){
+  assert.equal(map[y][x],'~');const state={area:3,district:'lumiose-zone16',interior:null,x,y,zaRoyaleRank:'C',teamIds:['kept']};
+  const old=storeAdventurePosition(state,19);old.districtPosition.zone16Layout=1;const restored=restoreAdventurePosition(structuredClone(old),19);
+  assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(old),20).district,null);
+ }
+ for(const start of [{x:8,y:4},{x:17,y:8},{x:8,y:12}])assert.ok(fieldPath(map,start,{x:11,y:7}).length);
 });
