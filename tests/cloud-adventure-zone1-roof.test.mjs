@@ -93,3 +93,13 @@ test('Zone 1 draft roof gap preserves paths and migrates matching old saves',()=
  for(const y of [4,5,6,9]){const old=storeAdventurePosition({...roof,x:14,y},23);delete old.districtPosition.zone1RoofLayout;const loaded=restoreAdventurePosition(old,23);assert.equal(loaded.district,roof.district);assert.notEqual(fieldMap(loaded)[loaded.y][loaded.x],'#');assert.deepEqual(loaded.teamIds,['kept']);}
  const current=storeAdventurePosition(roof,24);assert.equal(current.districtPosition.zone1RoofLayout,1);
 });
+
+test('Zone 1 northeastern gate links Vert Sector 8 and Hotel Z approach',()=>{
+ const zone={area:3,district:'lumiose-zone1',interior:null,x:17,y:1,facing:'up',teamIds:['kept']};
+ const entry=stepField(zone,'up');assert.deepEqual([entry.district,entry.x,entry.y],['lumiose-vert-sector8',11,15]);
+ const sector={...zone,...entry};assert.ok(fieldPath(fieldMap(sector),sector,{x:11,y:1}).length);assert.equal(fieldMap(sector)[5][18],';');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,x:11,y:1},68),68);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[sector.district,11,1,['kept']]);
+ const hotel=stepField(saved,'up');assert.deepEqual([hotel.district,hotel.x,hotel.y],['lumiose',15,1]);
+ const back=stepField({...saved,...hotel},'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector8',11,1]);
+ assert.equal(stepField({...sector,x:11,y:15},'down').district,'lumiose-zone1');assert.equal(stepField({...zone,x:11},'up').district,'lumiose-vert-sector9');
+});

@@ -652,3 +652,14 @@ test('Rouge Sector 6 cemetery approach preserves location after reload',async()=
   await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector6',11,1]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vert Sector 8 links Hotel Z and Zone 1 across reloads',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert8-zone1-qa',displayName:'거리테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:15,y:1,facing:'up'},state.revision+1));await get();await call('move',{direction:'up'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-sector8',11,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector8',x:11,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone1',17,1]);
+  await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-sector8',11,15]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
