@@ -80,3 +80,9 @@ test('Zone 18 south scaffold and legacy ladder remain reachable',()=>{
  assert.equal(map[13][14],'l');assert.equal(map[5][13],'l');assert.ok(fieldPath(map,s,{x:13,y:13}).length);assert.ok(fieldPath(map,s,{x:13,y:6}).length);
  const old=storeAdventurePosition({...s,x:14,y:13},34);const restored=restoreAdventurePosition(old,34);assert.deepEqual([restored.district,restored.x,restored.y],[s.district,14,13]);
 });
+
+test('Sector 9 outside scaffold keeps the street walkable and older positions',()=>{
+ const street={area:3,district:'lumiose-magenta-sector9',interior:null,x:13,y:13,facing:'right',zaRoyaleRank:'B',teamIds:['kept']};
+ const map=fieldMap(street);assert.equal(map[13][14],'l');assert.ok(fieldPath(map,street,{x:11,y:1}).length);
+ const old=restoreAdventurePosition(storeAdventurePosition({...street,x:14},48),48);assert.deepEqual([old.district,old.x,old.y,old.teamIds],[street.district,14,13,['kept']]);
+});
