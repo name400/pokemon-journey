@@ -51,3 +51,15 @@ test('repaired Rouge Holovator roof connects to Le Yeah roof and survives reload
  assert.deepEqual([saved.district,saved.x,saved.y,saved.zaSide04Won,saved.zaRouge1Tm005,saved.teamIds],['lumiose-rouge-sector3-roof',20,6,true,true,['kept']]);
  assert.deepEqual([stepField(next,'left').district,stepField(next,'left').x],['lumiose-rouge-sector1-roof',21]);
 });
+
+test('Rouge Sector 3 upper ladder and beam preserve roof saves',()=>{
+ const lower={area:3,district:'lumiose-rouge-sector3-roof',interior:null,x:19,y:5,facing:'up',zaSide04Won:true,teamIds:['kept']};
+ assert.equal(fieldDialogue(lower).action,'rouge3RoofLadder');
+ const upper={...lower,zaRouge3RoofUpper:true};
+ assert.equal(fieldDialogue(upper).action,'rouge3RoofLadder');
+ assert.ok(fieldPath(fieldMap(upper),upper,{x:10,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(upper,70),70);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaRouge3RoofUpper,saved.teamIds],['lumiose-rouge-sector3-roof',19,5,true,['kept']]);
+ const legacy=restoreAdventurePosition(storeAdventurePosition({...lower,x:20,y:6},71),71);
+ assert.deepEqual([legacy.district,legacy.x,legacy.y],['lumiose-rouge-sector3-roof',20,6]);
+});

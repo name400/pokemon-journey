@@ -37,13 +37,27 @@ const route=await import(await loadTS('lib/cloud-adventure/route.ts'));
 let state;
 async function get(){const r=await route.GET(new Request('http://adventure.test/api/world'));assert.equal(r.status,200);return state=await r.json();}
 async function call(action,extra={},expected=200){const r=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action,revision:state?.revision,...extra})}));const d=await r.json();assert.equal(r.status,expected,`${action}: ${JSON.stringify(d)}`);if(expected===200)state=d;return d;}
-function rawWorld(){return JSON.parse(sql.prepare('SELECT state FROM worlds WHERE user_id=?').get('adventure-qa').state);}
-function seedWorld(patch){const w={...rawWorld(),...patch};sql.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').run(JSON.stringify(w),'adventure-qa');}
+function rawWorld(){return JSON.parse(sql.prepare('SELECT state FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId).state);}
+function seedWorld(patch){const w={...rawWorld(),...patch};sql.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').run(JSON.stringify(w),globalThis.__adventureUser.userId);}
 function rawMon(id){return JSON.parse(sql.prepare('SELECT data FROM pokemon_box WHERE id=?').get(id).data);}
 function seedMon(id,p){sql.prepare('UPDATE pokemon_box SET species_id=?,data=? WHERE id=?').run(p.id,JSON.stringify(p),id);}
 async function walkTo(tileOrTarget){if(tileOrTarget==='W'&&state.world.district==='lumiose'&&!state.world.interior){await walkTo({x:8,y:14});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-zone1');return;}const target=typeof tileOrTarget==='string'?findTile(state.world.map,tileOrTarget):tileOrTarget;assert.ok(target);const gate=['E','W'].includes(typeof tileOrTarget==='string'?tileOrTarget:'');const origin=[state.world.area,state.world.district,state.world.interior,!!state.world.expedition];for(let n=0;n<100;n++){if(gate&&[state.world.area,state.world.district,state.world.interior,!!state.world.expedition].some((v,i)=>v!==origin[i]))return;if(!gate&&state.world.x===target.x&&state.world.y===target.y)return;const path=fieldPath(state.world.map,state.world,target);assert.ok(path.length,'target remains reachable');await call('move',{path:path.slice(0,8)});assert.equal(state.battle,null);}assert.fail('movement did not reach target');}
 async function travelToZone2(){assert.equal(state.world.district,'lumiose');await walkTo('h');await call('enterRooftop');await walkTo('W');assert.equal(state.world.district,'lumiose-zone2');}
 async function battle({resolve=true}={}){let turns=0;while(state.battle||state.world.adventureCatchWindow){assert.ok(turns++<180,'battle finishes');if(state.world.adventureCatchWindow){await call('skipCatchWindow');assert.equal(state.battle,null);continue;}const b=state.battle,q=b.requests[0],p=b.teams[0][b.active[0]],foe=b.teams[1][b.active[1]];const command=q.kind==='switch'?{type:'switch',slot:q.switches.sort((a,b)=>b.hp-a.hp)[0].slot}:{type:'move',move:q.moves.filter(m=>!m.disabled&&m.pp>0).map(m=>({m,score:(moves[m.name]?.power||0)*effectiveness(moves[m.name]?.type,foe.types)*(p.types.includes(moves[m.name]?.type)?1.5:1)})).sort((a,b)=>b.score-a.score)[0].m.name};await call('battle',{command});if(!state.battle&&!state.world.adventureCatchWindow){assert.equal(state.battleResult?.ended,true);assert.ok(Array.isArray(state.battleResult.events));assert.equal(rawWorld().combat,null);}}if(resolve)while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});return turns;}
+
+test('Rouge roof ladder saves and resumes both floors',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ globalThis.__adventureUser={userId:'rouge-roof-qa',displayName:'옥상테스트'};
+ try {
+ await get();await call('start',{species:1});
+ seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector3-roof',interior:null,x:19,y:5,facing:'up',zaSide04Won:true,zaRouge3RoofUpper:false},state.revision+1));
+ await get();assert.equal(state.world.interaction.action,'rouge3RoofLadder');
+ await call('rouge3RoofLadder');await get();assert.equal(rawWorld().zaRouge3RoofUpper,true);
+ assert.equal(state.world.map[8][14],',');assert.equal(state.world.interaction.action,'rouge3RoofLadder');
+ await call('rouge3RoofLadder');await get();assert.equal(rawWorld().zaRouge3RoofUpper,false);
+ assert.equal(state.world.map[5][20],'q');
+ } finally {globalThis.__adventureUser=previousUser;}
+});
 
 test('world route: save migration, atomic purchases, actual battle/capture/growth and full campaign',async()=>{
  const auth=globalThis.__adventureUser;globalThis.__adventureUser=null;assert.equal((await route.GET(new Request('http://adventure.test/api/world'))).status,401);globalThis.__adventureUser=auth;
