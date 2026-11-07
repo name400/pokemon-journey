@@ -443,3 +443,23 @@ test('cemetery west entrance reaches Rouge Street and keeps legacy approaches',(
  assert.ok(fieldPath(fieldMap({...zone,...back}),back,{x:11,y:14}).length);
  assert.equal(stepField({...zone,x:21,y:8},'right').district,'lumiose-rouge-north');
 });
+
+test('Rouge Sector 8 connects North Boulevard to the cemetery north gate',()=>{
+ const road={area:3,district:'lumiose-north-boulevard',interior:null,x:9,y:15,facing:'down',teamIds:['kept']};
+ const entry=stepField(road,'down');assert.deepEqual([entry.district,entry.x,entry.y],['lumiose-rouge-sector8',11,1]);
+ const sector={...road,...entry};assert.ok(fieldPath(fieldMap(sector),sector,{x:11,y:15}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,x:11,y:15},68),68);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[sector.district,11,15,['kept']]);
+ const cemetery=stepField(saved,'down');assert.deepEqual([cemetery.district,cemetery.x,cemetery.y],['lumiose-zone4',15,1]);
+ assert.deepEqual([stepField({...saved,...cemetery},'up').district,stepField({...sector,x:11,y:1},'up').district],['lumiose-rouge-sector8','lumiose-north-boulevard']);
+ assert.equal(stepField({...road,x:7},'down').district,'lumiose-zone4');
+});
+
+test('Rouge Sector 6 connects the southern cemetery gate to Rouge Street',()=>{
+ const street={area:3,district:'lumiose-rouge-north',interior:null,x:21,y:15,facing:'right',teamIds:['kept']};
+ const entry=stepField(street,'right');assert.deepEqual([entry.district,entry.x,entry.y],['lumiose-rouge-sector6',1,8]);
+ const sector={...street,...entry};assert.ok(fieldPath(fieldMap(sector),sector,{x:11,y:1}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,x:11,y:1},69),69);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[sector.district,11,1,['kept']]);
+ const cemetery=stepField(saved,'up');assert.deepEqual([cemetery.district,cemetery.x,cemetery.y],['lumiose-zone4',5,15]);
+ assert.equal(stepField({...saved,...cemetery},'down').district,'lumiose-rouge-sector6');assert.equal(stepField({...sector,x:1,y:8},'left').district,'lumiose-rouge-north');
+ assert.equal(stepField({...cemetery,x:11,y:15},'down').district,'lumiose-rouge-north');
+});

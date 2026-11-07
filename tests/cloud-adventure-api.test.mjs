@@ -630,3 +630,25 @@ test('cemetery western entrance survives reload and returns to Rouge Street',asy
   await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-north',21,14]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Rouge Sector 8 cemetery approach preserves location after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge8-cemetery-qa',displayName:'거리테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-north-boulevard',interior:null,x:9,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector8',11,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-rouge-sector8',x:11,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone4',15,1]);
+  await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector8',11,15]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Rouge Sector 6 cemetery approach preserves location after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge6-cemetery-qa',displayName:'거리테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:null,x:21,y:15,facing:'right'},state.revision+1));await get();await call('move',{direction:'right'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector6',1,8]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-rouge-sector6',x:11,y:1,facing:'up'},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone4',5,15]);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector6',11,1]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
