@@ -43,3 +43,10 @@ test('southern park furniture retains gates and safely restores earlier ground s
  const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'^');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
  const upper={...base,x:6,y:10,zaZone17Upper:true};const roof=restoreAdventurePosition(storeAdventurePosition(upper,9),9);assert.deepEqual([roof.x,roof.y,roof.zaZone17Upper],[6,10,true]);
 });
+
+test('Zone 17 split roofs keep the crossing and migrate earlier roof saves',()=>{
+ const base={area:3,district:'lumiose-zone17',interior:null,x:11,y:5,zaZone17Upper:true,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone17Map(base);
+ assert.equal(map[5][11],'#');assert.ok(fieldPath(map,{x:6,y:9},{x:14,y:7}).length);
+ const saved=storeAdventurePosition(base,7);delete saved.districtPosition.splitRoofLayout;const restored=restoreAdventurePosition(structuredClone(saved),7);
+ assert.equal(restored.district,base.district);assert.equal(restored.zaZone17Upper,true);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
+});

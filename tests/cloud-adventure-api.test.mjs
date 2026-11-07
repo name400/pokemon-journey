@@ -487,3 +487,15 @@ test('Rouge Sector 7 ladder preserves the rooftop across server reloads',async()
   assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.teamIds],['lumiose-rouge-sector7',13,7,team]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 17 and 18 older rooftop saves load safely after the split',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'split-roof-qa',displayName:'옥상테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const [district,flag,rank] of [['lumiose-zone17','zaZone17Upper','C'],['lumiose-zone18','zaZone18Upper','B']]){
+   const old=storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x:11,y:5,facing:'right',zaRoyaleRank:rank,[flag]:true},state.revision+1);delete old.districtPosition.splitRoofLayout;seedWorld(old);
+   await get();assert.equal(state.world.district,district);assert.equal(state.world[flag],true);assert.notEqual(state.world.map[state.world.y][state.world.x],'#');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+   const direction=state.world.x<11?'left':'right';await call('move',{direction});await get();assert.equal(state.world.district,district);assert.equal(state.world[flag],true);assert.deepEqual(state.world.teamIds,team);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});

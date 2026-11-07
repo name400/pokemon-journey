@@ -67,3 +67,10 @@ test('Autumnal Avenue reaches Quasartico and preserves existing mission state',(
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,...office},57),57);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission10Stage,saved.teamIds],['lumiose-quasartico',21,4,3,['kept']]);
  const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-autumnal-approach',1,4]);
 });
+
+test('Zone 18 opposing roofs keep the scaffold and migrate earlier roof saves',()=>{
+ const base={area:3,district:'lumiose-zone18',interior:null,x:11,y:5,zaZone18Upper:true,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone18Map(base);
+ assert.equal(map[5][11],'#');assert.ok(fieldPath(map,{x:6,y:9},{x:16,y:6}).length);
+ const saved=storeAdventurePosition(base,7);delete saved.districtPosition.splitRoofLayout;const restored=restoreAdventurePosition(structuredClone(saved),7);
+ assert.equal(restored.district,base.district);assert.equal(restored.zaZone18Upper,true);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
+});
