@@ -76,3 +76,13 @@ test('second roof and Side Mission 17 preserve ladder and shiny encounter state'
  assert.deepEqual([saved.district,saved.x,saved.y,saved.zaSide17MareepCaught,saved.teamIds],['lumiose-zone1-high-roof',8,6,true,['kept']]);
  assert.notEqual(fieldMap(saved)[5][8],'m');
 });
+
+test('Vert Sector 9 waterway keeps its bridge, access and matching legacy saves',()=>{
+ const base={area:3,district:'lumiose-vert-sector9',interior:null,x:11,y:9,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=fieldMap(base);
+ assert.equal(map[11][4],'~');assert.equal(map[12][18],'~');assert.equal(map[11][11],':');assert.equal(map[14][14],'q');
+ assert.ok(fieldPath(map,{x:1,y:8},{x:11,y:15}).length);assert.ok(fieldPath(map,{x:11,y:9},{x:14,y:15}).length);
+ assert.equal(stepField({...base,x:11,y:15},'down').district,'lumiose-zone1');
+ const saved=storeAdventurePosition({...base,x:4,y:11},7);delete saved.districtPosition.vert9Layout;
+ const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'~');assert.deepEqual(restored.teamIds,['kept']);
+ assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.vert9Layout,1);
+});

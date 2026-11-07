@@ -1014,3 +1014,11 @@ The Centrico canal now reaches the eastern screen boundary, aligning visually wi
 ### Bleu and Vert Plaza water outlines (draft)
 
 The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) shows a rounded water feature around Bleu Plaza's central monument and an irregular lake at Vert Plaza. The Zone 16 draft rounds three corners of its water ring, and the Zone 2 draft removes the straight northward extension beyond the northeast shore. Tile scale, crossings and detailed banks remain approximations; this is not a surveyed reconstruction. New water corners replace former floor only, with matching-revision migration for old saves. The existing encounter-grass tiles, entrances and fixed occupants are retained.
+
+### Vert Sector 9 park waterway (draft)
+
+[Nintendo Life](https://www.nintendolife.com/guides/pokemon-legends-z-a-where-to-catch-eevee) describes steps and a bridge to the grassy courtyard in Vert Sector 9; [Dexerto](https://www.dexerto.com/pokemon/pokemon-legends-za-players-can-catch-goomy-very-early-with-this-simple-trick-3273155/) describes a canal below and benches above. The existing Sector 9 screen now includes a small waterway, crossing and decorative green area while retaining its exits and the existing event marker. Exact orientation, height and coordinates remain provisional; the waterway and park are not a surveyed reconstruction. Previous floor positions newly under water are migrated only for the matching save revision. No grass encounter tiles were added.
+
+### Movement timing check (local mock)
+
+On 2026-11-07 a headless Chromium fixture with mocked 350 ms movement-response delay showed the current client first displaying movement in 30 ms in one run, reaching x=18 over the two-second sample; the mock server reached x=19 after queued requests completed. This is a single local synthetic observation, not a production or real-device measurement, and does not demonstrate all network or reconnect conditions. The workspace does not identify an accessible authenticated production session; live timing remains unmeasured.
