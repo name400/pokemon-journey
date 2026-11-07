@@ -1038,3 +1038,7 @@ The Rouge garden and cemetery path overlays still sit on encounter grass; the re
 ### Rouge garden and cemetery boundaries (draft)
 
 The [Lumiose overhead map](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) shows the circular formal garden and the separate rectangular cemetery. The garden now has a blocking outer hedge with approach gaps, while the cemetery has a blocking perimeter and openings linking its existing entrances. These gaps, fence tiles and exact proportions are provisional, not surveyed from the map; cemetery path overlays still retain their existing grass encounter behavior. For saves created before these walls, positions on newly blocked tiles are relocated to walkable ground only when the save revision matches. Existing visible encounters, event markers and exits remain in place.
+
+### Zone 6 canal edge and Prism Tower footprint
+
+The [Zone 6 guide](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-6-guide-all-pokemon-and-alphas) describes its bridge and the canal beneath it. In the ground-level draft the existing blocked water now continues to both screen edges, while the bridge and all exits remain unchanged. Boundary cells were already impassable. At Centrico, the existing 3-by-3 blocked tower footprint is drawn as one continuous structure rather than nine separate buildings. The edge alignment, bridge dimensions and tower detail remain approximate; neither source establishes these tile coordinates.

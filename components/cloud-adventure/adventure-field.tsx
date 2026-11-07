@@ -234,7 +234,13 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if((c==='t'&&w.district==='lumiose-north-boulevard')||(c==='m'&&w.district==='lumiose-centrico-route')){ctx.fillStyle=c==='t'?'#667c99':'#ac7255';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='t'?'퀴즈':'갈랑',px+tile/2,py+20);}
      if(w.district==='lumiose-vernal'&&c==='l'&&x===12&&y===4){ctx.fillStyle='#88643e';ctx.fillRect(px+8,py+3,tile-16,tile-6);ctx.fillStyle='#e3c49e';for(let j=0;j<3;j++)ctx.fillRect(px+8,py+7+j*7,tile-16,2);}
      if(c==='q'){const cafe=w.district==='lumiose-vernal'||w.district==='lumiose-centrico-route';ctx.fillStyle=cafe?'#a44c45':'#6e7780';ctx.fillRect(px+3,py+3,tile-6,tile-6);if(cafe){ctx.fillStyle='#f4e2c9';for(let i=5;i<tile-4;i+=8)ctx.fillRect(px+i,py+4,4,5);ctx.fillStyle='#dac4aa';ctx.fillRect(px+5,py+tile-7,tile-10,3);}ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(cafe?'카페':'골목',px+tile/2,py+20);}
-     if(c==='%'&&w.district==='lumiose-centrico-route'){ctx.fillStyle='#91a7aa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#dce6e1';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#547985';ctx.fillRect(px+8,py+7,tile-16,tile-14);if(x===11&&y===12){ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('탑',px+tile/2,py+20);}}
+     if(c==='%'&&w.district==='lumiose-centrico-route'){
+      // One continuous footprint for Prism Tower, rather than nine separate buildings.
+      ctx.fillStyle='#a8bab8';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#789396';
+      if(x===10)ctx.fillRect(px,py,4,tile);if(x===12)ctx.fillRect(px+tile-4,py,4,tile);
+      if(y===11)ctx.fillRect(px,py,tile,4);if(y===13)ctx.fillRect(px,py+tile-4,tile,4);
+      if(x===11&&y===12){ctx.fillStyle='#dce7de';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#547985';ctx.fillRect(px+9,py+8,tile-18,tile-16);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('탑',px+tile/2,py+20);}
+     }
      if(c==='b'&&w.district!=='lumiose-vernal'){ctx.fillStyle='#765e81';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('탐정',px+tile/2,py+20);}
      if(c==='Y'||c==='Z'){ctx.fillStyle='#8d684d';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('안내',px+tile/2,py+20);}
      if(c==='E'||c==='W'){ctx.fillStyle='#537b85';ctx.font='bold 23px sans-serif';ctx.textAlign='center';ctx.fillText(w.district==='lumiose-zone2'?(c==='E'?'↓':'↑'):(c==='E'?'›':'‹'),px+tile/2,py+25);}

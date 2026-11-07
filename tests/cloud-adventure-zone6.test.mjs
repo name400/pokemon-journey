@@ -60,3 +60,9 @@ test('North Boulevard and Zone 6 connect both ways without invalidating old save
  const restored=restoreAdventurePosition(storeAdventurePosition(old,76),76);
  assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone6',11,10]);
 });
+
+test('Zone 6 ground canal reaches both screen edges without opening an exit',()=>{
+ const ground=zone6Map({});for(const y of [9,10,11,12]){assert.equal(ground[y][0],'~');assert.equal(ground[y][22],'~');assert.equal(ground[y][11],';');}
+ assert.equal(stepField({area:3,district:'lumiose-zone6',x:1,y:10},'left').blocked,true);
+ assert.equal(stepField({area:3,district:'lumiose-zone6',x:21,y:10},'right').blocked,true);
+});
