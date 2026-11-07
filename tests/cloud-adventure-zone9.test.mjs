@@ -75,3 +75,11 @@ test('south entrance ladder connects both layers and preserves earlier rooftop p
   assert.deepEqual([restored.district,restored.zaZone9Upper,restored.x,restored.y,restored.teamIds],['lumiose-zone9',old.zaZone9Upper,17,12,['kept']]);
  }
 });
+
+test('Zone 9 building drafts preserve ladders and migrate only older ground saves',()=>{
+ const base={area:3,district:'lumiose-zone9',interior:null,x:18,y:3,zaZone9Upper:false,regionId:6,districtReturnRegion:1,teamIds:['kept']};
+ const map=zone9Map(base);assert.equal(map[3][18],'#');assert.ok(fieldPath(map,{x:11,y:1},{x:5,y:6}).length);assert.ok(fieldPath(map,{x:11,y:1},{x:15,y:14}).length);
+ const saved=storeAdventurePosition(base,7);delete saved.districtPosition.groundBuildingsLayout;
+ const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
+ const upper={...base,zaZone9Upper:true};const roof=restoreAdventurePosition(storeAdventurePosition(upper,9),9);assert.deepEqual([roof.x,roof.y,roof.zaZone9Upper],[18,3,true]);
+});

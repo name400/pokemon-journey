@@ -107,3 +107,11 @@ test('Zone 5 west gate connects Bleu Sector 4 while preserving older routes',()=
  assert.equal(stepField({...zone,y:8},'left').district,'lumiose-centrico-route');
  assert.equal(stepField({...zone,y:12},'left').district,'lumiose-bleu-street');
 });
+
+test('Zone 5 building drafts preserve ladder and safely migrate old ground positions',()=>{
+ const base={area:3,district:'lumiose-zone5',interior:null,x:3,y:2,zaZone5Upper:false,regionId:6,districtReturnRegion:1,teamIds:['kept']};
+ const map=zone5Map(base);assert.equal(map[2][3],'#');assert.ok(fieldPath(map,{x:11,y:1},{x:4,y:5}).length);assert.equal(map[4][4],'l');
+ const saved=storeAdventurePosition(base,7);delete saved.districtPosition.groundBuildingsLayout;
+ const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);
+ assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.groundBuildingsLayout,1);
+});
