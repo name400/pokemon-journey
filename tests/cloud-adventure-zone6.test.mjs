@@ -66,3 +66,13 @@ test('Zone 6 ground canal reaches both screen edges without opening an exit',()=
  assert.equal(stepField({area:3,district:'lumiose-zone6',x:1,y:10},'left').blocked,true);
  assert.equal(stepField({area:3,district:'lumiose-zone6',x:21,y:10},'right').blocked,true);
 });
+
+test('Zone 6 second southern gate connects Jaune Sector 12 and preserves both routes',()=>{
+ const zone={area:3,district:'lumiose-zone6',interior:null,x:16,y:15,facing:'down',zaZone6Layer:'ground',teamIds:['kept']};
+ const street=stepField(zone,'down');assert.deepEqual([street.district,street.x,street.y],['lumiose-jaune-sector12',15,1]);
+ const state={...zone,...street};assert.ok(fieldPath(fieldMap(state),state,{x:11,y:1}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,78),78);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-jaune-sector12',15,1,['kept']]);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaZone6Layer],['lumiose-zone6',16,15,'ground']);
+ assert.equal(stepField({...zone,x:18},'down').district,'lumiose-jaune-sector12');
+ assert.equal(stepField({...zone,zaZone6Layer:'roof'},'down').blocked,true);
+});

@@ -115,3 +115,13 @@ test('Zone 5 building drafts preserve ladder and safely migrate old ground posit
  const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);
  assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.groundBuildingsLayout,1);
 });
+
+test('Zone 5 south gate connects Bleu Sector 3 independently of the sewer',()=>{
+ const zone={area:3,district:'lumiose-zone5',interior:null,x:5,y:15,facing:'down',zaZone5Upper:false,teamIds:['kept']};
+ const sector=stepField(zone,'down');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-bleu-sector3',11,1]);
+ const state={...zone,...sector};assert.ok(fieldPath(fieldMap(state),state,{x:11,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,82),82);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-bleu-sector3',11,1,['kept']]);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaZone5Upper],['lumiose-zone5',5,15,false]);
+ assert.equal(stepField({...zone,x:17},'down').district,'lumiose-bleu-plaza-route');
+ assert.equal(stepField({...zone,zaZone5Upper:true},'down').blocked,true);
+});

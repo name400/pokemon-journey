@@ -591,3 +591,23 @@ test('Zone 13 earlier woodland save relocates only at matching revision',async()
   assert.equal(state.world.district,'lumiose-zone13');assert.notEqual(state.world.map[state.world.y][state.world.x],'^');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 6 second Jaune Sector 12 entrance survives reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone6-second-gate-qa',displayName:'출입구테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector12',interior:null,x:15,y:1,facing:'up'},state.revision+1));await get();await call('move',{direction:'up'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone6Layer],['lumiose-zone6',16,15,'ground']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-sector12',15,1]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Zone 5 southern Bleu Sector 3 entrance survives reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone5-south-gate-qa',displayName:'출입구테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector3',interior:null,x:11,y:1,facing:'up'},state.revision+1));await get();await call('move',{direction:'up'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone5Upper],['lumiose-zone5',5,15,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector3',11,1]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
