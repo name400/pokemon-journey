@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 import {magentaCanalRouteMap} from '../lib/cloud-adventure/adventure-magenta-canal-route.mjs';
 test('Zone 7 to canal and Zone 14 keeps gates, water and save',()=>{
  const start={area:3,district:'lumiose-zone7',interior:null,x:1,y:8,facing:'left',zaRoyaleRank:'F'};
@@ -30,4 +30,17 @@ test('South Boulevard connects Magenta Street without bypassing Zone 14',()=>{
  assert.equal(stepField({...state,x:10,y:1},'up').blocked,true);
  const saved=restoreAdventurePosition(storeAdventurePosition(state,69),69);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-canal-route',1,12,['kept']]);
  assert.equal(stepField(saved,'left').district,'lumiose-south-boulevard');
+});
+
+test('canal reaches the map edge and old positions return to a walkable bank',()=>{
+ const map=magentaCanalRouteMap();
+ assert.equal(map[0][18],'~');assert.equal(map[3][22],'~');
+ for(const [x,y] of [[17,1],[21,4]]){
+  const old={area:3,district:'lumiose-magenta-canal-route',interior:null,x,y,steps:27,teamIds:['kept'],zaMission20Stage:9};
+  const stored=storeAdventurePosition(old,73);const saved=restoreAdventurePosition(stored,73);
+  assert.equal(saved.district,old.district);assert.ok(walkable(map[saved.y][saved.x]));
+  assert.deepEqual([saved.steps,saved.teamIds,saved.zaMission20Stage],[27,['kept'],9]);
+  assert.ok(fieldPath(map,saved,{x:21,y:8}).length);
+  assert.equal(restoreAdventurePosition(stored,74).district,null);
+ }
 });
