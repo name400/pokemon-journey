@@ -990,3 +990,7 @@ The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/bl
 ### Saison Canal-side buildings (draft)
 
 The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) shows buildings and paths alongside the Saison Canal on both the Magenta and Jaune sides. The two existing route screens now include provisional building footprints adjacent to their walkways while retaining their current entrances. Their exact locations, individual outlines and the continuous canal geometry are not verified, and these blocks should not be treated as reproductions of specific buildings. Previously valid saved positions covered by the new blocks migrate only when the save revision matches.
+
+### Coulant Waterway eastern connections
+
+[Poképédia](https://www.pokepedia.fr/Canal_Lacoul%C3%A9e) describes two eastern streets connecting Coulant Waterway to Vert Sectors 6 and 7, as well as the existing northern and southern approaches. The draft waterway now connects to both sectors in each direction, while retaining its older Zone 11 and Vert Street connections. Exact door positions, street lengths and the overall waterway geometry are not established by the source and remain provisional. The additional exits use previously blocked boundary tiles; previously valid saved positions are unchanged.

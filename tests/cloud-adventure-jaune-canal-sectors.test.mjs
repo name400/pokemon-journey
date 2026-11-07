@@ -150,3 +150,13 @@ test('canal building drafts retain approaches and safely migrate legacy position
   assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.canalBuildingsLayout,1);
  }
 });
+
+test('Coulant eastern streets connect Vert Sectors 6 and 7 in both directions',()=>{
+ for(const [y,district,x] of [[4,'lumiose-vert-sector6',19],[12,'lumiose-vert-sector7',18]]){
+  const original={area:3,district:'lumiose-coulant-route',interior:null,x:21,y,zaRoyaleRank:'V',teamIds:['kept']};
+  const out=stepField(original,'right');assert.deepEqual([out.district,out.x,out.y],[district,x,1]);
+  const arrived={...original,...out};const saved=storeAdventurePosition(arrived,7);const restored=restoreAdventurePosition(saved,7);
+  assert.deepEqual([restored.district,restored.x,restored.y],[district,x,1]);assert.deepEqual(restored.teamIds,['kept']);
+  const back=stepField(restored,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-coulant-route',21,y]);
+ }
+});
