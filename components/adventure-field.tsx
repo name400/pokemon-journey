@@ -1,20 +1,19 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import manifest from '@/public/game/town/tiles.json';
-import {fieldPath} from '@/lib/adventure-field-core.mjs';
 import {shouldRenderField,createFieldScheduler} from '@/lib/adventure-render.mjs';
 import {GARDEN_VISIBLE,visibleWildTile} from '@/lib/adventure-visible-wild.mjs';
 import {fieldThrowTarget} from '@/lib/adventure-field-throw.mjs';
 
-type Props={world:any;disabled:boolean;night:boolean;aiming?:boolean;throwing?:boolean;onPath:(path:string[])=>void;onInteract:()=>void;onAim?:(target:{x:number;y:number})=>void};
+type Props={world:any;disabled:boolean;night:boolean;aiming?:boolean;throwing?:boolean;onInteract:()=>void;onAim?:(target:{x:number;y:number})=>void};
 const palettes:Record<string,string[]>={meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 const gymFloors:Record<string,[string,string,string]>={rock:['#d9ceb5','#cfc2a5','#897657'],water:['#d3e8e7','#c2dbdf','#4d8799'],electric:['#f2e7ba','#e8d99e','#a98235'],forest:['#d8e7ca','#c5dbb7','#5d8e5b'],poison:['#e3d5e2','#d6c4d7','#92618d'],psychic:['#f0dbe2','#e6cbd6','#ac6688'],volcano:['#f0d7c1','#e4c5a7','#b7614f'],ground:['#e5d5b9','#d8c3a0','#997754']};
 const trainerRows=['...RRRRR....','..RRRRRRR...','..RRWWWWRR..','...SSSSS....','...SKSKS....','....SSS.....','..BBBBBBB...','.SBBBBBBBS..','.SBBYYYBBS..','..BBYYYBB...','...KKKKK....','...KK.KK....','...KK.KK....','..DDD.DDD...'];
 
-export default function AdventureField({world:w,disabled,night,aiming=false,throwing=false,onPath,onInteract,onAim}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),invalidateRef=useRef<()=>void>(()=>{}),props=useRef({w,disabled,night,aiming,onPath,onInteract,onAim}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||'',cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
+export default function AdventureField({world:w,disabled,night,aiming=false,throwing=false,onInteract,onAim}:Props){
+ const canvas=useRef<HTMLCanvasElement>(null),invalidateRef=useRef<()=>void>(()=>{}),props=useRef({w,disabled,night,aiming,onInteract,onAim}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||'',cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
  const visibleNames=w.interior==='citywild'?Object.entries(GARDEN_VISIBLE).filter(([tile])=>w.map.some((row:string)=>row.includes(tile))).map(([,pokemon])=>pokemon.name).join(', '):'';
- props.current={w,disabled,night,aiming,onPath,onInteract,onAim};
+ props.current={w,disabled,night,aiming,onInteract,onAim};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>(),requested=new Set<string>(),motion=window.matchMedia('(prefers-reduced-motion: reduce)');let disposed=false,last=0,width=736,height=544,lastDrawn:any=null;
@@ -101,5 +100,5 @@ export default function AdventureField({world:w,disabled,night,aiming=false,thro
   scheduler.invalidate();return()=>{disposed=true;scheduler.dispose();invalidateRef.current=()=>{};observer.disconnect();motion.removeEventListener('change',onMotionChange);};
  },[]);
  useEffect(()=>{invalidateRef.current();},[w,night,aiming]);
- return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. ${aiming?'조준 중: 가까운 야생 포켓몬을 선택하세요.':'방향키 또는 WASD로 이동, E로 대화.'} 현재 위치 ${w.x}, ${w.y}.${visibleNames?` 보이는 야생 포켓몬: ${visibleNames}.`:''}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile);if(aiming){onAim?.({x,y});return;}if(x===w.x&&y===w.y){onInteract();return;}onPath(fieldPath(w.map,{x:w.x,y:w.y},{x,y}));}}/>{throwing&&<div className="adv-throw-pending" role="status"><span aria-hidden="true">◉</span> 볼을 던지는 중…</div>}<div className="adv-field-hint">{aiming?'가까운 야생 포켓몬을 눌러 볼을 던지세요':'필드를 누르면 그곳까지 걷습니다'}</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
+ return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. ${aiming?'조준 중: 가까운 야생 포켓몬을 선택하세요.':'방향키 또는 WASD로 이동, E로 대화.'} 현재 위치 ${w.x}, ${w.y}.${visibleNames?` 보이는 야생 포켓몬: ${visibleNames}.`:''}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile);if(aiming){onAim?.({x,y});return;}if(x===w.x&&y===w.y){onInteract();return;}}}/>{throwing&&<div className="adv-throw-pending" role="status"><span aria-hidden="true">◉</span> 볼을 던지는 중…</div>}<div className="adv-field-hint">{aiming?'가까운 야생 포켓몬을 눌러 볼을 던지세요':'방향키 또는 이동 버튼으로 걸으세요'}</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
 }

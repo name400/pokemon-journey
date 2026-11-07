@@ -13,7 +13,7 @@ import {ZONE9_VISIBLE} from '@/lib/cloud-adventure/adventure-zone9.mjs';
 import {ZONE8_VISIBLE} from '@/lib/cloud-adventure/adventure-zone8.mjs';
 import {useEffect,useRef,useState} from 'react';
 import manifest from '@/data/cloud-town-tiles.json';
-import {fieldPath,wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,cloudNpcTile} from '@/lib/cloud-adventure/adventure-world.mjs';
+import {wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,cloudNpcTile} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {adventureAvatarRows} from '@/lib/cloud-adventure/adventure-avatar.mjs';
 import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE} from '@/lib/cloud-adventure/adventure-zone11.mjs';
@@ -21,12 +21,12 @@ import {ZONE6_VISIBLE,zone6Layer} from '@/lib/cloud-adventure/adventure-zone6.mj
 import {zone2WaterEdges,zone2BridgeAxis} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
 import {createFieldScheduler} from '@/lib/adventure-render.mjs';
 
-type Props={world:any;disabled:boolean;onPath:(path:string[])=>void;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;period:string};
+type Props={world:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;period:string};
 const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 
-export default function AdventureField({world:w,disabled,onPath,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,disabled,onPath,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
- props.current={w,disabled,onPath,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period};
+export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}:Props){
+ const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
+ props.current={w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,last=0,width=736,height=544;
@@ -45,7 +45,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
    if(movedArea){s.x=w.x;s.y=w.y;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;s.district=w.district||null;}
    const moving=Math.abs(s.x-w.x)+Math.abs(s.y-w.y)>.025;
    const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-   s.x=reduce?w.x:s.x+(w.x-s.x)*Math.min(1,dt/72);s.y=reduce?w.y:s.y+(w.y-s.y)*Math.min(1,dt/72);
+   s.x=reduce?w.x:s.x+(w.x-s.x)*Math.min(1,dt/24);s.y=reduce?w.y:s.y+(w.y-s.y)*Math.min(1,dt/24);
    const tile=width>=900?40:32;s.tile=tile;
    s.cameraX=Math.max(0,Math.min(w.map[0].length*tile-width,(s.x+.5)*tile-width/2));s.cameraY=Math.max(0,Math.min(w.map.length*tile-height,(s.y+.5)*tile-height/2));
    // If the viewport is larger than the map, center it.
@@ -315,7 +315,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
    }
    if(w.area===9&&!w.expedition){for(let y=1;y<=4;y++)for(let x=7;x<=21;x++)sprite(y===1?'castleBattlement':y===3?'castleWindow':'castleWall',x*tile,y*tile);[8,11,14,17,20].forEach((x,i)=>{sprite('castleDoor',x*tile,4*tile);ctx.fillStyle='#fff4bc';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText(i===4?'챔피언':`${i+1} 사천왕`,x*tile+16,6*tile-8);});}
    function trainer(x:number,y:number,color:string,face:string,walk=false){
-    const px=Math.round(x*tile+tile/2-12),py=Math.round(y*tile+tile-29),step=walk&&!reduce?Math.sin(time/70)*2:0;
+    const px=Math.round(x*tile+tile/2-12),py=Math.round(y*tile+tile-29),step=walk&&!reduce?(Math.floor(time/95)%2===0?3:-3):0;
     ctx!.fillStyle='#28473155';ctx!.beginPath();ctx!.ellipse(px+12,py+28,12,4,0,0,Math.PI*2);ctx!.fill();
     const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',Y:'#f4cf64',D:'#4b3741'};
     adventureAvatarRows(face).forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+ry*2+(ry>10?(rx<6?step:-step):0),2,2);}));
@@ -352,5 +352,5 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
   scheduler.invalidate();return()=>{disposed=true;invalidate.current=null;scheduler.dispose();observer.disconnect();motion.removeEventListener('change',scheduler.invalidate);};
  },[]);
  useEffect(()=>{invalidate.current?.();},[w,period]);
- return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. 방향키 또는 WASD로 이동, E로 대화. 현재 위치 ${w.x}, ${w.y}${zone2BudewPosition(w)?'. 야생 꼬몽울이 보입니다.':''}${!w.interior&&['lumiose-zone3','lumiose-zone4'].includes(w.district)?'. 풀이 자란 길에서도 야생 포켓몬이 나타납니다.':''}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile),budew=zone2BudewPosition(w);if(budew&&budew.x===x&&budew.y===y){onAimBudew();return;}const kakuna=zone2KakunaPosition(w);if(kakuna&&kakuna.x===x&&kakuna.y===y){onAimKakuna();return;}const fieldMon=zone2FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(fieldMon){onAimField(fieldMon.id);return;}const zone3Mon=zone3FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(zone3Mon){onAimZone3(zone3Mon.id);return;}if(w.district==='lumiose-zone2'&&w.map[y]?.[x]==='p'){onAimIslandAlpha();return;}if(w.district==='lumiose-wild'&&w.map[y]?.[x]==='a'&&!w.zaWildAlphaSpent){onAimAlpha();return;}if(x===w.x&&y===w.y){onInteract();return;}onPath(fieldPath(w.map,{x:w.x,y:w.y},{x,y}));}}/><div className="adv-field-hint">{!w.interior&&['lumiose-zone3','lumiose-zone4'].includes(w.district)?'풀이 자란 길에서도 야생 포켓몬이 나타납니다':'필드를 누르면 그곳까지 걷습니다'}</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
+ return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. 방향키 또는 WASD로 이동, E로 대화. 현재 위치 ${w.x}, ${w.y}${zone2BudewPosition(w)?'. 야생 꼬몽울이 보입니다.':''}${!w.interior&&['lumiose-zone3','lumiose-zone4'].includes(w.district)?'. 풀이 자란 길에서도 야생 포켓몬이 나타납니다.':''}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile),budew=zone2BudewPosition(w);if(budew&&budew.x===x&&budew.y===y){onAimBudew();return;}const kakuna=zone2KakunaPosition(w);if(kakuna&&kakuna.x===x&&kakuna.y===y){onAimKakuna();return;}const fieldMon=zone2FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(fieldMon){onAimField(fieldMon.id);return;}const zone3Mon=zone3FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(zone3Mon){onAimZone3(zone3Mon.id);return;}if(w.district==='lumiose-zone2'&&w.map[y]?.[x]==='p'){onAimIslandAlpha();return;}if(w.district==='lumiose-wild'&&w.map[y]?.[x]==='a'&&!w.zaWildAlphaSpent){onAimAlpha();return;}if(x===w.x&&y===w.y){onInteract();return;}}}/><div className="adv-field-hint">{!w.interior&&['lumiose-zone3','lumiose-zone4'].includes(w.district)?'풀이 자란 길에서도 야생 포켓몬이 나타납니다':'방향키 또는 이동 버튼으로 걸으세요'}</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
 }
