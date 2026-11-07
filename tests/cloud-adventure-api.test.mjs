@@ -549,3 +549,13 @@ test('Hibernal Avenue rooftop lift respects rank and preserves its return after 
   const roof={...rawWorld(),district:'lumiose-zone15',x:4,y:8,facing:'up',zaZone15Upper:true};delete roof.zaZone15LiftReturn;seedWorld(storeAdventurePosition(roof,state.revision+1));await get();await call('zone15Lift');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone15',2,12]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('west Magenta courtyard entrance survives reload and returns to the canal',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta-courtyard-qa',displayName:'안뜰테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-canal-route',interior:null,x:19,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-west-courtyard',11,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-canal-route',19,15]);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

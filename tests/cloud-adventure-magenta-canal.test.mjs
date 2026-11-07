@@ -44,3 +44,12 @@ test('canal reaches the map edge and old positions return to a walkable bank',()
   assert.equal(restoreAdventurePosition(stored,74).district,null);
  }
 });
+
+test('west-of-Zone-7 courtyard connects to the canal street and preserves saves',()=>{
+ const s={area:3,district:'lumiose-magenta-canal-route',interior:null,x:19,y:15,facing:'down',teamIds:['kept'],zaRoyaleRank:'F'};
+ const entry=stepField(s,'down');assert.deepEqual([entry.district,entry.x,entry.y],['lumiose-magenta-west-courtyard',11,1]);
+ const court={...s,...entry};assert.ok(fieldPath(fieldMap(court),court,{x:11,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...court,x:11,y:8},45),45);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[court.district,11,8,['kept']]);
+ const exit=stepField({...court,x:11,y:1},'up');assert.deepEqual([exit.district,exit.x,exit.y],[s.district,19,15]);
+ assert.equal(stepField({...s,x:21,y:8},'right').district,'lumiose-zone7');
+});
