@@ -559,3 +559,14 @@ test('west Magenta courtyard entrance survives reload and returns to the canal',
   await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-canal-route',19,15]);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Coulant lower bank stairs and underpass survive reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'coulant-bank-qa',displayName:'수로테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-coulant-route',interior:null,x:3,y:4,facing:'down'},state.revision+1));await get();assert.equal(state.world.interaction.action,'coulantBankSteps');
+  await call('coulantBankSteps');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaCoulantLower],[3,6,true]);
+  await call('move',{direction:'right'});await call('move',{direction:'right'});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaCoulantLower],[6,6,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-coulant-route',x:19,y:6,facing:'up',zaCoulantLower:true},state.revision+1));await get();await call('coulantBankSteps');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaCoulantLower],[19,4,false]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

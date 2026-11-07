@@ -17,3 +17,11 @@ test('Zone 11 approach steps retain bank paths and earlier positions',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition(s,62),62);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[s.district,10,3,['kept']]);
  assert.equal(stepField({...s,x:10,y:1},'up').district,'lumiose-zone11');
 });
+
+test('Coulant lower bank crosses beneath a bridge and restores its own layer',()=>{
+ const s={area:3,district:'lumiose-coulant-route',interior:null,x:3,y:6,zaCoulantLower:true,teamIds:['kept']};
+ const lower=coulantRouteMap(s),upper=coulantRouteMap();assert.equal(lower[6][6],',');assert.equal(upper[6][6],':');assert.ok(fieldPath(lower,s,{x:19,y:6}).length);
+ assert.equal(stepField({...s,x:5,y:6},'right').x,6);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:6,y:6},24),24);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaCoulantLower,saved.teamIds],[s.district,6,6,true,['kept']]);
+ const old={...s,x:3,y:5,zaCoulantLower:false},restored=restoreAdventurePosition(storeAdventurePosition(old,25),25);assert.deepEqual([restored.x,restored.y],[3,5]);
+});
