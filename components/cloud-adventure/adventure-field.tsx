@@ -25,7 +25,7 @@ type Props={world:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;o
 const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 
 export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32}),[assetError,setAssetError]=useState(false);
+ const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,walkUntil:0}),[assetError,setAssetError]=useState(false);
  props.current={w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,period};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
@@ -42,8 +42,10 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
   function draw(time:number){
    if(disposed||!ctx||!el)return;const {w}=props.current,s=scene.current,dt=Math.min(48,time-last||16);last=time;
    const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0)||s.interior!==(w.interior||null)||s.district!==(w.district||null);
-   if(movedArea){s.x=w.x;s.y=w.y;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;s.district=w.district||null;}
+   if(movedArea){s.x=w.x;s.y=w.y;s.targetX=w.x;s.targetY=w.y;s.walkUntil=0;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;s.district=w.district||null;}
+   if(!movedArea&&(s.targetX!==w.x||s.targetY!==w.y)){s.targetX=w.x;s.targetY=w.y;s.walkUntil=time+140;}
    const moving=Math.abs(s.x-w.x)+Math.abs(s.y-w.y)>.025;
+   const walking=moving||time<s.walkUntil;
    const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
    s.x=reduce?w.x:s.x+(w.x-s.x)*Math.min(1,dt/24);s.y=reduce?w.y:s.y+(w.y-s.y)*Math.min(1,dt/24);
    const tile=width>=900?40:32;s.tile=tile;
@@ -352,11 +354,11 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    if(['lumiose-zone5','lumiose-zone5-drain'].includes(w.district)&&!w.interior)for(const m of ZONE5_VISIBLE.filter(p=>(w.district==='lumiose-zone5-drain'?p.drain===true:!p.drain&&p.upper===(w.zaZone5Upper===true))&&!w.zaZone5Spent?.[p.id])){const px=m.x*tile,py=m.y*tile,img=fieldImages[m.species];if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle=m.alpha?'#af5462':'#d6b57d';ctx.fillRect(px+6,py+6,tile-12,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}}
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
-   trainer(s.x,s.y,'#d95250',w.facing||'down',moving);
+   trainer(s.x,s.y,'#d95250',w.facing||'down',walking);
    ctx.restore();
    // Soft border is part of the camera, never a fullscreen tint over sprites.
    ctx.strokeStyle='#284d3b55';ctx.lineWidth=4;ctx.strokeRect(2,2,width-4,height-4);
-   return moving&&!reduce;
+   return walking&&!reduce;
   }
   scheduler.invalidate();return()=>{disposed=true;invalidate.current=null;scheduler.dispose();observer.disconnect();motion.removeEventListener('change',scheduler.invalidate);};
  },[]);
