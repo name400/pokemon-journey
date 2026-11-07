@@ -998,3 +998,7 @@ The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/bl
 ### Saison Canal across Centrico (draft street continuity)
 
 [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Saison_Canal) places the northwest canal segment along Magenta Street and the southeast segment beyond Centrico. The Magenta canal-side route now has a direct bidirectional street transition to the existing Centrico screen, which already connects to the southeast Saison promenade. The screen-edge coordinates, the intervening street length and the actual passage geometry are provisional; the water itself is not yet rendered as a continuous channel beneath the tower. The new transition does not require entering Wild Zone 7, and keeps that zone's existing rank restriction.
+
+### Canal beneath Prism Tower (draft)
+
+The [Saison Canal reference](https://bulbapedia.bulbagarden.net/wiki/Saison_Canal) says the waterway runs directly beneath Prism Tower. The Centrico draft now shows water on both sides of its existing tower footprint, with walkable approaches retained around it. These are short, compressed tile segments: the waterline, bridge structure, tower dimensions and exact screen-to-screen alignment have not been surveyed. This updates the previous entry's statement that the water was not rendered. Legacy floor positions newly covered by water are moved to walkable ground only if the save revision matches; original encounter tiles are not changed.

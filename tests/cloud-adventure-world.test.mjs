@@ -393,3 +393,16 @@ test('Rouge garden cross passage and cemetery approach preserve existing exits a
   const restored=restoreAdventurePosition(saved,4);assert.deepEqual([restored.district,restored.x,restored.y],[district,x,y]);assert.deepEqual(restored.teamIds,['kept']);
  }
 });
+
+test('Centrico canal preserves plaza access and recovers matching legacy floor positions',()=>{
+ const map=lumioseCentricoRouteMap();
+ for(const x of [7,8,9,13,14,15])assert.equal(map[12][x],'~');
+ assert.equal(map[12][11],'%');
+ for(const target of [{x:1,y:8},{x:21,y:8},{x:1,y:12},{x:2,y:1},{x:9,y:1},{x:19,y:1},{x:7,y:15},{x:12,y:15},{x:14,y:15},{x:16,y:15},{x:18,y:15},{x:20,y:15},{x:17,y:11},{x:18,y:12}])assert.ok(fieldPath(map,{x:11,y:8},target).length,`${target.x},${target.y}`);
+ for(const x of [7,9,13,15]){
+  const state={area:3,district:'lumiose-centrico-route',x,y:12,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42};
+  const old=storeAdventurePosition(state,7);delete old.districtPosition.centricoCanalLayout;
+  const restored=restoreAdventurePosition(structuredClone(old),7);assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,42);
+  assert.equal(restoreAdventurePosition(structuredClone(old),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.centricoCanalLayout,1);
+ }
+});
