@@ -49,3 +49,11 @@ test('Bleu Plaza island has three draft crossings and safely restores earlier pa
  }
  for(const start of [{x:8,y:4},{x:17,y:8},{x:8,y:12}])assert.ok(fieldPath(map,start,{x:11,y:7}).length);
 });
+
+test('southwest ladder reaches a separate rooftop and preserves earlier ground saves',()=>{
+ const s={area:3,district:'lumiose-zone16',interior:null,x:4,y:13,facing:'down',zaRoyaleRank:'C',teamIds:['kept']};
+ assert.equal(fieldDialogue(s).action,'zone16RoofLadder');assert.equal(zone16Map(s)[14][4],'l');
+ const roof={...s,x:4,y:9,zaZone16Upper:true};assert.equal(fieldDialogue(roof).action,'zone16RoofLadder');assert.ok(fieldPath(zone16Map(roof),roof,{x:18,y:8}).length);
+ const stored=storeAdventurePosition(roof,54),loaded=restoreAdventurePosition(stored,54);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaZone16Upper,loaded.teamIds],[s.district,4,9,true,['kept']]);
+ const old=storeAdventurePosition({...s,x:4,y:14},55),restored=restoreAdventurePosition(old,55);assert.deepEqual([restored.x,restored.y],[4,14]);assert.ok(walkable(zone16Map(restored)[14][4]));
+});

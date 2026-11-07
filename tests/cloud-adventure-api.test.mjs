@@ -526,3 +526,13 @@ test('Zone 19 directional entrances survive reloads and keep rank restrictions',
   }
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 16 southwest rooftop ladder survives reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone16-roof-qa',displayName:'옥상테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone16',interior:null,x:4,y:13,facing:'down',zaRoyaleRank:'C'},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'zone16RoofLadder');await call('zone16RoofLadder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone16Upper],[4,9,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone16RoofLadder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone16Upper],[4,13,false]);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
