@@ -25,7 +25,7 @@ test('Zone 5 underground route has two barriers and connects back to the sewer a
  const open={...drain,zaZone5DrainSecondCleared:true};
  assert.ok(fieldPath(fieldMap(open),open,{x:21,y:4}).length);
  const approach=stepField({...open,x:21,y:4},'right');assert.equal(approach.district,'lumiose-bleu3-sewer-approach');
- const back=stepField({...open,...approach},'up');assert.equal(back.district,'lumiose-zone5-drain');
+ const back=stepField({...open,...approach},'right');assert.equal(back.district,'lumiose-zone5-drain');
  const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:8,y:11,teamIds:['kept']},8),8);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone5-drain',8,11,['kept']]);
  assert.equal(stepField({...open,x:1,y:12},'left').district,'lumiose-zone5');
