@@ -499,3 +499,15 @@ test('Zone 17 and 18 older rooftop saves load safely after the split',async()=>{
   }
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 18 southern ladder preserves the return path after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-south-ladder-qa',displayName:'옥상테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:13,y:13,facing:'right',zaRoyaleRank:'B',zaZone18Upper:false},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'zone18Ladder');await call('zone18Ladder');await get();
+  assert.deepEqual([state.world.x,state.world.y,state.world.zaZone18Upper],[6,9,true]);assert.equal(rawWorld().zaZone18LadderReturn,'south');
+  await call('zone18Ladder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone18Upper],[13,13,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  const legacy={...rawWorld(),x:6,y:9,facing:'down',zaZone18Upper:true};delete legacy.zaZone18LadderReturn;seedWorld(storeAdventurePosition(legacy,state.revision+1));await get();await call('zone18Ladder');await get();assert.deepEqual([state.world.x,state.world.y],[13,6]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

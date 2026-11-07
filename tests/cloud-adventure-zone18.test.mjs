@@ -74,3 +74,9 @@ test('Zone 18 opposing roofs keep the scaffold and migrate earlier roof saves',(
  const saved=storeAdventurePosition(base,7);delete saved.districtPosition.splitRoofLayout;const restored=restoreAdventurePosition(structuredClone(saved),7);
  assert.equal(restored.district,base.district);assert.equal(restored.zaZone18Upper,true);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
 });
+
+test('Zone 18 south scaffold and legacy ladder remain reachable',()=>{
+ const s={area:3,district:'lumiose-zone18',interior:null,x:11,y:15,zaRoyaleRank:'B'};const map=zone18Map(s);
+ assert.equal(map[13][14],'l');assert.equal(map[5][13],'l');assert.ok(fieldPath(map,s,{x:13,y:13}).length);assert.ok(fieldPath(map,s,{x:13,y:6}).length);
+ const old=storeAdventurePosition({...s,x:14,y:13},34);const restored=restoreAdventurePosition(old,34);assert.deepEqual([restored.district,restored.x,restored.y],[s.district,14,13]);
+});

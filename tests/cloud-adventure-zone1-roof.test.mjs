@@ -86,3 +86,10 @@ test('Vert Sector 9 waterway keeps its bridge, access and matching legacy saves'
  const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'~');assert.deepEqual(restored.teamIds,['kept']);
  assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.vert9Layout,1);
 });
+
+test('Zone 1 draft roof gap preserves paths and migrates matching old saves',()=>{
+ const roof={area:3,district:'lumiose-zone1-roof',interior:null,x:2,y:9,facing:'down',teamIds:['kept']};
+ const map=fieldMap(roof);assert.equal(map[5][14],'#');assert.equal(map[7][14],'.');assert.ok(fieldPath(map,roof,{x:20,y:6}).length);
+ for(const y of [4,5,6,9]){const old=storeAdventurePosition({...roof,x:14,y},23);delete old.districtPosition.zone1RoofLayout;const loaded=restoreAdventurePosition(old,23);assert.equal(loaded.district,roof.district);assert.notEqual(fieldMap(loaded)[loaded.y][loaded.x],'#');assert.deepEqual(loaded.teamIds,['kept']);}
+ const current=storeAdventurePosition(roof,24);assert.equal(current.districtPosition.zone1RoofLayout,1);
+});
