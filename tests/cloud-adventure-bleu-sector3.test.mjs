@@ -30,8 +30,20 @@ test('Bleu sewer approach preserves the barrier, unlock and return after restore
  const old={...city,...tunnel,x:21,y:8,zaBleuSewerOpened:true,zaMission57Won:true};
  const restored=restoreAdventurePosition(storeAdventurePosition(old,7),7);
  assert.deepEqual([restored.x,restored.y,restored.zaBleuSewerOpened,restored.zaMission57Won,restored.teamIds],[21,8,true,true,['kept']]);
- assert.equal(stepField(restored,'right').district,'lumiose-zone5-drain');
+ assert.ok(fieldPath(fieldMap(restored),restored,{x:17,y:15}).length);
+ assert.equal(stepField({...restored,x:17,y:15},'down').district,'lumiose-zone5-drain');
  assert.equal(fieldDialogue({...city,...tunnel,x:17,y:3,facing:'up',zaMission19Complete:true}).action,'openBleuSewer');
+});
+
+test('from the street the underground junction turns left for the sewer and right for Zone 5',()=>{
+ const entry={area:3,district:'lumiose-bleu3-sewer-approach',interior:null,x:1,y:8,zaBleuSewerOpened:true,teamIds:['kept']};
+ const map=fieldMap(entry);
+ assert.ok(fieldPath(map,entry,{x:17,y:1}).length);
+ assert.ok(fieldPath(map,entry,{x:17,y:15}).length);
+ assert.equal(stepField({...entry,x:17,y:1},'up').district,'lumiose-sewer');
+ const drain=stepField({...entry,x:17,y:15},'down');assert.equal(drain.district,'lumiose-zone5-drain');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...entry,...drain},9),9);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu3-sewer-approach',17,15]);
 });
 
 test('Bleu Sector 3 and Vernal Avenue connect without entering locked Zone 12',()=>{
