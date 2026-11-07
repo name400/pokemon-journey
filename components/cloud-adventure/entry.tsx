@@ -36,7 +36,7 @@ export default function Adventure(){
  const [alphaAimKey,setAlphaAimKey]=useState(''),[budewAimKey,setBudewAimKey]=useState(''),[kakunaAimKey,setKakunaAimKey]=useState(''),[fieldAim,setFieldAim]=useState(''),[islandAlphaAim,setIslandAlphaAim]=useState(''),[zone3Aim,setZone3Aim]=useState(''),[catchBall,setCatchBall]=useState('pokeball');
  const [battleResult,setBattleResult]=useState<any>(null),resultRef=useRef<any>(null);
  const lock=useRef(false),mounted=useRef(true),revision=useRef(-1),snapshot=useRef<any>(null),screenRef=useRef<Screen>(null),dialogueRef=useRef<any>(null);
- const heldDirection=useRef(''),pathQueue=useRef<string[]>([]),lastFacing=useRef(''),movementEpoch=useRef(0),inputSequence=useRef(0),wakeMovement=useRef<()=>void>(()=>{});
+ const heldDirection=useRef(''),pathQueue=useRef<string[]>([]),lastFacing=useRef(''),movementEpoch=useRef(0),inputSequence=useRef(0),wakeMovement=useRef<()=>void>(()=>{}),inflightMove=useRef<any>(null);
  snapshot.current=data;screenRef.current=screen;dialogueRef.current=dialogue;
  const stop=useCallback(()=>{heldDirection.current='';pathQueue.current=[];movementEpoch.current++;},[]);
  const accept=useCallback((d:any)=>{
@@ -56,8 +56,13 @@ export default function Adventure(){
  // Show the first safe step in the input event instead of waiting for the
  // movement polling loop; the server still resolves and persists the move.
  const previewInput=useCallback((direction:string)=>{
-  const d=snapshot.current;if(!d?.world||d.revision!==revision.current||d.battle||d.world.adventurePendingMoves?.length||d.world.adventureCatchWindow||resultRef.current||screenRef.current||dialogueRef.current||lock.current)return;
-  const projected=predictCloudStep(d.world,direction,{allowGrass:true,allowTransition:true,allowHazard:true});if(projected)setPrediction({revision:d.revision,...projected});
+  const d=snapshot.current;if(!d?.world||d.revision!==revision.current||d.battle||d.world.adventurePendingMoves?.length||d.world.adventureCatchWindow||resultRef.current||screenRef.current||dialogueRef.current)return;
+  // While a movement request is in flight, preview from its expected endpoint.
+  // Only the queued input is sent after confirmation; failures still roll back.
+  const pending=lock.current?inflightMove.current:null;
+  if(lock.current&&(!pending||pending.revision!==d.revision||pending.position?.predictedTransition))return;
+  const base=pending?{...d.world,...pending.position}:d.world;
+  const projected=predictCloudStep(base,direction,{allowGrass:true,allowTransition:!pending,allowHazard:true});if(projected)setPrediction({revision:d.revision,...projected});
  },[]);
  const interact=useCallback(()=>{stop();if(lock.current)return;const spot=snapshot.current?.world?.interaction;if(!spot){setHint('NPC나 건물 입구로 다가가 바라본 뒤 대화하세요.');return;}setDialogue(spot);},[stop]);
  useEffect(()=>{
@@ -86,14 +91,15 @@ export default function Adventure(){
      if(projected)setPrediction({revision:d.revision,...projected});
      // Accumulate only displayed steps; transitions wait for server confirmation.
      const previewTimer=heldDirection.current&&projected?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||inputSequence.current!==inputAtStart||heldDirection.current!==direction)return;const next=buffer.push();if(next)setPrediction({revision:revision.current,...next});},adventureMovementInterval(d.world)):null;
-     moved=true;let r=await act('move',{path});
+     moved=true;inflightMove.current=projected?{revision:d.revision,position:projected}:null;let r=await act('move',{path});inflightMove.current=null;
      while(alive&&mounted.current&&movementEpoch.current===epoch&&inputSequence.current===inputAtStart&&buffer.path.length&&buffer.matches(r)){
       const pending=buffer.path,before=r,nextBuffer=createCloudMoveBuffer(before.world,buffer.position,direction);
       setPrediction({revision:before.revision,...buffer.position});
       // Keep one cadence across requests; restarting a timer after every
       // response adds a visible pause between otherwise continuous batches.
       buffer=nextBuffer;
-      r=await act('move',{path:pending});
+      inflightMove.current={revision:before.revision,position:buffer.position};
+      r=await act('move',{path:pending});inflightMove.current=null;
       if(!r||r.battle||r.world?.area!==before.world.area||r.world?.interior!==before.world.interior||r.world?.district!==before.world.district||(r.world?.steps||0)-(before.world.steps||0)<pending.length){stop();break;}
      }
      if(previewTimer)clearInterval(previewTimer);
