@@ -31,7 +31,9 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,last=0,width=736,height=544;
   const scheduler=createFieldScheduler(requestAnimationFrame,cancelAnimationFrame,draw);invalidate.current=scheduler.invalidate;
-  const fieldImages:Record<number,HTMLImageElement>={};for(const id of [656,504,662,688,322,323,552,66,443,302,303,64,703,678,310,318,319,24,505,225,67,459,460,712,713,361,673,214,127,709,70,304,305,529,530,95,587,694,710,545,353,711,15,354,246,870,308,181,650,660,707,668,303,371,373,428,653,115,531,35,1,4,448,282,306,129,120,667,674,677,672,25,669,702,63,309,17,69,544,79,618,676,716,228,229,307,427,180,333]){const img=new Image();img.onload=scheduler.invalidate;img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;fieldImages[id]=img;}
+  // Load field sprites only when a visible map actually refers to them. This
+  // avoids competing with movement requests for dozens of unrelated images.
+  const fieldImages=new Proxy({} as Record<number,HTMLImageElement>,{get(cache,key){if(typeof key!=='string'||!/^\d+$/.test(key))return Reflect.get(cache,key);const id=Number(key);if(!cache[id]){const img=new Image();img.onload=scheduler.invalidate;img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;cache[id]=img;}return cache[id];}});
   const kakunaImage=new Image();kakunaImage.onload=scheduler.invalidate;kakunaImage.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/14.png';
   const budewImage=new Image();budewImage.onload=scheduler.invalidate;budewImage.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/406.png';
   for(const src of [...new Set([manifest.image,...Object.values(manifest.tiles).map((t:any)=>t.image||manifest.image)])]){const img=new Image();img.onload=()=>{images.set(src,img);scheduler.invalidate();};img.onerror=()=>{if(!disposed)setAssetError(true);};img.src=src;}
