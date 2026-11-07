@@ -57,6 +57,8 @@
 .rogue-move-learn .rml-empty-note{display:block;font-size:13px;line-height:1.8;color:#78856e;margin-top:8px}
 .rogue-move-learn .rml-decision{padding:20px 27px 24px;background:#e8ecdc;border-top:1px solid #c4d0b9}
 .rogue-move-learn .rml-comparison{animation:rml-selection .18s ease both;margin-bottom:18px}
+.rogue-move-learn .rml-current-description{margin:-8px 0 16px;color:#496348;font-size:13px;line-height:1.6}
+.rogue-move-learn .rml-current-description p{margin:3px 0 0;white-space:pre-wrap}
 .rogue-move-learn .rml-swap-summary{display:flex;align-items:center;flex-wrap:wrap;gap:7px 13px;color:#648059;font-size:14px;line-height:1.8}
 .rogue-move-learn .rml-swap-summary>span{padding:2px 7px;border:1px solid #b8c8a8;border-radius:3px;background:#f5f5e5;color:#728367;font-size:12px}
 .rogue-move-learn .rml-swap-summary>b{font-size:16px;color:#6f7960;font-weight:700}

@@ -1,4 +1,4 @@
-export type ClassicRewardMove = { index: number; name: string; pp: number; maxPp: number; canBoostPP?: boolean };
+export type ClassicRewardMove = { index: number; name: string; pp: number; maxPp: number; description?: string; canBoostPP?: boolean };
 export type ClassicRewardTarget = {
   boxId: string;
   name: string;
