@@ -40,6 +40,7 @@ export type StarterEntry = {
 };
 export type StarterSelection = {
   id: number;
+  teraType?: string;
   ability: string;
   nature: string;
   gender: string;
