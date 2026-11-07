@@ -35,3 +35,12 @@ test('grass preview is bounded and pending steps require server authority',async
  assert.equal(buffer.matches({world:{...world,...first},battle:{}}),false);assert.equal(buffer.matches({world:{...world,...first,x:2}}),false);
  const gate={area:3,district:'lumiose-zone13',x:21,y:8,facing:'right'};assert.equal(predictCloudStep(gate,'right',{allowGrass:true}),null);
 });
+
+test('transition preview uses the target map and never buffers across the boundary',async()=>{
+ const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const world={area:3,district:'lumiose-vernal',interior:null,x:21,y:4,facing:'right',teamIds:['kept']},copy=structuredClone(world);
+ assert.equal(predictCloudStep(world,'right'),null);const p=predictCloudStep(world,'right',{allowTransition:true});
+ assert.deepEqual([p.district,p.x,p.y,p.predictedTransition],['lumiose-vert-sector4',1,8,true]);assert.equal(p.map[8][0],'X');assert.deepEqual(world,copy);
+ const buffer=createCloudMoveBuffer(world,p,'right');assert.equal(buffer.push(),null);assert.deepEqual(buffer.path,[]);assert.equal(buffer.matches({world:{...world,...p}}),false);
+ const blocked={area:3,district:'lumiose-vert2',interior:null,x:17,y:15,zaRoyaleRank:'F'};assert.equal(predictCloudStep(blocked,'down',{allowTransition:true}),null);
+});
