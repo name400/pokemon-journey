@@ -513,3 +513,16 @@ test('Zone 18 southern ladder preserves the return path after reload',async()=>{
   seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:15,facing:'down',zaZone18LadderReturn:'south'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.notEqual(state.world.district,'lumiose-zone18');assert.equal(rawWorld().zaZone18LadderReturn,undefined);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 19 directional entrances survive reloads and keep rank restrictions',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone19-entrance-qa',displayName:'이동테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const [district,x,landingX,direction] of [['lumiose-jaune-street',19,1,'left'],['lumiose-jaune-garden-route',19,21,'right']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y:1,facing:'up',zaRoyaleRank:'C'},state.revision+1));await get();await call('move',{direction:'up'},409);
+   seedWorld(storeAdventurePosition({...rawWorld(),district,interior:null,x,y:1,facing:'up',zaRoyaleRank:'B'},state.revision+1));await get();await call('move',{direction:'up'});await get();
+   assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',landingX,8]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+   await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[district,x,1]);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
