@@ -727,3 +727,23 @@ test('Zone 10 old canal-edge save restores without losing party or wallet',async
   await get();assert.equal(state.world.district,'lumiose-zone10');assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vert 2 courtyard rooftop ladder keeps layer and party after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert2-roof-qa',displayName:'안뜰사다리테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert2',interior:null,x:12,y:5,facing:'up'},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'vert2CourtyardLadder');await call('vert2CourtyardLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaVert2RoofUpper],['lumiose-vert2',5,9,true]);
+  await call('vert2CourtyardLadder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaVert2RoofUpper],[12,5,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Zone 2 old northern shoreline save preserves field state and inventory',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone2-north-shore-qa',displayName:'호숫가저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:15,y:2,zaZone2Budew:{x:15,y:3,alert:2,custom:'kept'}},state.revision+1);old.districtPosition.zone2Layout=7;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-zone2');assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  const budew=rawWorld().zaZone2Budew;assert.deepEqual([budew.alert,budew.custom],[2,'kept']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

@@ -463,3 +463,11 @@ test('Rouge Sector 6 connects the southern cemetery gate to Rouge Street',()=>{
  assert.equal(stepField({...saved,...cemetery},'down').district,'lumiose-rouge-sector6');assert.equal(stepField({...sector,x:1,y:8},'left').district,'lumiose-rouge-north');
  assert.equal(stepField({...cemetery,x:11,y:15},'down').district,'lumiose-rouge-north');
 });
+
+test('Vert Sector 2 courtyard ladder keeps ground saves and a separate roof',()=>{
+ const ground={area:3,district:'lumiose-vert2',interior:null,x:12,y:5,facing:'up',teamIds:['kept']},map=fieldMap(ground);
+ assert.equal(map[4][12],'l');assert.equal(fieldDialogue(ground).action,'vert2CourtyardLadder');
+ const old=restoreAdventurePosition(storeAdventurePosition({...ground,x:12,y:4},68),68);assert.deepEqual([old.district,old.x,old.y],[ground.district,12,4]);
+ const roof={...ground,x:5,y:9,facing:'down',zaVert2RoofUpper:true},upper=fieldMap(roof);assert.equal(upper[10][5],'l');assert.equal(fieldDialogue(roof).action,'vert2CourtyardLadder');
+ assert.equal(fieldPath(upper,roof,{x:14,y:8}).length,0);const saved=restoreAdventurePosition(storeAdventurePosition(roof,69),69);assert.deepEqual([saved.x,saved.y,saved.zaVert2RoofUpper,saved.teamIds],[5,9,true,['kept']]);
+});

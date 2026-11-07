@@ -20,3 +20,15 @@ test('old shoreline positions and saved Budew relocate without losing state',()=
  const other=storeAdventurePosition({area:3,district:'lumiose-zone2',interior:null,x:12,y:8,teamIds:['kept']},81);other.districtPosition.zone2Layout=6;
  const unchanged=restoreAdventurePosition(other,81);assert.deepEqual([unchanged.x,unchanged.y],[12,8]);
 });
+
+
+test('new northern shore safely migrates matching player and Budew saves',()=>{
+ for(const y of [1,2,3]){
+  const state={area:3,district:'lumiose-zone2',interior:null,x:15,y,teamIds:['kept'],zaZone2Budew:{x:15,y,alert:2,custom:'kept'}};
+  const old=storeAdventurePosition(state,96);old.districtPosition.zone2Layout=7;
+  const restored=restoreAdventurePosition(structuredClone(old),96),map=lumioseZone2Map(restored);
+  assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.ok(walkable(map[restored.zaZone2Budew.y][restored.zaZone2Budew.x]));
+  assert.deepEqual([restored.teamIds,restored.zaZone2Budew.alert,restored.zaZone2Budew.custom],[['kept'],2,'kept']);
+  assert.equal(restoreAdventurePosition(structuredClone(old),97).district,null);
+ }
+});
