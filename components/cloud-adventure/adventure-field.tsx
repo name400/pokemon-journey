@@ -153,7 +153,12 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if(c==='H'&&w.district==='lumiose-zone3'){ctx.fillStyle='#e4d8b9';ctx.fillRect(px+2,py+10,tile-4,tile-10);ctx.fillStyle='#cc6559';ctx.fillRect(px+1,py+5,tile-2,7);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('회복',px+tile/2,py+24);}
      if(c==='a'&&!w.zaWildAlphaSpent){ctx.fillStyle='#8e4939';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.38,tile*.30,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';const arrow=({up:'↑',down:'↓',left:'←',right:'→'} as any)[wildAlphaPosition(w).facing];ctx.fillText((w.zaWildAlphaAlert?'!':'왕')+arrow,px+tile/2,py+20);}if(c==='T'){ctx.fillStyle='#769b88';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('광장',px+tile/2,py+20);}
      if(c==='f'&&w.district==='lumiose-floral'){ctx.fillStyle='#537b85';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('북쪽',px+tile/2,py+20);}
-     if(c==='s'&&w.district==='lumiose'){ctx.fillStyle='#438766';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('구역 1',px+tile/2,py+20);}
+     if(c==='s'&&w.district==='lumiose'){
+      // Wild Zone 1's entrance is a green holographic barrier, not a building.
+      ctx.fillStyle='#d1dbc5';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#4a8272';ctx.fillRect(px+2,py+5,4,tile-9);ctx.fillRect(px+tile-6,py+5,4,tile-9);
+      ctx.fillStyle='#a5edbb';ctx.fillRect(px+6,py+6,tile-12,3);ctx.fillStyle='#64c99a';ctx.fillRect(px+7,py+10,tile-14,tile-16);
+      ctx.fillStyle='#e5fff0';for(let i=10;i<tile-7;i+=7)ctx.fillRect(px+i,py+10,2,tile-16);
+     }
      if(c==='d'){ctx.fillStyle='#273e35';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,11,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('?',px+tile/2,py+21);}
      if((c==='o'||c==='d')&&w.district==='lumiose-centrico-route'){ctx.fillStyle='#716589';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='o'?'SBC':'은행',px+tile/2,py+20);}
      if(c==='h'||c==='c'||c==='x'){ctx.fillStyle=c==='c'?'#d67aad':'#786884';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='c'?'결정':c==='x'?'교환':w.district==='lumiose-vernal'?'분수':'옥상',px+tile/2,py+20);}
@@ -194,6 +199,19 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
    }));
    for(const b of buildings){
     ctx.fillStyle=palette[2];ctx.fillRect((b.x-1)*tile,(b.y-3)*tile,3*tile,4*tile);
+    if(w.district==='lumiose'&&b.kind==='J'){
+     // Hotel Z's cream facade, dark mansard roof and ivy are stylized from the
+     // original exterior; its 3x4 footprint remains the existing draft.
+     const bx=(b.x-1)*tile,by=(b.y-3)*tile;
+     ctx.fillStyle='#d7cdb4';ctx.fillRect(bx,by+tile,3*tile,3*tile);
+     ctx.fillStyle='#66716f';ctx.fillRect(bx+5,by+3,3*tile-10,tile-4);ctx.fillStyle='#505d5d';ctx.fillRect(bx,by+tile-5,3*tile,6);
+     ctx.fillStyle='#ede5d2';for(let i=0;i<3;i++){ctx.fillRect(bx+11+i*tile,by+8,10,12);ctx.fillRect(bx+10+i*tile,by+tile+8,12,18);if(i!==1)ctx.fillRect(bx+10+i*tile,by+2*tile+8,12,18);}
+     ctx.fillStyle='#718a86';for(let i=0;i<3;i++){ctx.fillRect(bx+13+i*tile,by+10,6,8);ctx.fillRect(bx+13+i*tile,by+tile+10,6,13);if(i!==1)ctx.fillRect(bx+13+i*tile,by+2*tile+10,6,13);}
+     ctx.fillStyle='#719569';for(const [ix,iy] of [[2,0],[8,0],[0,1],[4,1],[7,2],[1,2]]){ctx.fillRect(bx+ix*tile/8,by+tile+iy*tile,10,13);ctx.fillRect(bx+3*tile-12-ix*tile/8,by+tile+iy*tile,9,12);}
+     ctx.fillStyle='#6b5040';ctx.fillRect(bx+tile+7,by+3*tile+3,tile-14,tile-3);ctx.fillStyle='#b79870';ctx.fillRect(bx+tile+tile/2-1,by+3*tile+5,2,tile-8);
+     ctx.fillStyle='#efe7d2';ctx.fillRect(bx+tile+5,by+3*tile-4,tile-10,4);ctx.fillStyle='#51685a';ctx.fillRect(bx+tile+6,by+2*tile+8,tile-12,10);ctx.fillStyle='#fff5d9';ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.fillText('HOTEL Z',bx+tile*1.5,by+2*tile+16);
+     continue;
+    }
     const layout=b.kind==='H'?manifest.buildings.center.layout:manifest.buildings.shop.layout;
     for(let y=0;y<4;y++)for(let x=0;x<3;x++)sprite(layout[y][x],(b.x+x-1)*tile,(b.y+y-3)*tile);
     // Red clinic / blue shop signs, independent of the source sheet roof colors.
