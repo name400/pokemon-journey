@@ -8,6 +8,7 @@ export type StarterEntry = {
   artId: number;
   name: string;
   types: string[];
+  teraTypes?: string[];
   generation: number;
   challengeRibbons?: {generations: number[]; types: number[]; other?: string[]};
   pokerus?: boolean;
@@ -110,6 +111,7 @@ export function defaultStarterSelection(entry: StarterEntry): StarterSelection {
   const defaultMoves = [...new Set(entry.defaultMoves)].filter(move => entry.moves.includes(move)).slice(0, 4);
   return {
     id: entry.id,
+    teraType: entry.teraTypes?.[0],
     ability: entry.abilities[0]?.key || '',
     nature: entry.natures.find(nature => nature.key === entry.defaultNature)?.key || entry.natures.find(nature => nature.key === 'hardy')?.key || entry.natures[0]?.key || 'hardy',
     gender: entry.genders[0] || 'N',
@@ -128,6 +130,7 @@ export function starterCostTotal(starters: readonly StarterEntry[], team: readon
 export function starterSelectionError(entry: StarterEntry, selection: StarterSelection): string | null {
   if (!entry.unlocked) return '알을 부화하면 스타터로 등록됩니다.';
   if (selection.id !== entry.id) return '선택한 포켓몬 정보를 다시 확인하세요.';
+  if (entry.teraTypes?.length && !entry.teraTypes.includes(selection.teraType||entry.teraTypes[0])) return '해금한 테라스탈 타입을 선택하세요.';
   if (!entry.abilities.some(ability => ability.key === selection.ability)) return '해금된 특성을 선택하세요.';
   if (!entry.natures.some(nature => nature.key === selection.nature)) return '선택 가능한 성격을 골라주세요.';
   if (!entry.genders.some(gender => gender === selection.gender)) return '선택 가능한 성별을 골라주세요.';

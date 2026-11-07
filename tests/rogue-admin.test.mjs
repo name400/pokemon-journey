@@ -11,11 +11,11 @@ assert.deepEqual([...adminStarterIds].sort((a,b)=>a-b),[...rogueSpecies.values()
 assert.throws(()=>mutateRogueAdmin(document,{action:'grantPokemon'},makeMon(150,100),'missing'),/위치/);
 const template=makeMon(150,100);Object.assign(template,{shiny:true,item:'masterball',moves:['じわれ'],ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31}});
 const ivs={hp:31,atk:2,def:17,spa:0,spd:23,spe:11},legal=starterLegalMoves(state.system,150),selected=legal.slice(0,Math.min(2,legal.length));
-const payload={action:'grantPokemon',destination:'starter',ivs,nature:'timid',moves:selected};
+const payload={action:'grantPokemon',destination:'starter',ivs,nature:'timid',teraType:'Ghost',moves:selected};
 const result=mutateRogueAdmin(document,payload,template,'admin-template');
 const entry=starterCatalog(state.system).find(p=>p.sourceId===150&&p.formIndex===0);
 assert.equal(entry.unlocked,true);assert.equal(entry.shinyUnlocked,false);assert.deepEqual(entry.ivs,ivs);assert.ok(entry.natures.some(n=>n.key==='timid'));assert.equal(entry.defaultNature,'timid');assert.deepEqual(entry.defaultMoves,selected);
-assert.equal(result.pokemon.level,5);assert.equal(result.pokemon.item,'');assert.equal(result.pokemon.shiny,false);assert.equal(rogueAdminView(document).box[0].boxId,'admin-template');
+assert.equal(result.pokemon.teraType,'Ghost');assert.deepEqual(entry.teraTypes,['Ghost']);assert.equal(result.pokemon.level,5);assert.equal(result.pokemon.item,'');assert.equal(result.pokemon.shiny,false);assert.equal(rogueAdminView(document).box[0].boxId,'admin-template');
 assert.ok(!entry.moves.includes('じわれ'));
 const choice={id:entry.id,ability:entry.abilities[0].key,nature:'timid',gender:entry.genders[0],shiny:false,moves:entry.defaultMoves};
 const starter=buildStarterParty(state.system,[choice],{newId:()=> 'starter'}).party[0];assert.equal(starter.level,5);assert.equal(starter.experience,0);assert.ok(Object.values(starter.evs).every(x=>x===0));
@@ -24,8 +24,9 @@ assert.throws(()=>mutateRogueAdmin(document,{...payload,moves:['파괴광선']},
 assert.throws(()=>mutateRogueAdmin(document,{...payload,moves:[selected[0],selected[0]]},template,'duplicate-move'),/시작 기술/);
 assert.throws(()=>mutateRogueAdmin(document,{...payload,ivs:{...ivs,hp:32}},template,'invalid-iv'),/0–31/);
 assert.throws(()=>mutateRogueAdmin(document,{...payload,nature:'not-a-nature'},template,'invalid-nature'),/성격/);
-mutateRogueAdmin(document,{...payload,ivs:{hp:1,atk:1,def:1,spa:1,spd:1,spe:1},nature:'hardy'},template,'second');
-assert.deepEqual(starterCatalog(state.system).find(p=>p.sourceId===150&&p.formIndex===0).ivs,{...ivs,spa:1});
+assert.throws(()=>mutateRogueAdmin(document,{...payload,teraType:'bad'},template,'bad-tera'),/테라스탈/);
+mutateRogueAdmin(document,{...payload,teraType:'Water',ivs:{hp:1,atk:1,def:1,spa:1,spd:1,spe:1},nature:'hardy'},template,'second');
+assert.deepEqual(starterCatalog(state.system).find(p=>p.sourceId===150&&p.formIndex===0).ivs,{...ivs,spa:1});assert.deepEqual(starterCatalog(state.system).find(p=>p.sourceId===150&&p.formIndex===0).teraTypes,['Ghost','Water']);
 const eggId=rogueSpecies.get(150).eggMoves[0],eggMove=sourceMove(eggId);
 if(eggMove&&!legal.includes(eggMove)){
  assert.throws(()=>mutateRogueAdmin(document,{...payload,moves:[eggMove]},template,'locked-egg'),/시작 기술/);
@@ -37,3 +38,9 @@ assert.throws(()=>mutateRogueAdmin(document,{action:'editPokemon',destination:'s
 assert.throws(()=>mutateRogueAdmin(document,{action:'grantPokemon',destination:'run',runSlot:0},template,'admin-run'),/스타터 종 등록만/);
 assert.equal(document.coins,original.coins);assert.deepEqual(document.run,original.run);
 console.log('Rogue admin grants register a standard level-five starter and reject arbitrary edits.');
+for(const [id,allowed] of [[1017,'Grass'],[1024,'Stellar']]){
+ const mon=makeMon(id,5),p={...payload,teraType:allowed,moves:starterLegalMoves(state.system,id).slice(0,1)};
+ assert.throws(()=>mutateRogueAdmin(document,{...p,teraType:'Water'},mon,`invalid-${id}`),/테라스탈/);
+ const granted=mutateRogueAdmin(document,p,mon,`fixed-${id}`);assert.equal(granted.pokemon.teraType,allowed);
+ assert.deepEqual(starterCatalog(state.system).find(entry=>entry.sourceId===id&&entry.formIndex===0).teraTypes,[allowed]);
+}
