@@ -7,7 +7,7 @@ test('Mission 27 lift and ice bridges preserve progress and legacy encounter',()
  assert.equal(fieldDialogue({...street,zaMission20Stage:4}).action,undefined);
  assert.equal(fieldDialogue(street).action,'mission61Battle');
  assert.equal(fieldDialogue({...street,zaMission61Won:true}).action,'mission27Holovator');
- const roof={...street,district:'lumiose-mission27-roof',x:2,y:12,facing:'down',zaMission61Won:true};
+ const roof={...street,district:'lumiose-mission27-roof',x:2,y:4,facing:'up',zaMission61Won:true};
  assert.equal(fieldDialogue(roof).action,'mission27Holovator');
  assert.equal(fieldMap(roof)[11][7],','); // southern arch
  assert.ok(fieldPath(fieldMap(roof),roof,{x:13,y:8}).length);
@@ -32,6 +32,10 @@ test('west Aymlis roof connects both ways and preserves existing mission progres
  const saved=restoreAdventurePosition(storeAdventurePosition(roof,93),93);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission61Won,saved.zaMission27Bridges],['lumiose-aymlis-west-roof',21,8,['kept'],true,['east']]);
  const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-mission27-roof',1,8]);
- assert.equal(fieldDialogue({...saved,...back,x:2,y:12,facing:'down'}).action,'mission27Holovator');
+ assert.equal(fieldDialogue({...saved,...back,x:2,y:4,facing:'up'}).action,'mission27Holovator');
+ const oldRoof={...start,x:2,y:12,facing:'down'};
+ const oldSave=restoreAdventurePosition(storeAdventurePosition(oldRoof,94),94);
+ assert.deepEqual([oldSave.district,oldSave.x,oldSave.y],['lumiose-mission27-roof',2,12]);
+ assert.ok(fieldPath(fieldMap(oldSave),oldSave,{x:2,y:4}).length);
  assert.equal(restoreAdventurePosition(storeAdventurePosition(roof,93),94).district,null);
 });
