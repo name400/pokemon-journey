@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone10Map,zone10Encounter,zone10Visible,zone10Item} from '../lib/cloud-adventure/adventure-zone10.mjs';
-import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone ten canal, rooftop, gate and saved positions',()=>{
  const base={area:3,district:'lumiose-south-boulevard',interior:null,x:11,y:1,facing:'up',zaRoyaleRank:'V'};assert.equal(stepField(base,'up').blocked,true);
  const entered=stepField({...base,zaRoyaleRank:'F'},'up');assert.equal(entered.district,'lumiose-zone10');const s={...base,...entered,zaRoyaleRank:'F'},map=zone10Map(s);assert.ok(fieldPath(map,s,{x:17,y:5}).length);assert.equal(zone10Visible(s,'c').species,318);assert.equal(zone10Visible(s,'e').alpha,true);assert.equal(zone10Item(s,'i').kind,'quickball');assert.equal(zone10Item({...s,zaZone10Items:['canal-quick']},'i'),null);assert.equal(stepField({...s,x:11,y:7},'down').blocked,true);
@@ -30,4 +30,16 @@ test('roof benches preserve old saved positions and access to the ladder and pot
   assert.ok(fieldPath(map,restored,{x:18,y:4}).length);
   assert.equal(restoreAdventurePosition(saved,82).district,null);
  }
+});
+
+test('western rooftop sludge gates the TM and survives a saved return',()=>{
+ const s={area:3,district:'lumiose-zone10',interior:null,zaZone10Upper:true,x:3,y:5,facing:'left',teamIds:['kept']};
+ assert.equal(zone10Map(s)[5][2],'r');assert.equal(fieldDialogue(s).action,'zone10ClearSludge');
+ assert.equal(fieldPath(zone10Map(s),s,{x:1,y:5}).length,0);
+ const opened={...s,zaZone10SludgeCleared:true};assert.ok(fieldPath(zone10Map(opened),opened,{x:1,y:5}).length);
+ assert.equal(zone10Item(opened,'t').kind,'za-tm034');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...opened,x:2,zaZone10Items:['roof-tm034']},89),89);
+ assert.equal(saved.district,'lumiose-zone10');assert.equal(saved.zaZone10SludgeCleared,true);
+ assert.equal(zone10Item(saved,'t'),null);assert.deepEqual(saved.teamIds,['kept']);
+ assert.equal(restoreAdventurePosition(storeAdventurePosition(opened,89),90).district,null);
 });
