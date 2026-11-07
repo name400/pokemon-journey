@@ -57,3 +57,12 @@ test('western rooftop sludge gates the TM and survives a saved return',()=>{
  assert.equal(zone10Item(saved,'t'),null);assert.deepEqual(saved.teamIds,['kept']);
  assert.equal(restoreAdventurePosition(storeAdventurePosition(opened,89),90).district,null);
 });
+
+test('canal-side path retains west-east access and old saved tiles',()=>{
+ const state={area:3,district:'lumiose-zone10',interior:null,zaZone10Upper:false,x:11,y:7,zaRoyaleRank:'F',teamIds:['kept']};
+ const map=zone10Map(state);assert.equal(map[7][11],',');assert.equal(map[6][0],'W');assert.equal(map[6][22],'E');
+ assert.ok(fieldPath(map,{x:2,y:7},{x:20,y:7}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,79),79);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone10',11,7,['kept']]);
+ assert.equal(stepField({...state,x:10,y:7},'right').tile,',');
+});
