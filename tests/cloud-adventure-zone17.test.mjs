@@ -34,3 +34,12 @@ test('Vert 6 and 7 bridge stays walkable and keeps saved positions',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition(state,45),45);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector7',1,8,['kept']]);
  assert.equal(stepField(saved,'left').district,'lumiose-vert-sector6');
 });
+
+test('southern park furniture retains gates and safely restores earlier ground saves',()=>{
+ const base={area:3,district:'lumiose-zone17',interior:null,x:4,y:14,regionId:6,districtReturnRegion:1,teamIds:['kept'],zaRoyaleRank:'C'},map=zone17Map(base);
+ for(const [x,y] of [[4,14],[6,14],[16,14],[18,14],[19,13]])assert.equal(map[y][x],'^');
+ for(const target of [{x:1,y:8},{x:21,y:8},{x:11,y:1},{x:11,y:15}])assert.ok(fieldPath(map,{x:11,y:9},target).length);
+ const saved=storeAdventurePosition(base,7);delete saved.districtPosition.zone17Layout;
+ const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'^');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
+ const upper={...base,x:6,y:10,zaZone17Upper:true};const roof=restoreAdventurePosition(storeAdventurePosition(upper,9),9);assert.deepEqual([roof.x,roof.y,roof.zaZone17Upper],[6,10,true]);
+});

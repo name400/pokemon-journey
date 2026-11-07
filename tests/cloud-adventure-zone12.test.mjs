@@ -31,3 +31,8 @@ test('court rocks gate Ice Beam and old court positions migrate safely',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...opened,x:5,y:5},94),94);
  assert.deepEqual([saved.x,saved.y,saved.zaZone12CourtRocks],[5,5,['5,4']]);
 });
+
+test('southwest pond steps keep the existing southern access',()=>{
+ const map=zone12Map({});assert.equal(map[13][8],':');assert.equal(map[13][9],':');assert.equal(map[13][7],'~');
+ assert.ok(fieldPath(map,{x:12,y:15},{x:8,y:13}).length);
+});
