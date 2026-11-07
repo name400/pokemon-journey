@@ -97,3 +97,13 @@ test('Zone 5 draft web reaches a second rooftop and retains older rooftop saves'
  assert.notEqual(fieldMap(saved)[9][12],'k');
  for(const [x,y] of [[4,5],[11,4],[18,5]]){const old=restoreAdventurePosition(storeAdventurePosition({...roof,x,y},65),65);assert.deepEqual([old.x,old.y],[x,y]);}
 });
+
+test('Zone 5 west gate connects Bleu Sector 4 while preserving older routes',()=>{
+ const zone={area:3,district:'lumiose-zone5',interior:null,x:1,y:10,zaZone5Upper:false,teamIds:['kept']};
+ const road=stepField(zone,'left');assert.deepEqual([road.district,road.x,road.y],['lumiose-bleu-sector4',11,1]);
+ assert.equal(stepField({...zone,...road},'up').district,'lumiose-zone5');
+ assert.ok(fieldPath(fieldMap({...zone,...road}),road,{x:1,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...road},79),79);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-bleu-sector4',11,1,['kept']]);
+ assert.equal(stepField({...zone,y:8},'left').district,'lumiose-centrico-route');
+ assert.equal(stepField({...zone,y:12},'left').district,'lumiose-bleu-street');
+});
