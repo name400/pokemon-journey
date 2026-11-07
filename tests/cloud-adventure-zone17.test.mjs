@@ -50,3 +50,12 @@ test('Zone 17 split roofs keep the crossing and migrate earlier roof saves',()=>
  const saved=storeAdventurePosition(base,7);delete saved.districtPosition.splitRoofLayout;const restored=restoreAdventurePosition(structuredClone(saved),7);
  assert.equal(restored.district,base.district);assert.equal(restored.zaZone17Upper,true);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
 });
+
+test('Zone 17 southwest lawn entrance connects Vert Street and keeps earlier entrances',()=>{
+ const road={area:3,district:'lumiose-vert-street-route',interior:null,x:20,y:1,facing:'up',zaRoyaleRank:'D',teamIds:['kept']};
+ assert.equal(stepField(road,'up').blocked,true);const entered=stepField({...road,zaRoyaleRank:'C'},'up');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone17',5,15]);
+ const state={...road,...entered,zaRoyaleRank:'C'};assert.ok(fieldPath(zone17Map(state),state,{x:11,y:9}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(state,72),72);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone17',5,15,['kept']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-street-route',20,1]);
+ assert.equal(stepField({...state,x:1,y:8},'left').district,'lumiose-vert-street-route');
+});

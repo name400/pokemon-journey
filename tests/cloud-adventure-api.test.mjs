@@ -570,3 +570,15 @@ test('Coulant lower bank stairs and underpass survive reload',async()=>{
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-coulant-route',x:19,y:6,facing:'up',zaCoulantLower:true},state.revision+1));await get();await call('coulantBankSteps');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaCoulantLower],[19,4,false]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 17 southwest entrance respects rank and survives reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone17-southwest-qa',displayName:'출입구테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const road={...rawWorld(),area:3,district:'lumiose-vert-street-route',interior:null,x:20,y:1,facing:'up',zaRoyaleRank:'D'};
+  seedWorld(storeAdventurePosition(road,state.revision+1));await get();await call('move',{direction:'up'},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),...road,zaRoyaleRank:'C'},state.revision+1));await get();await call('move',{direction:'up'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone17',5,15]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-street-route',20,1]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
