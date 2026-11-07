@@ -702,3 +702,14 @@ test('Zone 18 outside scaffold checks rank and returns to its street after reloa
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Bleu Sector 7 scaffold returns to its ground location after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu7-scaffold-qa',displayName:'블루비계테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector7',interior:null,x:9,y:6,facing:'up'},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'bleu7ScaffoldLadder');await call('bleu7ScaffoldLadder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaBleu7Upper],[5,9,true]);
+  assert.equal(state.world.interaction.action,'bleu7ScaffoldLadder');await call('bleu7ScaffoldLadder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaBleu7Upper],[9,6,false]);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
