@@ -22,3 +22,11 @@ test('Vert 4 street, roof and courtyard are separate saved layers',()=>{
  const court={...street,x:5,y:9,facing:'down',zaVert4Layer:'courtyard'};assert.equal(fieldDialogue(court).action,'vert4CourtyardLadder');
  for(const state of [roof,court]){const saved=restoreAdventurePosition(storeAdventurePosition(state,46),46);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaVert4Layer,saved.teamIds],[state.district,state.x,state.y,state.zaVert4Layer,['kept']]);assert.equal(restoreAdventurePosition(storeAdventurePosition(state,46),47).district,null);}
 });
+
+test('Vernal Avenue and Vert 4 link near Cafe Classe without affecting roofs',()=>{
+ const road={area:3,district:'lumiose-vernal',interior:null,x:21,y:4,facing:'right',teamIds:['kept']};
+ const entered=stepField(road,'right');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-vert-sector4',1,8]);
+ const sector={...road,...entered};assert.ok(fieldPath(fieldMap(sector),sector,{x:9,y:6}).length);const back=stepField(sector,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-vernal',21,4]);
+ assert.equal(stepField({...road,zaVernalEastRoof:true},'right').blocked,true);
+ for(const state of [road,sector]){const saved=restoreAdventurePosition(storeAdventurePosition(state,50),50);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[state.district,state.x,state.y,['kept']]);}
+});

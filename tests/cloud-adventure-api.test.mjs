@@ -794,3 +794,13 @@ test('Vert 4 lift and enclosed courtyard keep their layers on reload',async()=>{
   await walkTo({x:4,y:9});await call('move',{direction:'down'});await get();assert.equal(state.world.interaction.action,'vert4Lift');await call('vert4Lift');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaVert4Layer],[9,6,'ground']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vernal to Vert 4 link and lift retain saves and wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vernal-vert4-qa',displayName:'베르날연결테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:21,y:4,facing:'right'},state.revision+1));await get();await call('move',{direction:'right'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-sector4',1,8]);await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vernal',21,4]);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
