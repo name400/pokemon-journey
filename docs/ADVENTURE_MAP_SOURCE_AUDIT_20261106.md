@@ -982,3 +982,7 @@ Zone 20 already existed for Mission 42. [Nintendo Life](https://www.nintendolife
 ### 로즈 4번지와 광장·오토널 애비뉴 (초안)
 
 [로즈 4번지 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_4)는 이 번지가 로즈 광장 북쪽, 오토널 애비뉴 인근에 있으며 카페 포켓몬아미가 있다고 설명한다. 두 지역에 왕복 연결되는 거리 초안을 추가하고 구역 7의 랭크 F 제한을 유지했다. 정확한 좌표·건물 형상은 초안이며 카페 내부·서비스와 이 번지의 미션 28 현장 이전은 미완료다. 기존 미션 경로는 보존한다.
+
+### Magenta and Jaune Plaza ground appearance (draft)
+
+The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) depicts Magenta Plaza's circular centre and surrounding paved ring, with the canal outside on both sides, and a circular arrangement at Jaune Plaza. The field renderer now distinguishes the centres and outer rings across each screen; for Jaune, the central earth and outer sand are also described by the [Wild Zone 8 guide](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-8-guide-all-pokemon-and-alphas). The displayed ellipses, colours and precise road widths are 2D approximations, not surveyed geometry. The Jaune changes are rendering only. At Magenta, small canal edge tiles were added on both sides; their exact extent is provisional. Old saved positions on those tiles migrate only at a matching revision, while encounter tiles, field objects and exit locations remain unchanged. The full canal, surrounding buildings and missing original street connections are not implemented.

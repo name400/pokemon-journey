@@ -44,3 +44,12 @@ test('defeating the central alpha while on its tile restores to the plaza',()=>{
  assert.ok(fieldPath(zone7Map(restored),restored,{x:1,y:8}).length);
  assert.equal(restoreAdventurePosition(stored,76).district,null);
 });
+
+test('plaza canal edges keep routes and migrate only matching legacy saves',()=>{
+ const map=zone7Map();for(const [x,y] of [[1,5],[2,6],[20,10],[21,11]])assert.equal(map[y][x],'~');
+ assert.ok(fieldPath(map,{x:1,y:8},{x:11,y:15}).length);
+ const state={area:3,district:'lumiose-zone7',x:1,y:5,regionId:6,districtReturnRegion:1,teamIds:['kept'],zaRoyaleRank:'F'};
+ const saved=storeAdventurePosition(state,9);delete saved.districtPosition.zone7Layout;
+ const restored=restoreAdventurePosition(structuredClone(saved),9);assert.equal(restored.district,'lumiose-zone7');assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
+ assert.equal(restoreAdventurePosition(structuredClone(saved),10).district,null);assert.equal(storeAdventurePosition(restored,10).districtPosition.zone7Layout,1);
+});
