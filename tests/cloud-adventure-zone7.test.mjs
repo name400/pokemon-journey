@@ -32,3 +32,15 @@ test('the provisional plaza fountain preserves an older save and access between 
  assert.ok(fieldPath(zone7Map(restored),restored,{x:17,y:15}).length);
  assert.equal(restoreAdventurePosition(stored,74).district,null);
 });
+
+test('defeating the central alpha while on its tile restores to the plaza',()=>{
+ const before={area:3,district:'lumiose-zone7',interior:null,x:10,y:8,zaZone7AlphaSpent:false};
+ assert.deepEqual([stepField(before,'right').x,stepField(before,'right').y],[11,8]);
+ const s={area:3,district:'lumiose-zone7',interior:null,x:11,y:8,zaZone7AlphaSpent:true,teamIds:['kept'],steps:64};
+ const stored=storeAdventurePosition(s,75),restored=restoreAdventurePosition(stored,75);
+ assert.equal(restored.district,'lumiose-zone7');
+ assert.ok(walkable(zone7Map(restored)[restored.y][restored.x]));
+ assert.deepEqual([restored.zaZone7AlphaSpent,restored.teamIds,restored.steps],[true,['kept'],64]);
+ assert.ok(fieldPath(zone7Map(restored),restored,{x:1,y:8}).length);
+ assert.equal(restoreAdventurePosition(stored,76).district,null);
+});
