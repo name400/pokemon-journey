@@ -44,3 +44,12 @@ test('transition preview uses the target map and never buffers across the bounda
  const buffer=createCloudMoveBuffer(world,p,'right');assert.equal(buffer.push(),null);assert.deepEqual(buffer.path,[]);assert.equal(buffer.matches({world:{...world,...p}}),false);
  const blocked={area:3,district:'lumiose-vert2',interior:null,x:17,y:15,zaRoyaleRank:'F'};assert.equal(predictCloudStep(blocked,'down',{allowTransition:true}),null);
 });
+
+test('near moving encounters the first step is visual only and never buffers',async()=>{
+ const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const world={area:0,x:3,y:8,facing:'down',badges:[],zaWildAlphaAlert:true},copy=structuredClone(world);
+ assert.equal(predictCloudStep(world,'right'),null);
+ const first=predictCloudStep(world,'right',{allowHazard:true});assert.deepEqual(first,{x:4,y:8,facing:'right',predictedHazard:true});assert.deepEqual(world,copy);
+ const buffer=createCloudMoveBuffer(world,first,'right');assert.equal(buffer.push(),null);assert.deepEqual(buffer.path,[]);
+ assert.equal(buffer.matches({world:{...world,...first},battle:{}}),false);assert.equal(buffer.matches({world:{...world,x:3,y:8}}),false);
+});
