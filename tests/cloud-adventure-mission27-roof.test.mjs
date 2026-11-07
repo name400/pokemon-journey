@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldMap,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Mission 27 lift and ice bridges preserve progress and legacy encounter',()=>{
  const street={area:3,district:'lumiose-bleu-sector3',interior:null,x:10,y:9,facing:'up',zaMission20Stage:5,zaMission26Stage:3,teamIds:['kept']};
@@ -23,4 +23,15 @@ test('Mission 27 lift and ice bridges preserve progress and legacy encounter',()
  assert.equal(fieldDialogue(saved).action,'mission26CaseBattle');
  assert.equal(fieldDialogue({...saved,zaMission27Complete:true,zaMission27RewardPending:true}).action,'mission26ClaimStone');
  assert.equal(fieldDialogue({...street,district:'lumiose-rooftop',x:15,y:7,facing:'up'}).action,'mission26CaseBattle');
+});
+
+test('west Aymlis roof connects both ways and preserves existing mission progress',()=>{
+ const start={area:3,district:'lumiose-mission27-roof',interior:null,x:1,y:8,facing:'left',teamIds:['kept'],zaMission61Won:true,zaMission26Stage:3,zaMission27Bridges:['east']};
+ const toWest=stepField(start,'left');assert.deepEqual([toWest.district,toWest.x,toWest.y],['lumiose-aymlis-west-roof',21,8]);
+ const roof={...start,...toWest};assert.ok(fieldPath(fieldMap(roof),roof,{x:3,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(roof,93),93);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission61Won,saved.zaMission27Bridges],['lumiose-aymlis-west-roof',21,8,['kept'],true,['east']]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-mission27-roof',1,8]);
+ assert.equal(fieldDialogue({...saved,...back,x:2,y:12,facing:'down'}).action,'mission27Holovator');
+ assert.equal(restoreAdventurePosition(storeAdventurePosition(roof,93),94).district,null);
 });
