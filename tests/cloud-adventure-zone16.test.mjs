@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone16Map,zone16Encounter,zone16Visible} from '../lib/cloud-adventure/adventure-zone16.mjs';
+import {zone16Map,zone16Encounter,zone16Visible,ZONE16_STALLS} from '../lib/cloud-adventure/adventure-zone16.mjs';
 import {bleuPlazaRouteMap} from '../lib/cloud-adventure/adventure-bleu-plaza-route.mjs';
 import {stepField,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone sixteen gate, central monument and saved position',()=>{
@@ -35,7 +35,7 @@ test('rounded Bleu Plaza water safely restores older positions',()=>{
   const state={area:3,district:'lumiose-zone16',interior:null,x,y,regionId:6,districtReturnRegion:1,zaRoyaleRank:'C',teamIds:['kept']};
   const old=storeAdventurePosition(state,9);delete old.districtPosition.zone16Layout;
   const restored=restoreAdventurePosition(structuredClone(old),9);assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
-  assert.equal(restoreAdventurePosition(structuredClone(old),10).district,null);assert.equal(storeAdventurePosition(restored,10).districtPosition.zone16Layout,2);
+  assert.equal(restoreAdventurePosition(structuredClone(old),10).district,null);assert.equal(storeAdventurePosition(restored,10).districtPosition.zone16Layout,3);
  }
 });
 
@@ -56,4 +56,19 @@ test('southwest ladder reaches a separate rooftop and preserves earlier ground s
  const roof={...s,x:4,y:9,zaZone16Upper:true};assert.equal(fieldDialogue(roof).action,'zone16RoofLadder');assert.ok(fieldPath(zone16Map(roof),roof,{x:18,y:8}).length);
  const stored=storeAdventurePosition(roof,54),loaded=restoreAdventurePosition(stored,54);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaZone16Upper,loaded.teamIds],[s.district,4,9,true,['kept']]);
  const old=storeAdventurePosition({...s,x:4,y:14},55),restored=restoreAdventurePosition(old,55);assert.deepEqual([restored.x,restored.y],[4,14]);assert.ok(walkable(zone16Map(restored)[14][4]));
+});
+
+
+test('draft market stalls preserve older saves and the police facade preserves collision',()=>{
+ const map=zone16Map(), street=bleuPlazaRouteMap();
+ for(let y=10;y<=13;y++)for(let x=15;x<=19;x++)assert.equal(walkable(street[y][x]),false);
+ for(const [x,y] of ZONE16_STALLS){
+  assert.equal(map[y][x],'^');
+  const state={area:3,district:'lumiose-zone16',interior:null,x,y,zaRoyaleRank:'C',teamIds:['kept']};
+  const old=storeAdventurePosition(state,31);old.districtPosition.zone16Layout=2;
+  const restored=restoreAdventurePosition(structuredClone(old),31);
+  assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));
+  assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(old),32).district,null);
+ }
+ for(const start of [{x:11,y:1},{x:21,y:8},{x:1,y:12}])assert.ok(fieldPath(map,start,{x:11,y:7}).length);
 });
