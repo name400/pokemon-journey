@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone7Map,zone7Unlocked,zone7Encounter} from '../lib/cloud-adventure/adventure-zone7.mjs';
-import {stepField,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldPath,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone seven gate, plaza and stored location',()=>{
  const base={area:3,district:'lumiose-centrico-route',interior:null,x:5,y:1,facing:'up',zaRoyaleRank:'V'};
  assert.equal(stepField(base,'up').blocked,true);const entered=stepField({...base,zaRoyaleRank:'F'},'up');assert.equal(entered.district,'lumiose-zone7');
@@ -20,4 +20,15 @@ test('Magenta Sector 3 reaches Zone 7 without bypassing its rank gate',()=>{
  for(const [district,x,y,safeY] of [['lumiose-zone7',17,0,1],['lumiose-magenta-sector3',12,16,15]]){
   const old=restoreAdventurePosition(storeAdventurePosition({...city,district,x,y},72),72);assert.deepEqual([old.district,old.x,old.y,old.teamIds],[district,x,safeY,['kept']]);
  }
+});
+
+test('the provisional plaza fountain preserves an older save and access between gates',()=>{
+ const map=zone7Map();assert.equal(map[5][19],'~');
+ const old={area:3,district:'lumiose-zone7',interior:null,x:19,y:5,steps:18,teamIds:['kept'],zaZone7AlphaSpent:true};
+ const stored=storeAdventurePosition(old,73),restored=restoreAdventurePosition(stored,73);
+ assert.equal(restored.district,old.district);assert.ok(walkable(map[restored.y][restored.x]));
+ assert.deepEqual([restored.steps,restored.teamIds,restored.zaZone7AlphaSpent],[18,['kept'],true]);
+ assert.ok(fieldPath(zone7Map(restored),restored,{x:1,y:8}).length);
+ assert.ok(fieldPath(zone7Map(restored),restored,{x:17,y:15}).length);
+ assert.equal(restoreAdventurePosition(stored,74).district,null);
 });
