@@ -66,3 +66,15 @@ test('canal-side path retains west-east access and old saved tiles',()=>{
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone10',11,7,['kept']]);
  assert.equal(stepField({...state,x:10,y:7},'right').tile,',');
 });
+
+test('canal reaches both map edges and older ground-edge saves move safely',()=>{
+ const base={area:3,district:'lumiose-zone10',interior:null,x:1,y:8,zaRoyaleRank:'F',teamIds:['kept']},map=zone10Map(base);
+ for(const y of [8,10,12]){assert.equal(map[y][0],'~');assert.equal(map[y][22],'~');}
+ assert.ok(fieldPath(map,{x:1,y:6},{x:21,y:6}).length);
+ for(const [x,y] of [[1,8],[2,12],[20,8],[21,12]]){
+  const old=storeAdventurePosition({...base,x,y},88);delete old.districtPosition.zone10CanalLayout;
+  const restored=restoreAdventurePosition(structuredClone(old),88);assert.equal(restored.district,base.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
+  assert.equal(restoreAdventurePosition(structuredClone(old),89).district,null);
+ }
+ const roof={...base,x:19,y:6,zaZone10Upper:true};const saved=restoreAdventurePosition(storeAdventurePosition(roof,90),90);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone10Upper],[base.district,19,6,true]);
+});

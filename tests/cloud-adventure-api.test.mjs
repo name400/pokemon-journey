@@ -713,3 +713,12 @@ test('Bleu Sector 7 scaffold returns to its ground location after reload',async(
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 10 old canal-edge save restores without losing party or wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-canal-edge-qa',displayName:'수로저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:21,y:10,zaRoyaleRank:'F',zaZone10Upper:false},state.revision+1);delete old.districtPosition.zone10CanalLayout;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-zone10');assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

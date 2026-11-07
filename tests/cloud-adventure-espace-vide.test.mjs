@@ -23,3 +23,9 @@ test('Espace Vide surface and underground connect independently to Bleu Sector 4
  const saved=restoreAdventurePosition(storeAdventurePosition({...lower,...tunnel,x:16,y:8},78),78);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-bleu4-tunnel',16,8,['kept'],7]);
  const rust=stepField({...upper,...road,x:21,y:8},'right');assert.equal(rust.district,'lumiose-rust');assert.equal(stepField({...upper,...rust},'right').district,'lumiose-bleu-sector4');
 });
+
+test('lower Espace Vide retains its path beside the canal edge',()=>{
+ const lower={area:3,district:'lumiose-espace-vide',interior:null,x:1,y:8,zaEspaceLower:true,teamIds:['kept']},map=espaceVideMap(lower);
+ assert.equal(map[11][0],'~');assert.equal(map[11][22],'~');assert.ok(fieldPath(map,lower,{x:21,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(lower,75),75);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaEspaceLower,saved.teamIds],[lower.district,1,8,true,['kept']]);
+});
