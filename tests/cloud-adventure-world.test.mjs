@@ -346,3 +346,12 @@ test('legacy completed mission 15 can see L without resetting progress',()=>{
  assert.ok(fieldDialogue(lobby).actions.some(a=>a.action==='mission15Continue19'));
  assert.equal(lobby.zaMission15Complete,true);
 });
+
+test('zone one western grass preserves the existing road and stored positions',()=>{
+ const map=lumioseZone1Map(),s={area:3,district:'lumiose-zone1',x:2,y:9,facing:'right',teamIds:['kept']};
+ assert.equal(map[9][2],'g');assert.equal(map[8][1],'.');assert.equal(map[8][0],'W');
+ assert.equal(stepField({...s,x:1,y:8},'left').district,'lumiose-floral');
+ const restored=restoreAdventurePosition(storeAdventurePosition(s,74),74);
+ assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-zone1',2,9,['kept']]);
+ assert.equal(walkable(map[restored.y][restored.x]),true);
+});
