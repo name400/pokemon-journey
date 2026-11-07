@@ -782,3 +782,15 @@ test('Vert 4 and 5 city connections retain party and wallet through reload',asyn
   assert.equal(state.world.areaInfo.name,'베르 5번지 (배치 초안)');await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-vert-plaza');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vert 4 lift and enclosed courtyard keep their layers on reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert4-courtyard-qa',displayName:'베르안뜰테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector4',interior:null,x:9,y:6,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'vert4Lift');
+  await call('vert4Lift');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaVert4Layer],[4,9,'roof']);
+  await walkTo({x:13,y:7});await call('move',{direction:'down'});await get();assert.equal(state.world.interaction.action,'vert4CourtyardDrop');await call('vert4CourtyardDrop');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaVert4Layer],[11,8,'courtyard']);
+  await walkTo({x:5,y:9});await call('move',{direction:'down'});await get();assert.equal(state.world.interaction.action,'vert4CourtyardLadder');await call('vert4CourtyardLadder');await get();assert.equal(state.world.zaVert4Layer,'roof');
+  await walkTo({x:4,y:9});await call('move',{direction:'down'});await get();assert.equal(state.world.interaction.action,'vert4Lift');await call('vert4Lift');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaVert4Layer],[9,6,'ground']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

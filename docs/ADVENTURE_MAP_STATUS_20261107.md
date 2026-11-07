@@ -154,3 +154,7 @@
 ### 베르 4·5번지 거리 연결 초안
 
 [베르 4번지 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_4)는 베르 2번지 남쪽, 5번지 서쪽과 Café Classe를 명시하고, [베르 5번지 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_Sector_5)는 4번지 동쪽과 베르 광장 남쪽을 설명한다. 두 지상 화면과 베르 2번지·광장 사이 왕복 연결을 추가했다. 정확한 도로 선형, 출입 타일, 카페 외형과 안뜰 배치는 확인되지 않은 초안이다. 카페 실내와 [자료상 옥상에서 내려가는 안뜰](https://game8.co/games/Pokemon-Legends-Z-A/archives/558130)의 실제 높이·접근 경로는 구현하지 않았다.
+
+### 베르 4번지 옥상과 둘러싸인 안뜰
+
+[현장 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-where-to-catch-ralts)는 Café Classe 뒤의 둘러싸인 잔디 안뜰과 비계를 설명하고, [구역별 안내](https://game8.co/games/Pokemon-Legends-Z-A/archives/558130)는 옥상에서 내려가 진입하는 경로를 설명한다. 기존 지상 외에 옥상과 안뜰을 별도 층으로 추가하고 홀로베이터·하강 지점·복귀 사다리를 연결했다. 홀로베이터와 사다리의 정확한 위치, 복귀 방식, 옥상과 안뜰의 치수는 초안이다. 안뜰 포켓몬·아이템과 원작의 실제 점프·비계 경로는 추가하지 않았다. 기존 지상 저장 좌표와 이동은 유지하며 각 층의 저장·재접속을 지원한다.
