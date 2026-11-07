@@ -48,3 +48,15 @@ test('Zone 6 southern canal approach crosses into the lower layer and preserves 
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-saison-canalside',17,1]);
  assert.ok(fieldPath(fieldMap({...saved,...back}),back,{x:5,y:1}).length);
 });
+
+test('North Boulevard and Zone 6 connect both ways without invalidating old saves',()=>{
+ const road={area:3,district:'lumiose-north-boulevard',interior:null,x:18,y:1,facing:'up',teamIds:['kept'],zaRoyaleRank:'F'};
+ const toZone=stepField(road,'up');assert.deepEqual([toZone.district,toZone.zaZone6Layer,toZone.x,toZone.y],['lumiose-zone6','ground',14,1]);
+ const inZone={...road,...toZone};assert.ok(fieldPath(zone6Map(inZone),inZone,{x:11,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(inZone,75),75);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone6',14,1,['kept']]);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-north-boulevard',18,1]);
+ const old={...road,district:'lumiose-zone6',x:11,y:10,zaZone6Layer:'ground'};
+ const restored=restoreAdventurePosition(storeAdventurePosition(old,76),76);
+ assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone6',11,10]);
+});
