@@ -45,6 +45,21 @@ async function walkTo(tileOrTarget){if(tileOrTarget==='W'&&state.world.district=
 async function travelToZone2(){assert.equal(state.world.district,'lumiose');await walkTo('h');await call('enterRooftop');await walkTo('W');assert.equal(state.world.district,'lumiose-zone2');}
 async function battle({resolve=true}={}){let turns=0;while(state.battle||state.world.adventureCatchWindow){assert.ok(turns++<180,'battle finishes');if(state.world.adventureCatchWindow){await call('skipCatchWindow');assert.equal(state.battle,null);continue;}const b=state.battle,q=b.requests[0],p=b.teams[0][b.active[0]],foe=b.teams[1][b.active[1]];const command=q.kind==='switch'?{type:'switch',slot:q.switches.sort((a,b)=>b.hp-a.hp)[0].slot}:{type:'move',move:q.moves.filter(m=>!m.disabled&&m.pp>0).map(m=>({m,score:(moves[m.name]?.power||0)*effectiveness(moves[m.name]?.type,foe.types)*(p.types.includes(moves[m.name]?.type)?1.5:1)})).sort((a,b)=>b.score-a.score)[0].m.name};await call('battle',{command});if(!state.battle&&!state.world.adventureCatchWindow){assert.equal(state.battleResult?.ended,true);assert.ok(Array.isArray(state.battleResult.events));assert.equal(rawWorld().combat,null);}}if(resolve)while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});return turns;}
 
+test('Vert 7 lift repair and rooftop persist across requests',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ globalThis.__adventureUser={userId:'vert7-roof-qa',displayName:'옥상테스트'};
+ try {
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:5,y:10,facing:'down',zaMission14Stage:8},state.revision+1));
+  await get();await call('vert7RepairLift',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-south-boulevard',interior:null,x:5,y:10,facing:'down',zaMission14Stage:9},state.revision+1));await get();await call('vert7RepairLift',{},409);
+  seedMon(id,{...makeMon(25,15),moves:['전기쇼크']});await get();await call('vert7RepairLift');
+  await get();assert.equal(rawWorld().zaSide40Lift,true);await call('vert7RepairLift',{},409);
+  await call('vert7Holovator');await get();assert.equal(rawWorld().zaVert7RoofUpper,true);assert.equal(state.world.map[8][11],'v');
+  await call('vert7Holovator');await get();assert.equal(rawWorld().zaVert7RoofUpper,false);assert.equal(state.world.map[11][5],'j');
+ } finally {globalThis.__adventureUser=previousUser;}
+});
+
 test('Rouge roof ladder saves and resumes both floors',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'rouge-roof-qa',displayName:'옥상테스트'};

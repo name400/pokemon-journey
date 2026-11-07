@@ -1,6 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Vert Sector 7 roof bridge and lift preserve old and upper positions',()=>{
+ const lower={area:3,district:'lumiose-south-boulevard',interior:null,x:5,y:10,facing:'down',zaSide40Lift:true,teamIds:['kept']};
+ assert.equal(fieldDialogue(lower).action,'vert7Holovator');
+ const upper={...lower,zaVert7RoofUpper:true};
+ assert.ok(fieldPath(fieldMap(upper),upper,{x:18,y:8}).length);
+ assert.equal(fieldDialogue(upper).action,'vert7Holovator');
+ const saved=restoreAdventurePosition(storeAdventurePosition(upper,90),90);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaVert7RoofUpper,saved.teamIds],['lumiose-south-boulevard',5,10,true,['kept']]);
+ const old=restoreAdventurePosition(storeAdventurePosition({...lower,x:11,y:8},91),91);
+ assert.deepEqual([old.district,old.x,old.y],['lumiose-south-boulevard',11,8]);
+});
 test('South Boulevard connects Bleu Sector 7 and the existing research lab approach',()=>{
  const city={area:3,district:'lumiose-bleu-sector7',interior:null,x:11,y:15,zaRoyaleRank:'E',teamIds:['kept']};
  const street=stepField(city,'down');assert.deepEqual([street.district,street.x,street.y],['lumiose-south-boulevard',8,1]);
