@@ -1026,3 +1026,7 @@ On 2026-11-07 a headless Chromium fixture with mocked 350 ms movement-response d
 ### Wild Zones 12 and 13: terrain rendering
 
 [Wild Zone 12's guide](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/aymlis-park/all-wild-zone-12-pokemon-locations/) identifies the northern battle court and icy water west of the south entrance; [Wild Zone 13's guide](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/north-boulevard-2/) places its wooded area along North Boulevard. The existing court and water now use distinct ice rendering, and the road through Zone 13 is visually separated from its wooded sides. These changes only affect rendering: collision, encounters, existing map shape and saved positions are unchanged. Exact court, shoreline, tree and road geometry remain drafts.
+
+### Rouge garden and cemetery paths (visual draft)
+
+The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) depicts paths through Rouge Plaza's formal garden and branching paths inside the northern cemetery. Both screens now show provisional narrow path overlays on existing grass tiles. These are visual only: those tiles still have their original grass-encounter and movement behavior, and the path coordinates and cemetery layout are not a measured match to the source. No save migration is required. The existing garden gates, grave placement and crypt geometry still need verification.

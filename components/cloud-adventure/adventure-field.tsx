@@ -174,7 +174,19 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      if(c===':'&&w.district==='lumiose-centrico-route'){ctx.fillStyle='#b9ac99';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6dccb';for(let i=4;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}
      if(c===':'&&['lumiose-zone2','lumiose-vert2'].includes(w.district)){ctx.fillStyle='#c9c2ae';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#8f8a7c';for(let i=5;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}
      if(c===';'&&w.district==='lumiose-zone2'){ctx.fillStyle='#b5aa90';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#ded6be';ctx.fillRect(px+2,py+2,tile-4,tile-7);ctx.fillStyle='#837f70';ctx.fillRect(px+2,py+tile-5,tile-4,3);}
-     if(c==='g'){ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#8bb97d':'#98c68a'):'#92b97c';ctx.fillRect(px,py,tile,tile);if(!['lumiose-zone2','lumiose-zone3'].includes(w.district))sprite('bush',px,py);sprite('grassDetail',px,py);if(w.district==='lumiose-zone3'&&(x+y)%3===0){ctx.fillStyle='#f4ddd0';ctx.fillRect(px+7,py+9,3,3);ctx.fillRect(px+22,py+19,3,3);}}
+     if(c==='g'){
+      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#8bb97d':'#98c68a'):'#92b97c';ctx.fillRect(px,py,tile,tile);
+      if(!['lumiose-zone2','lumiose-zone3'].includes(w.district))sprite('bush',px,py);
+      sprite('grassDetail',px,py);
+      // Grass remains an encounter tile. The narrow, provisional paths are visual overlays.
+      if(w.district==='lumiose-zone3'&&y===8&&(x===9||x===13)){ctx.fillStyle='#d5c8ae';ctx.fillRect(px,py+tile*.39,tile,tile*.22);}
+      if(w.district==='lumiose-zone4'){
+       const vertical=(x===10&&y>=4&&y<=8)||(x===11&&y>=8&&y<=12)||(x===13&&y>=6&&y<=10);
+       const horizontal=(y===6&&x>=7&&x<=13)||(y===9&&x>=10&&x<=15)||(y===11&&x>=8&&x<=11);
+       if(vertical||horizontal){ctx.fillStyle='#bdb79b';if(vertical)ctx.fillRect(px+tile*.39,py,tile*.22,tile);if(horizontal)ctx.fillRect(px,py+tile*.39,tile,tile*.22);}
+      }
+      if(w.district==='lumiose-zone3'&&(x+y)%3===0){ctx.fillStyle='#f4ddd0';ctx.fillRect(px+7,py+9,3,3);ctx.fillRect(px+22,py+19,3,3);}
+     }
      if(('HMJ'.includes(c)&&!(c==='H'&&w.district==='lumiose-zone3'))||(c==='P'&&w.district==='lumiose-floral')||(c==='l'&&w.district==='lumiose-rouge-north'))buildings.push({x,y,kind:c});
      if(c==='|'&&w.district==='lumiose-zone3'){
       const vertical=x===9||x===13;ctx.fillStyle='#407a51';
