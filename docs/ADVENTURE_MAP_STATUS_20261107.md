@@ -58,3 +58,7 @@
 ### 야생 구역 7 서쪽 안뜰 초안
 
 [위치 자료](https://www.gamerguides.com/pokemon-legends-z-a/guide/getting-started/information/all-colorful-screw-locations)는 야생 구역 7 서쪽의 안뜰을 명시한다. 기존 마젠타 운하 거리에서 왕복할 수 있는 별도 안뜰 화면을 추가했다. U자 건물 윤곽과 출입구·도로 접점은 원작에서 확인된 좌표가 아닌 임시 배치이며, 실제 건물·높이와 출입 방향은 지도·현장 영상으로 추가 대조해야 한다. 기존 운하·광장 출입구와 저장 위치는 유지하며 안뜰 내 위치도 저장한다.
+
+### 쿨랑 수로와 구역 11 계단 표시
+
+[수로 현장 안내](https://allthings.how/how-to-complete-sylveon-the-soother-side-mission-67-in-pokemon-legends-z-a/)는 다리 아래 양안의 산책로와 구역 11 근처 계단을 설명한다. 기존 구역 11 접근 경로에 계단 타일을 표시하고, 수면을 건너는 두 다리는 계단과 구별되는 다리판으로 그렸다. 계단·다리의 정확한 위치와 모양은 초안이다. 이번 변경은 같은 높이의 기존 통행 칸과 저장 좌표를 유지하며, 다리 위와 아래가 겹치는 실제 높이층이나 다리 밑 통로를 새로 구현한 것은 아니다. [구역 11 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11)의 두 강변은 구역 안에서 이어지지 않는다는 조건을 유지한다.

@@ -10,3 +10,10 @@ test('Coulant route links Vert Street and the south bank of Zone 11',()=>{
  const zone=stepField({...gate,zaRoyaleRank:'E'},'up');assert.equal(zone.district,'lumiose-zone11');assert.equal(stepField({...gate,...zone},'down').district,'lumiose-coulant-route');
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:6,y:8,teamIds:['kept']},4),4);assert.deepEqual([saved.district,saved.x,saved.y],['lumiose-coulant-route',6,8]);assert.deepEqual(saved.teamIds,['kept']);
 });
+
+test('Zone 11 approach steps retain bank paths and earlier positions',()=>{
+ const map=coulantRouteMap(),s={area:3,district:'lumiose-coulant-route',interior:null,x:10,y:3,zaRoyaleRank:'E',teamIds:['kept']};
+ for(const y of [2,3,4])assert.equal(map[y][10],':');assert.ok(fieldPath(map,{x:10,y:1},{x:6,y:8}).length);assert.ok(fieldPath(map,{x:10,y:1},{x:16,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,62),62);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[s.district,10,3,['kept']]);
+ assert.equal(stepField({...s,x:10,y:1},'up').district,'lumiose-zone11');
+});
