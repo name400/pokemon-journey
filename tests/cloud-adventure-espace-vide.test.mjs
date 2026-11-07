@@ -13,3 +13,13 @@ test('Espace Vide connects lower Zone 10, Estival and Bleu Sector 6 safely',()=>
  const south=stepField({...upper,x:11,y:15},'down');assert.equal(south.district,'lumiose-bleu6-approach');assert.equal(stepField({...upper,...south},'up').district,'lumiose-espace-vide');
  const center=stepField({...upper,...north,x:11,y:1},'up');assert.equal(center.district,'lumiose-centrico-route');assert.equal(stepField({...upper,...center},'down').district,'lumiose-estival-approach');const plaza=stepField({...upper,...south,x:11,y:15},'down');assert.equal(plaza.district,'lumiose-bleu-plaza-route');assert.equal(stepField({...upper,...plaza},'left').district,'lumiose-bleu6-approach');const oldEnd=restoreAdventurePosition(storeAdventurePosition({...upper,...south,x:11,y:15,teamIds:['kept']},9),9);assert.deepEqual([oldEnd.district,oldEnd.x,oldEnd.y],['lumiose-bleu6-approach',11,15]);assert.deepEqual(oldEnd.teamIds,['kept']);
 });
+
+test('Espace Vide surface and underground connect independently to Bleu Sector 4',()=>{
+ const base={area:3,district:'lumiose-espace-vide',interior:null,x:21,y:8,facing:'right',teamIds:['kept'],zaMission20Stage:7};
+ const upper={...base,zaEspaceLower:false};const road=stepField(upper,'right');assert.equal(road.district,'lumiose-bleu-sector4');
+ const returnUpper=stepField({...upper,...road},'left');assert.deepEqual([returnUpper.district,returnUpper.zaEspaceLower],['lumiose-espace-vide',false]);
+ const lower={...base,zaEspaceLower:true};const tunnel=stepField(lower,'right');assert.equal(tunnel.district,'lumiose-bleu4-tunnel');
+ const returnLower=stepField({...lower,...tunnel},'left');assert.deepEqual([returnLower.district,returnLower.zaEspaceLower],['lumiose-espace-vide',true]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...lower,...tunnel,x:16,y:8},78),78);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-bleu4-tunnel',16,8,['kept'],7]);
+ const rust=stepField({...upper,...road,x:21,y:8},'right');assert.equal(rust.district,'lumiose-rust');assert.equal(stepField({...upper,...rust},'right').district,'lumiose-bleu-sector4');
+});
