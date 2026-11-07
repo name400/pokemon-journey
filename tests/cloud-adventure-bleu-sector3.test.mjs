@@ -37,3 +37,15 @@ test('Bleu Sector 3 and Vernal Avenue connect without entering locked Zone 12',(
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vernal',1,5,['kept']]);
  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-sector3',21,8]);
 });
+
+test('the provisional stairs connect the avenue to the sewer approach and keep saved positions',()=>{
+ let s={area:3,district:'lumiose-vernal',interior:null,x:1,y:5,teamIds:['kept'],steps:42};
+ s={...s,...stepField(s,'left')};
+ for(const direction of ['up','up','up','up','up']){const next=stepField(s,direction);assert.equal(next.blocked,undefined);s={...s,...next};}
+ assert.deepEqual([s.x,s.y], [21,3]);
+ const stairs={...s,y:5};assert.equal(fieldMap(stairs)[5][21],':');
+ const restored=restoreAdventurePosition(storeAdventurePosition(stairs,51),51);
+ assert.deepEqual([restored.district,restored.x,restored.y,restored.steps,restored.teamIds],['lumiose-bleu-sector3',21,5,42,['kept']]);
+ const tunnel=stepField(s,'right');assert.equal(tunnel.district,'lumiose-bleu3-sewer-approach');
+ assert.equal(stepField({...s,...tunnel},'left').district,'lumiose-bleu-sector3');
+});
