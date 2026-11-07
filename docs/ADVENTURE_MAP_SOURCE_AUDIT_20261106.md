@@ -1030,3 +1030,7 @@ On 2026-11-07 a headless Chromium fixture with mocked 350 ms movement-response d
 ### Rouge garden and cemetery paths (visual draft)
 
 The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) depicts paths through Rouge Plaza's formal garden and branching paths inside the northern cemetery. Both screens now show provisional narrow path overlays on existing grass tiles. These are visual only: those tiles still have their original grass-encounter and movement behavior, and the path coordinates and cemetery layout are not a measured match to the source. No save migration is required. The existing garden gates, grave placement and crypt geometry still need verification.
+
+### Grass-covered path indication
+
+The Rouge garden and cemetery path overlays still sit on encounter grass; the renderer now adds grass tufts to those paths and the field hint and canvas label explicitly explain that wild encounters can occur there. This is a visual/accessibility clarification only. The provisional path coordinates, underlying grass encounter rules, movement and save data remain unchanged.

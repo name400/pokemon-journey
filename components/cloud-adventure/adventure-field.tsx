@@ -179,12 +179,17 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
       if(!['lumiose-zone2','lumiose-zone3'].includes(w.district))sprite('bush',px,py);
       sprite('grassDetail',px,py);
       // Grass remains an encounter tile. The narrow, provisional paths are visual overlays.
-      if(w.district==='lumiose-zone3'&&y===8&&(x===9||x===13)){ctx.fillStyle='#d5c8ae';ctx.fillRect(px,py+tile*.39,tile,tile*.22);}
+      const gardenGrassPath=w.district==='lumiose-zone3'&&y===8&&(x===9||x===13);
+      let cemeteryGrassPath=false;
+      if(gardenGrassPath){ctx.fillStyle='#d5c8ae';ctx.fillRect(px,py+tile*.39,tile,tile*.22);}
       if(w.district==='lumiose-zone4'){
        const vertical=(x===10&&y>=4&&y<=8)||(x===11&&y>=8&&y<=12)||(x===13&&y>=6&&y<=10);
        const horizontal=(y===6&&x>=7&&x<=13)||(y===9&&x>=10&&x<=15)||(y===11&&x>=8&&x<=11);
-       if(vertical||horizontal){ctx.fillStyle='#bdb79b';if(vertical)ctx.fillRect(px+tile*.39,py,tile*.22,tile);if(horizontal)ctx.fillRect(px,py+tile*.39,tile,tile*.22);}
+       cemeteryGrassPath=vertical||horizontal;
+       if(cemeteryGrassPath){ctx.fillStyle='#bdb79b';if(vertical)ctx.fillRect(px+tile*.39,py,tile*.22,tile);if(horizontal)ctx.fillRect(px,py+tile*.39,tile,tile*.22);}
       }
+      // Grass on top of each path signals that the underlying encounter rule still applies.
+      if(gardenGrassPath||cemeteryGrassPath){ctx.fillStyle='#4c814b';for(const [dx,dy] of [[.43,.45],[.54,.56],[.60,.42]])ctx.fillRect(px+tile*dx,py+tile*dy,2,3);}
       if(w.district==='lumiose-zone3'&&(x+y)%3===0){ctx.fillStyle='#f4ddd0';ctx.fillRect(px+7,py+9,3,3);ctx.fillRect(px+22,py+19,3,3);}
      }
      if(('HMJ'.includes(c)&&!(c==='H'&&w.district==='lumiose-zone3'))||(c==='P'&&w.district==='lumiose-floral')||(c==='l'&&w.district==='lumiose-rouge-north'))buildings.push({x,y,kind:c});
@@ -307,5 +312,5 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
   scheduler.invalidate();return()=>{disposed=true;invalidate.current=null;scheduler.dispose();observer.disconnect();motion.removeEventListener('change',scheduler.invalidate);};
  },[]);
  useEffect(()=>{invalidate.current?.();},[w,period]);
- return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. 방향키 또는 WASD로 이동, E로 대화. 현재 위치 ${w.x}, ${w.y}${zone2BudewPosition(w)?'. 야생 꼬몽울이 보입니다.':''}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile),budew=zone2BudewPosition(w);if(budew&&budew.x===x&&budew.y===y){onAimBudew();return;}const kakuna=zone2KakunaPosition(w);if(kakuna&&kakuna.x===x&&kakuna.y===y){onAimKakuna();return;}const fieldMon=zone2FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(fieldMon){onAimField(fieldMon.id);return;}const zone3Mon=zone3FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(zone3Mon){onAimZone3(zone3Mon.id);return;}if(w.district==='lumiose-zone2'&&w.map[y]?.[x]==='p'){onAimIslandAlpha();return;}if(w.district==='lumiose-wild'&&w.map[y]?.[x]==='a'&&!w.zaWildAlphaSpent){onAimAlpha();return;}if(x===w.x&&y===w.y){onInteract();return;}onPath(fieldPath(w.map,{x:w.x,y:w.y},{x,y}));}}/><div className="adv-field-hint">필드를 누르면 그곳까지 걷습니다</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
+ return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. 방향키 또는 WASD로 이동, E로 대화. 현재 위치 ${w.x}, ${w.y}${zone2BudewPosition(w)?'. 야생 꼬몽울이 보입니다.':''}${!w.interior&&['lumiose-zone3','lumiose-zone4'].includes(w.district)?'. 풀이 자란 길에서도 야생 포켓몬이 나타납니다.':''}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile),budew=zone2BudewPosition(w);if(budew&&budew.x===x&&budew.y===y){onAimBudew();return;}const kakuna=zone2KakunaPosition(w);if(kakuna&&kakuna.x===x&&kakuna.y===y){onAimKakuna();return;}const fieldMon=zone2FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(fieldMon){onAimField(fieldMon.id);return;}const zone3Mon=zone3FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(zone3Mon){onAimZone3(zone3Mon.id);return;}if(w.district==='lumiose-zone2'&&w.map[y]?.[x]==='p'){onAimIslandAlpha();return;}if(w.district==='lumiose-wild'&&w.map[y]?.[x]==='a'&&!w.zaWildAlphaSpent){onAimAlpha();return;}if(x===w.x&&y===w.y){onInteract();return;}onPath(fieldPath(w.map,{x:w.x,y:w.y},{x,y}));}}/><div className="adv-field-hint">{!w.interior&&['lumiose-zone3','lumiose-zone4'].includes(w.district)?'풀이 자란 길에서도 야생 포켓몬이 나타납니다':'필드를 누르면 그곳까지 걷습니다'}</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
 }
