@@ -33,6 +33,19 @@ test('court rocks gate Ice Beam and old court positions migrate safely',()=>{
 });
 
 test('southwest pond steps keep the existing southern access',()=>{
- const map=zone12Map({});assert.equal(map[13][8],':');assert.equal(map[13][9],':');assert.equal(map[13][7],'~');
+ const map=zone12Map({});assert.equal(map[13][8],'l');assert.equal(map[13][9],':');assert.equal(map[13][7],'~');
  assert.ok(fieldPath(map,{x:12,y:15},{x:8,y:13}).length);
+});
+
+
+test('pond stairs expose a separate lower bank without moving old saves or water encounters',()=>{
+ const base={area:3,district:'lumiose-zone12',interior:null,x:9,y:13,facing:'left',zaRoyaleRank:'E',teamIds:['kept']};
+ assert.equal(fieldDialogue(base).action,'zone12PondSteps');
+ const old=restoreAdventurePosition(storeAdventurePosition(base,60),60);assert.deepEqual([old.x,old.y,old.zaZone12PondLower],[9,13,undefined]);
+ const lower={...base,zaZone12PondLower:true},map=zone12Map(lower);
+ assert.equal(fieldDialogue(lower).action,'zone12PondSteps');assert.equal(map[12][6],'v');assert.equal(map[12][7],'d');
+ assert.equal(stepField({...lower,x:8,y:12},'left').blocked,true);
+ const saved=restoreAdventurePosition(storeAdventurePosition(lower,61),61);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower,saved.teamIds],[9,13,true,['kept']]);
+ assert.equal(restoreAdventurePosition(storeAdventurePosition(lower,61),62).district,null);
+ assert.equal(zone12Map({...lower,zaZone12Spent:{'avalugg-alpha':true}})[12][6],'~');
 });
