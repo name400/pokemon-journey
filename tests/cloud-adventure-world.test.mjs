@@ -369,3 +369,14 @@ test('Vert Plaza streets preserve all three connections and migrate older positi
  assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
  assert.equal(storeAdventurePosition(restored,8).districtPosition.vertPlazaLayout,1);
 });
+
+test('Centrico and Vert Plaza keep their road approaches and existing save locations',()=>{
+ const centrico=lumioseCentricoRouteMap();
+ assert.equal(centrico[12][11],'%');assert.equal(centrico[12][4],',');assert.equal(centrico[15][7],',');
+ for(const target of [{x:1,y:8},{x:21,y:8},{x:11,y:1},{x:7,y:15}])assert.ok(fieldPath(centrico,{x:11,y:8},target).length);
+ const plaza=fieldMap({district:'lumiose-vert-plaza'});assert.equal(plaza[3][14],',');assert.ok(fieldPath(plaza,{x:11,y:8},{x:21,y:8}).length);
+ for(const district of ['lumiose-centrico-route','lumiose-vert-plaza']){
+  const saved=storeAdventurePosition({area:3,district,x:4,y:9,regionId:6,districtReturnRegion:1,teamIds:['kept']},7);
+  const restored=restoreAdventurePosition(saved,7);assert.deepEqual([restored.district,restored.x,restored.y],[district,4,9]);assert.deepEqual(restored.teamIds,['kept']);
+ }
+});
