@@ -509,5 +509,7 @@ test('Zone 18 southern ladder preserves the return path after reload',async()=>{
   assert.deepEqual([state.world.x,state.world.y,state.world.zaZone18Upper],[6,9,true]);assert.equal(rawWorld().zaZone18LadderReturn,'south');
   await call('zone18Ladder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone18Upper],[13,13,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
   const legacy={...rawWorld(),x:6,y:9,facing:'down',zaZone18Upper:true};delete legacy.zaZone18LadderReturn;seedWorld(storeAdventurePosition(legacy,state.revision+1));await get();await call('zone18Ladder');await get();assert.deepEqual([state.world.x,state.world.y],[13,6]);
+  // A stale return marker from an older session must not cross district boundaries.
+  seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:15,facing:'down',zaZone18LadderReturn:'south'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.notEqual(state.world.district,'lumiose-zone18');assert.equal(rawWorld().zaZone18LadderReturn,undefined);
  }finally{globalThis.__adventureUser=previousUser;}
 });
