@@ -160,3 +160,13 @@ test('Coulant eastern streets connect Vert Sectors 6 and 7 in both directions',(
   const back=stepField(restored,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-coulant-route',21,y]);
  }
 });
+
+test('Saison Canal street joins Magenta and Jaune approaches through Centrico without the wild-zone gate',()=>{
+ const initial={area:3,district:'lumiose-magenta-canal-route',interior:null,x:21,y:14,regionId:6,districtReturnRegion:1,zaRoyaleRank:'V',teamIds:['kept']};
+ const toCenter=stepField(initial,'right');assert.deepEqual([toCenter.district,toCenter.x,toCenter.y],['lumiose-centrico-route',1,12]);
+ const restored=restoreAdventurePosition(storeAdventurePosition({...initial,...toCenter},7),7);assert.deepEqual(restored.teamIds,['kept']);
+ const back=stepField(restored,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-canal-route',21,14]);
+ const map=fieldMap(restored);assert.ok(fieldPath(map,{x:1,y:12},{x:9,y:1}).length);
+ const toSaison=stepField({...restored,x:9,y:1},'up');assert.deepEqual([toSaison.district,toSaison.x,toSaison.y],['lumiose-saison-canalside',1,8]);
+ const toCenterAgain=stepField({...restored,...toSaison},'left');assert.deepEqual([toCenterAgain.district,toCenterAgain.x,toCenterAgain.y],['lumiose-centrico-route',9,1]);
+});

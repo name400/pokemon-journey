@@ -994,3 +994,7 @@ The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/bl
 ### Coulant Waterway eastern connections
 
 [Poképédia](https://www.pokepedia.fr/Canal_Lacoul%C3%A9e) describes two eastern streets connecting Coulant Waterway to Vert Sectors 6 and 7, as well as the existing northern and southern approaches. The draft waterway now connects to both sectors in each direction, while retaining its older Zone 11 and Vert Street connections. Exact door positions, street lengths and the overall waterway geometry are not established by the source and remain provisional. The additional exits use previously blocked boundary tiles; previously valid saved positions are unchanged.
+
+### Saison Canal across Centrico (draft street continuity)
+
+[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Saison_Canal) places the northwest canal segment along Magenta Street and the southeast segment beyond Centrico. The Magenta canal-side route now has a direct bidirectional street transition to the existing Centrico screen, which already connects to the southeast Saison promenade. The screen-edge coordinates, the intervening street length and the actual passage geometry are provisional; the water itself is not yet rendered as a continuous channel beneath the tower. The new transition does not require entering Wild Zone 7, and keeps that zone's existing rank restriction.
