@@ -18,3 +18,12 @@ test('Jaune Street entrance honors Zone 8 access and reconnects on exit',()=>{
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone8',9,15,['kept']]);
  assert.ok(fieldPath(zone8Map(open),zone,{x:11,y:8}).length);
 });
+
+test('Jaune Plaza stall footprints keep paths, grass and old saves',()=>{
+ const base={area:3,district:'lumiose-zone8',interior:null,x:21,y:8,zaRoyaleRank:'F',teamIds:['kept']},map=zone8Map(base);
+ for(const [x,y] of [[21,8],[15,15]]){
+  assert.equal(map[y][x],'^');const old=storeAdventurePosition({...base,x,y},31);delete old.districtPosition.zone8Layout;
+  const loaded=restoreAdventurePosition(structuredClone(old),31);assert.equal(loaded.district,base.district);assert.notEqual(map[loaded.y][loaded.x],'^');assert.deepEqual(loaded.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(old),32).district,null);
+ }
+ assert.ok(fieldPath(map,{x:9,y:15},{x:21,y:10}).length);assert.equal(map[6][10],'g');assert.equal(storeAdventurePosition(base,32).districtPosition.zone8Layout,1);
+});

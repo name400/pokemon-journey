@@ -127,6 +127,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
      // the existing map tile continues to control movement and encounters.
      const r=Math.sqrt(((x-11)/9)**2+((y-8)/6)**2);
      ctx.fillStyle=c==='#'?'#857c69':r<=.48?'#b58c5e':r<=.9?'#dfc387':r<=1.1?'#e8dcc3':(x+y)%2?'#ddd4bd':'#e6dec9';ctx.fillRect(px,py,tile,tile);
+     if(c==='^'){ctx.fillStyle='#775c45';ctx.fillRect(px+5,py+9,tile-10,tile-13);ctx.fillStyle='#bb6654';ctx.fillRect(px+3,py+5,tile-6,6);ctx.fillStyle='#f3ddae';ctx.fillRect(px+7,py+5,4,6);ctx.fillRect(px+tile-11,py+5,4,6);}
      if(c==='g'){ctx.fillStyle=r<=.48?'#98734d':'#b9975f';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-8-(j%2)*4,4,2);}if('ijkl'.includes(c)){ctx.fillStyle='#d8b64f';ctx.fillRect(px+8,py+8,tile-16,tile-16);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-zone7'&&!w.interior){
      // Magenta Plaza stands between the two halves of the canal. Keep the
@@ -206,6 +207,13 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
       }
       // Grass on top of each path signals that the underlying encounter rule still applies.
       if(gardenGrassPath||cemeteryGrassPath){ctx.fillStyle='#4c814b';for(const [dx,dy] of [[.43,.45],[.54,.56],[.60,.42]])ctx.fillRect(px+tile*dx,py+tile*dy,2,3);}
+      // The original plaza has four plots: Budew motifs to the west and
+      // Roselia motifs to the east. Their 2D scale and positions are draft.
+      if(w.district==='lumiose-zone3'&&(x===8||x===14)&&(y===6||y===10)){
+       ctx.fillStyle='#568154';ctx.fillRect(px+tile/2-2,py+tile/2,4,9);ctx.fillRect(px+tile/2-7,py+tile/2+3,14,3);
+       if(x===8){ctx.fillStyle='#e8e2a2';ctx.fillRect(px+tile/2-4,py+6,8,8);ctx.fillStyle='#75a463';ctx.fillRect(px+tile/2-2,py+4,4,4);}
+       else{ctx.fillStyle='#d98b9d';ctx.fillRect(px+tile/2-7,py+7,6,6);ctx.fillStyle='#8aa6ce';ctx.fillRect(px+tile/2+1,py+7,6,6);}
+      }
       if(w.district==='lumiose-zone3'&&(x+y)%3===0){ctx.fillStyle='#f4ddd0';ctx.fillRect(px+7,py+9,3,3);ctx.fillRect(px+22,py+19,3,3);}
      }
      if(('HMJ'.includes(c)&&!(c==='H'&&w.district==='lumiose-zone3'))||(c==='P'&&w.district==='lumiose-floral')||(c==='l'&&w.district==='lumiose-rouge-north'))buildings.push({x,y,kind:c});

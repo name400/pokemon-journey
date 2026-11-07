@@ -611,3 +611,12 @@ test('Zone 5 southern Bleu Sector 3 entrance survives reload',async()=>{
   await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector3',11,1]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 8 earlier stall-position save is safely restored',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone8-stall-qa',displayName:'광장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:21,y:8,zaRoyaleRank:'F'},state.revision+1);delete old.districtPosition.zone8Layout;seedWorld(old);await get();
+  assert.equal(state.world.district,'lumiose-zone8');assert.notEqual(state.world.map[state.world.y][state.world.x],'^');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
