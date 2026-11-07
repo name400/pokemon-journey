@@ -536,3 +536,16 @@ test('Zone 16 southwest rooftop ladder survives reload',async()=>{
   await call('zone16RoofLadder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone16Upper],[4,13,false]);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Hibernal Avenue rooftop lift respects rank and preserves its return after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'hibernal-roof-qa',displayName:'옥상테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const onStreet={...rawWorld(),area:3,district:'lumiose-hibernal-approach',interior:null,x:14,y:6,facing:'up',zaRoyaleRank:'E',zaZone15LiftUnlocked:true};
+  seedWorld(storeAdventurePosition(onStreet,state.revision+1));await get();await call('zone15Lift',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),...onStreet,zaRoyaleRank:'D'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone15Lift');await call('zone15Lift');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone15Upper],['lumiose-zone15',4,8,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone15Lift');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-hibernal-approach',14,6]);assert.deepEqual(state.world.teamIds,team);
+  const roof={...rawWorld(),district:'lumiose-zone15',x:4,y:8,facing:'up',zaZone15Upper:true};delete roof.zaZone15LiftReturn;seedWorld(storeAdventurePosition(roof,state.revision+1));await get();await call('zone15Lift');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone15',2,12]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
