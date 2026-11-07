@@ -28,3 +28,11 @@ test('Vert Pokémon Center uses the existing healing action near the road juncti
  const saved=restoreAdventurePosition(storeAdventurePosition(s,48),48);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-street-route',10,13,['kept']]);
  assert.equal(fieldDialogue(saved).action,'heal');
 });
+
+test('station footprint faces the center without blocking the existing intersection',()=>{
+ const map=vertStreetRouteMap(),road={area:3,district:'lumiose-vert-street-route',interior:null,x:8,y:6,facing:'up',teamIds:['kept']};
+ assert.equal(map[5][8],'%');assert.equal(map[13][10],'H');assert.equal(stepField(road,'up').blocked,true);
+ assert.ok(fieldPath(map,{x:1,y:8},{x:10,y:15}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(road,73),73);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-street-route',8,6,['kept']]);
+});
