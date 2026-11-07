@@ -41,3 +41,13 @@ test('Rouge Sector 7 court ladder and separate roof preserve positions',()=>{
  const upper={...ground,district:'lumiose-rouge7-roof',x:5,y:9,facing:'down'};assert.equal(fieldDialogue(upper)?.action,'rouge7RoofLadder');assert.ok(fieldPath(fieldMap(upper),upper,{x:18,y:6}).length);
  const restored=restoreAdventurePosition(storeAdventurePosition(upper,8),8);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-rouge7-roof',5,9,['kept']]);
 });
+
+test('Zone 13 roadside trees preserve grass, routes and older saves',()=>{
+ const base={area:3,district:'lumiose-zone13',interior:null,x:4,y:2,regionId:6,districtReturnRegion:1,teamIds:['kept'],zaRoyaleRank:'E'},map=zone13Map(base);
+ for(const [x,y] of [[4,2],[8,2],[12,2],[16,2],[20,2],[2,4],[20,4],[2,12],[20,12],[4,14],[8,14],[14,14],[18,14]]){
+  assert.equal(map[y][x],'^');const old=storeAdventurePosition({...base,x,y},37);delete old.districtPosition.zone13Layout;const restored=restoreAdventurePosition(structuredClone(old),37);
+  assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'^');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(old),38).district,null);
+ }
+ assert.equal(map[3][3],'g');assert.ok(fieldPath(map,{x:1,y:8},{x:21,y:8}).length);assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:8}).length);
+ assert.equal(storeAdventurePosition(base,39).districtPosition.zone13Layout,1);
+});

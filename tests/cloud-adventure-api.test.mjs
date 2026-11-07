@@ -582,3 +582,12 @@ test('Zone 17 southwest entrance respects rank and survives reload',async()=>{
   await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-street-route',20,1]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 13 earlier woodland save relocates only at matching revision',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone13-tree-qa',displayName:'숲테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone13',interior:null,x:4,y:2,facing:'down',zaRoyaleRank:'E'},state.revision+1);delete old.districtPosition.zone13Layout;seedWorld(old);await get();
+  assert.equal(state.world.district,'lumiose-zone13');assert.notEqual(state.world.map[state.world.y][state.world.x],'^');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
