@@ -356,3 +356,16 @@ test('zone one western grass preserves the existing road and stored positions',(
  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-zone1',2,9,['kept']]);
  assert.equal(walkable(map[restored.y][restored.x]),true);
 });
+
+test('Vert Plaza streets preserve all three connections and migrate older positions',()=>{
+ const state={area:3,district:'lumiose-vert-plaza',interior:null,x:5,y:3,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42};
+ const map=fieldMap(state);const start={x:11,y:8};
+ for(const p of [{x:1,y:8},{x:21,y:8},{x:11,y:1}])assert.ok(fieldPath(map,start,p).length);
+ assert.equal(stepField({...state,x:1,y:8},'left').district,'lumiose-vernal');
+ assert.equal(stepField({...state,x:21,y:8},'right').district,'lumiose-zone2');
+ assert.equal(stepField({...state,x:11,y:1},'up').district,'lumiose-vert-sector3');
+ const saved=storeAdventurePosition(state,7);delete saved.districtPosition.vertPlazaLayout;
+ const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,42);
+ assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
+ assert.equal(storeAdventurePosition(restored,8).districtPosition.vertPlazaLayout,1);
+});
