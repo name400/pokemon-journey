@@ -747,3 +747,14 @@ test('Zone 2 old northern shoreline save preserves field state and inventory',as
   const budew=rawWorld().zaZone2Budew;assert.deepEqual([budew.alert,budew.custom],[2,'kept']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vert 2 rooftop box crossing and glide preserve state across reloads',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert2-roof-gap-qa',displayName:'옥상틈테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert2',interior:null,x:9,y:8,facing:'right',zaVert2RoofUpper:true,zaMission15Stage:1},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'vert2RoofGap');await call('rotoGlide',{},409);await call('vert2RoofGap');await get();assert.deepEqual([state.world.x,state.world.y],[13,8]);
+  assert.equal(state.world.interaction.action,'vert2RoofGap');await call('vert2RoofGap');await get();assert.deepEqual([state.world.x,state.world.y],[9,8]);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert2',interior:null,x:9,y:8,facing:'right',zaVert2RoofUpper:true,zaMission15Stage:2},state.revision+1));await get();await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaVert2RoofUpper],[13,8,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
