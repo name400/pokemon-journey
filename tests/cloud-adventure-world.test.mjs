@@ -434,3 +434,12 @@ test('Rouge garden and cemetery perimeters keep gates and safely restore older s
   const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,42);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
  }
 });
+
+test('cemetery west entrance reaches Rouge Street and keeps legacy approaches',()=>{
+ const zone={area:3,district:'lumiose-zone4',interior:null,x:1,y:10,facing:'left',teamIds:['kept']};
+ const street=stepField(zone,'left');assert.deepEqual([street.district,street.x,street.y],['lumiose-rouge-north',21,14]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...street},73),73);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-rouge-north',21,14,['kept']]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone4',1,10]);
+ assert.ok(fieldPath(fieldMap({...zone,...back}),back,{x:11,y:14}).length);
+ assert.equal(stepField({...zone,x:21,y:8},'right').district,'lumiose-rouge-north');
+});

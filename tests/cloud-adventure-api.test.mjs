@@ -620,3 +620,13 @@ test('Zone 8 earlier stall-position save is safely restored',async()=>{
   assert.equal(state.world.district,'lumiose-zone8');assert.notEqual(state.world.map[state.world.y][state.world.x],'^');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('cemetery western entrance survives reload and returns to Rouge Street',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'cemetery-west-qa',displayName:'출입구테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:null,x:21,y:14,facing:'right'},state.revision+1));await get();await call('move',{direction:'right'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone4',1,10]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-north',21,14]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
