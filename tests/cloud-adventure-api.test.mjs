@@ -475,3 +475,15 @@ test('Zone 15 and Sector 7 rooftop transition survives a server reload',async()=
   await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone15Upper],['lumiose-zone15',15,1,true]);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Rouge Sector 7 ladder preserves the rooftop across server reloads',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge7-roof-qa',displayName:'옥상테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector7',interior:null,x:13,y:7,facing:'right'},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'rouge7RoofLadder');await call('rouge7RoofLadder');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.teamIds],['lumiose-rouge7-roof',5,9,team]);assert.deepEqual(state.wallet,wallet);
+  assert.equal(state.world.interaction.action,'rouge7RoofLadder');await call('rouge7RoofLadder');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.teamIds],['lumiose-rouge-sector7',13,7,team]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
