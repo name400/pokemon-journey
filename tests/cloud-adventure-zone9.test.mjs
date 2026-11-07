@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone9Map,zone9Encounter,zone9Visible,zone9Item} from '../lib/cloud-adventure/adventure-zone9.mjs';
-import {stepField,fieldMap,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldMap,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone nine entry and rooftop keep saved positions',()=>{
  const base={area:3,district:'lumiose-estival-approach',interior:null,x:21,y:12,facing:'right',zaRoyaleRank:'V'};
  assert.equal(stepField(base,'right').blocked,true);const entered=stepField({...base,zaRoyaleRank:'F'},'right');assert.equal(entered.district,'lumiose-zone9');
@@ -62,4 +62,16 @@ test('Magenta Sector 6 connects west to South Boulevard without bypassing Zone 9
  assert.ok(fieldPath(fieldMap({...sector,...road}),road,{x:15,y:8}).length);
  const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...road},35),35);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission10Stage,saved.teamIds],['lumiose-south-boulevard',21,12,3,['kept']]);
  const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector6',1,8]);
+});
+
+test('south entrance ladder connects both layers and preserves earlier rooftop positions',()=>{
+ const ground={area:3,district:'lumiose-zone9',interior:null,x:15,y:14,facing:'up',zaRoyaleRank:'F',zaZone9Upper:false,teamIds:['kept']};
+ assert.equal(zone9Map(ground)[13][15],'h');assert.equal(fieldDialogue(ground).action,'zone9Ladder-h');
+ assert.equal(stepField({...ground,x:15,y:15},'down').district,'lumiose-estival-approach');
+ const upper={...ground,zaZone9Upper:true};assert.equal(fieldDialogue(upper).action,'zone9Ladder-h');
+ assert.ok(fieldPath(zone9Map(upper),upper,{x:17,y:12}).length);
+ for(const old of [{...ground,x:17,y:12},{...upper,x:17,y:12}]){
+  const restored=restoreAdventurePosition(storeAdventurePosition(old,78),78);
+  assert.deepEqual([restored.district,restored.zaZone9Upper,restored.x,restored.y,restored.teamIds],['lumiose-zone9',old.zaZone9Upper,17,12,['kept']]);
+ }
 });

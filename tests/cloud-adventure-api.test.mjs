@@ -45,6 +45,19 @@ async function walkTo(tileOrTarget){if(tileOrTarget==='W'&&state.world.district=
 async function travelToZone2(){assert.equal(state.world.district,'lumiose');await walkTo('h');await call('enterRooftop');await walkTo('W');assert.equal(state.world.district,'lumiose-zone2');}
 async function battle({resolve=true}={}){let turns=0;while(state.battle||state.world.adventureCatchWindow){assert.ok(turns++<180,'battle finishes');if(state.world.adventureCatchWindow){await call('skipCatchWindow');assert.equal(state.battle,null);continue;}const b=state.battle,q=b.requests[0],p=b.teams[0][b.active[0]],foe=b.teams[1][b.active[1]];const command=q.kind==='switch'?{type:'switch',slot:q.switches.sort((a,b)=>b.hp-a.hp)[0].slot}:{type:'move',move:q.moves.filter(m=>!m.disabled&&m.pp>0).map(m=>({m,score:(moves[m.name]?.power||0)*effectiveness(moves[m.name]?.type,foe.types)*(p.types.includes(moves[m.name]?.type)?1.5:1)})).sort((a,b)=>b.score-a.score)[0].m.name};await call('battle',{command});if(!state.battle&&!state.world.adventureCatchWindow){assert.equal(state.battleResult?.ended,true);assert.ok(Array.isArray(state.battleResult.events));assert.equal(rawWorld().combat,null);}}if(resolve)while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});return turns;}
 
+test('Zone 9 south ladder remains usable across reloads',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
+ try {
+  await get();await call('start',{species:1});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:15,y:14,facing:'up',zaRoyaleRank:'F',zaZone9Upper:false},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'zone9Ladder-h');
+  await call('zone9Ladder-h');await get();assert.equal(rawWorld().zaZone9Upper,true);
+  assert.deepEqual([state.world.x,state.world.y],[15,14]);assert.equal(state.world.interaction.action,'zone9Ladder-h');
+  await call('zone9Ladder-h');await get();assert.equal(rawWorld().zaZone9Upper,false);
+ } finally {globalThis.__adventureUser=previousUser;}
+});
+
 test('Vert 7 lift repair and rooftop persist across requests',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'vert7-roof-qa',displayName:'옥상테스트'};
