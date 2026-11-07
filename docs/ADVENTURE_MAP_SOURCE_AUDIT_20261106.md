@@ -1010,3 +1010,7 @@ The [Wild Zone 11 reference](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11) p
 ### Centrico channel alignment (draft)
 
 The Centrico canal now reaches the eastern screen boundary, aligning visually with water at the western edge of the existing Saison promenade. Walkable bridge strips preserve plaza and event access. The [source](https://bulbapedia.bulbagarden.net/wiki/Saison_Canal) establishes the channel beneath Prism Tower, but these tile widths, bridge locations and direct screen alignment are approximations. Newly submerged former floor positions in older save layouts are relocated only on matching revisions; all existing exits and event tiles remain in place.
+
+### Bleu and Vert Plaza water outlines (draft)
+
+The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) shows a rounded water feature around Bleu Plaza's central monument and an irregular lake at Vert Plaza. The Zone 16 draft rounds three corners of its water ring, and the Zone 2 draft removes the straight northward extension beyond the northeast shore. Tile scale, crossings and detailed banks remain approximations; this is not a surveyed reconstruction. New water corners replace former floor only, with matching-revision migration for old saves. The existing encounter-grass tiles, entrances and fixed occupants are retained.

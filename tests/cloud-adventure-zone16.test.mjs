@@ -27,3 +27,14 @@ test('Froakie is on the central monument and a spent encounter restores safely',
  assert.ok(walkable(zone16Map(saved)[saved.y][saved.x]));assert.deepEqual(saved.teamIds,['kept']);
  assert.equal(saved.zaZone16Spent.froakie,true);assert.equal(restoreAdventurePosition(stored,57).district,null);
 });
+
+test('rounded Bleu Plaza water safely restores older positions',()=>{
+ const map=zone16Map();
+ for(const [x,y] of [[15,5],[7,11],[15,11]]){
+  assert.equal(map[y][x],'~');
+  const state={area:3,district:'lumiose-zone16',interior:null,x,y,regionId:6,districtReturnRegion:1,zaRoyaleRank:'C',teamIds:['kept']};
+  const old=storeAdventurePosition(state,9);delete old.districtPosition.zone16Layout;
+  const restored=restoreAdventurePosition(structuredClone(old),9);assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
+  assert.equal(restoreAdventurePosition(structuredClone(old),10).district,null);assert.equal(storeAdventurePosition(restored,10).districtPosition.zone16Layout,1);
+ }
+});
