@@ -33,3 +33,13 @@ test('South Boulevard connects to the western substation approach without bypass
  const saved=restoreAdventurePosition(storeAdventurePosition(state,44),44);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone14',1,8,['kept']]);
  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-south-boulevard',21,14]);
 });
+
+test('Discharge TM is behind the breakable rock and stays collected after save',()=>{
+ const s={area:3,district:'lumiose-zone14',interior:null,x:15,y:10,teamIds:['kept'],zaZone14Items:['rock-mastery']};
+ assert.equal(zone14Item(s,'l').kind,'za-tm039');
+ assert.equal(fieldPath(zone14Map(s),s,{x:17,y:11}).length,0);
+ const opened={...s,zaZone14RockCleared:true};assert.ok(fieldPath(zone14Map(opened),opened,{x:17,y:11}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...opened,zaZone14Items:['rock-mastery','rock-tm039']},55),55);
+ assert.deepEqual(saved.zaZone14Items,['rock-mastery','rock-tm039']);assert.equal(zone14Item(saved,'l'),null);
+ assert.deepEqual(saved.teamIds,['kept']);
+});
