@@ -372,7 +372,7 @@ test('Vert Plaza streets preserve all three connections and migrate older positi
 
 test('Centrico and Vert Plaza keep their road approaches and existing save locations',()=>{
  const centrico=lumioseCentricoRouteMap();
- assert.equal(centrico[12][11],'%');assert.equal(centrico[12][4],',');assert.equal(centrico[15][7],',');
+ assert.equal(centrico[12][11],'%');assert.equal(centrico[12][4],':');assert.equal(centrico[15][7],',');
  for(const target of [{x:1,y:8},{x:21,y:8},{x:11,y:1},{x:7,y:15}])assert.ok(fieldPath(centrico,{x:11,y:8},target).length);
  const plaza=fieldMap({district:'lumiose-vert-plaza'});assert.equal(plaza[3][14],',');assert.ok(fieldPath(plaza,{x:11,y:8},{x:21,y:8}).length);
  for(const district of ['lumiose-centrico-route','lumiose-vert-plaza']){
@@ -403,6 +403,16 @@ test('Centrico canal preserves plaza access and recovers matching legacy floor p
   const state={area:3,district:'lumiose-centrico-route',x,y:12,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42};
   const old=storeAdventurePosition(state,7);delete old.districtPosition.centricoCanalLayout;
   const restored=restoreAdventurePosition(structuredClone(old),7);assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,42);
-  assert.equal(restoreAdventurePosition(structuredClone(old),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.centricoCanalLayout,1);
+  assert.equal(restoreAdventurePosition(structuredClone(old),8).district,null);assert.equal(storeAdventurePosition(restored,8).districtPosition.centricoCanalLayout,2);
  }
+});
+
+
+test('extended Centrico water keeps bridges and restores version one positions',()=>{
+ const map=lumioseCentricoRouteMap();
+ for(const y of [11,12,13]){assert.equal(map[y][22],'~');assert.equal(map[y][4],':');assert.equal(map[y][19],':');}
+ const state={area:3,district:'lumiose-centrico-route',x:3,y:12,regionId:6,districtReturnRegion:1,teamIds:['kept']};
+ const saved=storeAdventurePosition(state,7);saved.districtPosition.centricoCanalLayout=1;
+ const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
+ assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
 });

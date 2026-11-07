@@ -1006,3 +1006,7 @@ The [Saison Canal reference](https://bulbapedia.bulbagarden.net/wiki/Saison_Cana
 ### Saison promenade and Wild Zone 11 map edges
 
 The [Wild Zone 11 reference](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11) places the zone on both sides of the Saison Canal, without a crossing within the zone. The existing water now extends to the edges of the promenade and Zone 11 screens rather than ending against an artificial wall. Those boundary cells were already blocked; the bridge exit and the separation of the banks are unchanged. This improves visual continuity only: the precise shoreline and connections to adjacent screens remain draft.
+
+### Centrico channel alignment (draft)
+
+The Centrico canal now reaches the eastern screen boundary, aligning visually with water at the western edge of the existing Saison promenade. Walkable bridge strips preserve plaza and event access. The [source](https://bulbapedia.bulbagarden.net/wiki/Saison_Canal) establishes the channel beneath Prism Tower, but these tile widths, bridge locations and direct screen alignment are approximations. Newly submerged former floor positions in older save layouts are relocated only on matching revisions; all existing exits and event tiles remain in place.

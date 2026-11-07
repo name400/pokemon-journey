@@ -166,6 +166,7 @@ export default function AdventureField({world:w,disabled,onPath,onInteract,onAim
       for(let i=4;i<tile;i+=7)vertical==='vertical'?ctx.fillRect(px+3,py+i,tile-6,2):ctx.fillRect(px+i,py+3,2,tile-6);
       ctx.fillStyle='#436d60';if(vertical==='vertical'){ctx.fillRect(px+1,py,3,tile);ctx.fillRect(px+tile-4,py,3,tile);}else{ctx.fillRect(px,py+1,tile,3);ctx.fillRect(px,py+tile-4,tile,3);}
      }
+     if(c===':'&&w.district==='lumiose-centrico-route'){ctx.fillStyle='#b9ac99';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6dccb';for(let i=4;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}
      if(c===':'&&['lumiose-zone2','lumiose-vert2'].includes(w.district)){ctx.fillStyle='#c9c2ae';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#8f8a7c';for(let i=5;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}
      if(c===';'&&w.district==='lumiose-zone2'){ctx.fillStyle='#b5aa90';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#ded6be';ctx.fillRect(px+2,py+2,tile-4,tile-7);ctx.fillStyle='#837f70';ctx.fillRect(px+2,py+tile-5,tile-4,3);}
      if(c==='g'){ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#8bb97d':'#98c68a'):'#92b97c';ctx.fillRect(px,py,tile,tile);if(!['lumiose-zone2','lumiose-zone3'].includes(w.district))sprite('bush',px,py);sprite('grassDetail',px,py);if(w.district==='lumiose-zone3'&&(x+y)%3===0){ctx.fillStyle='#f4ddd0';ctx.fillRect(px+7,py+9,3,3);ctx.fillRect(px+22,py+19,3,3);}}
