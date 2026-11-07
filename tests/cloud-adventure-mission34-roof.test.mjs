@@ -17,3 +17,14 @@ test('Sector 9 scaffolding and bridge enforce Philippe before the Starmie arena'
  assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission34PhilippeWon,saved.teamIds],['lumiose-mission34-roof',18,11,true,['kept']]);
  const old={...street,district:'lumiose-site',x:8,y:13,facing:'up'};assert.equal(fieldDialogue(old).action,'mission34Philippe');
 });
+
+test('South Boulevard lift remains blocked until Beldum defeat and preserves reward state',()=>{
+ const street={area:3,district:'lumiose-south-boulevard',interior:null,x:4,y:7,facing:'up',teamIds:['kept']};
+ assert.equal(fieldDialogue(street).action,undefined);
+ assert.equal(fieldDialogue({...street,zaRoyaleRank:'B'}).action,'side92Battle');
+ const unlocked={...street,zaSide92Won:true,zaSide92RewardPending:true};
+ assert.deepEqual(fieldDialogue(unlocked).actions.map(a=>a.action),['side92Holovator','side92Reward']);
+ const saved=restoreAdventurePosition(storeAdventurePosition(unlocked,77),77);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaSide92Won,saved.zaSide92RewardPending,saved.teamIds],['lumiose-south-boulevard',4,7,true,true,['kept']]);
+ assert.equal(fieldDialogue({...unlocked,district:'lumiose-mission34-roof',x:3,y:4,facing:'left'}).action,'side92Holovator');
+});
