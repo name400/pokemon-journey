@@ -85,18 +85,18 @@ export default function Adventure(){
      const projected=predictCloudStep(d.world,path[0],{allowGrass:true,allowTransition:true,allowHazard:true}),epoch=movementEpoch.current,inputAtStart=inputSequence.current;let buffer=createCloudMoveBuffer(d.world,projected,direction);
      if(projected)setPrediction({revision:d.revision,...projected});
      // Accumulate only displayed steps; transitions wait for server confirmation.
-     const previewTimer=heldDirection.current&&projected?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||inputSequence.current!==inputAtStart||heldDirection.current!==direction)return;const next=buffer.push();if(next)setPrediction({revision:d.revision,...next});},adventureMovementInterval(d.world)):null;
-     moved=true;let r=await act('move',{path});if(previewTimer)clearInterval(previewTimer);
+     const previewTimer=heldDirection.current&&projected?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||inputSequence.current!==inputAtStart||heldDirection.current!==direction)return;const next=buffer.push();if(next)setPrediction({revision:revision.current,...next});},adventureMovementInterval(d.world)):null;
+     moved=true;let r=await act('move',{path});
      while(alive&&mounted.current&&movementEpoch.current===epoch&&inputSequence.current===inputAtStart&&buffer.path.length&&buffer.matches(r)){
       const pending=buffer.path,before=r,nextBuffer=createCloudMoveBuffer(before.world,buffer.position,direction);
       setPrediction({revision:before.revision,...buffer.position});
-      // Continue buffering while the previously displayed batch is in flight.
-      // Each next batch still requires the server to confirm the full prior batch.
-      const nextTimer=heldDirection.current===direction?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||inputSequence.current!==inputAtStart||heldDirection.current!==direction)return;const next=nextBuffer.push();if(next)setPrediction({revision:before.revision,...next});},adventureMovementInterval(before.world)):null;
-      r=await act('move',{path:pending});if(nextTimer)clearInterval(nextTimer);
-      if(!r||r.battle||r.world?.area!==before.world.area||r.world?.interior!==before.world.interior||r.world?.district!==before.world.district||(r.world?.steps||0)-(before.world.steps||0)<pending.length){stop();break;}
+      // Keep one cadence across requests; restarting a timer after every
+      // response adds a visible pause between otherwise continuous batches.
       buffer=nextBuffer;
+      r=await act('move',{path:pending});
+      if(!r||r.battle||r.world?.area!==before.world.area||r.world?.interior!==before.world.interior||r.world?.district!==before.world.district||(r.world?.steps||0)-(before.world.steps||0)<pending.length){stop();break;}
      }
+     if(previewTimer)clearInterval(previewTimer);
      // A confirmed area transition ends the old route, but held input can
      // continue on the new map after its authoritative state has arrived.
      const changedArea=r&&(r.world?.area!==d.world.area||r.world?.interior!==d.world.interior||r.world?.district!==d.world.district);
