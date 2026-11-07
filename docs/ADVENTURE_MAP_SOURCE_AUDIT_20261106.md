@@ -1034,3 +1034,7 @@ The [overhead Lumiose map](https://github.com/Insektaure/Shiny-Stash-Live-Map/bl
 ### Grass-covered path indication
 
 The Rouge garden and cemetery path overlays still sit on encounter grass; the renderer now adds grass tufts to those paths and the field hint and canvas label explicitly explain that wild encounters can occur there. This is a visual/accessibility clarification only. The provisional path coordinates, underlying grass encounter rules, movement and save data remain unchanged.
+
+### Rouge garden and cemetery boundaries (draft)
+
+The [Lumiose overhead map](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) shows the circular formal garden and the separate rectangular cemetery. The garden now has a blocking outer hedge with approach gaps, while the cemetery has a blocking perimeter and openings linking its existing entrances. These gaps, fence tiles and exact proportions are provisional, not surveyed from the map; cemetery path overlays still retain their existing grass encounter behavior. For saves created before these walls, positions on newly blocked tiles are relocated to walkable ground only when the save revision matches. Existing visible encounters, event markers and exits remain in place.
