@@ -1206,3 +1206,14 @@ test('Magenta Sector 3 roof gap ladder round-trips with saves and mission progre
   await call('magenta3RoofGap');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector3-roof',20,9]);assert.equal(state.world.zaMission15Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Magenta 3 rooftop descent reaches Sector 6 without losing mission or save',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta3-sector6-drop-qa',displayName:'마젠타거리낙하테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const roof={...rawWorld(),area:3,district:'lumiose-magenta-sector3-roof',interior:null,x:19,y:11,facing:'right',zaMission15Stage:2,zaMission17Complete:false};
+  seedWorld(storeAdventurePosition(roof,state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta3DropSector6');await call('magenta3DropSector6');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector6',3,6]);assert.equal(state.world.zaMission15Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector6',3,6]);assert.equal(state.world.zaMission17Complete,false);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

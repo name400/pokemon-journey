@@ -21,3 +21,12 @@ test('Magenta Sector 3 roof gap and return ladder preserve old locations',()=>{
  const gap={...roof,district:'lumiose-magenta3-gap',x:6,y:4,facing:'up'};assert.equal(fieldMap(gap)[3][6],'l');assert.equal(fieldDialogue(gap).action,'magenta3RoofGap');assert.ok(fieldPath(fieldMap(gap),gap,{x:6,y:13}).length);
  const restored=restoreAdventurePosition(storeAdventurePosition(gap,136),136);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaMission15Stage,restored.teamIds],[gap.district,6,4,2,['kept']]);
 });
+
+
+test('Magenta 3 roof descends toward Sector 6 scaffold and preserves earlier positions',()=>{
+ const roof={area:3,district:'lumiose-magenta-sector3-roof',interior:null,x:19,y:11,facing:'right',zaMission15Stage:2,teamIds:['kept']},map=fieldMap(roof);
+ assert.equal(map[11][20],'v');assert.equal(fieldDialogue(roof).action,'magenta3DropSector6');assert.ok(fieldPath(map,{x:2,y:13},roof).length);
+ const old=restoreAdventurePosition(storeAdventurePosition({...roof,x:20,y:11},137),137);assert.deepEqual([old.district,old.x,old.y,old.teamIds],[roof.district,20,11,['kept']]);
+ const street={...roof,district:'lumiose-magenta-sector6',x:3,y:6,facing:'up'};assert.equal(fieldMap(street)[6][3],'.');assert.ok(fieldPath(fieldMap(street),street,{x:2,y:6}).length);
+ assert.equal(fieldDialogue({...roof,x:20,y:9,facing:'down'}).action,'magenta3RoofGap');
+});
