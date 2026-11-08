@@ -977,3 +977,18 @@ test('Zone 20 old container position preserves progress and wallet',async()=>{
   await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 20 directional gates preserve story locks, exits and saved party',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-gates-qa',displayName:'유적출입구테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const seedGate=(x,y,mission,complete=false)=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x,y,facing:'up',zaMission38Complete:complete,zaMission42Stage:mission,zaMission42Complete:false},state.revision+1));
+  seedGate(11,4,0,false);await get();await call('zone20DirectionalGate',{},409);assert.equal(state.world.district,'lumiose-centrico-route');
+  seedGate(11,4,2,true);await get();await call('zone20DirectionalGate',{},409);assert.equal(state.world.district,'lumiose-centrico-route');
+  for(const [x,y,stage,startX,startY,direction] of [[11,4,1,11,1,'up'],[3,8,3,1,8,'left'],[19,8,4,21,8,'right']]){
+   seedGate(x,y,stage,true);await get();assert.equal(state.world.interaction.action,'zone20DirectionalGate');await call('zone20DirectionalGate');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone20',startX,startY]);assert.ok([448,282,306].includes(state.world.zaZone20AlphaSpecies));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission42Stage,stage);
+   await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-centrico-route',x,y]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+  seedGate(3,8,0,true);await get();await call('zone20DirectionalGate');await get();assert.equal(state.world.district,'lumiose-zone20');
+ }finally{globalThis.__adventureUser=previousUser;}
+});

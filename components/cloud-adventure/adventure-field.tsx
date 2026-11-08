@@ -219,6 +219,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(w.district==='lumiose-rouge-north'&&c==='h'){ctx.fillStyle='#767a76';ctx.fillRect(px+5,py+3,tile-10,tile-6);ctx.fillStyle='#d8d3c5';ctx.fillRect(px+5,py+9,tile-10,3);ctx.fillRect(px+5,py+19,tile-10,3);}
      if(w.district==='lumiose-rust'&&c==='l'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}
      if(w.district==='lumiose-rust'&&c==='|'){ctx.fillStyle='#555b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#9a9d92';ctx.fillRect(px+4,py+5,tile-8,3);}
+     if(w.district==='lumiose-centrico-route'&&c==='G'){ctx.fillStyle='#8d9e8e';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#4d846f';ctx.fillRect(px+2,py+5,4,tile-10);ctx.fillRect(px+tile-6,py+5,4,tile-10);ctx.fillStyle='#8bd6a5';ctx.fillRect(px+6,py+7,tile-12,3);ctx.fillStyle='#f0fff2';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(y===4?'북문':x===3?'서문':'동문',px+tile/2,py+22);}
      if(c==='k'||c==='K'){ctx.fillStyle=c==='K'?'#79a36d':w.district==='lumiose-zone3'?'#78a66f':'#a6c692';ctx.fillRect(px+2,py+2,tile-4,tile-4);if(c==='K'||w.district==='lumiose-zone3'){ctx.fillStyle=c==='K'?'#fff3be':'#e7c6b4';ctx.fillRect(px+8,py+10,4,4);ctx.fillRect(px+20,py+16,4,4);}}
      if(c==='k'&&w.district==='lumiose-zone1'){ctx.fillStyle='#92b97c';ctx.fillRect(px,py,tile,tile);sprite('grassDetail',px,py);}
      if(c==='~'||c==='w'){
