@@ -13,3 +13,11 @@ test('Magenta Sector 3 draft rooftop links lift, scaffold and Mission 17 while p
  assert.equal(fieldDialogue({...saved,zaMission17Complete:true,zaMission17RewardPending:true}).action,'claimMission15Stone');
  assert.notEqual(fieldMap({...saved,zaMission17Complete:true})[5][18],'d');
 });
+
+test('Magenta Sector 3 roof gap and return ladder preserve old locations',()=>{
+ const roof={area:3,district:'lumiose-magenta-sector3-roof',interior:null,x:20,y:9,facing:'down',zaMission15Stage:2,teamIds:['kept']},map=fieldMap(roof);
+ assert.equal(map[10][20],'v');assert.equal(fieldDialogue(roof).action,'magenta3RoofGap');assert.ok(fieldPath(map,{x:2,y:13},roof).length);
+ const previous=restoreAdventurePosition(storeAdventurePosition({...roof,x:20,y:10},135),135);assert.deepEqual([previous.district,previous.x,previous.y,previous.teamIds],[roof.district,20,10,['kept']]);
+ const gap={...roof,district:'lumiose-magenta3-gap',x:6,y:4,facing:'up'};assert.equal(fieldMap(gap)[3][6],'l');assert.equal(fieldDialogue(gap).action,'magenta3RoofGap');assert.ok(fieldPath(fieldMap(gap),gap,{x:6,y:13}).length);
+ const restored=restoreAdventurePosition(storeAdventurePosition(gap,136),136);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaMission15Stage,restored.teamIds],[gap.district,6,4,2,['kept']]);
+});

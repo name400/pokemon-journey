@@ -1195,3 +1195,14 @@ test('Zone 7 manual roof roll crosses and returns while retaining saves',async()
   await call('zone7RoofRoll');await get();assert.deepEqual([state.world.x,state.world.y],[11,9]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Magenta Sector 3 roof gap ladder round-trips with saves and mission progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta3-gap-qa',displayName:'옥상틈새저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const roof={...rawWorld(),area:3,district:'lumiose-magenta-sector3-roof',interior:null,x:20,y:9,facing:'down',zaMission15Stage:2,zaMission17Complete:false};
+  seedWorld(storeAdventurePosition(roof,state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta3RoofGap');await call('magenta3RoofGap');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta3-gap',6,4]);assert.equal(state.world.zaMission15Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('magenta3RoofGap');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector3-roof',20,9]);assert.equal(state.world.zaMission15Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
