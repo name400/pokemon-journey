@@ -83,3 +83,15 @@ test('draft market stalls preserve older saves and the police facade preserves c
  }
  for(const start of [{x:11,y:1},{x:21,y:8},{x:1,y:12}])assert.ok(fieldPath(map,start,{x:11,y:7}).length);
 });
+
+
+test('Zone 16 northwest gate reaches the Rust office without changing older exits',()=>{
+ const zone={area:3,district:'lumiose-zone16',interior:null,x:8,y:1,facing:'up',zaRoyaleRank:'C',teamIds:['kept']},map=zone16Map(zone);
+ assert.equal(map[0][8],'X');assert.ok(fieldPath(map,zone,{x:8,y:5}).length);
+ const office=stepField(zone,'up');assert.deepEqual([office.district,office.x,office.y],['lumiose-rust',1,12]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...office},132),132);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-rust',1,12,['kept']]);
+ assert.equal(stepField({...saved,zaRoyaleRank:'D'},'left').blocked,true);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y,back.zaZone16Upper],['lumiose-zone16',8,1,false]);
+ assert.equal(stepField({...zone,x:11,y:1},'up').district,'lumiose-bleu-plaza-route');
+ assert.equal(stepField({...zone,zaZone16Upper:true},'up').blocked,true);
+});

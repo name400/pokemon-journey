@@ -1160,3 +1160,15 @@ test('Zone 11 lower Coulant stair connection preserves both levels on reload',as
   await get();assert.equal(state.world.zaCoulantLower,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 16 northwest office connection respects rank and persists across reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone16-rust-qa',displayName:'광장사무소저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const office={...rawWorld(),area:3,district:'lumiose-rust',interior:null,x:1,y:12,facing:'left',zaRoyaleRank:'D',zaMission20Stage:7};
+  seedWorld(storeAdventurePosition(office,state.revision+1));await get();await call('move',{direction:'left'},409);
+  seedWorld(storeAdventurePosition({...office,zaRoyaleRank:'C'},state.revision+1));await get();await call('move',{direction:'left'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone16Upper],['lumiose-zone16',8,1,false]);assert.equal(state.world.zaMission20Stage,7);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rust',1,12]);assert.equal(state.world.zaMission20Stage,7);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
