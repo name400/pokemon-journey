@@ -1052,3 +1052,17 @@ test('Zone 6 cafe roof keeps the high layer and progress across reload',async()=
   await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone6Layer],[18,3,'high']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 5 drain rooftop ladder preserves progress and cannot bypass the sludge',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone5-roof-ladder-qa',displayName:'지하옥상저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone5',interior:null,x:17,y:5,facing:'down',zaZone5Upper:true,zaZone5DrainSecondCleared:false},state.revision+1));
+  await get();await call('zone5DrainRoofLadder',{},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone5',17,5]);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone5-drain',x:18,y:7,facing:'right',zaZone5Upper:false,zaZone5DrainSecondCleared:true,zaZone5Spent:{'whirlipede-alpha':true}},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'zone5DrainRoofLadder');await call('zone5DrainRoofLadder');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone5Upper],['lumiose-zone5',18,5,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaZone5Spent['whirlipede-alpha'],true);
+  await call('move',{direction:'left'});await call('move',{direction:'down'});await get();await call('zone5DrainRoofLadder');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone5Upper],['lumiose-zone5-drain',18,7,false]);assert.equal(state.world.zaZone5DrainSecondCleared,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

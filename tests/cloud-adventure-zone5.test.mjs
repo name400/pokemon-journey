@@ -149,3 +149,14 @@ test('Zone 5 underground shallow canal remains traversable and preserves saves',
  assert.equal(stepField({...s,x:0,y:12},'right').tile,'w');assert.equal(stepField({...s,x:21,y:4},'right').district,'lumiose-bleu3-sewer-approach');
  const blocked=fieldMap({...s,zaZone5DrainSecondCleared:false});assert.equal(blocked[5][12],'r');assert.equal(fieldPath(blocked,s,{x:21,y:4}).length,0);
 });
+
+test('Zone 5 drain ladder connects the alpha clearing to the rooftop without opening the barrier',()=>{
+ const drain={area:3,district:'lumiose-zone5-drain',interior:null,x:18,y:7,facing:'right',zaZone5DrainSecondCleared:true,teamIds:['kept']};
+ const roof={...drain,district:'lumiose-zone5',zaZone5Upper:true,x:17,y:5,facing:'down'};
+ assert.equal(fieldMap(drain)[7][19],'h');assert.equal(fieldMap(roof)[6][17],'h');
+ assert.equal(fieldDialogue(drain).action,'zone5DrainRoofLadder');assert.equal(fieldDialogue(roof).action,'zone5DrainRoofLadder');
+ assert.equal(fieldDialogue({...roof,zaZone5DrainSecondCleared:false}).action,undefined);
+ assert.ok(fieldPath(fieldMap(drain),{x:15,y:5},{x:18,y:7}).length);
+ assert.ok(fieldPath(fieldMap(roof),{x:18,y:5},{x:7,y:4}).length);
+ for(const old of [drain,roof]){const restored=restoreAdventurePosition(storeAdventurePosition(old,120),120);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[old.district,old.x,old.y,['kept']]);}
+});
