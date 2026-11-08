@@ -967,3 +967,13 @@ test('Zone 4 old grave position preserves progress and wallet',async()=>{
   await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaZone4AlphaSpent,true);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 20 old container position preserves progress and wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-container-qa',displayName:'유적저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:2,y:2,zaMission42Stage:3,zaZone20Items:['south-seed']},state.revision+1);old.districtPosition.zone20Layout=2;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-zone20');assert.notEqual(state.world.map[state.world.y][state.world.x],'%');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.equal(state.world.zaMission42Stage,3);
+  await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
