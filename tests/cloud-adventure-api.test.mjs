@@ -1042,3 +1042,13 @@ test('Zone 5 shallow canal preserves movement and saved progress',async()=>{
   await get();assert.deepEqual([state.world.x,state.world.y],[2,12]);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 6 cafe roof keeps the high layer and progress across reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone6-cafe-roof-qa',displayName:'카페지붕저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone6',interior:null,x:18,y:3,zaZone6Layer:'high',zaZone6Items:['roof-luxury']},state.revision+1));
+  await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone6Layer],['lumiose-zone6',18,2,'high']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone6Items,['roof-luxury']);
+  await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone6Layer],[18,3,'high']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

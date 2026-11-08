@@ -100,3 +100,10 @@ test('draft café footprint preserves ground paths and older saves',()=>{
  const saved=storeAdventurePosition({...base,x:17,y:3},95);assert.equal(saved.districtPosition.zone6CafeLayout,1);const restored=restoreAdventurePosition(saved,95);assert.deepEqual([restored.x,restored.y],[17,3]);
  assert.notEqual(zone6Map({...base,zaZone6Layer:'high'})[1][18],'%');
 });
+
+test('Zone 6 café roof overlaps its ground footprint and preserves high-layer saves',()=>{
+ const ground={area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',teamIds:['kept']},roof={...ground,zaZone6Layer:'high',x:18,y:3},below=zone6Map(ground),above=zone6Map(roof);
+ for(let y=1;y<=2;y++)for(let x=17;x<=19;x++){assert.equal(below[y][x],'%');assert.equal(above[y][x],'.');assert.ok(fieldPath(above,roof,{x,y}).length);}
+ assert.equal(above[3][17],'j');assert.equal(above[10][12],'v');assert.equal(zone6Visible(roof,'a').species,25);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...roof,x:18,y:2},139),139);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone6Layer,saved.teamIds],[ground.district,18,2,'high',['kept']]);
+});
