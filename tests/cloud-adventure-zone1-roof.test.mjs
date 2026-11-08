@@ -2,6 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Zone 1 street is non-grass while neighboring grass and old positions remain intact',()=>{
+ const base={area:3,district:'lumiose-zone1',interior:null,x:6,y:8,facing:'right',teamIds:['kept'],steps:42};
+ const map=fieldMap(base);
+ for(let x=6;x<=16;x++){
+  assert.equal(map[8][x],',');assert.equal(map[7][x],'g');assert.equal(map[9][x],'g');
+  const saved=storeAdventurePosition({...base,x},61);delete saved.districtPosition.zone1Layout;
+  const restored=restoreAdventurePosition(saved,61);
+  assert.deepEqual([restored.district,restored.x,restored.y,restored.steps,restored.teamIds],['lumiose-zone1',x,8,42,['kept']]);
+ }
+ assert.ok(fieldPath(map,{x:1,y:8},{x:21,y:8}).length);
+ assert.equal(stepField({...base,x:6,y:7},'down').tile,',');
+ assert.equal(stepField(base,'up').tile,'g');
+});
+
 test('Zone 1 rock and rooftop ladder preserve the old ground route and saved roof state',()=>{
  const ground={area:3,district:'lumiose-zone1',interior:null,x:1,y:3,facing:'left',teamIds:['kept']};
  assert.equal(fieldDialogue(ground).action,'zone1RoofRock');

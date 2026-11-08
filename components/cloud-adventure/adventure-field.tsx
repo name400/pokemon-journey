@@ -196,7 +196,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#ddd2ba':'#e8dec9'):((x+y)%2?'#e7dfce':'#ded7c5');ctx.fillRect(px,py,tile,tile);
      // Zone 1's east–west street continues through the ordinary floor on
      // either side of the encounter grass. Its exact width is provisional.
-     if(w.district==='lumiose-zone1'&&c==='.'&&y===8){ctx.fillStyle='#aab29d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d8d5c3';ctx.fillRect(px+3,py+tile-4,tile-6,2);}
+     if(w.district==='lumiose-zone1'&&(c==='.'||c===',')&&y===8){ctx.fillStyle='#aab29d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d8d5c3';ctx.fillRect(px+3,py+tile-4,tile-6,2);}
      if(w.district==='lumiose-vert-plaza'&&c===','){ctx.fillStyle=(x+y)%2?'#d0c4af':'#dbd0bc';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#eee4d2';ctx.fillRect(px+2,py+tile-3,tile-4,1);}
      if(w.district==='lumiose-vert-plaza'&&c==='%'){ctx.fillStyle=y===2||y===12?'#917f71':'#c4b5a1';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2||y===12?'#b2a08c':'#79918a';ctx.fillRect(px+5,py+6,tile-10,tile-12);}
      if(w.district==='lumiose-zone3'&&c==='.'){
@@ -228,10 +228,8 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c===':'&&['lumiose-zone2','lumiose-vert2'].includes(w.district)){ctx.fillStyle='#c9c2ae';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#8f8a7c';for(let i=5;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}
      if(c===';'&&w.district==='lumiose-zone2'){ctx.fillStyle='#b5aa90';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#ded6be';ctx.fillRect(px+2,py+2,tile-4,tile-7);ctx.fillStyle='#837f70';ctx.fillRect(px+2,py+tile-5,tile-4,3);}
      if(c==='g'){
-      const zone1Road=w.district==='lumiose-zone1'&&y===8;
-      ctx.fillStyle=zone1Road?'#aab29d':w.district==='lumiose-zone3'?((x+y)%2?'#8bb97d':'#98c68a'):'#92b97c';ctx.fillRect(px,py,tile,tile);
-      if(!zone1Road&&!['lumiose-zone2','lumiose-zone3'].includes(w.district))sprite('bush',px,py);
-      if(zone1Road){ctx.fillStyle='#d8d5c3';ctx.fillRect(px+3,py+tile-4,tile-6,2);}
+      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#8bb97d':'#98c68a'):'#92b97c';ctx.fillRect(px,py,tile,tile);
+      if(!['lumiose-zone2','lumiose-zone3'].includes(w.district))sprite('bush',px,py);
       sprite('grassDetail',px,py);
       // Grass remains an encounter tile. The narrow, provisional paths are visual overlays.
       const gardenGrassPath=w.district==='lumiose-zone3'&&y===8&&(x===9||x===13);

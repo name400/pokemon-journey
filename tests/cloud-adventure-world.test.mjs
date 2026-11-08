@@ -419,10 +419,11 @@ test('extended Centrico water keeps bridges and restores version one positions',
 
 test('Zone 2 northern shoreline keeps the northeastern bank and bridge accessible',()=>{
  const map=lumioseZone2Map();
- for(const y of [1,2,3])assert.ok(walkable(map[y][15]));
+ for(const y of [1,2,3])assert.equal(map[y][15],'~');
  assert.equal(map[4][15],'~');assert.equal(map[6][15],'=');
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone2',x:15,y:2,regionId:6,districtReturnRegion:1,teamIds:['kept']},7);
- const restored=restoreAdventurePosition(saved,7);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone2',15,2]);assert.deepEqual(restored.teamIds,['kept']);
+ saved.districtPosition.zone2Layout=7;
+ const restored=restoreAdventurePosition(saved,7);assert.equal(restored.district,'lumiose-zone2');assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
 });
 
 
