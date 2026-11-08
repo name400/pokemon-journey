@@ -26,6 +26,18 @@ test('Zone 15 southwest gate connects Jaune Sector 7 without losing legacy route
  assert.equal(stepField({...zone,x:11,y:15},'down').district,'lumiose-jaune-sector7');
  assert.notEqual(zone15Map({...zone,zaZone15Upper:true})[13][0],'X');
 });
+
+test('Zone 15 street approaches retain grass, object positions and old floor saves',()=>{
+ const s={area:3,district:'lumiose-zone15',interior:null,zaRoyaleRank:'D',regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone15Map(s);
+ for(let y=1;y<=5;y++)for(const x of [10,11,12])assert.equal(map[y][x],',');
+ for(let y=11;y<=15;y++)for(const x of [10,11,12])assert.equal(map[y][x],',');
+ for(let x=11;x<=17;x++)assert.equal(map[15][x],',');
+ assert.equal(map[6][11],'g');assert.equal(map[8][11],'a');assert.equal(map[13][2],'l');
+ for(const [x,y] of [[11,1],[10,4],[17,15]]){
+  const restored=restoreAdventurePosition(storeAdventurePosition({...s,x,y},109),109);
+  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[s.district,x,y,['kept']]);
+ }
+});
 test('zone fifteen gate, day/night encounters and saved position',()=>{
  const base={area:3,district:'lumiose-north-boulevard',interior:null,x:19,y:1,facing:'up',zaRoyaleRank:'E'};assert.equal(stepField(base,'up').blocked,true);
  const entered=stepField({...base,zaRoyaleRank:'D'},'up');assert.equal(entered.district,'lumiose-zone15');const s={...base,...entered,zaRoyaleRank:'D'},map=zone15Map(s);assert.ok(fieldPath(map,s,{x:11,y:9}).length);assert.equal(zone15Visible({...s,zaZone15Period:'day'},'b').species,545);assert.equal(zone15Visible({...s,zaZone15Period:'night'},'b').species,353);assert.equal(zone15Visible({...s,zaZone15Period:'day'},'d').species,15);assert.equal(zone15Visible({...s,zaZone15Period:'night'},'d').species,354);assert.equal(zone15Item(s,'i').kind,'ultraball');assert.equal(zone15Item({...s,zaZone15Items:['cafe-ultra']},'i'),null);const roof={...s,zaZone15Upper:true,zaZone15LiftUnlocked:true,x:10,y:7};assert.equal(stepField(roof,'right').blocked,true);assert.equal(stepField({...roof,zaZone15WebOpen:true},'right').x,11);assert.equal(zone15Visible(roof,'a').species,246);const savedRoof=restoreAdventurePosition(storeAdventurePosition(roof,43),43);assert.equal(savedRoof.zaZone15Upper,true);
