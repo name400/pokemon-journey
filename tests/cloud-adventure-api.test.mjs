@@ -932,3 +932,16 @@ test('Vert 6 glide to Coulant roof retains saves and return access',async()=>{
   await get();await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[16,4]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Rust north building migration and rooftop glide preserve progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rust-roof-qa',displayName:'사무소옥상저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rust',interior:null,x:18,y:2,zaMission15Stage:2,zaMission20Stage:7},state.revision+1);old.districtPosition.rustLayout=1;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-rust');assert.notEqual(state.world.map[state.world.y][state.world.x],'#');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission20Stage,7);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rust',interior:null,x:21,y:4,facing:'left',zaMission15Stage:2,zaMission20Stage:7},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'rustRoofLadder');await call('rustRoofLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rust-roof',18,4]);
+  await walkTo({x:15,y:6});await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[15,9]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission20Stage,7);
+  await get();await call('rotoGlide');await get();await walkTo({x:18,y:4});await call('face',{direction:'up'});await call('rustRoofLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rust',21,4]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
