@@ -992,3 +992,13 @@ test('Zone 20 directional gates preserve story locks, exits and saved party',asy
   seedGate(3,8,0,true);await get();await call('zone20DirectionalGate');await get();assert.equal(state.world.district,'lumiose-zone20');
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Bleu western courtyards retain saves, exits and wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu-courtyards-qa',displayName:'블루안뜰저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const [district,x,y,direction,expectedX,expectedY] of [['lumiose-bleu-sector4',5,6,'up',5,5],['lumiose-bleu-sector5',7,4,'left',6,4]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,zaRoyaleRank:'E',zaMission20Stage:7},state.revision+1));await get();await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[district,expectedX,expectedY]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission20Stage,7);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
