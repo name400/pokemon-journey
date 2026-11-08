@@ -12,6 +12,15 @@ test('Zone 1 draft street shops preserve exits and recover older saves',()=>{
  assert.equal(map[4][6],'g');assert.equal(storeAdventurePosition({...base,x:11,y:8},150).districtPosition.zone1ShopsLayout,1);
 });
 
+test('Zone 4 outer path connects west and south around the crypt without changing grass',()=>{
+ const base={area:3,district:'lumiose-zone4',interior:null,teamIds:['kept']},map=lumioseZone4Map(base);
+ for(let y=11;y<=14;y++)assert.equal(map[y][2],',');
+ for(let x=2;x<=19;x++)assert.equal(map[14][x],',');
+ assert.equal(map[12][14],'^');assert.equal(map[6][8],'g');
+ assert.ok(fieldPath(map,{x:1,y:10},{x:11,y:15}).length);
+ for(const [x,y] of [[2,12],[12,14],[19,14]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},152),152);assert.deepEqual([saved.x,saved.y,saved.teamIds],[x,y,['kept']]);}
+});
+
 test('all ten fields have reachable services, trainers, pickups and gated exits',()=>{
  for(let area=0;area<10;area++){
   const map=adventureMap(area),start={x:3,y:8};assert.equal(map.length,17);assert.ok(map.every(row=>row.length===23));
