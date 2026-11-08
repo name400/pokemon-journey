@@ -24,3 +24,13 @@ test('zone eleven has gated and separately saved canal banks',()=>{
  for(const p of [{...n,x:17,y:3},{...open,...south,x:15,y:12}]){const stored=storeAdventurePosition(p,7),restored=restoreAdventurePosition(stored,7);assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-zone11',p.x,p.y]);assert.equal(restoreAdventurePosition(stored,8).district,null);}
  assert.equal(zone11Map({...n,zaMission40Stage:2})[3][11],'0');assert.equal(zone11Encounter({...n,y:3},()=>0).speciesId,79);assert.equal(zone11Encounter({...n,y:12},()=>0).speciesId,676);
 });
+
+test('draft bank approaches preserve separated canal, encounters and saved positions',()=>{
+ const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']},map=zone11Map(base);
+ for(let x=1;x<=21;x++){assert.equal(map[1][x],',');assert.equal(map[15][x],',');}
+ for(let y=7;y<=9;y++)for(let x=0;x<=22;x++)assert.equal(map[y][x],'~');
+ assert.ok(fieldPath(map,{x:1,y:4},{x:21,y:4}).length);assert.ok(fieldPath(map,{x:21,y:12},{x:5,y:15}).length);
+ assert.equal(fieldPath(map,{x:1,y:4},{x:21,y:12}).length,0);
+ for(const [x,y] of [[3,4],[14,3],[8,11]])assert.equal(map[y][x],'g');
+ for(const [x,y] of [[1,1],[21,1],[5,15],[20,12]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},97),97);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[base.district,x,y,['kept']]);}
+});
