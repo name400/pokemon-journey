@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone13Map,zone13Encounter,zone13Visible,zone13Item} from '../lib/cloud-adventure/adventure-zone13.mjs';
+import {zone13Map,zone13Encounter,zone13Visible,zone13Item,ZONE13_STUMPS} from '../lib/cloud-adventure/adventure-zone13.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,rotoGlideLanding,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone thirteen woodland gate and saved position',()=>{
  const base={area:3,district:'lumiose-north-boulevard',interior:null,x:5,y:1,facing:'up',zaRoyaleRank:'F'};assert.equal(stepField(base,'up').blocked,true);
@@ -50,6 +50,13 @@ test('Zone 13 roadside trees preserve grass, routes and older saves',()=>{
  }
  assert.equal(map[3][3],'g');assert.ok(fieldPath(map,{x:1,y:8},{x:21,y:8}).length);assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:8}).length);
  assert.equal(storeAdventurePosition(base,39).districtPosition.zone13Layout,1);
+});
+
+test('Zone 13 south approach and stump artwork preserve routes and saves',()=>{
+ const base={area:3,district:'lumiose-zone13',interior:null,zaRoyaleRank:'E',teamIds:['kept']},map=zone13Map(base);
+ for(const [x,y] of ZONE13_STUMPS)assert.equal(map[y][x],'^');
+ for(let y=14;y<=15;y++)for(let x=10;x<=12;x++){assert.equal(map[y][x],',');const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},141),141);assert.deepEqual([saved.x,saved.y,saved.teamIds],[x,y,['kept']]);}
+ assert.equal(map[10][10],'g');assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:8}).length);assert.ok(fieldPath(map,{x:1,y:8},{x:21,y:8}).length);
 });
 
 test('Rouge Sector 7 separate rooftop glide requires unlocking and restores its landing',()=>{
