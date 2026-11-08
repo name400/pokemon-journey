@@ -945,3 +945,15 @@ test('Rust north building migration and rooftop glide preserve progress',async()
   await get();await call('rotoGlide');await get();await walkTo({x:18,y:4});await call('face',{direction:'up'});await call('rustRoofLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rust',21,4]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Galerie exterior scaffold, roof ladder and dome preserve saved state',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lune-roof-qa',displayName:'갤러리옥상저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:null,x:20,y:12,facing:'down',zaMission15Stage:2,zaMission41Stage:3},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'luneScaffold');await call('luneScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-lune-roof',4,8]);
+  await walkTo({x:7,y:8});await call('face',{direction:'right'});await call('luneRoofLadder');await get();assert.deepEqual([state.world.x,state.world.y],[13,8]);
+  await walkTo({x:17,y:4});await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[17,2]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission41Stage,3);
+  await get();await call('rotoGlide');await get();await walkTo({x:13,y:8});await call('face',{direction:'left'});await call('luneRoofLadder');await get();await walkTo({x:4,y:8});await call('face',{direction:'left'});await call('luneScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-north',20,12]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission41Stage,3);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
