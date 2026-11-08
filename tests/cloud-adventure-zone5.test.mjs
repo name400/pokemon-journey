@@ -4,6 +4,22 @@ import assert from 'node:assert/strict';
 import {zone5Map,zone5Encounter,canClearZone5Sludge} from '../lib/cloud-adventure/adventure-zone5.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Zone 5 and Bleu Sector 3 southern approaches retain movement and stored positions',()=>{
+ const s={area:3,district:'lumiose-zone5',interior:null,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone5Map(s);
+ for(let y=14;y<=15;y++)for(let x=5;x<=17;x++)assert.equal(map[y][x],',');
+ assert.equal(map[10][5],'g');assert.ok(fieldPath(map,{x:5,y:15},{x:17,y:15}).length);
+ for(const [x,dest] of [[5,'lumiose-bleu-sector3'],[17,'lumiose-bleu-plaza-route']]){
+  const old=restoreAdventurePosition(storeAdventurePosition({...s,x,y:15},102),102);
+  assert.deepEqual([old.district,old.x,old.y,old.teamIds],[s.district,x,15,['kept']]);
+  assert.equal(stepField(old,'down').district,dest);
+ }
+ const sector={...s,district:'lumiose-bleu-sector3'},street=fieldMap(sector);
+ for(let y=1;y<=6;y++)for(let x=10;x<=12;x++)assert.equal(street[y][x],',');
+ assert.equal(street[8][10],'j');assert.ok(fieldPath(street,{x:11,y:1},{x:11,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,x:11,y:1},103),103);
+ assert.equal(stepField(saved,'up').district,'lumiose-zone5');assert.deepEqual(saved.teamIds,['kept']);
+});
+
 test('zone five preserves separate ground and rooftop, entrances and saved locations',()=>{
  const state={area:3,district:'lumiose-centrico-route',interior:null,x:18,y:15,facing:'down'};
  const south=stepField(state,'down');assert.equal(south.district,'lumiose-zone5');assert.deepEqual([south.x,south.y],[11,15]);
