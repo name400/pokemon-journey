@@ -1022,3 +1022,13 @@ test('Vert courtyard access preserves saves, party and wallet',async()=>{
   }
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 9 elevated scaffold keeps floor, progress and wallet on reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone9-scaffold-qa',displayName:'구역9비계저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:7,y:11,zaRoyaleRank:'F',zaZone9Upper:true,zaZone9Items:['north-heal']},state.revision+1));
+  await get();await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone9Upper],['lumiose-zone9',8,11,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone9Items,['north-heal']);
+  await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone9Upper],[8,11,true]);await call('move',{direction:'left'});await get();assert.deepEqual([state.world.x,state.world.y],[7,11]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

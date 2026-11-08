@@ -25,6 +25,10 @@
 
 [현장 안내](https://raiderking.com/pokemon-legends-z-a-all-tms-locations/)는 베르 6번지 북동쪽 작은 건물의 사다리로 오른 뒤 라시느건설 옥상으로 활공하는 경로를 설명한다. 기존 거리에 사다리와 별도의 두 옥상층을 추가하고 로토글라이드 해금 후 건너게 했다. 건물·사다리·착륙 위치와 역방향 복귀는 초안이며, 원작의 정확한 높이와 두 지붕의 윤곽은 추가 확인이 필요하다. 옥상 보상은 추가하지 않았다.
 
+## 야생 구역 9 높은 비계 초안
+
+[구역 9 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-9-guide-all-pokemon-and-alphas)는 건물 사이 비계와 그 아래 지상 공간을 설명한다. 기존 두 옥상 사이에 별도 높은 비계 통로를 추가하고 아래 지상에도 비계의 그림자를 표현했다. 통로의 실제 위치·높이·폭은 초안이다. 기존 지상 통행·풀숲과 저장 좌표는 유지하고, 옥상에서 이전에 막혀 있던 칸만 열었다.
+
 ## 베르 1·5번지 안뜰 초안
 
 [베르 1번지 위치 자료](https://sportsrant.indiatimes.com/gaming/list-of-all-colourful-screw-locations-in-pokmon-legends-z-a/articleshow/126639673.html)는 건물 안뜰을, [베르 5번지 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 안뜰의 서쪽과 동쪽을 언급한다. 각 거리의 막힌 건물 내부에 접근 가능한 안뜰을 추가했다. 건물 선택, 안뜰의 크기와 거리 쪽 출입구는 확인되지 않은 초안이며 보상은 추가하지 않았다. 기존 통행 칸과 저장 위치는 유지한다.

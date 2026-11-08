@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone9Map,zone9Encounter,zone9Visible,zone9Item} from '../lib/cloud-adventure/adventure-zone9.mjs';
-import {stepField,fieldMap,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldMap,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 9 southern exits join the central road while retaining stored positions',()=>{
  const s={area:3,district:'lumiose-zone9',interior:null,zaRoyaleRank:'F',regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone9Map(s);
@@ -107,4 +107,11 @@ test('Zone 9 building drafts preserve ladders and migrate only older ground save
  const saved=storeAdventurePosition(base,7);delete saved.districtPosition.groundBuildingsLayout;
  const restored=restoreAdventurePosition(structuredClone(saved),7);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
  const upper={...base,zaZone9Upper:true};const roof=restoreAdventurePosition(storeAdventurePosition(upper,9),9);assert.deepEqual([roof.x,roof.y,roof.zaZone9Upper],[18,3,true]);
+});
+
+test('Zone 9 elevated scaffold connects roofs without blocking the street below',()=>{
+ const base={area:3,district:'lumiose-zone9',interior:null,zaRoyaleRank:'F',teamIds:['kept']},ground=zone9Map(base),roof=zone9Map({...base,zaZone9Upper:true});
+ for(let x=8;x<=14;x++){assert.equal(roof[11][x],',');assert.ok(walkable(ground[11][x]));}
+ assert.ok(fieldPath(roof,{x:7,y:11},{x:15,y:11}).length);assert.ok(fieldPath(ground,{x:8,y:11},{x:14,y:11}).length);
+ for(const [x,y,upper] of [[8,11,true],[14,11,true],[11,11,false]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y,zaZone9Upper:upper},137),137);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone9Upper,saved.teamIds],[base.district,x,y,upper,['kept']]);}
 });
