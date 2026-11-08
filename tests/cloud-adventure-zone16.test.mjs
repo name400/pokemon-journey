@@ -3,6 +3,17 @@ import assert from 'node:assert/strict';
 import {zone16Map,zone16Encounter,zone16Visible,ZONE16_STALLS} from '../lib/cloud-adventure/adventure-zone16.mjs';
 import {bleuPlazaRouteMap} from '../lib/cloud-adventure/adventure-bleu-plaza-route.mjs';
 import {stepField,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
+
+test('Bleu Plaza approaches connect the three entrances to the existing crossings',()=>{
+ const s={area:3,district:'lumiose-zone16',interior:null,zaRoyaleRank:'C',teamIds:['kept']},map=zone16Map(s);
+ for(const [x,y] of [[11,1],[11,2],[11,3],[8,3],[8,4],[8,5],[16,8],[17,8],[21,8],[1,12],[8,12],[8,11]])assert.equal(map[y][x],',',`${x},${y}`);
+ assert.equal(map[4][11],'~');assert.equal(map[6][11],'g');assert.equal(map[8][11],'f');
+ for(const [x,y] of [[11,1],[21,8],[1,12]]){
+  assert.ok(fieldPath(map,{x,y},{x:11,y:7}).length);
+  const restored=restoreAdventurePosition(storeAdventurePosition({...s,x,y},105),105);
+  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[s.district,x,y,['kept']]);
+ }
+});
 test('zone sixteen gate, central monument and saved position',()=>{
  const base={area:3,district:'lumiose-zone5',interior:null,x:17,y:15,facing:'down',zaRoyaleRank:'D'};const street=stepField(base,'down');assert.equal(street.district,'lumiose-bleu-plaza-route');assert.ok(fieldPath(bleuPlazaRouteMap(),street,{x:21,y:8}).length);const savedStreet=restoreAdventurePosition(storeAdventurePosition({...base,...street},5),5);assert.equal(savedStreet.district,'lumiose-bleu-plaza-route');assert.equal(stepField({...base,...street},'up').district,'lumiose-zone5');const gate={...base,...street,x:11,y:15,facing:'down'};assert.equal(stepField(gate,'down').blocked,true);
  const entered=stepField({...gate,zaRoyaleRank:'C'},'down');assert.equal(entered.district,'lumiose-zone16');const s={...base,...entered,zaRoyaleRank:'C'},map=zone16Map(s);assert.ok(fieldPath(map,s,{x:11,y:7}).length);assert.equal(map[8][11],'f');assert.equal(zone16Map({zaZone16Spent:{froakie:true}})[8][11],'#');assert.equal(map[4][18],'~');assert.equal(zone16Visible(s,'b').species,870);

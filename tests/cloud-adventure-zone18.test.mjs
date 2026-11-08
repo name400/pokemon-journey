@@ -2,6 +2,19 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {zone18Map,zone18Visible,zone18Encounter} from '../lib/cloud-adventure/adventure-zone18.mjs';
+
+test('Zone 18 north and southeast approaches preserve ground and rooftop saves',()=>{
+ const s={area:3,district:'lumiose-zone18',interior:null,zaRoyaleRank:'B',teamIds:['kept']},map=zone18Map(s);
+ for(let y=1;y<=4;y++)for(let x=10;x<=12;x++)assert.equal(map[y][x],',');
+ for(let x=12;x<=20;x++)assert.equal(map[15][x],',');
+ assert.equal(map[8][8],'a');assert.equal(map[13][14],'l');assert.equal(map[12][16],'#');
+ assert.ok(fieldPath(map,{x:11,y:1},{x:20,y:15}).length);
+ for(const [x,y] of [[11,1],[20,15]]){
+  const restored=restoreAdventurePosition(storeAdventurePosition({...s,x,y},106),106);
+  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[s.district,x,y,['kept']]);
+ }
+ assert.equal(zone18Map({...s,zaZone18Upper:true})[1][11],'#');
+});
 test('zone eighteen gate, road and saved position',()=>{
  const base={area:3,district:'lumiose-north-boulevard',interior:null,x:2,y:1,facing:'up',zaRoyaleRank:'C'};
  assert.equal(stepField(base,'up').blocked,true);const entered=stepField({...base,zaRoyaleRank:'B'},'up');assert.equal(entered.district,'lumiose-zone18');
