@@ -1184,3 +1184,14 @@ test('Zone 7 west rooftop lift persists and restores the plaza after reload',asy
   await call('zone7WestRoofLift');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone7',4,8]);assert.equal(state.world.zaZone7AlphaSpent,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 7 manual roof roll crosses and returns while retaining saves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone7-roof-roll-qa',displayName:'옥상구르기저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const roof={...rawWorld(),area:3,district:'lumiose-zone7-west-roof',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'F',zaZone7AlphaSpent:true};
+  seedWorld(storeAdventurePosition(roof,state.revision+1));await get();assert.equal(state.world.interaction.action,'zone7RoofRoll');await call('zone7RoofRoll');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone7-west-roof',11,13]);assert.equal(state.world.zaZone7AlphaSpent,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone7RoofRoll');await get();assert.deepEqual([state.world.x,state.world.y],[11,9]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

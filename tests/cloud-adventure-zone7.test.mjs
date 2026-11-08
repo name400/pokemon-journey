@@ -61,3 +61,11 @@ test('Zone 7 west Holovator and rooftop preserve plaza paths and saved positions
  const roof={...plaza,district:'lumiose-zone7-west-roof',x:4,y:9,facing:'down'};assert.equal(fieldMap(roof)[10][4],'j');assert.equal(fieldDialogue(roof).action,'zone7WestRoofLift');assert.ok(fieldPath(fieldMap(roof),roof,{x:17,y:5}).length);
  for(const old of [roof,{...plaza,x:3,y:8}]){const saved=restoreAdventurePosition(storeAdventurePosition(old,133),133);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[old.district,old.x,old.y,['kept']]);}
 });
+
+
+test('Zone 7 neighbouring roof is separated by a gap and keeps saved locations',()=>{
+ const roof={area:3,district:'lumiose-zone7-west-roof',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'F',teamIds:['kept']},map=fieldMap(roof);
+ assert.equal(map[10][11],'v');assert.equal(map[11][11],'#');assert.equal(map[12][11],'v');assert.equal(fieldPath(map,roof,{x:11,y:13}).length,0);
+ assert.equal(fieldDialogue(roof).action,'zone7RoofRoll');const other={...roof,x:11,y:13,facing:'up'};assert.equal(fieldDialogue(other).action,'zone7RoofRoll');
+ for(const state of [roof,other,{...roof,x:11,y:10}]){const saved=restoreAdventurePosition(storeAdventurePosition(state,134),134);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[state.district,state.x,state.y,['kept']]);}
+});
