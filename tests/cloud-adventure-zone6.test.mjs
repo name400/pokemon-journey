@@ -3,6 +3,21 @@ import assert from 'node:assert/strict';
 import {zone6Map,zone6Encounter,zone6Layer,zone6Visible,zone6Item} from '../lib/cloud-adventure/adventure-zone6.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Zone 6 ground approaches connect the bridge to gates without altering grass or saves',()=>{
+ const s={area:3,district:'lumiose-zone6',interior:null,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone6Map(s);
+ for(const y of [1,2,3,4,5,6,7,8,13,14,15])for(const x of [10,11,12])assert.equal(map[y][x],',');
+ for(let x=10;x<=15;x++)assert.equal(map[1][x],',');
+ for(let x=10;x<=18;x++)assert.equal(map[15][x],',');
+ for(let y=9;y<=12;y++)assert.equal(map[y][11],';');
+ assert.equal(map[4][4],'g');assert.equal(map[5][6],'a');assert.equal(map[14][19],'i');
+ for(const [x,y] of [[10,1],[15,1],[10,15],[18,15]]){
+  const old=restoreAdventurePosition(storeAdventurePosition({...s,x,y},101),101);
+  assert.deepEqual([old.district,old.x,old.y,old.teamIds],[s.district,x,y,['kept']]);
+ }
+ assert.ok(fieldPath(map,{x:11,y:1},{x:11,y:15}).length);
+ assert.equal(zone6Map({...s,zaZone6Layer:'canal'})[7][11],';');
+});
+
 test('zone six connects city and gated northern zone eleven via its bridge',()=>{
  const city={area:3,district:'lumiose-vert2',interior:null,x:17,y:1,facing:'up'},enter=stepField(city,'up');assert.deepEqual([enter.district,enter.x,enter.y],['lumiose-zone6',11,1]);
  const z={...city,...enter},map=zone6Map(z);assert.ok(fieldPath(map,z,{x:11,y:15}).length);assert.equal(stepField({...z,x:9,y:8},'down').blocked,true);
