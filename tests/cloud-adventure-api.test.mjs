@@ -851,3 +851,13 @@ test('Vernal to Vert 4 link and lift retain saves and wallet',async()=>{
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 14 old equipment save preserves progress and wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone14-equipment-qa',displayName:'변전소저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:4,y:10,zaRoyaleRank:'D',zaZone14RocksCleared:['16,10'],zaZone14Items:['south-ultra']},state.revision+1);old.districtPosition.zone14Layout=1;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-zone14');assert.notEqual(state.world.map[state.world.y][state.world.x],'^');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone14RocksCleared,['16,10']);assert.deepEqual(state.world.zaZone14Items,['south-ultra']);
+  await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone14Items,['south-ultra']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

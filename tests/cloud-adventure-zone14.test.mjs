@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone14Map,zone14Encounter,zone14Visible,zone14Item} from '../lib/cloud-adventure/adventure-zone14.mjs';
+import {zone14Map,zone14Encounter,zone14Visible,zone14Item,ZONE14_EQUIPMENT} from '../lib/cloud-adventure/adventure-zone14.mjs';
 import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone fourteen substation gate and saved position',()=>{
  const base={area:3,district:'lumiose-magenta-canal-route',interior:null,x:10,y:1,facing:'up',zaRoyaleRank:'E'};assert.equal(stepField(base,'up').blocked,true);
@@ -55,4 +55,19 @@ test('three rocks keep independent progress while legacy cleared saves stay open
  const legacy={...state,zaZone14RockCleared:true};
  assert.deepEqual([9,10,11].map(y=>zone14Map(legacy)[y][16]),['.','.','.']);
  assert.ok(fieldPath(zone14Map(legacy),legacy,{x:17,y:11}).length);
+});
+
+test('draft substation equipment preserves routes and migrates old occupied positions',()=>{
+ const state={area:3,district:'lumiose-zone14',interior:null,x:4,y:10,teamIds:['kept'],zaRoyaleRank:'D',zaZone14RocksCleared:['16,10'],zaZone14Items:['south-ultra']};
+ const map=zone14Map(state);
+ for(const [x,y] of ZONE14_EQUIPMENT)assert.equal(map[y][x],'^');
+ for(const point of [{x:11,y:1},{x:1,y:8},{x:11,y:15},{x:17,y:15},{x:15,y:10}])assert.ok(fieldPath(map,{x:12,y:10},point).length);
+ for(const version of [undefined,1]){
+  const old=storeAdventurePosition(state,63);if(version===undefined)delete old.districtPosition.zone14Layout;else old.districtPosition.zone14Layout=version;
+  const restored=restoreAdventurePosition(old,63);
+  assert.equal(restored.district,'lumiose-zone14');assert.notEqual(map[restored.y][restored.x],'^');
+  assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone14RocksCleared,['16,10']);assert.deepEqual(restored.zaZone14Items,['south-ultra']);
+ }
+ const current=storeAdventurePosition({...state,x:6,y:10},64);assert.equal(current.districtPosition.zone14Layout,2);
+ const restored=restoreAdventurePosition(current,64);assert.deepEqual([restored.x,restored.y],[6,10]);
 });
