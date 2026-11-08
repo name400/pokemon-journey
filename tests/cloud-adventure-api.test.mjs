@@ -1126,3 +1126,13 @@ test('Rust courtyard older statue location recovers without losing progress',asy
   await get();assert.equal(state.world.district,'lumiose-rust');assert.equal(state.world.zaMission20Stage,7);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 11 old western bank position recovers from fork water on reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-fork-save-qa',displayName:'서쪽물길저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x:2,y:5,zaRoyaleRank:'E',zaZone11Spent:{slowpoke:true}},state.revision+1);delete old.districtPosition.zone11Layout;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-zone11');assert.notDeepEqual([state.world.x,state.world.y],[2,5]);assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.equal(state.world.zaZone11Spent.slowpoke,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await get();assert.equal(state.world.district,'lumiose-zone11');assert.equal(state.world.zaZone11Spent.slowpoke,true);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

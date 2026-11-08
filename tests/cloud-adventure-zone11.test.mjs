@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone11Map,zone11Unlocked,zone11Encounter} from '../lib/cloud-adventure/adventure-zone11.mjs';
+import {zone11Map,zone11Unlocked,zone11Encounter,ZONE11_WEST_FORK} from '../lib/cloud-adventure/adventure-zone11.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 11 east gate returns west from Vert Sector 6 without losing legacy access',()=>{
@@ -43,4 +43,12 @@ test('Zone 11 southern riverside path connects both gate approaches and preserve
  assert.equal(map[11][8],'g');assert.equal(map[12][15],'f');assert.equal(map[9][11],'~');
  assert.ok(fieldPath(map,{x:21,y:12},{x:5,y:15}).length);assert.equal(fieldPath(map,{x:11,y:10},{x:11,y:6}).length,0);
  for(const [x,y] of [[2,10],[2,13],[19,11],[11,10]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},123),123);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[base.district,x,y,['kept']]);}
+});
+
+
+test('Zone 11 western water fork retains gates and relocates matching older saves',()=>{
+ const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']},map=zone11Map(base);
+ for(const [x,y] of ZONE11_WEST_FORK){assert.equal(map[y][x],'~');if(x===0)continue;const old=storeAdventurePosition({...base,x,y},126);delete old.districtPosition.zone11Layout;const restored=restoreAdventurePosition(structuredClone(old),126);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'~');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(old),127).district,null);}
+ assert.equal(map[4][0],'X');assert.ok(fieldPath(map,{x:1,y:4},{x:21,y:4}).length);assert.equal(fieldPath(map,{x:1,y:4},{x:21,y:12}).length,0);assert.equal(map[6][3],'g');
+ assert.equal(storeAdventurePosition({...base,x:3,y:4},128).districtPosition.zone11Layout,1);
 });
