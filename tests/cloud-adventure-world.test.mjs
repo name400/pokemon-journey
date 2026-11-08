@@ -3,6 +3,14 @@ import assert from 'node:assert/strict';
 import {adventureMap,labMap,lumioseMap,lumioseVernalMap,lumioseCentricoRouteMap,lumioseRooftopMap,lumioseZone1Map,lumioseZone2Map,zone2IslandAlphaTarget,lumioseZone3Map,lumioseZone3TowerMap,lumioseRougeNorthMap,fieldMap,lumioseZone4Map,lumioseBureauMap,lumioseGardenMap,lumioseSiteMap,lumioseWildMap,lumioseObservationMap,lumioseRoyaleMap,hotelMap,normalizeField,fieldPath,stepField,walkable,findTile,validateAdventurePath,interactionAt,fieldDialogue,wildAlphaAim,wildAlphaTarget,stepWildAlphaPursuit,wildAlphaPosition,leagueIndex,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {habitatLabAction,habitatGuideDialogue,habitatSummary} from '../lib/cloud-adventure/adventure-story.mjs';
+import {ZONE1_STREET_SHOPS} from '../lib/cloud-adventure/adventure-world.mjs';
+
+test('Zone 1 draft street shops preserve exits and recover older saves',()=>{
+ const base={area:3,district:'lumiose-zone1',interior:null,teamIds:['kept']},map=lumioseZone1Map(base);
+ for(const [x,y] of ZONE1_STREET_SHOPS){assert.equal(map[y][x],'%');const old=storeAdventurePosition({...base,x,y},150);delete old.districtPosition.zone1ShopsLayout;const restored=restoreAdventurePosition(old,150);assert.equal(restored.district,base.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(old,151).district,null);}
+ assert.ok(fieldPath(map,{x:1,y:8},{x:21,y:8}).length);assert.ok(fieldPath(map,{x:1,y:8},{x:11,y:1}).length);assert.ok(fieldPath(map,{x:1,y:8},{x:17,y:1}).length);
+ assert.equal(map[4][6],'g');assert.equal(storeAdventurePosition({...base,x:11,y:8},150).districtPosition.zone1ShopsLayout,1);
+});
 
 test('all ten fields have reachable services, trainers, pickups and gated exits',()=>{
  for(let area=0;area<10;area++){
