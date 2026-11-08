@@ -3,6 +3,16 @@ import assert from 'node:assert/strict';
 import {zone11Map,zone11Unlocked,zone11Encounter} from '../lib/cloud-adventure/adventure-zone11.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Zone 11 east gate returns west from Vert Sector 6 without losing legacy access',()=>{
+ const zone={area:3,district:'lumiose-zone11',interior:null,x:21,y:12,zaRoyaleRank:'E',regionId:6,districtReturnRegion:1,teamIds:['kept']};
+ const exit=stepField(zone,'right');assert.deepEqual([exit.district,exit.x,exit.y],['lumiose-vert-sector6',1,12]);
+ const sector={...zone,...exit},saved=restoreAdventurePosition(storeAdventurePosition(sector,19),19);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector6',1,12,['kept']]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone11',21,12]);
+ assert.equal(stepField({...saved,zaRoyaleRank:'F'},'left').blocked,true);
+ assert.equal(stepField({...saved,x:21,y:12},'right').district,'lumiose-zone11');
+});
+
 test('zone eleven has gated and separately saved canal banks',()=>{
  const city={area:3,district:'lumiose-vert2',interior:null,x:17,y:1,facing:'up'};
  assert.equal(zone11Unlocked(city),false);assert.equal(stepField({...city,x:17,y:15},'down').blocked,true);assert.equal(stepField({...city,district:'lumiose-zone6',x:11,y:15},'down').blocked,true);
