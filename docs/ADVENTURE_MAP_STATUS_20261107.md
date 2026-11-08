@@ -29,6 +29,10 @@
 
 [구역 9 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-9-guide-all-pokemon-and-alphas)는 건물 사이 비계와 그 아래 지상 공간을 설명한다. 기존 두 옥상 사이에 별도 높은 비계 통로를 추가하고 아래 지상에도 비계의 그림자를 표현했다. 통로의 실제 위치·높이·폭은 초안이다. 기존 지상 통행·풀숲과 저장 좌표는 유지하고, 옥상에서 이전에 막혀 있던 칸만 열었다.
 
+## 야생 구역 5 지하의 얕은 수로 초안
+
+[현장 안내](https://www.powerpyx.com/pokemon-legends-z-a-electrike-location/)는 오염물을 없애고 물길을 따라 내려가 지하 터널로 이어지는 경로를 설명한다. 기존 지하 통로의 바닥 일부를 걸을 수 있는 얕은 수로로 구분했다. 물길의 폭·윤곽과 정확한 위치는 초안이다. 이동 가능 여부, 오염물·출입구 및 기존 저장 좌표를 유지한다.
+
 ## 베르 1·5번지 안뜰 초안
 
 [베르 1번지 위치 자료](https://sportsrant.indiatimes.com/gaming/list-of-all-colourful-screw-locations-in-pokmon-legends-z-a/articleshow/126639673.html)는 건물 안뜰을, [베르 5번지 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 안뜰의 서쪽과 동쪽을 언급한다. 각 거리의 막힌 건물 내부에 접근 가능한 안뜰을 추가했다. 건물 선택, 안뜰의 크기와 거리 쪽 출입구는 확인되지 않은 초안이며 보상은 추가하지 않았다. 기존 통행 칸과 저장 위치는 유지한다.

@@ -141,3 +141,11 @@ test('Zone 5 south gate connects Bleu Sector 3 independently of the sewer',()=>{
  assert.equal(stepField({...zone,x:17},'down').district,'lumiose-bleu-plaza-route');
  assert.equal(stepField({...zone,zaZone5Upper:true},'down').blocked,true);
 });
+
+test('Zone 5 underground shallow canal remains traversable and preserves saves',()=>{
+ const s={area:3,district:'lumiose-zone5-drain',interior:null,x:1,y:12,zaZone5DrainSecondCleared:true,teamIds:['kept']},map=fieldMap(s);
+ for(let x=1;x<=9;x++)assert.equal(map[12][x],'w');for(let y=7;y<=12;y++)for(let x=7;x<=9;x++)assert.equal(map[y][x],'w');
+ assert.ok(fieldPath(map,s,{x:21,y:4}).length);const old=restoreAdventurePosition(storeAdventurePosition({...s,x:8,y:11},138),138);assert.deepEqual([old.district,old.x,old.y,old.teamIds,old.zaZone5DrainSecondCleared],[s.district,8,11,['kept'],true]);
+ assert.equal(stepField({...s,x:0,y:12},'right').tile,'w');assert.equal(stepField({...s,x:21,y:4},'right').district,'lumiose-bleu3-sewer-approach');
+ const blocked=fieldMap({...s,zaZone5DrainSecondCleared:false});assert.equal(blocked[5][12],'r');assert.equal(fieldPath(blocked,s,{x:21,y:4}).length,0);
+});

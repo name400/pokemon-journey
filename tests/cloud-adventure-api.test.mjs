@@ -1032,3 +1032,13 @@ test('Zone 9 elevated scaffold keeps floor, progress and wallet on reload',async
   await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone9Upper],[8,11,true]);await call('move',{direction:'left'});await get();assert.deepEqual([state.world.x,state.world.y],[7,11]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 5 shallow canal preserves movement and saved progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone5-water-qa',displayName:'지하수로저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone5-drain',interior:null,x:1,y:12,zaZone5DrainSecondCleared:true,zaZone5Spent:{'whirlipede-alpha':true}},state.revision+1));
+  await get();assert.equal(state.world.map[12][1],'w');await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone5-drain',2,12]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaZone5DrainSecondCleared,true);assert.equal(state.world.zaZone5Spent['whirlipede-alpha'],true);
+  await get();assert.deepEqual([state.world.x,state.world.y],[2,12]);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
