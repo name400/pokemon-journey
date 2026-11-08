@@ -59,3 +59,11 @@ test('Zone 17 southwest lawn entrance connects Vert Street and keeps earlier ent
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-street-route',20,1]);
  assert.equal(stepField({...state,x:1,y:8},'left').district,'lumiose-vert-street-route');
 });
+
+test('north promenade and south approach use walkable paving without replacing grass',()=>{
+ const s={area:3,district:'lumiose-zone17',interior:null,zaRoyaleRank:'C'},map=zone17Map(s);
+ for(const y of [1,2,3,4,13,14,15])for(const x of [10,11,12])assert.equal(map[y][x],',',`${x},${y}`);
+ for(const [x,y] of [[3,5],[4,8],[10,9],[12,9],[18,12]])assert.equal(map[y][x],'g',`${x},${y}`);
+ for(const gate of [{x:6,y:1},{x:11,y:1},{x:16,y:1}])assert.ok(fieldPath(map,{x:11,y:14},gate).length);
+ const state={...s,regionId:6,districtReturnRegion:1,teamIds:['kept'],x:10,y:14};const restored=restoreAdventurePosition(storeAdventurePosition(state,99),99);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[state.district,10,14,['kept']]);
+});
