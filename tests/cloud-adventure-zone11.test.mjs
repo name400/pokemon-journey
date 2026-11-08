@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone11Map,zone11Unlocked,zone11Encounter,ZONE11_WEST_FORK} from '../lib/cloud-adventure/adventure-zone11.mjs';
+import {zone11Map,zone11Unlocked,zone11Encounter,ZONE11_WEST_FORK,ZONE11_SOUTHWEST_STAIRS} from '../lib/cloud-adventure/adventure-zone11.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 11 northwest ledge preserves the old entrance and its saved position',()=>{
@@ -56,6 +56,13 @@ test('Zone 11 southern riverside path connects both gate approaches and preserve
  assert.equal(map[11][8],'g');assert.equal(map[12][15],'f');assert.equal(map[9][11],'~');
  assert.ok(fieldPath(map,{x:21,y:12},{x:5,y:15}).length);assert.equal(fieldPath(map,{x:11,y:10},{x:11,y:6}).length,0);
  for(const [x,y] of [[2,10],[2,13],[19,11],[11,10]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},123),123);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[base.district,x,y,['kept']]);}
+});
+
+test('Zone 11 southwest stair artwork stays on walkable non-encounter terrain',()=>{
+ const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']},map=zone11Map(base);
+ assert.deepEqual([...new Set(ZONE11_SOUTHWEST_STAIRS.map(([,y])=>y))],[11,13]);
+ for(const [x,y] of ZONE11_SOUTHWEST_STAIRS){assert.ok(['.',','].includes(map[y][x]));const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},130),130);assert.deepEqual([saved.x,saved.y,saved.teamIds],[x,y,['kept']]);}
+ assert.ok(fieldPath(map,{x:5,y:15},{x:2,y:10}).length);
 });
 
 
