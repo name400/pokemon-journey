@@ -34,3 +34,13 @@ test('draft bank approaches preserve separated canal, encounters and saved posit
  for(const [x,y] of [[3,4],[14,3],[8,11]])assert.equal(map[y][x],'g');
  for(const [x,y] of [[1,1],[21,1],[5,15],[20,12]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},97),97);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[base.district,x,y,['kept']]);}
 });
+
+
+test('Zone 11 southern riverside path connects both gate approaches and preserves encounters',()=>{
+ const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']},map=zone11Map(base);
+ for(let x=1;x<=20;x++)assert.equal(map[10][x],',');
+ for(const x of [2,19])for(let y=11;y<=14;y++)assert.equal(map[y][x],',');
+ assert.equal(map[11][8],'g');assert.equal(map[12][15],'f');assert.equal(map[9][11],'~');
+ assert.ok(fieldPath(map,{x:21,y:12},{x:5,y:15}).length);assert.equal(fieldPath(map,{x:11,y:10},{x:11,y:6}).length,0);
+ for(const [x,y] of [[2,10],[2,13],[19,11],[11,10]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},123),123);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[base.district,x,y,['kept']]);}
+});

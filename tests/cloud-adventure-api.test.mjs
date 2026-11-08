@@ -1105,3 +1105,14 @@ test('Zone 6 under-bridge shallow passage preserves water obstacles and saved la
   seedWorld(storeAdventurePosition({...rawWorld(),x:12,y:7,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'},409);await get();assert.deepEqual([state.world.x,state.world.y],[12,7]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 11 south bank path keeps positions and inventory across reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-south-path-qa',displayName:'강변길저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x:10,y:10,facing:'right',zaRoyaleRank:'E',zaZone11Spent:{slowpoke:true}},state.revision+1));
+  await get();assert.equal(state.world.map[10][10],',');await call('move',{direction:'right'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone11',11,10]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaZone11Spent.slowpoke,true);
+  await call('move',{direction:'up'},409);await get();assert.deepEqual([state.world.x,state.world.y],[11,10]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
