@@ -1172,3 +1172,15 @@ test('Zone 16 northwest office connection respects rank and persists across relo
   await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rust',1,12]);assert.equal(state.world.zaMission20Stage,7);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 7 west rooftop lift persists and restores the plaza after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone7-west-roof-qa',displayName:'광장옥상저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const plaza={...rawWorld(),area:3,district:'lumiose-zone7',interior:null,x:4,y:8,facing:'left',zaRoyaleRank:'V',zaZone7AlphaSpent:true};
+  seedWorld(storeAdventurePosition(plaza,state.revision+1));await get();await call('zone7WestRoofLift',{},409);
+  seedWorld(storeAdventurePosition({...plaza,zaRoyaleRank:'F'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone7WestRoofLift');await call('zone7WestRoofLift');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone7-west-roof',4,9]);assert.equal(state.world.zaZone7AlphaSpent,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone7WestRoofLift');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone7',4,8]);assert.equal(state.world.zaZone7AlphaSpent,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

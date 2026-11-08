@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone7Map,zone7Unlocked,zone7Encounter} from '../lib/cloud-adventure/adventure-zone7.mjs';
-import {stepField,fieldPath,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone seven gate, plaza and stored location',()=>{
  const base={area:3,district:'lumiose-centrico-route',interior:null,x:5,y:1,facing:'up',zaRoyaleRank:'V'};
  assert.equal(stepField(base,'up').blocked,true);const entered=stepField({...base,zaRoyaleRank:'F'},'up');assert.equal(entered.district,'lumiose-zone7');
@@ -52,4 +52,12 @@ test('plaza canal edges keep routes and migrate only matching legacy saves',()=>
  const saved=storeAdventurePosition(state,9);delete saved.districtPosition.zone7Layout;
  const restored=restoreAdventurePosition(structuredClone(saved),9);assert.equal(restored.district,'lumiose-zone7');assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
  assert.equal(restoreAdventurePosition(structuredClone(saved),10).district,null);assert.equal(storeAdventurePosition(restored,10).districtPosition.zone7Layout,1);
+});
+
+
+test('Zone 7 west Holovator and rooftop preserve plaza paths and saved positions',()=>{
+ const plaza={area:3,district:'lumiose-zone7',interior:null,x:4,y:8,facing:'left',zaRoyaleRank:'F',teamIds:['kept']},map=zone7Map(plaza);
+ assert.equal(map[8][3],'j');assert.equal(fieldDialogue(plaza).action,'zone7WestRoofLift');assert.ok(fieldPath(map,{x:1,y:8},plaza).length);
+ const roof={...plaza,district:'lumiose-zone7-west-roof',x:4,y:9,facing:'down'};assert.equal(fieldMap(roof)[10][4],'j');assert.equal(fieldDialogue(roof).action,'zone7WestRoofLift');assert.ok(fieldPath(fieldMap(roof),roof,{x:17,y:5}).length);
+ for(const old of [roof,{...plaza,x:3,y:8}]){const saved=restoreAdventurePosition(storeAdventurePosition(old,133),133);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[old.district,old.x,old.y,['kept']]);}
 });
