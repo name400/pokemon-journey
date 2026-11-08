@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone6Map,zone6Encounter,zone6Layer,zone6Visible,zone6Item} from '../lib/cloud-adventure/adventure-zone6.mjs';
+import {zone6Map,zone6Encounter,zone6Layer,zone6Visible,zone6Item,ZONE6_CAFE_FOOTPRINT} from '../lib/cloud-adventure/adventure-zone6.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 6 ground approaches connect the bridge to gates without altering grass or saves',()=>{
@@ -90,4 +90,13 @@ test('Zone 6 second southern gate connects Jaune Sector 12 and preserves both ro
  const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaZone6Layer],['lumiose-zone6',16,15,'ground']);
  assert.equal(stepField({...zone,x:18},'down').district,'lumiose-jaune-sector12');
  assert.equal(stepField({...zone,zaZone6Layer:'roof'},'down').blocked,true);
+});
+
+test('draft café footprint preserves ground paths and older saves',()=>{
+ const base={area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',x:11,y:8,teamIds:['kept'],zaZone6Items:['south-potion']},map=zone6Map(base);
+ for(const [x,y] of ZONE6_CAFE_FOOTPRINT)assert.equal(map[y][x],'%');
+ for(const point of [{x:17,y:3},{x:18,y:4},{x:20,y:4},{x:11,y:1},{x:11,y:15}])assert.ok(fieldPath(map,base,point).length);
+ for(const [x,y] of ZONE6_CAFE_FOOTPRINT){const old=storeAdventurePosition({...base,x,y},93);delete old.districtPosition.zone6CafeLayout;const restored=restoreAdventurePosition(old,93);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'%');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone6Items,['south-potion']);assert.equal(restoreAdventurePosition(old,94).district,null);}
+ const saved=storeAdventurePosition({...base,x:17,y:3},95);assert.equal(saved.districtPosition.zone6CafeLayout,1);const restored=restoreAdventurePosition(saved,95);assert.deepEqual([restored.x,restored.y],[17,3]);
+ assert.notEqual(zone6Map({...base,zaZone6Layer:'high'})[1][18],'%');
 });
