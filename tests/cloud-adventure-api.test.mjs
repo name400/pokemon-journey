@@ -911,3 +911,14 @@ test('Rouge 7 rooftop glide round trip preserves save and wallet',async()=>{
   await get();assert.deepEqual([state.world.x,state.world.y],[16,14]);await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[16,12]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vert 6 ladder and rooftop glide preserve save and wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert6-roof-qa',displayName:'베르옥상저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector6',interior:null,x:18,y:3,facing:'up',zaMission15Stage:2},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'vert6RoofLadder');await call('vert6RoofLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert6-roof',18,9]);
+  await walkTo({x:13,y:8});await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[9,8]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await get();await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[13,8]);await walkTo({x:18,y:9});await call('face',{direction:'down'});await call('vert6RoofLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-sector6',18,3]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
