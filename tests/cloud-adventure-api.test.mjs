@@ -871,3 +871,13 @@ test('Zone 20 old pond save preserves progress and wallet',async()=>{
   await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 10 roof above canal preserves floor and saved progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-canal-roof-qa',displayName:'운하옥상저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:5,y:9,zaRoyaleRank:'F',zaZone10Upper:true,zaZone10Items:['canal-quick']},state.revision+1));
+  await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone10Upper],['lumiose-zone10',5,9,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone10Items,['canal-quick']);
+  await call('move',{direction:'right'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone10Upper],[6,9,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

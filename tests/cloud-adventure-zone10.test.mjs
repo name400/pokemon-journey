@@ -90,3 +90,15 @@ test('canal reaches both map edges and older ground-edge saves move safely',()=>
  }
  const roof={...base,x:19,y:6,zaZone10Upper:true};const saved=restoreAdventurePosition(storeAdventurePosition(roof,90),90);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone10Upper],[base.district,19,6,true]);
 });
+
+test('draft roof sections sit over the canal while both floors remain distinct',()=>{
+ const base={area:3,district:'lumiose-zone10',interior:null,zaRoyaleRank:'F',teamIds:['kept'],zaZone10Items:['canal-quick']};
+ const ground=zone10Map(base),roof=zone10Map({...base,zaZone10Upper:true});
+ for(const [x,y] of [[5,9],[7,10],[15,9],[17,10]]){
+  assert.equal(ground[y][x],'~');assert.equal(roof[y][x],'.');
+  const state={...base,zaZone10Upper:true,x,y};const saved=restoreAdventurePosition(storeAdventurePosition(state,91),91);
+  assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone10Upper],[base.district,x,y,true]);assert.deepEqual(saved.teamIds,['kept']);assert.deepEqual(saved.zaZone10Items,['canal-quick']);
+  assert.ok(fieldPath(roof,saved,{x:17,y:5}).length);
+ }
+ assert.ok(fieldPath(ground,{x:1,y:6},{x:21,y:6}).length);
+});
