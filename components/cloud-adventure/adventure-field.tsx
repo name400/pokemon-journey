@@ -194,6 +194,9 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     }
     if(w.district==='lumiose-rust'||w.district==='lumiose'||w.district==='lumiose-floral'||w.district==='lumiose-vernal'||w.district==='lumiose-vert-plaza'||w.district==='lumiose-vert2'||w.district==='lumiose-centrico-route'||w.district==='lumiose-rouge-north'||w.district==='lumiose-north-boulevard'||w.district==='lumiose-quasartico'||w.district==='lumiose-rooftop'||w.district==='lumiose-zone1'||w.district==='lumiose-zone2'||w.district==='lumiose-zone3'||w.district==='lumiose-zone4'||w.district==='lumiose-bureau'||w.district==='lumiose-garden'||w.district==='lumiose-site'||w.district==='lumiose-wild'||w.district==='lumiose-observation'||w.district==='lumiose-royale'){
      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#ddd2ba':'#e8dec9'):((x+y)%2?'#e7dfce':'#ded7c5');ctx.fillRect(px,py,tile,tile);
+     // Zone 1's east–west street continues through the ordinary floor on
+     // either side of the encounter grass. Its exact width is provisional.
+     if(w.district==='lumiose-zone1'&&c==='.'&&y===8){ctx.fillStyle='#aab29d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d8d5c3';ctx.fillRect(px+3,py+tile-4,tile-6,2);}
      if(w.district==='lumiose-vert-plaza'&&c===','){ctx.fillStyle=(x+y)%2?'#d0c4af':'#dbd0bc';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#eee4d2';ctx.fillRect(px+2,py+tile-3,tile-4,1);}
      if(w.district==='lumiose-vert-plaza'&&c==='%'){ctx.fillStyle=y===2||y===12?'#917f71':'#c4b5a1';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2||y===12?'#b2a08c':'#79918a';ctx.fillRect(px+5,py+6,tile-10,tile-12);}
      if(w.district==='lumiose-zone3'&&c==='.'){
