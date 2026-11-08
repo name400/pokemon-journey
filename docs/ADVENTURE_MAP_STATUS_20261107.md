@@ -330,3 +330,7 @@
 ### 구역 11 서쪽 수로 분기 초안
 
 [현장 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-11-guide-all-pokemon-and-alphas)는 구역 11 서쪽 끝의 수로가 갈라지는 지점을 설명한다. 기존 일직선 수면에 서쪽 분기 수면을 추가했다. 분기의 정확한 방향·너비·강변 윤곽은 확인되지 않아 초안이며, 북서쪽 출입구와 양안 분리는 유지한다. 새 물에 겹친 옛 저장은 동일 리비전에서 인접 강변으로 복구한다. 풀숲 칸은 변경하지 않았다.
+
+### 구역 1 지붕 끝 중정 접근 초안
+
+[현장 공략](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/A_New_Life_in_Lumiose_City)은 지붕 끝에서 피츄가 있는 중정으로 내려가는 경로를 설명하고, [피츄 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-where-to-catch-pichu)는 풀숲으로 내려갈 수 있다고 설명한다. 기존 지붕 끝에 별도 낙하 지점을 추가해 중정 풀숲으로 이동한다. 정확한 지붕·낙하 좌표와 중정 지형은 초안이며, 이전 낙하 경로와 저장 좌표는 유지한다.

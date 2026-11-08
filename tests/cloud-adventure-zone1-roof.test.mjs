@@ -118,3 +118,12 @@ test('Zone 1 northeastern gate links Vert Sector 8 and Hotel Z approach',()=>{
  const back=stepField({...saved,...hotel},'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector8',11,1]);
  assert.equal(stepField({...sector,x:11,y:15},'down').district,'lumiose-zone1');assert.equal(stepField({...zone,x:11},'up').district,'lumiose-vert-sector9');
 });
+
+
+test('Zone 1 far rooftop drop reaches a grassy courtyard while preserving old saves',()=>{
+ const roof={area:3,district:'lumiose-zone1-roof',interior:null,x:19,y:5,facing:'up',zaZone1RoofRockCleared:true,teamIds:['kept']},map=fieldMap(roof);
+ assert.equal(map[4][19],'d');assert.equal(fieldDialogue(roof).action,'zone1CourtyardDrop');assert.ok(fieldPath(map,{x:2,y:9},roof).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...roof,x:19,y:4},129),129);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[roof.district,19,4,['kept']]);
+ const yard={...roof,district:'lumiose-zone1-courtyard',x:9,y:6,facing:'down'};assert.equal(fieldMap(yard)[6][9],'g');assert.ok(fieldPath(fieldMap(yard),yard,{x:21,y:8}).length);
+ const old={...roof,x:4,y:5};assert.equal(fieldDialogue(old).action,'zone1CourtyardDrop');
+});

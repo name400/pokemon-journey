@@ -1136,3 +1136,14 @@ test('Zone 11 old western bank position recovers from fork water on reload',asyn
   await get();assert.equal(state.world.district,'lumiose-zone11');assert.equal(state.world.zaZone11Spent.slowpoke,true);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 1 far rooftop drop reaches the courtyard and preserves progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone1-far-drop-qa',displayName:'옥상낙하저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1-roof',interior:null,x:19,y:5,facing:'up',zaZone1RoofRockCleared:true,zaZone1RoofPearl:true},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'zone1CourtyardDrop');await call('zone1CourtyardDrop');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone1-courtyard',9,6]);assert.equal(state.world.map[6][9],'g');assert.equal(state.world.zaZone1RoofPearl,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await get();assert.equal(state.world.district,'lumiose-zone1-courtyard');assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
