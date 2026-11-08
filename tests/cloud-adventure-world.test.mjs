@@ -426,6 +426,19 @@ test('Zone 2 northern shoreline keeps the northeastern bank and bridge accessibl
  const restored=restoreAdventurePosition(saved,7);assert.equal(restored.district,'lumiose-zone2');assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
 });
 
+test('Rouge garden and cemetery entrance approaches preserve grass and saved locations',()=>{
+ const garden={area:3,district:'lumiose-zone3',interior:null,x:10,y:1,regionId:6,districtReturnRegion:1,teamIds:['kept']};
+ const gm=fieldMap(garden);for(const [x,y] of [[10,1],[11,1],[12,1],[10,14],[11,14],[12,14]])assert.equal(gm[y][x],',');
+ assert.equal(gm[8][11],'g');assert.ok(fieldPath(gm,{x:11,y:1},{x:11,y:15}).length);
+ const cemetery={...garden,district:'lumiose-zone4',x:1,y:10},cm=fieldMap(cemetery);
+ for(let x=1;x<=5;x++)assert.equal(cm[10][x],',');assert.equal(cm[10][6],'g');
+ assert.equal(lumioseZone4Map({zaBunnelbyQuest:3})[10][4],'p');
+ for(const s of [garden,cemetery]){
+  const old=restoreAdventurePosition(storeAdventurePosition(s,104),104);
+  assert.deepEqual([old.district,old.x,old.y,old.teamIds],[s.district,s.x,s.y,['kept']]);
+ }
+});
+
 
 test('Rouge garden and cemetery perimeters keep gates and safely restore older saves',()=>{
  for(const [district,map,old,versionKey,version] of [['lumiose-zone3',lumioseZone3Map(),{x:8,y:4},'zone3Layout',2],['lumiose-zone4',lumioseZone4Map(),{x:8,y:3},'zone4Layout',null]]){

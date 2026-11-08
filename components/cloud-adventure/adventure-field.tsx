@@ -194,6 +194,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     }
     if(w.district==='lumiose-rust'||w.district==='lumiose'||w.district==='lumiose-floral'||w.district==='lumiose-vernal'||w.district==='lumiose-vert-plaza'||w.district==='lumiose-vert2'||w.district==='lumiose-centrico-route'||w.district==='lumiose-rouge-north'||w.district==='lumiose-north-boulevard'||w.district==='lumiose-quasartico'||w.district==='lumiose-rooftop'||w.district==='lumiose-zone1'||w.district==='lumiose-zone2'||w.district==='lumiose-zone3'||w.district==='lumiose-zone4'||w.district==='lumiose-bureau'||w.district==='lumiose-garden'||w.district==='lumiose-site'||w.district==='lumiose-wild'||w.district==='lumiose-observation'||w.district==='lumiose-royale'){
      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#ddd2ba':'#e8dec9'):((x+y)%2?'#e7dfce':'#ded7c5');ctx.fillRect(px,py,tile,tile);
+     if(c===','&&['lumiose-zone3','lumiose-zone4'].includes(w.district)){ctx.fillStyle='#cfc2aa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e5dac7';ctx.fillRect(px,py+tile-3,tile,2);}
      // Zone 1's east–west street continues through the ordinary floor on
      // either side of the encounter grass. Its exact width is provisional.
      if(w.district==='lumiose-zone1'&&(c==='.'||c===',')&&y===8){ctx.fillStyle='#aab29d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d8d5c3';ctx.fillRect(px+3,py+tile-4,tile-6,2);}
