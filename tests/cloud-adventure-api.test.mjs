@@ -901,3 +901,13 @@ test('Zone 18 old scaffold position preserves progress and wallet',async()=>{
   await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone18Items,['roof-quick']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Rouge 7 rooftop glide round trip preserves save and wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge7-glide-qa',displayName:'루주활공테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge7-roof',interior:null,x:16,y:12,zaMission15Stage:2},state.revision+1));
+  await get();await call('rotoGlide');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge7-roof',16,14]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await get();assert.deepEqual([state.world.x,state.world.y],[16,14]);await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[16,12]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

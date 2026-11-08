@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone13Map,zone13Encounter,zone13Visible,zone13Item} from '../lib/cloud-adventure/adventure-zone13.mjs';
-import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldPath,fieldMap,fieldDialogue,rotoGlideLanding,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone thirteen woodland gate and saved position',()=>{
  const base={area:3,district:'lumiose-north-boulevard',interior:null,x:5,y:1,facing:'up',zaRoyaleRank:'F'};assert.equal(stepField(base,'up').blocked,true);
  const entered=stepField({...base,zaRoyaleRank:'E'},'up');assert.equal(entered.district,'lumiose-zone13');const s={...base,...entered,zaRoyaleRank:'E'},map=zone13Map(s);assert.ok(fieldPath(map,s,{x:11,y:10}).length);assert.equal(zone13Visible(s,'a').species,214);assert.equal(zone13Visible(s,'b').species,127);assert.equal(zone13Visible({...s,zaZone13Period:'day'},'e').alpha,true);assert.equal(zone13Visible({...s,zaZone13Period:'day'},'d'),null);assert.equal(zone13Visible({...s,zaZone13Period:'night'},'d').species,709);assert.equal(zone13Item(s,'i').kind,'luxuryball');assert.equal(zone13Item({...s,zaZone13Items:['north-luxury']},'i'),null);
@@ -50,4 +50,13 @@ test('Zone 13 roadside trees preserve grass, routes and older saves',()=>{
  }
  assert.equal(map[3][3],'g');assert.ok(fieldPath(map,{x:1,y:8},{x:21,y:8}).length);assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:8}).length);
  assert.equal(storeAdventurePosition(base,39).districtPosition.zone13Layout,1);
+});
+
+test('Rouge Sector 7 separate rooftop glide requires unlocking and restores its landing',()=>{
+ const s={area:3,district:'lumiose-rouge7-roof',interior:null,x:16,y:12,zaMission15Stage:1,teamIds:['kept']},map=fieldMap(s);
+ assert.equal(map[13][16],'#');assert.equal(fieldPath(map,s,{x:16,y:14}).length,0);assert.equal(rotoGlideLanding(s),null);
+ const open={...s,zaMission15Stage:2};assert.deepEqual(rotoGlideLanding(open),{x:16,y:14,facing:'down'});
+ const landed={...open,...rotoGlideLanding(open)},saved=restoreAdventurePosition(storeAdventurePosition(landed,107),107);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[s.district,16,14,['kept']]);assert.deepEqual(rotoGlideLanding(saved),{x:16,y:12,facing:'up'});
+ assert.ok(fieldPath(map,{x:5,y:9},{x:16,y:12}).length);assert.equal(rotoGlideLanding({...open,x:15}),null);
 });
