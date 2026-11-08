@@ -702,6 +702,17 @@ test('Zone 12 icicle requires an active physical move and preserves bridge acros
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 18 second rooftop gate survives a server reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-east-roof-qa',displayName:'옥상테스트'};
+ try{
+  await get();await call('start',{species:1});const team=state.world.teamIds,wallet=state.wallet;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:21,y:8,facing:'right',zaRoyaleRank:'B',zaZone18Upper:true,zaZone18Items:['roof-quick']},state.revision+1));
+  await get();await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaMagenta9Upper],['lumiose-magenta-sector9',21,8,true]);
+  await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone18Upper],['lumiose-zone18',21,8,true]);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawWorld().zaZone18Items,['roof-quick']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 18 outside scaffold checks rank and returns to its street after reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-outside-scaffold-qa',displayName:'비계테스트'};
  try{

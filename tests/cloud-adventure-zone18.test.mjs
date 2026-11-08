@@ -110,6 +110,17 @@ test('outside roof and Zone 18 rooftop gate preserve layer and rank',()=>{
  const resumed=restoreAdventurePosition(storeAdventurePosition({...saved,...back},100),100);assert.deepEqual([resumed.x,resumed.y,resumed.zaMagenta9Upper],[11,1,true]);
 });
 
+test('second Zone 18 rooftop gate round trips near the eastern roof',()=>{
+ const roof={area:3,district:'lumiose-zone18',interior:null,x:21,y:8,zaZone18Upper:true,zaRoyaleRank:'B',teamIds:['kept'],zaZone18Items:['roof-quick']};
+ const map=fieldMap(roof);assert.equal(map[8][22],'E');assert.ok(fieldPath(map,roof,{x:16,y:8}).length);
+ const out=stepField(roof,'right');assert.deepEqual([out.district,out.x,out.y,out.zaZone18Upper,out.zaMagenta9Upper],['lumiose-magenta-sector9',21,8,false,true]);
+ const external={...roof,...out},saved=restoreAdventurePosition(storeAdventurePosition(external,142),142);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMagenta9Upper,saved.teamIds,saved.zaZone18Items],[external.district,21,8,true,['kept'],['roof-quick']]);
+ assert.equal(stepField({...saved,zaRoyaleRank:'C'},'right').blocked,true);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y,back.zaZone18Upper],['lumiose-zone18',21,8,true]);
+ const resumed=restoreAdventurePosition(storeAdventurePosition({...saved,...back},143),143);assert.deepEqual([resumed.district,resumed.x,resumed.y,resumed.zaZone18Upper],['lumiose-zone18',21,8,true]);
+ assert.equal(zone18Map({...roof,zaZone18Upper:false})[8][22],'E');
+});
+
 test('draft scaffold courtyard preserves access and older ground saves',()=>{
  const s={area:3,district:'lumiose-zone18',interior:null,x:11,y:8,zaRoyaleRank:'B',teamIds:['kept'],zaZone18Items:['roof-quick']},map=zone18Map(s);
  for(const [x,y] of ZONE18_SCAFFOLD)assert.equal(map[y][x],'^');
