@@ -1,7 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone11Map,zone11Unlocked,zone11Encounter,ZONE11_WEST_FORK} from '../lib/cloud-adventure/adventure-zone11.mjs';
-import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
+
+test('Zone 11 northwest ledge preserves the old entrance and its saved position',()=>{
+ const road={area:3,district:'lumiose-jaune-sector10',interior:null,x:21,y:9,facing:'right',zaRoyaleRank:'E',teamIds:['kept']};
+ assert.equal(stepField({...road,zaRoyaleRank:'F'},'right').blocked,true);
+ const entered=stepField(road,'right');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone11-nw-ledge',1,5]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...road,...entered},129),129);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[entered.district,1,5,['kept']]);
+ assert.deepEqual([stepField(saved,'left').district,stepField(saved,'left').x,stepField(saved,'left').y],[road.district,21,9]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:8,y:6}).length);
+ assert.equal(fieldDialogue({...saved,x:8,y:6,facing:'right'}).action,'zone11NorthwestDrop');
+ const old=stepField({...road,y:8},'right');assert.deepEqual([old.district,old.x,old.y],['lumiose-zone11',1,4]);
+ const lower={...saved,district:'lumiose-zone11',x:3,y:3};assert.equal(fieldMap(lower)[3][3],'.');assert.equal(fieldPath(fieldMap(lower),lower,{x:15,y:12}).length,0);
+});
 
 test('Zone 11 east gate returns west from Vert Sector 6 without losing legacy access',()=>{
  const zone={area:3,district:'lumiose-zone11',interior:null,x:21,y:12,zaRoyaleRank:'E',regionId:6,districtReturnRegion:1,teamIds:['kept']};

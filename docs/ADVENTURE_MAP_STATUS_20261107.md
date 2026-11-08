@@ -358,3 +358,6 @@
 ### 마젠타 6번지 비계 접근 초안
 
 [현장 경로 안내](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/Exploring_Lumiose_City)는 6번지의 배틀코트 옆 골목에서 비계와 계단을 오르는 경로를 설명한다. 기존 지상·옥상 사이에 별도 비계 통로를 연결했다. 비계의 경로·폭·높이와 착지 위치는 초안이며, 원작의 구르기와 개별 계단 높이는 구현하지 않았다. 이전 저장과 동선을 위해 기존 직행 사다리 선택지도 유지하며 미션·아이템은 변경하지 않았다.
+# Zone 11 northwest ledge (draft)
+
+The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/16622) describes an item after descending a ledge from Wild Zone 11's northwest entrance. This supports a height change near that entrance, not a precise tile layout or a second gate. A separate upper approach and one-way descent to the existing north bank model that relation; the shape, landing coordinates, and parallel entrance are provisional. The existing direct entrance is retained for compatibility, and no item is added. Further original-game imagery is needed to determine the exact entrance, ledge geometry, and connection.
