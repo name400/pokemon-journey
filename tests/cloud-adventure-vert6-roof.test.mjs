@@ -11,3 +11,11 @@ test('Vert 6 isolated ladder roof and Racine roof preserve ground access and sav
  const landing={...launch,...rotoGlideLanding(launch)},saved=restoreAdventurePosition(storeAdventurePosition(landing,112),112);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert6-roof',9,8,['kept']]);assert.deepEqual(rotoGlideLanding(saved),{x:13,y:8,facing:'right'});
  assert.equal(stepField({...ground,x:1,y:8},'left').district,'lumiose-south-boulevard');
 });
+
+test('Coulant overlooking roof is a separate saved glide destination',()=>{
+ const s={area:3,district:'lumiose-vert6-roof',interior:null,x:16,y:4,zaMission15Stage:2,teamIds:['kept']},map=fieldMap(s);
+ assert.equal(map[3][16],'#');assert.equal(fieldPath(map,s,{x:16,y:2}).length,0);assert.equal(rotoGlideLanding({...s,zaMission15Stage:1}),null);
+ assert.deepEqual(rotoGlideLanding(s),{x:16,y:2,facing:'up'});const landing={...s,...rotoGlideLanding(s)};
+ const saved=restoreAdventurePosition(storeAdventurePosition(landing,113),113);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert6-roof',16,2,['kept']]);assert.deepEqual(rotoGlideLanding(saved),{x:16,y:4,facing:'down'});
+ assert.ok(fieldPath(map,{x:18,y:9},s).length);assert.deepEqual(rotoGlideLanding({...s,x:13,y:8}),{x:9,y:8,facing:'left'});
+});
