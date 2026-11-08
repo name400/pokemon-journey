@@ -1066,3 +1066,17 @@ test('Zone 5 drain rooftop ladder preserves progress and cannot bypass the sludg
   assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone5Upper],['lumiose-zone5-drain',18,7,false]);assert.equal(state.world.zaZone5DrainSecondCleared,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 15 adjacent rooftop lift preserves progress and the legacy lift',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone15-adjacent-lift-qa',displayName:'인접옥상저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const street={...rawWorld(),area:3,district:'lumiose-hibernal-approach',interior:null,x:14,y:6,facing:'up',zaRoyaleRank:'D',zaZone15LiftUnlocked:false,zaZone15WebOpen:true};
+  seedWorld(storeAdventurePosition(street,state.revision+1));await get();await call('zone15OuterLift',{},409);
+  seedWorld(storeAdventurePosition({...street,zaZone15LiftUnlocked:true,zaRoyaleRank:'E'},state.revision+1));await get();await call('zone15OuterLift',{},409);
+  seedWorld(storeAdventurePosition({...street,zaZone15LiftUnlocked:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone15Lift');await call('zone15OuterLift');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune7-roof',6,7]);assert.equal(state.world.zaZone15WebOpen,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone15OuterLift');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-hibernal-approach',14,6]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone15Lift');await get();assert.equal(state.world.district,'lumiose-zone15');assert.equal(state.world.zaZone15Upper,true);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
