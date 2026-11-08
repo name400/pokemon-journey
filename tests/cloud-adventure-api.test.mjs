@@ -1116,3 +1116,13 @@ test('Zone 11 south bank path keeps positions and inventory across reload',async
   await call('move',{direction:'up'},409);await get();assert.deepEqual([state.world.x,state.world.y],[11,10]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Rust courtyard older statue location recovers without losing progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rust-courtyard-statue-qa',displayName:'앞마당저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rust',interior:null,x:8,y:8,zaMission20Stage:7},state.revision+1);old.districtPosition.rustLayout=2;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-rust');assert.notDeepEqual([state.world.x,state.world.y],[8,8]);assert.equal(state.world.map[state.world.y][state.world.x]==='^',false);assert.equal(state.world.zaMission20Stage,7);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await get();assert.equal(state.world.district,'lumiose-rust');assert.equal(state.world.zaMission20Stage,7);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

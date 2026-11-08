@@ -18,7 +18,7 @@ test('Rust office courtyard preserves access and restores older positions on new
   assert.equal(restored.district,base.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual([restored.zaMission20Stage,restored.teamIds],[1,['kept']]);
   assert.equal(restoreAdventurePosition(structuredClone(old),111).district,null);
  }
- assert.equal(storeAdventurePosition({...base,x:11,y:7},112).districtPosition.rustLayout,1);
+ assert.equal(storeAdventurePosition({...base,x:11,y:7},112).districtPosition.rustLayout,3);
 });
 
 test('temporary meeting areas restore positions and house encounters stay reachable',()=>{
@@ -31,4 +31,15 @@ test('temporary meeting areas restore positions and house encounters stay reacha
 test('Philippe and Gwynn can mega evolve, and the three rogue forms start mega evolved',()=>{
  for(const [id,item,form] of [[227,'skarmorite','skarmorymega'],[609,'chandelurite','chandeluremega']]){let b=createCombat([makeMon(150,40)],[{...makeMon(id,47),item}],{strategy:'balanced'});b=playCpu(b,{type:'move',move:b.requests[0].moves[0].id});assert.equal(b.teams[1][0].battleAppearance,form);assert.equal(b.teams[1][0].mega,true);}
  for(const [id,form] of [[10052,'mawilemega'],[10298,'barbaraclemega'],[10045,'ampharosmega']]){const b=createCombat([makeMon(150,40)],[makeMon(id,49)]);assert.equal(b.teams[1][0].battleAppearance,form);assert.equal(b.teams[1][0].mega,true);}
+});
+
+
+test('Rust courtyard statues and bamboo preserve the central gate and old saves',()=>{
+ const base={area:3,district:'lumiose-rust',interior:null,regionId:6,districtReturnRegion:1,teamIds:['kept'],zaMission20Stage:7},map=lumioseRustMap();
+ for(const [x,y] of [[8,8],[14,8],[7,6],[15,6],[7,9],[15,9]]){
+  assert.equal(map[y][x],'^');const old=storeAdventurePosition({...base,x,y},124);old.districtPosition.rustLayout=2;
+  const saved=restoreAdventurePosition(structuredClone(old),124);assert.equal(saved.district,base.district);assert.ok(walkable(map[saved.y][saved.x]));assert.deepEqual(saved.teamIds,['kept']);assert.equal(saved.zaMission20Stage,7);assert.equal(restoreAdventurePosition(structuredClone(old),125).district,null);
+ }
+ for(const start of [{x:1,y:8},{x:21,y:8},{x:11,y:15}])assert.ok(fieldPath(map,start,{x:11,y:6}).length);
+ assert.equal(map[10][11],',');assert.equal(map[6][11],'d');
 });
