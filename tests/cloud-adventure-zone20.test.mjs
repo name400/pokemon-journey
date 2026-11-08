@@ -33,6 +33,15 @@ test('Zone 20 north and canal-side exits lead to directional plaza gates',()=>{
  assert.equal(stepField({...base,x:11,y:14},'down').district,'lumiose-centrico-route');
 });
 
+test('Zone 20 northeastern promenade joins the north and east approaches',()=>{
+ const base={area:3,district:'lumiose-zone20',interior:null,zaMission38Complete:true,teamIds:['kept'],zaZone20Items:['south-seed']},map=zone20Map(base);
+ for(let x=11;x<=17;x++)assert.equal(map[1][x],',');
+ for(let x=17;x<=21;x++)assert.equal(map[2][x],',');
+ for(let y=2;y<=8;y++)assert.equal(map[y][21],',');
+ assert.equal(map[5][19],'~');assert.equal(map[4][16],'g');assert.ok(fieldPath(map,{x:11,y:1},{x:21,y:8}).length);
+ for(const [x,y] of [[11,1],[17,2],[21,6],[21,8]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},153),153);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaZone20Items],[base.district,x,y,['kept'],['south-seed']]);}
+});
+
 
 test('directional plaza gates stay walkable, non-NPC and keep old saved positions',()=>{
  const base={area:3,district:'lumiose-centrico-route',interior:null,x:11,y:8,teamIds:['kept']},map=fieldMap(base);
