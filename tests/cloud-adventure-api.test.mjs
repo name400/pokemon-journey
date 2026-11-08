@@ -795,6 +795,17 @@ test('Vert 4 lift and enclosed courtyard keep their layers on reload',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Coulant opposite bank stairs retain layer, wallet and party on reconnect',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'coulant-opposite-bank-qa',displayName:'반대편수로테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-coulant-route',interior:null,x:3,y:12,facing:'up',zaCoulantLower:false},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'coulantBankSteps');await call('coulantBankSteps');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaCoulantLower],[3,10,true]);
+  await walkTo({x:19,y:10});await call('face',{direction:'down'});await get();assert.equal(state.world.interaction.action,'coulantBankSteps');await call('coulantBankSteps');await get();
+  assert.deepEqual([state.world.x,state.world.y,state.world.zaCoulantLower],[19,12,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Rust office old wall position restores without losing progress or wallet',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rust-layout-qa',displayName:'사무소저장테스트'};
  try{

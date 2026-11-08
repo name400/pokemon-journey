@@ -2,6 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {coulantRouteMap} from '../lib/cloud-adventure/adventure-coulant-route.mjs';
+
+test('both lower canal banks run under the bridges and remain separated by water',()=>{
+ const s={area:3,district:'lumiose-coulant-route',interior:null,zaCoulantLower:true,teamIds:['kept']},lower=coulantRouteMap(s),upper=coulantRouteMap();
+ for(const x of [3,19]){assert.equal(lower[11][x],'l');assert.equal(upper[11][x],'l');}
+ assert.ok(fieldPath(lower,{x:3,y:10},{x:19,y:10}).length);
+ assert.equal(fieldPath(lower,{x:3,y:10},{x:3,y:6}).length,0);
+ assert.equal(stepField({...s,x:10,y:10},'up').blocked,true);
+ for(const [x,y] of [[3,10],[6,10],[19,10]]){
+  const loaded=restoreAdventurePosition(storeAdventurePosition({...s,x,y},111),111);
+  assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.zaCoulantLower,loaded.teamIds],[s.district,x,y,true,['kept']]);
+ }
+ const old=restoreAdventurePosition(storeAdventurePosition({...s,x:3,y:11,zaCoulantLower:false},112),112);
+ assert.deepEqual([old.x,old.y,old.zaCoulantLower],[3,11,false]);
+});
 test('Coulant route links Vert Street and the south bank of Zone 11',()=>{
  const start={area:3,district:'lumiose-vert-street-route',interior:null,x:21,y:8,facing:'right',zaRoyaleRank:'F'};
  const route=stepField(start,'right');assert.equal(route.district,'lumiose-coulant-route');const s={...start,...route};const map=coulantRouteMap();
