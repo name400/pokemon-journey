@@ -25,6 +25,10 @@
 
 [현장 안내](https://raiderking.com/pokemon-legends-z-a-all-tms-locations/)는 베르 6번지 북동쪽 작은 건물의 사다리로 오른 뒤 라시느건설 옥상으로 활공하는 경로를 설명한다. 기존 거리에 사다리와 별도의 두 옥상층을 추가하고 로토글라이드 해금 후 건너게 했다. 건물·사다리·착륙 위치와 역방향 복귀는 초안이며, 원작의 정확한 높이와 두 지붕의 윤곽은 추가 확인이 필요하다. 옥상 보상은 추가하지 않았다.
 
+## 베르 1·5번지 안뜰 초안
+
+[베르 1번지 위치 자료](https://sportsrant.indiatimes.com/gaming/list-of-all-colourful-screw-locations-in-pokmon-legends-z-a/articleshow/126639673.html)는 건물 안뜰을, [베르 5번지 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)는 안뜰의 서쪽과 동쪽을 언급한다. 각 거리의 막힌 건물 내부에 접근 가능한 안뜰을 추가했다. 건물 선택, 안뜰의 크기와 거리 쪽 출입구는 확인되지 않은 초안이며 보상은 추가하지 않았다. 기존 통행 칸과 저장 위치는 유지한다.
+
 ## 베르 3번지 북동쪽 안뜰·분수 초안
 
 [안뜰 위치 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/poke-balls.html)와 [분수 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-the-many-flowers-of-flabebe-side-mission-where-to-find-all-five-colours)는 베르 3번지의 북동쪽 안뜰과 플라제스 분수를 설명한다. 기존 막힌 건물 안에 접근 가능한 안뜰과 분수를 추가했다. 출입구·분수의 좌표와 형태는 초안이며, 별도 안내에서 언급되는 오염물로 막힌 인근 안뜰과의 관계는 추가 확인이 필요하다. 기존 통행 칸과 주변 출입구는 유지했고 보상·포켓몬은 추가하지 않았다.
