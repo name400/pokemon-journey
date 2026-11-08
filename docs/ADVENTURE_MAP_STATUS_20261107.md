@@ -180,3 +180,7 @@
 ### 구역 11 강변과 구역 13 숲의 표현 보강
 
 [구역 11 안내](https://pokequery.com/games/legends-za/wild-zones/11)의 물길·강변과 [구역 13 안내](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/north-boulevard-2/)의 큰길 주변 숲을 바탕으로 강변 색과 풀, 나무 실루엣을 구분했다. 화면만 변경하여 지형 판정과 저장 좌표는 그대로다. 강변 폭·나무 모양과 배치는 초안이며, 북쪽 고지와 원작 건물·도로의 정확한 구조는 미완성이다.
+
+### 존느 광장 반대편 거리 초안
+
+[구역 8 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_8)는 광장 양쪽이 존느 스트리트와 연결된다고 설명하고, [존느 8번지 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Sector_8)는 이 번지가 존느 스트리트 북쪽이라고 설명한다. 기존 광장 남쪽 접근 외에 반대편 거리 화면과 기존 8번지 접근 화면으로의 왕복 연결을 추가했다. 두 자료는 거리의 정확한 출입 방향·선형·거리 폭·건물 위치나 이 화면 사이의 직접 연결을 입증하지 않으므로 모두 초안이다. 기존 임시 출입구와 저장 좌표를 유지하며 새로운 길도 기존 구역 8 진입 제한을 따른다.
