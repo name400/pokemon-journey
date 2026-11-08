@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone15Map,zone15Encounter,zone15Visible,zone15Item} from '../lib/cloud-adventure/adventure-zone15.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+
+test('Zone 15 southern gate connects North Boulevard while retaining the older west route',()=>{
+ const zone={area:3,district:'lumiose-zone15',interior:null,x:17,y:15,zaRoyaleRank:'D',regionId:6,districtReturnRegion:1,teamIds:['kept']};
+ const road=stepField(zone,'down');assert.deepEqual([road.district,road.x,road.y],['lumiose-north-boulevard',20,1]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...road},107),107);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[road.district,20,1,['kept']]);
+ assert.equal(stepField({...saved,zaRoyaleRank:'E'},'up').blocked,true);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaZone15Upper],['lumiose-zone15',17,15,false]);
+ assert.equal(stepField({...zone,x:1,y:8},'left').district,'lumiose-north-boulevard');
+ assert.notEqual(zone15Map({...zone,zaZone15Upper:true})[16][17],'X');
+});
 test('zone fifteen gate, day/night encounters and saved position',()=>{
  const base={area:3,district:'lumiose-north-boulevard',interior:null,x:19,y:1,facing:'up',zaRoyaleRank:'E'};assert.equal(stepField(base,'up').blocked,true);
  const entered=stepField({...base,zaRoyaleRank:'D'},'up');assert.equal(entered.district,'lumiose-zone15');const s={...base,...entered,zaRoyaleRank:'D'},map=zone15Map(s);assert.ok(fieldPath(map,s,{x:11,y:9}).length);assert.equal(zone15Visible({...s,zaZone15Period:'day'},'b').species,545);assert.equal(zone15Visible({...s,zaZone15Period:'night'},'b').species,353);assert.equal(zone15Visible({...s,zaZone15Period:'day'},'d').species,15);assert.equal(zone15Visible({...s,zaZone15Period:'night'},'d').species,354);assert.equal(zone15Item(s,'i').kind,'ultraball');assert.equal(zone15Item({...s,zaZone15Items:['cafe-ultra']},'i'),null);const roof={...s,zaZone15Upper:true,zaZone15LiftUnlocked:true,x:10,y:7};assert.equal(stepField(roof,'right').blocked,true);assert.equal(stepField({...roof,zaZone15WebOpen:true},'right').x,11);assert.equal(zone15Visible(roof,'a').species,246);const savedRoof=restoreAdventurePosition(storeAdventurePosition(roof,43),43);assert.equal(savedRoof.zaZone15Upper,true);
