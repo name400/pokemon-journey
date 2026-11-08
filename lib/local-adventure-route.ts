@@ -1,3 +1,4 @@
+import {isAdventureBattleOnlyForm} from '@/lib/adventure-battle-forms.mjs';
 import {registerAdventureDex} from '@/lib/adventure-dex.mjs';
 import {FIELD_GOODS,MAP_VERSION,normalizeField,fieldMap,stepField,validateAdventurePath,interactionAt,fieldDialogue,leagueIndex} from '@/lib/adventure-world.mjs';
 import {CITY_AREA,CITY_WILD_AREA,CITY_ARENA_AREA,CITY_WILD_IDS,GARDEN_WILD_IDS,HOTEL_AREA,SHOP_AREA} from '@/lib/adventure-city.mjs';
@@ -51,7 +52,7 @@ else if(b.action==='move'){
   if(s.interior==='citywild'){const gardenMap=fieldMap(s);if(alphaNoticesPlayer(s,gardenMap)){if(s.pcAlphaAlert){const found=GARDEN_VISIBLE.e,foe=makeMon(found.id,found.level);foe.boxId='garden-visible-e';foe.adventureGardenWild='e';foe.isAlpha=true;s.pcAlphaAlert=false;s.combat=createAdventureWildCombat(adventureBattleParty(s,mons),[foe]);s.encounter=foe;s.trainer=null;s.log=['우두머리 스라크가 다가와 배틀이 시작됐다!'];break;}s.pcAlphaAlert=true;s.log=['우두머리 스라크가 눈치챘다! 조용히 걷거나 멀어지자.'];break;}else if(s.pcAlphaAlert)s.pcAlphaAlert=false;const startled=waryWildNoticesPlayer(s,gardenMap);if(startled){const prior=s.pcGardenSpooked&&typeof s.pcGardenSpooked==='object'&&!Array.isArray(s.pcGardenSpooked)?s.pcGardenSpooked:{};s.pcGardenSpooked={...prior,[startled]:Date.now()+30000};s.log=[`${GARDEN_VISIBLE[startled as keyof typeof GARDEN_VISIBLE].name}이(가) 놀라 달아났다. 잠시 후 돌아온다.`];break;}}else if(s.pcAlphaAlert)s.pcAlphaAlert=false;
   if(tile==='g'&&random()<.25){
    const area=s.interior==='citywild'?CITY_WILD_AREA:s.cityVisit?CITY_AREA:s.expedition?{min:40,max:65}:AREAS[s.area];
-   const candidates=s.interior==='citywild'?gardenWildPool:s.cityVisit?cityWildPool:s.expedition?species.filter(p=>p.defaultForm&&!p.legendary&&p.generation===(s.regionId>=9?s.regionId-1:s.regionId)):encounterPool(s.area);
+   const candidates=s.interior==='citywild'?gardenWildPool:s.cityVisit?cityWildPool:s.expedition?species.filter(p=>p.defaultForm&&!p.legendary&&!isAdventureBattleOnlyForm(p)&&p.generation===(s.regionId>=9?s.regionId-1:s.regionId)):encounterPool(s.area);
    const pool=candidates.length?candidates:encounterPool(s.area),foe=makeMon(pool[Math.floor(random()*pool.length)].id,area.min+Math.floor(random()*(area.max-area.min+1)));
    foe.boxId='wild';s.combat=createAdventureWildCombat(adventureBattleParty(s,mons),[foe],{weather:s.weather==='rain'?'raindance':undefined});s.encounter=foe;s.trainer=null;if(s.cityVisit&&!s.interior&&s.pcMZNaveen===1&&foe.speciesId===559){s.pcMZNaveen=2;s.log=['곤율랭의 움직임을 살펴봤다. 이노에게 이야기하자.',`야생 ${foe.name}이(가) 나타났다!`];}else s.log=[`야생 ${foe.name}이(가) 나타났다!`];break;
   }
