@@ -15,6 +15,18 @@ test('Zone 9 southern exits join the central road while retaining stored positio
  }
  assert.equal(map[9][11],'a');assert.equal(map[13][15],'h');
 });
+
+test('Zone 9 north and east approaches join the central road and retain saves',()=>{
+ const s={area:3,district:'lumiose-zone9',interior:null,zaRoyaleRank:'F',regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone9Map(s);
+ for(let y=1;y<=5;y++)for(let x=10;x<=12;x++)assert.equal(map[y][x],',');
+ for(let y=7;y<=9;y++)for(let x=15;x<=21;x++)assert.equal(map[y][x],',');
+ for(const [x,y] of [[11,1],[21,8],[15,7]]){
+  assert.ok(fieldPath(map,{x:11,y:10},{x,y}).length);
+  const saved=restoreAdventurePosition(storeAdventurePosition({...s,x,y},68),68);
+  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[s.district,x,y,['kept']]);
+ }
+ assert.equal(map[9][11],'a');assert.equal(map[13][15],'h');assert.equal(map[10][18],'i');
+});
 test('zone nine entry and rooftop keep saved positions',()=>{
  const base={area:3,district:'lumiose-estival-approach',interior:null,x:21,y:12,facing:'right',zaRoyaleRank:'V'};
  assert.equal(stepField(base,'right').blocked,true);const entered=stepField({...base,zaRoyaleRank:'F'},'right');assert.equal(entered.district,'lumiose-zone9');

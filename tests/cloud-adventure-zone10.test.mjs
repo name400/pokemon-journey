@@ -2,6 +2,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone10Map,zone10Encounter,zone10Visible,zone10Item} from '../lib/cloud-adventure/adventure-zone10.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
+
+test('Zone 10 canal path reaches both entrances and preserves floor saves',()=>{
+ const s={area:3,district:'lumiose-zone10',interior:null,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone10Map(s);
+ for(const [x,y] of [[1,6],[1,7],[21,6],[21,7]]){
+  assert.equal(map[y][x],',');const saved=restoreAdventurePosition(storeAdventurePosition({...s,x,y},69),69);
+  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[s.district,x,y,['kept']]);
+ }
+ assert.ok(fieldPath(map,{x:1,y:6},{x:21,y:6}).length);
+ assert.equal(stepField({...s,x:1,y:6},'left').district,'lumiose-south-boulevard');
+ assert.equal(stepField({...s,x:21,y:6},'right').district,'lumiose-espace-vide');
+ assert.equal(map[8][11],'c');assert.equal(map[4][17],'l');
+});
 test('zone ten canal, rooftop, gate and saved positions',()=>{
  const base={area:3,district:'lumiose-south-boulevard',interior:null,x:11,y:1,facing:'up',zaRoyaleRank:'V'};assert.equal(stepField(base,'up').blocked,true);
  const entered=stepField({...base,zaRoyaleRank:'F'},'up');assert.equal(entered.district,'lumiose-zone10');const s={...base,...entered,zaRoyaleRank:'F'},map=zone10Map(s);assert.ok(fieldPath(map,s,{x:17,y:5}).length);assert.equal(zone10Visible(s,'c').species,318);assert.equal(zone10Visible(s,'e').alpha,true);assert.equal(zone10Item(s,'i').kind,'quickball');assert.equal(zone10Item({...s,zaZone10Items:['canal-quick']},'i'),null);assert.equal(stepField({...s,x:11,y:7},'down').blocked,true);
