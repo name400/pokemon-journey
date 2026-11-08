@@ -957,3 +957,13 @@ test('Galerie exterior scaffold, roof ladder and dome preserve saved state',asyn
   await get();await call('rotoGlide');await get();await walkTo({x:13,y:8});await call('face',{direction:'left'});await call('luneRoofLadder');await get();await walkTo({x:4,y:8});await call('face',{direction:'left'});await call('luneScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-north',20,12]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission41Stage,3);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 4 old grave position preserves progress and wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone4-grave-qa',displayName:'묘지저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone4',interior:null,x:7,y:7,zaBunnelbyQuest:3,zaZone4AlphaSpent:true},state.revision+1);old.districtPosition.zone4Layout=1;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-zone4');assert.notEqual(state.world.map[state.world.y][state.world.x],'%');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaBunnelbyQuest,3);assert.equal(state.world.zaZone4AlphaSpent,true);
+  await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaZone4AlphaSpent,true);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
