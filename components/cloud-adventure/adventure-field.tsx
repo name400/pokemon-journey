@@ -19,7 +19,7 @@ import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer} from '@/lib/cloud-adventure/adventure-zone6.mjs';
 import {zone2WaterEdges,zone2BridgeAxis} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
-import {createFieldScheduler} from '@/lib/adventure-render.mjs';
+import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 
 type Props={world:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;period:string};
@@ -69,8 +69,9 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    function canalWater(px:number,py:number,x:number,y:number){ctx!.fillStyle='#73adbb';ctx!.fillRect(px,py,tile,tile);ctx!.fillStyle='#a9d2d0';ctx!.fillRect(px+5+(x*7+y*3)%9,py+8,8,2);ctx!.fillRect(px+10,py+tile-9,11,2);}
    function roofPaving(px:number,py:number,x:number,y:number){ctx!.fillStyle=(x+y)%2?'#c3b6a6':'#d0c4b2';ctx!.fillRect(px,py,tile,tile);ctx!.fillStyle='#aa9e8e';ctx!.fillRect(px,py+tile-2,tile,2);ctx!.fillRect(px+(y%2?tile/2:2),py+2,2,tile-4);ctx!.fillStyle='#867d74';if(w.map[y-1]?.[x]==='#')ctx!.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]==='#')ctx!.fillRect(px,py+tile-3,tile,3);if(w.map[y]?.[x-1]==='#')ctx!.fillRect(px,py,3,tile);if(w.map[y]?.[x+1]==='#')ctx!.fillRect(px+tile-3,py,3,tile);}
    function bridgeDeck(px:number,py:number,x:number){ctx!.fillStyle='#b3a184';ctx!.fillRect(px,py,tile,tile);ctx!.fillStyle='#ddd0b5';for(let j=5;j<tile;j+=8)ctx!.fillRect(px+2,py+j,tile-4,2);ctx!.fillStyle='#777c72';if(x===10)ctx!.fillRect(px,py,3,tile);if(x===12)ctx!.fillRect(px+tile-3,py,3,tile);}
-   const buildings:Array<{x:number;y:number;kind:string}>=[];
+   const buildings:Array<{x:number;y:number;kind:string}>=[],bounds=visibleFieldBounds(s.cameraX,s.cameraY,width,height,tile);
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{
+    if(x<bounds.left||x>bounds.right||y<bounds.top||y>bounds.bottom)return;
     const px=x*tile,py=y*tile;ctx.fillStyle=palette[0];ctx.fillRect(px,py,tile,tile);
     if(w.district==='lumiose-zone6'&&!w.interior){const layer=zone6Layer(w),roof=['roof','high'].includes(layer);ctx.fillStyle=c==='#'?'#66787a':c==='g'?'#8eae79':c===','&&layer==='ground'?'#b9ab95':(x+y)%2?'#d7cfbb':'#e2dcc8';ctx.fillRect(px,py,tile,tile);if(roof&&c!=='#')roofPaving(px,py,x,y);if(c==='~'||(layer==='canal'&&c==='a'))canalWater(px,py,x,y);if(c===';')bridgeDeck(px,py,x);if(c==='g'){ctx.fillStyle='#618f58';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}if('Xqlhtjvi'.includes(c)){ctx.fillStyle=c==='q'?'#816b89':c==='t'||c==='i'?'#d8b64f':c==='l'||c==='h'||c==='j'?'#936e40':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'카페':c==='l'?'수로':c==='h'?'옥상':c==='j'?'승강':c==='v'?'낙하':c==='i'?'도구':c==='t'?'TM':x===14&&y===0?'대로':y===0?'북쪽':'남쪽',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-coulant-route'&&!w.interior&&w.zaCoulantLower){ctx.fillStyle=c==='#'?'#7c817c':c==='~'?'#6fa7b1':'#beb5a0';ctx.fillRect(px,py,tile,tile);if(c===','&&(x===6||x===16)){ctx.fillStyle='#8a847a';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#6d6963';ctx.fillRect(px,py,tile,4);}if(c==='l'||c==='X'){ctx.fillStyle='#8e795f';for(let j=0;j<3;j++)ctx.fillRect(px+3,py+5+j*8,tile-6,2);}return;}

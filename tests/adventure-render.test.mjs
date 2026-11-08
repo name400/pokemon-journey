@@ -1,5 +1,15 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {shouldRenderField,createFieldScheduler} from '../lib/adventure-render.mjs';
+import {shouldRenderField,createFieldScheduler,visibleFieldBounds} from '../lib/adventure-render.mjs';
+
+test('field bounds retain offscreen sprite margins and reduce mobile tile drawing',()=>{
+ const bounds=visibleFieldBounds(200,160,320,278,32);
+ assert.deepEqual(bounds,{left:2,top:1,right:21,bottom:18});
+ // A four-tile margin includes tall building anchors outside the viewport.
+ assert.ok(bounds.bottom>=Math.floor((160+278)/32)+4);
+ const count=(bounds.right-bounds.left+1)*(Math.min(16,bounds.bottom)-Math.max(0,bounds.top)+1);
+ assert.ok(count<23*17);
+ assert.deepEqual(visibleFieldBounds(-48,-32,800,600,32),{left:-6,top:-5,right:28,bottom:22});
+});
 test('stationary map skips redundant paints but reacts to motion, state, size, images and accessibility settings',()=>{
  const world={},frame={world,width:375,height:326,images:2,reduced:false};
  assert.equal(shouldRenderField(null,frame,false),true);
