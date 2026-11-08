@@ -1093,3 +1093,15 @@ test('Zone 15 outer web opens before the roof entrance and persists on reload',a
   seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.zaZone15Upper,state.world.zaZone15WebOpen],['lumiose-zone15',true,true]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 6 under-bridge shallow passage preserves water obstacles and saved layer',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone6-underbridge-qa',displayName:'다리아래저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const canal={...rawWorld(),area:3,district:'lumiose-zone6',interior:null,x:11,y:7,facing:'down',zaZone6Layer:'canal',zaZone6Items:['canal-potion']};
+  seedWorld(storeAdventurePosition(canal,state.revision+1));await get();await call('move',{direction:'down'});await get();
+  assert.deepEqual([state.world.district,state.world.zaZone6Layer,state.world.x,state.world.y],['lumiose-zone6','canal',11,8]);assert.equal(state.world.map[8][12],'a');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone6Items,['canal-potion']);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone6Layer],[11,9,'canal']);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:12,y:7,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'},409);await get();assert.deepEqual([state.world.x,state.world.y],[12,7]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

@@ -15,7 +15,7 @@ test('Zone 6 ground approaches connect the bridge to gates without altering gras
   assert.deepEqual([old.district,old.x,old.y,old.teamIds],[s.district,x,y,['kept']]);
  }
  assert.ok(fieldPath(map,{x:11,y:1},{x:11,y:15}).length);
- assert.equal(zone6Map({...s,zaZone6Layer:'canal'})[7][11],';');
+ assert.equal(zone6Map({...s,zaZone6Layer:'canal'})[9][11],'w');
 });
 
 test('zone six connects city and gated northern zone eleven via its bridge',()=>{
@@ -106,4 +106,14 @@ test('Zone 6 café roof overlaps its ground footprint and preserves high-layer s
  for(let y=1;y<=2;y++)for(let x=17;x<=19;x++){assert.equal(below[y][x],'%');assert.equal(above[y][x],'.');assert.ok(fieldPath(above,roof,{x,y}).length);}
  assert.equal(above[3][17],'j');assert.equal(above[10][12],'v');assert.equal(zone6Visible(roof,'a').species,25);
  const saved=restoreAdventurePosition(storeAdventurePosition({...roof,x:18,y:2},139),139);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone6Layer,saved.teamIds],[ground.district,18,2,'high',['kept']]);
+});
+
+
+test('Zone 6 shallow underpass aligns with the bridge and preserves saved layers',()=>{
+ const ground={area:3,district:'lumiose-zone6',interior:null,x:11,y:10,zaZone6Layer:'ground',teamIds:['kept']};
+ const canal={...ground,zaZone6Layer:'canal',x:11,y:7},above=fieldMap(ground),below=fieldMap(canal);
+ for(let y=9;y<=11;y++){assert.equal(above[y][11],';');assert.equal(below[y][11],'w');}
+ assert.equal(below[8][12],'a');assert.equal(stepField({...canal,x:12},'down').blocked,true);
+ assert.equal(stepField(canal,'down').y,8);assert.ok(fieldPath(below,canal,{x:11,y:12}).length);
+ for(const value of [ground,{...canal,x:11,y:10}]){const s=restoreAdventurePosition(storeAdventurePosition(value,121),121);assert.deepEqual([s.district,s.zaZone6Layer,s.x,s.y,s.teamIds],[value.district,value.zaZone6Layer,value.x,value.y,['kept']]);}
 });
