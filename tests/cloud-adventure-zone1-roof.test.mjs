@@ -94,6 +94,7 @@ test('second roof and Side Mission 17 preserve ladder and shiny encounter state'
 test('Vert Sector 9 waterway keeps its bridge, access and matching legacy saves',()=>{
  const base={area:3,district:'lumiose-vert-sector9',interior:null,x:11,y:9,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=fieldMap(base);
  assert.equal(map[11][4],'~');assert.equal(map[12][18],'~');assert.equal(map[11][11],':');assert.equal(map[14][14],'q');
+ for(const y of [11,12]){assert.equal(map[y][0],'~');assert.equal(map[y][22],'~');assert.equal(stepField({...base,x:1,y},'left').blocked,true);assert.equal(stepField({...base,x:21,y},'right').blocked,true);}
  assert.ok(fieldPath(map,{x:1,y:8},{x:11,y:15}).length);assert.ok(fieldPath(map,{x:11,y:9},{x:14,y:15}).length);
  assert.equal(stepField({...base,x:11,y:15},'down').district,'lumiose-zone1');
  const saved=storeAdventurePosition({...base,x:4,y:11},7);delete saved.districtPosition.vert9Layout;
