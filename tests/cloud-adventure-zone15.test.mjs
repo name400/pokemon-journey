@@ -85,7 +85,16 @@ test('Hibernal Avenue lift is reachable and keeps older street positions',()=>{
 test('Adjacent Zone 15 roof lift keeps the older route and saved positions',()=>{
  const street={area:3,district:'lumiose-hibernal-approach',interior:null,x:14,y:6,facing:'up',zaRoyaleRank:'D',zaZone15LiftUnlocked:true,teamIds:['kept']};
  assert.deepEqual(fieldDialogue(street).actions.map(x=>x.action),['zone15OuterLift','zone15Lift']);
- const roof={...street,district:'lumiose-jaune7-roof',x:6,y:7};assert.equal(fieldMap(roof)[6][6],'j');assert.equal(fieldDialogue(roof).action,'zone15OuterLift');
+ const roof={...street,district:'lumiose-jaune7-roof',x:6,y:7,zaZone15WebOpen:true};assert.equal(fieldMap(roof)[6][6],'j');assert.equal(fieldDialogue(roof).action,'zone15OuterLift');
  assert.ok(fieldPath(fieldMap(roof),roof,{x:11,y:15}).length);
  const restored=restoreAdventurePosition(storeAdventurePosition(roof,116),116);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[roof.district,6,7,['kept']]);
+});
+
+
+test('Adjacent rooftop web gates the exit and recovers older positions',()=>{
+ const roof={area:3,district:'lumiose-jaune7-roof',interior:null,x:9,y:8,facing:'right',zaRoyaleRank:'D',teamIds:['kept']};
+ assert.equal(fieldMap(roof)[8][10],'r');assert.equal(stepField(roof,'right').blocked,true);assert.equal(fieldDialogue(roof).action,'zone15Web');
+ const open={...roof,zaZone15WebOpen:true};assert.equal(fieldMap(open)[8][10],',');assert.ok(fieldPath(fieldMap(open),open,{x:11,y:15}).length);
+ const old=storeAdventurePosition({...roof,x:10},118),restored=restoreAdventurePosition(old,118);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-jaune7-roof',9,8,['kept']]);
+ assert.equal(restoreAdventurePosition(storeAdventurePosition({...open,x:10},119),119).x,10);
 });

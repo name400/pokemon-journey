@@ -1080,3 +1080,16 @@ test('Zone 15 adjacent rooftop lift preserves progress and the legacy lift',asyn
   await call('zone15Lift');await get();assert.equal(state.world.district,'lumiose-zone15');assert.equal(state.world.zaZone15Upper,true);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 15 outer web opens before the roof entrance and persists on reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone15-outer-web-qa',displayName:'옥상거미줄저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const roof={...rawWorld(),area:3,district:'lumiose-jaune7-roof',interior:null,x:9,y:8,facing:'right',zaRoyaleRank:'D',zaZone15LiftUnlocked:true,zaZone15WebOpen:false};
+  seedWorld(storeAdventurePosition(roof,state.revision+1));await get();assert.equal(state.world.interaction.action,'zone15Web');await call('move',{direction:'right'},409);
+  seedMon(team[0],{...makeMon(4,20),moves:['울음소리']});await get();await call('zone15Web',{},409);
+  seedMon(team[0],{...makeMon(4,20),moves:['화염방사']});await get();await call('zone15Web');await get();assert.equal(state.world.zaZone15WebOpen,true);
+  await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune7-roof',10,8]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.zaZone15Upper,state.world.zaZone15WebOpen],['lumiose-zone15',true,true]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
