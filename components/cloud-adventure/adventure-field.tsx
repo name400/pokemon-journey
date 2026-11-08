@@ -195,6 +195,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     }
     if(w.district==='lumiose-rust'||w.district==='lumiose'||w.district==='lumiose-floral'||w.district==='lumiose-vernal'||w.district==='lumiose-vert-plaza'||w.district==='lumiose-vert2'||w.district==='lumiose-centrico-route'||w.district==='lumiose-rouge-north'||w.district==='lumiose-north-boulevard'||w.district==='lumiose-quasartico'||w.district==='lumiose-rooftop'||w.district==='lumiose-zone1'||w.district==='lumiose-zone2'||w.district==='lumiose-zone3'||w.district==='lumiose-zone4'||w.district==='lumiose-bureau'||w.district==='lumiose-garden'||w.district==='lumiose-site'||w.district==='lumiose-wild'||w.district==='lumiose-observation'||w.district==='lumiose-royale'){
      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#ddd2ba':'#e8dec9'):((x+y)%2?'#e7dfce':'#ded7c5');ctx.fillRect(px,py,tile,tile);
+     if(w.district==='lumiose-rust'&&c===','){ctx.fillStyle='#c3c1b6';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#deddd2';ctx.fillRect(px+4,py+tile-5,tile-8,2);}
      if(c===','&&['lumiose-zone3','lumiose-zone4'].includes(w.district)){ctx.fillStyle='#cfc2aa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e5dac7';ctx.fillRect(px,py+tile-3,tile,2);}
      // Zone 1's east–west street continues through the ordinary floor on
      // either side of the encounter grass. Its exact width is provisional.
@@ -209,6 +210,8 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if((c===','||c===';')&&['lumiose-centrico-route','lumiose-rouge-north','lumiose-north-boulevard'].includes(w.district)){ctx.fillStyle='#737c7b';ctx.fillRect(px,py,tile,tile);if(c===';'){ctx.fillStyle='#e5e2d4';for(let i=3;i<tile;i+=8)ctx.fillRect(px+3,py+i,tile-6,4);}else if(y===8&&x%3===0){ctx.fillStyle='#dfddd0';ctx.fillRect(px+5,py+tile/2-1,tile-10,2);}}
      if(c==='^'&&w.district==='lumiose-zone4'){ctx.fillStyle='#777d7d';ctx.fillRect(px+1,py+1,tile-2,tile-2);ctx.fillStyle='#9da4a0';ctx.fillRect(px+3,py+3,tile-6,5);ctx.fillRect(px+4,py+tile-8,tile-8,4);}
      if(c==='#'){ctx.fillStyle=w.district==='lumiose-zone3'?'#547e60':'#8e9c91';ctx.fillRect(px,py,tile,tile);if(w.district==='lumiose-zone3'){ctx.fillStyle='#78a47a';ctx.fillRect(px+3,py+5,tile-6,4);ctx.fillRect(px+5,py+tile-9,tile-10,3);}}if(c==='r'){ctx.fillStyle='#757b78';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.4,tile*.33,-.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c7cbc5';ctx.fillRect(px+8,py+10,9,3);}
+     if(w.district==='lumiose-rust'&&c==='#'&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle=y===2?'#292e32':'#464b4b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2?'#858681':'#696c68';ctx.fillRect(px+2,py+tile-5,tile-4,3);}
+     if(w.district==='lumiose-rust'&&c==='|'){ctx.fillStyle='#555b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#9a9d92';ctx.fillRect(px+4,py+5,tile-8,3);}
      if(c==='k'||c==='K'){ctx.fillStyle=c==='K'?'#79a36d':w.district==='lumiose-zone3'?'#78a66f':'#a6c692';ctx.fillRect(px+2,py+2,tile-4,tile-4);if(c==='K'||w.district==='lumiose-zone3'){ctx.fillStyle=c==='K'?'#fff3be':'#e7c6b4';ctx.fillRect(px+8,py+10,4,4);ctx.fillRect(px+20,py+16,4,4);}}
      if(c==='k'&&w.district==='lumiose-zone1'){ctx.fillStyle='#92b97c';ctx.fillRect(px,py,tile,tile);sprite('grassDetail',px,py);}
      if(c==='~'||c==='w'){

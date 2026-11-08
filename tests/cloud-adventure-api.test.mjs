@@ -795,6 +795,16 @@ test('Vert 4 lift and enclosed courtyard keep their layers on reload',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Rust office old wall position restores without losing progress or wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rust-layout-qa',displayName:'사무소저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rust',interior:null,x:6,y:8,zaMission20Stage:7},state.revision+1);delete old.districtPosition.rustLayout;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-rust');assert.notEqual(state.world.map[state.world.y][state.world.x],'|');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission20Stage,7);
+  await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission20Stage,7);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Vernal to Vert 4 link and lift retain saves and wallet',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vernal-vert4-qa',displayName:'베르날연결테스트'};
  try{
