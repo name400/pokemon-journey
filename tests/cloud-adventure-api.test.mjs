@@ -1217,3 +1217,15 @@ test('Magenta 3 rooftop descent reaches Sector 6 without losing mission or save'
   await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector6',3,6]);assert.equal(state.world.zaMission17Complete,false);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Magenta 6 scaffold walk connects street and roof without losing saved progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta6-scaffold-qa',displayName:'마젠타비계저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const street={...rawWorld(),area:3,district:'lumiose-magenta-sector6',interior:null,x:2,y:6,facing:'up',zaMission20Stage:5,zaMission21Complete:false};
+  seedWorld(storeAdventurePosition(street,state.revision+1));await get();await call('magenta6Scaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta6-scaffold',2,12]);
+  await walkTo({x:18,y:4});await get();assert.equal(state.world.interaction.action,'magenta6Scaffold');await call('magenta6Scaffold');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector6-roof',2,13]);assert.equal(state.world.zaMission20Stage,5);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('magenta6Scaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta6-scaffold',18,4]);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
