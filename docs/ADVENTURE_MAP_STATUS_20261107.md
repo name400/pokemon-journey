@@ -31,6 +31,8 @@
 
 ## 야생 구역 6 카페 지붕 초안
 
+[구역 6 현장 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-6-guide-all-pokemon-and-alphas)는 카페로 가는 거리와 그 거리의 노점 옆에 있는 헬가를 설명한다. 기존 헬가 부근에 노점 두 동과 사이 통로를 추가했다. 개수·형태·정밀 좌표는 확인되지 않은 초안이다. 노점 아래 네 칸은 기존 통행 칸에서 막힌 지형으로 바뀌므로 같은 리비전의 이전 저장은 인근 통행 칸으로 복구한다. 풀숲, 개체와 카페 접근로는 유지한다.
+
 [구역 6 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-6-guide-all-pokemon-and-alphas)는 Café Bataille 지붕이 탐험 가능한 장소라고 설명한다. 지상 카페 건물과 같은 좌표 위의 높은 층을 열고 기존 옥상과 연결했다. 지붕과 건물의 정확한 크기·좌표·높이는 초안이며, 원작에서 이 지붕에 있는 우두머리의 현재 개체 좌표는 이번 맵 작업에서 변경하지 않아 추가 대조가 필요하다. 기존 층과 저장 좌표는 유지한다.
 
 ## 야생 구역 9 높은 비계 초안

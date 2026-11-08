@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone6Map,zone6Encounter,zone6Layer,zone6Visible,zone6Item,ZONE6_CAFE_FOOTPRINT} from '../lib/cloud-adventure/adventure-zone6.mjs';
+import {zone6Map,zone6Encounter,zone6Layer,zone6Visible,zone6Item,ZONE6_CAFE_FOOTPRINT,ZONE6_MARKET_STALLS} from '../lib/cloud-adventure/adventure-zone6.mjs';
+
+test('Zone 6 market stalls preserve older positions and the cafe approach',()=>{
+ const base={area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',teamIds:['kept'],zaZone6Items:['south-potion']},map=zone6Map(base);
+ for(const [x,y] of ZONE6_MARKET_STALLS){assert.equal(map[y][x],'%');const old=storeAdventurePosition({...base,x,y},140);delete old.districtPosition.zone6MarketLayout;const restored=restoreAdventurePosition(old,140);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'%');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone6Items,['south-potion']);}
+ assert.ok(fieldPath(map,{x:11,y:15},{x:18,y:3}).length);assert.equal(map[3][8],'e');assert.equal(map[4][7],'g');
+ assert.equal(storeAdventurePosition({...base,x:11,y:15},140).districtPosition.zone6MarketLayout,1);
+});
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 6 ground approaches connect the bridge to gates without altering grass or saves',()=>{
