@@ -334,3 +334,7 @@
 ### 구역 1 지붕 끝 중정 접근 초안
 
 [현장 공략](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/A_New_Life_in_Lumiose_City)은 지붕 끝에서 피츄가 있는 중정으로 내려가는 경로를 설명하고, [피츄 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-where-to-catch-pichu)는 풀숲으로 내려갈 수 있다고 설명한다. 기존 지붕 끝에 별도 낙하 지점을 추가해 중정 풀숲으로 이동한다. 정확한 지붕·낙하 좌표와 중정 지형은 초안이며, 이전 낙하 경로와 저장 좌표는 유지한다.
+
+### 쿨랑 수로 아래 산책로에서 구역 11로
+
+[현장 안내](https://allthings.how/how-to-complete-sylveon-the-soother-side-mission-67-in-pokemon-legends-z-a/)는 다리 아래쪽 강변에서 구역 11로 가는 계단 근처까지 이어지는 동선을 설명한다. 기존 하층 강변과 구역 11 남쪽 사이에 왕복 출입을 추가했다. 어느 강변과 연결되는지의 정확한 방위, 계단 타일과 화면 간 거리는 초안이다. 기존 상층 출입구는 저장과 이동 호환을 위해 유지하므로 출입 타일이 나란히 표현된다.

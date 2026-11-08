@@ -77,3 +77,15 @@ test('Zone 17 bridge and lower-bank stairs use separate elevations and retain sa
  // Previously saved upper-bank access remains usable.
  assert.equal(stepField({...base,district:'lumiose-coulant-route',x:16,y:15,zaCoulantLower:false},'down').district,'lumiose-zone17');
 });
+
+
+test('Zone 11 connects to lower Coulant stairs without replacing the upper approach',()=>{
+ const lower={area:3,district:'lumiose-coulant-route',interior:null,x:10,y:5,facing:'up',zaCoulantLower:true,zaRoyaleRank:'E',teamIds:['kept']};
+ assert.equal(coulantRouteMap(lower)[4][10],'X');assert.equal(stepField({...lower,zaRoyaleRank:'F'},'up').blocked,true);
+ const zone=stepField(lower,'up');assert.deepEqual([zone.district,zone.x,zone.y,zone.zaCoulantLower],['lumiose-zone11',6,15,false]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...lower,...zone},130),130);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone11',6,15,['kept']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y,back.zaCoulantLower],['lumiose-coulant-route',10,5,true]);
+ const restored=restoreAdventurePosition(storeAdventurePosition({...saved,...back},131),131);assert.equal(restored.zaCoulantLower,true);assert.deepEqual([restored.x,restored.y],[10,5]);
+ assert.ok(fieldPath(coulantRouteMap(restored),restored,{x:3,y:6}).length);assert.ok(fieldPath(coulantRouteMap(restored),restored,{x:19,y:6}).length);
+ const old=stepField({...saved,x:5,y:15},'down');assert.deepEqual([old.district,old.x,old.y,old.zaCoulantLower],['lumiose-coulant-route',10,1,false]);
+});

@@ -1147,3 +1147,16 @@ test('Zone 1 far rooftop drop reaches the courtyard and preserves progress',asyn
   await get();assert.equal(state.world.district,'lumiose-zone1-courtyard');assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 11 lower Coulant stair connection preserves both levels on reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-lower-stair-qa',displayName:'아래산책로저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const bank={...rawWorld(),area:3,district:'lumiose-coulant-route',interior:null,x:10,y:5,facing:'up',zaCoulantLower:true,zaRoyaleRank:'F'};
+  seedWorld(storeAdventurePosition(bank,state.revision+1));await get();await call('move',{direction:'up'},409);
+  seedWorld(storeAdventurePosition({...bank,zaRoyaleRank:'E'},state.revision+1));await get();await call('move',{direction:'up'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone11',6,15]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaCoulantLower],['lumiose-coulant-route',10,5,true]);
+  await get();assert.equal(state.world.zaCoulantLower,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
