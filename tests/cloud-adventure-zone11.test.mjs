@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone11Map,zone11Unlocked,zone11Encounter,ZONE11_WEST_FORK,ZONE11_SOUTHWEST_STAIRS} from '../lib/cloud-adventure/adventure-zone11.mjs';
+import {zone11Map,zone11Unlocked,zone11Encounter,ZONE11_WEST_FORK,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '../lib/cloud-adventure/adventure-zone11.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 11 northwest ledge preserves the old entrance and its saved position',()=>{
@@ -63,6 +63,12 @@ test('Zone 11 southwest stair artwork stays on walkable non-encounter terrain',(
  assert.deepEqual([...new Set(ZONE11_SOUTHWEST_STAIRS.map(([,y])=>y))],[11,13]);
  for(const [x,y] of ZONE11_SOUTHWEST_STAIRS){assert.ok(['.',','].includes(map[y][x]));const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},130),130);assert.deepEqual([saved.x,saved.y,saved.teamIds],[x,y,['kept']]);}
  assert.ok(fieldPath(map,{x:5,y:15},{x:2,y:10}).length);
+});
+
+test('Zone 11 exit labels match every screen edge',()=>{
+ const map=zone11Map(),expected=[[0,4,'서쪽'],[22,4,'동쪽'],[22,12,'동쪽'],[5,0,'북쪽'],[5,16,'남쪽'],[6,16,'남쪽'],[11,16,'남쪽']];
+ for(const [x,y,label] of expected){assert.equal(map[y][x],'X');assert.equal(zone11ExitLabel(x,y),label);}
+ assert.equal(zone11ExitLabel(11,8),'출구');
 });
 
 

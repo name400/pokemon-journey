@@ -16,7 +16,7 @@ import manifest from '@/data/cloud-town-tiles.json';
 import {wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,cloudNpcTile} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {adventureAvatarRows} from '@/lib/cloud-adventure/adventure-avatar.mjs';
 import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
-import {ZONE11_VISIBLE,ZONE11_SOUTHWEST_STAIRS} from '@/lib/cloud-adventure/adventure-zone11.mjs';
+import {ZONE11_VISIBLE,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer} from '@/lib/cloud-adventure/adventure-zone6.mjs';
 import {zone2WaterEdges,zone2BridgeAxis} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
@@ -175,7 +175,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='~'){canalWater(px,py,x,y);ctx.fillStyle='#506f70';if(w.map[y-1]?.[x]!=='~')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]!=='~')ctx.fillRect(px,py+tile-3,tile,3);}
      if(shore){ctx.fillStyle='#a99f7e';ctx.fillRect(px+4+(x%3)*4,py+6,5,2);ctx.fillRect(px+18,py+22,4,2);}
      if(c==='g'){ctx.fillStyle='#5e8f58';for(let j=0;j<4;j++){const h=5+(x+y+j)%5;ctx.fillRect(px+4+j*7,py+tile-5-h,2,h);}ctx.fillStyle='#b4d393';ctx.fillRect(px+7+(x*3+y)%12,py+8,3,2);}
-     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(y===0?'북쪽':'남쪽',px+tile/2,py+20);}return;
+     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(zone11ExitLabel(x,y),px+tile/2,py+20);}return;
     }
     if(w.district==='lumiose-galerie-lune'&&!w.interior){ctx.fillStyle=c==='#'?'#8e8291':c===','?'#d6d2ca':(x+y)%2?'#e4dce0':'#f1e9eb';ctx.fillRect(px,py,tile,tile);if(c==='.'&&x>=8&&x<=14&&y>=4&&y<=9){ctx.fillStyle='rgba(166,200,211,.24)';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,tile*.3,0,Math.PI*2);ctx.fill();}if('abcdefghs'.includes(c)){ctx.fillStyle=c==='s'?'#6f9b9a':'#a66b82';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='s'?'미용실':'상점',px+tile/2,py+20);}if('WEX'.includes(c)){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-ombrage-arcade'&&!w.interior){ctx.fillStyle=c==='#'?'#80747c':c===','?'#d9d4ce':'#eee3e0';ctx.fillRect(px,py,tile,tile);if(c===','&&x>=9&&x<=13){ctx.fillStyle='rgba(129,190,197,.20)';ctx.fillRect(px+2,py+1,tile-4,4);}if(c==='u'){ctx.fillStyle='#d6b857';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();}if('abcdefghijkl mns'.replace(/ /g,'').includes(c)){ctx.fillStyle=c==='s'?'#66999d':'#a66b82';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='s'?'미용실':'상점',px+tile/2,py+20);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
