@@ -21,6 +21,16 @@ test('Zone 4 outer path connects west and south around the crypt without changin
  for(const [x,y] of [[2,12],[12,14],[19,14]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},152),152);assert.deepEqual([saved.x,saved.y,saved.teamIds],[x,y,['kept']]);}
 });
 
+test('North Boulevard paths reach the existing wild zone approaches and preserve saves',()=>{
+ const base={area:3,district:'lumiose-north-boulevard',interior:null,zaRoyaleRank:'A',teamIds:['kept']},map=fieldMap(base);
+ for(const x of [2,5,6,19,20])for(let y=1;y<=6;y++)assert.equal(map[y][x],',');
+ for(let y=1;y<=4;y++)assert.equal(map[y][18],',');assert.equal(map[5][18],'8');assert.equal(map[6][18],'6');
+ for(const [x,district] of [[2,'lumiose-zone18'],[5,'lumiose-zone13'],[6,'lumiose-zone13'],[18,'lumiose-zone6'],[19,'lumiose-zone15'],[20,'lumiose-zone15']]){
+  assert.ok(fieldPath(map,{x:11,y:8},{x,y:1}).length);assert.equal(stepField({...base,x,y:1},'up').district,district);
+  const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y:1},155),155);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[base.district,x,1,['kept']]);
+ }
+});
+
 test('all ten fields have reachable services, trainers, pickups and gated exits',()=>{
  for(let area=0;area<10;area++){
   const map=adventureMap(area),start={x:3,y:8};assert.equal(map.length,17);assert.ok(map.every(row=>row.length===23));
