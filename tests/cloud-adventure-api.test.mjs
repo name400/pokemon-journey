@@ -1002,3 +1002,13 @@ test('Bleu western courtyards retain saves, exits and wallet',async()=>{
   }
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vert 3 courtyard access preserves position and wallet across reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert3-courtyard-qa',displayName:'베르안뜰저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector3',interior:null,x:17,y:6,facing:'up',zaMission32Stage:1},state.revision+1));
+  await get();await call('move',{direction:'up'});await call('move',{direction:'up'});await call('move',{direction:'right'});await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-sector3',18,3]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission32Stage,1);
+  await get();await call('move',{direction:'down'});await call('move',{direction:'left'});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.x,state.world.y],[17,5]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
