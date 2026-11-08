@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
-import {zone18Map,zone18Visible,zone18Encounter} from '../lib/cloud-adventure/adventure-zone18.mjs';
+import {zone18Map,zone18Visible,zone18Encounter,ZONE18_SCAFFOLD} from '../lib/cloud-adventure/adventure-zone18.mjs';
 
 test('Zone 18 north and southeast approaches preserve ground and rooftop saves',()=>{
  const s={area:3,district:'lumiose-zone18',interior:null,zaRoyaleRank:'B',teamIds:['kept']},map=zone18Map(s);
@@ -108,4 +108,13 @@ test('outside roof and Zone 18 rooftop gate preserve layer and rank',()=>{
  const state={...outside,...entered,zaRoyaleRank:'B'};const saved=restoreAdventurePosition(storeAdventurePosition(state,99),99);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone18Upper,saved.teamIds],['lumiose-zone18',1,8,true,['kept']]);
  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y,back.zaMagenta9Upper],['lumiose-magenta-sector9',11,1,true]);
  const resumed=restoreAdventurePosition(storeAdventurePosition({...saved,...back},100),100);assert.deepEqual([resumed.x,resumed.y,resumed.zaMagenta9Upper],[11,1,true]);
+});
+
+test('draft scaffold courtyard preserves access and older ground saves',()=>{
+ const s={area:3,district:'lumiose-zone18',interior:null,x:11,y:8,zaRoyaleRank:'B',teamIds:['kept'],zaZone18Items:['roof-quick']},map=zone18Map(s);
+ for(const [x,y] of ZONE18_SCAFFOLD)assert.equal(map[y][x],'^');
+ for(const point of [{x:11,y:1},{x:13,y:6},{x:20,y:15},{x:11,y:15},{x:1,y:8},{x:21,y:8}])assert.ok(fieldPath(map,s,point).length);
+ for(const [x,y] of ZONE18_SCAFFOLD){const old=storeAdventurePosition({...s,x,y},98);delete old.districtPosition.zone18ScaffoldLayout;const restored=restoreAdventurePosition(old,98);assert.equal(restored.district,s.district);assert.notEqual(map[restored.y][restored.x],'^');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone18Items,['roof-quick']);assert.equal(restoreAdventurePosition(old,99).district,null);}
+ const saved=storeAdventurePosition({...s,x:10,y:2},99);assert.equal(saved.districtPosition.zone18ScaffoldLayout,1);const restored=restoreAdventurePosition(saved,99);assert.deepEqual([restored.x,restored.y],[10,2]);
+ assert.notEqual(zone18Map({...s,zaZone18Upper:true})[2][8],'^');
 });

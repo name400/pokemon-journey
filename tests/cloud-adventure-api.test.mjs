@@ -891,3 +891,13 @@ test('Zone 6 old café footprint save preserves progress and wallet',async()=>{
   await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone6Items,['south-potion']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 18 old scaffold position preserves progress and wallet',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-scaffold-qa',displayName:'비계저장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:9,y:3,zaRoyaleRank:'B',zaZone18Upper:false,zaZone18Items:['roof-quick']},state.revision+1);delete old.districtPosition.zone18ScaffoldLayout;seedWorld(old);
+  await get();assert.equal(state.world.district,'lumiose-zone18');assert.notEqual(state.world.map[state.world.y][state.world.x],'^');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone18Items,['roof-quick']);
+  await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone18Items,['roof-quick']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
