@@ -795,6 +795,19 @@ test('Vert 4 lift and enclosed courtyard keep their layers on reload',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Vert Sector 3 stair connections preserve location and wallet across reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'coulant-west-stairs-qa',displayName:'서쪽계단테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const [sectorY,canalY] of [[4,2],[10,6]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector3',interior:null,x:21,y:sectorY,facing:'right'},state.revision+1));await get();
+   await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaCoulantLower],['lumiose-coulant-route',1,canalY,false]);
+   await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-sector3',21,sectorY]);
+  }
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Vert Street lower bank entrances preserve wallet and layer across reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'coulant-vert-banks-qa',displayName:'양안출입구테스트'};
  try{

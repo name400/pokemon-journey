@@ -3,6 +3,18 @@ import assert from 'node:assert/strict';
 import {fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {coulantRouteMap} from '../lib/cloud-adventure/adventure-coulant-route.mjs';
 
+test('three western stair approaches link the upper waterway and Vert Sector 3',()=>{
+ const sector={area:3,district:'lumiose-vert-sector3',interior:null,x:21,regionId:6,districtReturnRegion:1,teamIds:['kept']};
+ for(const [sectorY,canalY] of [[4,2],[7,4],[10,6]]){
+  const waterway=stepField({...sector,y:sectorY},'right');assert.deepEqual([waterway.district,waterway.x,waterway.y],['lumiose-coulant-route',1,canalY]);
+  const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...waterway},114),114);
+  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[waterway.district,1,canalY,['kept']]);
+  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector3',21,sectorY]);
+ }
+ const lower={area:3,district:'lumiose-coulant-route',interior:null,x:1,y:6,zaCoulantLower:true};
+ assert.equal(stepField(lower,'left').district,'lumiose-vert-street-route');
+});
+
 test('both lower banks connect to Vert Street and retain the upper connection',()=>{
  const street={area:3,district:'lumiose-vert-street-route',interior:null,x:21,zaRoyaleRank:'E',teamIds:['kept']};
  for(const y of [6,10]){
