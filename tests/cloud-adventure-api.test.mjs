@@ -2230,13 +2230,17 @@ test('Mission 19 sewer ice branch persists bridge and teaches the reusable Crunc
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-sewer',interior:null,x:3,y:10,facing:'left',zaMission19Stage:10},state.revision+1));
   await get();await call('enterSewerIceBranch',{},409);
   seedWorld(storeAdventurePosition({...rawWorld(),x:3,y:10,facing:'left',zaMission19Stage:11,zaMission19ChandelureStep:0},state.revision+1));
-  await get();assert.equal(state.world.interaction.action,'enterSewerIceBranch');await call('enterSewerIceBranch');await get();assert.equal(state.world.zaSewerIceBranch,true);
+  await get();assert.equal(state.world.interaction.action,'enterSewerIceBranch');await call('enterSewerIceBranch');await get();assert.equal(state.world.zaSewerIceBranch,true);assert.equal(state.world.zaMission19ChandelureStep,undefined);assert.equal(rawWorld().zaMission19ChandelureStep,0);
+  await walkTo({x:16,y:3});const nuggetKey=JSON.stringify([globalThis.__adventureUser.userId,'nugget']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(nuggetKey,globalThis.__adventureUser.userId,'nugget');await get();await call('sewerBranchItem-fork-nugget',{},409);assert.equal(rawWorld().zaSewerBranchItems?.includes('fork-nugget')||false,false);sql.prepare('DELETE FROM inventory WHERE key=?').run(nuggetKey);await get();
+  for(const item of [{id:'fork-nugget',x:16,y:3,key:'nugget'},{id:'fork-ice-stone',x:18,y:3,key:'icestone'},{id:'ice-room-stone',x:15,y:7,key:'icestone'},{id:'hall-hp-up',x:17,y:13,key:'hpup'}]){
+   await walkTo({x:item.x,y:item.y});const before=state.inventory[item.key]||0;assert.equal(state.world.interaction.action,`sewerBranchItem-${item.id}`);await call(`sewerBranchItem-${item.id}`);await get();assert.equal(state.inventory[item.key],before+1);await call(`sewerBranchItem-${item.id}`,{},409);
+  }
   await call('sewerCrunchTM',{},409);await walkTo({x:14,y:8});await call('face',{direction:'left'});assert.equal(state.world.interaction.action,'sewerIceBridge');await call('sewerIceBridge',{},409);
   seedMon(id,{...makeMon(130,30),moves:['몸통박치기'],pp:{}});await get();await call('sewerIceBridge');await get();assert.equal(state.world.zaSewerIceBridge,true);assert.equal(state.world.map[8][10],':');
   await walkTo({x:5,y:8});await call('face',{direction:'left'});assert.equal(state.world.interaction.action,'sewerCrunchTM');await call('sewerCrunchTM');await get();assert.equal(state.inventory['za-tm025'],1);await call('sewerCrunchTM',{},409);
   await call('teachStoryTm',{item:'za-tm025',slot:0});assert.equal(rawMon(id).moves[0],'깨물어부수기');assert.equal(state.inventory['za-tm025'],1);
   const incompatible={...makeMon(1,30),moves:['몸통박치기'],pp:{}};seedMon(id,incompatible);await get();await call('teachStoryTm',{item:'za-tm025',slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);
-  await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaSewerIceBranch],['lumiose-sewer',3,10,false]);assert.equal(state.world.zaMission19Stage,11);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaSewerIceBranch],['lumiose-sewer',3,10,false]);assert.equal(state.world.zaMission19Stage,11);assert.equal(state.world.zaMission19ChandelureStep,0);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 

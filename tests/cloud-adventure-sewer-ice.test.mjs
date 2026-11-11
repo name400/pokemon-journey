@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
+import {SEWER_BRANCH_ITEMS} from '../lib/cloud-adventure/adventure-mission19.mjs';
 
 test('Mission 19 sewer branch ice bridge preserves both sides and existing save positions',()=>{
  const s={area:3,district:'lumiose-sewer',interior:null,zaMission19Stage:11,teamIds:['kept'],x:3,y:10,facing:'left'};
@@ -11,6 +12,7 @@ test('Mission 19 sewer branch ice bridge preserves both sides and existing save 
  assert.equal(fieldDialogue({...branch,x:14,y:8}).action,'sewerIceBridge');
  const opened={...branch,zaSewerIceBridge:true},after=fieldMap(opened);assert.ok(fieldPath(after,opened,{x:4,y:8}).length);
  assert.equal(fieldDialogue({...opened,x:5,y:8}).action,'sewerCrunchTM');
+ for(const item of SEWER_BRANCH_ITEMS){assert.ok(fieldPath(before,branch,{x:item.x,y:item.y}).length);assert.equal(fieldDialogue({...branch,x:item.x,y:item.y}).action,`sewerBranchItem-${item.id}`);assert.notEqual(fieldMap({...branch,zaSewerBranchItems:[item.id]})[item.y][item.x],'o');}
  for(const state of [s,branch,opened]){const copy=restoreAdventurePosition(storeAdventurePosition(state,42),42);assert.deepEqual([copy.district,copy.x,copy.y,copy.teamIds],[state.district,state.x,state.y,['kept']]);assert.equal(!!copy.zaSewerIceBranch,!!state.zaSewerIceBranch);}
  const stale=restoreAdventurePosition(storeAdventurePosition(opened,42),43);assert.equal(stale.district,null);assert.equal(stale.zaSewerIceBranch,undefined);assert.equal(stale.zaSewerIceBridge,true);assert.deepEqual(stale.teamIds,['kept']);
  const back=stepField({...opened,x:21,y:8},'right');assert.deepEqual([back.district,back.x,back.y,back.zaSewerIceBranch],['lumiose-sewer',3,10,false]);
