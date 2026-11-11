@@ -38,3 +38,16 @@ test('captures accumulate distinct types and survive reconnect without losing ol
  const types=starterCatalog(system).find(p=>p.id===1).teraTypes;assert.deepEqual(types,['Grass','Water','Fire']);
  const saved=await decodeGameData(await encodeGameData({system}));assert.deepEqual(starterCatalog(saved.system).find(p=>p.id===1).teraTypes,types);
 });
+
+test('cloud Shedinja receives its own stable type when created by evolution',async()=>{
+ const {createAdventureShedinja}=await import('../lib/cloud-adventure/adventure-evolution.mjs');
+ const parent={...makeMon(290,20),boxId:'parent',teraType:'Ground'};
+ const children=Array.from({length:32},(_,i)=>createAdventureShedinja(parent,`shed-test-${i}`));
+ assert.ok(new Set(children.map(child=>child.teraType)).size>1);
+ for(const child of children){
+  assert.ok(TERA_TYPES.includes(child.teraType));
+  assert.equal(child.teraType,stableTeraType({speciesId:292,boxId:child.boxId}));
+  assert.equal(normalizeStoredPokemon(JSON.parse(JSON.stringify(child))).teraType,child.teraType);
+ }
+ assert.equal(parent.teraType,'Ground');
+});
