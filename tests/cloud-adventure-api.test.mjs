@@ -289,6 +289,16 @@ test('Mission 21 scaffold adds a reversible ladder and glide approach',async()=>
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 13 Victreebel appears in Magenta Sector 9 with documented moves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission13-magenta9-qa',displayName:'로즈9테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector9',interior:null,x:11,y:8,facing:'right',zaMagenta9Upper:false,zaRoyaleRank:'F',zaMission10Stage:10,zaMission13Complete:false},state.revision+1));await get();assert.equal(state.world.interaction.action,'battleMission13Victreebel');await call('battleMission13Victreebel');let sim=Battle.fromJSON(rawWorld().combat.snapshot);assert.deepEqual(sim.p2.pokemon[0].moveSlots.map(m=>m.id),['bulletseed','vinewhip']);assert.equal(sim.p2.pokemon[0].level,34);await call('forfeit');assert.notEqual(state.world.zaMission13Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-magenta-sector9',interior:null,x:11,y:8,facing:'right',zaMagenta9Upper:false},state.revision+1));await get();await call('battleMission13Victreebel');const combat=rawWorld().combat;sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.equal(state.world.zaMission13RewardPending,true);await call('claimMission13Stone');assert.equal(state.inventory.victreebelite,1);await get();assert.equal(state.world.map[8][12],',');assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-magenta-sector9',interior:null,x:11,y:8,facing:'right',zaMagenta9Upper:false,zaMission13RewardPending:true},state.revision+1));await get();await call('claimMission13Stone');assert.equal(state.inventory.victreebelite,2);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
