@@ -1640,3 +1640,15 @@ test('Mable gift choices go to storage when the party is full',async()=>{
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-floral',interior:'lumioseDirector',x:11,y:5,teamIds:team,activeId:id,zaSide22Called:true},state.revision+1));await get();await call(action);await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaSide22Choice,speciesId);assert.equal(state.box.filter(m=>m.speciesId===speciesId).length,speciesId===1?7:1);await call(action,{},409);
  }}finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Lysandre Cafe connects the Magenta approach to the hidden lab and preserves legacy saves',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lysandre-cafe-qa',displayName:'카페경로테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector4',interior:null,x:17,y:15,facing:'up',zaMission35Stage:3,zaMission35Started:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission35Griselle');await call('mission35Griselle');assert.equal(state.world.trainer.id,'mission35-griselle');await call('forfeit');assert.equal(state.world.zaMission35Stage,3);
+  seedWorld(storeAdventurePosition({...state.world,area:3,district:'lumiose-magenta-sector4',interior:null,x:17,y:15,facing:'up',zaMission35Stage:4},state.revision+1));await get();assert.equal(state.world.interaction.action,'enterLysandreCafe');await call('enterLysandreCafe');await get();assert.equal(state.world.interior,'lysandreCafe');await walkTo('u');assert.equal(state.world.interaction.action,'mission35LabEnter');await call('mission35LabEnter');await get();assert.equal(state.world.district,'lumiose-lysandre-lab');assert.equal(state.world.zaLysandreCafeRoute,true);
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior],['lumiose-magenta-sector4','lysandreCafe']);
+  seedWorld(storeAdventurePosition({...state.world,zaMission35Stage:5},state.revision+1));await get();await walkTo('b');assert.equal(state.world.interaction.action,'mission35GrishamTalk');await call('mission35GrishamTalk');await get();assert.equal(state.world.zaMission35Stage,6);await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior],['lumiose-magenta-sector4',null]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-lysandre-lab',interior:null,x:11,y:14,zaMission35Stage:4,zaLysandreCafeRoute:false},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-site');
+ }finally{globalThis.__adventureUser=priorUser;}
+});
