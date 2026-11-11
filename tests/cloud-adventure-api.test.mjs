@@ -572,6 +572,17 @@ test('west Magenta courtyard entrance survives reload and returns to the canal',
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Rouge garden old side-fence save restores safely with progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge-fence-qa',displayName:'정원담장테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const x of [5,17]){
+   const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x,y:8,zaJoseeComplete:true},state.revision+1);old.districtPosition.zone3Layout=3;
+   seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone3');assert.notEqual(state.world.map[state.world.y][state.world.x],'|');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Rouge Plaza southeast road reconnects across save and reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge-hibernal-qa',displayName:'광장길테스트'};
  try{

@@ -276,6 +276,16 @@ test('Rouge gardens have blocked fences, reachable gates and safe legacy-positio
  const old=storeAdventurePosition({area:3,district:'lumiose-zone3',x:9,y:5,regionId:6,districtReturnRegion:1,teamIds:['kept'],steps:42},17);delete old.districtPosition.zone3Layout;const loaded=restoreAdventurePosition(structuredClone(old),17);assert.equal(loaded.district,'lumiose-zone3');assert.ok(walkable(map[loaded.y][loaded.x]));assert.deepEqual(loaded.teamIds,['kept']);assert.equal(loaded.steps,42);assert.equal(restoreAdventurePosition(structuredClone(old),18).district,null);
 });
 
+test('Rouge garden outer fence keeps north and south access and recovers old side positions',()=>{
+ const map=lumioseZone3Map(),base={area:3,district:'lumiose-zone3',interior:null,zaJoseeComplete:true,teamIds:['kept'],steps:42};
+ assert.equal(map[8][5],'|');assert.equal(map[8][17],'|');
+ assert.ok(fieldPath(map,{x:11,y:1},{x:11,y:8}).length);assert.ok(fieldPath(map,{x:11,y:15},{x:11,y:8}).length);
+ const sealed=map.map(row=>row.split(''));for(const y of [3,13])for(const x of [10,11,12])sealed[y][x]='#';
+ for(const x of [4,18])assert.equal(fieldPath(sealed.map(row=>row.join('')),{x,y:8},{x:11,y:8}).length,0);
+ for(const x of [5,17]){const old=storeAdventurePosition({...base,x,y:8},155);old.districtPosition.zone3Layout=3;const loaded=restoreAdventurePosition(structuredClone(old),155);assert.equal(loaded.district,base.district);assert.ok(walkable(map[loaded.y][loaded.x]));assert.deepEqual([loaded.teamIds,loaded.steps],[['kept'],42]);assert.equal(restoreAdventurePosition(structuredClone(old),156).district,null);}
+ assert.equal(storeAdventurePosition({...base,x:11,y:8},157).districtPosition.zone3Layout,4);
+});
+
 test('north Rouge Street joins Zone 3 to a provisional boulevard and saves safely',()=>{
  const map=lumioseRougeNorthMap();assert.equal(map[7][16],'H');assert.ok(fieldPath(map,{x:11,y:15},{x:16,y:7}).length);
  const out=stepField({area:3,district:'lumiose-zone3',x:11,y:1},'up');assert.deepEqual([out.district,out.x,out.y],['lumiose-rouge-north',11,15]);const back=stepField({...out,x:11,y:15},'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone3',11,1]);
@@ -305,10 +315,10 @@ test('provisional zone three respects story and older saves, and round-trips its
  const roadMap=lumioseCentricoRouteMap();for(const tile of [',',';','k'])assert.equal(walkable(tile),true);assert.ok(fieldPath(roadMap,{x:1,y:8},{x:21,y:8}).length);assert.ok(fieldPath(roadMap,{x:1,y:8},{x:11,y:6}).length);
  const old=storeAdventurePosition({...center,x:11,y:12},7);delete old.districtPosition.centricoLayout;const restored=restoreAdventurePosition(structuredClone(old),7);assert.equal(restored.district,'lumiose-centrico-route');assert.ok(walkable(lumioseCentricoRouteMap()[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,23);assert.equal(restoreAdventurePosition(structuredClone(old),8).district,null);
  assert.equal(stepField({area:3,district:'lumiose-vert2',x:21,y:8},'right').district,'lumiose-zone2');
- const grass={area:3,district:'lumiose-zone3',x:17,y:8,zaRoyaleRank:'Y',zaJoseeRequired:true};assert.equal(stepField(grass,'left').blocked,true);assert.equal(stepField({...grass,zaJoseeComplete:true},'left').blocked,undefined);assert.equal(stepField({...grass,x:15,y:6},'left').blocked,undefined);
+ const grass={area:3,district:'lumiose-zone3',x:10,y:6,zaRoyaleRank:'Y',zaJoseeRequired:true};assert.equal(stepField(grass,'left').blocked,true);assert.equal(stepField({...grass,zaJoseeComplete:true},'left').blocked,undefined);assert.equal(stepField({...grass,x:15,y:6},'left').blocked,undefined);
  assert.ok(fieldPath(lumioseZone3Map(),{x:21,y:8},findTile(lumioseZone3Map(),'g')).length);
- const saved=storeAdventurePosition({area:3,district:'lumiose-zone3',x:17,y:8,regionId:6,districtReturnRegion:1},10),loaded=restoreAdventurePosition(structuredClone(saved),10);
- assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone3',17,8]);
+ const saved=storeAdventurePosition({area:3,district:'lumiose-zone3',x:18,y:8,regionId:6,districtReturnRegion:1},10),loaded=restoreAdventurePosition(structuredClone(saved),10);
+ assert.deepEqual([loaded.district,loaded.x,loaded.y],['lumiose-zone3',18,8]);
 });
 
 
