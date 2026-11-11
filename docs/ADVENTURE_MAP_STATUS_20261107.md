@@ -472,3 +472,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 11 남서쪽 두 계단
 
 [현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)는 베르 3번지 근처 남서 입구에서 계단 두 구간을 내려 강변으로 가는 동선을 설명한다. 기존 계단 그림과 별도로 두 높이층을 통과하는 왕복 경로를 추가했다. 쿨랑 수로의 정확한 연결점, 계단 폭·방향·착지 좌표는 초안이며 기존 직행 출입은 호환을 위해 유지한다. 두 강변은 구역 내부에서 여전히 분리된다.
+
+### 사이드 미션 72 갈라르 메더 수색
+
+[현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)는 구역 11 남서 강변에서 몬스터볼처럼 위장한 메더를 찾는 동선을, [의뢰 안내](https://www.thonky.com/pokemon-legends-z-a/side-mission-072-find-my-galarian-stunfisk)는 미션 25 시작 이후 개방 및 보상(800원·기력의덩어리·파워웨이트 각 1개)을 설명한다. 베르 6번지 부근 Terri에게 의뢰를 받고 강변에서 메더를 선물로 받는다. Terri와 위장 위치, 선물 레벨 30은 초안이다. 다른 자료에는 개방 시점과 파워웨이트 수량이 다르게 나와 있어 후속 원작 확인이 필요하다. 기력의덩어리와 파워웨이트는 가방에 저장하지만 탐험 모드의 전용 사용 효과는 아직 확인·구현하지 않았다.
