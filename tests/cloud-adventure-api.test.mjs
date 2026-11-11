@@ -180,6 +180,20 @@ test('Mission 19 follows Chandelure after either Klefki capture path',async()=>{
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('Mission 20 clears each ghost by capture or defeat and preserves legacy slots',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission20-ghost-resolution-qa',displayName:'빈집고스트테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],beforeBox=sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-ghost-house',interior:null,x:11,y:14,facing:'up',zaMission20Stage:7,adventureBalls:{masterball:1}},state.revision+1));await get();
+  const win=async()=>{const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();};
+  await walkTo('q');await call('mission20GhostBattle');assert.deepEqual([state.battle.teams[1][0].speciesId,state.battle.teams[1][0].level,state.battle.teams[1][0].moves],[92,40,['Shadow Ball','Icy Wind','Dark Pulse','Haze']]);await call('flee');assert.deepEqual(state.world.zaMission20GhostCaught||[],[]);await call('mission20GhostBattle');await win();assert.deepEqual(state.world.zaMission20GhostCaught,[92]);assert.equal(sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,beforeBox);await call('mission20GhostBattle',{},409);
+  await walkTo('a');await call('mission20GhostBattle');assert.deepEqual([state.battle.teams[1][0].speciesId,state.battle.teams[1][0].level,state.battle.teams[1][0].moves],[94,42,['Shadow Ball','Dark Pulse','Haze','Icy Wind']]);await call('ball',{ball:'masterball'});assert.deepEqual(state.world.zaMission20GhostCaught,[92,93]);
+  await walkTo('b');await call('mission20GhostBattle');assert.deepEqual([state.battle.teams[1][0].speciesId,state.battle.teams[1][0].level],[94,42]);await win();await get();assert.deepEqual(state.world.zaMission20GhostCaught,[92,93,94]);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.equal(sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,beforeBox+1);await walkTo('n');await call('mission20HouseReport');assert.equal(state.world.zaMission20Stage,8);await get();await call('mission20HouseReport',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-ghost-house',interior:null,x:11,y:14,zaMission20Stage:7,zaMission20GhostCaught:[92,93]},state.revision+1));await get();await walkTo('a');await call('mission20GhostBattle',{},409);await walkTo('b');await call('mission20GhostBattle');assert.equal(state.battle.teams[1][0].speciesId,94);await call('flee');assert.deepEqual(state.world.zaMission20GhostCaught,[92,93]);
+  const oldFoe={...makeMon(93,49),boxId:'mission20-ghost-93',adventureMissionId:'mission20-ghost-93'},oldCombat=createCombat([{...rawMon(id),boxId:id}],[oldFoe]);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-ghost-house',interior:null,x:6,y:6,zaMission20Stage:7,zaMission20GhostCaught:[92],adventureBalls:{masterball:1},encounter:oldFoe,trainer:null,combat:oldCombat},state.revision+1));await get();assert.equal(state.battle.teams[1][0].speciesId,93);await call('ball',{ball:'masterball'});assert.deepEqual(state.world.zaMission20GhostCaught,[92,93]);assert.equal(state.box.find(m=>m.boxId===state.world.teamIds.at(-1)).speciesId,93);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
