@@ -283,6 +283,21 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
       if(vertical){ctx.fillRect(px+tile/2-3,py,6,tile);ctx.fillStyle='#9ecb92';ctx.fillRect(px+tile/2-1,py+2,2,tile-4);}
       else{ctx.fillRect(px,py+tile/2-3,tile,6);ctx.fillStyle='#9ecb92';ctx.fillRect(px+2,py+tile/2-1,tile-4,2);}
      }
+     // A monumental arch faces the central garden. Its precise orientation,
+     // dimensions and placement are not established: this is a visual draft.
+     // Reuse existing fence piers and leave the three path cells passable.
+     if(w.district==='lumiose-zone3'&&!w.zaZone3TowerUpper&&y===4&&x>=9&&x<=13){
+      ctx.fillStyle='#777d78';ctx.fillRect(px,py+3,tile,8);
+      ctx.fillStyle='#d4cbbb';ctx.fillRect(px,py+2,tile,6);
+      ctx.fillStyle='#eee5d2';ctx.fillRect(px,py+2,tile,2);
+      ctx.fillStyle='#a59d8c';ctx.fillRect(px,py+8,tile,3);
+      if(x===9||x===13){
+       ctx.fillStyle='#8a8d82';ctx.fillRect(px+tile*.25,py+6,tile*.5,tile-7);
+       ctx.fillStyle='#dcd4c0';ctx.fillRect(px+tile*.30,py+6,tile*.4,tile-10);
+       ctx.fillStyle='#f0e8d5';ctx.fillRect(px+tile*.25,py+8,tile*.5,3);
+       ctx.fillStyle='#a49b89';ctx.fillRect(px+tile*.25,py+tile-5,tile*.5,4);
+      }
+     }
      if(c==='t'&&w.district==='lumiose-zone3'&&w.zaZone3TowerUpper){ctx.fillStyle='#d8b64f';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('TM',px+tile/2,py+20);}
      if(c==='l'&&w.district==='lumiose-zone1'){ctx.fillStyle='#8f6747';ctx.fillRect(px+5,py+3,tile-10,tile-6);}
      if(c==='i'&&w.district==='lumiose-zone3'){

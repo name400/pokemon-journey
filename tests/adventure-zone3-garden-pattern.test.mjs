@@ -17,3 +17,10 @@ test('four ground patterns follow west Budew and east Roselia without changing g
 test('plaza edge labels identify city connections without calling them garden gates',()=>{
  for(const [x,y,label] of [[0,6,'서쪽'],[0,8,'서쪽'],[22,12,'동쪽'],[11,0,'북쪽'],[17,0,'북쪽'],[11,16,'남쪽']])assert.equal(zone3ExitLabel(x,y),label);
 });
+
+test('draft arch uses existing fence piers and leaves the central approach open',()=>{
+ const map=lumioseZone3Map();
+ assert.equal(map[4][9],'|');assert.equal(map[4][13],'|');
+ for(const x of [10,11,12])assert.equal(map[4][x],'.');
+ assert.ok(fieldPath(map,{x:11,y:3},{x:11,y:8}).length);
+});
