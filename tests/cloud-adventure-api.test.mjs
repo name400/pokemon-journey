@@ -230,6 +230,17 @@ test('Mission 13 is reachable from the north road and old encounter remains avai
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 28 links Zone 7 west lift to the rooftop circuit',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission28-west-lift-qa',displayName:'서쪽옥상테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector4-roof',interior:null,x:1,y:6,facing:'left',zaRoyaleRank:'W',zaMission26Stage:0},state.revision+1));await get();await call('move',{direction:'left'},409);assert.equal(state.world.district,'lumiose-magenta-sector4-roof');
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone7',x:4,y:8,facing:'left',zaRoyaleRank:'C',zaMission26Stage:3,zaMission28Complete:false},state.revision+1));await get();await call('zone7WestRoofLift');await get();assert.equal(state.world.district,'lumiose-zone7-west-roof');await walkTo({x:21,y:5});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector4-roof',1,6]);
+  await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-zone7-west-roof');await call('move',{direction:'right'});await walkTo({x:19,y:5});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission26CaseBattle');await call('mission26CaseBattle');await call('forfeit');assert.notEqual(state.world.zaMission28Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-magenta-sector4-roof',interior:null,x:19,y:5,facing:'up'},state.revision+1));await get();await call('mission26CaseBattle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission28RewardPending,true);await get();await call('mission26ClaimStone');assert.equal(state.inventory.altarianite,1);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
