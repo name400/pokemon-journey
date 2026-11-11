@@ -88,3 +88,13 @@ main[data-mode="home"] .login-welcome p { color:#4f7063; }
   main[data-mode="home"] .topbar > div:first-child { min-width:0; flex:1; }
   main[data-mode="home"] .topbar-admin-group { gap:4px; min-width:0; }
 }
+/* The shared collection is the current species archive in the adventure shell. */
+main[data-view="collection"] .section-head{padding:18px 20px;border:2px solid #77958b;border-radius:14px;background:linear-gradient(120deg,#e2eee3,#f8f2df);color:#22484a}
+main[data-view="collection"] .section-head p{color:#506b62}
+main[data-view="collection"] .count{color:#28685c;white-space:nowrap}
+main[data-view="collection"] .dex-card{min-width:0;border:2px solid #9ab3a4;background:linear-gradient(#fdf9ed,#eaf1e5);box-shadow:0 4px 0 #bdd0bd;color:#274b4b}
+main[data-view="collection"] .dex-num{color:#52746b}
+main[data-view="collection"] .dex-card small{color:#4b6b61;overflow-wrap:anywhere}
+main[data-view="collection"] .notice{background:#f9f3e3;border:2px solid #9ab3a4;color:#294b48}
+@media(max-width:520px){main[data-view="collection"] .section-head{padding:12px;gap:8px}main[data-view="collection"] .dex-card{padding:12px}}
+@media(max-width:520px){main[data-mode="adventure"] .topbar{gap:6px;padding-inline:10px}main[data-mode="adventure"] .topbar>div:first-child{min-width:0;flex:1}main[data-mode="adventure"] .topbar .avatar{display:none}main[data-mode="adventure"] .topbar .account-name{max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left:2px}main[data-mode="adventure"] .topbar .signin{white-space:nowrap}}
