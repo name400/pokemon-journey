@@ -85,6 +85,19 @@ test('Rintaro promotion pays on victory and restores one pending legacy reward',
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('Tracie pending potions survive a full bag and can be claimed only once',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tracie-reward-qa',displayName:'교환보상테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],id=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:11,y:8,zaEmmaMet:true,zaTradeQuest:2,zaTradePotionPending:true,zaTradedPikachuId:'old-pikachu',zaTradeHeracrossId:'old-heracross'},state.revision+1));
+  sql.prepare('UPDATE wallets SET potions=? WHERE user_id=?').run(97,globalThis.__adventureUser.userId);
+  await get();await call('claimTradePotions',{},409);await walkTo('v');assert.equal(state.world.interaction.action,'claimTradePotions');
+  const mon=rawMon(id),before=structuredClone(rawWorld());await call('claimTradePotions',{},409);assert.deepEqual(rawWorld(),before);assert.equal(state.wallet.potions,97);
+  sql.prepare('UPDATE wallets SET potions=? WHERE user_id=?').run(96,globalThis.__adventureUser.userId);await get();await call('claimTradePotions');assert.equal(state.wallet.potions,99);assert.equal(state.world.zaTradePotionPending,false);
+  await get();assert.equal(state.wallet.potions,99);assert.equal(state.world.zaTradeQuest,2);assert.equal(state.world.zaTradedPikachuId,'old-pikachu');assert.equal(state.world.zaTradeHeracrossId,'old-heracross');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);await call('claimTradePotions',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 9 south ladder remains usable across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
