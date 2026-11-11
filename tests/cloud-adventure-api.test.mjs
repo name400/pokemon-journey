@@ -2159,3 +2159,15 @@ test('Mission 23 TM089 is reusable for verified species and preserves existing m
   const other='tm-outside-party',rabbit={...makeMon(659,10),boxId:other,moves:['몸통박치기']};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,rabbit.id,JSON.stringify(rabbit),'qa',1);seedWorld({zaResearchRewards:[2]});await get();await call('teachResearchTm',{level:2,boxId:other,slot:0},409);assert.deepEqual(rawMon(other).moves,['몸통박치기']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Hibernal Pokemon Center heals and sells supplies on the Mission 33 route',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'hibernal-center-qa',displayName:'히베르날 센터'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];
+  const mon={...rawMon(id),hp:1,status:'독',pp:{tackle:1}};seedMon(id,mon);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-hibernal-approach',interior:null,x:21,y:8,facing:'right',zaMission31Stage:3},state.revision+1));await get();await call('move',{direction:'right'});await walkTo({x:5,y:4});await call('face',{direction:'up'});await get();assert.equal(state.world.interaction.action,'heal');
+  await call('heal');assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-mission33-alley',5,4]);
+  await walkTo({x:7,y:4});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'shop');const previousCoins=state.wallet.coins,previousPotions=state.wallet.potions;await call('buy',{item:'potion'});assert.ok(state.wallet.coins<previousCoins);assert.equal(state.wallet.potions,previousPotions+1);assert.deepEqual(state.world.teamIds,team);
+  await walkTo({x:1,y:4});await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-hibernal-approach');
+ }finally{globalThis.__adventureUser=previousUser;}
+});
