@@ -21,7 +21,8 @@ export default function BattlePixelFx({ effect, duration, children }) {
     setReady(false);
     if (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const canvas = ref.current;
-    const context = canvas?.getContext('2d');
+    let context;
+    try { context = canvas?.getContext('2d'); } catch { return; }
     if (!context) return;
     const module = effects[effect] || hit;
     const frame = createFrame(128, 128);
@@ -48,5 +49,5 @@ export default function BattlePixelFx({ effect, duration, children }) {
     handle = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(handle);
   }, [effect, duration]);
-  return <><span style={{ display: ready ? 'none' : 'contents' }}>{children}</span><canvas ref={ref} width={128} height={128} className="bs-pixel-fx" style={{ visibility: ready ? 'visible' : 'hidden' }} aria-hidden="true" /></>;
+  return <>{!ready && children}<canvas ref={ref} width={128} height={128} className="bs-pixel-fx" style={{ visibility: ready ? 'visible' : 'hidden' }} aria-hidden="true" /></>;
 }
