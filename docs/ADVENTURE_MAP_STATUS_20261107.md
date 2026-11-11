@@ -475,4 +475,8 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 
 ### 사이드 미션 72 갈라르 메더 수색
 
-[현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)는 구역 11 남서 강변에서 몬스터볼처럼 위장한 메더를 찾는 동선을, [의뢰 안내](https://www.thonky.com/pokemon-legends-z-a/side-mission-072-find-my-galarian-stunfisk)는 미션 25 시작 이후 개방 및 보상(800원·기력의덩어리·파워웨이트 각 1개)을 설명한다. 베르 6번지 부근 Terri에게 의뢰를 받고 강변에서 메더를 선물로 받는다. Terri와 위장 위치, 선물 레벨 30은 초안이다. 다른 자료에는 개방 시점과 파워웨이트 수량이 다르게 나와 있어 후속 원작 확인이 필요하다. 기력의덩어리와 파워웨이트는 가방에 저장하지만 탐험 모드의 전용 사용 효과는 아직 확인·구현하지 않았다.
+[현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)는 구역 11 남서 강변에서 몬스터볼처럼 위장한 메더를 찾는 동선을, [의뢰 안내](https://www.thonky.com/pokemon-legends-z-a/side-mission-072-find-my-galarian-stunfisk)는 미션 25 시작 이후 개방 및 보상(800원·기력의덩어리·파워웨이트 각 1개)을 설명한다. 베르 6번지 부근 Terri에게 의뢰를 받고 강변에서 메더를 선물로 받는다. Terri와 위장 위치, 선물 레벨 30은 초안이다. 다른 자료에는 개방 시점과 파워웨이트 수량이 다르게 나와 있어 후속 원작 확인이 필요하다. 기력의덩어리는 탐험 가방에서 기절한 파티원의 HP를 전부 회복하고 하나를 소비한다. 파워웨이트의 탐험 모드 전용 효과는 아직 확인·구현하지 않았다.
+
+### 기력의덩어리 사용
+
+[도구 설명](https://www.serebii.net/itemdex/maxrevive.shtml)에 따라 기절한 파티원의 HP를 최대로 회복한다. 보유한 `maxrevive` 한 개를 기존 가방 저장에서 소비하며 HP 외의 상태·기술 PP·개체 데이터는 변경하지 않는다. 배틀·포획 및 회복이 제한된 연전 중에는 사용할 수 없다. 파워웨이트 효과는 별도 미구현이다.
