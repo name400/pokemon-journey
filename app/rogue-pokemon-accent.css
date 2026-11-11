@@ -54,3 +54,34 @@
 .rc-shell .rogue-classic-rewards .rcr-service.is-selected { background:#fff0bf; border-color:#b78536; }
 .rc-shell .rogue-classic-rewards .rcr-choice:focus-visible,
 .rc-shell .rogue-classic-rewards .rcr-service:focus-visible { outline-color:#d99431; }
+
+/* Starter, party, egg shop and ranking share the same cartridge palette. */
+.rc-shell:not(.is-battle) .rogue-hud {
+  background:linear-gradient(#28566b,#193d55);
+  border-color:#102b40;
+  color:#fff6df;
+}
+.rc-shell:not(.is-battle) .rc-nav { background:#19374d; border-color:#426978; }
+.rc-shell:not(.is-battle) .rc-nav button.selected {
+  background:#f7d77f; color:#17384b; border-color:#e9b851;
+  box-shadow:inset 0 1px #fff2bd,0 2px #102b40;
+}
+.rc-shell .rogue-starters-screen .rss-header,
+.rc-shell .rogue-starters-screen .rss-launchbar { background:linear-gradient(#2c6570,#193e56); }
+.rc-shell .rogue-starters-screen .rss-party { background:#edf5e3; border-color:#8ab2a3; }
+.rc-shell .rogue-starters-screen .rss-mon:not(.is-locked):not(.is-focused):not(.is-chosen) { background:#fffbed; border-color:#87aaa0; }
+.rc-shell .rogue-starters-screen .rss-mon.is-focused { background:#fff0bc; border-color:#b88431; }
+.rc-shell .rogue-starters-screen .rss-mon.is-chosen { background:#d9f0dd; border-color:#328977; }
+.rc-shell:has(.rc-party-grid) .rc-content { background:#c7e3d8; }
+.rc-shell .rc-party-grid .rc-mon { background:#fff9e8; border-color:#76a495; box-shadow:0 2px #98bdae; }
+.rc-shell .rc-party-grid .rc-mon .rogue-button:not(:disabled) { background:#245c65; border-color:#19434d; color:#fff9e4; }
+.rc-shell .rc-party-grid .rc-mon .rogue-button:not(:disabled):hover { background:#327d74; }
+.rc-shell .rc-gacha .rc-machine.selected { background:#fff0c1a8; border-color:#d6a13d; }
+.rc-shell .rc-gacha .rc-gacha-actions { border-color:#315e70; background:#f8f3de; }
+.rc-shell .rc-gacha .rc-gacha-eggs { background:#f1f6e6; border-color:#82aa9d; }
+.rc-shell .rogue-ranking { background:repeating-linear-gradient(135deg,#c2dfd5 0 18px,#d5ebe0 18px 36px); }
+.rc-shell .rogue-ranking .rr-heading { background:#fff5d9; border-color:#285064; }
+.rc-shell .rogue-ranking .rr-personal { background:linear-gradient(145deg,#fff1c5,#ebf3dc); }
+.rc-shell .rogue-ranking .rr-list li.is-self { background:#d9eee0; box-shadow:inset 3px 0 #318877; }
+.rc-shell .rogue-ranking .rr-heading > div { min-width:0; }
+.rc-shell .rogue-ranking .rr-heading button { flex:none; white-space:nowrap; }
