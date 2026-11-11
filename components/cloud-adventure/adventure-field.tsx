@@ -19,6 +19,7 @@ import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer,ZONE6_MARKET_STALLS} from '@/lib/cloud-adventure/adventure-zone6.mjs';
 import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
+import {zone3GardenPattern,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-zone3-garden.mjs';
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 
@@ -263,12 +264,15 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
       }
       // Grass on top of each path signals that the underlying encounter rule still applies.
       if(gardenGrassPath||cemeteryGrassPath){ctx.fillStyle='#4c814b';for(const [dx,dy] of [[.43,.45],[.54,.56],[.60,.42]])ctx.fillRect(px+tile*dx,py+tile*dy,2,3);}
-      // The original plaza has four plots: Budew motifs to the west and
-      // Roselia motifs to the east. Their 2D scale and positions are draft.
-      if(w.district==='lumiose-zone3'&&(x===8||x===14)&&(y===6||y===10)){
-       ctx.fillStyle='#568154';ctx.fillRect(px+tile/2-2,py+tile/2,4,9);ctx.fillRect(px+tile/2-7,py+tile/2+3,14,3);
-       if(x===8){ctx.fillStyle='#e8e2a2';ctx.fillRect(px+tile/2-4,py+6,8,8);ctx.fillStyle='#75a463';ctx.fillRect(px+tile/2-2,py+4,4,4);}
-       else{ctx.fillStyle='#d98b9d';ctx.fillRect(px+tile/2-7,py+7,6,6);ctx.fillStyle='#8aa6ce';ctx.fillRect(px+tile/2+1,py+7,6,6);}
+      // Ground mosaics, sampled only inside existing encounter grass tiles;
+      // their source-inspired shapes and exact positions remain provisional.
+      if(w.district==='lumiose-zone3'&&!gardenGrassPath&&((x>=7&&x<=9)||(x>=13&&x<=15))&&((y>=5&&y<=7)||(y>=9&&y<=11))){
+       const colors:Record<string,string>={bud:'#c2d38e',leaf:'#6f9c6d','rose-red':'#d9a5a0','rose-blue':'#a1b8d0'};
+       const cell=tile/8;
+       for(let iy=0;iy<8;iy++)for(let ix=0;ix<8;ix++){
+        const part=zone3GardenPattern(x+(ix+.5)/8,y+(iy+.5)/8);
+        if(part){ctx.fillStyle=colors[part];ctx.fillRect(px+ix*cell,py+iy*cell,Math.ceil(cell),Math.ceil(cell));}
+       }
       }
       if(w.district==='lumiose-zone3'&&(x+y)%3===0){ctx.fillStyle='#f4ddd0';ctx.fillRect(px+7,py+9,3,3);ctx.fillRect(px+22,py+19,3,3);}
      }
@@ -325,7 +329,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='Y'||c==='Z'){ctx.fillStyle='#8d684d';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('안내',px+tile/2,py+20);}
      if(c==='E'||c==='W'){ctx.fillStyle='#537b85';ctx.font='bold 23px sans-serif';ctx.textAlign='center';ctx.fillText(w.district==='lumiose-zone2'?(c==='E'?'↓':'↑'):(c==='E'?'›':'‹'),px+tile/2,py+25);}
      if(w.district==='lumiose-rooftop'&&w.zaMission15Stage>=2&&w.zaRooftopCrystalCleared&&x===8&&y===10){ctx.fillStyle='#447e9a';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공 ↑',px+tile/2,py+20);}if(w.district==='lumiose-rooftop'&&w.zaMission15Stage>=2&&w.zaRooftopCrystalCleared&&x===6&&y===8){ctx.fillStyle='#447e9a';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공 ↓',px+tile/2,py+20);}
-     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(w.district==='lumiose-north-boulevard'&&x===18&&y===0?'구역6':w.district==='lumiose-vert2'&&x===17?(y===0?'구역6':'구역11'):w.district==='lumiose-centrico-route'&&x===18&&y===16?'구역5':w.district==='lumiose-royale'?'광장':w.district==='lumiose-bureau'?'출구':w.district==='lumiose-rooftop'?'광장':w.district==='lumiose-zone3'?(y===0?'북쪽':'남쪽'):w.district==='lumiose-rouge-north'?'광장':w.district==='lumiose-vernal'?'연구소':'항구',px+tile/2,py+20);}
+     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(w.district==='lumiose-north-boulevard'&&x===18&&y===0?'구역6':w.district==='lumiose-vert2'&&x===17?(y===0?'구역6':'구역11'):w.district==='lumiose-centrico-route'&&x===18&&y===16?'구역5':w.district==='lumiose-royale'?'광장':w.district==='lumiose-bureau'?'출구':w.district==='lumiose-rooftop'?'광장':w.district==='lumiose-zone3'?zone3ExitLabel(x,y):w.district==='lumiose-rouge-north'?'광장':w.district==='lumiose-vernal'?'연구소':'항구',px+tile/2,py+20);}
      return;
     }
     if(c==='.'||'EW HMGNLCPQSI'.includes(c)){ctx.fillStyle=palette[2];ctx.fillRect(px,py,tile,tile);sprite('path',px,py);}
