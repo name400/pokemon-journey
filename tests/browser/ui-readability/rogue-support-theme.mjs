@@ -10,6 +10,11 @@ try{
   await page.route('**/api/rogue-ranking',r=>r.fulfill({status:200,json:{leaders:[{nickname:'탐험가',best_wave:200},{nickname:'화면 격리 검증',best_wave:78,is_self:1}],own:{bestWave:78,rank:2,needsNickname:false}}}));
   const fit=async label=>assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${label} overflow ${width}`);
   await page.request.post(base+'/api/test-reset?scenario=rewards');await page.goto(base+'/?mode=rogue&tab=rogue');
+  await page.locator('.rc-slots-rule b').waitFor();await fit('slots');
+  const rule=page.locator('.rc-slots-rule b');assert.equal(await rule.textContent(),'스타터 편성');
+  await page.locator('.rc-slot.selected').getByRole('button',{name:'새 도전 시작'}).click();
+  await page.getByText('현재 도전은 기록에 보관됩니다.',{exact:false}).waitFor();
+  await page.request.post(base+'/api/test-reset?scenario=rewards');await page.goto(base+'/?mode=rogue&tab=rogue');
   await page.getByRole('button',{name:'새 도전 시작'}).last().click();await page.locator('.rogue-starters-screen').waitFor();await fit('starter');
   await page.locator('.rss-mon:not(.is-locked)').first().click();
   const detail=page.getByRole('button',{name:'선택 포켓몬 설정'});if(await detail.isVisible()&&await detail.getAttribute('aria-pressed')!=='true')await detail.click();

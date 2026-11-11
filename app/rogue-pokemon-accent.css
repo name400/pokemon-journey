@@ -204,3 +204,22 @@
 .rc-shell .rogue-ranking .rr-list li:nth-child(-n+3) .rr-place{background:#ffdf62;border-color:#b18e19;color:#17265b}
 .rc-shell .rogue-ranking .rr-list li.is-self{background:#fff4bc;box-shadow:inset 3px 0 #3b4cca}
 .rc-shell .rogue-ranking .rr-list li.is-self strong small{color:#263a85}
+
+/* Adventure select uses a trainer-card frame and retains the existing slot layout. */
+.rc-shell:has(.rc-slots) .rc-content{background:#e9eefb}
+.rc-shell .rc-slots-heading{background:#3b4cca;border:2px solid #17265b;border-bottom:3px solid #ffcb05;border-radius:10px;color:#fff;box-shadow:none}
+.rc-shell .rc-slots-heading :is(.rogue-eyebrow,h2,p){color:#fff}
+.rc-shell .rc-slots-rule{background:#f8f9fa;border:2px solid #17265b;border-radius:9px;color:#17265b}
+.rc-shell .rc-slots-rule :is(b,small){color:#17265b}
+.rc-shell .rc-rule-icon{background:#ffcb05;color:#17265b;border:2px solid #17265b}
+.rc-shell .rc-slot{background:#f8f9fa;border:2px solid #8799d8;border-radius:12px;color:#17265b;box-shadow:inset 0 2px #fff,0 3px #cad3ec}
+.rc-shell .rc-slot.selected{background:#fffbe2;border-color:#3b4cca;box-shadow:inset 0 0 0 2px #ffcb05,0 3px #cad3ec}
+.rc-shell .rc-slot header,.rc-shell .rc-slot-actions{border-color:#c6cee5}
+.rc-shell .rc-slot :is(.rc-slot-title b,.rc-empty-party b,.rc-empty-party small,.rc-slot-party,p){color:#263a72}
+.rc-shell .rc-slot-number{background:#3b4cca;border-color:#17265b;border-radius:8px;color:#fff!important}
+.rc-shell .rc-slot-status{background:#e9eefb;color:#263a85!important}
+.rc-shell .rc-slot-actions .rogue-button:not(:disabled){background:#f8f9fa;border-color:#3b4cca;border-radius:8px;color:#263a85;box-shadow:0 2px #b7c4e5}
+.rc-shell .rc-slot-actions .rogue-button-primary:not(:disabled){background:#ffcb05;border-color:#17265b;color:#17265b;box-shadow:0 2px #a5820d}
+.rc-shell .rc-slot-actions .rogue-button:not(:disabled):hover{background:#fff0a2}
+.rc-shell .rc-slot .rc-warning{color:#80391a!important}
+.rc-shell .rc-error{background:#fff2ee;border-left:5px solid #b3261e;color:#6e1b16;overflow-wrap:anywhere}
