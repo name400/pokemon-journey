@@ -164,6 +164,17 @@ test('Mission 40 northern shore investigation reveals Xerneas and preserves old 
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 42 L battle uses the documented team and survives loss without progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-l-roster-qa',displayName:'L배틀테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:'hotel',x:11,y:6,facing:'up',zaMission40Complete:true,zaMission41Complete:true},state.revision+1));await get();await call('mission42L');
+  assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level]),[[668,78],[671,78],[302,78],[715,79],[569,79],[130,80]]);
+  assert.deepEqual(state.battle.teams[1][5].moves,['Crunch','Waterfall','Ice Fang','Earthquake']);assert.equal(state.battle.teams[1][5].item,'gyaradosite');
+  await get();assert.equal(state.battle.teams[1][5].item,'gyaradosite');await call('forfeit');await get();assert.ok(!state.world.zaMission42Stage);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 9 south ladder remains usable across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
