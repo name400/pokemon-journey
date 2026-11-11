@@ -219,6 +219,17 @@ test('Mission 12 scaffold connects the city and preserves battle and saved layer
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 13 is reachable from the north road and old encounter remains available',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission13-road-qa',displayName:'북쪽큰길테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-north-boulevard',interior:null,x:14,y:8,facing:'right',zaRoyaleRank:'F',zaMission10Stage:10,zaMission13Complete:false},state.revision+1));await get();assert.equal(state.world.map[8][15],'d');assert.equal(state.world.interaction.action,'battleMission13Victreebel');await call('battleMission13Victreebel');await call('forfeit');assert.notEqual(state.world.zaMission13Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-north-boulevard',interior:null,x:14,y:8,facing:'right'},state.revision+1));await get();await call('battleMission13Victreebel');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission13RewardPending,true);await get();assert.equal(state.world.map[8][15],'d');await call('claimMission13Stone');assert.equal(state.inventory.victreebelite,1);await get();assert.equal(state.world.map[8][15],',');assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-north-boulevard',interior:null,x:15,y:8,zaMission13RewardPending:true},state.revision+1));await get();assert.deepEqual([state.world.x,state.world.y],[15,8]);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-north-boulevard',interior:null,x:15,y:6,facing:'up',zaMission13RewardPending:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'claimMission13Stone');await call('claimMission13Stone');assert.equal(state.inventory.victreebelite,2);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
