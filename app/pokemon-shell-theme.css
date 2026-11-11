@@ -104,3 +104,69 @@ main[data-view="pvp"] .notice p{color:#506d62}
 main[data-view="pvp"] .arena-tabs [aria-selected="true"]{background:#28675d;color:#fff9e8;border-color:#28675d}
 main[data-view="pvp"] .pvp-select button[aria-pressed="true"]{background:#dcefdc;border-color:#397b67;color:#244d45}
 main[data-view="pvp"] :is(button,input):focus-visible{outline:3px solid #b77b22;outline-offset:2px}
+
+/* Trainer-card frames for the game selector: shaped panels and inset outlines
+   keep the familiar handheld-game language without changing navigation. */
+main[data-mode="home"] .workspace {
+  background: repeating-linear-gradient(135deg,#f1eee0 0 18px,#e9eddf 18px 36px);
+}
+main[data-mode="home"] .topbar {
+  background:#f8f5e8; border-bottom:4px solid #26384b;
+  box-shadow:inset 0 -3px #e0b34a;
+}
+main[data-mode="home"] .mode-selection > .kicker {
+  display:inline-block; padding:4px 11px; border:2px solid #26384b;
+  border-radius:3px; background:#d64d47; color:#fffdf1; letter-spacing:.13em;
+  box-shadow:2px 2px 0 #26384b;
+}
+main[data-mode="home"] .mode-selection > h2 {
+  color:#203247; letter-spacing:-.04em; text-shadow:1px 2px #fff;
+}
+main[data-mode="home"] .mode-cards > button,
+main[data-mode="home"] .mode-cards > button:nth-child(2) {
+  border:4px solid #26384b; border-radius:8px 22px 8px 8px;
+  background:linear-gradient(135deg,#fffdf2 0%,#f8f3de 70%,#e8eedf 100%);
+  color:#24374c; box-shadow:inset 0 0 0 3px #fffdf4,0 5px 0 #8a9689;
+}
+main[data-mode="home"] .mode-cards > button:nth-child(2) {
+  background:linear-gradient(135deg,#fffdf5 0%,#f4efdd 70%,#e2e7f1 100%);
+}
+main[data-mode="home"] .mode-cards > button:hover,
+main[data-mode="home"] .mode-cards > button:nth-child(2):hover {
+  border-color:#b8483d; box-shadow:inset 0 0 0 3px #fffdf4,0 7px 0 #a78b68;
+}
+main[data-mode="home"] .mode-cards > button::before {
+  right:-50px; bottom:-90px; width:190px; height:190px;
+  border:16px solid #c8bfa9; opacity:.2;
+}
+main[data-mode="home"] .mode-cards .mode-icon,
+main[data-mode="home"] .mode-cards > button:nth-child(2) .mode-icon {
+  position:relative; overflow:hidden; border:3px solid #26384b; border-radius:50%;
+  background:linear-gradient(to bottom,#df504b 0 43%,#26384b 43% 57%,#fffdf1 57%);
+  box-shadow:0 0 0 3px #e6c26d;
+}
+main[data-mode="home"] .mode-cards .mode-icon svg { visibility:hidden; }
+main[data-mode="home"] .mode-cards .mode-icon::after {
+  content:''; position:absolute; inset:50% auto auto 50%; width:13px; height:13px;
+  border:3px solid #26384b; border-radius:50%; background:#fffdf1; transform:translate(-50%,-50%);
+}
+main[data-mode="home"] .mode-cards small,
+main[data-mode="home"] .mode-cards > button:nth-child(2) small {
+  color:#9b433e; font-family:ui-monospace,monospace; letter-spacing:.12em;
+}
+main[data-mode="home"] .mode-cards h3 { color:#203247; letter-spacing:-.04em; }
+main[data-mode="home"] .mode-cards p,
+main[data-mode="home"] .mode-cards > button:nth-child(2) p { color:#44576a; }
+main[data-mode="home"] .mode-cards b,
+main[data-mode="home"] .mode-cards > button:nth-child(2) b {
+  color:#fffdf0; background:#2f6673; border:2px solid #26384b;
+  border-radius:4px; box-shadow:inset 0 2px #85aeb0,0 3px 0 #26384b;
+}
+main[data-mode="home"] .mode-cards > button:nth-child(2) b { background:#b74b47; box-shadow:inset 0 2px #e9917e,0 3px 0 #26384b; }
+main[data-mode="home"] .sidebar .nav.active { border:2px solid #253547; border-radius:5px 12px 5px 5px; box-shadow:inset 0 0 0 2px #fff3c8,0 3px 0 #0c2637; }
+@media(max-width:600px) {
+  main[data-mode="home"] .mode-cards > button,
+  main[data-mode="home"] .mode-cards > button:nth-child(2) { border-width:3px; padding:20px; }
+  main[data-mode="home"] .mode-cards .mode-icon,
+  main[data-mode="home"] .mode-cards > button:nth-child(2) .mode-icon { width:40px; height:40px; }
+}

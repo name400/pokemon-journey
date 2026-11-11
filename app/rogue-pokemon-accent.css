@@ -85,3 +85,37 @@
 .rc-shell .rogue-ranking .rr-list li.is-self { background:#d9eee0; box-shadow:inset 3px 0 #318877; }
 .rc-shell .rogue-ranking .rr-heading > div { min-width:0; }
 .rc-shell .rogue-ranking .rr-heading button { flex:none; white-space:nowrap; }
+
+/* Starter selection uses an outlined handheld-style frame. These rules leave
+   grid columns, controls and the battle layout untouched. */
+.rc-shell .rogue-starters-screen {
+  border:4px solid #172a3d; box-shadow:inset 0 0 0 3px #fff8dd,0 4px 0 #0e1c2c;
+}
+.rc-shell .rogue-starters-screen .rss-header,
+.rc-shell .rogue-starters-screen .rss-launchbar {
+  border-color:#172a3d; box-shadow:inset 0 -3px #e3b44e;
+}
+.rc-shell .rogue-starters-screen .rss-slots > * {
+  border-radius:4px; box-shadow:inset 0 0 0 2px #f9f5dc;
+}
+.rc-shell .rogue-starters-screen .rss-mon {
+  border-width:2px; border-radius:4px 9px 4px 4px;
+  box-shadow:inset 0 0 0 2px #fffdf1,0 2px 0 #718c80;
+}
+.rc-shell .rogue-starters-screen .rss-mon.is-focused {
+  border-color:#945c26; box-shadow:inset 0 0 0 3px #f6ce65,0 2px 0 #694b2c;
+}
+.rc-shell .rogue-starters-screen .rss-generations > button {
+  border:2px solid #879989; border-radius:3px;
+}
+.rc-shell .rogue-starters-screen .rss-generations > button.is-active {
+  border-color:#203849; box-shadow:inset 0 0 0 1px #8bb0a0,0 2px #203849;
+}
+.rc-shell .rogue-starters-screen .rss-button:not(:disabled) {
+  border-width:2px; box-shadow:inset 0 0 0 1px #ffffff69,0 3px 0 #173344;
+}
+/* Keep the catalog usable on shorter desktop windows; the page can scroll
+   instead of squeezing the actual Pokémon grid beneath fixed controls. */
+@media (min-width:992px) {
+  .rc-shell .rogue-starters-screen { height:max(820px,calc(100dvh - 132px)); }
+}
