@@ -1,0 +1,5 @@
+# Side Mission 22: A Call from Mable
+
+Sources: [Serebii](https://www.serebii.net/legendsz-a/sidemissions/acallfrommable.shtml) documents the Mission 8 promotion decision, 30 Pokédex registrations, a Pokémon Center visit, three level-5 gift choices and their moves; [Thonky](https://www.thonky.com/pokemon-legends-z-a/side-mission-022-a-call-from-mable) documents the 3F office and 1,000 money, three Exp. Candy XS and two S rewards. [Serebii's item entry](https://www.serebii.net/itemdex/exp.candyxs.shtml) confirms XS grants 100 XP.
+
+The existing campaign compresses promotion stages: reaching rank V or beyond is the current approximation for the Mission 8 unlock. A center heal with 30 unique registered base Lumiose Pokédex species records Mable's call. The 3F office offers one choice and pays the item and money rewards in the same transaction; a full party sends the Pokémon to storage. Full item stacks block completion until space is available. The call is delivered as a game log rather than a voiced phone scene, and the office's original placement remains a draft.

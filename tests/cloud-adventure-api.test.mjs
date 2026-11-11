@@ -14,6 +14,7 @@ import {Battle} from '@pkmn/sim';
 import {expToNext} from '../lib/growth.mjs';
 import {fieldPath,findTile,storeAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
+import lumioseDex from '../data/lumiose-dex.json' with {type:'json'};
 
 const root=fileURLToPath(new URL('../',import.meta.url)),sql=new DatabaseSync(':memory:');
 for(const name of (await fs.readdir(new URL('../drizzle/',import.meta.url))).filter(n=>/^\d.*\.sql$/.test(n)).sort())sql.exec(await fs.readFile(new URL('../drizzle/'+name,import.meta.url),'utf8'));
@@ -1613,4 +1614,29 @@ test('Research lab lift and third-floor office preserve mission and legacy lobby
   await walkTo('R');seedWorld(storeAdventurePosition({...state.world,zaMission35Stage:1},state.revision+1));await get();await call('mission35Mable');assert.equal(state.world.zaMission35Stage,2);
   await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.equal(state.world.interior,null);assert.equal(state.world.district,'lumiose-floral');
  }finally{globalThis.__adventureUser=priorUser;}
+});
+
+test('Mable call grants one chosen Kanto starter and candy after center and dex requirements',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side22-qa',displayName:'관동선물테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],coins=state.wallet.coins;
+  const atCenter=(dex,rank='V')=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:5,facing:'up',zaRoyaleRank:rank,adventureDexSpecies:lumioseDex.nationalSpeciesIds.slice(0,dex)},state.revision+1);
+  seedWorld(atCenter(29));await get();await call('heal');assert.notEqual(state.world.zaSide22Called,true);
+  seedWorld(atCenter(30,'W'));await get();await call('heal');assert.notEqual(state.world.zaSide22Called,true);
+  seedWorld(atCenter(30));await get();await call('heal');assert.equal(state.world.zaSide22Called,true);await get();assert.equal(state.world.zaSide22Called,true);
+  seedWorld(storeAdventurePosition({...state.world,interior:'lumioseDirector',district:'lumiose-floral',x:11,y:5},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='side22Charmander'));
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-xs']),globalThis.__adventureUser.userId,'za-exp-candy-xs',997);
+  await call('side22Charmander',{},409);assert.notEqual(rawWorld().zaSide22Complete,true);
+  sql.prepare('UPDATE inventory SET quantity=0 WHERE user_id=? AND item=?').run(globalThis.__adventureUser.userId,'za-exp-candy-xs');await get();await call('side22Charmander');await get();assert.equal(state.world.zaSide22Choice,4);assert.equal(state.world.zaSide22Complete,true);assert.equal(state.wallet.coins,coins+1000);assert.equal(state.inventory['za-exp-candy-xs'],3);assert.equal(state.inventory['za-exp-candy-s'],2);assert.equal(state.world.teamIds.length,team.length+1);assert.equal(state.box.find(m=>m.boxId===state.world.teamIds.at(-1)).speciesId,4);await call('side22Squirtle',{},409);
+  const before=rawMon(team[0]);await call('useAdventureExpCandyXS');assert.equal(state.inventory['za-exp-candy-xs'],2);assert.ok(rawMon(team[0]).experience>before.experience||rawMon(team[0]).level>before.level);await get();assert.equal(state.world.zaSide22Complete,true);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
+
+test('Mable gift choices go to storage when the party is full',async()=>{
+ const priorUser=globalThis.__adventureUser;
+ try{for(const [action,speciesId] of [['side22Bulbasaur',1],['side22Squirtle',7]]){
+  globalThis.__adventureUser={userId:`side22-full-${speciesId}`,displayName:'선물보관테스트'};await get();await call('start',{species:1});const id=state.world.activeId,team=[id],mon=rawMon(id);
+  for(let n=0;n<5;n++){const boxId=`side22-full-${speciesId}-${n}`;team.push(boxId);sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(boxId,globalThis.__adventureUser.userId,mon.id,JSON.stringify(mon),'qa',n);}
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-floral',interior:'lumioseDirector',x:11,y:5,teamIds:team,activeId:id,zaSide22Called:true},state.revision+1));await get();await call(action);await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaSide22Choice,speciesId);assert.equal(state.box.filter(m=>m.speciesId===speciesId).length,speciesId===1?7:1);await call(action,{},409);
+ }}finally{globalThis.__adventureUser=priorUser;}
 });
