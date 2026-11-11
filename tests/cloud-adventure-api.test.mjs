@@ -1652,3 +1652,17 @@ test('Lysandre Cafe connects the Magenta approach to the hidden lab and preserve
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-lysandre-lab',interior:null,x:11,y:14,zaMission35Stage:4,zaLysandreCafeRoute:false},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-site');
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Magenta Sector 2 links the plaza and avenues to the original cafe route',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta-sector2-qa',displayName:'마젠타2길테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector4',interior:null,x:21,y:11,facing:'right',zaMission35Started:true,zaMission35Stage:4,zaRoyaleRank:'W'},state.revision+1));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-magenta-sector2');
+  await walkTo({x:1,y:8});await call('move',{direction:'left'},409);assert.equal(state.world.district,'lumiose-magenta-sector2');
+  await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-autumnal-approach');await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-magenta-sector2');
+  seedWorld(storeAdventurePosition({...state.world,zaRoyaleRank:'F',x:1,y:8,facing:'left'},state.revision+1));await get();await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-zone7');await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-magenta-sector2');
+  seedWorld(storeAdventurePosition({...state.world,x:17,y:7,facing:'up',zaMission35Stage:3},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission35Griselle');await call('mission35Griselle');assert.equal(state.world.trainer.id,'mission35-griselle');await call('forfeit');
+  seedWorld(storeAdventurePosition({...state.world,area:3,district:'lumiose-magenta-sector2',interior:null,x:17,y:7,facing:'up',zaMission35Stage:4},state.revision+1));await get();assert.equal(state.world.interaction.action,'enterLysandreCafe');await call('enterLysandreCafe');await get();assert.equal(state.world.interior,'lysandreCafe');await walkTo('u');await call('mission35LabEnter');await get();assert.equal(state.world.zaLysandreCafeDistrict,'lumiose-magenta-sector2');await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior],['lumiose-magenta-sector2','lysandreCafe']);await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector2',17,7]);
+  await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-magenta-sector4');assert.equal(state.world.zaMission35Stage,4);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
