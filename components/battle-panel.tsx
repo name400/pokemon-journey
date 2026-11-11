@@ -1,4 +1,5 @@
 'use client';
+import BattlePixelFx from './battle-pixel-fx';
 
 import {useEffect,useRef,useState,useSyncExternalStore} from 'react';
 import RogueIvScanner from './rogue-iv-scanner';
@@ -266,10 +267,10 @@ export default function BattlePanel({presentationPaused=false,introDialoguePendi
       {!multiple&&(own.hp>0||playing&&!own.fainted)&&<div className="bs-hud bs-hud-own"><div className="bs-name"><b>{classicLayout?classicDisplayPokemonName(own):own.name}</b>{classicLayout&&<PokemonTypeBadge mon={own}/>}<span>Lv.{own.level}</span></div><HP p={own}/>{classicLayout&&<ExperienceBar mon={own}/>}{classicLayout&&<StatStages mon={own}/>}{own.status&&<span className="bs-status">{statusLabel(own.status)}</span>}<PartyBalls party={teams[side]||[]}/></div>}
       {(battle.weather||battle.terrain)&&<div className="bs-field">{battle.weather&&<span>{fields[battle.weather]||battle.weather}</span>}{battle.terrain&&<span>{fields[battle.terrain]||battle.terrain}</span>}</div>}
       {event&&<div className="bs-fx-layer" key={playback.eventKey} data-kind={event.kind} data-actor={actorLocation?.side===side?'own':'foe'} data-target={targetLocation?.side===side?'own':'foe'} data-actor-known={!!actorLocation} data-target-known={!!targetLocation} data-type={event.type||'normal'} data-category={event.category||'physical'} style={fxStyle} aria-hidden="true">
-        {event.kind==='move'&&event.category!=='status'&&<div className="bs-projectile"><TypeFX event={event}/></div>}
+        {event.kind==='move'&&event.category!=='status'&&<div className="bs-projectile">{event.type==='fire'?<BattlePixelFx effect="fire" duration={playback.durationMs||440}><TypeFX event={event}/></BattlePixelFx>:<TypeFX event={event}/>}</div>}
         {event.kind==='move'&&event.category==='status'&&<div className="bs-status-aura"/>}
         {event.kind==='status'&&event.status&&conditionVisual[event.status]&&<div className="bs-condition-burst" data-condition={conditionVisual[event.status]}><i/><i/><i/><span>{conditionVisual[event.status]==='sleep'?'Z':conditionVisual[event.status]==='paralysis'?'ϟ':conditionVisual[event.status]==='freeze'?'❄':'✦'}</span></div>}
-        {event.kind==='damage'&&event.hit&&<><div className="bs-impact"><TypeFX event={{...event,category:'physical'}}/></div><div className="bs-hit-wash"/></>}
+        {event.kind==='damage'&&event.hit&&<><div className="bs-impact"><BattlePixelFx effect={event.type==='electric'?'electric':'hit'} duration={playback.durationMs||360}><TypeFX event={{...event,category:'physical'}}/></BattlePixelFx></div><div className="bs-hit-wash"/></>}
         {(event.kind==='heal'||event.kind==='status'&&event.status===null)&&<div className="bs-heal-burst"><i>+</i><i>+</i><i>+</i><span>✦</span></div>}
         {eventNumber&&<strong className={`bs-float ${event.kind==='heal'?'heal':''}`}>{eventNumber}</strong>}
         {['critical','immune','miss','effect','status','form'].includes(event.kind||'')&&<strong className={`bs-effect-text ${event.kind==='critical'?'critical':''}`}>{event.text}</strong>}
