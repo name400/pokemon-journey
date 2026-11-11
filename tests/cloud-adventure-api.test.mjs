@@ -1555,3 +1555,17 @@ test('Justice Dojo connects Jaune Sector 2 with missions and hyper training',asy
   seedMon(id,strong);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:11,y:13,facing:'up',zaMission19Stage:16,zaMission37Complete:true},state.revision+1));await get();await walkTo('h');assert.equal(state.world.interaction.hyperTraining,true);await call('hyperTrainAdventure',{item:'bottlecap',stat:'atk'});assert.equal(rawMon(id).ivs.atk,0);assert.equal(rawMon(id).adventureHyperTrained.atk,true);await get();assert.equal(state.world.interior,'justiceDojo');await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-jaune-sector2',null,5,10]);assert.equal(rawMon(id).adventureHyperTrained.atk,true);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Rust Syndicate office separates courtyard and preserves story progress',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rust-office-qa',displayName:'사무소테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const outside=()=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rust',interior:null,x:11,y:7,facing:'up'},state.revision+1);
+  seedWorld({...outside(),zaMission20Stage:1});await get();await call('enterRustOffice',{},409);
+  seedWorld({...outside(),zaMission20Stage:3});await get();assert.equal(state.world.interaction.action,'mission20Deal');assert.ok(state.world.interaction.actions.some(a=>a.action==='enterRustOffice'));await call('enterRustOffice');await get();assert.equal(state.world.interior,'rustOffice');await walkTo('d');assert.equal(state.world.interaction.action,'mission20Deal');await call('mission20Deal');await get();assert.equal(state.world.zaMission20Stage,4);assert.equal(state.world.interior,'rustOffice');
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-rust',null,11,7]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...state.world,interior:'rustOffice',x:11,y:7,facing:'up',zaMission20Stage:14},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission20Finish');await call('mission20Finish');assert.equal(state.world.zaMission20Complete,true);assert.equal(state.world.zaMission24Started,true);
+  seedWorld(storeAdventurePosition({...state.world,zaRoyaleRank:'D',zaRoyaleDPoints:38000},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission24Corbeau');await call('mission24Corbeau');assert.ok(state.battle);await call('forfeit');assert.notEqual(state.world.zaMission24Won,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rust',interior:'rustOffice',x:11,y:7,facing:'up',zaMission20Stage:15,zaMission20Complete:true,zaRoyaleRank:'C',zaMission24Won:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission24Reward');await call('mission24Reward');assert.equal(state.world.zaMission24Complete,true);assert.equal(state.inventory['za-tm100'],1);await get();assert.equal(state.world.interior,'rustOffice');assert.equal(state.world.zaMission25Started,true);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
