@@ -2222,6 +2222,18 @@ test('Zone 18 rooftop bird encounter uses server time and survives reload',async
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 20 Magenta canal gate preserves progress and initializes both alphas',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-magenta-canal-qa',displayName:'구역 20 운하'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),id=state.world.activeId,mon=structuredClone(rawMon(id));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-canal-route',interior:null,x:21,y:10,facing:'right',zaMission38Complete:false,zaZone20Items:['south-seed']},state.revision+1));
+  await get();await call('move',{direction:'right'},409);assert.equal(state.world.district,'lumiose-magenta-canal-route');
+  seedWorld(storeAdventurePosition({...rawWorld(),x:21,y:10,facing:'right',zaMission38Complete:true},state.revision+1));await get();await call('move',{direction:'right'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone20',1,9]);assert.ok(ZONE20_ALPHA.some(p=>p.species===state.world.zaZone20AlphaSpecies));assert.ok(ZONE20_ALPHA.some(p=>p.species===state.world.zaZone20AlphaSpecies2));assert.equal(state.world.map[7][13],'d');assert.equal(state.world.map[7][9],'e');
+  assert.deepEqual(state.world.zaZone20Items,['south-seed']);await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-canal-route',21,10]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),{...mon,walkSteps:(mon.walkSteps||0)+2});assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 19 sewer ice branch persists bridge and teaches the reusable Crunch TM',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-sewer-ice-qa',displayName:'하수도 얼음 다리'};
  try{

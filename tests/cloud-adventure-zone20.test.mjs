@@ -33,6 +33,18 @@ test('Zone 20 north and canal-side exits lead to directional plaza gates',()=>{
  assert.equal(stepField({...base,x:11,y:14},'down').district,'lumiose-centrico-route');
 });
 
+test('Zone 20 west gate connects to Magenta canal without replacing legacy exits',()=>{
+ const canal={area:3,district:'lumiose-magenta-canal-route',interior:null,x:21,y:10,teamIds:['kept'],zaZone20Items:['south-seed']};
+ assert.equal(fieldMap(canal)[10][22],'X');assert.ok(fieldPath(fieldMap(canal),{x:1,y:8},{x:21,y:10}).length);assert.equal(stepField(canal,'right').blocked,true);
+ assert.equal(stepField({...canal,zaMission38Complete:true,zaMission42Stage:2},'right').blocked,true);
+ for(const unlocked of [{zaMission38Complete:true},{zaMission42Stage:1},{zaMission42Stage:3},{zaMission42Stage:4}]){
+  const entered=stepField({...canal,...unlocked},'right');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone20',1,9]);
+  const saved=restoreAdventurePosition(storeAdventurePosition({...canal,...unlocked,...entered},170),170);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaZone20Items],['lumiose-zone20',1,9,['kept'],['south-seed']]);
+  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-canal-route',21,10]);
+ }
+ assert.deepEqual([stepField({area:3,district:'lumiose-zone20',x:1,y:8},'left').district,fieldMap(canal)[8][22]],['lumiose-centrico-route','X']);
+});
+
 test('Zone 20 northeastern promenade joins the north and east approaches',()=>{
  const base={area:3,district:'lumiose-zone20',interior:null,zaMission38Complete:true,teamIds:['kept'],zaZone20Items:['south-seed']},map=zone20Map(base);
  for(let x=11;x<=17;x++)assert.equal(map[1][x],',');
