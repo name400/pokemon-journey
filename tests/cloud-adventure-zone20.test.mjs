@@ -45,6 +45,19 @@ test('Zone 20 west gate connects to Magenta canal without replacing legacy exits
  assert.deepEqual([stepField({area:3,district:'lumiose-zone20',x:1,y:8},'left').district,fieldMap(canal)[8][22]],['lumiose-centrico-route','X']);
 });
 
+test('Zone 20 east gate connects a separate Vert-side canal bank and restores both layers',()=>{
+ const zone={area:3,district:'lumiose-zone20',interior:null,x:21,y:9,zaMission38Complete:true,teamIds:['kept'],zaZone20Items:['south-seed']};
+ const intoBank=stepField(zone,'right');assert.deepEqual([intoBank.district,intoBank.x,intoBank.y,intoBank.zaVertSaisonBank],['lumiose-vert-sector1',1,8,true]);
+ const bank={...zone,...intoBank},map=fieldMap(bank);assert.equal(map[3][5],'~');assert.ok(fieldPath(map,bank,{x:21,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(bank,171),171);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaVertSaisonBank,saved.teamIds],['lumiose-vert-sector1',1,8,true,['kept']]);
+ const stale=restoreAdventurePosition(storeAdventurePosition(bank,171),172);assert.equal(stale.district,null);assert.equal(stale.zaVertSaisonBank,undefined);assert.deepEqual(stale.zaZone20Items,['south-seed']);
+ assert.equal(stepField({...saved,zaMission38Complete:false},'left').blocked,true);
+ const zoneBack=stepField(saved,'left');assert.deepEqual([zoneBack.district,zoneBack.x,zoneBack.y,zoneBack.zaVertSaisonBank],['lumiose-zone20',21,9,false]);
+ const street=stepField({...saved,x:21,y:8},'right');assert.deepEqual([street.district,street.x,street.y,street.zaVertSaisonBank],['lumiose-vert-sector1',1,8,false]);
+ const bankBack=stepField({...saved,...street},'left');assert.deepEqual([bankBack.district,bankBack.x,bankBack.y,bankBack.zaVertSaisonBank],['lumiose-vert-sector1',21,8,true]);
+ assert.equal(stepField({...zone,x:21,y:8},'right').district,'lumiose-centrico-route');
+});
+
 test('Zone 20 northeastern promenade joins the north and east approaches',()=>{
  const base={area:3,district:'lumiose-zone20',interior:null,zaMission38Complete:true,teamIds:['kept'],zaZone20Items:['south-seed']},map=zone20Map(base);
  for(let x=11;x<=17;x++)assert.equal(map[1][x],',');

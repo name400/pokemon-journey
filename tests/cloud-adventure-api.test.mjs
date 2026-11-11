@@ -2222,6 +2222,21 @@ test('Zone 18 rooftop bird encounter uses server time and survives reload',async
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 20 Vert canal bank connects both ways and restores its layer',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-vert-canal-qa',displayName:'베르 운하'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),mon=structuredClone(rawMon(id));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector1',interior:null,x:1,y:8,facing:'left',zaMission38Complete:false,zaZone20Items:['south-seed']},state.revision+1));
+  await get();await call('move',{direction:'left'});await get();assert.deepEqual([state.world.zaVertSaisonBank,state.world.x,state.world.y],[true,21,8]);assert.match(state.world.areaInfo.name,/운하변/);
+  await walkTo({x:1,y:8});await call('move',{direction:'left'},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:1,y:8,facing:'left',zaVertSaisonBank:true,zaMission38Complete:true},state.revision+1));await get();
+  await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaVertSaisonBank],['lumiose-zone20',21,9,false]);assert.ok(ZONE20_ALPHA.some(p=>p.species===state.world.zaZone20AlphaSpecies));assert.ok(ZONE20_ALPHA.some(p=>p.species===state.world.zaZone20AlphaSpecies2));
+  await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaVertSaisonBank],['lumiose-vert-sector1',1,8,true]);
+  await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaVertSaisonBank],['lumiose-vert-sector1',1,8,false]);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.deepEqual(rawMon(id).ivs,mon.ivs);assert.deepEqual(rawMon(id).moves,mon.moves);assert.equal(rawMon(id).teraType,mon.teraType);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 20 Magenta canal gate preserves progress and initializes both alphas',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-magenta-canal-qa',displayName:'구역 20 운하'};
  try{
