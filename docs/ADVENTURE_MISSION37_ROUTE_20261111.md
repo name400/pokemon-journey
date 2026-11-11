@@ -1,0 +1,5 @@
+# Mission 37 defense route draft
+
+[Thonky's mission walkthrough](https://www.thonky.com/pokemon-legends-z-a/main-mission-37-operation-protect-lumiose) describes a park, Ivor's bridge and canal route, scaffolding, the subsequent building and the climb to rooftops in sequence. The former defense map put every encounter in one open room. New mission 36 completions now unlock a six-section 2D route in encounter order. Terrain colors and textures distinguish its sections; closed passages open as encounters finish, and the tower confrontation follows the final rooftop battle.
+
+The room dimensions, exact coordinates, walls, passage gates, terrain textures and the return exit are approximations. This is not a reproduction of the original 3D scaffolding, elevation or companions' real-time actions. Existing mission 37 saves retain their former map and coordinates; the new layout is flagged only when the new mission 36 descent is completed. Exiting and returning to the new route starts at its entrance while preserving progress.
