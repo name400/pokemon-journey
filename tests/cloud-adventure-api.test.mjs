@@ -252,6 +252,19 @@ test('Mission 33 Hibernal alley connects to the city and preserves legacy reward
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 32 eastern courtyard lift and glide preserve progress and old rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission32-eastern-roof-qa',displayName:'구역2동쪽옥상'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:21,y:5,facing:'right',zaRoyaleRank:'B',zaMission15Stage:2,zaMission31Stage:3,zaMission32Complete:false},state.revision+1));await get();await call('move',{direction:'right'});assert.equal(state.world.district,'lumiose-mission32-courtyard');await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-zone2');await call('move',{direction:'right'});
+  await walkTo({x:14,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission32Lift');await call('mission32Lift');await get();assert.equal(state.world.zaMission32Layer,'roof');await call('mission32Lift');assert.equal(state.world.zaMission32Layer,'ground');await call('mission32Lift');
+  await walkTo({x:18,y:5});await call('face',{direction:'up'});await call('mission32Ladder');await get();assert.equal(state.world.zaMission32Layer,'high');await call('mission32Ladder');assert.equal(state.world.zaMission32Layer,'roof');await call('mission32Ladder');await walkTo({x:11,y:6});seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:6,zaMission15Stage:1},state.revision+1));await get();await call('rotoGlide',{},409);seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:6,zaMission15Stage:2},state.revision+1));await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaMission32Layer,state.world.zaMission15Stage],[11,6,'high',2]);await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaMission32Layer],[15,6,'high']);await call('rotoGlide');assert.equal(state.world.x,11);await call('rotoGlide');
+  await walkTo({x:18,y:7});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission31CaseBattle');await call('mission31CaseBattle');await call('forfeit');assert.notEqual(state.world.zaMission32Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-mission32-courtyard',zaMission32Layer:'high',interior:null,x:18,y:7,facing:'up'},state.revision+1));await get();await call('mission31CaseBattle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission32RewardPending,true);await get();await call('mission31ClaimStone');assert.equal(state.inventory.dragoninite,1);await get();assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-rooftop',interior:null,x:17,y:8,facing:'up',zaMission32RewardPending:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission31ClaimStone');await call('mission31ClaimStone');assert.equal(state.inventory.dragoninite,2);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
