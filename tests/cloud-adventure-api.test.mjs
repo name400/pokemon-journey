@@ -2567,8 +2567,21 @@ test('direct Lumiose visit preserves existing field position, progress and Poké
 
 test('new adventure can start in Lumiose without changing legacy start',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-direct-start-qa',displayName:'도시시작검증'};
- try{await get();await call('start',{species:1,destination:'lumiose'});assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);await get();assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);assert.equal(state.world.teamIds.length,1);}
+ try{await get();await call('start',{species:152,destination:'lumiose'});assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);await get();assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);assert.equal(state.world.teamIds.length,1);}
  finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Lumiose starters match ZA and existing adventure data is preserved',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ try{
+  for(const species of [152,498,158]){
+   globalThis.__adventureUser={userId:`za-starter-${species}`,displayName:'시작 선택'};await get();await call('start',{species,destination:'lumiose'});const id=state.world.activeId,mon=structuredClone(rawMon(id));assert.equal(mon.speciesId,species);assert.equal(mon.level,5);assert.deepEqual(state.world.teamIds,[id]);
+   await get();assert.deepEqual(rawMon(id),mon);await call('start',{species:152,destination:'lumiose'},409);assert.deepEqual(rawMon(id),mon);await get();assert.deepEqual(state.world.teamIds,[id]);
+  }
+  globalThis.__adventureUser={userId:'za-invalid-starter',displayName:'시작 검증'};await get();await call('start',{species:1,destination:'lumiose'},409);assert.equal(sql.prepare('SELECT COUNT(*) n FROM worlds WHERE user_id=?').get('za-invalid-starter').n,0);assert.equal(sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get('za-invalid-starter').n,0);
+  globalThis.__adventureUser={userId:'classic-starter-compat',displayName:'기존 시작'};await get();await call('start',{species:1,destination:'classic'});const oldId=state.world.activeId,oldMon=structuredClone(rawMon(oldId));await get();assert.deepEqual(rawMon(oldId),oldMon);assert.equal(oldMon.speciesId,1);
+  globalThis.__adventureUser={userId:'classic-za-starter',displayName:'구형 지역 시작'};await get();await call('start',{species:498,destination:'classic'});assert.equal(rawMon(state.world.activeId).speciesId,498);
+ }finally{globalThis.__adventureUser=previousUser;}
 });
 
 test('direct Lumiose travel rejects unsafe or stale states without modifying saves',async()=>{
