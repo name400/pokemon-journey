@@ -381,6 +381,18 @@ test('Mission 34 Philippe uses his documented team and Lida heals after Starmie'
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 22 Cafe No. 2 waterside route preserves both tunnel returns',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission22-cafe2-qa',displayName:'누보카페물가테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector5',interior:null,x:1,y:8,facing:'left',zaRoyaleRank:'D',zaMission20Stage:5,zaMission22Complete:false,zaMission22IceBridge:false},state.revision+1));await get();await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-bleu-cafe2');await call('move',{direction:'right'});assert.equal(state.world.district,'lumiose-bleu-sector5');await call('move',{direction:'left'});await walkTo({x:4,y:13});await call('face',{direction:'up'});assert.equal(state.world.interaction.name,'누보 카페 2호 (위치 초안)');assert.equal(state.world.map[7][11],'~');
+  await walkTo({x:17,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission22TunnelEnter');await call('mission22TunnelEnter');await get();assert.equal(state.world.district,'lumiose-mission22-tunnel');await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-cafe2',17,6]);await call('face',{direction:'up'});await call('mission22TunnelEnter');
+  await walkTo({x:11,y:8});await call('face',{direction:'up'});await call('mission22IceBridge');await get();assert.equal(state.world.zaMission22IceBridge,true);await walkTo({x:17,y:5});await call('face',{direction:'up'});await call('mission20CaseBattle');await call('forfeit');assert.notEqual(state.world.zaMission22Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-mission22-tunnel',interior:null,x:17,y:5,facing:'up',zaMission22IceBridge:true},state.revision+1));await get();await call('mission20CaseBattle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission22RewardPending,true);await call('mission20ClaimStone');assert.equal(state.inventory.barbaracite,1);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-mission22-tunnel',interior:null,x:11,y:14,facing:'down',zaMission22Entry:undefined},state.revision+1));await get();await call('move',{direction:'down'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector5',10,5]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
