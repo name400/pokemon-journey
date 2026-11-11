@@ -14,6 +14,7 @@ test('Galerie scaffolding, ladder and glass dome retain distinct roof areas',()=
 test('new Mission 41 saves inspect the dome while older stage-three saves keep the encounter',()=>{
  const roof={area:3,district:'lumiose-lune-roof',interior:null,x:17,y:2,facing:'left',zaMission41Stage:3,zaMission15Stage:2,teamIds:['kept']};
  const fresh={...roof,zaMission41DomeInvestigated:false};assert.equal(fieldMap(fresh)[2][16],'z');assert.equal(fieldDialogue(fresh).action,'mission41InspectDome');
+ const awaitingReturn={...roof,zaMission41DomeInvestigated:true,zaMission41DomeReturnRequired:true};assert.equal(fieldMap(awaitingReturn)[2][16],'z');assert.match(fieldDialogue(awaitingReturn).text,/돌아간 뒤/);assert.deepEqual(rotoGlideLanding(awaitingReturn),{x:17,y:4,facing:'down'});
  const revealed={...roof,zaMission41DomeInvestigated:true};assert.equal(fieldMap(revealed)[2][16],'0');assert.equal(fieldDialogue(revealed).action,'mission41Yveltal');
  assert.equal(fieldMap(roof)[2][16],'0');assert.equal(fieldDialogue(roof).action,'mission41Yveltal');assert.notEqual(fieldMap({...revealed,zaMission41Complete:true})[2][16],'0');
  const saved=restoreAdventurePosition(storeAdventurePosition(fresh,190),190);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission41DomeInvestigated,saved.teamIds],['lumiose-lune-roof',17,2,false,['kept']]);
