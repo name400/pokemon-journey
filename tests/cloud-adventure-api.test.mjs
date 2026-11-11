@@ -2242,3 +2242,11 @@ test('Zone 2 overlook stairs round-trip and restore without changing party or pr
   await walkTo({x:8,y:10});await walkTo({x:4,y:12});await call('face',{direction:'down'});await call('zone2Overlook');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone2',3,4]);assert.equal(state.world.zaZone2RockCleared,true);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 10 east shallows expose Tynamo and survive reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-tynamo-qa',displayName:'저리어테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:20,y:7,facing:'down',zaRoyaleRank:'F'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone10Wild-tynamo');await call('zone10Wild-tynamo');assert.equal(state.battle.teams[1][0].id,602);await get();assert.equal(state.battle.teams[1][0].id,602);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
