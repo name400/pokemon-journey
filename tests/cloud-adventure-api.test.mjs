@@ -2190,6 +2190,25 @@ test('Nouveau Cafe 2 sells restorative drinks without changing mission progress'
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 5 Emma battle can continue outside the bureau and preserve legacy saves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission5-bureau-outside-qa',displayName:'탐정사무소 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];
+  seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector5',interior:null,x:5,y:7,facing:'up',zaRoyaleRank:'Y',zaJoseeComplete:true,zaEmmaMet:true,zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:2},state.revision+1));
+  await get();await call('battleEmma',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:7,facing:'up',zaSableyeQuest:3},state.revision+1));await get();
+  assert.ok(state.world.interaction.actions.some((option)=>option.action==='battleEmma'));assert.ok(state.world.interaction.actions.some((option)=>option.action==='enterBureau'));
+  await call('battleEmma');assert.equal(state.battle.teams[1][0].speciesId,179);await call('forfeit');await get();assert.notEqual(state.world.zaEmmaBattleComplete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector5',interior:null,x:5,y:7,facing:'up'},state.revision+1));await get();
+  await call('battleEmma');await battle();await get();assert.equal(state.world.zaEmmaBattleComplete,true);assert.ok(state.world.interaction.actions.some((option)=>option.action==='seeEmmaMega'));
+  await call('seeEmmaMega');await get();assert.equal(state.world.zaEmmaMegaSeen,true);assert.deepEqual(state.world.teamIds,team);await call('seeEmmaMega',{},409);
+  // Older saves may still start this fight inside the bureau.
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bureau',interior:null,x:11,y:6,facing:'up',zaEmmaBattleComplete:false,zaEmmaMegaSeen:false},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'battleEmma');await call('battleEmma');assert.equal(state.battle.teams[1][0].speciesId,179);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 18 rooftop bird encounter uses server time and survives reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-roof-bird-qa',displayName:'옥상 조우'};
  try{
