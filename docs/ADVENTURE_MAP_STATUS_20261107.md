@@ -494,3 +494,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 9 남쪽 비계층
 
 [구역 도구 위치 안내](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/)는 남쪽 비계가 옥상 사이에 있다고 설명한다. 기존 옥상 두 곳에 별도 비계 높이층을 왕복 연결하고 기존 옥상 경로와 저장을 유지했다. 연결 지점·사다리 방식·비계 폭과 좌표는 초안이며, 기존 평면 직결이 호환을 위해 남아 있어 원작의 유일한 통로라고 볼 수 없다.
+
+### 구역 20 중앙 타워 유적
+
+[구역 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_20)은 중앙이 무너진 프리즘타워 아래라고 설명하며, [타워 자료](https://bulbapedia.bulbagarden.net/wiki/Prism_Tower)는 파손된 타워가 남아 있다고 설명한다. 기존 중앙 접근로 양옆에 유적 지지 구조를 통행 불가 지형으로 추가하고 네 출입구와 지가르데 지점을 유지했다. 지지대의 형태·수량·좌표와 출입 간격은 확인되지 않은 2D 초안이다. 지지대가 된 기존 풀숲 8칸에서는 더 이상 조우하지 않으며, 해당 구형 저장은 리비전이 일치할 때 인접 통행 칸으로 복구한다.

@@ -2323,3 +2323,12 @@ test('Zone 9 southern scaffold crosses between roofs and preserves encounter pro
   await call('zone9SouthScaffold');await walkTo({x:4,y:7});await call('face',{direction:'left'});await call('zone9SouthScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone9',7,10]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 20 central ruins safely restore a prior position and mission progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-ruins-qa',displayName:'타워유적테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:8,y:4,zaMission38Complete:true,zaMission42Stage:3,zaZone20Items:['south-seed']},state.revision+1);old.districtPosition.zone20Layout=3;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone20');assert.notEqual(state.world.map[state.world.y][state.world.x],'|');assert.equal(state.world.zaMission42Stage,3);assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await get();assert.notEqual(state.world.map[state.world.y][state.world.x],'|');assert.equal(state.world.zaMission42Stage,3);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
