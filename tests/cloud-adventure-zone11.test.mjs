@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone11Map,zone11Unlocked,zone11Encounter,ZONE11_WEST_FORK,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '../lib/cloud-adventure/adventure-zone11.mjs';
-import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 11 northwest ledge preserves the old entrance and its saved position',()=>{
  const road={area:3,district:'lumiose-jaune-sector10',interior:null,x:21,y:9,facing:'right',zaRoyaleRank:'E',teamIds:['kept']};
@@ -77,4 +77,14 @@ test('Zone 11 western water fork retains gates and relocates matching older save
  for(const [x,y] of ZONE11_WEST_FORK){assert.equal(map[y][x],'~');if(x===0)continue;const old=storeAdventurePosition({...base,x,y},126);delete old.districtPosition.zone11Layout;const restored=restoreAdventurePosition(structuredClone(old),126);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'~');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(old),127).district,null);}
  assert.equal(map[4][0],'X');assert.ok(fieldPath(map,{x:1,y:4},{x:21,y:4}).length);assert.equal(fieldPath(map,{x:1,y:4},{x:21,y:12}).length,0);assert.equal(map[6][3],'g');
  assert.equal(storeAdventurePosition({...base,x:3,y:4},128).districtPosition.zone11Layout,1);
+});
+
+test('two southwest stair flights connect Coulant to the south bank without crossing water',()=>{
+ const gate={area:3,district:'lumiose-coulant-route',interior:null,x:9,y:1,zaCoulantLower:false,zaRoyaleRank:'D',teamIds:['kept']};
+ assert.equal(stepField({...gate,zaRoyaleRank:'F'},'up').blocked,true);const top=stepField(gate,'up');assert.deepEqual([top.district,top.x,top.y],['lumiose-zone11-sw-top',11,1]);
+ for(const [district,x,y] of [['lumiose-zone11-sw-top',11,11],['lumiose-zone11-sw-middle',11,5],['lumiose-zone11-sw-middle',11,11]]){
+  const state={...gate,district,x,y},map=fieldMap(state);assert.ok(walkable(map[y][x]));const restored=restoreAdventurePosition(storeAdventurePosition(state,151),151);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[district,x,y,['kept']]);
+ }
+ const middle={...gate,district:'lumiose-zone11-sw-middle',x:11,y:5,facing:'up'};assert.equal(fieldDialogue(middle).action,'zone11SouthwestStairs');assert.ok(fieldPath(fieldMap(middle),middle,{x:11,y:11}).length);
+ const bank={...gate,district:'lumiose-zone11',x:4,y:15};const back=stepField(bank,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone11-sw-middle',11,11]);assert.equal(fieldPath(zone11Map(bank),{x:11,y:10},{x:11,y:6}).length,0);
 });

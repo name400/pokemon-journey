@@ -2270,3 +2270,14 @@ test('Zone 16 raised garden stairs preserve shared encounter and saved progress'
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone16-garden',x:18,y:3,facing:'up',zaZone16Spent:{}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone16Wild-ampharos-alpha');await call('zone16Wild-ampharos-alpha');assert.equal(state.battle.teams[1][0].speciesId,181);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 11 southwest stairs round-trip and preserve encounter progress until leaving',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-sw-stairs-qa',displayName:'강변계단테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-coulant-route',interior:null,x:9,y:1,facing:'up',zaRoyaleRank:'E',zaZone11Spent:{furfrou:true}},state.revision+1));await get();
+  await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-zone11-sw-top');await walkTo({x:11,y:11});await call('face',{direction:'down'});await call('zone11SouthwestStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone11-sw-middle',11,5]);assert.equal(state.world.zaZone11Spent.furfrou,true);
+  await walkTo({x:11,y:11});await call('face',{direction:'down'});await call('zone11SouthwestStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone11',4,15]);assert.equal(state.world.zaZone11Spent.furfrou,true);
+  await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-zone11-sw-middle');assert.equal(state.world.zaZone11Spent.furfrou,true);await walkTo({x:11,y:5});await call('face',{direction:'up'});await call('zone11SouthwestStairs');await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-coulant-route');assert.equal(state.world.zaZone11Spent,undefined);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

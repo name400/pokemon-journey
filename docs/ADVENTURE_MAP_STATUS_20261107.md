@@ -468,3 +468,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 16 높은 정원
 
 [구역 현장 안내](https://allthings.how/every-pokemon-in-wild-zone-16-in-pokemon-legends-z-a-and-how-to-catch-them/)는 전룡 주변의 높은 정원을 설명한다. 별도 높이층과 왕복 계단을 추가하고 기존 광장과 정원의 전룡·보송송이 동일한 조우 완료 기록을 공유한다. 기존 지상 개체는 호환을 위해 남겨 두었다. 계단 연결, 정원 방향·형상과 개체 좌표는 초안이다. 자료의 기술머신 076은 정확한 학습 호환 데이터가 아직 없어 이번에 지급하지 않았다.
+
+### 구역 11 남서쪽 두 계단
+
+[현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)는 베르 3번지 근처 남서 입구에서 계단 두 구간을 내려 강변으로 가는 동선을 설명한다. 기존 계단 그림과 별도로 두 높이층을 통과하는 왕복 경로를 추가했다. 쿨랑 수로의 정확한 연결점, 계단 폭·방향·착지 좌표는 초안이며 기존 직행 출입은 호환을 위해 유지한다. 두 강변은 구역 내부에서 여전히 분리된다.
