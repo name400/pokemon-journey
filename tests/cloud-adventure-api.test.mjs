@@ -2313,3 +2313,13 @@ test('Zone 11 alpha Slowbro and Clawitzer start alpha battles from their banks',
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone11',interior:null,x:16,y:6,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone11Wild-slowbro-alpha');await call('zone11Wild-slowbro-alpha');assert.equal(state.battle.teams[1][0].speciesId,80);assert.equal(state.battle.teams[1][0].adventureAlpha,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,afterVictoryWallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 9 southern scaffold crosses between roofs and preserves encounter progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone9-south-scaffold-qa',displayName:'남쪽비계테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:7,y:10,facing:'down',zaZone9Upper:true,zaRoyaleRank:'F',zaZone9Spent:{'manectric-alpha':true},zaZone9Items:['north-heal']},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone9SouthScaffold');await call('zone9SouthScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone9-scaffold',4,7]);assert.equal(state.world.zaZone9Spent['manectric-alpha'],true);assert.deepEqual(state.world.zaZone9Items,['north-heal']);
+  await walkTo({x:18,y:7});await call('face',{direction:'right'});await call('zone9SouthScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone9Upper],['lumiose-zone9',15,10,true]);assert.equal(state.world.zaZone9Spent['manectric-alpha'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone9SouthScaffold');await walkTo({x:4,y:7});await call('face',{direction:'left'});await call('zone9SouthScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone9',7,10]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

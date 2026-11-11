@@ -490,3 +490,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 전투 노력치 지급 검토
 
 [원작 경험 공유 조사](https://gamefaqs.gamespot.com/switch/452075-pokemon-legends-z-a/answers/659501-how-are-evs-from-defeating-wild-pokeacutemon-granted)는 생존 파티 전체의 노력치 지급을 설명하고 [훈련 안내](https://rotomlabs.net/guide/stat-training-legends-z-a)는 훈련 대상이 직접 격파하도록 권한다. 지급 대상과 세부 조건은 추가 교차검증이 필요하다. 현재 턴제 엔진은 결과 시 살아 있는 파티에 총 경험치를 주며 상대별 지급·중간 격파·포획의 노력치 기록은 없다. 트레이너전과 포획, 기절·교체 및 레벨 100의 원작 조건이 확인되기 전 일반 노력치나 파워웨이트를 임의 지급하지 않는다. 기존 저장은 그대로 유지한다.
+
+### 구역 9 남쪽 비계층
+
+[구역 도구 위치 안내](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/)는 남쪽 비계가 옥상 사이에 있다고 설명한다. 기존 옥상 두 곳에 별도 비계 높이층을 왕복 연결하고 기존 옥상 경로와 저장을 유지했다. 연결 지점·사다리 방식·비계 폭과 좌표는 초안이며, 기존 평면 직결이 호환을 위해 남아 있어 원작의 유일한 통로라고 볼 수 없다.

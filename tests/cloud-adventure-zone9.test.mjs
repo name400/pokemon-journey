@@ -123,3 +123,10 @@ test('Mission 40 Pangoro appears only on the southwest roof while unresolved',()
  assert.ok(fieldPath(map,{x:5,y:6},{x:5,y:9}).length);
  const restored=restoreAdventurePosition(storeAdventurePosition({...base,x:5,y:9},177),177);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone9Upper,restored.teamIds],['lumiose-zone9',5,9,true,['kept']]);
 });
+
+test('south scaffold connects both rooftops on its own saved level',()=>{
+ const roof={area:3,district:'lumiose-zone9',interior:null,zaZone9Upper:true,zaRoyaleRank:'F',teamIds:['kept']},map=fieldMap(roof);
+ for(const x of [7,15]){assert.equal(map[11][x],'o');assert.equal(fieldDialogue({...roof,x,y:10,facing:'down'}).action,'zone9SouthScaffold');assert.ok(walkable(map[11][x]));}
+ const scaffold={...roof,district:'lumiose-zone9-scaffold',x:4,y:7,facing:'left'},platform=fieldMap(scaffold);assert.equal(fieldDialogue(scaffold).action,'zone9SouthScaffold');assert.ok(fieldPath(platform,scaffold,{x:18,y:7}).length);assert.equal(fieldDialogue({...scaffold,x:18,facing:'right'}).action,'zone9SouthScaffold');
+ const restored=restoreAdventurePosition(storeAdventurePosition({...scaffold,zaZone9Spent:{'manectric-alpha':true},zaZone9Items:['north-heal']},140),140);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone9Upper,restored.teamIds],['lumiose-zone9-scaffold',4,7,true,['kept']]);assert.deepEqual(restored.zaZone9Items,['north-heal']);assert.equal(restored.zaZone9Spent['manectric-alpha'],true);
+});
