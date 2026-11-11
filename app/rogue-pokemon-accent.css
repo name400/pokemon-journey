@@ -177,3 +177,30 @@
 .rc-shell .rc-gacha .rc-machine.selected{background:#fff3b3;border:2px solid #3b4cca;box-shadow:inset 0 0 0 2px #ffcb05}
 .rc-shell .rc-gacha .rc-gacha-actions,
 .rc-shell .rc-gacha .rc-gacha-eggs{background:#f8f9fa;border:2px solid #8799d8;border-radius:9px}
+
+/* Party and leaderboard keep their existing controls and status indicators. */
+.rc-shell:has(.rc-party-grid) .rc-content{background:#e9eefb;color:#17265b}
+.rc-shell:has(.rc-party-grid) .rc-heading p{color:#485b7c}
+.rc-shell:has(.rc-party-grid) .rogue-eyebrow{color:#3448bd}
+.rc-shell .rc-party-grid .rc-mon{background:#f8f9fa;border:2px solid #8799d8;border-radius:14px;box-shadow:inset 0 3px #fff,0 3px #cad3ec}
+.rc-shell .rc-party-grid .rc-mon h3{color:#17265b}
+.rc-shell .rc-party-grid .rc-mon h3 small{color:#775400}
+.rc-shell .rc-party-grid .rc-mon p{color:#485b70}
+.rc-shell .rc-party-grid .rc-move-list span{background:#e9eefb;border:1px solid #b5c3e6;border-radius:7px;color:#263a85}
+.rc-shell .rc-party-grid .rc-mon .rogue-button:not(:disabled){background:#3b4cca;border-color:#17265b;color:#fff;border-radius:9px}
+.rc-shell .rc-party-grid .rc-mon .rogue-button:not(:disabled):hover{background:#293a9d}
+.rc-shell:has(.rc-party-grid) .rc-transfer{background:#f8f9fa;border:2px solid #8799d8;border-radius:12px;color:#17265b}
+.rc-shell .rogue-ranking{background:#e9eefb;border:3px solid #1c2b69;border-radius:12px;color:#17265b;box-shadow:inset 0 0 0 2px #fff}
+.rc-shell .rogue-ranking .rr-heading{background:#3b4cca;border:2px solid #17265b;border-bottom:3px solid #ffcb05;border-radius:9px;box-shadow:none;color:#fff}
+.rc-shell .rogue-ranking .rr-heading :is(h2,p,span){color:#fff}
+.rc-shell .rogue-ranking .rr-heading button{background:#f8f9fa;border-color:#17265b;border-radius:8px;color:#263a85}
+.rc-shell .rogue-ranking :is(.rr-personal,.rr-global){background:#f8f9fa;border:2px solid #8799d8;border-radius:10px;box-shadow:inset 0 0 0 2px #fff}
+.rc-shell .rogue-ranking .rr-icon{background:#ffcb05;border-color:#17265b;border-radius:50%;color:#17265b}
+.rc-shell .rogue-ranking :is(.rr-personal small,.rr-personal p,.rr-global-head small,.rr-note,.rr-empty){color:#4b5c78}
+.rc-shell .rogue-ranking :is(.rr-personal b,.rr-list li>b){color:#263a85}
+.rc-shell .rogue-ranking .rr-global-head{border-color:#c6cee5}
+.rc-shell .rogue-ranking .rr-list li{border-color:#d4dcf0;border-radius:7px}
+.rc-shell .rogue-ranking .rr-place{background:#e9eefb;border-color:#a9b7e1;border-radius:8px;color:#263a85}
+.rc-shell .rogue-ranking .rr-list li:nth-child(-n+3) .rr-place{background:#ffdf62;border-color:#b18e19;color:#17265b}
+.rc-shell .rogue-ranking .rr-list li.is-self{background:#fff4bc;box-shadow:inset 3px 0 #3b4cca}
+.rc-shell .rogue-ranking .rr-list li.is-self strong small{color:#263a85}
