@@ -1,0 +1,56 @@
+/* Colour-only pass for classic battles and the reward/shop counter. Layout,
+   hit targets, double-battle placement and battle mechanics stay unchanged. */
+.rc-shell.is-battle .battle-screen .bs-console {
+  background:#1b3b4c;
+  border-color:#dbad54;
+  box-shadow:inset 0 3px #436f77;
+}
+.rc-shell.is-battle .battle-screen .bs-narration,
+.rc-shell.is-battle .battle-screen .bs-classic-commands {
+  background:linear-gradient(135deg,#173547,#1c4050);
+  border-color:#a4bfae;
+  box-shadow:inset 0 0 0 2px #315d67;
+}
+.rc-shell.is-battle .battle-screen .bs-classic-commands button svg {
+  background:#285568;
+  border-color:#81a79d;
+  color:#fff4ce;
+}
+.rc-shell.is-battle .battle-screen .bs-classic-commands button:not(:disabled):hover,
+.rc-shell.is-battle .battle-screen .bs-classic-commands button:focus-visible {
+  background:#f5d882;
+  border-color:#e8b856;
+  color:#18394a;
+}
+.rc-shell.is-battle .battle-screen .bs-scene:not([data-multi=true]) .bs-hud {
+  background:#193a4ced;
+  border-color:#102b3c;
+  box-shadow:inset 0 -2px #527b80,2px 3px #102b3c66;
+}
+.rc-shell.is-battle .battle-screen .bs-footer { border-color:#5c8183; }
+.rc-shell.is-battle .battle-screen .bs-actor-steps { background:#254c5b; border-color:#86aaa2; }
+
+.rc-shell .rogue-classic-rewards {
+  --rcr-paper:#f8f4e6;
+  --rcr-teal:#287e70;
+  --rcr-navy:#193b51;
+  --rcr-ink:#243f4b;
+  --rcr-muted:#536f65;
+}
+.rc-shell .rogue-classic-rewards .rcr-header {
+  background:linear-gradient(120deg,#326d75,#193e57);
+  border-color:#17374c;
+}
+.rc-shell .rogue-classic-rewards .rcr-choice:not(:disabled) {
+  background:#fffbed;
+  box-shadow:inset 0 1px #fff,0 2px #a4bfae;
+}
+.rc-shell .rogue-classic-rewards .rcr-choice.is-selected {
+  background:#fff0bf;
+  box-shadow:inset 0 0 0 2px #f2c75f,0 2px #ad9156;
+}
+.rc-shell .rogue-classic-rewards .rcr-services { background:#edf3e6; border-color:#a3bdab; }
+.rc-shell .rogue-classic-rewards .rcr-service:not(:disabled) { background:#fffaf0; border-color:#bed2bc; }
+.rc-shell .rogue-classic-rewards .rcr-service.is-selected { background:#fff0bf; border-color:#b78536; }
+.rc-shell .rogue-classic-rewards .rcr-choice:focus-visible,
+.rc-shell .rogue-classic-rewards .rcr-service:focus-visible { outline-color:#d99431; }
