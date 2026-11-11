@@ -2222,6 +2222,20 @@ test('Zone 18 rooftop bird encounter uses server time and survives reload',async
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 18 courtyard west exit reaches the outside scaffold and returns after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-west-scaffold-qa',displayName:'비계 경로'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:1,y:12,facing:'left',zaRoyaleRank:'B',zaZone18Upper:false,zaZone18Construction:true},state.revision+1));
+  await get();await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector9',21,12]);assert.notEqual(state.world.zaZone18Construction,true);
+  await walkTo({x:14,y:14});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone18OutsideLadder');await call('zone18OutsideLadder');await get();assert.equal(state.world.zaMagenta9Upper,true);
+  await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.zaZone18Upper],['lumiose-zone18',true]);
+  await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.zaMagenta9Upper],['lumiose-magenta-sector9',true]);
+  await walkTo({x:6,y:9});await call('face',{direction:'down'});await call('zone18OutsideLadder');await get();assert.equal(state.world.zaMagenta9Upper,false);
+  await walkTo({x:21,y:12});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.zaZone18Construction,state.world.x,state.world.y],['lumiose-zone18',true,1,12]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 18 construction alley connects to the shared Lopunny encounter',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-construction-qa',displayName:'공사 골목'};
  try{

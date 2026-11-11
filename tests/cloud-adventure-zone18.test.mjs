@@ -18,6 +18,19 @@ test('Zone 18 rooftop birds follow the server period and preserve old positions'
  assert.equal(zone18Visible({...base,zaZone18Upper:false,zaZone18Period:'day'},'e'),null);
 });
 
+test('Zone 18 courtyard west exit connects to the outside scaffold and preserves saves',()=>{
+ const courtyard={area:3,district:'lumiose-zone18',interior:null,x:1,y:12,zaRoyaleRank:'B',zaZone18Construction:true,zaZone18Upper:false,teamIds:['kept']};
+ assert.equal(zone18Map(courtyard)[12][0],'X');
+ const street=stepField(courtyard,'left');assert.deepEqual([street.district,street.x,street.y],['lumiose-magenta-sector9',21,12]);
+ const outside={...courtyard,...street,zaZone18Construction:false};const map=fieldMap(outside);
+ assert.ok(fieldPath(map,outside,{x:14,y:14}).length);assert.equal(map[13][14],'l');
+ const saved=restoreAdventurePosition(storeAdventurePosition(outside,40),40);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-sector9',21,12,['kept']]);
+ assert.equal(stepField({...saved,zaRoyaleRank:'C'},'right').blocked,true);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y,back.zaZone18Construction],['lumiose-zone18',1,12,true]);
+ const restored=restoreAdventurePosition(storeAdventurePosition({...saved,...back},41),41);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone18Construction],['lumiose-zone18',1,12,true]);
+ assert.ok(fieldPath(fieldMap(restored),restored,{x:16,y:6}).length);
+});
+
 test('Zone 18 north and southeast approaches preserve ground and rooftop saves',()=>{
  const s={area:3,district:'lumiose-zone18',interior:null,zaRoyaleRank:'B',teamIds:['kept']},map=zone18Map(s);
  for(let y=1;y<=4;y++)for(let x=10;x<=12;x++)assert.equal(map[y][x],',');
