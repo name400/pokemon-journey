@@ -1451,6 +1451,20 @@ test('Infinite Royale candy rewards survive a full bag and streak resets on defe
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Infinite Royale random prize survives full ball storage and is claimed once',async()=>{
+ const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'infinite-prize-qa',displayName:'추첨테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaMission39Started:true,zaInfinitePoints:50000,adventureBalls:{masterball:99}},state.revision+1));
+  await get();await call('mission39Zach');globalThis.__adventureRandom=()=>.999;await battle();assert.equal(state.world.zaInfiniteFirstWon,true);assert.equal(state.world.adventureBalls.masterball,99);assert.equal(state.world.zaInfinitePrizePending.masterball,1);
+  await get();await call('mission39ClaimPrize',{item:'masterball'},409);await call('mission39ClaimPrize',{item:'pokeball'},409);
+  seedWorld({adventureBalls:{...rawWorld().adventureBalls,masterball:98}});await get();await call('mission39ClaimPrize',{item:'masterball'});assert.equal(state.world.adventureBalls.masterball,99);assert.equal(state.world.zaInfinitePrizePending.masterball,undefined);await get();await call('mission39ClaimPrize',{item:'masterball'},409);
+  const nugget='bignugget',key=JSON.stringify([globalThis.__adventureUser.userId,nugget]);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,nugget);
+  seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaInfinitePoints:50000},state.revision+1));await get();await call('mission39Griselle');globalThis.__adventureRandom=()=>0;await battle();assert.equal(state.world.zaInfiniteSecondWon,true);assert.equal(state.world.zaInfinitePrizePending[nugget],1);assert.equal(state.inventory[nugget],999);
+  sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();await call('mission39ClaimPrize',{item:nugget});assert.equal(state.inventory[nugget],999);await get();await call('mission39ClaimPrize',{item:nugget},409);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('Zone 1 road does not encounter but neighboring grass does',async()=>{
  const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-road-qa',displayName:'구역1길테스트'};
  try{
