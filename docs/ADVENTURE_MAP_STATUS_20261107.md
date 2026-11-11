@@ -450,3 +450,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 18 남동쪽 공사 골목
 
 [구역 18 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-18-guide-all-pokemon-and-alphas)는 이어롭을 비계 사이 골목의 레벨 56 우두머리로 설명한다. [현장 안내](https://pokequery.com/games/legends-za/wild-zones/18)는 구역 남동쪽 공사 현장을 가리킨다. 기존 남동쪽 접근에서 별도의 공사 골목으로 왕복하고 비계 사이에서 이어롭을 만날 수 있다. 위치·비계 수와 골목 형상은 2D 초안이다. 기존 큰길 쪽 이어롭 표식은 이전 경로를 위해 유지하며 두 곳은 동일한 조우 완료 기록을 쓴다. 접근 시기·기존 옥상과 저장 상태를 보존한다.
+
+### 구역 17 북쪽 산책로 높이층
+
+[구역 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17)은 남쪽 공원과 북쪽 Y자 산책로가 계단으로 이어지며 북쪽 출입구 세 곳과 옥상 사다리가 있다고 설명한다. 계단을 통해 별도 산책로 층에 오르고 쿨랑 운하 위 다리·운하 아래 계단·베르 6번지 및 기존 옥상으로 이동할 수 있다. 북쪽 구역의 화염레오와 우두머리는 기존 조우 완료 기록을 공유한다. 옛 지상·옥상 저장 좌표와 기존 남쪽 출입은 유지한다. 거리의 정밀 윤곽, 계단 높이와 건물·동상 좌표는 2D 추정이다.

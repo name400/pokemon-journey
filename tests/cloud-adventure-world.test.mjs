@@ -534,3 +534,11 @@ test('Centrico court is reachable without invalidating existing plaza positions'
  assert.equal(fieldDialogue(position)?.action,'mission20SBCStart');
  assert.equal(fieldMap({...base,zaMission20Stage:12})[3][16],';');
 });
+
+test('Zone 17 promenade retains legacy ground saves and shares northern encounters',()=>{
+ const base={area:3,district:'lumiose-zone17',interior:null,zaZone17Upper:false,zaRoyaleRank:'C',teamIds:['kept']};
+ const old=restoreAdventurePosition(storeAdventurePosition({...base,x:17,y:6},512),512);
+ assert.deepEqual([old.x,old.y,old.zaZone17Promenade,old.teamIds],[17,6,undefined,['kept']]);
+ assert.equal(fieldMap(old)[6][17],'e');assert.equal(fieldMap({...old,zaZone17Promenade:true})[6][17],'e');
+ for(const zaZone17Promenade of [false,true])assert.notEqual(fieldMap({...old,zaZone17Promenade,zaZone17Spent:{'pyroar-alpha':true}})[6][17],'e');
+});

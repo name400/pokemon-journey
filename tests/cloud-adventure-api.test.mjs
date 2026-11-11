@@ -2193,3 +2193,17 @@ test('Zone 18 construction alley connects to the shared Lopunny encounter',async
   await walkTo({x:3,y:13});await call('face',{direction:'left'});await call('zone18Construction');await get();assert.equal(state.world.zaZone18Construction,false);assert.notEqual(state.world.map[5][12],'c');assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 17 stairs connect the raised promenade, northern gates and roof',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone17-promenade-qa',displayName:'산책로 검사'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,x:11,y:11,facing:'up',zaRoyaleRank:'C',zaZone17Upper:false},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone17PromenadeStairs');
+  await call('zone17PromenadeStairs');await get();assert.deepEqual([state.world.zaZone17Promenade,state.world.x,state.world.y],[true,11,13]);assert.equal(state.world.map[6][17],'e');
+  await walkTo({x:13,y:7});await call('face',{direction:'up'});await call('zone17Ladder');await get();assert.equal(state.world.zaZone17Upper,true);await call('zone17Ladder');await get();assert.deepEqual([state.world.zaZone17Upper,state.world.zaZone17Promenade,state.world.x,state.world.y],[false,true,13,7]);
+  await walkTo({x:6,y:1});await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-coulant-route');await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.zaZone17Promenade,state.world.x,state.world.y],['lumiose-zone17',true,6,1]);
+  await walkTo({x:16,y:1});await call('move',{direction:'up'});assert.equal(state.world.zaCoulantLower,true);await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.zaZone17Promenade,state.world.x,state.world.y],['lumiose-zone17',true,16,1]);
+  await walkTo({x:11,y:1});await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-vert-sector6');await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.zaZone17Promenade,state.world.x,state.world.y],['lumiose-zone17',true,11,1]);
+  await walkTo({x:11,y:13});await call('face',{direction:'down'});await call('zone17PromenadeStairs');await get();assert.deepEqual([state.world.zaZone17Promenade,state.world.x,state.world.y],[false,11,11]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
