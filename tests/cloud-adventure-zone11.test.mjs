@@ -41,7 +41,7 @@ test('zone eleven has gated and separately saved canal banks',()=>{
 test('draft bank approaches preserve separated canal, encounters and saved positions',()=>{
  const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']},map=zone11Map(base);
  for(let x=1;x<=21;x++){assert.equal(map[1][x],',');assert.equal(map[15][x],',');}
- for(let y=7;y<=9;y++)for(let x=0;x<=22;x++){assert.ok(map[y][x]==='~'||(x===13&&y===9&&map[y][x]==='r'));assert.equal(walkable(map[y][x]),false);}
+ for(let y=7;y<=9;y++)for(let x=0;x<=22;x++){assert.ok(map[y][x]==='~'||!!zone11Visible(base,map[y][x])?.water);assert.equal(walkable(map[y][x]),false);}
  assert.ok(fieldPath(map,{x:1,y:4},{x:21,y:4}).length);assert.ok(fieldPath(map,{x:21,y:12},{x:5,y:15}).length);
  assert.equal(fieldPath(map,{x:1,y:4},{x:21,y:12}).length,0);
  for(const [x,y] of [[3,4],[14,3],[8,11]])assert.equal(map[y][x],'g');
@@ -93,4 +93,14 @@ test('Zone 11 alpha Slowbro and Clawitzer are accessible without making the rive
  const north={area:3,district:'lumiose-zone11',interior:null,x:16,y:6,facing:'up',zaRoyaleRank:'E',teamIds:['kept']},south={...north,x:13,y:10,facing:'up'},map=zone11Map(north);
  assert.deepEqual([zone11Visible(north,'b').species,zone11Visible(north,'b').level],[80,44]);assert.deepEqual([zone11Visible(south,'r').species,zone11Visible(south,'r').level],[693,43]);assert.equal(fieldDialogue(north).action,'zone11Wild-slowbro-alpha');assert.equal(fieldDialogue(south).action,'zone11Wild-clawitzer-alpha');assert.equal(stepField(south,'up').blocked,true);assert.equal(fieldPath(map,{x:11,y:10},{x:11,y:6}).length,0);
  const spent={...south,zaZone11Spent:{'slowbro-alpha':true,'clawitzer-alpha':true}},restored=restoreAdventurePosition(storeAdventurePosition(spent,162),162);assert.equal(zone11Map(restored)[5][16],'g');assert.equal(zone11Map(restored)[9][13],'~');assert.deepEqual(restored.teamIds,['kept']);
+});
+
+test('Zone 11 aquatic encounters remain in water and accessible from shore',()=>{
+ const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']};
+ for(const [tile,x,y,species,id] of [['1',4,7,686,'inkay'],['2',18,9,130,'gyarados']]){
+  const direction=y===7?'down':'up',shore={...base,x,y:y===7?6:10,facing:direction},map=zone11Map(shore);
+  assert.equal(map[y][x],tile);assert.equal(zone11Visible(shore,tile).species,species);assert.equal(fieldDialogue(shore).action,`zone11Wild-${id}`);assert.equal(stepField(shore,direction).blocked,true);
+  const spent={...shore,zaZone11Spent:{[id]:true}},saved=restoreAdventurePosition(storeAdventurePosition(spent,202),202);assert.equal(zone11Map(saved)[y][x],'~');assert.deepEqual(saved.teamIds,['kept']);
+ }
+ assert.equal(fieldPath(zone11Map(base),{x:11,y:6},{x:11,y:10}).length,0);
 });

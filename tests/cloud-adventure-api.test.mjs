@@ -2393,3 +2393,36 @@ test('Mission 37 legacy layout accepts all six campaign fixture locations',async
   for(const [stage,x,y,species] of cases){seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x,y,facing:'up',zaMission36Complete:true,zaMission37Started:true,zaMission37Stage:stage,zaProtectLayout:3},state.revision+1));await get();await call('mission37Wave');assert.equal(state.battle.teams[1][0].id,species);await call('forfeit');assert.equal(state.world.zaMission37Stage,stage);}
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 11 banks connect via the city bridge and preserve the wild zone state',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-bridge-roundtrip-qa',displayName:'강변다리검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x:1,y:4,facing:'left',zaRoyaleRank:'E',zaZone11Spent:{slowpoke:true},zaSide72Stage:1},state.revision+1));await get();
+  await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-jaune-sector10');
+  await walkTo({x:1,y:8});await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-jaune-sector6');
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-saison-canalside');
+  await walkTo({x:19,y:15});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-vert-sector3');
+  await walkTo({x:21,y:7});await call('move',{direction:'right'});assert.equal(state.world.district,'lumiose-coulant-route');
+  await walkTo({x:10,y:1});await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-zone11');assert.deepEqual([state.world.x,state.world.y],[5,15]);
+  await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaSide72Stage,1);
+  await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-coulant-route');
+  await walkTo({x:1,y:4});await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-vert-sector3');
+  await walkTo({x:11,y:1});await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-saison-canalside');
+  await walkTo({x:11,y:1});await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-jaune-sector6');
+  await walkTo({x:21,y:8});await call('move',{direction:'right'});assert.equal(state.world.district,'lumiose-jaune-sector10');
+  await walkTo({x:21,y:8});await call('move',{direction:'right'});assert.equal(state.world.district,'lumiose-zone11');assert.deepEqual([state.world.x,state.world.y],[1,4]);
+  await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaSide72Stage,1);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Zone 11 river Pokémon can be encountered from shore without walking on water',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-water-pokemon-qa',displayName:'수로조우검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  for(const [x,y,direction,species,name] of [[4,6,'down',686,'inkay'],[18,10,'up',130,'gyarados']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x,y,facing:direction,activeId:id,zaRoyaleRank:'E',adventureBalls:{...rawWorld().adventureBalls,masterball:2}},state.revision+1));await get();
+   assert.equal(state.world.interaction.action,`zone11Wild-${name}`);await call('move',{direction},409);await call(`zone11Wild-${name}`);assert.equal(state.battle.teams[1][0].speciesId,species);await call('flee');assert.notEqual(state.world.zaZone11Spent?.[name],true);await call(`zone11Wild-${name}`);await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaZone11Spent[name],true);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
