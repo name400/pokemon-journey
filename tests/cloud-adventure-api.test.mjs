@@ -1599,3 +1599,18 @@ test('Side Mission 118 follows Gengar search, preserves stages and pays usable c
   seedMon(id,{...makeMon(1,10),boxId:id});await get();await call('useAdventureExpCandyXL');assert.equal(state.inventory['za-exp-candy-xl'],undefined);assert.ok(rawMon(id).level>10);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Research lab lift and third-floor office preserve mission and legacy lobby progress',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-office-qa',displayName:'연구소테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-floral',interior:'lumioseLab',x:16,y:10,facing:'up',zaMission35Stage:1},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'researchLabLift');await call('researchLabLift');await get();assert.equal(state.world.interior,'lumioseDirector');
+  await walkTo('R');assert.ok(state.world.interaction.actions.some(a=>a.action==='mission35Mable'));await call('mission35Mable');await get();assert.equal(state.world.zaMission35Stage,2);assert.equal(state.world.interior,'lumioseDirector');
+  seedWorld(storeAdventurePosition({...state.world,zaMission40Started:true,zaMission40Stage:0},state.revision+1));await get();await call('mission40Mable');await get();assert.equal(state.world.zaMission40Stage,1);
+  seedWorld(storeAdventurePosition({...state.world,zaMission40Anomalies:['steelix','gallade','pangoro']},state.revision+1));await get();await call('mission40Report');assert.equal(state.world.zaMission40Stage,2);
+  await get();await walkTo('i');await call('researchLabLift');await get();assert.equal(state.world.interior,'lumioseLab');assert.equal(state.world.zaMission40Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await walkTo('R');seedWorld(storeAdventurePosition({...state.world,zaMission35Stage:1},state.revision+1));await get();await call('mission35Mable');assert.equal(state.world.zaMission35Stage,2);
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.equal(state.world.interior,null);assert.equal(state.world.district,'lumiose-floral');
+ }finally{globalThis.__adventureUser=priorUser;}
+});
