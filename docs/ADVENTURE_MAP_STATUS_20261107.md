@@ -446,3 +446,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 3 기념 아치 시각 초안
 
 [Poképédia의 구역 3 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_3)은 네 정원 사이 중앙 공간을 마주하는 기념 아치를 기술한다. 이를 바탕으로 현재 중앙 북쪽 길에 기존 울타리 두 칸을 기둥으로 쓰는 아치 외형을 추가했다. 실제 아치의 정확한 방향·위치·폭과 탑과의 관계는 확인하지 못했으며, 이 2D 배치는 초안이다. 기존 타일·충돌·조우·출입구·저장 좌표는 바꾸지 않았고 탑 위층에는 표시하지 않는다. 방향이 식별되는 원작 화면을 확보한 뒤 탑과 아치의 실제 관계 및 내부 동선을 다시 대조해야 한다.
+
+### 구역 18 남동쪽 공사 골목
+
+[구역 18 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-18-guide-all-pokemon-and-alphas)는 이어롭을 비계 사이 골목의 레벨 56 우두머리로 설명한다. [현장 안내](https://pokequery.com/games/legends-za/wild-zones/18)는 구역 남동쪽 공사 현장을 가리킨다. 기존 남동쪽 접근에서 별도의 공사 골목으로 왕복하고 비계 사이에서 이어롭을 만날 수 있다. 위치·비계 수와 골목 형상은 2D 초안이다. 기존 큰길 쪽 이어롭 표식은 이전 경로를 위해 유지하며 두 곳은 동일한 조우 완료 기록을 쓴다. 접근 시기·기존 옥상과 저장 상태를 보존한다.

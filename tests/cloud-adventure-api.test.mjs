@@ -2182,3 +2182,14 @@ test('Nouveau Cafe 2 sells restorative drinks without changing mission progress'
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-bleu-sector5',x:1,y:8,facing:'left'},state.revision+1));await get();await call('cafe2Milk',{},409);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 18 construction alley connects to the shared Lopunny encounter',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-construction-qa',displayName:'공사 골목'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:20,y:13,facing:'down',zaRoyaleRank:'B',zaZone18Upper:false,adventureBalls:{masterball:1}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone18Construction');
+  await call('zone18Construction');await get();assert.deepEqual([state.world.zaZone18Construction,state.world.x,state.world.y],[true,3,13]);assert.equal(state.world.map[5][17],'c');
+  await call('zone18Construction');assert.equal(state.world.zaZone18Construction,false);await call('zone18Construction');await walkTo({x:17,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone18Wild-lopunny-alpha');await call('zone18Wild-lopunny-alpha');assert.deepEqual([state.battle.teams[1][0].speciesId,state.battle.teams[1][0].level],[428,56]);await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaZone18Spent['lopunny-alpha'],true);assert.equal(state.world.map[5][17],'.');
+  await walkTo({x:3,y:13});await call('face',{direction:'left'});await call('zone18Construction');await get();assert.equal(state.world.zaZone18Construction,false);assert.notEqual(state.world.map[5][12],'c');assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
