@@ -265,6 +265,19 @@ test('Mission 32 eastern courtyard lift and glide preserve progress and old rewa
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 29 Jaune Sector 8 links center, garden and legacy reward',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission29-jaune8-qa',displayName:'존느8테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,reserveId='mission29-reserve',reserve=makeMon(25,5);sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(reserveId,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);const team=[id,reserveId];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});seedMon(reserveId,{...reserve,hp:1,status:'독',pp:{전기쇼크:1}});
+  seedWorld(storeAdventurePosition({...rawWorld(),teamIds:team,area:3,district:'lumiose-jaune-street',interior:null,x:17,y:1,facing:'up',zaRoyaleRank:'C',zaMission26Stage:3,zaMission29Complete:false},state.revision+1));await get();await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-jaune-sector8');await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-jaune-street');await call('move',{direction:'up'});
+  await walkTo({x:5,y:7});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'heal');await call('heal');assert.equal(rawMon(reserveId).hp,rawMon(reserveId).maxHp);assert.equal(rawMon(reserveId).status,null);
+  await walkTo({x:11,y:1});await call('move',{direction:'up'},409);seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:1,zaRoyaleRank:'B'},state.revision+1));await get();await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-zone19');await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-jaune-sector8');
+  await walkTo({x:16,y:9});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission26CaseBattle');await call('mission26CaseBattle');await call('forfeit');assert.notEqual(state.world.zaMission29Complete,true);
+  seedMon(reserveId,{...rawMon(reserveId),hp:1,status:'독',pp:{전기쇼크:1}});seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-sector8',interior:null,x:16,y:9,facing:'up'},state.revision+1));await get();await call('mission26CaseBattle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission29RewardPending,true);assert.equal(rawMon(reserveId).hp,rawMon(reserveId).maxHp);assert.equal(rawMon(reserveId).status,null);await get();await call('mission26ClaimStone');assert.equal(state.inventory.venusaurite,1);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-site',interior:null,x:7,y:13,facing:'up',zaMission29RewardPending:true},state.revision+1));await get();await call('mission26ClaimStone');assert.equal(state.inventory.venusaurite,2);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
