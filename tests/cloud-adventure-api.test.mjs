@@ -2619,6 +2619,32 @@ test('Mission 3 companion uses the two unchosen starters in matchup order',async
  }}finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 3 capture lesson, research and Royale transition preserve progress',async()=>{
+ const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'za-mission03-capture',displayName:'포획 수업'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152,destination:'lumiose'});const id=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:6,facing:'up',zaMission03Stage:2,adventureBalls:{masterball:3}},state.revision+1));await get();await call('heal');assert.equal(state.world.zaMission03Stage,3);
+  await walkTo({x:8,y:14});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-zone1');await walkTo('n');assert.equal(state.world.interaction.action,'mission03Supplies');const originalBalls=state.wallet.balls;await call('mission03Supplies');assert.equal(state.wallet.balls,originalBalls+10);await call('mission03Supplies',{},409);
+  await walkTo('f');assert.equal(state.world.interaction.action,'mission03Fletchling');await call('mission03Fletchling');assert.equal(state.world.zaMission03FletchlingTried,true);assert.equal(state.world.zaMission03Stage,4);await get();await call('mission03Fletchling');assert.equal(state.world.zaMission03Stage,5);assert.ok(state.world.adventureDexSpecies.includes(661));assert.equal(state.wallet.balls,originalBalls+8);await call('mission03Fletchling',{},409);
+  await walkTo('b');assert.equal(state.world.interaction.action,'mission03Bunnelby');await call('mission03Bunnelby');assert.equal(state.battle.teams[1][0].speciesId,659);
+  const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();const move=state.battle.requests[0].moves.find(m=>!m.disabled&&m.pp>0&&(moves[m.name]?.power||0)>0).name;await call('battle',{command:{type:'move',move}});assert.ok(state.world.adventureCatchWindow);await get();await call('catchWindowBall',{ball:'masterball'});await get();assert.equal(state.world.zaMission03Stage,6);assert.ok(state.world.adventureDexSpecies.includes(659));
+  await walkTo('n');await call('mission03Bonus');assert.equal(state.world.zaMission03Stage,7);assert.equal(state.wallet.balls,originalBalls+18);await call('mission03Bonus',{},409);await call('mission03ResearchReady',{},409);
+  for(const [roll,expected] of [[0,13],[.16,16]]){globalThis.__adventureRandom=()=>roll;seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone1',interior:null,x:6,y:9,facing:'right'},state.revision+1));await get();await call('move',{direction:'right'});assert.equal(state.battle.teams[1][0].speciesId,expected);await call('ball',{ball:'masterball'});assert.ok(state.world.adventureDexSpecies.includes(expected));}
+  globalThis.__adventureRandom=()=>.999;await walkTo('n');await call('mission03ResearchReady');assert.equal(state.world.zaMission03Stage,8);await walkTo('W');assert.equal(state.world.district,'lumiose-floral');await walkTo('P');await call('enterLumioseLab');await walkTo('i');await call('researchLabLift');await walkTo('R');assert.equal(state.world.interaction.action,'mission03Mable');await call('mission03Mable');await get();assert.equal(state.world.zaMission03Stage,9);assert.ok(state.world.zaResearchRewards.includes(2));await call('mission03Mable',{},409);
+  const team=[...state.world.teamIds];await walkTo('i');await call('researchLabLift');await walkTo({x:11,y:14});await call('move',{direction:'down'});await walkTo('E');assert.equal(state.world.district,'lumiose-zone1');await walkTo('E');assert.equal(state.world.district,'lumiose');await walkTo('J');await call('enterHotel');await walkTo('F');assert.equal(state.world.interaction.action,'mission03Hotel');await call('mission03Hotel');await get();assert.equal(state.world.zaMission03Complete,true);assert.equal(state.world.zaMission04Started,true);assert.equal(state.world.zaRoyaleRank,'Z');assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.activeId,id);await call('mission03Hotel',{},409);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
+});
+
+test('Mission 3 ball supplies respect capacity and refill only when empty',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'za-mission03-capacity',displayName:'볼 한도'};
+ try{
+  await get();await call('start',{species:152,destination:'lumiose'});const id=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:5,y:8,facing:'up',zaMission03Stage:3},state.revision+1));sql.prepare('UPDATE wallets SET balls=90 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('mission03Supplies',{},409);assert.equal(state.world.zaMission03Stage,3);await get();assert.equal(state.wallet.balls,90);assert.equal(state.world.activeId,id);
+  sql.prepare('UPDATE wallets SET balls=89 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('mission03Supplies');assert.equal(state.wallet.balls,99);assert.equal(state.world.zaMission03Stage,4);await call('mission03Refill',{},409);
+  sql.prepare('UPDATE wallets SET balls=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('mission03Refill');assert.equal(state.wallet.balls,1);await call('mission03Refill',{},409);await get();assert.equal(state.world.zaMission03Stage,4);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('direct Lumiose travel rejects unsafe or stale states without modifying saves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-direct-guard-qa',displayName:'도시이동안전검증'};
  try{
