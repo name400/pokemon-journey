@@ -359,6 +359,18 @@ test('Mission 23 Rouge Sector 6 lift remembers its street and preserves legacy e
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 11 Vernal Center and Aymlis bank preserve earlier rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission11-aymlis-qa',displayName:'몽테리물가테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,reserveId='mission11-park-reserve',reserve=makeMon(25,5);sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(reserveId,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);const team=[id,reserveId];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});seedMon(reserveId,{...reserve,hp:1,status:'독',pp:{전기쇼크:1}});
+  seedWorld(storeAdventurePosition({...rawWorld(),teamIds:team,area:3,district:'lumiose-vernal',interior:null,x:20,y:15,facing:'down',zaRoyaleRank:'F',zaMission10Stage:10,zaMission11Complete:false},state.revision+1));await get();await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-aymlis-park');await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-vernal');await call('move',{direction:'down'});
+  await walkTo({x:19,y:3});await call('face',{direction:'right'});assert.equal(state.world.interaction.action,'heal');await call('heal');assert.equal(rawMon(reserveId).hp,rawMon(reserveId).maxHp);assert.equal(rawMon(reserveId).status,null);
+  await walkTo({x:18,y:13});await call('face',{direction:'up'});await call('mission11ParkStairs');await get();assert.equal(state.world.zaMission11ParkLower,true);await call('mission11ParkStairs');assert.equal(state.world.zaMission11ParkLower,false);await call('mission11ParkStairs');await walkTo({x:5,y:11});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'battleMission11Slowbro');await call('battleMission11Slowbro');let combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);assert.equal(sim.p2.pokemon[0].level,34);assert.deepEqual(sim.p2.pokemon[0].moveSlots.map(m=>m.id),['waterpulse','psybeam']);await call('forfeit');assert.notEqual(state.world.zaMission11Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-aymlis-park',zaMission11ParkLower:true,interior:null,x:5,y:11,facing:'up'},state.revision+1));await get();await call('battleMission11Slowbro');combat=rawWorld().combat;sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission11RewardPending,true);await get();await call('claimMission11Stone');assert.equal(state.inventory.slowbronite,1);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vernal',zaVernalSlowbroBank:false,interior:null,x:17,y:11,facing:'up',zaMission11RewardPending:true},state.revision+1));await get();await call('claimMission11Stone');assert.equal(state.inventory.slowbronite,2);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
