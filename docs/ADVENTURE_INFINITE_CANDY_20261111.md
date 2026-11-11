@@ -8,4 +8,4 @@
 
 [Z-A 육성 자료](https://poketrainervault.com/legends-za/guides/competitive-building-guide/)에 따라 영양제는 노력치를 10씩, 한 능력치 252 및 총합 510 한도까지 올린다. [친밀도 자료](https://bulbapedia.bulbagarden.net/wiki/Friendship)에 따른 +4/+2 증가와 160 상한을 적용한다. 체력 변화는 기존 손상량을 유지하며 기절 상태는 회복하지 않는다.
 
-[Z-A 서비스 안내](https://psypokes.com/plza/servicenpcs.php)와 [대단한 특훈 설명](https://bulbapedia.bulbagarden.net/wiki/Hyper_Training)에 따라 미션 37 완료 후 레벨 50 이상 파티 선두의 개체값 한 항목(은색) 또는 가능한 전체 항목(금색)을 특훈한다. 원본 개체값과 잠재파워 타입은 유지한다. 도장 실제 내부와 담당자 좌표는 미구현이므로 기존 정의단 도장 임시 위치를 사용한다.
+[Z-A 서비스 안내](https://psypokes.com/plza/servicenpcs.php)와 [대단한 특훈 설명](https://bulbapedia.bulbagarden.net/wiki/Hyper_Training)에 따라 미션 37 완료 후 레벨 50 이상 파티 선두의 개체값 한 항목(은색) 또는 가능한 전체 항목(금색)을 특훈한다. 원본 개체값과 잠재파워 타입은 유지한다. 정의단 도장 마당은 존느 구역 2에 연결했으며 출입구와 담당자 좌표는 초안이다. 기존 임시 위치도 호환을 위해 유지한다.
