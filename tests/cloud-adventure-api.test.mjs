@@ -1736,3 +1736,16 @@ test('Magenta Sector 1 joins its neighbouring streets and Café Gallant serves M
   seedWorld(storeAdventurePosition({...state.world,district:'lumiose-bleu-street',interior:null,x:11,y:6,zaMission14Stage:6},state.revision+1));await get();await walkTo('m');await call('rankEGalette');assert.equal(state.world.zaMission14Stage,7);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Canari quiz venue supports answer areas, cafe return and Mani battle',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'canari-quiz-qa',displayName:'퀴즈장테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-canal-route',interior:null,x:8,y:8,facing:'up',zaMission14Stage:2,zaRoyaleRank:'F'},state.revision+1));await get();assert.equal(state.world.interaction.action,'enterCanariQuiz');await call('enterCanariQuiz');await get();assert.equal(state.world.interior,'canariQuiz');assert.equal(state.world.zaMission14Stage,3);
+  await walkTo('w');assert.equal(state.world.interaction.action,'rankEFalse');await call('rankEFalse');assert.equal(state.world.zaMission14Stage,3);await call('rankETrue',{},409);await walkTo('v');await call('rankETrue');await get();assert.equal(state.world.zaMission14Stage,4);await walkTo('w');await call('rankEFalse');await get();assert.equal(state.world.zaMission14Stage,5);await walkTo('v');await call('rankETrue');await get();assert.equal(state.world.zaMission14Stage,6);
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.equal(state.world.interior,null);assert.equal(state.world.district,'lumiose-magenta-canal-route');
+  seedWorld(storeAdventurePosition({...state.world,district:'lumiose-magenta-sector1',interior:'cafeGallant',x:11,y:6,facing:'up'},state.revision+1));await get();await call('rankEGalette');assert.equal(state.world.zaMission14Stage,7);
+  seedWorld(storeAdventurePosition({...state.world,district:'lumiose-magenta-canal-route',interior:null,x:8,y:8,facing:'up'},state.revision+1));await get();await call('enterCanariQuiz');await get();assert.equal(state.world.zaMission14Stage,7);await walkTo('t');assert.equal(state.world.interaction.action,'rankEMani');await call('rankEMani');await battle();await get();assert.equal(state.world.zaMission14Stage,8);assert.ok(state.world.interaction.actions.some(a=>a.action==='rankEGrandpa'));await call('rankEGrandpa');await get();assert.equal(state.world.zaMission14Stage,9);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...state.world,district:'lumiose-north-boulevard',interior:null,x:12,y:5,facing:'up',zaMission14Stage:3},state.revision+1));await get();await call('rankETrue');assert.equal(state.world.zaMission14Stage,4);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
