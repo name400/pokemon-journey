@@ -1725,3 +1725,14 @@ test('Racine Construction garage and Canari room connect the Rank E promotion',a
   seedWorld(storeAdventurePosition({...state.world,district:'lumiose-site',interior:null,x:7,y:10,zaMission14Stage:10,zaRoyaleRank:'F',zaCanariRoomVisited:false},state.revision+1));await get();await call('rankECanari');assert.equal(state.world.trainer.id,'rank-e-canari');await call('forfeit');
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Magenta Sector 1 joins its neighbouring streets and Café Gallant serves Mission 14',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta-sector1-qa',displayName:'로즈1카페테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const routes=[['lumiose-magenta-street',12,1,'up',11,1,'up'],['lumiose-estival-approach',1,10,'left',11,15,'down'],['lumiose-magenta-sector3',21,10,'right',1,8,'left'],['lumiose-centrico-route',1,4,'left',21,8,'right']];
+  for(const [district,x,y,direction,sx,sy,back] of routes){seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:direction,zaMission14Stage:6,zaRoyaleRank:'F'},state.revision+1));await get();await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector1',sx,sy]);await call('move',{direction:back});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[district,x,y]);}
+  seedWorld(storeAdventurePosition({...state.world,district:'lumiose-magenta-sector1',interior:null,x:17,y:7,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'enterCafeGallant');await call('enterCafeGallant');await get();assert.equal(state.world.interior,'cafeGallant');await walkTo('n');assert.equal(state.world.interaction.action,'rankEGalette');await call('rankEGalette');await get();assert.equal(state.world.zaMission14Stage,7);assert.equal(state.world.interior,'cafeGallant');await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-magenta-sector1',null,17,7]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);await call('rankEGalette',{},409);await walkTo('H');assert.equal(state.world.interaction.action,'heal');await call('heal');assert.equal(state.world.zaMission14Stage,7);
+  seedWorld(storeAdventurePosition({...state.world,district:'lumiose-bleu-street',interior:null,x:11,y:6,zaMission14Stage:6},state.revision+1));await get();await walkTo('m');await call('rankEGalette');assert.equal(state.world.zaMission14Stage,7);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
