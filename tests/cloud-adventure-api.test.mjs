@@ -98,6 +98,17 @@ test('Mission 37 route opens in sequence and preserves the legacy layout',async(
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 42 L appears outside Hotel Z while the legacy lobby entry remains available',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-outside-qa',displayName:'호텔앞테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:13,y:8,facing:'up',zaMission40Complete:true,zaMission41Complete:false},state.revision+1));await get();assert.notEqual(state.world.map[7][13],'F');await call('mission42L',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:13,y:7,facing:'down',zaMission41Complete:true},state.revision+1));await get();assert.deepEqual([state.world.x,state.world.y],[13,7]);await call('move',{direction:'down'});await call('face',{direction:'up'});assert.equal(state.world.map[7][13],'F');assert.equal(state.world.interaction.action,'mission42L');await get();await call('mission42L');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[668,671,302,715,569,130]);await call('forfeit');assert.equal(state.world.zaMission42Stage||0,0);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:'hotel',x:11,y:6,facing:'up'},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='mission42L'));await call('mission42L');await call('forfeit');assert.equal(state.world.zaMission42Stage||0,0);assert.ok(rawMon(id));
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:13,y:7,zaMission42Stage:1},state.revision+1));await get();assert.notEqual(state.world.map[7][13],'F');assert.deepEqual([state.world.x,state.world.y],[13,7]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
