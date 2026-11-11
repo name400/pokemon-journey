@@ -145,3 +145,35 @@
 .rc-shell .rogue-starters-screen :is(.rss-detail-tabs,.rss-pane-nav){background:#e9eefb}
 .rc-shell .rogue-starters-screen .rss-detail-tabs button{background:#f8f9fa;color:#263a85;border-color:#9aabdc;border-radius:8px}
 .rc-shell .rogue-starters-screen .rss-detail-tabs button[aria-pressed=true]{background:#fff3b4;color:#17265b;box-shadow:inset 0 -3px #3b4cca}
+
+/* Reward counter and egg machines: match the blue/yellow trainer UI while
+   retaining reward-tier colors, descriptions and the existing control layout. */
+.rc-shell .rogue-classic-rewards{
+  --rcr-paper:#f8f9fa;--rcr-ink:#202d55;--rcr-muted:#4b5c78;
+  --rcr-teal:#3448bd;--rcr-navy:#253691;--rcr-line:#c6cee5;
+  background:#f8f9fa;border:3px solid #1c2b69;border-radius:12px;
+  box-shadow:inset 0 0 0 2px #fff,0 4px 0 #17265b;
+}
+.rc-shell .rogue-classic-rewards .rcr-header{
+  background:#3b4cca;border:2px solid #1c2b69;border-bottom:3px solid #ffcb05;border-radius:8px;color:#fff;
+}
+.rc-shell .rogue-classic-rewards .rcr-header .rcr-eyebrow,
+.rc-shell .rogue-classic-rewards .rcr-money>span{color:#edf0ff}
+.rc-shell .rogue-classic-rewards .rcr-money>b{color:#ffdb43}
+.rc-shell .rogue-classic-rewards .rcr-clear-mark{background:#ffcb05;border:2px solid #17265b;color:#17265b;box-shadow:inset 0 0 0 2px #ffe98e}
+.rc-shell .rogue-classic-rewards .rcr-party-button{background:#293b9e;border:2px solid #18265b;color:#fff;border-radius:8px}
+.rc-shell .rogue-classic-rewards .rcr-choice:not(:disabled){background:#f8f9fa;border-right:2px solid #a9b7e1;border-bottom:2px solid #a9b7e1;border-left:2px solid #a9b7e1;border-radius:10px;box-shadow:inset 0 0 0 1px #fff,0 2px #cad3ec}
+.rc-shell .rogue-classic-rewards .rcr-choice.is-selected{background:#fff5bf;border-right-color:#3b4cca;border-bottom-color:#3b4cca;border-left-color:#3b4cca;box-shadow:inset 0 0 0 2px #ffcb05,0 2px #253691}
+.rc-shell .rogue-classic-rewards .rcr-detail{background:#f8f9fa;border:2px solid #899cdd;border-radius:10px}
+.rc-shell .rogue-classic-rewards .rcr-detail-heading,
+.rc-shell .rogue-classic-rewards .rcr-confirm,
+.rc-shell .rogue-classic-rewards .rcr-services{background:#edf1fb;border-color:#b2bfe5}
+.rc-shell .rogue-classic-rewards .rcr-service:not(:disabled){background:#f8f9fa;border:2px solid #b5c3e6;border-radius:9px}
+.rc-shell .rogue-classic-rewards .rcr-service.is-selected{background:#fff4b7;border-color:#3b4cca}
+.rc-shell .rogue-classic-rewards .rcr-button:not(.rcr-button-outline):not(:disabled){background:#3b4cca;border:2px solid #17265b;color:#fff;border-radius:8px;box-shadow:inset 0 2px #8e9cf0,0 3px #17265b}
+.rc-shell .rogue-classic-rewards :is(.rcr-choice,.rcr-service,.rcr-button):focus-visible{outline:3px solid #ffcb05;outline-offset:2px}
+.rc-shell .rc-gacha{background:#f1f4fc;border-color:#293a8f}
+.rc-shell .rc-gacha .rc-machine{border-radius:12px}
+.rc-shell .rc-gacha .rc-machine.selected{background:#fff3b3;border:2px solid #3b4cca;box-shadow:inset 0 0 0 2px #ffcb05}
+.rc-shell .rc-gacha .rc-gacha-actions,
+.rc-shell .rc-gacha .rc-gacha-eggs{background:#f8f9fa;border:2px solid #8799d8;border-radius:9px}
