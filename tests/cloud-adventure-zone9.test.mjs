@@ -115,3 +115,11 @@ test('Zone 9 elevated scaffold connects roofs without blocking the street below'
  assert.ok(fieldPath(roof,{x:7,y:11},{x:15,y:11}).length);assert.ok(fieldPath(ground,{x:8,y:11},{x:14,y:11}).length);
  for(const [x,y,upper] of [[8,11,true],[14,11,true],[11,11,false]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y,zaZone9Upper:upper},137),137);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone9Upper,saved.teamIds],[base.district,x,y,upper,['kept']]);}
 });
+
+test('Mission 40 Pangoro appears only on the southwest roof while unresolved',()=>{
+ const base={area:3,district:'lumiose-zone9',interior:null,zaRoyaleRank:'A',zaMission40Stage:1,zaZone9Upper:true,teamIds:['kept']};
+ const map=zone9Map(base);assert.equal(map[9][5],'0');assert.equal(zone9Map({...base,zaZone9Upper:false})[9][5],'.');
+ assert.notEqual(zone9Map({...base,zaMission40Stage:0})[9][5],'0');assert.notEqual(zone9Map({...base,zaMission40Anomalies:['pangoro']})[9][5],'0');
+ assert.ok(fieldPath(map,{x:5,y:6},{x:5,y:9}).length);
+ const restored=restoreAdventurePosition(storeAdventurePosition({...base,x:5,y:9},177),177);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone9Upper,restored.teamIds],['lumiose-zone9',5,9,true,['kept']]);
+});

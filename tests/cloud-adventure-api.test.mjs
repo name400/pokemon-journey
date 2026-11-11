@@ -98,6 +98,19 @@ test('Tracie pending potions survive a full bag and can be claimed only once',as
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 40 Pangoro can be investigated on the Zone 9 southwest roof',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission40-zone9-qa',displayName:'옥상조사테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:5,y:6,facing:'up',zaRoyaleRank:'A',zaMission40Stage:1,zaZone9Upper:false,zaMission40Anomalies:['steelix'],adventureBalls:{masterball:1}},state.revision+1));
+  await get();await call('mission40OtherAlpha',{},409);assert.equal(state.world.interaction.action,'zone9Ladder-l');await call('zone9Ladder-l');await get();assert.equal(state.world.zaZone9Upper,true);assert.equal(state.world.map[9][5],'0');
+  await walkTo('0');assert.equal(state.world.interaction.action,'mission40OtherAlpha');await call('mission40OtherAlpha');assert.equal(state.battle.teams[1][0].speciesId,675);assert.equal(state.battle.teams[1][0].level,70);
+  await call('flee');await get();assert.equal(state.world.map[9][5],'0');assert.deepEqual(state.world.zaMission40Anomalies,['steelix']);await call('mission40OtherAlpha');await call('ball',{ball:'masterball'});
+  await get();assert.equal(state.world.zaZone9Upper,true,JSON.stringify({district:state.world.district,log:state.world.log,anomalies:state.world.zaMission40Anomalies}));assert.notEqual(state.world.map[9][5],'0');assert.deepEqual(state.world.zaMission40Anomalies,['steelix','pangoro']);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.ok(state.world.teamIds.length===team.length+1);assert.deepEqual(state.wallet,wallet);await call('mission40OtherAlpha',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 9 south ladder remains usable across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
