@@ -2228,6 +2228,9 @@ test('Southern Rouge Street joins Plaza, Sector 1 and Zone 20 across reloads',as
   await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),mon=structuredClone(rawMon(id));
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:12,y:15,facing:'down',zaMission38Complete:false,zaZone20Items:['south-seed']},state.revision+1));
   await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaRougeStreetSouth],['lumiose-rouge-north',11,1,true]);assert.match(state.world.areaInfo.name,/남쪽/);
+  await walkTo({x:14,y:11});await call('face',{direction:'right'});assert.equal(state.world.interaction.action,'heal');await call('heal');
+  await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-galerie-lune',1,8]);
+  await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaRougeStreetSouth],['lumiose-rouge-north',21,8,true]);
   await walkTo({x:1,y:8});await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector1',21,9]);await call('move',{direction:'right'});await get();assert.equal(state.world.zaRougeStreetSouth,true);
   await walkTo({x:11,y:15});await call('move',{direction:'down'},409);
   seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:15,facing:'down',zaRougeStreetSouth:true,zaMission38Complete:true},state.revision+1));await get();

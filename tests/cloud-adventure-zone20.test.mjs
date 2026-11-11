@@ -70,6 +70,9 @@ test('Southern Rouge Street joins Zone 20, Rouge Plaza and Sector 1 without repl
  const returnStreet=stepField({...south,...zone},'up');assert.deepEqual([returnStreet.district,returnStreet.x,returnStreet.y,returnStreet.zaRougeStreetSouth],['lumiose-rouge-north',11,15,true]);
  const sector=stepField({...saved,x:1,y:8},'left');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-rouge-sector1',21,9]);
  const returnFromSector=stepField({...saved,...sector},'right');assert.deepEqual([returnFromSector.district,returnFromSector.x,returnFromSector.y,returnFromSector.zaRougeStreetSouth],['lumiose-rouge-north',1,8,true]);
+ const gallery=stepField({...saved,x:21,y:8},'right');assert.deepEqual([gallery.district,gallery.x,gallery.y,gallery.zaRougeStreetSouth],['lumiose-galerie-lune',1,8,false]);
+ const returnFromGallery=stepField({...saved,...gallery},'left');assert.deepEqual([returnFromGallery.district,returnFromGallery.x,returnFromGallery.y,returnFromGallery.zaRougeStreetSouth],['lumiose-rouge-north',21,8,true]);
+ const oldGalleryExit=stepField({...saved,...gallery,x:1,y:7,zaRougeStreetSouth:true},'left');assert.deepEqual([oldGalleryExit.district,oldGalleryExit.x,oldGalleryExit.y,oldGalleryExit.zaRougeStreetSouth],['lumiose-rouge-north',21,12,false]);
  assert.equal(stepField({...plaza,x:11,y:15},'down').district,'lumiose-centrico-route');assert.equal(stepField({...zone,x:11,y:1},'up').district,'lumiose-centrico-route');
 });
 
