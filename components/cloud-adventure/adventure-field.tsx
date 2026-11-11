@@ -18,7 +18,7 @@ import {adventureAvatarRows} from '@/lib/cloud-adventure/adventure-avatar.mjs';
 import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer,ZONE6_MARKET_STALLS} from '@/lib/cloud-adventure/adventure-zone6.mjs';
-import {zone2WaterEdges,zone2BridgeAxis} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
+import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 
@@ -240,7 +240,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='='&&w.district==='lumiose-zone2'){
       const vertical=zone2BridgeAxis(w.map,x,y);ctx.fillStyle='#678d7d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#9fc2a6';
       for(let i=4;i<tile;i+=7)vertical==='vertical'?ctx.fillRect(px+3,py+i,tile-6,2):ctx.fillRect(px+i,py+3,2,tile-6);
-      ctx.fillStyle='#436d60';if(vertical==='vertical'){ctx.fillRect(px+1,py,3,tile);ctx.fillRect(px+tile-4,py,3,tile);}else{ctx.fillRect(px,py+1,tile,3);ctx.fillRect(px,py+tile-4,tile,3);}
+      const rails=zone2BridgeRails(w.map,x,y);ctx.fillStyle='#436d60';if(rails.west)ctx.fillRect(px+1,py,3,tile);if(rails.east)ctx.fillRect(px+tile-4,py,3,tile);if(rails.north)ctx.fillRect(px,py+1,tile,3);if(rails.south)ctx.fillRect(px,py+tile-4,tile,3);
      }
      if(c===':'&&w.district==='lumiose-centrico-route'){ctx.fillStyle='#b9ac99';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6dccb';for(let i=4;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}
      if(c==='l'&&w.district==='lumiose-vernal'&&x===18&&y===4){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}
