@@ -299,6 +299,28 @@ test('Mission 13 Victreebel appears in Magenta Sector 9 with documented moves',a
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Rogue Mega encounters use documented levels and moves after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rogue-mega-config-qa',displayName:'폭주메가테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];
+  const cases=[
+   ['battleMission12Camerupt','lumiose-site',7,11,34,['earthpower','headbutt']],
+   ['mission20CaseBattle','lumiose-rooftop',17,5,48,['ironhead','playrough','crunch','swordsdance']],
+   ['mission20CaseBattle','lumiose-sewer',17,5,48,['rockslide','poweruppunch','waterfall']],
+   ['mission20CaseBattle','lumiose-rouge-north',17,5,48,['dragonpulse','breakingswipe','charge']],
+   ['mission26CaseBattle','lumiose-rooftop',15,7,53,['phantomforce','icywind','willowisp','shadowball']],
+   ['mission26CaseBattle','lumiose-magenta-sector4-roof',19,5,53,['dragonpulse','moonblast','bravebird']],
+   ['mission26CaseBattle','lumiose-site',7,13,53,['bulletseed','powerwhip','sludgewave']],
+   ['mission31CaseBattle','lumiose-rooftop',17,8,59,['airslash','outrage','flamethrower','dragonrush']],
+   ['mission31CaseBattle','lumiose-north-boulevard',18,7,59,['rockslide','crunch','sandtomb','outrage']],
+   ['mission31CaseBattle','lumiose-site',8,13,59,['aquajet','zenheadbutt','waterpulse','bulkup']],
+  ];
+  for(const [action,district,x,y,level,expected] of cases){
+   seedMon(id,{...makeMon(150,100),moves:['사이코브레이크'],pp:{}});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'up',zaRoyaleRank:'B',zaMission10Stage:10,zaMission12WorkerWon:true,zaMission12Complete:false,zaMission20Stage:5,zaMission21Complete:false,zaMission22Complete:false,zaMission23Complete:false,zaMission23GwynnWon:true,zaMission26Stage:3,zaMission27Complete:false,zaMission28Complete:false,zaMission29Complete:false,zaMission31Stage:3,zaMission32Complete:false,zaMission33Complete:false,zaMission34Complete:false,zaMission34PhilippeWon:true},state.revision+1));await get();await call(action);const before=Battle.fromJSON(rawWorld().combat.snapshot).p2.pokemon[0];assert.equal(before.level,level);assert.deepEqual(before.moveSlots.map(m=>m.id),expected);await get();const after=Battle.fromJSON(rawWorld().combat.snapshot).p2.pokemon[0];assert.equal(after.level,level);assert.deepEqual(after.moveSlots.map(m=>m.id),expected);await call('forfeit');assert.deepEqual(state.world.teamIds,team);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
