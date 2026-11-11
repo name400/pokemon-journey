@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone11Map,zone11Unlocked,zone11Encounter,ZONE11_WEST_FORK,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '../lib/cloud-adventure/adventure-zone11.mjs';
+import {zone11Map,zone11Unlocked,zone11Encounter,zone11Visible,ZONE11_WEST_FORK,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '../lib/cloud-adventure/adventure-zone11.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 11 northwest ledge preserves the old entrance and its saved position',()=>{
@@ -41,7 +41,7 @@ test('zone eleven has gated and separately saved canal banks',()=>{
 test('draft bank approaches preserve separated canal, encounters and saved positions',()=>{
  const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']},map=zone11Map(base);
  for(let x=1;x<=21;x++){assert.equal(map[1][x],',');assert.equal(map[15][x],',');}
- for(let y=7;y<=9;y++)for(let x=0;x<=22;x++)assert.equal(map[y][x],'~');
+ for(let y=7;y<=9;y++)for(let x=0;x<=22;x++){assert.ok(map[y][x]==='~'||(x===13&&y===9&&map[y][x]==='r'));assert.equal(walkable(map[y][x]),false);}
  assert.ok(fieldPath(map,{x:1,y:4},{x:21,y:4}).length);assert.ok(fieldPath(map,{x:21,y:12},{x:5,y:15}).length);
  assert.equal(fieldPath(map,{x:1,y:4},{x:21,y:12}).length,0);
  for(const [x,y] of [[3,4],[14,3],[8,11]])assert.equal(map[y][x],'g');
@@ -87,4 +87,10 @@ test('two southwest stair flights connect Coulant to the south bank without cros
  }
  const middle={...gate,district:'lumiose-zone11-sw-middle',x:11,y:5,facing:'up'};assert.equal(fieldDialogue(middle).action,'zone11SouthwestStairs');assert.ok(fieldPath(fieldMap(middle),middle,{x:11,y:11}).length);
  const bank={...gate,district:'lumiose-zone11',x:4,y:15};const back=stepField(bank,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-zone11-sw-middle',11,11]);assert.equal(fieldPath(zone11Map(bank),{x:11,y:10},{x:11,y:6}).length,0);
+});
+
+test('Zone 11 alpha Slowbro and Clawitzer are accessible without making the river walkable',()=>{
+ const north={area:3,district:'lumiose-zone11',interior:null,x:16,y:6,facing:'up',zaRoyaleRank:'E',teamIds:['kept']},south={...north,x:13,y:10,facing:'up'},map=zone11Map(north);
+ assert.deepEqual([zone11Visible(north,'b').species,zone11Visible(north,'b').level],[80,44]);assert.deepEqual([zone11Visible(south,'r').species,zone11Visible(south,'r').level],[693,43]);assert.equal(fieldDialogue(north).action,'zone11Wild-slowbro-alpha');assert.equal(fieldDialogue(south).action,'zone11Wild-clawitzer-alpha');assert.equal(stepField(south,'up').blocked,true);assert.equal(fieldPath(map,{x:11,y:10},{x:11,y:6}).length,0);
+ const spent={...south,zaZone11Spent:{'slowbro-alpha':true,'clawitzer-alpha':true}},restored=restoreAdventurePosition(storeAdventurePosition(spent,162),162);assert.equal(zone11Map(restored)[5][16],'g');assert.equal(zone11Map(restored)[9][13],'~');assert.deepEqual(restored.teamIds,['kept']);
 });

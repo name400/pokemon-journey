@@ -2304,3 +2304,12 @@ test('Max Revive restores a fainted party member atomically and preserves its ot
   await call('useAdventureMaxRevive',{boxId:reserveId});await get();const healed=rawMon(reserveId);assert.equal(healed.hp,reserve.maxHp);assert.equal(healed.status,reserve.status);assert.deepEqual(healed.pp,reserve.pp);assert.deepEqual(healed.ivs,reserve.ivs);assert.deepEqual(healed.custom,reserve.custom);assert.equal(state.inventory.maxrevive,undefined);assert.deepEqual(state.world.teamIds,[lead,reserveId]);assert.equal(state.world.activeId,lead);await call('useAdventureMaxRevive',{boxId:reserveId},409);await get();assert.equal(rawMon(reserveId).hp,reserve.maxHp);seedMon(reserveId,{...healed,hp:0});await get();await call('useAdventureMaxRevive',{boxId:reserveId},409);assert.equal(rawMon(reserveId).hp,0);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 11 alpha Slowbro and Clawitzer start alpha battles from their banks',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-alpha-qa',displayName:'구역11우두머리테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(team[0],{...makeMon(150,100),boxId:team[0],moves:['사이코브레이크','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x:13,y:10,facing:'up',zaRoyaleRank:'E'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone11Wild-clawitzer-alpha');await call('zone11Wild-clawitzer-alpha');assert.equal(state.battle.teams[1][0].speciesId,693);assert.equal(state.battle.teams[1][0].adventureAlpha,true);await get();assert.equal(state.battle.teams[1][0].speciesId,693);await battle();assert.equal(state.world.zaZone11Spent['clawitzer-alpha'],true);await get();assert.equal(state.world.map[9][13],'~');const afterVictoryWallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone11',interior:null,x:16,y:6,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone11Wild-slowbro-alpha');await call('zone11Wild-slowbro-alpha');assert.equal(state.battle.teams[1][0].speciesId,80);assert.equal(state.battle.teams[1][0].adventureAlpha,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,afterVictoryWallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

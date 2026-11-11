@@ -480,3 +480,9 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 기력의덩어리 사용
 
 [도구 설명](https://www.serebii.net/itemdex/maxrevive.shtml)에 따라 기절한 파티원의 HP를 최대로 회복한다. 보유한 `maxrevive` 한 개를 기존 가방 저장에서 소비하며 HP 외의 상태·기술 PP·개체 데이터는 변경하지 않는다. 배틀·포획 및 회복이 제한된 연전 중에는 사용할 수 없다. 파워웨이트 효과는 별도 미구현이다.
+
+### 구역 11 강변 우두머리
+
+[구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-11-guide-all-pokemon-and-alphas)는 북쪽 강변의 우두머리 야도란과 중앙 수로의 우두머리 블로스터를 설명한다. 기존 보이는 포켓몬 체계에 두 우두머리를 추가했다. 블로스터는 강변에서 확인하며 수역은 막힌 상태를 유지한다. 좌표와 원작의 이동·감지 행동은 초안이다.
+
+파워웨이트는 [도구 자료](https://bulbapedia.bulbagarden.net/wiki/Power_Weight)의 속도 감소와 HP 노력치 보너스가 확인되지만, 현재 탐험 전투는 상대별 격파자 및 일반 노력치 지급을 추적하지 않아 원작의 지급 조건을 안전하게 재현할 수 없다. 효과는 보류하며 상대별 경험치·노력치 지급 및 전투 참여 추적이 먼저 필요하다.
