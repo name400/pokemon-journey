@@ -1666,3 +1666,15 @@ test('Magenta Sector 2 links the plaza and avenues to the original cafe route',a
   await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-magenta-sector4');assert.equal(state.world.zaMission35Stage,4);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Magenta Street junctions round trip and preserve saved positions',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta-street-qa',displayName:'로즈대로테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const routes=[['lumiose-magenta-sector8-route',21,12,'right',11,1,'up'],['lumiose-magenta-sector6',21,12,'right',11,15,'down'],['lumiose-magenta-sector4',1,12,'left',21,4,'right'],['lumiose-magenta-sector2',11,15,'down',21,8,'right'],['lumiose-centrico-route',21,5,'right',21,12,'right'],['lumiose-magenta-canal-route',21,6,'right',1,8,'left']];
+  for(const [district,x,y,direction,streetX,streetY,back] of routes){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:direction,zaRoyaleRank:'W',zaMission35Stage:4},state.revision+1));await get();await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-street',streetX,streetY],district);await call('move',{direction:back});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[district,x,y]);
+  }
+  assert.equal(state.world.zaMission35Stage,4);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=priorUser;}
+});

@@ -1,0 +1,5 @@
+# Magenta Street and canal junctions
+
+[Magenta Street](https://bulbapedia.bulbagarden.net/wiki/Magenta_Street) runs alongside Sectors 4, 6, 7 and 8 and part of the Saison Canal; [Magenta Plaza](https://bulbapedia.bulbagarden.net/wiki/Magenta_Plaza) connects toward Centrico Plaza and the northern and southern boulevards along that street. [Sector 2](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_2) borders Magenta Street.
+
+A compressed street map represents its central canal-side section and a walkable crossing. It joins the existing Sector 8 route toward North Boulevard, Sector 6 toward South Boulevard, Sectors 2 and 4, Centrico and the canal route. Screen edges, exact road alignment, bridge, building shapes and connection locations are provisional; these six game-screen links are not a surveyed original street map. Existing links and walkable positions remain usable. The full street, actual sewer and substation approaches, accurate canal continuity and Sectors 7/8 layout still require further original visual evidence and comparison.
