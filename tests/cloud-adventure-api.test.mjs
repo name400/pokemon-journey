@@ -2232,3 +2232,13 @@ test('Mission 37 building and rooftop connect the last battles while keeping old
   seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:12,zaProtectLayout:4,zaProtectRoof:false,zaProtectBuilding:false,zaMission37Stage:5},state.revision+1));await get();assert.equal(state.world.map[12][11],'j');assert.equal(state.world.map[12][3],'g');
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 2 overlook stairs round-trip and restore without changing party or progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone2-overlook-qa',displayName:'전망대테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:3,y:4,facing:'up',zaZone2RockCleared:true,zaMission10Stage:2},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'zone2Overlook');await call('zone2Overlook');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone2-overlook',4,12]);assert.equal(state.world.zaZone2RockCleared,true);assert.equal(state.world.zaMission10Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await walkTo({x:8,y:10});await walkTo({x:4,y:12});await call('face',{direction:'down'});await call('zone2Overlook');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone2',3,4]);assert.equal(state.world.zaZone2RockCleared,true);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

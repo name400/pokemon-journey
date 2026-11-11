@@ -454,3 +454,5 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 17 북쪽 산책로 높이층
 
 [구역 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17)은 남쪽 공원과 북쪽 Y자 산책로가 계단으로 이어지며 북쪽 출입구 세 곳과 옥상 사다리가 있다고 설명한다. 계단을 통해 별도 산책로 층에 오르고 쿨랑 운하 위 다리·운하 아래 계단·베르 6번지 및 기존 옥상으로 이동할 수 있다. 북쪽 구역의 화염레오와 우두머리는 기존 조우 완료 기록을 공유한다. 옛 지상·옥상 저장 좌표와 기존 남쪽 출입은 유지한다. 거리의 정밀 윤곽, 계단 높이와 건물·동상 좌표는 2D 추정이다.
+
+- 야생 구역 2 높은 전망층: [Poképédia](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_2)는 강·섬·나무다리 두 개와 높은 전망 지형을 설명하며, [TheGameSlayer](https://thegameslayer.com/guides/pokemon-legends-z-a-all-wild-zone-2-pokemon/)는 북서쪽 출입구 앞 계단을 설명한다. 전망층의 형상과 조망, 이 계단에서 전망층으로 이어지는 연결 및 좌표는 원작에서 확인되지 않아 모두 초안이다. 기존 지상 동선과 야생 개체 상태는 유지한다. 기존에 구현된 세 갈래 다리 가운데 원작과의 정확한 대응은 추가 확인이 필요하다.
