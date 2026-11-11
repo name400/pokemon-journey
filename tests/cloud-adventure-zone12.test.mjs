@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone12Map,zone12Encounter,zone12Visible,zone12Item} from '../lib/cloud-adventure/adventure-zone12.mjs';
 import {stepField,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+function reachable(s,target){const q=[s],seen=new Set([`${s.x},${s.y}`]);for(let i=0;i<q.length;i++){const p=q[i];if(p.x===target.x&&p.y===target.y)return true;for(const dir of ['up','down','left','right']){const n=stepField(p,dir),key=`${n.x},${n.y}`;if(!n.blocked&&!n.transitioned&&!seen.has(key)){seen.add(key);q.push({...p,...n});}}}return false;}
+test('draft Bleu 5 waterside entrance preserves ground gates and lower-layer saves',()=>{
+ const city={area:3,district:'lumiose-bleu-sector5',interior:null,x:21,y:14,zaRoyaleRank:'E',teamIds:['kept']};
+ assert.equal(stepField({...city,zaRoyaleRank:'F'},'right').blocked,true);
+ const entered=stepField(city,'right');assert.deepEqual([entered.district,entered.x,entered.y,entered.zaZone12PondLower],['lumiose-zone12',1,13,true]);
+ const lower={...city,...entered},map=zone12Map(lower);assert.ok(fieldPath(map,lower,{x:6,y:11}).length);assert.equal(map[12][6],'v');
+ assert.equal(reachable(lower,{x:9,y:13}),false);
+ const saved=restoreAdventurePosition(storeAdventurePosition(lower,77),77);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone12PondLower,saved.teamIds],['lumiose-zone12',1,13,true,['kept']]);
+ const exit=stepField(saved,'left');assert.deepEqual([exit.district,exit.x,exit.y],['lumiose-bleu-sector5',21,14]);
+ assert.deepEqual([stepField({...city,y:12},'right').district,stepField({...city,y:12},'right').y],['lumiose-zone12',12]);
+});
 test('zone twelve snow park gate and saved position',()=>{
  const base={area:3,district:'lumiose-centrico-route',interior:null,x:14,y:15,facing:'down',zaRoyaleRank:'F'};assert.equal(stepField(base,'down').blocked,true);
  const entered=stepField({...base,zaRoyaleRank:'E'},'down');assert.equal(entered.district,'lumiose-zone12');const s={...base,...entered,zaRoyaleRank:'E'},map=zone12Map(s);assert.ok(fieldPath(map,s,{x:7,y:6}).length);assert.equal(zone12Visible(s,'b').species,67);assert.equal(zone12Visible(s,'d').species,712);assert.equal(stepField({...s,x:7,y:11},'down').blocked,true);assert.equal(zone12Visible(s,'v').level,55);assert.equal(zone12Item(s,'i').kind,'super_potions');assert.equal(zone12Item({...s,zaZone12Items:['south-super']},'i'),null);
@@ -56,7 +67,7 @@ test('draft icicle becomes a traversable bridge while water encounters remain bl
  assert.equal(zone12Map(base)[14][7],'r');assert.equal(fieldDialogue(base).action,'zone12IceBridge');assert.equal(stepField(base,'left').blocked,true);
  const open={...base,zaZone12IceBridge:true};for(let x=4;x<=7;x++)assert.equal(zone12Map(open)[13][x],'=');
  assert.ok(fieldPath(zone12Map(open),open,{x:4,y:13}).length);assert.equal(stepField({...open,x:7,y:13},'up').blocked,true);
- assert.equal(fieldPath(zone12Map(base),base,{x:3,y:13}).length,0);
+ assert.equal(reachable(base,{x:3,y:13}),false);
  assert.ok(fieldPath(zone12Map(open),open,{x:3,y:13}).length);
  assert.equal(stepField({...open,x:3,y:13},'right').x,4);
  const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:5,y:13},71),71);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower,saved.zaZone12IceBridge,saved.teamIds],[5,13,true,true,['kept']]);

@@ -676,6 +676,17 @@ test('Vert Sector 8 links Hotel Z and Zone 1 across reloads',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 12 waterside route persists across reload and returns to Bleu 5',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone12-waterside-qa',displayName:'수로테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector5',interior:null,x:21,y:14,facing:'right',zaRoyaleRank:'E'},state.revision+1));await get();
+  await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone12PondLower],['lumiose-zone12',1,13,true]);
+  await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector5',21,14]);assert.notEqual(state.world.zaZone12PondLower,true);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 12 pond stairs keep layer and inventory across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone12-pond-qa',displayName:'연못테스트'};
  try{
