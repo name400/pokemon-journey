@@ -5,6 +5,13 @@ import { createFrame, clearFrame, createFx, composite } from '../third_party/pix
 import * as fireball from '../third_party/pixelfx/src/fx/fire/fireball.js';
 import * as zap from '../third_party/pixelfx/src/fx/lightning/zap-hit.js';
 import * as hit from '../third_party/pixelfx/src/fx/impacts/hit-spark.js';
+import * as water from '../third_party/pixelfx/src/fx/water/splash.js';
+import * as ice from '../third_party/pixelfx/src/fx/ice/snowflake-burst.js';
+import * as poison from '../third_party/pixelfx/src/fx/nature/acid-splash.js';
+import * as heal from '../third_party/pixelfx/src/fx/nature/healing-bloom.js';
+import * as grass from '../third_party/pixelfx/src/fx/nature/vine-whip.js';
+
+const effects = { fire: fireball, electric: zap, hit, water, ice, poison, heal, grass };
 
 // The SVG remains a fallback if canvas is unavailable or reduced motion is requested.
 export default function BattlePixelFx({ effect, duration, children }) {
@@ -16,16 +23,17 @@ export default function BattlePixelFx({ effect, duration, children }) {
     const canvas = ref.current;
     const context = canvas?.getContext('2d');
     if (!context) return;
-    const module = effect === 'fire' ? fireball : effect === 'electric' ? zap : hit;
+    const module = effects[effect] || hit;
     const frame = createFrame(128, 128);
     const image = context.createImageData(128, 128);
-    const fx = createFx(module, { x: 64, y: effect === 'fire' ? 64 : 84 });
-    let handle = 0, start = 0, last = 0, displayed = -Infinity;
+    const fx = createFx(module, { x: 64, y: effect === 'fire' ? 64 : 84, ...(effect === 'water' ? { stone: false } : {}) });
+    if (effect === 'water') fx.update(0.2); // Skip the upstream stone-drop lead-in.
+    let handle = 0, start = null, last = 0, displayed = -Infinity;
     const draw = now => {
-      if (!start) start = now;
+      if (start === null) start = now;
       const elapsed = Math.min(Math.max(0, now - start), duration);
       if (elapsed - displayed >= 32 || displayed < 0) {
-        const dt = Math.max(0, elapsed - last) / 1000;
+        const dt = Math.min(0.08, Math.max(0, elapsed - last) / 1000);
         fx.update(dt);
         clearFrame(frame);
         fx.draw(frame);
