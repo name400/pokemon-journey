@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone16Map,zone16Encounter,zone16Visible,ZONE16_STALLS} from '../lib/cloud-adventure/adventure-zone16.mjs';
 import {bleuPlazaRouteMap} from '../lib/cloud-adventure/adventure-bleu-plaza-route.mjs';
-import {stepField,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Bleu Plaza approaches connect the three entrances to the existing crossings',()=>{
  const s={area:3,district:'lumiose-zone16',interior:null,zaRoyaleRank:'C',teamIds:['kept']},map=zone16Map(s);
@@ -94,4 +94,12 @@ test('Zone 16 northwest gate reaches the Rust office without changing older exit
  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y,back.zaZone16Upper],['lumiose-zone16',8,1,false]);
  assert.equal(stepField({...zone,x:11,y:1},'up').district,'lumiose-bleu-plaza-route');
  assert.equal(stepField({...zone,zaZone16Upper:true},'up').blocked,true);
+});
+
+test('raised garden stairs and shared Ampharos keep ground and garden saves',()=>{
+ const ground={area:3,district:'lumiose-zone16',interior:null,x:17,y:7,facing:'up',zaRoyaleRank:'C',teamIds:['kept']};
+ assert.equal(zone16Map(ground)[6][17],'j');assert.equal(fieldDialogue(ground).action,'zone16GardenStairs');
+ const garden={...ground,district:'lumiose-zone16-garden',x:17,y:11,facing:'down'},map=fieldMap(garden);assert.equal(fieldDialogue(garden).action,'zone16GardenStairs');assert.ok(fieldPath(map,garden,{x:18,y:3}).length);assert.equal(map[2][18],'d');assert.equal(zone16Visible(garden,'d').species,181);
+ for(const state of [ground,garden]){const saved=restoreAdventurePosition(storeAdventurePosition(state,152),152);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[state.district,state.x,state.y,['kept']]);}
+ const spent={...garden,zaZone16Spent:{'ampharos-alpha':true}};assert.equal(fieldMap(spent)[2][18],'.');assert.equal(zone16Visible(spent,'d'),null);assert.equal(zone16Visible({...ground,zaZone16Spent:spent.zaZone16Spent},'d'),null);
 });

@@ -2260,3 +2260,13 @@ test('Zone 14 north entrance returns to Rose Avenue and preserves progress',asyn
   await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-canal-route',10,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 16 raised garden stairs preserve shared encounter and saved progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone16-garden-qa',displayName:'높은정원테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone16',interior:null,x:17,y:7,facing:'up',zaRoyaleRank:'C',zaZone16Spent:{'ampharos-alpha':true},zaZone16Items:['battle-ultra']},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone16GardenStairs');await call('zone16GardenStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone16-garden',17,11]);assert.equal(state.world.map[2][18],'.');assert.deepEqual(state.world.zaZone16Items,['battle-ultra']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone16GardenStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone16',17,7]);assert.equal(state.world.zaZone16Spent['ampharos-alpha'],true);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone16-garden',x:18,y:3,facing:'up',zaZone16Spent:{}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone16Wild-ampharos-alpha');await call('zone16Wild-ampharos-alpha');assert.equal(state.battle.teams[1][0].speciesId,181);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
