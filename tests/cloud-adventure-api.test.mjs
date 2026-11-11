@@ -123,6 +123,17 @@ test('Mission 19 Canari rematch works in Racine garage and the legacy site',asyn
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 19 city hall clue connects through Jaune Sector 9 and keeps the legacy clue',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-city-hall-qa',displayName:'시청단서테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector10',interior:null,x:11,y:1,facing:'up',zaMission19Stage:4,zaRoyaleRank:'E'},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-jaune-sector9');assert.equal(state.world.map[6][5],'u');assert.equal(state.world.map[11][6],';');assert.equal(state.world.map[11][7],'F');
+  await walkTo({x:7,y:12});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission19CityClue');await call('mission19CityClue');await get();assert.equal(state.world.zaMission19Stage,5);assert.notEqual(state.world.map[11][7],'F');await call('mission19CityClue',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-centrico-route',interior:null,x:15,y:6,facing:'up'},state.revision+1));await get();await call('mission19CafeClue');assert.equal(state.world.zaMission19Stage,6);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-rouge-north',interior:null,x:11,y:8,zaMission19Stage:4},state.revision+1));await get();await walkTo('t');await call('mission19CityClue');assert.equal(state.world.zaMission19Stage,5);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
