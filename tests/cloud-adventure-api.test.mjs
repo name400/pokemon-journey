@@ -1525,3 +1525,22 @@ test('Side Mission 119 unlocks, saves four battles, and pays its prize once',asy
   const before=state.wallet.coins;await call('side119Battle');await battle();assert.equal(state.wallet.coins,before+5400);assert.equal(state.world.zaSide119BestStreak,1);assert.equal(state.world.zaSide119RepeatStreak,1);await get();assert.equal(state.world.zaSide119Complete,true);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Hotel Richissime lobby and event hall preserve saves and postgame access',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'richissime-qa',displayName:'호텔테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:14,y:5,facing:'right',zaMission38Complete:true,zaMission39Complete:true,zaInfiniteFirstWon:true,zaInfiniteSecondWon:true,zaInfiniteRewardWins:20},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='zone20Enter'));assert.ok(state.world.interaction.actions.some(a=>a.action==='enterRichissime'));
+  await call('enterRichissime');assert.equal(state.world.interior,'richissimeLobby');await get();assert.equal(state.world.interior,'richissimeLobby');await walkTo('i');assert.equal(state.world.interaction.action,'richissimeLift');await call('richissimeLift');assert.equal(state.world.interior,'richissimeHall');await get();assert.equal(state.world.interior,'richissimeHall');await walkTo('q');assert.equal(state.world.interaction.action,'side119Accept');await call('side119Accept');await get();assert.equal(state.world.zaSide119Started,true);assert.ok(state.world.interaction.actions.some(a=>a.action==='side119Battle'));
+  await walkTo('i');await call('richissimeLift');assert.equal(state.world.interior,'richissimeLobby');await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.interior,null);assert.equal(state.world.district,'lumiose-centrico-route');assert.deepEqual([state.world.x,state.world.y],[14,5]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaSide119Started,true);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
+
+test('Richissime hall accepts original invitation and promotion match',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'richissime-story-qa',displayName:'호텔이야기테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:'richissimeHall',x:11,y:4,facing:'up',zaMission26Stage:1},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission26Invitation');await call('mission26Invitation');assert.equal(state.world.zaMission26Stage,2);await get();assert.equal(state.world.interior,'richissimeHall');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:'richissimeHall',x:11,y:4,facing:'up',zaMission30Started:true,zaRoyaleRank:'C',zaRoyaleCPoints:41000},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission30Round');await call('mission30Round');assert.equal(state.world.trainer.id,'mission30-round-0');await call('forfeit');assert.equal(state.world.zaMission30Round||0,0);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
