@@ -2143,3 +2143,19 @@ test('Mission 23 lower rooftop persists, returns to scaffolding and reaches Amph
   await walkTo({x:18,y:4});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission20CaseBattle');await call('mission20CaseBattle');assert.equal(state.battle.teams[1][0].speciesId,181);await call('forfeit');assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 23 TM089 is reusable for verified species and preserves existing moves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-tm089-qa',displayName:'기술머신 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  const original={...makeMon(69,100),moves:['몸통박치기','울음소리','전광석화','방어'],pp:{tackle:3,growl:7,quickattack:0,protect:4}};seedMon(id,original);
+  await get();await call('teachStoryTm',{item:'za-tm089',slot:0},409);assert.deepEqual(rawMon(id).moves,original.moves);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-mission23-roof',interior:null,x:12,y:10,facing:'right',zaMission20Stage:5,zaMission23GwynnWon:true},state.revision+1));await get();await call('mission23TM089');
+  await call('teachStoryTm',{item:'za-tm089',boxId:id,slot:1});let mon=rawMon(id);assert.deepEqual(mon.moves,['몸통박치기','독압정','전광석화','방어']);assert.deepEqual(mon.pp,{tackle:3,quickattack:0,protect:4});assert.equal(state.inventory['za-tm089'],1);await get();assert.equal(state.box.find(m=>m.boxId===id).moves[1],'독압정');
+  await call('teachStoryTm',{item:'za-tm089',slot:0},409);seedMon(id,original);await get();await call('teachStoryTm',{item:'za-tm089',slot:2});assert.equal(rawMon(id).moves[2],'독압정');assert.equal(state.inventory['za-tm089'],1);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-mission23-roof',x:18,y:4,facing:'up'},state.revision+1));await get();await call('mission20CaseBattle');assert.ok(state.battle.requests[0].moves.some(m=>m.name==='독압정'));await call('battle',{command:{type:'move',move:'독압정'}});assert.ok(Battle.fromJSON(rawWorld().combat.snapshot).p2.sideConditions.toxicspikes);await call('forfeit');
+  const incompatible={...makeMon(25,20),moves:['전광석화'],pp:{quickattack:2}};seedMon(id,incompatible);await get();await call('teachStoryTm',{item:'za-tm089',slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);assert.deepEqual(rawMon(id).pp,incompatible.pp);
+  const regional={...makeMon(10179,20),moves:['몸통박치기'],pp:{tackle:1}};seedMon(id,regional);await get();await call('teachStoryTm',{item:'za-tm089',slot:0},409);assert.equal(rawMon(id).id,10179);
+  const other='tm-outside-party',rabbit={...makeMon(659,10),boxId:other,moves:['몸통박치기']};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,rabbit.id,JSON.stringify(rabbit),'qa',1);seedWorld({zaResearchRewards:[2]});await get();await call('teachResearchTm',{level:2,boxId:other,slot:0},409);assert.deepEqual(rawMon(other).moves,['몸통박치기']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
