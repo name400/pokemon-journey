@@ -26,7 +26,6 @@ import './rogue-results-redesign.css';
 import './rogue-world-redesign.css';
 import './rogue-milestone-motion.css';
 import './rogue-npc-dialogue.css';
-import './rogue-pokemon-accent.css';
 import NpcDialogue from '@/components/rogue-npc-dialogue';
 type State={revision:number;pickupVersion?:number;activeSlot:number;slots:any[];selecting:boolean;selectionSlot:number;starters?:StarterEntry[];run:any;battle:any;finishedBattle?:any;meta:{unlocked:number;candies:number};eggShop:any;drawnEggs?:{count:number;machineId:string;eggs?:{id:string;name:string;image:string}[]};pendingHatches?:any[];hatchedEgg?:any;evolutionResult?:any};
 const fmt=(n:number)=>Number(n||0).toLocaleString('ko-KR');

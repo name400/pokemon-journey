@@ -150,11 +150,3 @@ See `docs/PC_REAL_ARTWORK_PERFORMANCE_QA_20261105.md` for the measured limits an
 memo candidate that was rejected and reverted because it did not improve the long log.
 
 The active alias script checks the conditional battle button, cancellation, wild and trainer normal and Sketch plus non-random and ability-random challenge, including fusion and trainer-test/Weird Dream events with verified challenge combinations, confirmation, saved reserve and return to the same turn in synthetic desktop and mobile layouts.
-
-The shared Pokémon-themed entry shell has a focused responsive check:
-
-```sh
-PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/pokemon-shell-theme.mjs
-```
-
-It exercises game selection, guide and navigation at 320, 390 and 1280px with stubbed external artwork; it does not verify production artwork or physical devices.

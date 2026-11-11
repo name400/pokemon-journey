@@ -3,7 +3,6 @@ import './globals.css';
 import './game-shell.css';
 import './adventure-theme.css';
 import './rogue-shell-redesign.css';
-import './pokemon-shell-theme.css';
 export const metadata: Metadata = { title: '포켓몬 저니 | 탐험과 로그라이크', description: '독립 저장으로 즐기는 2D 탐험 모험과 로그라이크 도전', icons: {icon: '/favicon.svg'} };
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) { return <html lang="ko"><body>{children}</body></html>; }
 

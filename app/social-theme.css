@@ -8,11 +8,3 @@ main[data-mode="rogue"] .social-screen .friend-code{font-family:NeoDunggeunmo,sa
 @media(max-width:650px){main[data-mode="rogue"] .social-screen{grid-template-columns:1fr 1fr;gap:8px;padding:10px}main[data-mode="rogue"] .social-heading h2{font-size:20px}main[data-mode="rogue"] .social-screen .notice{padding:10px}main[data-mode="rogue"] .social-screen .social-add,main[data-mode="rogue"] .social-screen .social-friends,main[data-mode="rogue"] .social-screen details.notice{grid-column:1/-1}main[data-mode="rogue"] .social-screen .notice h3{font-size:13px}main[data-mode="rogue"] .social-screen .friend-code{font-size:16px;letter-spacing:.04em;overflow-wrap:anywhere}main[data-mode="rogue"] .social-screen .friend-list{max-height:20vh}main[data-mode="rogue"] .social-screen button{font-size:12px}main[data-mode="rogue"] .social-grid .input-label{font-size:11px}}
 
 @media(min-width:1200px) and (min-height:700px){main[data-mode=rogue] .social-screen{max-width:1400px;padding:28px;gap:16px}main[data-mode=rogue] .social-heading h2{font-size:30px}main[data-mode=rogue] .social-heading p,main[data-mode=rogue] .social-screen .notice p{font-size:14px;line-height:1.5}main[data-mode=rogue] .social-screen .notice{padding:20px;min-height:150px}main[data-mode=rogue] .social-screen .notice h3{font-size:19px}main[data-mode=rogue] .social-screen input,main[data-mode=rogue] .social-screen button{font-size:14px;min-height:46px}}
-/* Shared trainer network colours, including the adventure and home shells. */
-main:not([data-mode="rogue"]) .social-screen .notice{background:#faf5e8;border:2px solid #a4b9aa;color:#294c49;box-shadow:0 3px 0 #c2d1bf}
-main:not([data-mode="rogue"]) .social-screen .notice p{color:#506d62;line-height:1.55}
-main:not([data-mode="rogue"]) .social-screen .friend-code{color:#286b5c;overflow-wrap:anywhere}
-main:not([data-mode="rogue"]) .social-screen :is(input,button){min-height:44px}
-main:not([data-mode="rogue"]) .social-screen input{background:#fffdf6;border-color:#9bb5a6;color:#253e3b}
-main:not([data-mode="rogue"]) .social-screen button{color:#285f51;border-color:#89a998;background:#fffdf6}
-main:not([data-mode="rogue"]) .social-screen :is(input,button,summary):focus-visible{outline:3px solid #b77b22;outline-offset:2px}
