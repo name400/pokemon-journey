@@ -1569,3 +1569,16 @@ test('Rust Syndicate office separates courtyard and preserves story progress',as
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rust',interior:'rustOffice',x:11,y:7,facing:'up',zaMission20Stage:15,zaMission20Complete:true,zaRoyaleRank:'C',zaMission24Won:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission24Reward');await call('mission24Reward');assert.equal(state.world.zaMission24Complete,true);assert.equal(state.inventory['za-tm100'],1);await get();assert.equal(state.world.interior,'rustOffice');assert.equal(state.world.zaMission25Started,true);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Side Mission 117 saves Josée training, protects alpha duo and pays once',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side117-qa',displayName:'수련테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,strong={...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);const team=[id];for(let i=0;i<5;i++){const k=`side117-team-${i}`;team.push(k);sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(k,globalThis.__adventureUser.userId,150,JSON.stringify(strong),'qa',i);}
+  const dojo=()=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',teamIds:team,activeId:id},state.revision+1);
+  seedWorld({...dojo(),zaMission39Started:false});await get();await call('side117Josee',{},409);seedWorld({...dojo(),zaMission39Started:true});await get();assert.equal(state.world.interaction.action,'side117Josee');const coins=state.wallet.coins;
+  await call('side117Josee');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[68,63],[560,63],[701,63],[308,63]]);await battle();assert.equal(state.world.zaSide117Stage,1);assert.equal(state.wallet.coins,coins+3024);await get();assert.equal(state.world.interaction.action,'side117Pangoro');
+  await call('side117Pangoro');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level,m.adventureAlpha]),[[675,65,true],[675,65,true]]);await call('ball',{},409);await call('forfeit');assert.equal(state.world.zaSide117Stage,1);seedMon(id,strong);seedWorld(dojo());await get();await call('side117Pangoro');await battle();assert.equal(state.world.zaSide117Stage,2);assert.notEqual(state.world.zaSide117Complete,true);await get();assert.equal(state.world.interaction.action,'side117Reward');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'seedofmasteryza']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,995)').run(key,globalThis.__adventureUser.userId,'seedofmasteryza');await get();await call('side117Reward',{},409);assert.equal(state.world.zaSide117Stage,2);assert.equal(state.wallet.coins,coins+3024);
+  sql.prepare('UPDATE inventory SET quantity=989 WHERE key=?').run(key);await get();await call('side117Reward');assert.equal(state.inventory.seedofmasteryza,999);assert.equal(state.inventory.expertbelt,1);assert.equal(state.wallet.coins,coins+4524);assert.equal(state.world.zaSide117Complete,true);await get();await call('side117Reward',{},409);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
