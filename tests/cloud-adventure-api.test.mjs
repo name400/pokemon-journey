@@ -112,6 +112,17 @@ test('Mission 42 L appears outside Hotel Z while the legacy lobby entry remains 
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 19 Canari rematch works in Racine garage and the legacy site',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-racine-qa',displayName:'카나리재대결테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector6',interior:null,x:17,y:14,facing:'up',zaMission14Stage:12,zaMission19Stage:6,zaRoyaleRank:'E'},state.revision+1));await get();await call('mission19Canari',{},409);await call('enterRacineGarage');await get();await walkTo('d');assert.equal(state.world.interaction.action,'mission19Canari');await call('mission19Canari');assert.equal(state.battle.teams[1].at(-1).item,'eelektrossite');await call('forfeit');assert.equal(state.world.zaMission19Stage,6);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-site',interior:null,x:11,y:6,facing:'up'},state.revision+1));await get();await walkTo('d');assert.equal(state.world.interaction.action,'mission19Canari');await call('mission19Canari');await call('forfeit');assert.equal(state.world.zaMission19Stage,6);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector6',interior:'racineGarage',x:11,y:6,facing:'up'},state.revision+1));await get();await call('mission19Canari');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()}});await get();await battle();assert.equal(state.world.zaMission19Stage,7);assert.equal(state.wallet.coins,coins+3168);assert.deepEqual(state.world.teamIds,team);await get();assert.equal(state.world.zaMission19Stage,7);await call('mission19Canari',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-bleu-sector7',interior:null,x:13,y:13,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission19Freeze');await call('mission19Freeze',{},409);assert.equal(state.world.zaMission19Stage,7);seedMon(id,{...rawMon(id),moves:['냉동빔'],pp:{}});await get();await call('mission19Freeze');await get();assert.equal(state.world.zaMission19Stage,8);await call('mission19EnterSewer');await get();assert.equal(state.world.district,'lumiose-sewer');assert.equal(state.world.zaSewerReturn,'bleu7');assert.equal(state.world.zaMission19Stage,9);await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector7',13,13]);assert.equal(state.world.zaMission19Stage,9);await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission19EnterSewer');
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
