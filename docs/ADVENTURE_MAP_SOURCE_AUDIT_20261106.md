@@ -1050,3 +1050,7 @@ The [Zone 6 guide](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-
 ### Zone 17 park furniture and Zone 12 pond approach (draft)
 
 [Poképédia](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17) describes four benches and a stand in Zone 17's southern green area; these are now represented as blocking map objects, with matching-revision migration for older ground saves. The individual tile coordinates and stand appearance are draft. The [Zone 12 map guide](https://gamewith.jp/pokemon-za/524530) describes access by steps to the lower icy pond; two walkable step tiles now mark the existing pond approach. Those steps do not implement a separate elevation layer, and their exact position is provisional. Existing entrances, encounter tiles and rooftop state are preserved.
+
+## 센트리코 SBC 배틀코트 접근 — 초안
+
+[미션 20 안내](https://www.thonky.com/pokemon-legends-z-a/main-mission-20-a-request-from-the-rust-syndicate)는 센트리코 포켓몬센터 근처의 배틀코트를 명시한다. 센터 근처에 걸어서 들어가는 코트와 SBC 배틀 지점을 추가하고 기존 위치에서도 진행할 수 있게 유지했다. 코트의 정확한 좌표, 크기와 윤곽은 확인하지 못한 2D 초안이다. 은행 접근과 기존 운하 지형의 정밀 대조는 남아 있다.

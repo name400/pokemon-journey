@@ -522,3 +522,15 @@ test('Vert Sector 2 courtyard ladder keeps ground saves and a separate roof',()=
  const roof={...ground,x:5,y:9,facing:'down',zaVert2RoofUpper:true},upper=fieldMap(roof);assert.equal(upper[10][5],'l');assert.equal(fieldDialogue(roof).action,'vert2CourtyardLadder');
  assert.equal(fieldPath(upper,roof,{x:14,y:8}).length,0);const saved=restoreAdventurePosition(storeAdventurePosition(roof,69),69);assert.deepEqual([saved.x,saved.y,saved.zaVert2RoofUpper,saved.teamIds],[5,9,true,['kept']]);
 });
+
+test('Centrico court is reachable without invalidating existing plaza positions',()=>{
+ const base={area:3,district:'lumiose-centrico-route',interior:null,zaMission20Stage:11,teamIds:['kept']};
+ const map=fieldMap(base);
+ assert.equal(map[3][16],'o');assert.equal(map[11][17],'o');assert.equal(map[12][18],'d');
+ assert.ok(fieldPath(map,{x:11,y:6},{x:16,y:3}).length);
+ const position={...base,x:16,y:3,facing:'up'};
+ const restored=restoreAdventurePosition(storeAdventurePosition(position,411),411);
+ assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[base.district,16,3,['kept']]);
+ assert.equal(fieldDialogue(position)?.action,'mission20SBCStart');
+ assert.equal(fieldMap({...base,zaMission20Stage:12})[3][16],';');
+});

@@ -2117,3 +2117,14 @@ test('Canari quiz venue supports answer areas, cafe return and Mani battle',asyn
   seedWorld(storeAdventurePosition({...state.world,district:'lumiose-north-boulevard',interior:null,x:12,y:5,facing:'up',zaMission14Stage:3},state.revision+1));await get();await call('rankETrue');assert.equal(state.world.zaMission14Stage,4);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Mission 20 SBC court supports battle and preserves the legacy plaza entrance',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission20-court-qa',displayName:'배틀코트'};
+ try{
+  await get();await call('start',{species:1});
+  const originalTeam=[...state.world.teamIds];
+  const seed=(x,y)=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x,y,facing:'up',zaMission20Stage:11},state.revision+1));
+  seed(16,3);await get();assert.equal(state.world.interaction.action,'mission20SBCStart');await call('mission20SBCStart');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[444,705]);await call('forfeit');
+  seed(17,11);await get();assert.equal(state.world.interaction.action,'mission20SBCStart');assert.deepEqual(state.world.teamIds,originalTeam);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
