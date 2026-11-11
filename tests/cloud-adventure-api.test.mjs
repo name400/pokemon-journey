@@ -57,6 +57,20 @@ test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Moire pending revive reward can be claimed once after reconnect',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'moire-pending-qa',displayName:'보상테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:null,x:11,y:8,zaEmmaMet:true,zaSableyeQuest:3,zaSableyeRevivePending:true,zaRevives:3},state.revision+1));
+  await get();await call('claimSableyeRevives',{},409);await walkTo('m');assert.equal(state.world.interaction.action,'claimSableyeRevives');
+  await call('claimSableyeRevives');assert.equal(state.world.zaRevives,5);assert.equal(state.world.zaSableyeRevivePending,false);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.teamIds,team);
+  await get();assert.equal(state.world.zaRevives,5);assert.equal(state.world.zaSableyeQuest,3);await call('claimSableyeRevives',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-rouge-north',interior:null,x:state.world.x,y:state.world.y,zaSableyeQuest:2,zaSableyeRevivePending:false},state.revision+1));await get();await walkTo('m');await call('reportSableye');
+  assert.equal(state.world.zaSableyeRevivePending,true);assert.equal(state.wallet.coins,wallet.coins+4000);
+  await call('claimSableyeRevives');await get();assert.equal(state.world.zaRevives,7);assert.equal(state.wallet.coins,wallet.coins+4000);await call('claimSableyeRevives',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 9 south ladder remains usable across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
