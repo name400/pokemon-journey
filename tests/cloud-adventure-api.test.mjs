@@ -1496,3 +1496,15 @@ test('adventure vitamins consume only on valid use and persist EVs',async()=>{
   const current=rawMon(id),foe={...makeMon(19,5),boxId:'wild'};seedWorld({combat:createCombat([{...current,boxId:id}],[foe]),encounter:foe,trainer:null});await get();await call('useAdventureVitamin',{item:'protein',boxId:id},409);assert.equal(rawMon(id).evs.atk,10);assert.equal(state.inventory.protein,1);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('dojo hyper training spends caps once and preserves genetic IVs across reconnect',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'hyper-training-qa',displayName:'특훈테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,ivs={hp:0,atk:4,def:8,spa:12,spd:16,spe:31},mon={...configure({...makeMon(1,50),ivs}),boxId:id};seedMon(id,mon);
+  for(const item of ['bottlecap','goldbottlecap'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-site',interior:null,x:7,y:10,zaMission37Complete:false},state.revision+1));await get();await call('hyperTrainAdventure',{item:'bottlecap',stat:'atk'},409);assert.equal(state.inventory.bottlecap,1);
+  seedWorld(storeAdventurePosition({...state.world,zaMission37Complete:true},state.revision+1));await get();assert.equal(state.world.interaction?.hyperTraining,true,JSON.stringify({district:state.world.district,x:state.world.x,y:state.world.y,facing:state.world.facing,interaction:state.world.interaction}));await call('hyperTrainAdventure',{item:'bottlecap',stat:'spe'},409);assert.equal(state.inventory.bottlecap,1);
+  await call('hyperTrainAdventure',{item:'bottlecap',stat:'atk'});assert.equal(state.inventory.bottlecap,undefined);assert.deepEqual(rawMon(id).ivs,ivs);assert.equal(rawMon(id).adventureHyperTrained.atk,true);await get();assert.equal(state.box.find(m=>m.boxId===id).adventureHyperTrained.atk,true);
+  await call('hyperTrainAdventure',{item:'goldbottlecap'});assert.equal(state.inventory.goldbottlecap,undefined);assert.deepEqual(rawMon(id).ivs,ivs);assert.deepEqual(rawMon(id).adventureHyperTrained,{atk:true,hp:true,def:true,spa:true,spd:true});await get();await call('hyperTrainAdventure',{item:'goldbottlecap'},409);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
