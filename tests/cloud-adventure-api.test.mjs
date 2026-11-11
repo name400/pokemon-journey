@@ -1475,3 +1475,13 @@ test('Zone 1 road does not encounter but neighboring grass does',async()=>{
   await call('flee');await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone1',16,7]);
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
+
+test('rare reward balls remain usable after reconnect in battles and catch windows',async()=>{
+ const priorUser=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'rare-ball-qa',displayName:'희귀볼테스트'};
+ try{
+  await get();await call('start',{species:1});const hero=state.world.activeId;seedMon(hero,{...makeMon(1,30),boxId:hero});
+  const setBall=(item,n)=>sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?) ON CONFLICT(key) DO UPDATE SET quantity=excluded.quantity').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item,n);
+  setBall('friendball',1);const foe={...makeMon(25,5),boxId:'wild',hp:1};const player={...rawMon(hero),boxId:hero};seedWorld({combat:createCombat([player],[foe]),encounter:foe,trainer:null});await get();globalThis.__adventureRandom=()=>0;await call('ball',{ball:'friendball'});const caught=state.world.teamIds.at(-1);assert.equal(rawMon(caught).originBall,'friendball');assert.equal(rawMon(caught).friendship,150);assert.equal(state.inventory.friendball,undefined);await get();assert.equal(rawMon(caught).friendship,150);
+  setBall('moonball',1);const windowFoe={...makeMon(30,5),boxId:'wild',hp:0};seedWorld({combat:null,encounter:null,trainer:null,adventureCatchWindow:{foe:windowFoe,moveCount:0,revision:state.revision+1}});await get();await call('catchWindowBall',{ball:'moonball'});assert.equal(state.inventory.moonball,undefined);assert.equal(rawMon(state.world.teamIds.at(-1)).originBall,'moonball');await get();assert.equal(rawMon(state.world.teamIds.at(-1)).originBall,'moonball');
+ }finally{globalThis.__adventureUser=priorUser;globalThis.__adventureRandom=priorRandom;}
+});
