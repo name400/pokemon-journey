@@ -1,0 +1,5 @@
+# Magenta Street lower bank and sewer
+
+[Mission 20 walkthrough](https://www.thonky.com/pokemon-legends-z-a/main-mission-20-a-request-from-the-rust-syndicate) describes descending to the canal near Magenta Pokémon Center to enter the sewer and clear 27 crystals. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/The_Sewers) identifies this as the smaller Magenta Street sewer, separate from the Bleu sewer. [PowerPyx](https://www.powerpyx.com/pokemon-legends-z-a-moon-stone-location/) notes that the area remains accessible after the cleanup.
+
+A separate lower bank is connected to the existing center approach by a ramp, and its door leads to the existing cleanup map. Mission 20's start, return and report work there; after cleanup the player can re-enter without resetting progress. The former canal and Vernal draft accesses remain for existing saves. Ramp coordinates, bank geometry and sewer interior are provisional. This does not reproduce the original sewer's wild Pokémon or exact floor plan; unrestricted pre-mission access is not implemented. Existing Zone 14 substation connections and unlock checks are unchanged.

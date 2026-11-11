@@ -1678,3 +1678,13 @@ test('Magenta Street junctions round trip and preserve saved positions',async()=
   assert.equal(state.world.zaMission35Stage,4);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Magenta Center ramp reaches the lower sewer and allows return after cleanup',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta-sewer-bank-qa',displayName:'운하하수도테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector8-route',interior:null,x:16,y:15,facing:'up',zaMission20Stage:8},state.revision+1));await get();assert.equal(state.world.interaction.action,'magentaSewerRamp');await call('magentaSewerRamp');await get();assert.equal(state.world.district,'lumiose-magenta-sewer-bank');await walkTo({x:4,y:8});await call('face',{direction:'up'});assert.ok(state.world.interaction.actions.some(a=>a.action==='mission20CrystalStart'));await call('magentaSewerEnter',{},409);await call('mission20CrystalStart');await get();assert.equal(state.world.district,'lumiose-crystal-sewer');assert.equal(state.world.zaMission20Stage,9);assert.equal(state.world.zaMission20CrystalReturn,'magenta-bank');
+  const crystals=state.world.map.flatMap((row,y)=>[...row].flatMap((c,x)=>c==='c'?[`${x},${y}`]:[]));assert.equal(crystals.length,27);seedWorld(storeAdventurePosition({...state.world,zaMission20Crystals:crystals,zaMission20Stage:10},state.revision+1));await get();await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-magenta-sewer-bank');await call('face',{direction:'up'});assert.ok(state.world.interaction.actions.some(a=>a.action==='mission20CrystalReport'));await call('mission20CrystalReport');assert.equal(state.world.zaMission20Stage,11);await get();await call('magentaSewerEnter');await get();assert.equal(state.world.map.some(row=>row.includes('c')),false);await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-magenta-sewer-bank');
+  await walkTo({x:18,y:12});await call('face',{direction:'down'});await call('magentaSewerRamp');await get();assert.equal(state.world.district,'lumiose-magenta-sector8-route');assert.equal(state.world.zaMission20Stage,11);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
