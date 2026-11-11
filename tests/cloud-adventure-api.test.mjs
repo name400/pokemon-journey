@@ -278,6 +278,17 @@ test('Mission 29 Jaune Sector 8 links center, garden and legacy reward',async()=
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 21 scaffold adds a reversible ladder and glide approach',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission21-glide-qa',displayName:'입치트비계테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector6',interior:null,x:2,y:6,facing:'up',zaRoyaleRank:'D',zaMission15Stage:2,zaMission20Stage:5,zaMission21Complete:false},state.revision+1));await get();await call('magenta6Scaffold');await walkTo({x:11,y:5});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission21Scaffold');await call('mission21Scaffold');await get();assert.equal(state.world.district,'lumiose-mission21-glide');await call('mission21Scaffold');assert.equal(state.world.district,'lumiose-magenta6-scaffold');await call('mission21Scaffold');
+  await walkTo({x:9,y:6});await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[13,6]);await call('rotoGlide');assert.equal(state.world.x,9);await call('rotoGlide');await walkTo({x:17,y:6});await call('face',{direction:'up'});await call('mission21Scaffold');await get();assert.equal(state.world.district,'lumiose-magenta-sector6-roof');await call('mission21Scaffold');assert.equal(state.world.district,'lumiose-mission21-glide');await call('mission21Scaffold');
+  await walkTo({x:18,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission20CaseBattle');await call('mission20CaseBattle');await call('forfeit');assert.notEqual(state.world.zaMission21Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-magenta-sector6-roof',interior:null,x:18,y:6,facing:'up'},state.revision+1));await get();await call('mission20CaseBattle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission21RewardPending,true);await get();await call('mission20ClaimStone');assert.equal(state.inventory.mawilite,1);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
