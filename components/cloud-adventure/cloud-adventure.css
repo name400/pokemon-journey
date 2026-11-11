@@ -42,3 +42,9 @@
 .cloud-adventure-view .adv-roster button[aria-pressed=true]{background:#dcefdc;border-color:#397b67;box-shadow:inset 0 0 0 1px #397b67}
 .cloud-adventure-view .adv-products article{background:#fbf7eb;border-color:#a9bcaa}
 .cloud-adventure-view .adv-manage-mon{background:#e9f1e4;border:1px solid #a9c0ad;border-radius:8px;padding:10px 12px;margin-bottom:16px}
+.cloud-adventure-view .adv-start-destinations{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.cloud-adventure-view .adv-start-destinations button{min-height:44px}
+.cloud-adventure-view .adv-city-access{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;margin:0 0 12px;border:2px solid #557b72;border-radius:8px;background:#f7f4e4;color:#24483f}
+.cloud-adventure-view .adv-city-access p{margin:0;line-height:1.5;font-size:13px}
+.cloud-adventure-view .adv-city-access button{flex:none;min-height:44px;padding:8px 12px}
+@media(max-width:560px){.cloud-adventure-view .adv-city-access{align-items:stretch;flex-direction:column;gap:7px}.cloud-adventure-view .adv-city-access button{width:100%}}

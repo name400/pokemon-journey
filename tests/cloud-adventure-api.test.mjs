@@ -2437,3 +2437,30 @@ test('Hotel Richissime north boulevard entrance preserves the lobby and returns 
   await walkTo('i');await call('richissimeLift');await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-north-boulevard',null,14,4]);assert.equal(state.world.zaMission26Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('direct Lumiose visit preserves existing field position, progress and Pokémon',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-direct-visit-qa',displayName:'도시방문검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  seedWorld({...rawWorld(),area:1,x:3,y:8,facing:'right',regionId:2,locationId:17,badges:['gym1'],league:1,zaSide72Stage:1});await get();
+  const mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet),bag=structuredClone(state.inventory),team=[...state.world.teamIds];
+  await call('quickVisitLumiose');assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);await get();assert.equal(state.world.zaQuickReturn.area,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,bag);assert.equal(state.world.zaSide72Stage,1);
+  await call('returnFromLumiose');await get();assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y,state.world.facing,state.world.regionId,state.world.locationId],[1,null,3,8,'right',2,17]);assert.equal(state.world.zaQuickReturn,undefined);assert.deepEqual(state.world.badges,['gym1']);assert.equal(state.world.league,1);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,bag);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('new adventure can start in Lumiose without changing legacy start',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-direct-start-qa',displayName:'도시시작검증'};
+ try{await get();await call('start',{species:1,destination:'lumiose'});assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);await get();assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);assert.equal(state.world.teamIds.length,1);}
+ finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('direct Lumiose travel rejects unsafe or stale states without modifying saves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-direct-guard-qa',displayName:'도시이동안전검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon=structuredClone(rawMon(id));
+  seedWorld({interior:'lab',area:0,x:7,y:8});await get();const revision=state.revision;await call('quickVisitLumiose',{},409);assert.equal(state.revision,revision);assert.deepEqual(rawMon(id),mon);
+  seedWorld({interior:null,area:0,x:3,y:8,adventurePendingMoves:[null]});await get();await call('quickVisitLumiose',{},409);await call('resolveAdventureMove',{slot:null});
+  const stale=state.revision;await call('face',{direction:'up'});await call('quickVisitLumiose',{revision:stale},409);assert.equal(state.world.district||null,null);assert.deepEqual(rawMon(id),mon);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
