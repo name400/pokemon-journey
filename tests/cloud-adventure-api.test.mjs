@@ -111,6 +111,18 @@ test('Mission 40 Pangoro can be investigated on the Zone 9 southwest roof',async
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 41 Yveltal is reachable on the Galerie dome and remains retryable',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission41-dome-qa',displayName:'돔조사테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:null,x:20,y:12,facing:'down',zaMission15Stage:2,zaMission41Stage:3,zaMission40Complete:true,adventureBalls:{masterball:1}},state.revision+1));
+  await get();await call('luneScaffold');await walkTo({x:7,y:8});await call('face',{direction:'right'});await call('luneRoofLadder');await walkTo({x:17,y:4});await call('rotoGlide');
+  await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-lune-roof',17,2]);assert.equal(state.world.map[2][16],'0');await call('face',{direction:'left'});assert.equal(state.world.interaction.action,'mission41Yveltal');
+  await call('mission41Yveltal');assert.deepEqual([state.battle.teams[1][0].speciesId,state.battle.teams[1][0].level],[717,75]);await call('flee');await get();assert.equal(state.world.map[2][16],'0');assert.equal(state.world.zaMission41Stage,3);
+  await call('mission41Yveltal');await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaMission41Complete,true);assert.equal(state.world.zaMission42Ready,true);assert.notEqual(state.world.map[2][16],'0');assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);await call('mission41Yveltal',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 9 south ladder remains usable across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
