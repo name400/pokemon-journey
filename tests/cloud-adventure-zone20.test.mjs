@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldPath,storeAdventurePosition,restoreAdventurePosition,stepField,cloudNpcTile,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
-import {zone20Map,zone20Visible,zone20Encounter,ZONE20_CONTAINERS,ZONE20_ROCKS,ZONE20_RUIN_SUPPORTS} from '../lib/cloud-adventure/adventure-mission42.mjs';
+import {zone20Map,zone20Visible,zone20Encounter,ZONE20_ALPHA,ZONE20_CONTAINERS,ZONE20_ROCKS,ZONE20_RUIN_SUPPORTS} from '../lib/cloud-adventure/adventure-mission42.mjs';
 test('zone twenty retains Zygarde site and supports saved field position',()=>{
  const s={area:3,district:'lumiose-zone20',interior:null,x:11,y:14,facing:'up',zaMission42Stage:1};const map=zone20Map(s);
  assert.equal(map[6][11],'n');assert.ok(fieldPath(map,s,{x:11,y:7}).length);assert.equal(zone20Visible(s,'a').species,1);assert.equal(zone20Encounter(s,()=>0).speciesId,1);
@@ -76,4 +76,9 @@ test('two independent Zone 20 alpha locations preserve legacy and spent state',(
  const saved=restoreAdventurePosition(storeAdventurePosition(s,201),201);assert.deepEqual([saved.zaZone20AlphaSpecies,saved.zaZone20AlphaSpecies2,saved.zaZone20Spent,saved.teamIds],[448,282,{alpha:true},['kept']]);
  assert.equal(zone20Visible({...s,zaZone20Spent:{alpha2:true}},'d').species,448);assert.equal(zone20Visible({...s,zaZone20Spent:{alpha2:true}},'e'),null);
  assert.ok(fieldPath(map,{x:11,y:14},{x:11,y:7}).length);
+});
+
+test('documented central alpha pool supports every battle species',async()=>{
+ const {makeMon}=await import('../lib/game.mjs');assert.equal(ZONE20_ALPHA.length,67);assert.equal(new Set(ZONE20_ALPHA.map(p=>p.species)).size,67);
+ for(const p of ZONE20_ALPHA){const mon=makeMon(p.species,64);assert.equal(mon.speciesId,p.species);assert.equal(mon.name,p.name);}
 });
