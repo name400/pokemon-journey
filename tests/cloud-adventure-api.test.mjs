@@ -572,6 +572,17 @@ test('west Magenta courtyard entrance survives reload and returns to the canal',
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Rouge Plaza southeast road reconnects across save and reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge-hibernal-qa',displayName:'광장길테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:21,y:12,facing:'right'},state.revision+1));await get();
+  await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-hibernal-approach',1,12]);
+  await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone3',21,12]);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Coulant old water-edge save restores a safe bank with progress',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'coulant-old-bank-qa',displayName:'옛수로테스트'};
  try{
