@@ -460,3 +460,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 10 동쪽 얕은 물과 저리어
 
 [구역 안내](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-10/)와 [위치 안내](https://www.gamerguides.com/pokemon-legends-z-a/guide/wild-zones/bleu-sector-10/all-wild-zone-10-pokemon-locations)는 동쪽 출입구 근처 얕은 물에서 저리어가 나타난다고 설명한다. 기존 운하의 동쪽 일부에 걷는 얕은 수역과 저리어를 추가했다. 정확한 물 경계·좌표·개체 행동은 초안이며 나머지 수로의 이동 방식은 미완성이다. 기존 지형, 저장과 개체 소진 기록은 유지한다.
+
+### 구역 14 북쪽 정문
+
+[구역 14 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_14)은 변전소의 유일한 출입구가 북쪽 로즈 애비뉴로 이어진다고 설명한다. 로즈 애비뉴에서 기존 북문에 도착하고 북문으로 돌아오도록 주 경로를 바로잡았다. 기존 서쪽·남쪽 임시 출입은 이전 이동 경로를 위해 남아 있으므로 출입구 수는 원작과 다르다. 입구 주변 포장과 타일 좌표는 초안이며 기존 저장·랭크 제한·바위와 도구 진행은 보존한다.

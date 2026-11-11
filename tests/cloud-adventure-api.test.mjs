@@ -2250,3 +2250,13 @@ test('Zone 10 east shallows expose Tynamo and survive reload',async()=>{
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:20,y:7,facing:'down',zaRoyaleRank:'F'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone10Wild-tynamo');await call('zone10Wild-tynamo');assert.equal(state.battle.teams[1][0].id,602);await get();assert.equal(state.battle.teams[1][0].id,602);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 14 north entrance returns to Rose Avenue and preserves progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone14-north-gate-qa',displayName:'변전소북문테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-canal-route',interior:null,x:10,y:1,facing:'up',zaRoyaleRank:'D',zaZone14RocksCleared:['16,10'],zaZone14Items:['south-ultra']},state.revision+1));await get();
+  await call('move',{direction:'up'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone14',11,1]);await get();assert.deepEqual(state.world.zaZone14RocksCleared,['16,10']);assert.deepEqual(state.world.zaZone14Items,['south-ultra']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-canal-route',10,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
