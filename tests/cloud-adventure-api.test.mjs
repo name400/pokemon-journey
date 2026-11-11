@@ -1688,3 +1688,18 @@ test('Magenta Center ramp reaches the lower sewer and allows return after cleanu
   await walkTo({x:18,y:12});await call('face',{direction:'down'});await call('magentaSewerRamp');await get();assert.equal(state.world.district,'lumiose-magenta-sector8-route');assert.equal(state.world.zaMission20Stage,11);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Magenta sewer free exploration preserves mission state and supports wild captures',async()=>{
+ const priorUser=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom,priorTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'magenta-sewer-wild-qa',displayName:'하수도야생테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sewer-bank',interior:null,x:4,y:8,facing:'up',zaMission20Stage:undefined,adventureBalls:{masterball:1}},state.revision+1));await get();assert.equal(state.world.interaction.action,'magentaSewerEnter');await call('magentaSewerEnter');await get();assert.equal(state.world.zaMission20Stage,0);assert.equal(state.world.map.some(row=>row.includes('c')),false);
+  globalThis.__adventureTime={period:'night',hour:22};
+  for(const [choice,speciesId] of [[.01,168],[.3,686],[.55,690],[.8,714]]){
+   seedWorld(storeAdventurePosition({...state.world,district:'lumiose-crystal-sewer',interior:null,x:4,y:7,facing:'up',combat:null,encounter:null,trainer:null},state.revision+1));await get();let calls=0;globalThis.__adventureRandom=()=>calls++===0?0:calls===2?choice:0;await call('move',{direction:'up'});assert.equal(state.battle.teams[1][0].speciesId,speciesId);assert.ok(state.battle.teams[1][0].level>=34&&state.battle.teams[1][0].level<=39);globalThis.__adventureRandom=()=>0;
+   if(speciesId===714){await call('ball',{ball:'masterball'});await get();assert.ok(state.box.some(m=>m.speciesId===714));}else{await call('flee');assert.equal(state.battle,null);}
+  }
+  globalThis.__adventureTime={period:'day',hour:12};seedWorld(storeAdventurePosition({...state.world,district:'lumiose-crystal-sewer',interior:null,x:4,y:7,facing:'up'},state.revision+1));await get();let dayCalls=0;globalThis.__adventureRandom=()=>dayCalls++===0?0:dayCalls===2?.99:0;await call('move',{direction:'up'});assert.equal(state.battle.teams[1][0].speciesId,690);globalThis.__adventureRandom=()=>0;await call('flee');
+  globalThis.__adventureRandom=()=>.999;await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-magenta-sewer-bank');assert.equal(state.world.zaMission20Stage,0);assert.ok(state.world.adventureDexSpecies.includes(714));
+ }finally{globalThis.__adventureUser=priorUser;globalThis.__adventureRandom=priorRandom;globalThis.__adventureTime=priorTime;}
+});
