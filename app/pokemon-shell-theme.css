@@ -98,3 +98,9 @@ main[data-view="collection"] .dex-card small{color:#4b6b61;overflow-wrap:anywher
 main[data-view="collection"] .notice{background:#f9f3e3;border:2px solid #9ab3a4;color:#294b48}
 @media(max-width:520px){main[data-view="collection"] .section-head{padding:12px;gap:8px}main[data-view="collection"] .dex-card{padding:12px}}
 @media(max-width:520px){main[data-mode="adventure"] .topbar{gap:6px;padding-inline:10px}main[data-mode="adventure"] .topbar>div:first-child{min-width:0;flex:1}main[data-mode="adventure"] .topbar .avatar{display:none}main[data-mode="adventure"] .topbar .account-name{max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left:2px}main[data-mode="adventure"] .topbar .signin{white-space:nowrap}}
+/* Shared arena lobby uses the same trainer card palette. */
+main[data-view="pvp"] .notice{background:#faf5e8;border:2px solid #a4b9aa;color:#294c49}
+main[data-view="pvp"] .notice p{color:#506d62}
+main[data-view="pvp"] .arena-tabs [aria-selected="true"]{background:#28675d;color:#fff9e8;border-color:#28675d}
+main[data-view="pvp"] .pvp-select button[aria-pressed="true"]{background:#dcefdc;border-color:#397b67;color:#244d45}
+main[data-view="pvp"] :is(button,input):focus-visible{outline:3px solid #b77b22;outline-offset:2px}

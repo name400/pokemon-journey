@@ -60,3 +60,13 @@
 .adv-sheet{border-color:#405b5d;box-shadow:0 18px 80px #07142188}.adv-sheet>header{background:#e4dfc9;border-color:#aabcb2}.adv-sheet :is(button,input,select,summary):focus-visible,.adventure-game button:focus-visible,.adv-field:focus-visible{outline-color:#f3be5b}.adv-battle-revive{background:#e9dfc6;border-color:#829b91;color:#24344b}.adv-battle-revive button{color:#24344b}
 @media(max-width:740px){.adventure-game{width:calc(100% - 16px);margin:10px 8px 20px;border-radius:8px}}
 @media(max-width:520px){.adv-field-bottom{gap:4px;font-size:10px}.adv-field-bottom span:last-child{font-size:9px}}
+.local-adventure-view .adv-field-top,.local-adventure-view .adv-field-bottom{background:#dcebe1;border-color:#698f84;color:#234d48}
+.local-adventure-view .adv-console,.local-adventure-view .adv-partner,.local-adventure-view .adv-party{background:#faf5e7;border-color:#98b1a0}
+.local-adventure-view .adv-toolbar button{background:#fdf8e9;border-color:#91ab9d;color:#285a50}
+.local-adventure-view .adv-party>button.active{background:#e0efdd;border-color:#508d79;box-shadow:inset 3px 0 #508d79}
+.local-adventure-view .adv-sheet{background:#fffaf0;border-color:#658e80}
+.local-adventure-view .adv-sheet>header{background:#dcece1;border-bottom:2px solid #90ac9b;color:#244d49}
+.local-adventure-view .adv-search{background:#fffef8;border-color:#99b1a2}
+.local-adventure-view .adv-roster button{background:#f7f3e4;border-color:#acbead;color:#294b47}
+.local-adventure-view .adv-roster button[aria-pressed=true]{background:#dcefdc;border-color:#397b67;box-shadow:inset 0 0 0 1px #397b67}
+.local-adventure-view .adv-products article{background:#fbf7eb;border-color:#a9bcaa}
