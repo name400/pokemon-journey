@@ -117,5 +117,31 @@
 /* Keep the catalog usable on shorter desktop windows; the page can scroll
    instead of squeezing the actual Pokémon grid beneath fixed controls. */
 @media (min-width:992px) {
-  .rc-shell .rogue-starters-screen { height:max(820px,calc(100dvh - 132px)); }
+  .rc-shell .rogue-starters-screen { height:max(1000px,calc(100dvh - 132px)); }
 }
+
+/* Yellow/blue menu frames, white cards, and red reserved for primary actions.
+   Type badges retain their existing type-specific colors. */
+.rc-shell:not(.is-battle) .rogue-hud,
+.rc-shell .rogue-starters-screen .rss-header,
+.rc-shell .rogue-starters-screen .rss-launchbar{background:#3b4cca;border-color:#17265b;color:#f8f9fa;box-shadow:inset 0 -3px #ffcb05}
+.rc-shell:not(.is-battle) .rc-nav{background:#293a8f;border-color:#17265b}
+.rc-shell:not(.is-battle) .rc-nav button.selected{background:#ffcb05;color:#17265b;border-color:#17265b;border-radius:10px;box-shadow:inset 0 2px #fff1a0,0 2px #17265b}
+.rc-shell .rogue-starters-screen{--rss-ink:#1d2858;--rss-deep:#17265b;--rss-teal:#3b4cca;--rss-amber:#ffcb05;--rss-cream:#f8f9fa;background:#f8f9fa;border-color:#17265b}
+.rc-shell .rogue-starters-screen .rss-party{background:#eff3fc;border-color:#a9b5e1}
+.rc-shell .rogue-starters-screen .rss-mon:not(.is-locked):not(.is-focused):not(.is-chosen){background:#f8f9fa;border-color:#8798d7}
+.rc-shell .rogue-starters-screen .rss-mon.is-focused{background:#fff6c6;border-color:#263a94;box-shadow:inset 0 0 0 3px #ffcb05,0 2px 0 #263a94}
+.rc-shell .rogue-starters-screen .rss-mon.is-chosen{background:#e5ebff;border-color:#3b4cca}
+.rc-shell .rogue-starters-screen .rss-generations>button.is-active{background:#3b4cca;color:#fff;border-color:#17265b}
+.rc-shell .rogue-starters-screen .rss-button-primary:not(:disabled),
+.rc-shell .rogue-starters-screen .rss-button-start:not(:disabled){background:#d91212;color:#fff;border-color:#7e0e0e;box-shadow:inset 0 2px #ee7777,0 3px #7e0e0e}
+.rc-shell.is-battle .battle-screen .bs-classic-commands [data-command-primary]:not(:disabled){background:#d91212;color:#fff;border-color:#7e0e0e;box-shadow:inset 0 2px #ee7777,0 3px #7e0e0e}
+.rc-shell.is-battle .battle-screen .bs-classic-commands [data-command-primary]:not(:disabled) svg{background:#a60f0f;color:#fff;border-color:#f1b3a5}
+.rc-shell .rogue-starters-screen :is(.rss-catalog-controls,.rss-detail-heading,.rss-detail-body){background:#f8f9fa;border-color:#a9b5e1}
+.rc-shell .rogue-starters-screen .rss-catalog{background:#edf1fb}
+.rc-shell .rogue-starters-screen .rss-mon-grid{background-color:#edf1fb;background-image:linear-gradient(#cbd4f155 1px,transparent 1px),linear-gradient(90deg,#cbd4f155 1px,transparent 1px)}
+.rc-shell .rogue-starters-screen .rss-slots>li{background:#e9eefb;border-color:#9aabdc;border-radius:9px}
+.rc-shell .rogue-starters-screen .rss-slots>li.is-filled{background:#fffbe1;border-color:#3b4cca}
+.rc-shell .rogue-starters-screen :is(.rss-detail-tabs,.rss-pane-nav){background:#e9eefb}
+.rc-shell .rogue-starters-screen .rss-detail-tabs button{background:#f8f9fa;color:#263a85;border-color:#9aabdc;border-radius:8px}
+.rc-shell .rogue-starters-screen .rss-detail-tabs button[aria-pressed=true]{background:#fff3b4;color:#17265b;box-shadow:inset 0 -3px #3b4cca}
