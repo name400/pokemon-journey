@@ -18,3 +18,11 @@ test('Zone 19 west and east entrances connect both ways and preserve old routes'
   const back=stepField(saved,reverse);assert.deepEqual([back.district,back.x,back.y],[district,x,1]);
  }
 });
+
+test('Zone 19 east entrance connects directly to Jaune Sector 8',()=>{
+ const road={area:3,district:'lumiose-jaune-sector8',interior:null,x:1,y:8,zaRoyaleRank:'C',teamIds:['kept'],zaZone19Items:['tree-luxury']};
+ assert.equal(stepField(road,'left').blocked,true);
+ const entry=stepField({...road,zaRoyaleRank:'B'},'left');assert.deepEqual([entry.district,entry.x,entry.y],['lumiose-zone19',21,9]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...road,...entry,zaRoyaleRank:'B'},11),11);assert.deepEqual(saved.teamIds,['kept']);assert.deepEqual(saved.zaZone19Items,['tree-luxury']);
+ assert.ok(fieldPath(zone19Map(saved),saved,{x:11,y:9}).length);const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-jaune-sector8',1,8]);
+});

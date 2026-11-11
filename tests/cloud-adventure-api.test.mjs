@@ -1056,6 +1056,9 @@ test('Zone 19 directional entrances survive reloads and keep rank restrictions',
    assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',landingX,8]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
    await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[district,x,1]);
   }
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:1,y:8,facing:'left',zaRoyaleRank:'C',zaZone19Items:['tree-luxury']},state.revision+1));await get();await call('move',{direction:'left'},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:1,y:8,zaRoyaleRank:'B'},state.revision+1));await get();await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',21,9]);assert.deepEqual(state.world.zaZone19Items,['tree-luxury']);
+  await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-sector8',1,8]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
