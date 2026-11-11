@@ -2190,6 +2190,19 @@ test('Nouveau Cafe 2 sells restorative drinks without changing mission progress'
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 18 rooftop bird encounter uses server time and survives reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-roof-bird-qa',displayName:'옥상 조우'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:7,y:7,facing:'up',zaRoyaleRank:'B',zaZone18Upper:true,adventureBalls:{masterball:1}},state.revision+1));
+  await get();const night=state.world.zaZone18Period==='night',id=night?'noibat':'swablu',species=night?714:333;
+  assert.equal(state.world.interaction.action,`zone18Wild-${id}`);await call(`zone18Wild-${id}`);assert.equal(state.battle.teams[1][0].speciesId,species);
+  await call('flee');await get();assert.notEqual(state.world.zaZone18Spent?.[id],true);
+  await call(`zone18Wild-${id}`);await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaZone18Spent[id],true);
+  assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 18 construction alley connects to the shared Lopunny encounter',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-construction-qa',displayName:'공사 골목'};
  try{

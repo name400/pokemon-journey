@@ -1,7 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {zone18Map,zone18Visible,zone18Encounter,ZONE18_SCAFFOLD} from '../lib/cloud-adventure/adventure-zone18.mjs';
+
+test('Zone 18 rooftop birds follow the server period and preserve old positions',()=>{
+ const base={area:3,district:'lumiose-zone18',interior:null,zaRoyaleRank:'B',zaZone18Upper:true,teamIds:['kept']};
+ for(const [period,species] of [['day',[333,334]],['night',[714,715]]]){
+  const s={...base,zaZone18Period:period};
+  for(const [index,tile] of ['e','f'].entries()){
+   const mon=zone18Visible(s,tile);assert.equal(mon.species,species[index]);assert.equal(zone18Map(s)[mon.y][mon.x],tile);
+   assert.equal(fieldDialogue({...s,x:mon.x,y:mon.y+1,facing:'up'}).action,`zone18Wild-${mon.id}`);
+   assert.equal(zone18Visible({...s,zaZone18Spent:{[mon.id]:true}},tile),null);
+   const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:mon.x,y:mon.y},37),37);
+   assert.deepEqual([saved.x,saved.y,saved.teamIds],[mon.x,mon.y,['kept']]);
+  }
+ }
+ assert.equal(zone18Visible({...base,zaZone18Upper:false,zaZone18Period:'day'},'e'),null);
+});
 
 test('Zone 18 north and southeast approaches preserve ground and rooftop saves',()=>{
  const s={area:3,district:'lumiose-zone18',interior:null,zaRoyaleRank:'B',teamIds:['kept']},map=zone18Map(s);
