@@ -2584,6 +2584,19 @@ test('Lumiose starters match ZA and existing adventure data is preserved',async(
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('ZA introduction saves the chase and confirms one nearby starter',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ try{
+  for(const [species,x] of [[152,2],[498,4],[158,6]]){
+   globalThis.__adventureUser={userId:`za-intro-${species}`,displayName:'도입 검증'};await get();await call('startIntro');assert.equal(state.world.zaIntroStage,'chase');assert.deepEqual(state.world.teamIds,[]);
+   await call('introTalk',{species},409);await call('introConfirm',{species,confirmed:true},409);await call('introMove',{direction:'right'});await get();assert.equal(state.world.zaIntroX,2);
+   for(let i=0;i<5;i++)await call('introMove',{direction:'right'});await get();assert.equal(state.world.zaIntroStage,'choose');assert.equal(sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,0);
+   for(let i=0;i<Math.abs(x-4);i++)await call('introMove',{direction:x<4?'left':'right'});await call('introMove',{direction:'up'});await call('introTalk',{species});await get();assert.equal(state.world.zaIntroChoice,species);
+   await call('introCancel');await get();assert.equal(state.world.zaIntroChoice,null);await call('introTalk',{species});await call('introConfirm',{species,confirmed:false},409);await call('introConfirm',{species,confirmed:true});const id=state.world.activeId,mon=structuredClone(rawMon(id));assert.equal(mon.speciesId,species);assert.equal(mon.level,5);assert.equal(state.world.zaIntroStage,'complete');assert.equal(state.world.district,'lumiose');await get();assert.deepEqual(rawMon(id),mon);await call('introConfirm',{species,confirmed:true},409);assert.equal(sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('direct Lumiose travel rejects unsafe or stale states without modifying saves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-direct-guard-qa',displayName:'도시이동안전검증'};
  try{
