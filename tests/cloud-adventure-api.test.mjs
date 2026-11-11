@@ -241,6 +241,17 @@ test('Mission 28 links Zone 7 west lift to the rooftop circuit',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 33 Hibernal alley connects to the city and preserves legacy rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission33-alley-qa',displayName:'히베르날골목테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-hibernal-approach',interior:null,x:21,y:8,facing:'right',zaRoyaleRank:'B',zaMission31Stage:3,zaMission33Complete:false},state.revision+1));await get();await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-mission33-alley',1,4]);
+  await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-hibernal-approach');await call('move',{direction:'right'});await walkTo({x:5,y:12});await call('face',{direction:'up'});await get();assert.equal(state.world.interaction.action,'mission31CaseBattle');await call('mission31CaseBattle');await call('forfeit');assert.notEqual(state.world.zaMission33Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-mission33-alley',interior:null,x:5,y:12,facing:'up'},state.revision+1));await get();await call('mission31CaseBattle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission33RewardPending,true);await get();await call('mission31ClaimStone');assert.equal(state.inventory.tyranitarite,1);await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.map[11][5],'.');
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-north-boulevard',interior:null,x:18,y:7,facing:'up',zaMission33RewardPending:true},state.revision+1));await get();await call('mission31ClaimStone');assert.equal(state.inventory.tyranitarite,2);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
