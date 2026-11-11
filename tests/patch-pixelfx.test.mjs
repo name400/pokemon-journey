@@ -9,8 +9,10 @@ import * as ice from '../third_party/pixelfx/src/fx/ice/snowflake-burst.js';
 import * as poison from '../third_party/pixelfx/src/fx/nature/acid-splash.js';
 import * as heal from '../third_party/pixelfx/src/fx/nature/healing-bloom.js';
 import * as grass from '../third_party/pixelfx/src/fx/nature/vine-whip.js';
+import * as burn from '../third_party/pixelfx/src/fx/fire/spirit-flame.js';
+import * as sleep from '../third_party/pixelfx/src/fx/status/sleep.js';
 
-for (const [name, effect] of Object.entries({ fire, electric, hit, water, ice, poison, heal, grass })) {
+for (const [name, effect] of Object.entries({ fire, electric, hit, water, ice, poison, heal, grass, burn, sleep })) {
   test(`Patch PixelFX ${name} renders a transparent battle overlay`, () => {
     const frame = createFrame(128, 128);
     const instance = createFx(effect, { x: 64, y: 84 });
@@ -23,3 +25,16 @@ for (const [name, effect] of Object.entries({ fire, electric, hit, water, ice, p
     assert.ok(transparent > 0, 'background remains transparent');
   });
 }
+
+test('sleep overlay does not paint the stock actor eyes', async () => {
+  const { stockActor } = await import('../third_party/pixelfx/src/core/index.js');
+  const render = eyes => {
+    const actor = { ...stockActor(2), eyes };
+    const frame = createFrame(128, 128);
+    const instance = createFx(sleep, { x: 64, y: 84, actor });
+    instance.update(0.2);
+    instance.draw(frame);
+    return composite(frame, new Uint8ClampedArray(128 * 128 * 4));
+  };
+  assert.deepEqual(render([[0, 0], [23, 37]]), render([]));
+});

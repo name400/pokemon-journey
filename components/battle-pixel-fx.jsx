@@ -10,8 +10,10 @@ import * as ice from '../third_party/pixelfx/src/fx/ice/snowflake-burst.js';
 import * as poison from '../third_party/pixelfx/src/fx/nature/acid-splash.js';
 import * as heal from '../third_party/pixelfx/src/fx/nature/healing-bloom.js';
 import * as grass from '../third_party/pixelfx/src/fx/nature/vine-whip.js';
+import * as burn from '../third_party/pixelfx/src/fx/fire/spirit-flame.js';
+import * as sleep from '../third_party/pixelfx/src/fx/status/sleep.js';
 
-const effects = { fire: fireball, electric: zap, hit, water, ice, poison, heal, grass };
+const effects = { fire: fireball, electric: zap, hit, water, ice, poison, heal, grass, burn, sleep };
 
 // The SVG remains a fallback if canvas is unavailable or reduced motion is requested.
 export default function BattlePixelFx({ effect, duration, children }) {
@@ -27,7 +29,7 @@ export default function BattlePixelFx({ effect, duration, children }) {
     const module = effects[effect] || hit;
     const frame = createFrame(128, 128);
     const image = context.createImageData(128, 128);
-    const fx = createFx(module, { x: 64, y: effect === 'fire' ? 64 : 84, ...(effect === 'water' ? { stone: false } : {}) });
+    const fx = createFx(module, { x: 64, y: effect === 'fire' ? 64 : 84, ...(effect === 'water' ? { stone: false } : {}), ...(effect === 'burn' ? { palette: fireball.meta.options.palette } : {}) });
     if (effect === 'water') fx.update(0.2); // Skip the upstream stone-drop lead-in.
     let handle = 0, start = null, last = 0, displayed = -Infinity;
     const draw = now => {
