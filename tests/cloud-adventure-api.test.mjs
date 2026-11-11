@@ -2130,3 +2130,16 @@ test('Mission 20 SBC court supports battle and preserves the legacy plaza entran
   seed(17,11);await get();assert.equal(state.world.interaction.action,'mission20SBCStart');assert.deepEqual(state.world.teamIds,originalTeam);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 23 lower rooftop persists, returns to scaffolding and reaches Ampharos',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission23-lower-roof-qa',displayName:'전룡 옥상'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-mission23-roof',interior:null,x:12,y:11,facing:'right',zaMission20Stage:5,zaMission23GwynnWon:true},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'mission23LowerRoof');await walkTo({x:12,y:10});await call('face',{direction:'right'});assert.equal(state.world.interaction.action,'mission23TM089');await call('mission23TM089');assert.equal(state.inventory['za-tm089'],1);await get();assert.equal(state.world.zaMission23Tm089,true);await call('mission23TM089',{},409);
+  await walkTo({x:12,y:11});await call('face',{direction:'right'});await call('mission23LowerRoof');await get();assert.equal(state.world.zaMission23LowerRoof,true);assert.deepEqual([state.world.x,state.world.y],[3,11]);
+  await call('mission23LowerRoof');assert.equal(state.world.zaMission23LowerRoof,false);await call('mission23LowerRoof');
+  await walkTo({x:18,y:9});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission23LowerLadder');await call('mission23LowerLadder');await get();assert.equal(state.world.zaMission23LowerRoof,false);assert.deepEqual([state.world.x,state.world.y],[17,5]);
+  await walkTo({x:18,y:4});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission20CaseBattle');await call('mission20CaseBattle');assert.equal(state.battle.teams[1][0].speciesId,181);await call('forfeit');assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
