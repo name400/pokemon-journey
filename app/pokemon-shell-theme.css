@@ -1,0 +1,90 @@
+/* Shared journey shell. Gameplay panels retain their own contrast and layout. */
+main[data-mode] .brandmark {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 3px solid #203850;
+  background: linear-gradient(to bottom, #e85e52 0 44%, #203850 44% 56%, #fff9e8 56% 100%);
+  box-shadow: 0 0 0 2px #f5d271;
+}
+main[data-mode] .brandmark svg { visibility: hidden; }
+main[data-mode] .brandmark::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 11px; height: 11px;
+  border: 3px solid #203850; border-radius: 50%; background: #fff9e8; transform: translate(-50%,-50%);
+}
+main[data-mode] .sidebar .nav:focus-visible,
+main[data-mode] .mode-cards > button:focus-visible,
+main[data-mode] .topbar button:focus-visible { outline: 3px solid #f3b946; outline-offset: 3px; }
+
+/* The neutral entry point now uses the same field-guide palette as the games. */
+main[data-mode="home"] { --ink:#20394c; --muted:#56717d; --border:#d5e0dc; background:#eef5ed; }
+main[data-mode="home"] .workspace {
+  background: radial-gradient(circle at 90% 0%,#dceee2 0,transparent 36%), linear-gradient(155deg,#f7faf2,#edf5ef 68%,#e3f0ed);
+}
+main[data-mode="home"] .sidebar { background:#17384c; color:#f8f2dc; border-right:3px solid #0d283a; }
+main[data-mode="home"] .brand strong { color:#fff5d8; }
+main[data-mode="home"] .brand small, main[data-mode="home"] .side-label { color:#a9c6c5; }
+main[data-mode="home"] .sidebar .nav { color:#c7ddda; border:1px solid transparent; }
+main[data-mode="home"] .sidebar .nav.active { color:#17384c; background:#f8dda0; border-color:#ffe9b2; box-shadow:0 3px 0 #0c2637; }
+main[data-mode="home"] .sidebar .nav:hover:not(.active) { background:#27556a; color:#fff8df; }
+main[data-mode="home"] .sidebar-bottom { border-color:#476779; }
+main[data-mode="home"] .sidebar-bottom p, main[data-mode="home"] .signal { color:#c1d6d2; }
+main[data-mode="home"] .topbar { background:#fbfbf4; border-bottom:2px solid #d5e4db; }
+main[data-mode="home"] .eyebrow { color:#6b897f; }
+main[data-mode="home"] .topbar h1 { color:#233e50; }
+main[data-mode="home"] .workspace > footer { color:#648080; }
+main[data-mode="home"] .mode-selection { max-width:1200px; }
+main[data-mode="home"] .mode-selection > .kicker { color:#49796b; }
+main[data-mode="home"] .mode-selection > h2 { color:#173b4e; font-size:clamp(26px,3vw,38px); line-height:1.25; }
+main[data-mode="home"] .mode-selection > p { color:#536e6d; }
+main[data-mode="home"] .mode-cards { gap:20px; }
+main[data-mode="home"] .mode-cards > button {
+  min-height:340px; padding:30px; border:2px solid #a7cbb9; border-radius:18px;
+  color:#173f42; background:linear-gradient(145deg,#fafff3,#e2f4df); box-shadow:0 5px 0 #b3cfbd;
+}
+main[data-mode="home"] .mode-cards > button:nth-child(2) {
+  color:#263f62; border-color:#aabde1; background:linear-gradient(145deg,#fdf8eb,#e4ecfa); box-shadow:0 5px 0 #b4c1db;
+}
+main[data-mode="home"] .mode-cards > button::before {
+  content:''; position:absolute; right:-58px; bottom:-100px; width:220px; height:220px;
+  border:22px solid currentColor; border-radius:50%; opacity:.045; pointer-events:none;
+}
+main[data-mode="home"] .mode-cards > button:hover { transform:translateY(-3px); border-color:#58a085; box-shadow:0 8px 0 #abcbb9; }
+main[data-mode="home"] .mode-cards > button:nth-child(2):hover { border-color:#748ec3; box-shadow:0 8px 0 #adbddc; }
+main[data-mode="home"] .mode-cards .mode-icon {
+  display:grid; place-items:center; width:54px; height:54px; margin:0 0 34px;
+  color:#267963; background:#d5eddb; border:1px solid #a6d1b6; border-radius:14px;
+}
+main[data-mode="home"] .mode-cards > button:nth-child(2) .mode-icon { color:#516fa6; background:#dfe8fa; border-color:#bbcceb; }
+main[data-mode="home"] .mode-cards .mode-icon svg { width:33px; height:33px; stroke-width:2; }
+main[data-mode="home"] .mode-cards small { color:#47796b; font-weight:800; }
+main[data-mode="home"] .mode-cards > button:nth-child(2) small { color:#526e9a; }
+main[data-mode="home"] .mode-cards h3 { font-size:26px; color:inherit; }
+main[data-mode="home"] .mode-cards p { color:#496a60; max-width:90%; min-height:48px; }
+main[data-mode="home"] .mode-cards > button:nth-child(2) p { color:#536783; }
+main[data-mode="home"] .mode-cards b { display:inline-block; padding:10px 14px; margin-top:20px; border-radius:9px; color:#fff; background:#247a64; }
+main[data-mode="home"] .mode-cards > button:nth-child(2) b { background:#526eaa; }
+main[data-mode="home"] .login-welcome { background:linear-gradient(135deg,#e7f5df,#e1eff0); border:2px solid #b1d4bd; color:#173b4e; }
+main[data-mode="home"] .login-welcome p { color:#4f7063; }
+
+@media(max-width:800px) {
+  main[data-mode="home"] .sidebar { padding-inline:8px; }
+}
+@media(max-width:600px) {
+  main[data-mode="home"] .mode-selection { padding-top:24px; }
+  main[data-mode="home"] .mode-cards { gap:14px; }
+  main[data-mode="home"] .mode-cards > button { min-height:225px; padding:20px; }
+  main[data-mode="home"] .mode-cards .mode-icon { margin-bottom:14px; width:44px; height:44px; }
+  main[data-mode="home"] .mode-cards .mode-icon svg { width:28px; height:28px; }
+  main[data-mode="home"] .mode-cards h3 { font-size:22px; }
+  main[data-mode="home"] .mode-cards p { max-width:100%; min-height:0; }
+  main[data-mode="home"] .mode-cards b { margin-top:12px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  main[data-mode="home"] .mode-cards > button:hover { transform:none; }
+}
+@media(max-width:520px) {
+  main[data-mode="home"] .topbar .avatar { display:none; }
+  main[data-mode="home"] .topbar > div:first-child { min-width:0; flex:1; }
+  main[data-mode="home"] .topbar-admin-group { gap:4px; min-width:0; }
+}
