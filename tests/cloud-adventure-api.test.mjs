@@ -2426,3 +2426,14 @@ test('Zone 11 river Pokémon can be encountered from shore without walking on wa
   }
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Hotel Richissime north boulevard entrance preserves the lobby and returns to its entrance',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'richissime-boulevard-qa',displayName:'큰길호텔검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-north-boulevard',interior:null,x:14,y:4,facing:'up',zaMission26Stage:1},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'enterRichissime');await call('enterRichissime');assert.equal(state.world.interior,'richissimeLobby');await get();assert.equal(state.world.zaRichissimeEntrance,'north-boulevard');
+  await walkTo('i');await call('richissimeLift');await get();assert.equal(state.world.interior,'richissimeHall');await walkTo('q');assert.equal(state.world.interaction.action,'mission26Invitation');await call('mission26Invitation');assert.equal(state.world.zaMission26Stage,2);
+  await walkTo('i');await call('richissimeLift');await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-north-boulevard',null,14,4]);assert.equal(state.world.zaMission26Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
