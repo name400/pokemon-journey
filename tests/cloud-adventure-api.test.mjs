@@ -1564,7 +1564,7 @@ test('Zone 20 directional gates preserve story locks, exits and saved party',asy
   seedGate(11,4,0,false);await get();await call('zone20DirectionalGate',{},409);assert.equal(state.world.district,'lumiose-centrico-route');
   seedGate(11,4,2,true);await get();await call('zone20DirectionalGate',{},409);assert.equal(state.world.district,'lumiose-centrico-route');
   for(const [x,y,stage,startX,startY,direction] of [[11,4,1,11,1,'up'],[3,8,3,1,8,'left'],[19,8,4,21,8,'right']]){
-   seedGate(x,y,stage,true);await get();assert.equal(state.world.interaction.action,'zone20DirectionalGate');await call('zone20DirectionalGate');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone20',startX,startY]);assert.ok([448,282,306].includes(state.world.zaZone20AlphaSpecies));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission42Stage,stage);
+   seedGate(x,y,stage,true);await get();assert.equal(state.world.interaction.action,'zone20DirectionalGate');await call('zone20DirectionalGate');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone20',startX,startY]);assert.ok([448,282,306].includes(state.world.zaZone20AlphaSpecies));assert.ok([448,282,306].includes(state.world.zaZone20AlphaSpecies2));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission42Stage,stage);
    await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-centrico-route',x,y]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
   }
   seedGate(3,8,0,true);await get();await call('zone20DirectionalGate');await get();assert.equal(state.world.district,'lumiose-zone20');
@@ -2330,5 +2330,16 @@ test('Zone 20 central ruins safely restore a prior position and mission progress
   await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
   const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:8,y:4,zaMission38Complete:true,zaMission42Stage:3,zaZone20Items:['south-seed']},state.revision+1);old.districtPosition.zone20Layout=3;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone20');assert.notEqual(state.world.map[state.world.y][state.world.x],'|');assert.equal(state.world.zaMission42Stage,3);assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
   await get();assert.notEqual(state.world.map[state.world.y][state.world.x],'|');assert.equal(state.world.zaMission42Stage,3);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Zone 20 two alpha encounters and legacy visit persist independently',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-two-alphas-qa',displayName:'두우두머리테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];
+  const legacy=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:10,y:7,facing:'left',zaMission38Complete:true,zaZone20AlphaSpecies:448,zaZone20Spent:{alpha:true},adventureBalls:{masterball:2}},state.revision+1);delete legacy.zaZone20AlphaSpecies2;seedWorld(legacy);
+  await get();await call('face',{direction:'left'});const second=state.world.zaZone20AlphaSpecies2;assert.ok([448,282,306].includes(second));assert.equal(state.world.zaZone20AlphaSpecies,448);assert.equal(state.world.zaZone20Spent.alpha,true);
+  await get();assert.equal(state.world.zaZone20AlphaSpecies2,second);assert.equal(state.world.interaction.action,'zone20Wild-alpha2');await call('zone20Wild-alpha2');assert.equal(state.battle.teams[1][0].speciesId,second);assert.equal(state.battle.teams[1][0].adventureAlpha,true);
+  await call('flee');assert.notEqual(state.world.zaZone20Spent.alpha2,true);await call('zone20Wild-alpha2');await call('ball',{ball:'masterball'});assert.equal(state.world.zaZone20Spent.alpha2,true);await get();assert.deepEqual(state.world.zaZone20Spent,{alpha:true,alpha2:true});assert.equal(state.world.zaZone20AlphaSpecies,448);assert.equal(state.world.teamIds[0],team[0]);assert.equal(state.world.teamIds.length,2);
  }finally{globalThis.__adventureUser=previousUser;}
 });

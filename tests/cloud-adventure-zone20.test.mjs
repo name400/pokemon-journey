@@ -67,3 +67,13 @@ test('central ruined tower supports preserve all four approaches and migrate old
  for(const point of [{x:11,y:1},{x:1,y:8},{x:21,y:8},{x:11,y:14}])assert.ok(fieldPath(map,point,{x:11,y:7}).length);
  assert.equal(map[6][11],'n');assert.equal(zone20Visible(base,'a').species,1);assert.equal(storeAdventurePosition({...base,x:11,y:7},166).districtPosition.zone20Layout,4);
 });
+
+test('two independent Zone 20 alpha locations preserve legacy and spent state',()=>{
+ const legacy={area:3,district:'lumiose-zone20',interior:null,x:11,y:14,zaZone20AlphaSpecies:448,zaZone20Spent:{alpha:true},teamIds:['kept']};
+ assert.equal(zone20Visible(legacy,'d'),null);assert.equal(zone20Visible(legacy,'e'),null);
+ const s={...legacy,zaZone20AlphaSpecies2:282},map=zone20Map(s);
+ assert.equal(map[7][13],'g');assert.equal(map[7][9],'e');assert.equal(zone20Visible(s,'e').species,282);assert.equal(zone20Visible(s,'e').id,'alpha2');
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,201),201);assert.deepEqual([saved.zaZone20AlphaSpecies,saved.zaZone20AlphaSpecies2,saved.zaZone20Spent,saved.teamIds],[448,282,{alpha:true},['kept']]);
+ assert.equal(zone20Visible({...s,zaZone20Spent:{alpha2:true}},'d').species,448);assert.equal(zone20Visible({...s,zaZone20Spent:{alpha2:true}},'e'),null);
+ assert.ok(fieldPath(map,{x:11,y:14},{x:11,y:7}).length);
+});
