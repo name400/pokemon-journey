@@ -572,6 +572,15 @@ test('west Magenta courtyard entrance survives reload and returns to the canal',
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Coulant old water-edge save restores a safe bank with progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'coulant-old-bank-qa',displayName:'옛수로테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-coulant-route',interior:null,x:21,y:8,facing:'right',zaCoulantLower:false},state.revision+1);delete old.districtPosition.coulantWaterLayout;
+  seedWorld(old);await get();assert.equal(state.world.district,'lumiose-coulant-route');assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Coulant lower bank stairs and underpass survive reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'coulant-bank-qa',displayName:'수로테스트'};
  try{

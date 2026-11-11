@@ -3,6 +3,22 @@ import assert from 'node:assert/strict';
 import {fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {coulantRouteMap} from '../lib/cloud-adventure/adventure-coulant-route.mjs';
 
+test('Coulant water reaches both edges and old bank saves recover safely',()=>{
+ const base={area:3,district:'lumiose-coulant-route',interior:null,zaCoulantLower:false,teamIds:['kept'],zaRoyaleRank:'E'};
+ const upper=coulantRouteMap(base),lower=coulantRouteMap({...base,zaCoulantLower:true});
+ for(let y=7;y<=9;y++)for(const x of [0,1,21,22]){assert.equal(upper[y][x],'~');assert.equal(lower[y][x],'~');}
+ const withoutBridges=upper.map(row=>row.replaceAll(':','~'));
+ assert.ok(fieldPath(upper,{x:3,y:5},{x:3,y:11}).length);
+ assert.equal(fieldPath(withoutBridges,{x:3,y:5},{x:3,y:11}).length,0);
+ for(const [x,y] of [[1,7],[1,10],[21,6],[21,10]]){
+  const old=storeAdventurePosition({...base,x,y},141);delete old.districtPosition.coulantWaterLayout;
+  const restored=restoreAdventurePosition(structuredClone(old),141);
+  assert.equal(restored.district,base.district);assert.notEqual(upper[restored.y][restored.x],'~');assert.deepEqual(restored.teamIds,['kept']);
+  assert.equal(restoreAdventurePosition(structuredClone(old),142).district,null);
+ }
+ assert.equal(storeAdventurePosition({...base,x:3,y:5},143).districtPosition.coulantWaterLayout,1);
+});
+
 test('three western stair approaches link the upper waterway and Vert Sector 3',()=>{
  const sector={area:3,district:'lumiose-vert-sector3',interior:null,x:21,regionId:6,districtReturnRegion:1,teamIds:['kept']};
  for(const [sectorY,canalY] of [[4,2],[7,4],[10,6]]){
