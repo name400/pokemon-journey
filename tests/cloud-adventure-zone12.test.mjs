@@ -56,5 +56,9 @@ test('draft icicle becomes a traversable bridge while water encounters remain bl
  assert.equal(zone12Map(base)[14][7],'r');assert.equal(fieldDialogue(base).action,'zone12IceBridge');assert.equal(stepField(base,'left').blocked,true);
  const open={...base,zaZone12IceBridge:true};for(let x=4;x<=7;x++)assert.equal(zone12Map(open)[13][x],'=');
  assert.ok(fieldPath(zone12Map(open),open,{x:4,y:13}).length);assert.equal(stepField({...open,x:7,y:13},'up').blocked,true);
+ assert.equal(fieldPath(zone12Map(base),base,{x:3,y:13}).length,0);
+ assert.ok(fieldPath(zone12Map(open),open,{x:3,y:13}).length);
+ assert.equal(stepField({...open,x:3,y:13},'right').x,4);
  const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:5,y:13},71),71);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower,saved.zaZone12IceBridge,saved.teamIds],[5,13,true,true,['kept']]);
+ const landing=restoreAdventurePosition(storeAdventurePosition({...open,x:3,y:13},72),72);assert.deepEqual([landing.x,landing.y,landing.zaZone12PondLower,landing.zaZone12IceBridge,landing.teamIds],[3,13,true,true,['kept']]);
 });
