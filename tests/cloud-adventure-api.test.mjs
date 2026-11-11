@@ -190,6 +190,16 @@ test('Mission 41 Yveltal is reachable on the Galerie dome and remains retryable'
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 42 respects rare balls in the bag and grants the cube after capture',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-rare-ball-qa',displayName:'희귀볼테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],coins=state.wallet.coins,item='fastball',key=JSON.stringify([globalThis.__adventureUser.userId,item]);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',zaMission42Stage:3,adventureBalls:{}},state.revision+1));sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,item);
+  await get();await call('mission42OfferCapture');assert.equal(state.wallet.balls,0);assert.equal(state.inventory[item],1);await get();await call('mission42SupplyBall',{},409);await call('catchWindowBall',{ball:item});assert.equal(state.world.zaMission42Caught,true);assert.equal(state.world.zaMission42Stage,4);assert.equal(state.wallet.balls,0);assert.equal(state.inventory[item]||0,0);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);
+  await get();assert.equal(state.world.zaMission42Caught,true);await call('mission42Cube');assert.equal(state.inventory['za-zygarde-cube'],1);assert.equal(state.world.zaMission42Complete,true);await get();await call('mission42Cube',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 42 supplies a ball only when needed and repairs legacy capture windows',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-ball-qa',displayName:'지가르데포획테스트'};
  try{
@@ -198,6 +208,7 @@ test('Mission 42 supplies a ball only when needed and repairs legacy capture win
   sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);await get();await call('mission42SupplyBall',{},409);
   await call('mission42OfferCapture');assert.equal(state.wallet.balls,0);assert.equal(state.world.adventureBalls.greatball,1);assert.deepEqual([state.world.adventureCatchWindow.foe.level,state.world.adventureCatchWindow.foe.nature,state.world.adventureCatchWindow.foe.ability,state.world.adventureCatchWindow.foe.shiny],[84,'quiet','powerconstruct',false]);assert.deepEqual(state.world.adventureCatchWindow.foe.moves,['코어퍼니셔','사우전드애로','사우전드웨이브','그라운드포스']);assert.deepEqual(state.world.adventureCatchWindow.foe.ivs,{hp:31,atk:31,def:15,spa:31,spd:28,spe:19});await call('mission42SupplyBall',{},409);await call('skipCatchWindow');
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',adventureBalls:{}},state.revision+1));await get();await call('mission42OfferCapture');assert.equal(state.wallet.balls,1);await get();assert.ok(state.world.adventureCatchWindow);await call('mission42SupplyBall',{},409);await call('skipCatchWindow');assert.equal(state.wallet.balls,1);
+  sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);await get();await call('mission42OfferCapture');assert.equal(state.wallet.balls,1);await call('skipCatchWindow');
   sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);
   const nextRevision=state.revision+1,foe={...makeMon(10181,80),boxId:'mission42-zygarde',adventureMissionId:'mission42-zygarde'};
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',adventureBalls:{},adventureCatchWindow:{foe,moveCount:0,revision:nextRevision}},nextRevision));
@@ -252,6 +263,16 @@ test('Mission 42 Zygarde phases use the documented levels and moves',async()=>{
    assert.deepEqual([state.battle.teams[1][0].id,state.battle.teams[1][0].level,state.battle.teams[1][0].moves],[form,84,moves]);await get();await call('forfeit');assert.equal(state.world.zaMission42Stage,1);assert.equal(state.world.zaMission42Phase,0);
   }
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Mission 42 actual defeat in the final phase resets all three phases',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-loss-qa',displayName:'지가르데패배테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',zaMission42Stage:2,zaMission42Phase:2},state.revision+1));await get();await call('mission42Battle');
+  for(let turn=0;state.battle;turn++){assert.ok(turn<30);const req=state.battle.requests[0];assert.equal(req.kind,'move');const move=req.moves.find(m=>!m.disabled&&m.pp>0);assert.ok(move);await call('battle',{command:{type:'move',move:move.name}});}
+  assert.equal(state.battleResult.winner,1);assert.equal(state.world.zaMission42Stage,1);assert.equal(state.world.zaMission42Phase,0);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,team);await get();assert.equal(state.world.zaMission42Phase,0);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
