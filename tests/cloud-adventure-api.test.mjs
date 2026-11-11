@@ -71,6 +71,20 @@ test('Moire pending revive reward can be claimed once after reconnect',async()=>
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Rintaro promotion pays on victory and restores one pending legacy reward',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'rintaro-reward-qa',displayName:'승급보상테스트'};globalThis.__adventureTime={period:'night',hour:22};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],initialCoins=state.wallet.coins;
+  seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:8,zaRoyaleRank:'W',zaRoyaleWPoints:5000,zaLidaStage:2,zaLidaRequired:false},state.revision+1));
+  await get();await walkTo('T');await call('royaleRintaro');await call('forfeit');assert.equal(state.wallet.coins,initialCoins);assert.notEqual(state.world.zaRintaroRewardPending,true);
+  await walkTo('T');await call('royaleRintaro');await battle();assert.equal(state.world.zaRoyaleRank,'V');assert.equal(state.wallet.coins,initialCoins+1140);assert.equal(state.world.zaRintaroRewardPending,false);
+  await get();await call('claimRintaroReward',{},409);assert.equal(state.wallet.coins,initialCoins+1140);
+  seedWorld(storeAdventurePosition({...rawWorld(),zaRintaroRewardPending:true},state.revision+1));await get();await call('claimRintaroReward');assert.equal(state.wallet.coins,initialCoins+2280);assert.deepEqual(state.world.teamIds,team);
+  await get();assert.equal(state.world.zaRintaroRewardPending,false);await call('claimRintaroReward',{},409);assert.equal(state.wallet.coins,initialCoins+2280);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Zone 9 south ladder remains usable across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
@@ -339,7 +353,7 @@ test('world route: save migration, atomic purchases, actual battle/capture/growt
   for(let i=0;i<(visit===3?1:3);i++){const [tile,action,expected,team]=[['O','royaleErica','royale-w-mathis',[[228,16],[672,16]]],['U','royaleDaniel','royale-w-aya',[[662,18],[17,18]]],['V','royaleJean','royale-w-sean',[[688,16],[92,16]]]][i];await walkTo(tile);await call(action);assert.equal(state.world.trainer.id,expected);assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level]),team);await battle();assert.equal(state.world.zaRoyaleWPoints,(visit*3+i+1)*500);assert.equal(state.world.zaResearchTrainerWins,beforeResearch+visit*3+i+1);await call(action,{},409);}
   await walkTo({x:11,y:14});await call('move',{direction:'down'});await walkTo('T');await get();
  }
- assert.equal(state.world.zaRoyaleWPoints,5000);assert.equal(state.world.zaResearchTrainerWins,beforeResearch+10);assert.equal(state.world.zaRoyaleRank,'W');assert.equal(state.wallet.coins,beforeRoyaleCoins+5528);assert.equal(state.world.interaction.action,'royaleRintaro');await call('enterRoyaleZone',{},409);await call('royaleRintaro');assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level]),[[512,24],[516,24],[514,24]]);await call('forfeit');assert.equal(state.world.zaRoyaleRank,'W');assert.equal(state.world.zaRoyaleWPoints,5000);assert.notEqual(state.world.zaRintaroRewardPending,true);await walkTo('T');await call('royaleRintaro');await battle();assert.equal(state.world.zaRoyaleRank,'V');assert.equal(state.world.zaRintaroRewardPending,true);assert.equal(state.wallet.coins,beforeRoyaleCoins+5528);await call('royaleRintaro',{},409);await get();assert.equal(state.world.zaRoyaleRank,'V');assert.equal(state.world.zaRintaroRewardPending,true);
+ assert.equal(state.world.zaRoyaleWPoints,5000);assert.equal(state.world.zaResearchTrainerWins,beforeResearch+10);assert.equal(state.world.zaRoyaleRank,'W');assert.equal(state.wallet.coins,beforeRoyaleCoins+5528);assert.equal(state.world.interaction.action,'royaleRintaro');await call('enterRoyaleZone',{},409);await call('royaleRintaro');assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level]),[[512,24],[516,24],[514,24]]);await call('forfeit');assert.equal(state.world.zaRoyaleRank,'W');assert.equal(state.world.zaRoyaleWPoints,5000);assert.notEqual(state.world.zaRintaroRewardPending,true);await walkTo('T');await call('royaleRintaro');await battle();assert.equal(state.world.zaRoyaleRank,'V');assert.equal(state.world.zaRintaroRewardPending,false);assert.equal(state.wallet.coins,beforeRoyaleCoins+6668);await call('royaleRintaro',{},409);await get();assert.equal(state.world.zaRoyaleRank,'V');assert.equal(state.world.zaRintaroRewardPending,false);
  // Mission 09 opening: the encounter leads from the plaza to the already open rooftop.
  await walkTo('d');await call('followMystery');assert.equal(state.world.zaMysteryTrail,1);await call('followMystery',{},409);await walkTo('h');await call('enterRooftop');await walkTo('d');await call('investigateMystery');assert.equal(state.world.zaMysteryTrail,2);assert.match(state.world.log[0],/AZ가 기다리고 있다/);await call('investigateMystery',{},409);await get();assert.equal(state.world.zaMysteryTrail,2);assert.equal(state.world.interaction.action,'meetAZForAbsol');const beforeAZCoins=state.wallet.coins,beforeAZParty=[...state.world.teamIds];await call('meetAZForAbsol');assert.equal(state.world.zaMysteryTrail,3);assert.equal(state.wallet.coins,beforeAZCoins);assert.deepEqual(state.world.teamIds,beforeAZParty);await call('meetAZForAbsol',{},409);await get();assert.equal(state.world.zaMysteryTrail,3);
  // AZ's loan battle is isolated from the saved party, inventory and research.
