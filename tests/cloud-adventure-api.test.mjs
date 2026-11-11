@@ -2171,3 +2171,14 @@ test('Hibernal Pokemon Center heals and sells supplies on the Mission 33 route',
   await walkTo({x:1,y:4});await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-hibernal-approach');
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Nouveau Cafe 2 sells restorative drinks without changing mission progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'nouveau-cafe2-qa',displayName:'누보카페 2호'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,other='cafe2-reserve',reserve={...makeMon(25,10),boxId:other,hp:0,status:'독',pp:{thundershock:1}};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);
+  const damaged={...rawMon(id),hp:1,status:'독',pp:{tackle:1},friendship:70};seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(1000,globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),teamIds:[id,other],area:3,district:'lumiose-bleu-cafe2',interior:null,x:4,y:13,facing:'up',zaMission20Stage:5,zaMission22IceBridge:true},state.revision+1));await get();
+  assert.ok(state.world.interaction.actions.some(a=>a.action==='cafe2Water'));const coins=state.wallet.coins;await call('cafe2Water');assert.equal(state.wallet.coins,coins-100);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(rawMon(id).friendship,71);assert.equal(rawMon(other).hp,rawMon(other).maxHp);assert.equal(rawMon(other).status,null);await get();assert.equal(state.world.zaMission20Stage,5);assert.equal(state.world.zaMission22IceBridge,true);await call('cafe2Milk');await call('cafe2Coffee');assert.equal(state.wallet.coins,coins-550);assert.equal(rawMon(id).friendship,73);
+  seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(99,globalThis.__adventureUser.userId);await get();const before=rawMon(id);await call('cafe2Water',{},409);assert.deepEqual(rawMon(id),before);assert.equal(state.wallet.coins,99);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-bleu-sector5',x:1,y:8,facing:'left'},state.revision+1));await get();await call('cafe2Milk',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
