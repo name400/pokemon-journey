@@ -139,6 +139,19 @@ test('Mission 42 supplies a ball only when needed and repairs legacy capture win
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 40 objective follows saved investigations and preserves parallel Mission 41',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission40-objective-qa',displayName:'조사안내테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const seed=patch=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:5,zaMission40Started:true,zaMission40Complete:false,zaMission41Complete:false,...patch},state.revision+1));
+  seed({zaMission40Stage:0,zaMission41Stage:0});await get();assert.match(state.world.objective,/연구소.*Mable/);
+  seed({zaMission40Stage:1,zaMission40Anomalies:['gallade','gallade','unknown']});await get();assert.match(state.world.objective,/1\/3/);assert.match(state.world.objective,/구역 3.*강철톤/);assert.match(state.world.objective,/구역 9.*부란다/);assert.doesNotMatch(state.world.objective,/엘레이드/);
+  seed({zaMission40Anomalies:['steelix','gallade','pangoro']});await get();assert.match(state.world.objective,/연구소.*보고/);
+  seed({zaMission40Stage:1,zaMission41Stage:1,zaMission10Stage:12,zaMission14Stage:12,zaMission15Stage:4,zaMission19Stage:17,zaMission20Stage:15,zaMission24Complete:true,zaMission25Complete:true,zaMission26Complete:true,zaMission26Stage:3,zaMission30Complete:true,zaMission31Complete:true,zaMission35Stage:8,zaMission36Complete:true,zaMission38Complete:true});await get();assert.match(state.world.objective,/Vinnie/);
+  seed({zaMission40Stage:2});await get();assert.match(state.world.objective,/구역 11.*제르네아스/);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 9 south ladder remains usable across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
