@@ -60,6 +60,18 @@ test('Mission 36 rooftop visit persists and legacy tower progress remains availa
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 36 rival defeat continues the story without victory rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission36-defeat-qa',displayName:'동료배틀테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:15,y:6,facing:'up',zaMission36Started:true,zaMission36Stage:1,zaMission10Starter:'grass'},state.revision+1));await get();
+  await call('mission36Rival');await call('forfeit');assert.equal(state.world.zaMission36Stage,1);assert.equal(state.wallet.coins,coins);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-centrico-route',interior:null,x:15,y:6,facing:'up'},state.revision+1));await get();await call('mission36Rival');
+  for(let turns=0;state.battle;turns++){assert.ok(turns<20);const req=state.battle.requests[0];assert.equal(req.kind,'move');const move=req.moves.find(m=>!m.disabled&&m.pp>0);assert.ok(move);await call('battle',{command:{type:'move',move:move.name}});}
+  assert.equal(state.battleResult.winner,1);assert.equal(state.world.zaMission36Stage,2);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,team);await get();assert.equal(state.world.zaMission36Stage,2);await call('mission36Vinnie');assert.equal(state.world.zaMission37Started,true);await call('mission36Vinnie',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
