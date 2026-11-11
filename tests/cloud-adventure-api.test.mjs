@@ -123,6 +123,22 @@ test('Mission 41 Yveltal is reachable on the Galerie dome and remains retryable'
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 42 supplies a ball only when needed and repairs legacy capture windows',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-ball-qa',displayName:'지가르데포획테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',zaMission42Stage:3,zaMission40Complete:true,zaMission41Complete:true,adventureBalls:{greatball:1}},state.revision+1));
+  sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);await get();await call('mission42SupplyBall',{},409);
+  await call('mission42OfferCapture');assert.equal(state.wallet.balls,0);assert.equal(state.world.adventureBalls.greatball,1);await call('mission42SupplyBall',{},409);await call('skipCatchWindow');
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',adventureBalls:{}},state.revision+1));await get();await call('mission42OfferCapture');assert.equal(state.wallet.balls,1);await get();assert.ok(state.world.adventureCatchWindow);await call('mission42SupplyBall',{},409);await call('skipCatchWindow');assert.equal(state.wallet.balls,1);
+  sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);
+  const nextRevision=state.revision+1,foe={...makeMon(10181,80),boxId:'mission42-zygarde',adventureMissionId:'mission42-zygarde'};
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',adventureBalls:{},adventureCatchWindow:{foe,moveCount:0,revision:nextRevision}},nextRevision));
+  await get();assert.equal(state.wallet.balls,0);await call('mission42SupplyBall');assert.equal(state.wallet.balls,1);await get();await call('mission42SupplyBall',{},409);await call('catchWindowBall',{ball:'pokeball'});
+  assert.equal(state.world.zaMission42Stage,4);assert.equal(state.world.zaMission42Caught,true);assert.equal(state.wallet.balls,0);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);await get();assert.equal(state.world.zaMission42Caught,true);await call('mission42SupplyBall',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 9 south ladder remains usable across reloads',async()=>{
  const previousUser=globalThis.__adventureUser;
  globalThis.__adventureUser={userId:'zone9-ladder-qa',displayName:'옥상테스트'};
