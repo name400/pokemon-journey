@@ -1485,3 +1485,14 @@ test('rare reward balls remain usable after reconnect in battles and catch windo
   setBall('moonball',1);const windowFoe={...makeMon(30,5),boxId:'wild',hp:0};seedWorld({combat:null,encounter:null,trainer:null,adventureCatchWindow:{foe:windowFoe,moveCount:0,revision:state.revision+1}});await get();await call('catchWindowBall',{ball:'moonball'});assert.equal(state.inventory.moonball,undefined);assert.equal(rawMon(state.world.teamIds.at(-1)).originBall,'moonball');await get();assert.equal(rawMon(state.world.teamIds.at(-1)).originBall,'moonball');
  }finally{globalThis.__adventureUser=priorUser;globalThis.__adventureRandom=priorRandom;}
 });
+
+test('adventure vitamins consume only on valid use and persist EVs',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vitamin-qa',displayName:'영양제테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon={...makeMon(1,100),boxId:id,hp:20,friendship:99,teraType:'Fire',custom:{preserved:true},evs:{hp:250,atk:0,def:0,spa:0,spd:0,spe:0}};seedMon(id,mon);
+  for(const item of ['hpup','protein'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,2)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item);
+  await get();await call('useAdventureVitamin',{item:'hpup',boxId:id});assert.equal(state.inventory.hpup,1);assert.equal(rawMon(id).evs.hp,252);assert.equal(rawMon(id).friendship,103);assert.equal(rawMon(id).teraType,'Fire');assert.deepEqual(rawMon(id).custom,{preserved:true});assert.equal(rawMon(id).maxHp-rawMon(id).hp,mon.maxHp-mon.hp);
+  await get();await call('useAdventureVitamin',{item:'hpup',boxId:id},409);assert.equal(state.inventory.hpup,1);await call('useAdventureVitamin',{item:'protein',boxId:'other'},409);await call('useAdventureVitamin',{item:'protein',boxId:id});await get();assert.equal(rawMon(id).evs.atk,10);assert.equal(state.inventory.protein,1);
+  const current=rawMon(id),foe={...makeMon(19,5),boxId:'wild'};seedWorld({combat:createCombat([{...current,boxId:id}],[foe]),encounter:foe,trainer:null});await get();await call('useAdventureVitamin',{item:'protein',boxId:id},409);assert.equal(rawMon(id).evs.atk,10);assert.equal(state.inventory.protein,1);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
