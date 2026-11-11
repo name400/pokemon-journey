@@ -129,7 +129,7 @@ test('Mission 42 supplies a ball only when needed and repairs legacy capture win
   await get();await call('start',{species:1});const team=[...state.world.teamIds],coins=state.wallet.coins;
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',zaMission42Stage:3,zaMission40Complete:true,zaMission41Complete:true,adventureBalls:{greatball:1}},state.revision+1));
   sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);await get();await call('mission42SupplyBall',{},409);
-  await call('mission42OfferCapture');assert.equal(state.wallet.balls,0);assert.equal(state.world.adventureBalls.greatball,1);await call('mission42SupplyBall',{},409);await call('skipCatchWindow');
+  await call('mission42OfferCapture');assert.equal(state.wallet.balls,0);assert.equal(state.world.adventureBalls.greatball,1);assert.deepEqual([state.world.adventureCatchWindow.foe.level,state.world.adventureCatchWindow.foe.nature,state.world.adventureCatchWindow.foe.ability,state.world.adventureCatchWindow.foe.shiny],[84,'quiet','powerconstruct',false]);assert.deepEqual(state.world.adventureCatchWindow.foe.moves,['코어퍼니셔','사우전드애로','사우전드웨이브','그라운드포스']);assert.deepEqual(state.world.adventureCatchWindow.foe.ivs,{hp:31,atk:31,def:15,spa:31,spd:28,spe:19});await call('mission42SupplyBall',{},409);await call('skipCatchWindow');
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',adventureBalls:{}},state.revision+1));await get();await call('mission42OfferCapture');assert.equal(state.wallet.balls,1);await get();assert.ok(state.world.adventureCatchWindow);await call('mission42SupplyBall',{},409);await call('skipCatchWindow');assert.equal(state.wallet.balls,1);
   sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);
   const nextRevision=state.revision+1,foe={...makeMon(10181,80),boxId:'mission42-zygarde',adventureMissionId:'mission42-zygarde'};
@@ -172,6 +172,29 @@ test('Mission 42 L battle uses the documented team and survives loss without pro
   assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level]),[[668,78],[671,78],[302,78],[715,79],[569,79],[130,80]]);
   assert.deepEqual(state.battle.teams[1][5].moves,['Crunch','Waterfall','Ice Fang','Earthquake']);assert.equal(state.battle.teams[1][5].item,'gyaradosite');
   await get();assert.equal(state.battle.teams[1][5].item,'gyaradosite');await call('forfeit');await get();assert.ok(!state.world.zaMission42Stage);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Mission 42 Zygarde phases use the documented levels and moves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-phases-qa',displayName:'지가르데폼테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const forms=[[10181,['사우전드애로','신속','깨물어부수기']],[718,['그라운드포스','용의파동','깨물어부수기','스톤샤워']],[10120,['사우전드애로','사우전드웨이브','그라운드포스','코어퍼니셔']]];
+  for(const [phase,[form,moves]] of forms.entries()){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',zaMission42Stage:phase===0?1:2,zaMission42Phase:phase},state.revision+1));await get();await call('mission42Battle');
+   assert.deepEqual([state.battle.teams[1][0].id,state.battle.teams[1][0].level,state.battle.teams[1][0].moves],[form,84,moves]);await get();await call('forfeit');assert.equal(state.world.zaMission42Stage,1);assert.equal(state.world.zaMission42Phase,0);
+  }
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('newly captured Mission 42 Zygarde keeps its documented traits after reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-zygarde-traits-qa',displayName:'지가르데포획특성테스트'};
+ try{
+  await get();await call('start',{species:1});const coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',zaMission42Stage:3,adventureBalls:{}},state.revision+1));sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(0,globalThis.__adventureUser.userId);
+  await get();await call('mission42OfferCapture');await call('catchWindowBall',{ball:'pokeball'});const id=state.world.teamIds.at(-1);await get();const mon=rawMon(id);
+  assert.deepEqual([mon.speciesId,mon.level,mon.nature,mon.ability,mon.shiny,mon.originBall],[718,84,'quiet','powerconstruct',false,'pokeball']);assert.deepEqual(mon.ivs,{hp:31,atk:31,def:15,spa:31,spd:28,spe:19});assert.deepEqual(mon.moves,['코어퍼니셔','사우전드애로','사우전드웨이브','그라운드포스']);assert.equal(state.wallet.coins,coins);assert.equal(state.world.zaMission42Caught,true);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
