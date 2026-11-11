@@ -205,6 +205,20 @@ test('Mission 11 south bank stairs support battle retry and the legacy location'
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 12 scaffold connects the city and preserves battle and saved layers',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission12-scaffold-qa',displayName:'비계테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:17,y:1,facing:'up',zaRoyaleRank:'F',zaMission10Stage:10,zaMission12WorkerWon:false,zaMission12Complete:false},state.revision+1));await get();await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-mission12-jaune3');
+  await walkTo({x:17,y:8});await call('face',{direction:'up'});await call('mission12Scaffold',{},409);
+  await walkTo({x:11,y:9});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'battleMission12Worker');await call('battleMission12Worker');await battle();assert.equal(state.world.zaMission12WorkerWon,true);
+  await walkTo({x:17,y:8});await call('face',{direction:'up'});await call('mission12Scaffold');await get();assert.equal(state.world.zaMission12Layer,'scaffold');assert.deepEqual([state.world.x,state.world.y],[17,11]);
+  await walkTo({x:5,y:5});await call('face',{direction:'up'});await call('mission12Scaffold');await get();assert.equal(state.world.zaMission12Layer,'roof');await call('mission12Scaffold');assert.equal(state.world.zaMission12Layer,'scaffold');await call('mission12Scaffold');assert.equal(state.world.zaMission12Layer,'roof');
+  await walkTo({x:11,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'battleMission12Camerupt');await call('battleMission12Camerupt');await call('forfeit');assert.notEqual(state.world.zaMission12Complete,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-mission12-jaune3',interior:null,x:11,y:6,facing:'up',zaMission12Layer:'roof'},state.revision+1));await get();await call('battleMission12Camerupt');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission12RewardPending,true);await call('claimMission12Stone');assert.equal(state.inventory.cameruptite,1);await get();assert.equal(state.world.zaMission12Complete,true);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
