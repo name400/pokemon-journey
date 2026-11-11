@@ -1508,3 +1508,20 @@ test('dojo hyper training spends caps once and preserves genetic IVs across reco
   await call('hyperTrainAdventure',{item:'goldbottlecap'});assert.equal(state.inventory.goldbottlecap,undefined);assert.deepEqual(rawMon(id).ivs,ivs);assert.deepEqual(rawMon(id).adventureHyperTrained,{atk:true,hp:true,def:true,spa:true,spd:true});await get();await call('hyperTrainAdventure',{item:'goldbottlecap'},409);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Side Mission 119 unlocks, saves four battles, and pays its prize once',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side119-qa',displayName:'토너먼트테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,strong={...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);const team=[id];
+  for(let i=0;i<5;i++){const testId=`side119-${i}`;team.push(testId);sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(testId,globalThis.__adventureUser.userId,150,JSON.stringify(strong),'qa',i);}
+  const atHotel=()=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:15,y:6,facing:'up',teamIds:team,activeId:id},state.revision+1);
+  seedWorld({...atHotel(),zaMission39Complete:true,zaInfiniteFirstWon:true,zaInfiniteSecondWon:true,zaInfiniteRewardWins:19,adventureBalls:{luxuryball:85}});await get();await call('side119Accept',{},409);
+  seedWorld({...atHotel(),zaInfiniteRewardWins:20});await get();assert.equal(state.world.interaction.action,'side119Accept');await call('side119Accept');const startCoins=state.wallet.coins;await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='side119Battle'));
+  await call('side119Battle');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[703,73],[303,74],[699,74],[282,74],[700,74],[36,75]]);assert.equal(state.battle.teams[1][5].item,'clefablite');await battle();assert.equal(state.world.zaSide119Wins,1);assert.equal(state.wallet.coins,startCoins+5400);await get();assert.equal(state.world.zaSide119Wins,1);
+  await call('side119Battle');await call('forfeit');assert.equal(state.world.zaSide119Wins,0);assert.notEqual(state.world.zaSide119Complete,true);
+  seedWorld(atHotel());await get();for(let n=1;n<=4;n++){await call('side119Battle');await battle();assert.equal(state.world.zaSide119Wins,n);if(n<4){assert.equal(state.world.zaSide119Complete,undefined);await get();}}
+  assert.equal(state.world.zaSide119Complete,true);assert.equal(state.world.zaSide119LuxuryPending,30);assert.equal(state.wallet.coins,startCoins+5*5400+300000);await get();await call('side119ClaimBalls');assert.equal(state.world.adventureBalls.luxuryball,99);assert.equal(state.world.zaSide119LuxuryPending,16);
+  seedWorld({...atHotel(),adventureBalls:{...rawWorld().adventureBalls,luxuryball:80}});await get();await call('side119ClaimBalls');assert.equal(state.world.adventureBalls.luxuryball,96);assert.equal(state.world.zaSide119LuxuryPending,0);await call('side119ClaimBalls',{},409);
+  const before=state.wallet.coins;await call('side119Battle');await battle();assert.equal(state.wallet.coins,before+5400);assert.equal(state.world.zaSide119BestStreak,1);assert.equal(state.world.zaSide119RepeatStreak,1);await get();assert.equal(state.world.zaSide119Complete,true);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
