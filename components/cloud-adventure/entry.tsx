@@ -110,7 +110,9 @@ export default function Adventure(){
      else if(changedArea){if(heldDirection.current&&movementEpoch.current===epoch)pathQueue.current=[];else stop();}
     }
    }
-   running=false;if(alive)timer=setTimeout(tick,moved?Math.max(0,adventureMovementInterval(d.world)-(performance.now()-started)):16);
+   // Sleep while idle. Input explicitly wakes the loop, while held or queued
+   // input continues to retry during an in-flight action or modal transition.
+   running=false;if(alive&&(heldDirection.current||pathQueue.current.length))timer=setTimeout(tick,moved?Math.max(0,adventureMovementInterval(d.world)-(performance.now()-started)):16);
   };wakeMovement.current=()=>{if(alive&&!running){clearTimeout(timer);timer=setTimeout(tick,0);}};timer=setTimeout(tick,0);
   return()=>{alive=false;wakeMovement.current=()=>{};clearTimeout(timer);window.removeEventListener('keydown',keydown);window.removeEventListener('keyup',keyup);window.removeEventListener('blur',stop);document.removeEventListener('visibilitychange',hide);};
  },[act,interact,stop,previewInput]);

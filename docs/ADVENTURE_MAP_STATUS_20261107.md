@@ -395,3 +395,10 @@
 # Zone 11 northwest ledge (draft)
 
 The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/16622) describes an item after descending a ledge from Wild Zone 11's northwest entrance. This supports a height change near that entrance, not a precise tile layout or a second gate. A separate upper approach and one-way descent to the existing north bank model that relation; the shape, landing coordinates, and parallel entrance are provisional. The existing direct entrance is retained for compatibility, and no item is added. Further original-game imagery is needed to determine the exact entrance, ledge geometry, and connection.
+## 클라우드 이동의 유휴 작업 감소
+
+이동 입력이 없을 때도 약 16ms마다 확인하던 클라우드 이동 루프가 대기하도록 바꿨다. 키와 화면 방향 버튼은 기존처럼 루프를 깨우며, 누르고 있거나 요청 대기 중인 입력은 계속 처리한다. 맵·충돌·저장 형식과 이동 속도는 변경하지 않았다.
+
+격리 Chromium에서 서버 응답 120ms를 모의해 유휴 반복이 멈추는 것과 누르기·떼기·재입력 동작을 확인했다. 이것은 불필요한 작업을 줄인 결과이지 사용자가 체감하는 지연의 해결이나 실기기 성능 향상을 입증한 수치는 아니다. 실제 운영 기기·네트워크에서 입력 반응, 이동 중 보정과 구역 전환을 측정해야 한다.
+
+원작 맵은 여전히 구역 12의 연못 저층과 다리·출입구 정밀 위치, 구역 2의 해안 및 다리 치수, 루주 광장 탑 방향, 도시 건물과 운하의 연속 지형 등이 미검증 또는 초안이다. 출처가 설명하는 관계와 실제 좌표의 추정을 구분해야 한다. [구역 11 안내](https://gamewith.jp/pokemon-za/524524)는 남북 강변이 구역 내에서 연결되지 않는다고 명시하며, 현재 구현도 별도 접근을 유지한다.
