@@ -194,6 +194,17 @@ test('Mission 20 clears each ghost by capture or defeat and preserves legacy slo
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 11 south bank stairs support battle retry and the legacy location',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission11-south-bank-qa',displayName:'남쪽물가테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,{...makeMon(150,100),moves:['사이코브레이크'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:17,y:11,facing:'up',zaMission10Stage:10,zaMission11Complete:false,zaRoyaleRank:'F'},state.revision+1));await get();assert.equal(state.world.interaction.action,'battleMission11Slowbro');
+  await walkTo({x:20,y:11});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission11BankStairs');await call('mission11BankStairs');await get();assert.equal(state.world.zaVernalSlowbroBank,true);assert.deepEqual([state.world.x,state.world.y],[18,7]);assert.equal(state.world.areaInfo.name,'미르시티 · 남쪽 물가 (지형 초안)');
+  await call('mission11BankStairs');await get();assert.equal(state.world.zaVernalSlowbroBank,false);await call('mission11BankStairs');await walkTo('d');assert.equal(state.world.interaction.action,'battleMission11Slowbro');await call('battleMission11Slowbro');await call('forfeit');await get();assert.equal(state.world.zaVernalSlowbroBank,false);assert.notEqual(state.world.zaMission11Complete,true);
+  await walkTo({x:20,y:11});await call('face',{direction:'up'});await call('mission11BankStairs');await walkTo('d');await call('battleMission11Slowbro');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission11Complete,true);assert.equal(state.world.zaMission11RewardPending,true);await get();await call('claimMission11Stone');assert.equal(state.inventory.slowbronite,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 11 northwest ledge persists and drops to the north bank',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-ledge-qa',displayName:'길테스트'};
  try{
