@@ -58,6 +58,21 @@ test('Zone 20 east gate connects a separate Vert-side canal bank and restores bo
  assert.equal(stepField({...zone,x:21,y:8},'right').district,'lumiose-centrico-route');
 });
 
+test('Southern Rouge Street joins Zone 20, Rouge Plaza and Sector 1 without replacing older exits',()=>{
+ const plaza={area:3,district:'lumiose-zone3',interior:null,x:12,y:15,zaMission38Complete:true,teamIds:['kept'],zaZone20Items:['south-seed']};
+ const intoStreet=stepField(plaza,'down');assert.deepEqual([intoStreet.district,intoStreet.x,intoStreet.y,intoStreet.zaRougeStreetSouth],['lumiose-rouge-north',11,1,true]);
+ const street={...plaza,...intoStreet},map=fieldMap(street);assert.ok(fieldPath(map,street,{x:11,y:15}).length);assert.ok(fieldPath(map,street,{x:1,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(street,173),173);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaRougeStreetSouth,saved.teamIds],['lumiose-rouge-north',11,1,true,['kept']]);
+ const stale=restoreAdventurePosition(storeAdventurePosition(street,173),174);assert.equal(stale.district,null);assert.equal(stale.zaRougeStreetSouth,undefined);assert.deepEqual(stale.zaZone20Items,['south-seed']);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaRougeStreetSouth],['lumiose-zone3',12,15,false]);
+ const south={...saved,x:11,y:15};assert.equal(stepField({...south,zaMission38Complete:false},'down').blocked,true);
+ const zone=stepField(south,'down');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone20',12,1]);
+ const returnStreet=stepField({...south,...zone},'up');assert.deepEqual([returnStreet.district,returnStreet.x,returnStreet.y,returnStreet.zaRougeStreetSouth],['lumiose-rouge-north',11,15,true]);
+ const sector=stepField({...saved,x:1,y:8},'left');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-rouge-sector1',21,9]);
+ const returnFromSector=stepField({...saved,...sector},'right');assert.deepEqual([returnFromSector.district,returnFromSector.x,returnFromSector.y,returnFromSector.zaRougeStreetSouth],['lumiose-rouge-north',1,8,true]);
+ assert.equal(stepField({...plaza,x:11,y:15},'down').district,'lumiose-centrico-route');assert.equal(stepField({...zone,x:11,y:1},'up').district,'lumiose-centrico-route');
+});
+
 test('Zone 20 northeastern promenade joins the north and east approaches',()=>{
  const base={area:3,district:'lumiose-zone20',interior:null,zaMission38Complete:true,teamIds:['kept'],zaZone20Items:['south-seed']},map=zone20Map(base);
  for(let x=11;x<=17;x++)assert.equal(map[1][x],',');

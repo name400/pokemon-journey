@@ -2222,6 +2222,21 @@ test('Zone 18 rooftop bird encounter uses server time and survives reload',async
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Southern Rouge Street joins Plaza, Sector 1 and Zone 20 across reloads',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-rouge-south-qa',displayName:'루주대로'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),mon=structuredClone(rawMon(id));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:12,y:15,facing:'down',zaMission38Complete:false,zaZone20Items:['south-seed']},state.revision+1));
+  await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaRougeStreetSouth],['lumiose-rouge-north',11,1,true]);assert.match(state.world.areaInfo.name,/남쪽/);
+  await walkTo({x:1,y:8});await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector1',21,9]);await call('move',{direction:'right'});await get();assert.equal(state.world.zaRougeStreetSouth,true);
+  await walkTo({x:11,y:15});await call('move',{direction:'down'},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:15,facing:'down',zaRougeStreetSouth:true,zaMission38Complete:true},state.revision+1));await get();
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone20',12,1]);assert.ok(ZONE20_ALPHA.some(p=>p.species===state.world.zaZone20AlphaSpecies));assert.ok(ZONE20_ALPHA.some(p=>p.species===state.world.zaZone20AlphaSpecies2));
+  await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaRougeStreetSouth],['lumiose-rouge-north',11,15,true]);
+  await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone3',12,15]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.deepEqual(rawMon(id).ivs,mon.ivs);assert.deepEqual(rawMon(id).moves,mon.moves);assert.equal(rawMon(id).teraType,mon.teraType);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 20 Vert canal bank connects both ways and restores its layer',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-vert-canal-qa',displayName:'베르 운하'};
  try{
