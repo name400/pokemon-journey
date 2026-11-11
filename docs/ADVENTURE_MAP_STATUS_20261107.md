@@ -475,7 +475,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 
 ### 사이드 미션 72 갈라르 메더 수색
 
-[현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)는 구역 11 남서 강변에서 몬스터볼처럼 위장한 메더를 찾는 동선을, [의뢰 안내](https://www.thonky.com/pokemon-legends-z-a/side-mission-072-find-my-galarian-stunfisk)는 미션 25 시작 이후 개방 및 보상(800원·기력의덩어리·파워웨이트 각 1개)을 설명한다. 베르 6번지 부근 Terri에게 의뢰를 받고 강변에서 메더를 선물로 받는다. Terri와 위장 위치, 선물 레벨 30은 초안이다. 다른 자료에는 개방 시점과 파워웨이트 수량이 다르게 나와 있어 후속 원작 확인이 필요하다. 기력의덩어리는 탐험 가방에서 기절한 파티원의 HP를 전부 회복하고 하나를 소비한다. 파워웨이트의 탐험 모드 전용 효과는 아직 확인·구현하지 않았다.
+[현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)는 구역 11 남서 강변에서 몬스터볼처럼 위장한 메더를 찾는 동선을, [의뢰 안내](https://www.thonky.com/pokemon-legends-z-a/side-mission-072-find-my-galarian-stunfisk)는 미션 25 시작 이후 개방 및 보상(800원·기력의덩어리·파워웨이트 각 1개)을 설명한다. 베르 6번지 부근 Terri에게 의뢰를 받고 강변에서 메더를 선물로 받는다. Terri와 위장 위치는 초안이다. [구역 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_11)에 따라 새로 받는 메더는 레벨 38의 수컷이며 싫은소리·지진·철벽·뛰어오르기를 안다. 이미 지급된 개체는 변경하지 않는다. 다른 자료에는 개방 시점과 파워웨이트 수량이 다르게 나와 있어 후속 원작 확인이 필요하다. 기력의덩어리는 탐험 가방에서 기절한 파티원의 HP를 전부 회복하고 하나를 소비한다. 파워웨이트의 탐험 모드 전용 효과는 아직 확인·구현하지 않았다.
 
 ### 기력의덩어리 사용
 
@@ -486,3 +486,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 [구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-11-guide-all-pokemon-and-alphas)는 북쪽 강변의 우두머리 야도란과 중앙 수로의 우두머리 블로스터를 설명한다. 기존 보이는 포켓몬 체계에 두 우두머리를 추가했다. 블로스터는 강변에서 확인하며 수역은 막힌 상태를 유지한다. 좌표와 원작의 이동·감지 행동은 초안이다.
 
 파워웨이트는 [도구 자료](https://bulbapedia.bulbagarden.net/wiki/Power_Weight)의 속도 감소와 HP 노력치 보너스가 확인되지만, 현재 탐험 전투는 상대별 격파자 및 일반 노력치 지급을 추적하지 않아 원작의 지급 조건을 안전하게 재현할 수 없다. 효과는 보류하며 상대별 경험치·노력치 지급 및 전투 참여 추적이 먼저 필요하다.
+
+### 전투 노력치 지급 검토
+
+[원작 경험 공유 조사](https://gamefaqs.gamespot.com/switch/452075-pokemon-legends-z-a/answers/659501-how-are-evs-from-defeating-wild-pokeacutemon-granted)는 생존 파티 전체의 노력치 지급을 설명하고 [훈련 안내](https://rotomlabs.net/guide/stat-training-legends-z-a)는 훈련 대상이 직접 격파하도록 권한다. 지급 대상과 세부 조건은 추가 교차검증이 필요하다. 현재 턴제 엔진은 결과 시 살아 있는 파티에 총 경험치를 주며 상대별 지급·중간 격파·포획의 노력치 기록은 없다. 트레이너전과 포획, 기절·교체 및 레벨 100의 원작 조건이 확인되기 전 일반 노력치나 파워웨이트를 임의 지급하지 않는다. 기존 저장은 그대로 유지한다.
