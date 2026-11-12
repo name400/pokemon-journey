@@ -2305,6 +2305,18 @@ test('research level 8 Whirlpool TM survives reload and only teaches compatible 
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('field TMs teach verified regional forms and retain items and existing PP',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'story-tm-regional-qa',displayName:'지역 폼 필드 기술머신'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;
+  const mon={...makeMon(10164,30),moves:['몸통박치기','울음소리','전광석화','방어'],pp:{tackle:3,growl:7,quickattack:0,protect:4}};seedMon(id,mon);await get();await call('teachStoryTm',{item:'za-tm013',slot:1},409);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm013']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm013');await get();
+  await call('teachStoryTm',{item:'za-tm013',slot:1});assert.deepEqual(rawMon(id).moves,['몸통박치기','냉동빔','전광석화','방어']);assert.equal(rawMon(id).pp.tackle,3);assert.equal(rawMon(id).pp.quickattack,0);assert.equal(state.inventory['za-tm013'],1);await get();assert.equal(state.box.find(m=>m.boxId===id).moves[1],'냉동빔');await call('teachStoryTm',{item:'za-tm013',slot:0},409);
+  seedMon(id,mon);await get();await call('teachStoryTm',{item:'za-tm013',slot:0});assert.equal(rawMon(id).moves[0],'냉동빔');assert.equal(state.inventory['za-tm013'],1);
+  const incompatible={...makeMon(152,20),moves:['몸통박치기']};seedMon(id,incompatible);await get();await call('teachStoryTm',{item:'za-tm013',slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 23 TM089 is reusable for verified species and preserves existing moves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-tm089-qa',displayName:'기술머신 검증'};
  try{

@@ -4,6 +4,7 @@ import {Battle} from '@pkmn/sim';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat,playDuel} from '../lib/party-battle.mjs';
 import {RESEARCH_TM_REWARDS,canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
+import {STORY_TMS,canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 
 test('research TM compatibility covers available base species without mixing regional forms',()=>{
  assert.equal(RESEARCH_TM_REWARDS.length,41);
@@ -26,6 +27,17 @@ test('verified regional forms use their own TM lists and require matching specie
  assert.equal(canLearnResearchTm(state,{id:10100,speciesId:26,moves:['사이코쇼크']},14),false);
  assert.equal(canLearnResearchTm({zaResearchRewards:[]},{id:10100,speciesId:26,moves:[]},14),false);
  assert.equal(canLearnResearchTm(state,{id:10107,speciesId:52,moves:[]},4),false);
+});
+
+test('field TMs distinguish base and verified regional compatibility',()=>{
+ assert.equal(STORY_TMS.length,19);
+ const bag={'za-tm013':1,'za-tm034':1,'za-tm066':1};
+ for(const [id,speciesId,tm] of [[10100,26,'za-tm066'],[10108,53,'za-tm034'],[10164,79,'za-tm013'],[10165,80,'za-tm013'],[10172,199,'za-tm013'],[10234,211,'za-tm013'],[10241,705,'za-tm013'],[10242,706,'za-tm013'],[10243,713,'za-tm013']])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},tm),true,`${id}:${tm}`);
+ assert.equal(canLearnStoryTm(bag,{id:52,speciesId:52,moves:[]},'za-tm034'),false);
+ assert.equal(canLearnStoryTm(bag,{id:10100,speciesId:25,moves:[]},'za-tm066'),false);
+ assert.equal(canLearnStoryTm({}, {id:10100,speciesId:26,moves:[]},'za-tm066'),false);
+ assert.equal(canLearnStoryTm(bag,{id:10107,speciesId:52,moves:[]},'za-tm013'),false);
+ for(const [tm,id] of [['013',7],['056',1],['034',359],['039',25],['005',4],['103',1],['022',16],['051',1],['066',25],['011',66],['020',25],['100',23],['104',4]])assert.equal(canLearnStoryTm({[`za-tm${tm}`]:1},{id,speciesId:id,moves:[]},`za-tm${tm}`),true,`${id}:${tm}`);
 });
 
 test('research TMs retain core effects in the existing turn-based simulator',()=>{
