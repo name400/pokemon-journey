@@ -1,5 +1,29 @@
 # 배포 검증 실패 기록
 
+## 2026-11-12 — GitHub `a006820` 배포 검사 실패
+
+- 대상 브랜치와 커밋: `cloud/pokerogue-continue-20261105`, `a006820349fd5684bded5411960a1775d2a58ff6`.
+- 검증 소스: 기존 Sites 소스와 병합한 로컬 커밋 `ee96c4a569662e8fc39b04bc416ce708fcc55b1d` 및 미커밋 `app/layout.tsx`의 브라우저 제목 「포켓몬」 변경. Node.js v24.22.1.
+- `npm run typecheck`, `npm run build`: 통과.
+- `npm test`: 아래 네 실패가 출력됐다. 이후 3분 넘게 새 출력이 없어 전체 실행을 중단했으므로 최종 테스트 개수·통과 수와 다른 실패 유무는 확인하지 못했다. 테스트와 빌드는 일부 시간 동안 동시에 실행됐다.
+- 운영 배포는 수행하지 않았다. 마지막 확인된 운영본은 Sites v81이다.
+
+### 스타터 4 리그 진행
+
+- `tests/adventure-api.test.mjs:166`의 `fresh starter 4 can clear the league, A rank and the final investigation`가 전체 실행과 단독 재실행에서 모두 실패했다.
+- 단독 실행에서는 8개 배지 획득 후 리그 3회 도전, 최고 4단계, 추가 훈련 49회 상태에서 `state.world.completed`가 기대값 `true` 대신 `undefined`였다. 오류: `league stalled: {"leagueAttempts":3,"leagueReached":4,"finalTraining":49}`, 단언 위치 242행.
+- 전체 실행에서 스타터 1과 7의 동등 테스트는 통과했다. 전투 난수·테스트 전략·게임 동작 중 원인은 아직 확정되지 않았다.
+
+### 탐험 API 테스트 3건
+
+전체 실행에서 아래 테스트들이 실패로 표시됐다. 전체 실행을 중단해 그 실행의 상세 오류는 확보하지 못했다.
+
+1. `tests/cloud-adventure-api.test.mjs:887` — `mission 10 companion battle requires Absol and advances on either result`.
+2. 같은 파일 2916행 — `Académie courtyard keeps all entrances and supports Xavi retry and old approach`.
+3. 같은 파일 3349행 — `trainer KO effort survives reentry and forfeit without rewarding a fainted bench member`.
+
+세 테스트만 선택해 별도 실행했을 때 2·3번은 통과했다. 1번은 888행에서 `Cannot read properties of null (reading 'activeId')`가 발생했지만, 테스트 선택으로 선행 상태가 생략된 영향일 수 있으므로 전체 실행의 실패 원인과 같다고 단정할 수 없다. 파일 전체 단독 재실행은 최종 결과를 얻기 전에 중단했다. 공유 테스트 상태, 실행 순서와 각 실패의 상세 로그를 재확인해야 한다.
+
 ## 2026-11-12 — 개발 브랜치 확인, Sites 병합본 재검증 대기
 
 - 추가 시드 `12345`에서는 리그 전투 사이에 테스트가 보유량이 0인 풀회복약을 요청해 409가 재현됐다. 개발 커밋 `2d4e898`은 실제 보유한 회복 도구만 사용하고 없으면 진행하도록 테스트 전략을 수정한다. 같은 시드 두 차례와 기본 시드 한 차례에서 리그·A랭크·최종 조사까지 통과했다. 이는 아래 Sites 병합본의 재검증이 아니다.
