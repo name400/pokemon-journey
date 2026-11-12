@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import {pre
 
 test('held prediction is bounded, stops at transitions, and requires server confirmation',async()=>{
  const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
- const w={area:3,district:'lumiose',x:3,y:8,facing:'right',badges:[]},first=predictCloudStep(w,'right'),buffer=createCloudMoveBuffer(w,first,'right');
+ const w={area:3,district:'lumiose',x:3,y:8,facing:'right',badges:[]},first=predictCloudStep(w,'right'),buffer=createCloudMoveBuffer(w,first,'right',4);
  for(let i=0;i<4;i++)assert.ok(buffer.push());assert.equal(buffer.push(),null);assert.deepEqual(buffer.path,['right','right','right','right']);
  assert.equal(buffer.matches({world:{...w,...first},battle:null}),true);
  for(const result of [{world:{...w,...first,x:3}},{world:{...w,...first,district:'other'}},{world:{...w,...first,adventureCatchWindow:{}}},{world:{...w,...first},battle:{}}])assert.equal(buffer.matches(result),false);
@@ -52,4 +52,14 @@ test('near moving encounters buffered steps require server confirmation',async()
  const first=predictCloudStep(world,'right',{allowHazard:true});assert.deepEqual(first,{x:4,y:8,facing:'right',predictedHazard:true});assert.deepEqual(world,copy);
  const buffer=createCloudMoveBuffer(world,first,'right');assert.ok(buffer.push());assert.deepEqual(buffer.path,['right']);
  assert.equal(buffer.matches({world:{...world,...first}}),true);assert.equal(buffer.matches({world:{...world,...first},battle:{}}),false);assert.equal(buffer.matches({world:{...world,x:3,y:8}}),false);
+});
+
+
+test('extended preview is limited to quiet city pavement and server batches of eight',async()=>{
+ const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const w={area:3,district:'lumiose',interior:null,x:2,y:8,facing:'right',badges:[]},first=predictCloudStep(w,'right');const buffer=createCloudMoveBuffer(w,first,'right');
+ for(let i=0;i<8;i++)assert.ok(buffer.push());assert.equal(buffer.push(),null);assert.equal(buffer.path.length,8);assert.equal(buffer.matches({world:{...w,...first}}),true);assert.equal(buffer.matches({world:{...w,...first},battle:{}}),false);
+ const nearLandmark={...w,x:7,y:6};const approaching=createCloudMoveBuffer(nearLandmark,predictCloudStep(nearLandmark,'right'),'right');for(let i=0;i<5;i++)assert.ok(approaching.push());assert.equal(approaching.push(),null);assert.equal(approaching.position.x,13);
+ const group=createCloudMoveBuffer({...w,inUnion:true},first,'right');for(let i=0;i<4;i++)assert.ok(group.push());assert.equal(group.push(),null);
+ const alert=createCloudMoveBuffer({...w,zaWildAlphaAlert:true},{...first,predictedHazard:true},'right');for(let i=0;i<4;i++)assert.ok(alert.push());assert.equal(alert.push(),null);
 });

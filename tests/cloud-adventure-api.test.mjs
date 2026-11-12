@@ -1876,6 +1876,15 @@ test('concurrent movement uses a single authoritative revision and keeps invento
  }finally{db.prepare=prepareBefore;db.batch=batchBefore;globalThis.__adventureUser=previousUser;}
 });
 
+test('eight-step movement persists each step and stops at walls and encounters',async()=>{
+ const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'eight-step-move-qa',displayName:'연속 이동 검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,party=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:2,y:8,steps:10},state.revision+1));await get();const before=rawMon(id),rev=state.revision;await call('move',{path:Array(8).fill('right'),compact:true});assert.equal(state.world.x,10);assert.equal(state.world.steps,18);assert.equal(state.revision,rev+1);assert.equal(rawMon(id).walkSteps,(before.walkSteps||0)+8);await get();assert.equal(state.world.x,10);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:1,y:1,steps:18},state.revision+1));await get();await call('move',{path:['right','up','right','right','right','right','right','right'],compact:true});assert.deepEqual([state.world.x,state.world.y,state.world.steps],[2,1,19]);await get();assert.deepEqual([state.world.x,state.world.y],[2,1]);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone1',interior:null,x:17,y:8,steps:19},state.revision+1));await get();globalThis.__adventureRandom=()=>0;await call('move',{path:['left','up','right','right','right','right','right','right'],compact:true});assert.deepEqual([state.world.x,state.world.y,state.world.steps],[16,7,21]);assert.equal(state.battle.teams[1][0].speciesId,13);await get();assert.ok(state.battle);assert.deepEqual(state.world.teamIds,party);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('compact movement omits static catalogs without changing encounter or save semantics',async()=>{
  const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'compact-move-qa',displayName:'이동 응답 검증'};
  try{
