@@ -2984,3 +2984,14 @@ test('side 61 lift battle gives original prizes while legacy battles keep their 
   await get();await battle();await get();assert.equal(state.world.zaMission61Won,true);assert.equal(state.inventory.poisonbarb,1);assert.equal(state.world.zaMegaShards,legacy?9:29);assert.equal(state.inventory.calcium||0,legacy?3:0);assert.equal(state.wallet.coins,coins+(legacy?2000:4208));await call('mission61Battle',{},409);await call('mission27Holovator');await get();assert.equal(state.world.district,'lumiose-mission27-roof');await call('mission27Holovator');assert.equal(state.world.district,'lumiose-bleu-sector3');
  }}finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Vert 7 holovator mission rewards new and previously repaired saves exactly once',async()=>{
+ const oldUser=globalThis.__adventureUser;
+ try{for(const legacy of [false,true]){
+  globalThis.__adventureUser={userId:legacy?'side40-legacy-qa':'side40-new-qa',displayName:'홀로베이터'};await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];
+  const atLift={...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:5,y:10,facing:'down',zaMission14Stage:9,zaSide40Lift:legacy,zaMegaShards:7,adventureBalls:{ultraball:97}};seedWorld(storeAdventurePosition(atLift,state.revision+1));await get();
+  if(!legacy){await call('side40Reward',{},409);seedMon(id,{...makeMon(25,15),moves:['전기쇼크']});await get();await call('vert7RepairLift');await get();assert.equal(state.world.zaSide40Lift,true);}
+  assert.ok(state.world.interaction.actions.some(a=>a.action==='side40Reward'));const coins=state.wallet.coins;await call('side40Reward',{},409);await get();assert.equal(state.world.zaSide40RewardClaimed,undefined);assert.equal(state.wallet.coins,coins);assert.equal(state.world.zaMegaShards,7);
+  const w=rawWorld();seedWorld({adventureBalls:{...w.adventureBalls,ultraball:96},districtPosition:{...w.districtPosition,revision:state.revision+1}});await get();await call('side40Reward');await get();assert.equal(state.world.adventureBalls.ultraball,99);assert.equal(state.world.zaMegaShards,17);assert.equal(state.wallet.coins,coins+1700);assert.equal(state.world.zaSide40RewardClaimed,true);assert.deepEqual(state.world.teamIds,team);await call('side40Reward',{},409);await call('vert7Holovator');await get();assert.equal(state.world.zaVert7RoofUpper,true);await call('vert7Holovator');assert.equal(state.world.zaVert7RoofUpper,false);
+ }}finally{globalThis.__adventureUser=oldUser;}
+});

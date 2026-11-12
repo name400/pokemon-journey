@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('Vert Sector 7 roof bridge and lift preserve old and upper positions',()=>{
  const lower={area:3,district:'lumiose-south-boulevard',interior:null,x:5,y:10,facing:'down',zaSide40Lift:true,teamIds:['kept']};
- assert.equal(fieldDialogue(lower).action,'vert7Holovator');
+ assert.deepEqual(fieldDialogue(lower).actions.map(a=>a.action),['vert7Holovator','side40Reward']);assert.equal(fieldDialogue({...lower,zaSide40RewardClaimed:true}).action,'vert7Holovator');
  const upper={...lower,zaVert7RoofUpper:true};
  assert.ok(fieldPath(fieldMap(upper),upper,{x:18,y:8}).length);
  assert.equal(fieldDialogue(upper).action,'vert7Holovator');
