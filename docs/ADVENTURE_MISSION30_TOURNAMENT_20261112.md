@@ -1,0 +1,5 @@
+# Mission 30 tournament rosters
+
+[The original tournament listing](https://www.serebii.net/legendsz-a/mainmissions/reachingrankb.shtml) gives the moves and Mega Stones for Canari, Ivor, Corbeau, and Jacinthe. Newly started battles use those moves and their respective Eelektrossite, Falinksite, Scolipite and Clefablite. The existing turn-based opponent AI decides when to Mega Evolve. The Zygarde fight keeps its previous provisional moves because this listing does not specify them; Plus Moves and the original real-time behavior are not represented.
+
+Previously saved in-progress combat snapshots are not rewritten. Existing round, win, reward and party state are retained. An isolated API test checks each newly created team and reload, all four Mega Evolutions in separate engine battles, forfeiture and an old snapshot. The Jacinthe victory and one-time reward path are checked with opponents set to 1 HP and asleep; this validates progression but does not establish normal-play balance. Original hardware and production were not tested.
