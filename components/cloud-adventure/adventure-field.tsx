@@ -1,3 +1,5 @@
+import {LYSANDRE_WILD,lysandreWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
+import {museumSide21Spot,museumSide21Requester} from '@/lib/cloud-adventure/adventure-museum.mjs';
 'use client';
 import {ZONE20_VISIBLE,zone20Visible} from '@/lib/cloud-adventure/adventure-mission42.mjs';
 import {ZONE19_VISIBLE,zone19Visible} from '@/lib/cloud-adventure/adventure-zone19.mjs';
@@ -74,6 +76,43 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{
     if(x<bounds.left||x>bounds.right||y<bounds.top||y>bounds.bottom)return;
     const px=x*tile,py=y*tile;ctx.fillStyle=palette[0];ctx.fillRect(px,py,tile,tile);
+    // Museum and laboratory maps have their own structures, not outdoor trees.
+    // The 2D outlines and fixtures remain draft interpretations of the sources.
+    if(w.district==='lumiose-museum-front'){
+     const inside=w.interior==='museum1'||w.interior==='museum2',second=w.interior==='museum2';
+     if(!inside){
+      const facade=x>=3&&x<=19&&y>=2&&y<=6;
+      ctx.fillStyle=facade?'#e6e2d6':c==='#'?'#a5a9a4':c===','?'#c7c9c1':(x+y)%2?'#d8dcd5':'#e1e3db';ctx.fillRect(px,py,tile,tile);
+      if(facade){ctx.fillStyle=y===2?'#909f9e':y===6?'#c5c8bf':'#f2efe4';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#b3bdb9';if(y===2)ctx.fillRect(px,py+tile-6,tile,6);else if(y<6){ctx.fillRect(px+2,py,3,tile);ctx.fillRect(px+tile-5,py,3,tile);ctx.fillStyle='#70939b';ctx.fillRect(px+9,py+5,tile-18,tile-10);ctx.fillStyle='#d7e7e3';ctx.fillRect(px+11,py+7,3,tile-14);}else{ctx.fillStyle='#f6f2e6';ctx.fillRect(px+4,py,5,tile);ctx.fillRect(px+tile-9,py,5,tile);}}
+      if(c==='u'){ctx.fillStyle='#e8e4d8';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#516e77';ctx.fillRect(px+3,py+4,tile-6,tile-4);ctx.fillStyle='#e9eee7';ctx.fillRect(px+tile/2-1,py+4,2,tile-4);}
+      if(c===','){ctx.fillStyle='#e8e9df';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py,1,tile);}
+      if(c==='X'){ctx.fillStyle='#718c91';ctx.fillRect(px+6,py+5,tile-12,tile-10);}return;
+     }
+     ctx.fillStyle=c==='#'?(second?'#786d60':'#8a8375'):c===';'?(second?'#8f6259':'#c4ad83'):(x+y)%2?(second?'#dfd5c0':'#e7dfcb'):(second?'#ebe1ce':'#f0eadb');ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){ctx.fillStyle=second?'#bba88d':'#d0c5ad';ctx.fillRect(px,py+tile-5,tile,5);}
+     if(c===';'){ctx.fillStyle=second?'#b89374':'#e1d0a9';ctx.fillRect(px+3,py+3,tile-6,2);ctx.fillRect(px+3,py+tile-5,tile-6,2);}
+     if(c==='^'){ctx.fillStyle='#8d8272';ctx.fillRect(px+6,py+tile-8,tile-12,5);ctx.fillStyle='#e4e0d3';ctx.fillRect(px+11,py+8,tile-22,tile-16);ctx.fillRect(px+9,py+5,tile-18,5);}
+     if(c==='t'&&y===4&&(x===5||x===17)){ctx.fillStyle='#745b43';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle=second?'#aebcb5':'#9ab3a1';ctx.fillRect(px+6,py+7,tile-12,tile-14);ctx.fillStyle=second?'#ece0ba':'#e9cc85';ctx.fillRect(px+10,py+11,tile-20,4);}
+     if(c==='t'&&museumSide21Requester(w,{tile:c,x,y})){ctx.fillStyle='#b98b72';ctx.fillRect(px+11,py+5,10,7);ctx.fillStyle='#5d7182';ctx.fillRect(px+8,py+12,16,13);}
+     const spewpa=museumSide21Spot(w,{tile:c,x,y});if(spewpa&&w.zaSide21Started&&!w.zaSide21Complete&&!w.zaSide21Found?.includes(spewpa)){ctx.fillStyle='#f6f5e9';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,7,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#373d40';ctx.fillRect(px+tile/2-4,py+tile/2-1,2,2);ctx.fillRect(px+tile/2+2,py+tile/2-1,2,2);}
+     if(c==='l'){ctx.fillStyle='#806b55';for(let n=0;n<4;n++)ctx.fillRect(px+4,py+5+n*6,tile-8,3);}
+     if(c==='X'){ctx.fillStyle='#637e86';ctx.fillRect(px+6,py+5,tile-12,tile-10);}return;
+    }
+    if(w.district==='lumiose-lysandre-lab'&&!w.interior){
+     const wing=w.zaLysandreFloor===2?'b2':w.zaLysandreFloor===3?'b3':w.zaLysandreWing||'hub',accent=({a:'#c47b3e',b:'#6a9d70',e:'#9174a6',hub:'#b5a28d',b2:'#718187',b3:'#655d77'} as Record<string,string>)[wing]||'#b5a28d';
+     const floorTones=({a:['#bc9b7e','#cbb099'],b:['#8eaa94','#a5bca8'],e:['#a093b3','#b4a9c3'],hub:['#a99f91','#c1b8a9'],b2:['#849597','#a0afb0'],b3:['#716a7e','#8b8297']} as Record<string,string[]>)[wing]||['#9ba9a4','#acb8b1'];ctx.fillStyle=c==='#'?'#333f48':c==='|'?'#687379':floorTones[(x+y)%2];ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){ctx.fillStyle='#52616a';ctx.fillRect(px,py+tile-5,tile,4);ctx.fillRect(px+(y%2?tile/2:0),py,2,tile-5);}
+     else if(c==='|'){ctx.fillStyle='#b7c2bd';for(let n=5;n<tile;n+=8)ctx.fillRect(px+n,py+2,3,tile-4);}
+     else{ctx.fillStyle=accent;ctx.fillRect(px+2,py+tile-4,tile-4,2);ctx.fillStyle='#d2dad2';ctx.fillRect(px+1,py+1,tile-2,1);}
+     if(wing==='hub'&&['n','p','q'].includes(c)){ctx.fillStyle=({n:'#c47b3e',p:'#6a9d70',q:'#9174a6'} as Record<string,string>)[c];ctx.fillRect(px+3,py+2,tile-6,tile-4);ctx.fillStyle='#dce3da';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#435a5c';ctx.fillRect(px+9,py+8,tile-18,tile-16);}
+     if(c==='t'&&['a','b','e'].includes(wing)){ctx.fillStyle='#454f55';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle=w.zaLysandrePowers?.includes(wing)?'#a5e3a3':'#e98173';ctx.fillRect(px+9,py+8,tile-18,7);}
+     if(c==='u'){ctx.fillStyle='#546a74';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.strokeStyle=w.zaLysandrePowers?.includes(wing)?'#9ae5e2':'#8b9894';ctx.lineWidth=2;ctx.strokeRect(px+8,py+8,tile-16,tile-16);}
+     if('abek'.includes(c)){ctx.fillStyle='#65787a';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle='#d9e5ce';ctx.fillRect(px+8,py+7,tile-16,8);ctx.fillStyle='#f3c95b';ctx.fillRect(px+10,py+18,tile-20,3);}
+     if(c==='l'){ctx.fillStyle='#59696c';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d6ded3';ctx.fillRect(px+7,py+5,tile-14,tile-10);ctx.fillStyle='#627578';ctx.fillRect(px+tile/2-1,py+5,2,tile-10);}
+     if(c==='h'||c==='X'){ctx.fillStyle='#637f81';ctx.fillRect(px+6,py+5,tile-12,tile-10);}
+     if(c==='o'){ctx.fillStyle='#e4d7b5';ctx.fillRect(px+10,py+10,12,12);ctx.fillStyle='#d4665b';ctx.fillRect(px+10,py+10,12,5);}
+     return;
+    }
     if(w.district==='lumiose-zone2-overlook'&&!w.interior){if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?'#718479':(x+y)%2?'#c8c4a8':'#d8d2b7';ctx.fillRect(px,py,tile,tile);if(c==='h'){ctx.fillStyle='#917d60';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#e9ddbc';for(let j=0;j<3;j++)ctx.fillRect(px+5,py+7+j*7,tile-10,2);}return;}
     if(w.district==='lumiose-bleu-cafe2'&&!w.interior){if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?'#909488':c===','?'#c8bdae':(x+y)%2?'#e0ded0':'#ebe9dd';ctx.fillRect(px,py,tile,tile);if(c==='q'||c==='s'||c==='X'){ctx.fillStyle=c==='q'?'#a7534d':c==='s'?'#867156':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'카페':c==='s'?'계단':'거리',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-aymlis-park'&&!w.interior){const lower=w.zaMission11ParkLower===true;if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?(lower?'#71827f':'#779079'):c===','?'#d0c5b0':(x+y)%2?'#d9d5be':'#e7e1cc';ctx.fillRect(px,py,tile,tile);if(c==='H'||c==='j'||c==='d'||c==='X'||c===';'){ctx.fillStyle=c==='H'?'#c95d61':c==='j'?'#907758':c==='d'?'#668eaa':c===';'?'#aaa092':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='H'?'센터':c==='j'?'계단':c==='d'?'사건':c===';'?'아치':'거리',px+tile/2,py+20);}return;}
@@ -447,6 +486,11 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    if(['lumiose-zone16','lumiose-zone16-garden'].includes(w.district)&&!w.interior&&!w.zaZone16Upper)for(const m of ZONE16_VISIBLE.filter(p=>zone16Visible(w,p.tile)===p)){const img=fieldImages[m.species],px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#668c80';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
    if(w.district==='lumiose-zone15'&&!w.interior)for(const m of ZONE15_VISIBLE.filter(p=>zone15Visible(w,p.tile)===p)){const img=fieldImages[m.species],px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#728464';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
    if(w.district==='lumiose-zone14'&&!w.interior)for(const m of ZONE14_VISIBLE.filter(p=>!!zone14Visible(w,p.tile))){const img=fieldImages[m.species],px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#786c5b';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
+   if(w.district==='lumiose-lysandre-lab'&&!w.interior){
+    const visible=LYSANDRE_WILD.filter(p=>lysandreWild(w,{tile:p.tile,x:p.x,y:p.y}));
+    if(w.zaLysandreFloor!==2&&w.zaLysandreFloor!==3&&w.zaMission35Stage===4&&!w.zaLysandreAegislashWon&&(!w.zaLysandreMazeV2||w.zaLysandreWing==='e'))visible.push({id:'guardian',tile:'g',x:w.zaLysandreMazeV2?17:19,y:w.zaLysandreMazeV2?9:4,species:681,level:50,name:'킬가르도',alpha:true});
+    for(const m of visible){const px=m.x*tile,py=m.y*tile,img=fieldImages[m.species];if(m.alpha){ctx.fillStyle='#aa4b4c';ctx.fillRect(px+3,py+3,tile-6,tile-6);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle=m.alpha?'#d18b7a':'#a2bac1';ctx.fillRect(px+8,py+7,tile-16,tile-14);}}
+   }
    if(w.district==='lumiose-zone13'&&!w.interior)for(const m of ZONE13_VISIBLE.filter(p=>!!zone13Visible(w,p.tile))){const img=fieldImages[m.species],px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#658b5e';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
    if(w.district==='lumiose-zone12'&&!w.interior)for(const m of ZONE12_VISIBLE.filter(p=>!w.zaZone12Spent?.[p.id]&&(!w.zaZone12PondLower||p.water))){const img=fieldImages[m.species],px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#769097';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
    if(w.district==='lumiose-zone10'&&!w.interior)for(const m of ZONE10_VISIBLE.filter(p=>p.upper===(w.zaZone10Upper===true)&&!w.zaZone10Spent?.[p.id])){const img=fieldImages[m.species],px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#796d85';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
