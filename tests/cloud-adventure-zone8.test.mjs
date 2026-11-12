@@ -27,3 +27,10 @@ test('Jaune Plaza stall footprints keep paths, grass and old saves',()=>{
  }
  assert.ok(fieldPath(map,{x:9,y:15},{x:21,y:10}).length);assert.equal(map[6][10],'g');assert.equal(storeAdventurePosition(base,32).districtPosition.zone8Layout,1);
 });
+test('central burrows preserve paths and old player positions',()=>{
+ const s={area:3,district:'lumiose-zone8',interior:null,x:11,y:9,zaRoyaleRank:'F',teamIds:['kept']};const map=zone8Map(s);
+ assert.equal(map[9][11],'f');assert.equal(zone8Visible(s,'f').species,529);assert.equal(zone8Visible(s,'c').burrow,true);
+ assert.equal(zone8Visible({...s,zaZone8Spent:{drilbur:true}},'f'),null);
+ const old=storeAdventurePosition(s,23),loaded=restoreAdventurePosition(old,23);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.teamIds],['lumiose-zone8',11,9,['kept']]);
+ for(const random of [0,.25,.5,.75,.999]){assert.ok(![443,529].includes(zone8Encounter({x:11,y:8},()=>random).speciesId));assert.ok(![443,529].includes(zone8Encounter({x:3,y:8},()=>random).speciesId));}
+});

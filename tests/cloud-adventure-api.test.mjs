@@ -4620,3 +4620,14 @@ test('water field encounters preserve Lure Ball habitat across battle reload',as
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:5,y:6,facing:'up',zaZone10Upper:false,combat:null,encounter:null},state.revision+1));await get();await call('zone10Wild-slowpoke');await get();const land=rawWorld().combat.teams[1][0];assert.notEqual(land.adventureInWater,true);assert.equal(rareBallModifier('lureball',land,rareBallContext(land,rawWorld().combat.teams[0][0])),1);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zone 8 burrows start the hidden encounters and preserve captured state',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone8-burrow-qa',displayName:'흙더미 조우'};
+ try{
+  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const {id,species,x,y} of [{id:'drilbur',species:529,x:11,y:10},{id:'gible',species:443,x:14,y:9}]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x,y,facing:'up',zaRoyaleRank:'F',adventureBalls:{...rawWorld().adventureBalls,masterball:1},combat:null,encounter:null},state.revision+1));
+   await get();assert.equal(state.world.interaction.action,`zone8Wild-${id}`);assert.match(state.world.interaction.name,/흙더미/);await call(`zone8Wild-${id}`);assert.equal(state.battle.teams[1][0].speciesId,species);await get();assert.equal(state.battle.teams[1][0].speciesId,species);await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaZone8Spent[id],true);assert.ok(state.box.some(m=>m.speciesId===species));assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
