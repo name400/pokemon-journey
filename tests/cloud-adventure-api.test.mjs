@@ -4059,6 +4059,21 @@ test('trade evolution research belongs to the actual recipient and survives relo
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('trade-held evolutions require the item during the new trade and credit the recipient once',async()=>{
+ const previous=globalThis.__adventureUser;try{
+  const a={userId:'trade-item-a',displayName:'도구 교환 A'},b={userId:'trade-item-b',displayName:'도구 교환 B'};
+  globalThis.__adventureUser=a;await get();await call('start',{species:152});const first=state.world.activeId;seedMon(first,{...makeMon(95,30),boxId:first,moves:['몸통박치기'],item:''});
+  globalThis.__adventureUser=b;await get();await call('start',{species:152});const second=state.world.activeId;
+  for(const [u,code] of [[a,'ITMTRA'],[b,'ITMTRB']])sql.prepare('INSERT OR REPLACE INTO profiles(user_id,nickname,nickname_key,friend_code,updated_at) VALUES(?,?,?,?,?)').run(u.userId,u.displayName,u.userId,code,1);
+  sql.prepare("INSERT INTO friendships(pair_key,requester,recipient,status,created_at) VALUES(?,?,?,'accepted',?)").run(JSON.stringify([a.userId,b.userId].sort()),a.userId,b.userId,1);
+  const trade=await import(await loadTS('app/api/trades/route.ts'));async function tradeCall(payload){const response=await trade.POST(new Request('http://adventure.test/api/trades',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify(payload)}));const value=await response.json();assert.equal(response.status,200,JSON.stringify(value));return value;}
+  globalThis.__adventureUser=a;let offer=await tradeCall({action:'offer',friendCode:'ITMTRB',boxId:first});let tradeId=offer.items.find(t=>t.status==='pending').id;globalThis.__adventureUser=b;await tradeCall({action:'accept',id:tradeId,boxId:second});await get();assert.equal(rawMon(first).adventureTradeHeldItem,'');assert.equal(rawMon(first).adventureTradeConsumed,false);
+  const invKey=JSON.stringify([b.userId,'metalcoat']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(invKey,b.userId,'metalcoat');await call('equip',{boxId:first,item:'metalcoat'});await call('evolve',{boxId:first,target:208},409);assert.equal(rawMon(first).speciesId,95);assert.equal(rawWorld().zaResearchTradeEvolutions,undefined);await get();assert.equal(rawMon(first).adventureTradeHeldItem,'');
+  offer=await tradeCall({action:'offer',friendCode:'ITMTRA',boxId:first});tradeId=offer.items.find(t=>t.status==='pending').id;globalThis.__adventureUser=a;await tradeCall({action:'accept',id:tradeId,boxId:second});await get();assert.equal(rawMon(first).adventureTradeHeldItem,'metalcoat');assert.equal(rawMon(first).adventureTradeConsumed,false);await call('evolve',{boxId:first,target:208});assert.equal(rawMon(first).speciesId,208);assert.equal(rawMon(first).item,'');assert.equal(rawMon(first).adventureTradeConsumed,true);assert.equal(rawWorld().zaResearchTradeEvolutions,1);await get();assert.equal(rawWorld().zaResearchTradeEvolutions,1);await call('evolve',{boxId:first,target:208},409);
+  globalThis.__adventureUser=b;await get();assert.equal(rawWorld().zaResearchTradeEvolutions,undefined);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('zone nine wild color persists across flee and capture and is cleared after catch',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone9-shiny-qa',displayName:'색 검사'};
  try{
