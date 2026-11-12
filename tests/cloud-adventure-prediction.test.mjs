@@ -80,3 +80,11 @@ test('zone 4 and zone 6 ground paths extend, while grass and elevated layers do 
  for(const [district,x,y] of [['lumiose-zone4',10,3],['lumiose-zone6',3,2]]){const w={area:3,district,x,y,interior:null},first=predictCloudStep(w,'down',{allowGrass:true});assert.ok(first,district);const buffer=createCloudMoveBuffer(w,first,'down');for(let i=0;i<4;i++)assert.ok(buffer.push(),district);assert.equal(buffer.push(),null);}
  for(const [layer,x,y] of [['canal',2,3],['roof',4,2],['high',17,1]]){const w={area:3,district:'lumiose-zone6',zaZone6Layer:layer,x,y,interior:null},first=predictCloudStep(w,'down',{allowGrass:true});assert.ok(first,layer);const buffer=createCloudMoveBuffer(w,first,'down');for(let i=0;i<4;i++)assert.ok(buffer.push(),layer);assert.equal(buffer.push(),null);}
 });
+
+test('queued directions preview in order and stop at blocked tiles',async()=>{
+ const {predictCloudPath}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const world={area:3,district:'lumiose',interior:null,x:6,y:8,facing:'right'},before=structuredClone(world);
+ assert.deepEqual(predictCloudPath(world,['up','left']),{x:5,y:7,facing:'left'});assert.deepEqual(world,before);
+ const boundary={...world,x:1,y:1};assert.equal(predictCloudPath(boundary,['up','right']),null);
+ assert.deepEqual(predictCloudPath(boundary,['right','up']),{x:2,y:1,facing:'right'});
+});
