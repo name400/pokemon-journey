@@ -58,3 +58,7 @@ test('zone 19 preserves an unspent shiny across time changes',async()=>{
  assert.equal(refreshZone19Spawns(s,'day',2),true);assert.equal(s.zaWildShinyRolls['zone19:cleffa-night:173'],true);assert.equal(s.zaWildShinyRolls['zone19:audino:531'],undefined);assert.equal(s.zaWildShinyRolls['zone19:furfrou:676'],undefined);
  assert.equal(refreshZone19Spawns(s,'night',3),true);assert.equal(s.zaWildShinyRolls['zone19:cleffa-night:173'],true);
 });
+test('zone 19 preserves the old cycle when a respawn is blocked',async()=>{
+ const {refreshZone19Spawns}=await import('../lib/cloud-adventure/adventure-zone19.mjs');const s={district:'lumiose-zone19',zaZone19SpawnCycle:{period:'day',interval:0},zaZone19Spent:{furfrou:true}};
+ assert.equal(refreshZone19Spawns(s,'day',2,()=>false),false);assert.equal(s.zaZone19Spent.furfrou,true);assert.equal(s.zaZone19SpawnCycle.interval,0);assert.equal(refreshZone19Spawns(s,'day',2,()=>true),true);assert.equal(s.zaZone19Spent,undefined);
+});

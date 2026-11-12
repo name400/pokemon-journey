@@ -104,9 +104,19 @@ import {ROYALE_V_TRAINERS,royaleVPoints,royaleVWins,royaleVReady,ROYALE_Z_TRAINE
 import {canariBattleExperience} from '@/lib/cloud-adventure/adventure-canari.mjs';
 export const dynamic='force-dynamic';const db=()=>env.DB!;const random=()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;
 const fieldWildResolvers:any={5:zone5Visible,6:zone6Visible,8:zone8Visible,9:zone9Visible,10:zone10Visible,11:zone11Visible,12:zone12Visible,13:zone13Visible,14:zone14Visible,15:zone15Visible,16:zone16Visible,17:zone17Visible,18:zone18Visible,19:zone19Visible,20:zone20Visible};
+// A spent visible encounter may have exposed walkable ground beneath it.
+// Do not put it back under a player (or invalidate their persisted position).
+function canRefreshWildAtPosition(s:any,zone:number,period:string){
+ const spent=s[`zaZone${zone}Spent`];if(!spent||!Number.isInteger(s.x)||!Number.isInteger(s.y))return true;
+ const view:any={...s,[`zaZone${zone}Spent`]:undefined};
+ if([13,14,15,18,19].includes(zone))view[`zaZone${zone}Period`]=period;
+ if(zone===14){const time=gameTime(undefined,adventureClockOffset(s));view.weather=['water','poison'].includes(AREAS[s.area]?.biome)&&time.hour%2===0?'rain':'';}
+ const tile=fieldMap(view)[s.y]?.[s.x],p=fieldWildResolvers[zone]?.(view,tile);
+ return !(p&&p.x===s.x&&p.y===s.y&&spent[p.id]===true);
+}
 function prepareVisibleWild(s:any){
  if(!s||s.interior||s.combat||s.adventureCatchWindow)return false;
- const offset=adventureClockOffset(s),now=Date.now(),time=gameTime(now,offset),period=time.period;let changed=s.district==='lumiose-zone19'?refreshZone19Spawns(s,period,zone19SpawnInterval(now,offset)):['lumiose-zone2','lumiose-zone3'].includes(s.district)?refreshRoamingWildSpawns(s,period,zone19SpawnInterval(now,offset)):refreshOrdinaryWildSpawns(s,period,zone19SpawnInterval(now,offset));const ensure=(key:string)=>{if(typeof s.zaWildShinyRolls?.[key]!=='boolean'){assignWildShiny(s,{},random,key);changed=true;}};
+ const offset=adventureClockOffset(s),now=Date.now(),time=gameTime(now,offset),period=time.period;let changed=s.district==='lumiose-zone19'?refreshZone19Spawns(s,period,zone19SpawnInterval(now,offset),canRefreshWildAtPosition):['lumiose-zone2','lumiose-zone3'].includes(s.district)?refreshRoamingWildSpawns(s,period,zone19SpawnInterval(now,offset)):refreshOrdinaryWildSpawns(s,period,zone19SpawnInterval(now,offset),canRefreshWildAtPosition);const ensure=(key:string)=>{if(typeof s.zaWildShinyRolls?.[key]!=='boolean'){assignWildShiny(s,{},random,key);changed=true;}};
  if(s.district==='lumiose-zone8'&&initializeZone8Burrows(s,random))changed=true;
  if(s.district==='lumiose-lysandre-lab'){for(const p of lysandreVisibleWild(s))ensure(`lab:${p.id}:${p.species}`);return changed;}
  if(s.district==='lumiose-zone2'){if(zone2BudewPosition(s))ensure('field2:budew:406');if(zone2KakunaPosition(s))ensure('field2:kakuna:14');for(const p of zone2FieldMonsters(s,period))ensure(`field2:${p.id}:${p.speciesId}`);return changed;}

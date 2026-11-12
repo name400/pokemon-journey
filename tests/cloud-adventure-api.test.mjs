@@ -4652,3 +4652,22 @@ test('Zone 8 rerolls ordinary burrows across cycles while keeping an existing sh
   now+=1200000;globalThis.__adventureRandom=()=>0;await get();assert.deepEqual(rawWorld().zaZone8Burrows,{gible:443,drilbur:443});assert.equal(rawWorld().zaWildShinyRolls['zone8:gible:443'],true);assert.equal(rawWorld().zaWildShinyRolls['zone8:drilbur:529'],undefined);await call('zone8Wild-gible');assert.equal(state.battle.teams[1][0].shiny,true);await get();assert.equal(state.battle.teams[1][0].shiny,true);assert.deepEqual(state.world.teamIds,team);
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('wild refresh waits when a respawn would occupy the player save position',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'occupied-wild-refresh-qa',displayName:'재출현 위치'};
+ try{
+  Date.now=()=>now;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:14,y:8,facing:'down',zaRoyaleRank:'F',zaWildSpawnCycles:{8:{period:'day',interval:0}},zaZone8Burrows:{gible:443,drilbur:529},zaZone8Spent:{gible:true},combat:null,encounter:null},state.revision+1));
+  await get();assert.equal(state.world.district,'lumiose-zone8');now+=1200000;await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone8',14,8]);assert.equal(rawWorld().zaZone8Spent.gible,true);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone8',14,8]);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone8',14,9]);assert.equal(rawWorld().zaZone8Spent,undefined);assert.equal(state.world.map[8][14],'c');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('Zone 19 waits for a player to leave a spent encounter position',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'zone19-occupied-refresh-qa',displayName:'구역19 재출현 위치'};
+ try{
+  Date.now=()=>now;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:5,y:7,facing:'down',zaRoyaleRank:'B',zaZone19SpawnCycle:{period:'day',interval:0},zaZone19Spent:{furfrou:true},combat:null,encounter:null},state.revision+1));
+  now+=1200000;await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',5,7]);assert.equal(rawWorld().zaZone19Spent.furfrou,true);await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',5,8]);assert.equal(rawWorld().zaZone19Spent,undefined);assert.equal(state.world.map[7][5],'a');assert.deepEqual(state.world.teamIds,team);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});

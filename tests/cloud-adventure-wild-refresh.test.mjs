@@ -30,3 +30,8 @@ test('time changes retain unspent shiny individuals while resetting ordinary one
   assert.equal(refreshOrdinaryWildSpawns(s,'night',2),true);assert.equal(s.zaWildShinyRolls[`zone${zone}:alive:1`],true);assert.equal(s.zaWildShinyRolls[`zone${zone}:normal:2`],undefined);assert.equal(s.zaWildShinyRolls[`zone${zone}:caught:3`],undefined);assert.equal(s.zaWildShinyRolls['zone19:other:4'],true);
  }
 });
+test('blocked respawns retain their previous cycle and retry after movement',()=>{
+ const s={district:'lumiose-zone8',zaWildSpawnCycles:{8:{period:'day',interval:0}},zaZone8Spent:{gible:true}};
+ assert.equal(refreshOrdinaryWildSpawns(s,'day',2,()=>false),false);assert.equal(s.zaZone8Spent.gible,true);assert.equal(s.zaWildSpawnCycles[8].interval,0);
+ assert.equal(refreshOrdinaryWildSpawns(s,'day',2,()=>true),true);assert.equal(s.zaZone8Spent,undefined);assert.equal(s.zaWildSpawnCycles[8].interval,2);
+});
