@@ -66,7 +66,7 @@ export default function Adventure(){
   // Only the queued input is sent after confirmation; failures still roll back.
   const pending=lock.current?inflightMove.current:null;
   if(lock.current&&(!pending||pending.revision!==d.revision||pending.position?.predictedTransition))return;
-  const base=pending?{...d.world,...pending.position}:d.world;
+  const base=pending?{...d.world,...(pending.bufferedPosition||pending.position)}:d.world;
   const projected=predictCloudStep(base,direction,{allowGrass:true,allowTransition:!pending,allowHazard:true});if(projected)setPrediction({revision:d.revision,...projected});
  },[]);
  const interact=useCallback(()=>{stop();if(lock.current)return;const spot=snapshot.current?.world?.interaction;if(!spot){setHint('NPC나 건물 입구로 다가가 바라본 뒤 대화하세요.');return;}setDialogue(spot);},[stop]);
@@ -95,11 +95,13 @@ export default function Adventure(){
      const projected=predictCloudStep(d.world,path[0],{allowGrass:true,allowTransition:true,allowHazard:true}),epoch=movementEpoch.current,inputAtStart=inputSequence.current;let buffer=createCloudMoveBuffer(d.world,projected,direction);
      if(projected)setPrediction({revision:d.revision,...projected});
      // Accumulate only displayed steps; transitions wait for server confirmation.
-     const previewTimer=heldDirection.current&&projected?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||inputSequence.current!==inputAtStart||heldDirection.current!==direction)return;const next=buffer.push();if(next)setPrediction({revision:revision.current,...next});},adventureMovementInterval(d.world)):null;
+     const previewTimer=heldDirection.current&&projected?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||inputSequence.current!==inputAtStart||heldDirection.current!==direction)return;const next=buffer.push();if(next){if(inflightMove.current)inflightMove.current.bufferedPosition=next;setPrediction({revision:revision.current,...next});}},adventureMovementInterval(d.world)):null;
      moved=true;inflightMove.current=projected?{revision:d.revision,position:projected}:null;let r=await act('move',{path});inflightMove.current=null;
-     while(alive&&mounted.current&&movementEpoch.current===epoch&&inputSequence.current===inputAtStart&&buffer.path.length&&buffer.matches(r)){
+     while(alive&&mounted.current&&movementEpoch.current===epoch&&buffer.path.length&&buffer.matches(r)){
       const pending=buffer.path,before=r,nextBuffer=createCloudMoveBuffer(before.world,buffer.position,direction);
-      setPrediction({revision:before.revision,...buffer.position});
+      // A turn made while waiting follows the already displayed straight steps.
+      const turn=inputSequence.current!==inputAtStart?pathQueue.current[0]:null,turnPreview=turn?predictCloudStep({...before.world,...buffer.position},turn,{allowGrass:true,allowHazard:true}):null;
+      setPrediction({revision:before.revision,...(turnPreview||buffer.position)});
       // Keep one cadence across requests; restarting a timer after every
       // response adds a visible pause between otherwise continuous batches.
       buffer=nextBuffer;
@@ -108,6 +110,8 @@ export default function Adventure(){
       if(!r||r.battle||r.world?.area!==before.world.area||r.world?.interior!==before.world.interior||r.world?.district!==before.world.district||(r.world?.steps||0)-(before.world.steps||0)<pending.length){stop();break;}
      }
      if(previewTimer)clearInterval(previewTimer);
+     // Keep a queued turn visible after the previous batch is confirmed.
+     if(r?.world&&!r.battle&&!r.world.adventureCatchWindow&&!r.world.adventurePendingMoves?.length&&movementEpoch.current===epoch&&inputSequence.current!==inputAtStart&&pathQueue.current[0]){const next=predictCloudStep(r.world,pathQueue.current[0],{allowGrass:true,allowTransition:true,allowHazard:true});if(next)setPrediction({revision:r.revision,...next});}
      // A confirmed area transition ends the old route, but held input can
      // continue on the new map after its authoritative state has arrived.
      const changedArea=r&&(r.world?.area!==d.world.area||r.world?.interior!==d.world.interior||r.world?.district!==d.world.district);
