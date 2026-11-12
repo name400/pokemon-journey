@@ -16,11 +16,12 @@ import {stepField,wildAlphaTarget,zone2BudewTarget,zone2KakunaTarget,zone2FieldM
 import {ADVENTURE_BALLS,RARE_ADVENTURE_BALL_IDS} from '@/lib/cloud-adventure/adventure-balls.mjs';
 import './cloud-adventure.css';
 import {predictCloudStep,createCloudMoveBuffer,adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
+import {adventureJson} from '@/lib/adventure-network.mjs';
 
 type Screen='party'|'manage'|'bag'|'shop'|'journal'|'travel'|null;
 async function api(body?:any,light=false){
- const response=await fetch(light?'/api/world?light=1':'/api/world',body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store'});
- const data=await response.json() as any;if(!response.ok)throw Error(data.error||'탐험 요청 실패');return data;
+ const {response,data}=await adventureJson(light?'/api/world?light=1':'/api/world',body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store'});
+ if(!response.ok)throw Error(data.error||'탐험 요청 실패');return data;
 }
 export function AdventureHP({mon}:{mon:any}){const ratio=Math.max(0,Math.min(1,mon.hp/Math.max(1,mon.maxHp)));return <div className="adv-health"><div><b>HP</b><span>{mon.hp} / {mon.maxHp}</span></div><div className="adv-meter" role="progressbar" aria-label={`${mon.name} HP`} aria-valuenow={mon.hp} aria-valuemin={0} aria-valuemax={mon.maxHp}><i className={ratio<.25?'low':ratio<.5?'half':''} style={{transform:`scaleX(${ratio})`}}/></div></div>;}
 function MoveSummary({name}:{name:string}){const m=(moves as any)[name];if(!m)return null;const category=m.category==='Physical'?'물리':m.category==='Special'?'특수':'변화';return <small>{m.type} · {category} · 위력 {m.power||'—'} · 명중 {typeof m.acc==='number'?`${m.acc}%`:'—'} · 기본 PP {m.pp}</small>;}
@@ -37,6 +38,7 @@ export default function Adventure(){
  const [query,setQuery]=useState(''),[page,setPage]=useState(0),[hint,setHint]=useState('방향키 / WASD로 걷고 E로 대화하세요.');
  const [alphaAimKey,setAlphaAimKey]=useState(''),[budewAimKey,setBudewAimKey]=useState(''),[kakunaAimKey,setKakunaAimKey]=useState(''),[fieldAim,setFieldAim]=useState(''),[islandAlphaAim,setIslandAlphaAim]=useState(''),[zone3Aim,setZone3Aim]=useState(''),[sewerAim,setSewerAim]=useState(''),[catchBall,setCatchBall]=useState('pokeball');
  const [battleResult,setBattleResult]=useState<any>(null),resultRef=useRef<any>(null);
+ const syncRequired=useRef(false);
  const lock=useRef(false),mounted=useRef(true),revision=useRef(-1),snapshot=useRef<any>(null),screenRef=useRef<Screen>(null),dialogueRef=useRef<any>(null);
  const heldDirection=useRef(''),pathQueue=useRef<string[]>([]),lastFacing=useRef(''),movementEpoch=useRef(0),inputSequence=useRef(0),wakeMovement=useRef<()=>void>(()=>{}),inflightMove=useRef<any>(null);
  snapshot.current=data;screenRef.current=screen;dialogueRef.current=dialogue;
@@ -46,11 +48,11 @@ export default function Adventure(){
   setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()].filter((p:any)=>p.boxId!==d.world?.zaTradedPikachuId)};});
   setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();
  },[stop]);
- const load=useCallback(async(light=false)=>{try{accept(await api(undefined,light));setError('');}catch(e){if(mounted.current)setError(e instanceof Error?e.message:'불러오기 실패');}},[accept]);
+ const load=useCallback(async(light=false,recovery=false)=>{try{const result=await api(undefined,light);if(syncRequired.current&&!recovery)return false;if(recovery&&result.revision<revision.current)throw Error('서버의 최신 진행 상태를 확인하지 못했습니다.');accept(result);if(recovery)syncRequired.current=false;if(mounted.current)setError('');return true;}catch(e){if(mounted.current){setError(recovery?'연결을 복구하지 못했습니다. 다시 불러와 주세요.':e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept]);
  const act=useCallback(async(action:string,extra:any={})=>{
-  if(lock.current)return null;lock.current=true;setBusy(true);setError('');
+  if(lock.current||syncRequired.current)return null;lock.current=true;setBusy(true);setError('');
   try{const result=await api({action,revision:revision.current,...extra});if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result);return result;}
-  catch(e){stop();setPrediction(null);if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load();return null;}
+  catch(e){stop();setPrediction(null);syncRequired.current=true;if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load(false,true);return null;}
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  },[accept,load,stop]);
  useEffect(()=>{mounted.current=true;load();return()=>{mounted.current=false;stop();};},[load,stop]);
@@ -58,7 +60,7 @@ export default function Adventure(){
  // Show the first safe step in the input event instead of waiting for the
  // movement polling loop; the server still resolves and persists the move.
  const previewInput=useCallback((direction:string)=>{
-  const d=snapshot.current;if(!d?.world||d.revision!==revision.current||d.battle||d.world.adventurePendingMoves?.length||d.world.adventureCatchWindow||resultRef.current||screenRef.current||dialogueRef.current)return;
+  const d=snapshot.current;if(syncRequired.current||!d?.world||d.revision!==revision.current||d.battle||d.world.adventurePendingMoves?.length||d.world.adventureCatchWindow||resultRef.current||screenRef.current||dialogueRef.current)return;
   // While a movement request is in flight, preview from its expected endpoint.
   // Only the queued input is sent after confirmation; failures still roll back.
   const pending=lock.current?inflightMove.current:null;
@@ -81,7 +83,7 @@ export default function Adventure(){
   let alive=true,running=false,timer:ReturnType<typeof setTimeout>;
   const tick=async()=>{
    if(!alive||running)return;running=true;const started=performance.now();let moved=false;const d=snapshot.current,direction=heldDirection.current||pathQueue.current[0];
-   if(direction&&d?.world&&!d.battle&&!d.world.adventurePendingMoves?.length&&!d.world.adventureCatchWindow&&!resultRef.current&&!screenRef.current&&!dialogueRef.current&&!lock.current){
+   if(direction&&!syncRequired.current&&d?.world&&!d.battle&&!d.world.adventurePendingMoves?.length&&!d.world.adventureCatchWindow&&!resultRef.current&&!screenRef.current&&!dialogueRef.current&&!lock.current){
     const step=stepField(d.world,direction);
     if(step.blocked){pathQueue.current=[];if(lastFacing.current!==direction||d.world.facing!==direction){lastFacing.current=direction;await act('face',{direction});}setHint(step.reason);}
     else{
@@ -122,7 +124,7 @@ export default function Adventure(){
  const roster=useMemo(()=>{const q=query.trim().toLowerCase();return (data?.box||[]).filter((p:any)=>!q||`${p.name} ${p.id} ${p.types?.join(' ')}`.toLowerCase().includes(q));},[data?.box,query]);
  const close=()=>{setScreen(null);setTeamEdit(false);setQuery('');setPage(0);};
  const open=(s:Screen)=>{stop();setScreen(s);setDialogue(null);setTeam(data?.world?.teamIds||[]);};
- if(!data)return <div className="content adv-loading" role="status"><span className="adv-loading-ball"/><h2>{error||'모험을 불러오는 중…'}</h2>{error&&<button className="primary" onClick={()=>load()}>다시 불러오기</button>}</div>;
+ if(!data)return <div className="content adv-loading" role="status"><span className="adv-loading-ball"/><h2>{error||'모험을 불러오는 중…'}</h2>{error&&<button className="primary" onClick={()=>load(false,syncRequired.current)}>다시 불러오기</button>}</div>;
  if(!data.world)return <div className="content adv-intro"><span className="kicker">첫 번째 모험</span><h2>미르시티로 떠나자!</h2><p>여행 도중 가방을 가져간 판짱을 따라가세요.</p><button className="primary" disabled={busy} onClick={()=>act('startIntro')}>미르시티에서 시작<ChevronRight size={18}/></button><button disabled={busy} onClick={()=>setClassicStart(!classicStart)}>기존 10지역에서 시작</button>{classicStart&&<><p>기존 지역의 첫 파트너를 선택하세요.</p><div className="adv-starters">{ZA_ADVENTURE_STARTERS.map(id=>{const p=species.find(s=>s.id===id)!;return <button key={id} className={selected===id?'selected':''} aria-pressed={selected===id} onClick={()=>setSelected(id)}><PokemonImage mon={p} variant="sprite" eager/><b>{p.name}</b><span>{p.types.join(' / ')}</span></button>;})}</div><button disabled={busy} onClick={()=>act('start',{species:selected,destination:'classic'})}>선택한 파트너로 출발</button></>}<p className="adv-note">계정에 자동 저장</p>{error&&<p className="feedback" role="alert">{error}</p>}</div>;
  if(['chase','choose'].includes(data.world.zaIntroStage)){const intro=data.world,choosing=intro.zaIntroStage==='choose',candidate=species.find(p=>p.id===intro.zaIntroChoice);return <div className="content adv-intro" tabIndex={0} onKeyDown={e=>{const directions:Record<string,string>={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};if(directions[e.key]){e.preventDefault();void act('introMove',{direction:directions[e.key]});}}}><h2>{choosing?'첫 파트너를 만나자':'판짱을 따라가자'}</h2><p>{intro.log?.at(-1)}</p><p>골목 위치는 초안입니다. 방향 버튼이나 화살표 키로 이동하세요.</p><div role="img" aria-label={`골목의 내 위치 ${intro.zaIntroX}, ${intro.zaIntroY}`}><pre>{[1,2,3].map(y=>Array.from({length:7},(_,i)=>{const x=i+1,p=choosing&&INTRO_STARTERS.find(p=>p.x===x&&p.y===y);return x===intro.zaIntroX&&y===intro.zaIntroY?'나':p?'●':!choosing&&x===7&&y===2?'판':'·';}).join('  ')).join('\n')}</pre></div><div aria-label="이동 버튼">{[['up','위'],['left','왼쪽'],['down','아래'],['right','오른쪽']].map(([direction,label])=><button key={direction} disabled={busy||!!candidate} onClick={()=>act('introMove',{direction})}>{label}</button>)}</div>{choosing&&!candidate&&<div className="adv-starters">{INTRO_STARTERS.map(p=>{const mon=species.find(s=>s.id===p.species)!;const near=Math.abs(intro.zaIntroX-p.x)+Math.abs(intro.zaIntroY-p.y)===1;return <button key={p.species} disabled={busy||!near} onClick={()=>act('introTalk',{species:p.species})}><PokemonImage mon={mon} variant="sprite" eager/><b>{mon.name}</b><span>{near?'말 걸기':'가까이 다가가세요'}</span></button>;})}</div>}{candidate&&<div><p>{candidate.name}을(를) 첫 파트너로 선택할까요?</p><button className="primary" disabled={busy} onClick={()=>act('introConfirm',{species:candidate.id,confirmed:true})}>선택 확정</button><button disabled={busy} onClick={()=>act('introCancel')}>다시 고르기</button></div>}{error&&<p className="feedback" role="alert">{error}</p>}</div>;}
 
