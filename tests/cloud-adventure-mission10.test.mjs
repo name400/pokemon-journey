@@ -143,3 +143,13 @@ test('companion avoids a spread move that would hit the player when a safe attac
  const before=createCompanionBossSnapshot([player],[ally],boss),next=playMission10MultiTurn(before,{type:'move',move:'splash'});
  assert.equal(next.teams[0][0].hp,before.teams[0][0].hp);assert.ok(next.log.some(line=>line.includes('물의파동')));assert.ok(next.log.every(line=>!line.includes('파도타기')));
 });
+
+test('mission 36 rival team follows starter and can Mega Evolve its ace',async()=>{
+ const {mission36RivalTeam}=await import('../lib/cloud-adventure/adventure-mission10.mjs');
+ const own={...makeMon(150,100),boxId:'player',moves:['방어'],pp:{}};
+ for(const [choice,first,ace,item,appearance] of [['grass',160,500,'emboarite','emboarmega'],['fire',154,160,'feraligite','feraligatrmega'],['water',500,154,'meganiumite','meganiummega']]){
+  const team=mission36RivalTeam(choice);assert.deepEqual(team.map(p=>p.speciesId),[678,706,713,first,310,ace]);assert.deepEqual(team.map(p=>p.level),[62,62,62,63,63,64]);assert.deepEqual(team.map(p=>p.item),['','','','','',item]);assert.ok(team.every(p=>p.moves.length===4&&p.moves.every(m=>Object.hasOwn(moves,m))));
+  const result=playCpu(JSON.parse(JSON.stringify(createCombat([own],[team[5]]))),{type:'move',move:'방어'});assert.equal(result.teams[1][0].battleAppearance,appearance);assert.equal(result.teams[1][0].mega,true);
+ }
+ assert.throws(()=>mission36RivalTeam('__proto__'));
+});
