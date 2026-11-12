@@ -12,6 +12,7 @@ import {configure} from '../lib/pokemon-config.mjs';
 import {createCombat} from '../lib/party-battle.mjs';
 import {Battle} from '@pkmn/sim';
 import {expToNext,gainExperience,victoryExperience} from '../lib/growth.mjs';
+import {activeRoyaleZones} from '../lib/cloud-adventure/adventure-royale-zones.mjs';
 import {canariBattleExperience} from '../lib/cloud-adventure/adventure-canari.mjs';
 import {fieldPath,fieldMap,findTile,storeAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
@@ -1834,8 +1835,8 @@ test('Rank V royale trainers retain documented moves through battles and reload'
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-v-moves-qa',displayName:'로열기술테스트'};
  try{
   await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
-  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:0},state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();await call('enterRoyaleZone');
-  const cases=[['O','royaleErica','royale-v-jaques',[['빛의장막','드레인키스','초음파','환상빔'],['실뿜기','단단해지기','기충전','세차게휘두르기']]],['U','royaleDaniel','royale-v-anna',[['물대포','환상빔','물의파동','박치기'],['핥기','물대포','거품광선','물기']]],['V','royaleJean','royale-v-warren',[['물기','뱀눈초리','세차게휘두르기','싫은소리'],['바람일으키기','전광석화','회오리','날개치기']]],['a','royaleVExtra3','royale-v-marie',[['신비의부적','잎날가르기','드레인키스','희망사항'],['전기쇼크','전기자석파','충전','이상한빛']]],['b','royaleVExtra4','royale-v-nils',[['세차게휘두르기','불릿펀치','탁쳐서떨구기','벌크업'],['몸통박치기','째려보기','머드샷','전광석화']]],['e','royaleVExtra5','royale-v-antoine',[['저주','모래지옥','구멍파기','깨물어부수기'],['째려보기','모래지옥','물기','구멍파기']]]];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:0},state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();assert.ok(state.world.interaction.text.includes(activeRoyaleZones(rawWorld())[0].name));await call('enterRoyaleZone');
+  const cases=[['O','royaleErica','royale-v-jaques',[['빛의장막','드레인키스','초음파','환상빔'],['실뿜기','단단해지기','기충전','세차게휘두르기']]],['U','royaleDaniel','royale-v-anna',[['물대포','환상빔','물의파동','박치기'],['핥기','물대포','거품광선','물기']]],['V','royaleJean','royale-v-warren',[['물기','뱀눈초리','세차게휘두르기','싫은소리'],['바람일으키기','전광석화','회오리','날개치기']]],['a','royaleVExtra3','royale-v-marie',[['신비의부적','잎날가르기','드레인키스','희망사항'],['전기쇼크','전기자석파','충전','이상한빛']]],['b','royaleVExtra4','royale-v-nils',[['세차게휘두르기','불릿펀치','탁쳐서떨구기','벌크업'],['몸통박치기','째려보기','머드샷','전광석화']]],['e','royaleVExtra5','royale-v-antoine',[['저주','모래지옥','구멍파기','깨물어부수기'],['째려보기','모래지옥','물기','구멍파기']]],['t','royaleVExtra6','royale-v-ezio',[['바람일으키기','전광석화','회오리','날개치기'],['전광석화','불꽃세례','깃털댄스','날려버리기']]],['j','royaleVExtra7','royale-v-emeline',[['전기자석파','스파크','물기','괴전파'],['불릿펀치','메탈클로','분발','바위깨기']]],['k','royaleVExtra8','royale-v-armand',[['몸통박치기','모래지옥','용의숨결','땅고르기'],['쪼기','차밍보이스','흰안개','용의숨결']]],['n','royaleVExtra9','royale-v-mae',[['애교부리기','용의숨결','방어','머드샷'],['애교부리기','용의숨결','방어','머드샷']]]];
   for(let i=0;i<cases.length;i++){const [tile,action,trainer,moves]=cases[i];await walkTo(tile);await call(action);assert.equal(state.world.trainer.id,trainer);assert.deepEqual(rawWorld().combat.teams[1].map(m=>m.moves),moves);await get();assert.deepEqual(rawWorld().combat.teams[1].map(m=>m.moves),moves);await battle();assert.equal(state.world.zaRoyaleVPoints,(i+1)*550);await call(action,{},409);}
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
@@ -1844,7 +1845,10 @@ test('Magenta court night royale preserves rank progress and returns to the cour
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'magenta6-royale-qa',displayName:'마젠타로열테스트'};
  try{
   await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
-  const court={...rawWorld(),area:3,district:'lumiose-magenta6-court-alley',interior:null,x:13,y:11,facing:'up',zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:0};
+  const activeOffset=Array.from({length:11},(_,i)=>i*24).find(zaClockOffsetHours=>activeRoyaleZones({zaClockOffsetHours}).some(z=>z.id==='magenta6'));assert.notEqual(activeOffset,undefined);
+  const court={...rawWorld(),area:3,district:'lumiose-magenta6-court-alley',interior:null,x:13,y:11,facing:'up',zaClockOffsetHours:activeOffset,zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:0};
+  const inactiveOffset=Array.from({length:11},(_,i)=>i*24).find(zaClockOffsetHours=>!activeRoyaleZones({zaClockOffsetHours}).some(z=>z.id==='magenta6'));assert.notEqual(inactiveOffset,undefined);
+  seedWorld(storeAdventurePosition({...court,zaClockOffsetHours:inactiveOffset},state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();assert.match(state.world.interaction.text,/이번 밤의 배틀존/);assert.notEqual(state.world.interaction.action,'enterRoyaleZone');await call('enterRoyaleZone',{},409);
   seedWorld(storeAdventurePosition(court,state.revision+1));globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.world.interaction.action,'enterRoyaleZone');await call('enterRoyaleZone',{},409);await get();assert.equal(state.world.district,court.district);
   globalThis.__adventureTime={period:'night',hour:22};await call('enterRoyaleZone');await get();assert.equal(state.world.district,'lumiose-royale');await walkTo('O');await call('royaleErica');await battle();await get();assert.equal(state.world.zaRoyaleVPoints,550);assert.equal(state.world.zaMission10Stage,4);
   await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta6-court-alley',13,11]);assert.equal(state.world.zaRoyaleVPoints,550);assert.equal(state.world.activeId,id);
