@@ -4153,3 +4153,17 @@ test('rank B shard exchange charges source prices without altering prior ownersh
   const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'exchangeMegaShard',item:'falinksite',revision:rev})}));assert.equal(replay.status,409);await get();for(const item of ['falinksite','salamencite','metagrossite'])assert.equal(state.inventory[item],1);assert.equal(rawWorld().zaMegaShards,40);assert.deepEqual(rawMon(id),original);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('bulk berry and candy purchases enforce quantity, funds and capacity atomically',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bulk-training-qa',displayName:'묶음 구매 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,oldMon=structuredClone(rawMon(id));sql.prepare('UPDATE wallets SET coins=5000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:20,y:8,facing:'right',zaRoyaleRank:'F'},state.revision+1));await get();assert.equal(state.world.interaction.zone8BerryShop,true);
+  for(const quantity of [0,5,1.5,'10',101])await call('zone8BuyBerry-pomegberry',{quantity},409);await call('zone8BuyBerry-occaberry',{quantity:10},409);assert.equal(state.wallet.coins,5000);
+  const rev=state.revision;await call('zone8BuyBerry-pomegberry',{quantity:10});assert.equal(state.wallet.coins,3000);assert.equal(state.inventory.pomegberry,10);const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'zone8BuyBerry-pomegberry',quantity:10,revision:rev})}));assert.equal(replay.status,409);
+  await get();await call('zone8BuyBerry-pomegberry',{quantity:50},409);assert.equal(state.wallet.coins,3000);const berryKey=JSON.stringify([globalThis.__adventureUser.userId,'pomegberry']);sql.prepare('UPDATE inventory SET quantity=995 WHERE key=?').run(berryKey);await get();await call('zone8BuyBerry-pomegberry',{quantity:10},409);await get();assert.equal(state.inventory.pomegberry,995);assert.equal(state.wallet.coins,3000);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaShardExchangeUnlocked:true,zaMission10Stage:8,zaMegaShards:1000},state.revision+1));await get();
+  for(const quantity of [0,1.5,'10',1000])await call('exchangeMegaShardCandy',{item:'za-exp-candy-s',quantity},409);await call('exchangeMegaShardCandy',{item:'za-exp-candy-s',quantity:10});assert.equal(rawWorld().zaMegaShards,920);assert.equal(state.inventory['za-exp-candy-s'],10);
+  const candyKey=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-s']);sql.prepare('UPDATE inventory SET quantity=995 WHERE key=?').run(candyKey);await get();await call('exchangeMegaShardCandy',{item:'za-exp-candy-s',quantity:10},409);await get();assert.equal(rawWorld().zaMegaShards,920);assert.equal(state.inventory['za-exp-candy-s'],995);assert.deepEqual(rawMon(id),oldMon);
+ }finally{globalThis.__adventureUser=previous;}
+});
