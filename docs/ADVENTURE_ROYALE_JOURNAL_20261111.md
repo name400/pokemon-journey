@@ -21,3 +21,6 @@
 
 
 랭크 E의 Henri·Clarisse·Apolline 기술을 [상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/ranke.shtml)에 맞추고 웨이터 Gianni의 팀·기술을 추가했다. 승리 후 대화로 파티를 회복할 수 있다. 상대 배치와 승리당 3,500점은 기존 초안이며 회복 횟수는 확인되지 않아 방문당 한 번으로 제한한다. 기존 전투 스냅샷은 바꾸지 않는다.
+
+
+랭크 D·C의 기존 세 상대씩의 팀·기술을 [랭크 D](https://www.serebii.net/legendsz-a/z-aroyale/rankd.shtml)와 [랭크 C](https://www.serebii.net/legendsz-a/z-aroyale/rankc.shtml)에 맞췄다. Elise의 빠졌던 괴력몬을 추가하고 웨이터 Hector·웨이트리스 Lena와 승리 후 파티 회복을 연결했다. 배치와 승리 점수는 기존 초안이고 회복은 원작 횟수를 확인하지 못해 방문당 한 번이다. 현재 진행 중인 배틀 스냅샷은 변경하지 않는다.
