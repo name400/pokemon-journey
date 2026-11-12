@@ -4631,3 +4631,14 @@ test('Zone 8 burrows start the hidden encounters and preserve captured state',as
   }
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('unspent shiny field encounters survive a time refresh and battle reload',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;
+ globalThis.__adventureUser={userId:'shiny-cycle-retention-qa',displayName:'색이 다른 개체 보존'};
+ try{
+  Date.now=()=>now;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone5',interior:null,x:6,y:4,facing:'up',zaZone5Upper:true,zaRoyaleRank:'A',adventureBalls:{...rawWorld().adventureBalls,masterball:1},zaWildSpawnCycles:{5:{period:'day',interval:0}},zaZone5Spent:{electrike:true},zaWildShinyRolls:{'zone5:abra:63':true,'zone5:electrike:309':false},combat:null,encounter:null},state.revision+1));
+  await get();assert.equal(rawWorld().zaWildShinyRolls['zone5:abra:63'],true);now+=1200000;await get();assert.equal(rawWorld().zaWildShinyRolls['zone5:abra:63'],true);assert.equal(rawWorld().zaZone5Spent,undefined);
+  await call('zone5Wild-abra');assert.equal(state.battle.teams[1][0].shiny,true);await get();assert.equal(state.battle.teams[1][0].shiny,true);await call('flee');await get();assert.equal(rawWorld().zaWildShinyRolls['zone5:abra:63'],true);await call('zone5Wild-abra');await call('ball',{ball:'masterball'});await get();assert.equal(rawWorld().zaWildShinyRolls['zone5:abra:63'],undefined);assert.equal(rawWorld().zaZone5Spent.abra,true);assert.ok(state.box.some(mon=>mon.speciesId===63&&mon.shiny===true));assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.deepEqual(state.wallet,wallet);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});

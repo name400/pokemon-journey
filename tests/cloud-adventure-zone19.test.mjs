@@ -52,3 +52,9 @@ test('zone 19 refreshes one interval at a time without touching old saves or bat
  assert.equal(refreshZone19Spawns(s,'day',2),true);assert.equal(s.zaZone19Spent,undefined);assert.equal(s.zaWildShinyRolls['zone19:cleffa-night:173'],undefined);assert.equal(s.zaWildShinyRolls['zone5:saved:1'],true);assert.equal(refreshZone19Spawns(s,'day',2),false);
  s.zaZone19Spent={audino:true};assert.equal(refreshZone19Spawns(s,'day',4),true,'same period after a full cycle still refreshes');assert.equal(s.zaZone19Spent,undefined);
 });
+test('zone 19 preserves an unspent shiny across time changes',async()=>{
+ const {refreshZone19Spawns}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
+ const s={district:'lumiose-zone19',zaZone19SpawnCycle:{period:'night',interval:1},zaZone19Spent:{audino:true},zaWildShinyRolls:{'zone19:cleffa-night:173':true,'zone19:audino:531':true,'zone19:furfrou:676':false}};
+ assert.equal(refreshZone19Spawns(s,'day',2),true);assert.equal(s.zaWildShinyRolls['zone19:cleffa-night:173'],true);assert.equal(s.zaWildShinyRolls['zone19:audino:531'],undefined);assert.equal(s.zaWildShinyRolls['zone19:furfrou:676'],undefined);
+ assert.equal(refreshZone19Spawns(s,'night',3),true);assert.equal(s.zaWildShinyRolls['zone19:cleffa-night:173'],true);
+});

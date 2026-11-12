@@ -23,3 +23,10 @@ test('refresh waits for active encounters and ignores special zones',()=>{
  const s={district:'lumiose-zone11-sw-top',zaZone11Spent:{wild:true}};
  assert.equal(refreshOrdinaryWildSpawns(s,'day',1),true);s.district='lumiose-zone11';assert.equal(refreshOrdinaryWildSpawns(s,'night',2),true);assert.equal(s.zaZone11Spent,undefined);
 });
+
+test('time changes retain unspent shiny individuals while resetting ordinary ones',()=>{
+ for(const zone of [5,6,8,9,10,11,12,13,14,15,16,17,18]){
+  const s={district:`lumiose-zone${zone}`,zaWildSpawnCycles:{[zone]:{period:'day',interval:1}},[`zaZone${zone}Spent`]:{caught:true},zaWildShinyRolls:{[`zone${zone}:alive:1`]:true,[`zone${zone}:normal:2`]:false,[`zone${zone}:caught:3`]:true,'zone19:other:4':true}};
+  assert.equal(refreshOrdinaryWildSpawns(s,'night',2),true);assert.equal(s.zaWildShinyRolls[`zone${zone}:alive:1`],true);assert.equal(s.zaWildShinyRolls[`zone${zone}:normal:2`],undefined);assert.equal(s.zaWildShinyRolls[`zone${zone}:caught:3`],undefined);assert.equal(s.zaWildShinyRolls['zone19:other:4'],true);
+ }
+});
