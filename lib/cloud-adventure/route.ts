@@ -731,7 +731,7 @@ else if(b.action==='mapFastTravel'){
 else if(typeof b.action==='string'&&b.action.startsWith('taxi-')){
  const spot=interactionAt(s),id=b.action.slice('taxi-'.length),target:any=taxiDestinations(s).find(c=>c.id===id);
  if(!taxiAvailable(s,spot)||!target||s.adventureCatchWindow)throw Error('택시 승강장과 목적지를 확인하세요.');
- const arrival={...s,district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,zaRougeStreetSouth:target.zaRougeStreetSouth===true};if(!['.',',',';','g','H'].includes(fieldMap(arrival)[target.y]?.[target.x]))throw Error('택시 도착 지점을 확인하세요.');reward=-710;Object.assign(s,arrival,{facing:target.facing||'down'});recordCenter(s,{x:target.x,y:target.y,tile:'H'});recordLandmarks(s);s.log=[`택시를 타고 ${target.name}(으)로 이동했다.`];
+ const arrival={...s,district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,zaRougeStreetSouth:target.zaRougeStreetSouth===true};if(!['.',',',';','g','H'].includes(fieldMap(arrival)[target.y]?.[target.x]))throw Error('택시 도착 지점을 확인하세요.');const previousDistrict=s.district;reward=-710;if(previousDistrict!==target.district)clearMapTravelTransient(s);Object.assign(s,{district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,zaRougeStreetSouth:target.zaRougeStreetSouth===true,facing:target.facing||'down'});recordCenter(s,{x:target.x,y:target.y,tile:'H'});recordLandmarks(s);recordZoneEntry(s,previousDistrict,fieldMap(s)[s.y]?.[s.x]);s.log=[`택시를 타고 ${target.name}(으)로 이동했다.`];
 }
 else if(typeof b.action==='string'&&b.action.startsWith('fastTravel-')){
  const origin=centerAt(s,interactionAt(s)),target=registeredCenters(s).find(c=>c.id===b.action.slice('fastTravel-'.length));

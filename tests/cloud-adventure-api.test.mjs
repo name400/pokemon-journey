@@ -2894,3 +2894,12 @@ test('Centrico taxi and major destinations register safely and remain available 
   await call('mapFastTravel',{destination:'quasartico'},409);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Rouge taxi connects verified cafes and does not bypass wild zone gates',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge-taxi-qa',displayName:'루주 택시'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];const base={...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:1,y:5,facing:'left',zaMission04Complete:true,zaRoyaleRank:'C',zaZone3FieldSpent:{pancham:true},zaVernalEastRoof:true};
+  seedWorld(storeAdventurePosition(base,state.revision+1));await get();assert.equal(state.world.map[5][0],'#');await call('taxi-cafe-woof',{},409);seedWorld({zaMission30Started:true,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(710,globalThis.__adventureUser.userId);await get();assert.equal(state.world.interaction.name,'택시 승강장 (위치 초안)');await call('taxi-cafe-woof');await get();assert.equal(state.wallet.coins,0);assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vernal',12,6]);assert.equal(state.world.zaVernalEastRoof,false);assert.equal(state.world.zaZone3FieldSpent,undefined);assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='cafe-woof'));assert.ok(state.world.interaction.actions.some(p=>p.action==='woofNatural'));assert.deepEqual(state.world.teamIds,team);
+  const early={...rawWorld(),district:'lumiose-centrico-route',interior:null,x:1,y:7,facing:'left',zaMission04Complete:true,zaMission05Complete:false,zaMission06Started:false,zaRoyaleRank:'Y'};seedWorld(storeAdventurePosition(early,state.revision+1));sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(710,globalThis.__adventureUser.userId);await get();await call('taxi-plaza-rouge',{},409);assert.equal(state.wallet.coins,710);await call('taxi-plaza-jaune');await get();assert.equal(state.wallet.coins,0);assert.equal(state.world.district,'lumiose-jaune-street');await call('move',{direction:'up'},409);assert.equal(state.world.district,'lumiose-jaune-street');
+ }finally{globalThis.__adventureUser=oldUser;}
+});

@@ -27,6 +27,12 @@ test('Centrico taxis and landmark registration preserve gates and existing walka
 });
 
 test('taxi landmarks land on walkable tiles facing their existing entrances',async()=>{
- const {FAST_TRAVEL_LANDMARKS}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');const expected={'hotel-z':'enterHotel','research-lab':'enterLumioseLab','richissime':'enterRichissime','le-wow':'enterLeWow','le-nah':'enterLeNah','sushi':'enterSushi','quasartico':'enterQuasarticoOffice'};
- for(const p of FAST_TRAVEL_LANDMARKS){const s={area:3,...p,interior:null,zaMission10Stage:6,zaRoyaleRank:'V',zaRougeStreetSouth:false};assert.ok(['.',',',';','g','H'].includes(fieldMap(s)[s.y][s.x]),p.id);const d=fieldDialogue(s),actions=d?.actions||(d?.action?[d]:[]);assert.ok(actions.some(a=>a.action===expected[p.id]),`${p.id}: ${d?.name}`);if(p.id==='richissime')assert.match(d.name,/리시심/);}
+ const {FAST_TRAVEL_LANDMARKS}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');const expected={'hotel-z':'enterHotel','research-lab':'enterLumioseLab','richissime':'enterRichissime','le-wow':'enterLeWow','le-nah':'enterLeNah','sushi':'enterSushi','quasartico':'enterQuasarticoOffice','cafe-woof':'woofNatural','cafe-gallant':'enterCafeGallant','cafe-nouveau2':'cafe2Water'};
+ for(const p of FAST_TRAVEL_LANDMARKS){const s={area:3,...p,interior:null,zaMission10Stage:6,zaRoyaleRank:'V',zaRougeStreetSouth:false};assert.ok(['.',',',';','g','H'].includes(fieldMap(s)[s.y][s.x]),p.id);const d=fieldDialogue(s),actions=d?.actions||(d?.action?[d]:[]);if(expected[p.id])assert.ok(actions.some(a=>a.action===expected[p.id]),`${p.id}: ${d?.name}`);if(p.id==='richissime')assert.match(d.name,/리시심/);}
+});
+
+test('Rouge Plaza driver and new destinations respect mission gates',async()=>{
+ const {taxiAvailable,taxiDestinations,rougeTaxiUnlocked}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const early={area:3,district:'lumiose-zone3',interior:null,x:1,y:5,facing:'left',zaMission04Complete:true,zaRoyaleRank:'Y'};assert.equal(rougeTaxiUnlocked(early),false);assert.equal(fieldMap(early)[5][0],'#');assert.ok(!taxiDestinations(early).some(p=>p.id==='plaza-rouge'));
+ const later={...early,zaRoyaleRank:'C',zaMission30Started:true};assert.equal(fieldMap(later)[5][0],'n');assert.ok(taxiAvailable(later,{tile:'n',x:0,y:5}));assert.ok(taxiDestinations(later).some(p=>p.id==='plaza-rouge'));assert.ok(fieldDialogue(later).actions.some(p=>p.action==='taxi-cafe-woof'));
 });
