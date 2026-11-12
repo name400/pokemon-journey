@@ -4921,3 +4921,13 @@ test('Rank D additional opponents preserve progression and enforce encounter bou
   assert.equal(rawWorld().zaRoyaleDPoints,7600);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',interior:null,x:15,y:12,facing:'up',zaRoyaleDPoints:38000},state.revision+1));await get();await call('royaleDExtra8',{},409);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
 });
+
+test('approaching a center registers map travel without using its services',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'nearby-center-qa',displayName:'센터 방문'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector7',interior:null,x:9,y:13,facing:'right',zaBleu7Upper:false,zaMission04Complete:true,zaFastTravelCenters:['future-center'],zaEmmaMet:true},state.revision+1));await get();assert.ok(!state.world.zaMapTravelDestinations.some(p=>p.id==='bleu'));
+  await call('move',{direction:'right'});assert.deepEqual([state.world.x,state.world.y],[10,13]);await get();assert.deepEqual(state.world.zaFastTravelCenters,['future-center','bleu']);assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='bleu'));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaEmmaMet,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:11,y:13,facing:'up'},state.revision+1));await get();await call('mapFastTravel',{destination:'bleu'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector7',11,13]);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.world.zaFastTravelCenters,['future-center','bleu']);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
