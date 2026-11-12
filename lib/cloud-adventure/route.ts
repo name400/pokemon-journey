@@ -50,6 +50,7 @@ import {cafeWoofDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
 import {sushiCourseTeam,SUSHI_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-sushi.mjs';
 import {leWowAvailable,leWowCourseTeam,LE_WOW_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-wow.mjs';
 import {side88Available,side88Origin,side88Destination,side88Team} from '@/lib/cloud-adventure/adventure-side88.mjs';
+import {isStationSpot} from '@/lib/cloud-adventure/adventure-station.mjs';
 import {centerAt,registeredCenters,recordCenter,fastTravelEnabled,recordZoneEntry,mapTravelDestinations,canMapTravel,clearMapTravelTransient,taxiAvailable,taxiDestinations,registeredLandmarks,recordLandmarks,groundDestinationFlags} from '@/lib/cloud-adventure/adventure-fast-travel.mjs';
 import {mission10RivalTeam,mission10OriginalStarter} from '@/lib/cloud-adventure/adventure-mission10.mjs';
 import {vinnieTeam} from '@/lib/cloud-adventure/adventure-vinnie.mjs';
@@ -136,6 +137,7 @@ if(pending.length&&!['resolveAdventureMove','catchWindowBall','skipCatchWindow']
 // Upgrade an old visit on the next successful action without replacing its first alpha.
 // Wait until the player leaves the new draft spawn tile, preserving saved positions.
 if(s.district==='lumiose-zone20'&&!s.interior&&!Number.isInteger(s.zaZone20AlphaSpecies2)&&!(s.x===9&&s.y===7))s.zaZone20AlphaSpecies2=ZONE20_ALPHA[Math.floor(random()*ZONE20_ALPHA.length)].species;
+if(s.zaStationLeaveConfirm&&!['stationLeave','stationStay','talk','face','interact'].includes(b.action))delete s.zaStationLeaveConfirm;
 if(b.action==='introBattle'){if(s.combat||!['andi','brigitte'].includes(s.zaIntroStage))throw Error('현재 배틀 상대를 확인하세요.');const andi=s.zaIntroStage==='andi',t={id:andi?'intro-andi':'intro-brigitte',name:andi?'Andi':'Brigitte',team:andi?[[674,4]]:[[173,4],[659,4]],strategy:'balanced'},team=trainerTeam(t);if(andi){team[0].gender='F';team[0].moves=['몸통박치기'];team[0].pp={};}s.combat=createAdventureCombat(s,mons,team,{heals:0,strategy:'balanced'});s.trainer={id:t.id,name:t.name,title:'미르시티 첫 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=[`${t.name}와 배틀을 시작했다!`];}
 else if(b.action==='introEscapeMove'){if(s.combat)throw Error('배틀을 먼저 마치세요.');introEscapeMove(s,b.direction);}
 else if(b.action==='introBarrier'){if(s.combat||s.zaIntroStage!=='barrier')throw Error('장벽 앞에서 확인하세요.');s.zaIntroStage='tunnel';s.log=['동료와 함께 붉은 장벽을 열었다. 터널을 지나자.'];}
@@ -510,6 +512,11 @@ else if(b.action==='mission35Griselle'){if(s.combat||s.interior||s.zaMission35St
 else if(b.action==='mission31Vinnie'){if(s.combat||s.interior||s.district!=='lumiose-quasartico'||cell()!=='j'||!s.zaMission31Started||s.zaMission31Stage)throw Error('콰자르티코 앞에서 Vinnie를 만나세요.');s.zaMission31Stage=1;s.log=['Vinnie가 Jett의 요청을 전했다. 사무실에 들어가자.'];}
 else if(b.action==='mission31Jett'){if(s.combat||s.interior!=='quasarticoOffice'||s.district!=='lumiose-quasartico'||cell()!=='j'||s.zaMission31Stage!==1)throw Error('콰자르티코 사무실에서 Jett를 만나세요.');s.zaMission31Stage=2;s.log=['Jett에게 도시 재개발과 프리즘타워의 에너지, 폭주 메가진화에 관해 들었다.','Hotel Z로 돌아가 팀 MZ와 논의하자.'];}
 else if(b.action==='mission31Meeting'){if(s.combat||s.interior!=='hotel'||s.district!=='lumiose'||cell()!=='F'||s.zaMission31Stage!==2)throw Error('Hotel Z에서 작전 회의를 하세요.');s.zaMission31Stage=3;s.log=['팀 MZ가 세 폭주 사건에 대응하기로 했다.','망나뇽·마기라스·아쿠스타 사건으로 가자. 현장 위치는 초안이다.'];}
+else if(b.action==='stationLeave'||b.action==='stationStay'){
+ const spot=interactionAt(s);if(s.combat||s.unionHost||!isStationSpot(s,spot))throw Error('미르역 앞에서 열차를 확인하세요.');
+ if(b.action==='stationStay'){delete s.zaStationLeaveConfirm;s.log=['미르시티에 남기로 했다.'];}
+ else{const count=Number.isInteger(s.zaStationLeaveConfirm)?s.zaStationLeaveConfirm:0;if(count<0||count>2)throw Error('열차 선택을 다시 확인하세요.');if(count<2){s.zaStationLeaveConfirm=count+1;s.log=['정말 떠날지 다시 생각해 보자.'];}else{delete s.zaStationLeaveConfirm;Object.assign(s,{district:'lumiose-vert-street-route',interior:null,x:10,y:12,facing:'down'});s.log=['떠나는 꿈을 꾸었다. 베르 포켓몬센터 앞에서 깨어났다.'];}}
+}
 else if(b.action==='side88Ride'){
  const spot=interactionAt(s);if(s.combat||s.unionHost||s.zaSide88Stage||!side88Origin(s,spot))throw Error('루주 광장의 Tesse에게 첫 승차를 신청하세요.');
  clearMapTravelTransient(s);Object.assign(s,{area:3,district:'lumiose-magenta-sector8-route',interior:null,x:13,y:13,facing:'down',zaRougeStreetSouth:false,zaSide88Stage:1});recordCenter(s,{x:12,y:14,tile:'H'});s.log=['Tesse의 첫 손님으로 무료 탑승했다. 길을 헤맨 끝에 마젠타 포켓몬센터에 도착했다.'];
