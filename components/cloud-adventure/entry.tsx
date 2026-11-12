@@ -18,8 +18,11 @@ import {predictCloudStep,predictCloudPath,createCloudMoveBuffer,adventureMovemen
 import {adventureJson} from '@/lib/adventure-network.mjs';
 
 type Screen='party'|'manage'|'bag'|'shop'|'journal'|'travel'|null;
-async function api(body?:any,light=false){
- const {response,data}=await adventureJson(light?'/api/world?light=1':'/api/world',body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store'});
+// A timeout is uncertain: reload authoritative state instead of retrying the action.
+const MOVEMENT_RECOVERY_TIMEOUT_MS=4000;
+async function api(body?:any,light=false,recovery=false){
+ const timeout=recovery||['move','face','dodge'].includes(body?.action)?MOVEMENT_RECOVERY_TIMEOUT_MS:undefined;
+ const {response,data}=await adventureJson(light?'/api/world?light=1':'/api/world',body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store'},timeout);
  if(!response.ok)throw Error(data.error||'탐험 요청 실패');return data;
 }
 export function AdventureHP({mon}:{mon:any}){const ratio=Math.max(0,Math.min(1,mon.hp/Math.max(1,mon.maxHp)));return <div className="adv-health"><div><b>HP</b><span>{mon.hp} / {mon.maxHp}</span></div><div className="adv-meter" role="progressbar" aria-label={`${mon.name} HP`} aria-valuenow={mon.hp} aria-valuemin={0} aria-valuemax={mon.maxHp}><i className={ratio<.25?'low':ratio<.5?'half':''} style={{transform:`scaleX(${ratio})`}}/></div></div>;}
@@ -56,7 +59,7 @@ export default function Adventure(){
   setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()].filter((p:any)=>p.boxId!==d.world?.zaTradedPikachuId)};});
   setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();
  },[stop]);
- const load=useCallback(async(light=false,recovery=false)=>{try{const result=await api(undefined,light);if(syncRequired.current&&!recovery)return false;if(recovery&&result.revision<revision.current)throw Error('서버의 최신 진행 상태를 확인하지 못했습니다.');accept(result);if(recovery)syncRequired.current=false;if(mounted.current)setError('');return true;}catch(e){if(mounted.current){setError(recovery?'연결을 복구하지 못했습니다. 다시 불러와 주세요.':e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept]);
+ const load=useCallback(async(light=false,recovery=false)=>{try{const result=await api(undefined,light,recovery);if(syncRequired.current&&!recovery)return false;if(recovery&&result.revision<revision.current)throw Error('서버의 최신 진행 상태를 확인하지 못했습니다.');accept(result);if(recovery)syncRequired.current=false;if(mounted.current)setError('');return true;}catch(e){if(mounted.current){setError(recovery?'연결을 복구하지 못했습니다. 다시 불러와 주세요.':e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept]);
  const act=useCallback(async(action:string,extra:any={})=>{
   if(lock.current||syncRequired.current)return null;lock.current=true;setBusy(true);setError('');
   try{const result=await api({action,revision:revision.current,...extra,...(['move','face'].includes(action)?{compact:true}:{})});if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result);return result;}
