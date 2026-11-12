@@ -12,7 +12,7 @@ try{
   await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
   await page.route('**/api/world**',async r=>{
    if(r.request().method()==='POST'){
-    const b=r.request().postDataJSON();if(b.action==='movementFence'){if(b.revision===revision&&(b.activeId==null||b.activeId===world.activeId))revision++;return r.fulfill({json:{settled:true}});}assert.equal(b.revision,revision);posts++;inflight++;maxInflight=Math.max(maxInflight,inflight);paths.push(b.path);
+    const b=r.request().postDataJSON();if(b.action==='movementFence'){if((b.revision===null||b.revision===revision)&&(b.activeId==null||b.activeId===world.activeId))revision++;return r.fulfill({json:{settled:true}});}assert.equal(b.revision,revision);posts++;inflight++;maxInflight=Math.max(maxInflight,inflight);paths.push(b.path);
     if(posts===1)await gate;if((scenario==='multi-held'&&posts>1)||(scenario==='turn-partial'&&posts===3))await new Promise(resolve=>setTimeout(resolve,350));
     if((scenario==='rejected'&&posts===2)||(scenario==='multi-rejected'&&posts===3)){inflight--;return r.fulfill({status:409,json:{error:'진행이 변경됐습니다.'}});}
     for(const direction of b.path){const step=stepField(world,direction);if(step.blocked)break;world={...world,...step,steps:world.steps+1};if(step.transitioned||(scenario==='blocked'&&posts===2)||(scenario==='turn-partial'&&posts===3))break;}

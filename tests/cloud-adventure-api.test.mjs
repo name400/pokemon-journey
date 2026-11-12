@@ -3223,6 +3223,17 @@ test('persisted movement fence cannot change another active partner',async()=>{
  try{
   await get();await call('start',{species:1});const before=rawWorld(),rev=state.revision;
   const req=new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:rev,activeId:'unrelated-partner'})});
-  const response=await route.POST(req);assert.equal(response.status,200);assert.deepEqual(rawWorld(),before);assert.equal(sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId).revision,rev);
+  const response=await route.POST(req);assert.equal(response.status,409);assert.deepEqual(rawWorld(),before);assert.equal(sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId).revision,rev);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('movement fence on entry is scoped to the signed-in account and permits a new account',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ const fence=()=>route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:null,activeId:null})}));
+ try{
+  globalThis.__adventureUser={userId:'entry-fence-account-a',displayName:'A'};await get();await call('start',{species:1});const a=rawWorld(),rev=state.revision;
+  globalThis.__adventureUser={userId:'entry-fence-account-b',displayName:'B'};const stale=()=>route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:rev+99,activeId:a.activeId})}));assert.equal((await stale()).status,200);assert.equal((await fence()).status,200);assert.equal(sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get('entry-fence-account-a').revision,rev);
+  await get();await call('start',{species:4});const b=rawWorld(),br=state.revision;assert.equal((await stale()).status,200);assert.equal(sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get('entry-fence-account-b').revision,br);assert.equal((await fence()).status,200);assert.equal(sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get('entry-fence-account-b').revision,br+1);assert.deepEqual(rawWorld(),b);
+  globalThis.__adventureUser={userId:'entry-fence-account-a',displayName:'A'};assert.deepEqual(rawWorld(),a);assert.equal((await fence()).status,200);assert.equal(sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get('entry-fence-account-a').revision,rev+1);
  }finally{globalThis.__adventureUser=previousUser;}
 });

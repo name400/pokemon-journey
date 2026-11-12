@@ -3,9 +3,9 @@ import {fieldMap,stepField} from '../../../lib/cloud-adventure/adventure-world.m
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
 try{
- for(const scenario of ['fence-wins','movement-wins','reload-fence']){
+ for(const scenario of ['fence-wins','movement-wins','reload-fence','blocked-storage']){
   const page=await browser.newPage({viewport:{width:390,height:844}});
-  await page.addInitScript(()=>{const original=window.setTimeout;window.setTimeout=function(fn,delay,...args){return original(fn,delay===4000?300:delay,...args);};});
+  await page.addInitScript(({blocked})=>{if(blocked)Object.defineProperty(window,'sessionStorage',{get(){throw Error('storage blocked')}});const original=window.setTimeout;window.setTimeout=function(fn,delay,...args){return original(fn,delay===4000?300:delay,...args);};},{blocked:scenario==='blocked-storage'});
   const mon={boxId:'fixture',id:1,speciesId:1,name:'이상해씨',types:['풀','독'],level:5,hp:18,maxHp:20,experience:0,expToNext:20,evolutions:[]};
   let world={area:3,district:'lumiose',interior:null,areaInfo:{name:'시험 구역',biome:'city'},x:3,y:8,facing:'right',teamIds:['fixture'],activeId:'fixture',badges:[],objective:'여행',log:[],adventureBalls:{},steps:0};world.map=fieldMap(world);
   let revision=1,moves=0,fences=0,gets=0,resolveRecovery,releaseFirst,resolveFirst;const outcomes=[],recovery=new Promise(r=>{resolveRecovery=r;}),firstGate=new Promise(r=>{releaseFirst=r;}),firstDone=new Promise(r=>{resolveFirst=r;}),state=()=>({engine:'cloud',revision,box:[mon],wallet:{coins:100,balls:5},inventory:{},fieldShop:[],expeditions:[],gameTime:{period:'day'},battle:null,world});
@@ -14,7 +14,7 @@ try{
    if(r.request().method()==='POST'){
     const b=r.request().postDataJSON();
     if(b.action==='movementFence'){
-     fences++;assert.equal(b.revision,1);if(scenario==='movement-wins'){releaseFirst();await firstDone;}if(b.revision===revision&&(b.activeId==null||b.activeId===world.activeId))revision++;return r.fulfill({json:{settled:true}});
+     fences++;if(fences>1&&scenario==='movement-wins'){releaseFirst();await firstDone;}if((b.revision===null||b.revision===revision)&&(b.activeId==null||b.activeId===world.activeId))revision++;return r.fulfill({json:{settled:true}});
     }
     const number=++moves;if(number===1)await firstGate;
     if(b.revision!==revision){outcomes.push([number,409]);if(number===1)resolveFirst();try{await r.fulfill({status:409,json:{error:'다른 화면에서 진행이 변경됐습니다.'}})}catch{}return;}
@@ -25,13 +25,13 @@ try{
   });
   try{
    await page.goto((process.env.UI_TEST_URL||'http://127.0.0.1:5222')+'/?mode=adventure&tab=adventure');await page.locator('canvas.adv-field').waitFor();
-   await page.keyboard.press('ArrowRight');if(scenario==='reload-fence'){for(let i=0;i<100&&moves<1;i++)await page.waitForTimeout(10);assert.equal(moves,1);await page.reload();}await recovery;const expectedX=scenario==='movement-wins'?4:3;
+   await page.keyboard.press('ArrowRight');if(scenario==='reload-fence'||scenario==='blocked-storage'){for(let i=0;i<100&&moves<1;i++)await page.waitForTimeout(10);assert.equal(moves,1);await page.reload();}await recovery;const expectedX=scenario==='movement-wins'?4:3;
    await page.waitForFunction(x=>document.querySelector('canvas.adv-field')?.getAttribute('aria-label')?.includes(`현재 위치 ${x}, 8`),expectedX);
    // The fence-wins case reproduces recovery GET finishing before the old POST.
-   releaseFirst();await firstDone;await page.waitForTimeout(120);assert.equal(fences,1);assert.equal(moves,1);assert.equal(revision,2);assert.equal(world.x,expectedX);assert.equal(world.steps,scenario==='movement-wins'?1:0);assert.deepEqual(outcomes,[[1,scenario==='movement-wins'?200:409]]);
+   releaseFirst();await firstDone;await page.waitForTimeout(120);assert.equal(fences,2);assert.equal(moves,1);assert.equal(revision,3);assert.equal(world.x,expectedX);assert.equal(world.steps,scenario==='movement-wins'?1:0);assert.deepEqual(outcomes,[[1,scenario==='movement-wins'?200:409]]);
    assert.ok((await page.locator('canvas.adv-field').getAttribute('aria-label')).includes(`현재 위치 ${expectedX}, 8`),'late request must not change the recovered position');
-   await page.keyboard.press('ArrowDown');for(let i=0;i<100&&moves<2;i++)await page.waitForTimeout(20);for(let i=0;i<100&&revision<3;i++)await page.waitForTimeout(20);
-   assert.equal(moves,2);assert.equal(revision,3);assert.deepEqual([world.x,world.y],[expectedX,9]);assert.equal(world.steps,scenario==='movement-wins'?2:1);
+   await page.keyboard.press('ArrowDown');for(let i=0;i<100&&moves<2;i++)await page.waitForTimeout(20);for(let i=0;i<100&&revision<4;i++)await page.waitForTimeout(20);
+   assert.equal(moves,2);assert.equal(revision,4);assert.deepEqual([world.x,world.y],[expectedX,9]);assert.equal(world.steps,scenario==='movement-wins'?2:1);
    console.log(`${scenario}: recovery and late request converge; next movement succeeds`);
   }finally{releaseFirst();await page.close();}
  }
