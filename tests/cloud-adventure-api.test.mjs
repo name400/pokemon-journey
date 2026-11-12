@@ -2856,3 +2856,14 @@ test('Le Wow ten-course mission persists, pays once and supports paid retry afte
   seedWorld({zaLeWowRun:{course:9,repeat:true},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});for(const member of team)seedMon(member,strong);await get();await call('leWowNext');assert.deepEqual(state.battle.teams[1].map(p=>p.speciesId),[780,227,248]);await battle();await get();assert.equal(state.world.zaLeWowRewardPending,'repeat');assert.equal(state.wallet.coins,8000);const beforeRepeat=structuredClone(state.inventory);await call('claimLeWowReward');assert.equal(state.inventory.pearlstring,(beforeRepeat.pearlstring||0)+10);assert.equal(state.inventory['za-exp-candy-l'],(beforeRepeat['za-exp-candy-l']||0)+10);await call('claimLeWowReward',{},409);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('center travel registers visited destinations and preserves progress across reloads',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'fast-travel-qa',displayName:'센터 이동'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],id=state.world.activeId;
+  const hotel={...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:5,facing:'down',zaMission06Started:true,zaRoyaleRank:'Y',zaEmmaMet:true};seedWorld(storeAdventurePosition(hotel,state.revision+1));await get();await call('fastTravel-bleu',{},409);await call('heal');await get();assert.deepEqual(state.world.zaFastTravelCenters,['hotel']);await call('fastTravel-bleu',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector7',interior:null,x:11,y:13,facing:'down'},state.revision+1));await get();await call('heal');await get();assert.deepEqual(state.world.zaFastTravelCenters,['hotel','bleu']);assert.ok(state.world.interaction.actions.some(x=>x.action==='fastTravel-hotel'));await call('fastTravel-hotel');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaEmmaMet,true);assert.ok(state.box.some(p=>p.boxId===id));
+  await call('fastTravel-hotel',{},409);await call('fastTravel-bleu');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector7',11,13]);assert.deepEqual(state.world.zaFastTravelCenters,['hotel','bleu']);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-bleu-sector7',x:9,y:13,facing:'left'},state.revision+1));await get();await call('fastTravel-hotel',{},409);
+ }finally{globalThis.__adventureUser=oldUser;}
+});

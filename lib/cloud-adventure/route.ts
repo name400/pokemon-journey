@@ -49,6 +49,7 @@ import {RANK_F_TRAINERS,rankFPoints,rankFWins,RANK_E_MANI,RANK_E_TARRAGON,RANK_E
 import {cafeWoofDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
 import {sushiCourseTeam,SUSHI_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-sushi.mjs';
 import {leWowAvailable,leWowCourseTeam,LE_WOW_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-wow.mjs';
+import {centerAt,registeredCenters,recordCenter} from '@/lib/cloud-adventure/adventure-fast-travel.mjs';
 import {mission10RivalTeam,mission10OriginalStarter} from '@/lib/cloud-adventure/adventure-mission10.mjs';
 import {vinnieTeam} from '@/lib/cloud-adventure/adventure-vinnie.mjs';
 import {shardExchangeItem,shardExchangeOpen} from '@/lib/cloud-adventure/adventure-mega-exchange.mjs';
@@ -718,7 +719,13 @@ else if(b.action==='ball'){
  else{const moveCount=s.combat.adventureMoveCount;s.combat=playCpu(s.combat,{type:'item',item:'ball'});if(Number.isInteger(moveCount))s.combat.adventureMoveCount=moveCount+s.combat.events.filter((e:any)=>e.kind==='move').length;s.combat.events=[ballEvent,...s.combat.events];if(s.combat.ended)battleResult=combatView(s.combat);reward=finish(s,mons,changed,bagChanges,bag);s.log.unshift(`${ball.name}에서 빠져나왔다!`);if(battleResult)battleResult.log=s.log;}
 }
 else if(b.action==='flee'){if(!s.combat||s.trainer)throw Error('트레이너 배틀에서는 도망갈 수 없습니다.');syncCombat(s,mons,changed);s.combat=null;s.encounter=null;s.log=['야생 포켓몬에게서 도망쳤다.'];}
-else if(b.action==='heal'){if(s.combat||cell()!=='H'||(s.area===9&&s.league>0&&s.league<5))throw Error('리그 도전 중에는 도구로 회복하세요. 센터에서는 도전 전에 회복할 수 있습니다.');for(const id of s.teamIds){const m=heal(mons.get(id));mons.set(id,m);changed.set(id,m);}s.log=['파티의 HP·상태·PP를 모두 회복했다!'];if(s.district==='lumiose'&&!s.interior&&s.zaMission03Stage===2){s.zaMission03Stage=3;s.log.push('도감 안내를 받았다. 야생 구역 1의 동료를 만나자.');}if(s.area===3&&!s.zaSide22Called&&!s.zaSide22Complete&&['V','F','E','D','C','B','A','S'].includes(s.zaRoyaleRank)&&lumioseDexProgress(s).registered>=30){s.zaSide22Called=true;s.log.push('Mable에게 연락이 왔다. 포켓몬 연구소 3층 소장실로 가자!');}}
+else if(b.action==='heal'){if(s.combat||cell()!=='H'||(s.area===9&&s.league>0&&s.league<5))throw Error('리그 도전 중에는 도구로 회복하세요. 센터에서는 도전 전에 회복할 수 있습니다.');for(const id of s.teamIds){const m=heal(mons.get(id));mons.set(id,m);changed.set(id,m);}s.log=['파티의 HP·상태·PP를 모두 회복했다!'];if(recordCenter(s,interactionAt(s)))s.log.push('이 포켓몬센터를 빠른 이동 지점으로 등록했다.');if(s.district==='lumiose'&&!s.interior&&s.zaMission03Stage===2){s.zaMission03Stage=3;s.log.push('도감 안내를 받았다. 야생 구역 1의 동료를 만나자.');}if(s.area===3&&!s.zaSide22Called&&!s.zaSide22Complete&&['V','F','E','D','C','B','A','S'].includes(s.zaRoyaleRank)&&lumioseDexProgress(s).registered>=30){s.zaSide22Called=true;s.log.push('Mable에게 연락이 왔다. 포켓몬 연구소 3층 소장실로 가자!');}}
+else if(typeof b.action==='string'&&b.action.startsWith('fastTravel-')){
+ const origin=centerAt(s,interactionAt(s)),target=registeredCenters(s).find(c=>c.id===b.action.slice('fastTravel-'.length));
+ if(s.combat||s.adventureCatchWindow||s.unionHost||!benchRestUnlocked(s)||!origin||!target||origin.id===target.id)throw Error('등록된 포켓몬센터에서 이동할 곳을 확인하세요.');
+ Object.assign(s,{district:target.district,interior:null,area:3,x:target.x,y:target.y,facing:'down',zaRougeStreetSouth:target.zaRougeStreetSouth===true});
+ s.log=[`${target.name} 포켓몬센터로 이동했다.`];
+}
 else if(b.action==='use'){if(s.zaLoanBattle)throw Error('대여 배틀에서는 소지 도구를 사용할 수 없습니다.');consume=hasOwnKey(columns,b.item)?columns[b.item]:'';if(!consume||consume==='balls')throw Error('도구를 선택하세요.');const m=mons.get(b.boxId||s.activeId);if(!m)throw Error('보유 포켓몬이 아닙니다.');if(b.item==='antidote'){if(!['독','맹독'].includes(m.status))throw Error('독 상태가 아닙니다.');m.status=null;}else{if(m.hp<=0)throw Error('기절한 포켓몬은 센터에서 회복하세요.');if(m.hp===m.maxHp&&!(b.item==='fullrestore'&&m.status))throw Error('HP가 가득 찼습니다.');m.hp=Math.min(m.maxHp,m.hp+(b.item==='max'||b.item==='fullrestore'?m.maxHp:b.item==='hyper'?120:b.item==='super'?60:20));}if(b.item==='fullrestore')m.status=null;changed.set(m.boxId,m);s.log=['도구를 사용했다.'];}
 else if(b.action==='throwWildAlpha'){
  if(s.combat||s.interior||s.district!=='lumiose-wild'||s.zaWildAlphaSpent===true)throw Error('필드의 우두머리 구구를 조준하세요.');const target=b.targeted===true?wildAlphaTarget(s):wildAlphaAim(s);if(!target)throw Error('가까이에 보이는 구구를 조준하세요.');
