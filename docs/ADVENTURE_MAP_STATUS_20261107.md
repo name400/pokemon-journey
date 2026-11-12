@@ -592,3 +592,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 14 변전소 시각 표현
 
 [원작 안내](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-14/)는 변전소 건물과 장비가 있는 부지를 설명한다. 기존 건물 차단 칸 두 덩어리를 지붕 패널과 환기 설비로 나타내고, 기존 설비 칸에는 변압기 형태와 절연 장치를 그렸다. 경계 울타리, 모래 지형과 바위도 구분했다. 구체적인 건물 외형·장비 수·좌표는 기존 초안에 맞춘 추정이다. 실제 맵 타일, 길, 조우 및 저장은 수정하지 않았다.
+
+### 구역 17 북쪽 산책로 시각 표현
+
+[원작 구역 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17)은 북쪽 산책로와 남쪽 공원의 계단 연결을, [현장 화면](https://www.sportskeeda.com/pokemon/how-get-skarmory-pokemon-legends-z-a)은 계단으로 오르는 접근을 보여준다. 기존 별도 산책로 층의 Y자 길과 차단 경계에 포장·난간을 그리고 조각상·계단·사다리를 구분했다. 난간 재질, 조각상 형태와 Y자 경로·높이층의 정확한 좌표는 2D 추정이며 기존 맵 타일, 이동, 조우와 저장은 수정하지 않았다.
