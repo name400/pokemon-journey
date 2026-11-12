@@ -203,7 +203,23 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     if(w.district==='lumiose-mission23-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#73757f':c===','?'#b8a08b':w.zaMission23LowerRoof?((x+y)%2?'#b9aea0':'#ccc0b1'):(x+y)%2?'#cfc5b9':'#ddd3c6';ctx.fillRect(px,py,tile,tile);if(c===','){ctx.fillStyle='#987b60';for(let j=0;j<3;j++)ctx.fillRect(px+3,py+5+j*8,tile-6,2);}if('jlvht'.includes(c)){ctx.fillStyle=c==='v'?'#b75c72':c==='t'?'#d9ad3e':'#936e40';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='j'?'승강':c==='l'?'사다리':c==='h'?'낮은층':c==='t'?'TM':'!',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-mission22-tunnel'&&!w.interior){ctx.fillStyle=c==='#'?'#53636b':c==='~'?'#6da5b7':c===','?'#c1e1e6':(x+y)%2?'#a9b7b0':'#bac8be';ctx.fillRect(px,py,tile,tile);if(c==='r'||c==='o'||c==='X'){ctx.fillStyle=c==='r'?'#b7e3e9':c==='o'?'#b75c72':'#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-mission16-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#68718a':c===','?'#d8d5bd':(x+y)%2?'#d4c9ba':'#e0d5c6';ctx.fillRect(px,py,tile,tile);if(c==='r'||c===','){ctx.strokeStyle='#f7f2de';ctx.beginPath();ctx.moveTo(px+3,py+3);ctx.lineTo(px+tile-3,py+tile-3);ctx.moveTo(px+tile-3,py+3);ctx.lineTo(px+3,py+tile-3);ctx.stroke();}if(c==='d'||c==='W'){ctx.fillStyle=c==='d'?'#b75c72':'#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
-    if(w.district==='lumiose-zone11-nw-ledge'&&!w.interior){ctx.fillStyle=c==='#'?'#718d83':(x+y)%2?'#c4c9a8':'#d3d2b1';ctx.fillRect(px,py,tile,tile);if(c==='v'||c==='W'){ctx.fillStyle=c==='v'?'#6a8477':'#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='v'?'낙하':'거리',px+tile/2,py+20);}return;}
+    if(w.district==='lumiose-zone11-nw-ledge'&&!w.interior){
+     // The northwest entrance includes a drop to the bank; the dimensions,
+     // paving and drop position on this separate layer are provisional.
+     ctx.fillStyle=c==='#'?'#708b80':(x+y)%2?'#c3c7ae':'#d8d5bd';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){
+      ctx.fillStyle='#9bad9e';ctx.fillRect(px+1,py+2,tile-2,tile-5);
+      ctx.fillStyle='#cad5bf';ctx.fillRect(px+2,py+2,tile-4,3);
+      ctx.fillStyle='#617d72';ctx.fillRect(px,py+tile-4,tile,4);
+     }else{
+      ctx.fillStyle='#a9b09f';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);
+     }
+     if(c==='v'){
+      ctx.fillStyle='#5e7b70';ctx.fillRect(px+3,py+2,tile-6,tile-4);
+      ctx.fillStyle='#bdceb5';ctx.fillRect(px+3,py+2,tile-6,4);
+      ctx.fillStyle='#e4efe0';ctx.beginPath();ctx.moveTo(px+tile/2,py+tile-6);ctx.lineTo(px+8,py+12);ctx.lineTo(px+tile-8,py+12);ctx.closePath();ctx.fill();
+     }else if(c==='W'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-magenta6-scaffold'&&!w.interior){ctx.fillStyle=c==='#'?'#746c70':'#ae9278';ctx.fillRect(px,py,tile,tile);if(c===','){ctx.fillStyle='#e0c4a0';for(let j=0;j<3;j++)ctx.fillRect(px+3,py+6+j*8,tile-6,2);}if(c==='l'||c==='j'){ctx.fillStyle='#815e40';ctx.fillRect(px+6,py+4,tile-12,tile-8);ctx.fillStyle='#eddbc1';for(let j=0;j<3;j++)ctx.fillRect(px+8,py+8+j*6,tile-16,2);}return;}
     if(w.district==='lumiose-magenta3-gap'&&!w.interior){ctx.fillStyle=c==='#'?'#796e77':(x+y)%2?'#c1b4bb':'#cfc1c8';ctx.fillRect(px,py,tile,tile);if(c==='l'){ctx.fillStyle='#936e40';ctx.fillRect(px+6,py+4,tile-12,tile-8);ctx.fillStyle='#e8d9c3';for(let j=0;j<3;j++)ctx.fillRect(px+8,py+8+j*6,tile-16,2);}return;}
     if(w.district==='lumiose-magenta-street'&&!w.interior){if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?'#8d7482':c===':'?'#bca99f':c===','?'#d4c2c9':(x+y)%2?'#e9dce1':'#f0e5e8';ctx.fillRect(px,py,tile,tile);if(c===':'){ctx.fillStyle='#f2e6dc';ctx.fillRect(px,py+4,tile,2);ctx.fillRect(px,py+tile-6,tile,2);}if(c==='#'&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle='#b698a7';ctx.fillRect(px+3,py+4,tile-6,tile-8);}return;}

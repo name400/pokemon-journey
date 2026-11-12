@@ -640,3 +640,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 5 물길과 지하 터널 표현
 
 [현장 안내](https://www.powerpyx.com/pokemon-legends-z-a-whirlipede-location/)는 오염물을 치우고 낮은 물길과 터널을 지나 휠구가 있는 곳에 도달하는 경로를 설명한다. 기존 지하층의 물길·터널 벽·오염물과 사다리를 구분해 그렸다. 물길의 윤곽, 벽 재질과 사다리의 정확한 위치는 기존 2D 배치에 따른 추정이다. 맵 타일, 오염물 제거 조건, 조우·이동·저장은 변경하지 않았다.
+
+### 구역 11 북서쪽 높은 턱 표현
+
+[원작 도구 위치 안내](https://gamepedia.jp/pokemon-legends-z-a/archives/16622)는 북서쪽 입구에서 턱을 내려가는 동선을 설명한다. 기존 별도 높이층의 바닥과 경계, 낙하 위치를 구분해 그렸다. 실제 턱의 형태·포장과 출입구·낙하 좌표는 기존 2D 초안에 따른 추정이다. 맵 타일과 일방향 낙하, 기존 직행 경로 및 저장은 변경하지 않았다.
