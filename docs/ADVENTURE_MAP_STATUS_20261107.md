@@ -584,3 +584,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 15 옥상 거미줄과 카페 시각 표현
 
 [현장 안내](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-15/)는 인접 옥상을 거쳐 거미줄 다리를 펼쳐 접근하는 경로를 설명한다. 기존 2D 지붕 두 곳을 금속 패널과 난간으로 구분하고, 그 사이의 닫힌 거미줄과 펼쳐진 다리를 글자 대신 그림으로 나타냈다. 지상에서는 기존 카페 건물 차단 칸과 입구를 건물·창·차양으로 그렸다. 원작의 정확한 지붕 모양·재질과 카페 외관, 다리의 크기·좌표 및 기존 초안과 실제 옥상 간 대응은 확인되지 않았다. 그림은 기존 타일 위에만 표시되며 통행·층·조우·기존 저장을 변경하지 않았다.
+
+### 구역 16 분수와 광장 시각 표현
+
+[구역 자료](https://pokequery.com/games/legends-za/wild-zones/16)는 중앙 기념비와 북쪽 분수를, [현장 화면](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-16/)은 푸른 포장과 수변·생울타리를 보여준다. 기존 구역 16의 수로 타일에 물결과 석재 테두리를 그리고 기존 북동쪽 차단 칸에 분수, 중앙 기념비 칸에 오벨리스크를 표현했다. 현장 화면과 기존 맵에서 확인한 관계 외에 분수 조각의 모양, 포장과 수로 폭·좌표는 추정이다. 높이층과 경로를 새로 추가한 작업은 아니며 충돌·조우·저장 좌표는 그대로다.
