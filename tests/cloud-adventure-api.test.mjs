@@ -131,6 +131,27 @@ test('Mission 37 final battle defeat preserves phase and offers a recovered retr
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 37 Ange damage survives defeat, retry and Zygarde attack without duplicates',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-ange-hp-qa',displayName:'앙주 체력 검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  const strong={...makeMon(150,100),boxId:id,moves:['파동탄','튀어오르기'],pp:{}};seedMon(id,strong);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x:11,y:9,facing:'up',zaMission37Started:true,zaMission37Stage:7,zaMission37FinalPhase:0,zaMission37FinalRetryV1:true,zaProtectLayout:undefined,zaProtectRoof:false},state.revision+1));await get();assert.match(state.world.interaction.text,/100\/100/);await call('mission37FinalBattle');
+  let combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;sim.p2.active[0].trapped=true;sim.makeRequest(sim.requestState);seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('battle',{command:{type:'move',move:'파동탄'}});assert.ok(rawWorld().zaMission37AngeV1,JSON.stringify({battle:state.battle?.teams?.[1],result:state.battleResult,log:state.battle?.log}));assert.equal(rawWorld().zaMission37AngeV1.hp,95);assert.deepEqual(rawWorld().zaMission37AngeV1.flowers,['ange-red']);await get();assert.equal(rawWorld().zaMission37AngeV1.hp,95);
+  combat=rawWorld().combat;sim=Battle.fromJSON(combat.snapshot);sim.p1.active[0].hp=1;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();for(let i=0;state.battle;i++){assert.ok(i<20);await call('battle',{command:{type:'move',move:'튀어오르기'}});}assert.equal(state.battleResult.winner,1);assert.equal(rawWorld().zaMission37AngeV1.hp,95);assert.equal(rawMon(id).hp,rawMon(id).maxHp);await get();assert.match(state.world.interaction.text,/95\/100/);
+  seedMon(id,strong);await get();await call('mission37FinalBattle');combat=rawWorld().combat;sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;sim.p2.active[0].trapped=true;sim.makeRequest(sim.requestState);seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('battle',{command:{type:'move',move:'파동탄'}});assert.equal(rawWorld().zaMission37AngeV1.hp,95);
+  combat=rawWorld().combat;sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon)if(foe.hp>0){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission37FinalPhase,1);assert.equal(rawWorld().zaMission37AngeV1.hp,90);await get();assert.match(state.world.interaction.text,/90\/100/);await call('mission37FinalBattle');await battle();assert.equal(state.world.zaMission37FinalPhase,2);assert.equal(rawWorld().zaMission37AngeV1.hp,70);await get();assert.match(state.world.interaction.text,/70\/100/);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Mission 37 legacy in-progress battle resumes without rewriting its snapshot',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-ange-legacy-qa',displayName:'앙주 이전 저장'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(150,100),boxId:id,moves:['방어'],pp:{}};seedMon(id,player);
+  const foes=[{...makeMon(10061,65),boxId:'ange-red'},{...makeMon(10061,65),boxId:'ange-blue'}],combat=createCombat([player],foes),before=JSON.stringify(combat.snapshot);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x:11,y:9,facing:'up',zaMission37Started:true,zaMission37Stage:7,zaMission37FinalPhase:2,zaMission37AngeV1:undefined,combat,trainer:{id:'mission37-flowers',name:'앙주의 꽃',title:'',sprite:'youngster-gen3'},encounter:null},state.revision+1));await get();assert.equal(JSON.stringify(rawWorld().combat.snapshot),before);assert.equal(rawWorld().zaMission37AngeV1,undefined);await call('forfeit');assert.equal(state.world.zaMission37FinalPhase,2);assert.equal(rawWorld().zaMission37AngeV1,undefined);assert.deepEqual(state.world.teamIds,[id]);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-protect',interior:null,x:11,y:9,facing:'up'},state.revision+1));await get();assert.match(state.world.interaction.text,/70\/100/);await call('mission37FinalBattle');assert.equal(state.battle.teams[1].length,2);await call('forfeit');assert.equal(state.world.zaMission37FinalPhase,2);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 37 awards Zygardite and safely recovers legacy rewards',async()=>{
  const previousUser=globalThis.__adventureUser;
  try{
