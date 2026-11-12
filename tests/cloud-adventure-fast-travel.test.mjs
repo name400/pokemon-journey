@@ -51,3 +51,10 @@ test('Bleu sewer map point requires opening and entry and only allows departure 
  for(const patch of [{x:10},{zaSewerReturn:null},{zaSewerIceBranch:true},{zaMission19Inner:true},{combat:{}},{interior:'museum1'}])assert.equal(canMapTravel({...base,...patch}),false);
  assert.ok(!taxiDestinations(base).some(p=>p.id==='bleu-sewer'));
 });
+
+test('zone 20 never registers an underground tile as a ground destination',async()=>{
+ const {recordZoneEntry,mapTravelDestinations}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const s={area:3,district:'lumiose-zone20',interior:null,x:11,y:13,zaMission42Complete:true,zaMission42ChamberV1:true,zaMission42Underground:true,zaFastTravelZones:{1:{x:11,y:1}}};
+ assert.equal(recordZoneEntry(s,'lumiose', '.'),false);assert.deepEqual(s.zaFastTravelZones,{1:{x:11,y:1}});assert.ok(!mapTravelDestinations(s).some(p=>p.id==='zone20'));
+ s.zaMission42Underground=false;assert.equal(recordZoneEntry(s,null,fieldMap(s)[s.y][s.x]),true);assert.deepEqual(s.zaFastTravelZones[20],{x:11,y:13});s.x=10;assert.equal(recordZoneEntry(s,null,fieldMap(s)[s.y][s.x]),false);assert.deepEqual(s.zaFastTravelZones[20],{x:11,y:13});
+});

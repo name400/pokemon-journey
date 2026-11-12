@@ -3503,6 +3503,20 @@ test('map travel registers wild zones and taxi charges only on successful travel
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('rooftop entry registers a wild zone only after walking on the ground',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone17-roof-map-qa',displayName:'옥상 진입 지도 등록'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,x:6,y:9,facing:'down',zaMission04Complete:true,zaRoyaleRank:'C',zaZone17Upper:true,zaZone17Promenade:false,zaFastTravelZones:{1:{x:11,y:1}}},state.revision+1));await get();await call('move',{direction:'right'});await get();assert.ok(!state.world.zaFastTravelZones['17']);await call('move',{direction:'left'});await call('face',{direction:'down'});await call('zone17Ladder');assert.equal(state.world.zaZone17Upper,false);assert.ok(!state.world.zaFastTravelZones['17']);await call('move',{direction:'left'});await get();assert.deepEqual(state.world.zaFastTravelZones['17'],{x:12,y:7});assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='zone17'));assert.deepEqual(state.world.zaFastTravelZones['1'],{x:11,y:1});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('zone 20 registers after underground mission completion and returns to ground',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-ground-map-qa',displayName:'구역 20 지도 등록'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:14,facing:'down',zaMission04Complete:true,zaMission42Complete:true,zaMission42Stage:5,zaMission42ChamberV1:true,zaMission42Underground:true,zaFastTravelZones:{1:{x:11,y:1}},zaFastTravelCenters:['hotel']},state.revision+1));await get();await call('mapFastTravel',{destination:'hotel'},409);assert.ok(!state.world.zaMapTravelDestinations.some(p=>p.id==='zone20'));await call('mission42Ascend');assert.equal(state.world.zaMission42Underground,false);assert.ok(!state.world.zaMapTravelDestinations.some(p=>p.id==='zone20'));await call('move',{direction:'down'});await get();assert.deepEqual(state.world.zaFastTravelZones['20'],{x:11,y:8});assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='zone20'));await call('move',{direction:'down'});assert.deepEqual(rawWorld().zaFastTravelZones['20'],{x:11,y:8});await call('mapFastTravel',{destination:'hotel'});await get();assert.equal(state.world.district,'lumiose');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),zaMission42Underground:true},state.revision+1));await get();await call('mapFastTravel',{destination:'zone20'});await get();assert.equal(state.world.district,'lumiose-zone20');assert.equal(rawWorld().zaMission42Underground,false);assert.deepEqual([state.world.x,state.world.y],[11,8]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Centrico taxi and major destinations register safely and remain available after reload',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'centrico-taxi-qa',displayName:'센트리코 택시'};
  try{
