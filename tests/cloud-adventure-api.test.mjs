@@ -3414,3 +3414,14 @@ test('trade evolution research belongs to the actual recipient and survives relo
   globalThis.__adventureUser=a;await get();assert.equal(rawWorld().zaResearchTradeEvolutions,undefined);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('zone nine wild color persists across flee and capture and is cleared after catch',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone9-shiny-qa',displayName:'색 검사'};
+ try{
+  await get();await call('start',{species:152});const before=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:11,y:9,facing:'up',zaRoyaleRank:'F',zaZone9Upper:false,adventureBalls:{masterball:1}},state.revision+1));await get();
+  globalThis.__adventureRandom=()=>0;assert.equal(state.world.interaction.action,'zone9Wild-sableye');await call('zone9Wild-sableye');assert.equal(rawWorld().encounter.shiny,true);assert.equal(rawWorld().zaWildShinyRolls['zone9:sableye:302'],true);
+  await get();assert.equal(rawWorld().encounter.shiny,true);await call('flee');globalThis.__adventureRandom=()=>.999;await call('zone9Wild-sableye');assert.equal(rawWorld().encounter.shiny,true);await call('ball',{ball:'masterball'});await get();
+  assert.equal(rawWorld().zaWildShinyRolls['zone9:sableye:302'],undefined);assert.ok(state.box.some(p=>p.speciesId===302&&p.shiny));assert.ok(before.every(id=>state.world.teamIds.includes(id)));
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
