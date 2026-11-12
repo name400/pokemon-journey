@@ -9,6 +9,8 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readabilit
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
 CLOUD_TEST_DISTRICT=lumiose-zone1 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
 CLOUD_TEST_DISTRICT=lumiose-zone1 CLOUD_TEST_BLOCK=1 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
+CLOUD_TEST_DISTRICT=lumiose-zone4 CLOUD_TEST_Y=14 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
+CLOUD_TEST_DISTRICT=lumiose-zone6 CLOUD_TEST_X=9 CLOUD_TEST_Y=7 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/beast-and-rewards.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/touch-move-info.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/double-layout.mjs

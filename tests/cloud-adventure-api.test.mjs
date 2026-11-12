@@ -1885,6 +1885,14 @@ test('eight-step movement persists each step and stops at walls and encounters',
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('zone 4 and zone 6 long road batches preserve saves and stop at grass encounters',async()=>{
+ const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'extended-wild-roads-qa',displayName:'야생 도로 검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,party=[...state.world.teamIds],wallet=structuredClone(state.wallet);globalThis.__adventureRandom=()=>0;
+  for(const [district,x,y] of [['lumiose-zone4',2,14],['lumiose-zone6',9,7]]){seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,zaZone6Layer:'ground'},state.revision+1));await get();const before=rawMon(id),steps=state.world.steps||0,rev=state.revision;await call('move',{path:Array(8).fill('right'),compact:true});assert.equal(state.world.x,x+8,district);assert.equal(state.world.steps,steps+8);assert.equal(state.revision,rev+1);assert.equal(state.battle,null);assert.equal(rawMon(id).walkSteps,(before.walkSteps||0)+8);await get();assert.deepEqual([state.world.district,state.world.x],[district,x+8]);assert.deepEqual(state.world.teamIds,party);assert.deepEqual(state.wallet,wallet);}
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone4',interior:null,x:10,y:3},state.revision+1));await get();const steps=state.world.steps;await call('move',{path:Array(8).fill('down'),compact:true});assert.ok(state.battle);assert.deepEqual([state.world.x,state.world.y,state.world.steps],[10,4,steps+1]);await get();assert.ok(state.battle);assert.deepEqual([state.world.x,state.world.y],[10,4]);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('compact movement omits static catalogs without changing encounter or save semantics',async()=>{
  const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'compact-move-qa',displayName:'이동 응답 검증'};
  try{
