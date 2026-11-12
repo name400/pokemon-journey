@@ -119,10 +119,14 @@ test('one-boss companion battle preserves player switches and handles defeat',as
  assert.equal(fight.ended,true);assert.equal(fight.winner,1);assert.deepEqual(fight.owners.player,['lead','reserve']);assert.deepEqual(fight.owners.ally,['ally']);assert.equal(fight.teams[3].length,0);
 });
 
-test('mission 16 companion roster follows the original starter',async()=>{
+test('mission 16 and 21 companion rosters follow the original starter',async()=>{
  const {rogueCompanionTeam}=await import('../lib/cloud-adventure/adventure-companion-rogue.mjs');
  for(const [choice,ids] of Object.entries({grass:[160,500,310],fire:[154,160,310],water:[500,154,310]})){
   const team=rogueCompanionTeam('beedrill',choice);assert.deepEqual(team.map(mon=>mon.speciesId),ids);assert.deepEqual(team.map(mon=>mon.level),[36,36,37]);assert.ok(team.every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
  }
+ for(const [choice,ids] of Object.entries({grass:[160,500,310],fire:[154,160,310],water:[500,154,310]})){
+  const team=rogueCompanionTeam('mawile',choice);assert.deepEqual(team.map(mon=>mon.speciesId),ids);assert.deepEqual(team.map(mon=>mon.level),[43,43,44]);assert.ok(team.every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
+ }
+ for(const key of ['barbaracle','ampharos'])assert.ok(rogueCompanionTeam(key).every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
  assert.throws(()=>rogueCompanionTeam('beedrill','__proto__'));assert.throws(()=>rogueCompanionTeam('__proto__'));
 });
