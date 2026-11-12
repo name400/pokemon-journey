@@ -45,7 +45,7 @@ test('Zone 19 research species follow the day and night encounter pools',async()
 
 test('zone 19 refreshes one interval at a time without touching old saves or battles',async()=>{
  const {zone19SpawnInterval,refreshZone19Spawns}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
- assert.equal(zone19SpawnInterval(6*50000),0);assert.equal(zone19SpawnInterval(18*50000),1);assert.equal(zone19SpawnInterval(30*50000),2);assert.equal(zone19SpawnInterval(17*50000,1),1);
+ assert.equal(zone19SpawnInterval(4*50000),0);assert.equal(zone19SpawnInterval(20*50000),1);assert.equal(zone19SpawnInterval(28*50000),2);assert.equal(zone19SpawnInterval(19*50000,1),1);
  const s={district:'lumiose-zone19',zaZone19Spent:{'cleffa-night':true},zaWildShinyRolls:{'zone19:cleffa-night:173':true,'zone5:saved:1':true}};
  assert.equal(refreshZone19Spawns(s,'night',1),true);assert.equal(s.zaZone19Spent['cleffa-night'],true);assert.equal(s.zaWildShinyRolls['zone19:cleffa-night:173'],true);assert.equal(refreshZone19Spawns(s,'night',1),false);
  s.combat={snapshot:'keep'};assert.equal(refreshZone19Spawns(s,'day',2),false);assert.equal(s.zaZone19Spent['cleffa-night'],true);delete s.combat;s.adventureCatchWindow={foe:'keep'};assert.equal(refreshZone19Spawns(s,'day',2),false);delete s.adventureCatchWindow;s.encounter={snapshot:'keep'};assert.equal(refreshZone19Spawns(s,'day',2),false);delete s.encounter;

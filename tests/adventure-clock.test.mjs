@@ -27,3 +27,17 @@ test('cloud evolution checks the same personal time without changing other modes
   assert.equal(find({mode:'rogue',zaClockOffsetHours:8}).find(x=>x.id===196).ready,true);
  }finally{Date.now=oldNow;}
 });
+
+test('cloud clock uses Z-A day, night and dusk boundaries without changing other clocks',async()=>{
+ const {adventureGameTime,adventureSpawnInterval}=await import('../lib/cloud-adventure/adventure-clock.mjs'),h=50000;
+ for(const [hour,period,dusk] of [[3,'night',false],[4,'day',false],[15,'day',false],[16,'day',true],[19,'day',true],[20,'night',false],[23,'night',false]]){const t=adventureGameTime(hour*h);assert.equal(t.period,period);assert.equal(t.dusk,dusk);}
+ assert.equal(gameTime(5*h).period,'night');assert.equal(adventureGameTime(5*h).period,'day');assert.equal(gameTime(19*h).period,'night');assert.equal(adventureGameTime(19*h).period,'day');
+ assert.equal(adventureSpawnInterval(4*h-1),-1);assert.equal(adventureSpawnInterval(4*h),0);assert.equal(adventureSpawnInterval(20*h-1),0);assert.equal(adventureSpawnInterval(20*h),1);assert.equal(adventureSpawnInterval(28*h),2);assert.deepEqual(adventureGameTime(19*h,1),adventureGameTime(20*h));
+ const oldNow=Date.now;try{const mon=makeMon(133,20);mon.friendship=255;const options=()=>evolutionOptions(mon,{adventureEngine:'cloud'});Date.now=()=>5*h;assert.equal(options().find(x=>x.id===196).ready,true);Date.now=()=>18*h;assert.equal(options().find(x=>x.id===196).ready,false);assert.equal(options().find(x=>x.id===197).ready,false);Date.now=()=>21*h;assert.equal(options().find(x=>x.id===197).ready,true);}finally{Date.now=oldNow;}
+});
+
+test('legacy spawn cycles are rebased once without losing wild or player progress',async()=>{
+ const {migrateAdventureWildClock}=await import('../lib/cloud-adventure/adventure-clock.mjs');const s={zaClockOffsetHours:8,zaWildSpawnCycles:{5:{period:'night',interval:123},6:{period:'day',interval:124}},zaZone19SpawnCycle:{period:'night',interval:123},zaZone5Spent:{abra:true},zaWildShinyRolls:{'zone5:other:1':true},teamIds:['kept']};
+ assert.equal(migrateAdventureWildClock(s,'day',900),true);assert.equal(s.zaWildSpawnCycles[5].interval,900);assert.equal(s.zaZone19SpawnCycle.period,'day');assert.equal(s.zaZone5Spent.abra,true);assert.equal(s.zaWildShinyRolls['zone5:other:1'],true);assert.deepEqual(s.teamIds,['kept']);assert.equal(s.zaClockOffsetHours,8);assert.equal(migrateAdventureWildClock(s,'night',901),false);assert.equal(s.zaZone19SpawnCycle.interval,900);
+ const inBattle={combat:{},zaZone5Spent:{abra:true}};assert.equal(migrateAdventureWildClock(inBattle,'day',900),false);assert.equal(inBattle.zaWildClockV2,undefined);
+});

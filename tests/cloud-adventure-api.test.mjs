@@ -32,7 +32,7 @@ async function loadTS(relative){
  source=source.replace(/import\s*\{\s*env\s*\}\s*from\s*['"]cloudflare:workers['"];?/g,'const env=globalThis.__adventureEnv;');
  source=source.replace(/import\s*\{getChatGPTUser\}\s*from\s*['"]@\/app\/chatgpt-auth['"];?/g,'const getChatGPTUser=async()=>globalThis.__adventureUser;');
  source=source.replace("const random=()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;","const random=()=>globalThis.__adventureRandom();");
- source=source.replace("import {evolutionOptions,evolutionContext,gameTime} from '@/lib/evolution.mjs';","import {evolutionOptions,evolutionContext,gameTime as realGameTime} from '@/lib/evolution.mjs';const gameTime=(now,offset=0)=>{const t=globalThis.__adventureTime;if(!t)return realGameTime(now,offset);if(!offset)return t;const hour=(t.hour+offset)%24;return {...t,hour,period:hour>=6&&hour<18?'day':'night',dusk:hour>=17&&hour<19};};");
+ source=source.replace("import {adventureClockOffset,restUntilHour,migrateAdventureWildClock,adventureGameTime as gameTime} from '@/lib/cloud-adventure/adventure-clock.mjs';","import {adventureClockOffset,restUntilHour,migrateAdventureWildClock,adventureGameTime as realGameTime} from '@/lib/cloud-adventure/adventure-clock.mjs';const gameTime=(now,offset=0)=>{const t=globalThis.__adventureTime;if(!t)return realGameTime(now,offset);if(!offset)return t;const hour=(t.hour+offset)%24;return {...t,hour,period:hour>=4&&hour<20?'day':'night',dusk:hour>=16&&hour<20};};");
  const inventoryURL=relative==='lib/cloud-adventure/route.ts'?await loadTS('lib/inventory.ts'):null;
  const battleLockURL=relative==='app/api/trades/route.ts'?await loadTS('lib/battle-lock.ts'):null;
  source=source.replace(/from\s*(['"])(@\/[^'"]+|\.\.?\/[^'"]+)\1/g,(_,quote,specifier)=>{
@@ -4667,7 +4667,7 @@ test('Zone 19 waits for a player to leave a spent encounter position',async()=>{
  const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'zone19-occupied-refresh-qa',displayName:'구역19 재출현 위치'};
  try{
   Date.now=()=>now;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds];
-  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:5,y:7,facing:'down',zaRoyaleRank:'B',zaZone19SpawnCycle:{period:'day',interval:0},zaZone19Spent:{furfrou:true},combat:null,encounter:null},state.revision+1));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:5,y:7,facing:'down',zaRoyaleRank:'B',zaWildClockV2:true,zaZone19SpawnCycle:{period:'day',interval:0},zaZone19Spent:{furfrou:true},combat:null,encounter:null},state.revision+1));
   now+=1200000;await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',5,7]);assert.equal(rawWorld().zaZone19Spent.furfrou,true);await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',5,8]);assert.equal(rawWorld().zaZone19Spent,undefined);assert.equal(state.world.map[7][5],'a');assert.deepEqual(state.world.teamIds,team);
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
@@ -4681,4 +4681,37 @@ test('Zone 6 Meditite follows day and night without changing an active battle',a
   await call('zone6Wild-meditite');assert.equal(state.battle.teams[1][0].speciesId,307);globalThis.__adventureTime={period:'night',hour:22};await get();assert.equal(state.battle.teams[1][0].speciesId,307);await call('flee');await get();assert.equal(state.world.map[5][15],'g');assert.notEqual(state.world.interaction?.action,'zone6Wild-meditite');await call('zone6Wild-meditite',{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
   globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.world.map[5][15],'b');assert.equal(state.world.interaction.action,'zone6Wild-meditite');
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('legacy wild cycles are rebased without respawning or overwriting saved progress',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'wild-clock-migration-qa',displayName:'기존 낮밤 저장'};
+ try{
+  Date.now=()=>now;globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:14,y:9,zaRoyaleRank:'F',zaWildClockV2:undefined,zaWildSpawnCycles:{8:{period:'night',interval:77}},zaZone8Spent:{gible:true},zaZone8Burrows:{gible:443,drilbur:529},zaWildShinyRolls:{'zone8:drilbur:529':true},combat:null,encounter:null},state.revision+1));
+  await get();assert.equal(rawWorld().zaWildClockV2,true);assert.equal(rawWorld().zaZone8Spent.gible,true);assert.equal(rawWorld().zaWildShinyRolls['zone8:drilbur:529'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);const revision=state.revision;await get();assert.equal(state.revision,revision);
+  now+=1200000;await get();assert.equal(rawWorld().zaZone8Spent,undefined);assert.equal(rawWorld().zaWildShinyRolls['zone8:drilbur:529'],true);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('cloud time boundaries align field and legacy-save evolution eligibility',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=5*50000;globalThis.__adventureUser={userId:'za-time-boundary-qa',displayName:'낮밤 경계'};
+ try{
+  Date.now=()=>now;globalThis.__adventureTime=null;globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),eevee={...makeMon(133,20),boxId:id,friendship:255};seedMon(id,eevee);
+  seedWorld(storeAdventurePosition({...rawWorld(),adventureEngine:undefined,area:3,district:'lumiose-zone6',interior:null,x:15,y:6,facing:'up',zaRoyaleRank:'F',zaZone6Layer:'ground',zaClockOffsetHours:0,combat:null,encounter:null},state.revision+1));
+  const ready=species=>state.box.find(m=>m.boxId===id).evolutions.find(e=>e.id===species).ready;
+  await get();assert.equal(state.gameTime.period,'day');assert.equal(state.world.map[5][15],'b');assert.equal(ready(196),true);assert.equal(ready(197),false);
+  now=18*50000;await get();assert.equal(state.gameTime.period,'day');assert.equal(state.gameTime.dusk,true);assert.equal(ready(196),false);assert.equal(ready(197),false);
+  now=20*50000;await get();assert.equal(state.gameTime.period,'night');assert.equal(state.world.map[5][15],'g');assert.equal(ready(197),true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('day-only shiny field Pokémon returns unchanged after night and reload',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'shiny-day-night-return-qa',displayName:'낮 이로치 복원'};
+ try{
+  Date.now=()=>now;globalThis.__adventureTime=null;globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone6',interior:null,x:15,y:6,facing:'up',zaRoyaleRank:'F',zaZone6Layer:'ground',zaWildClockV2:true,zaWildSpawnCycles:{6:{period:'day',interval:0}},zaWildShinyRolls:{'zone6:meditite:307':true},combat:null,encounter:null},state.revision+1));
+  await get();assert.equal(state.world.map[5][15],'b');assert.equal(rawWorld().zaWildShinyRolls['zone6:meditite:307'],true);
+  now=20*50000;await get();assert.equal(state.gameTime.period,'night');assert.equal(state.world.map[5][15],'g');assert.equal(rawWorld().zaWildShinyRolls['zone6:meditite:307'],true);await get();assert.equal(rawWorld().zaWildShinyRolls['zone6:meditite:307'],true);
+  now=28*50000;await get();assert.equal(state.gameTime.period,'day');assert.equal(state.world.map[5][15],'b');assert.equal(rawWorld().zaWildShinyRolls['zone6:meditite:307'],true);await call('zone6Wild-meditite');assert.equal(state.battle.teams[1][0].shiny,true);await get();assert.equal(state.battle.teams[1][0].shiny,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
