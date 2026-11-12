@@ -2274,6 +2274,23 @@ test('Rank E documented trainers and waiter healing survive reload',async()=>{
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('Rank E additional trainers preserve progress, nightly limits, and roster details',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-e-extra-qa',displayName:'랭크 E 추가 상대'};
+ try{
+  globalThis.__adventureTime={period:'night',hour:22};await get();await call('start',{species:152});const id=state.world.activeId,strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}},party=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,strong);
+  seedWorld({...rawWorld(),zaRoyaleEPoints:3500,zaRoyaleESessionWins:['royale-e-henri'],districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  const cases=[[4,19,11,'b','royale-e-izia',[[64,36],[18,36]]],[5,12,5,'e','royale-e-mayline',[[705,40],[36,40]]],[6,3,11,'t','royale-e-wyatt',[[95,36],[305,36]]],[7,9,11,'j','royale-e-cleo',[[545,37],[618,37]]],[8,15,11,'k','royale-e-lily',[[583,37],[569,37]]],[9,19,5,'n','royale-e-jonas',[[714,38],[334,38]]],[10,12,11,'q','royale-e-justin',[[444,39],[26,39]]],[11,5,3,'e','royale-e-melissa',[[305,36],[323,36]]],[12,9,3,'t','royale-e-esther',[[710,38],[708,38]]],[13,15,3,'j','royale-e-kiri',[[707,39],[282,39]]],[14,19,3,'k','royale-e-kenzo',[[212,39],[689,39],[569,39]]],[15,5,13,'n','royale-e-kenner',[[450,38],[95,38]]],[16,17,13,'q','royale-e-cecil',[[181,38],[587,38]]],[17,7,13,'e','royale-e-akira',[[308,39],[67,39]]],[18,15,13,'t','royale-e-miya',[[354,39],[93,39]]]];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:11,y:14,facing:'up',zaRoyaleRank:'E',zaMission19Stage:1,combat:null,encounter:null,trainer:null},state.revision+1));await get();await walkTo({x:19,y:12});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'royaleEExtra4');
+  for(const [index,x,y,tile,trainer,expected] of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x,y:y+1,facing:'up',zaRoyaleRank:'E',zaMission19Stage:1,combat:null,encounter:null,trainer:null},state.revision+1));await get();assert.equal(state.world.map[y][x],tile);assert.equal(state.world.interaction.action,`royaleEExtra${index}`);if(index===4){await call('royaleEExtra5',{},409);globalThis.__adventureTime={period:'day',hour:12};await call(`royaleEExtra${index}`,{},409);globalThis.__adventureTime={period:'night',hour:22};}await call(`royaleEExtra${index}`);assert.equal(state.world.trainer.id,trainer);assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),expected);if(index===4)assert.deepEqual(rawWorld().combat.teams[1][0].moves,['Psycho Cut','Recover','Psyshock','Psychic']);await get();assert.equal(state.world.trainer.id,trainer);
+   if(index===4||index===14){const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.ok(rawWorld().zaRoyaleESessionWins.includes(trainer));await get();await call(`royaleEExtra${index}`,{},409);}else await call('forfeit');
+   assert.ok(rawWorld().zaRoyaleESessionWins.includes('royale-e-henri'));assert.deepEqual(state.world.teamIds,party);assert.deepEqual(state.wallet,wallet);
+  }
+  assert.equal(rawWorld().zaRoyaleEPoints,10500);assert.deepEqual(rawWorld().zaRoyaleESessionWins,['royale-e-henri','royale-e-izia','royale-e-kenzo']);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',interior:null,x:15,y:14,facing:'up',zaRoyaleEPoints:35000},state.revision+1));await get();await call('royaleEExtra18',{},409);assert.equal(rawWorld().zaRoyaleEPoints,35000);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
+
 test('Rank F additional trainers support battles, point limits, and restored saves',async()=>{
  const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-f-extra-qa',displayName:'랭크 F 추가 상대'};
  try{
