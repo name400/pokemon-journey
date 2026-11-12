@@ -596,3 +596,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 17 북쪽 산책로 시각 표현
 
 [원작 구역 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17)은 북쪽 산책로와 남쪽 공원의 계단 연결을, [현장 화면](https://www.sportskeeda.com/pokemon/how-get-skarmory-pokemon-legends-z-a)은 계단으로 오르는 접근을 보여준다. 기존 별도 산책로 층의 Y자 길과 차단 경계에 포장·난간을 그리고 조각상·계단·사다리를 구분했다. 난간 재질, 조각상 형태와 Y자 경로·높이층의 정확한 좌표는 2D 추정이며 기존 맵 타일, 이동, 조우와 저장은 수정하지 않았다.
+
+### 구역 5 거리와 옥상 시각 표현
+
+[현장 자료](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-5/)는 도시 건물과 풀밭이 만나는 구역을 보여주고, [구역 안내](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_5)는 주변 거리와 옥상 연결을 설명한다. 기존 차단된 건물 칸과 거리·수로 타일을 지붕과 포장·수변으로 구분하고 옥상의 닫힌 거미줄·펼쳐진 다리와 지하 입구를 그림으로 나타냈다. 건물의 형태·높이, 수로 윤곽과 정확한 좌표는 기존 2D 초안에 따른 추정이다. 이동·조우·높이층·저장 판정은 바꾸지 않았다.
