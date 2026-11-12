@@ -632,3 +632,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 11 남서쪽 두 계단의 착지 공간 표현
 
 [현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)에서 확인되는 두 계단 동선을 기존 상층·중간층의 경계와 돌 포장으로 구분했다. 바닥 색과 포장·난간의 형태 및 각 층의 정확한 크기는 기존 2D 배치에 따른 추정이다. 실제 높이층, 계단 전환, 맵 타일 및 저장은 바꾸지 않았다.
+
+### 구역 2 높은 지형의 물가 표현
+
+[구역 안내](https://allthings.how/pokemon-legends-z-a-wild-zone-2-every-spawn-and-where-to-find-them/)는 중앙의 높은 지형과 얕은 호수를 설명한다. 기존 전망층의 바닥·계단·물가 경계를 그려 수면과 구별했다. 이 층의 정확한 범위와 계단 연결, 석재 포장과 난간 형태는 기존 2D 초안에 따른 추정이다. 맵 타일, 높이 이동, 충돌, 조우 및 저장은 변경하지 않았다.

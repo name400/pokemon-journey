@@ -116,7 +116,21 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='o'){ctx.fillStyle='#e4d7b5';ctx.fillRect(px+10,py+10,12,12);ctx.fillStyle='#d4665b';ctx.fillRect(px+10,py+10,12,5);}
      return;
     }
-    if(w.district==='lumiose-zone2-overlook'&&!w.interior){if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?'#718479':(x+y)%2?'#c8c4a8':'#d8d2b7';ctx.fillRect(px,py,tile,tile);if(c==='h'){ctx.fillStyle='#917d60';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#e9ddbc';for(let j=0;j<3;j++)ctx.fillRect(px+5,py+7+j*7,tile-10,2);}return;}
+    if(w.district==='lumiose-zone2-overlook'&&!w.interior){
+     // A raised area and water are documented; this separate overlook's
+     // shape and stairs are provisional. Paint only the existing tiles.
+     if(c==='~'){canalWater(px,py,x,y);return;}
+     ctx.fillStyle=c==='#'?'#728a7e':(x+y)%2?'#c9c5ac':'#dcd5bd';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){
+      ctx.fillStyle='#95a79a';ctx.fillRect(px+1,py+2,tile-2,tile-5);
+      ctx.fillStyle='#c8d3c0';ctx.fillRect(px+2,py+2,tile-4,3);
+      ctx.fillStyle='#637c71';ctx.fillRect(px,py+tile-4,tile,4);
+     }else{
+      ctx.fillStyle='#b1ad99';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);
+      ctx.fillStyle='#f0e7d2';if(w.map[y-1]?.[x]==='~')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]==='~')ctx.fillRect(px,py+tile-3,tile,3);if(w.map[y]?.[x-1]==='~')ctx.fillRect(px,py,3,tile);if(w.map[y]?.[x+1]==='~')ctx.fillRect(px+tile-3,py,3,tile);
+     }
+     if(c==='h'){ctx.fillStyle='#8a7259';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#e9ddbc';for(let j=0;j<4;j++)ctx.fillRect(px+5,py+5+j*6,tile-10,3);ctx.fillStyle='#76877e';ctx.fillRect(px+2,py+3,3,tile-6);ctx.fillRect(px+tile-5,py+3,3,tile-6);}return;
+    }
     if(w.district==='lumiose-bleu-cafe2'&&!w.interior){if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?'#909488':c===','?'#c8bdae':(x+y)%2?'#e0ded0':'#ebe9dd';ctx.fillRect(px,py,tile,tile);if(c==='q'||c==='s'||c==='X'){ctx.fillStyle=c==='q'?'#a7534d':c==='s'?'#867156':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'카페':c==='s'?'계단':'거리',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-aymlis-park'&&!w.interior){const lower=w.zaMission11ParkLower===true;if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?(lower?'#71827f':'#779079'):c===','?'#d0c5b0':(x+y)%2?'#d9d5be':'#e7e1cc';ctx.fillRect(px,py,tile,tile);if(c==='H'||c==='j'||c==='d'||c==='X'||c===';'){ctx.fillStyle=c==='H'?'#c95d61':c==='j'?'#907758':c==='d'?'#668eaa':c===';'?'#aaa092':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='H'?'센터':c==='j'?'계단':c==='d'?'사건':c===';'?'아치':'거리',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-mission21-glide'&&!w.interior){ctx.fillStyle=c==='#'?'#756d70':'#b59980';ctx.fillRect(px,py,tile,tile);if(c===','){ctx.fillStyle='#e1c5a2';ctx.fillRect(px+2,py+tile-5,tile-4,2);}if(c==='l'||c==='j'||(y===6&&(x===9||x===13))){ctx.fillStyle=c==='l'||c==='j'?'#936e40':'#477d93';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='l'||c==='j'?'사다리':'활공',px+tile/2,py+20);}return;}
