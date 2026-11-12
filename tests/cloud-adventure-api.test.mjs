@@ -1830,6 +1830,18 @@ test('Magenta 6 court connects the street and scaffold while preserving progress
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Magenta court night royale preserves rank progress and returns to the court',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'magenta6-royale-qa',displayName:'마젠타로열테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  const court={...rawWorld(),area:3,district:'lumiose-magenta6-court-alley',interior:null,x:13,y:11,facing:'up',zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:0};
+  seedWorld(storeAdventurePosition(court,state.revision+1));globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.world.interaction.action,'enterRoyaleZone');await call('enterRoyaleZone',{},409);await get();assert.equal(state.world.district,court.district);
+  globalThis.__adventureTime={period:'night',hour:22};await call('enterRoyaleZone');await get();assert.equal(state.world.district,'lumiose-royale');await walkTo('O');await call('royaleErica');await battle();await get();assert.equal(state.world.zaRoyaleVPoints,550);assert.equal(state.world.zaMission10Stage,4);
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta6-court-alley',13,11]);assert.equal(state.world.zaRoyaleVPoints,550);assert.equal(state.world.activeId,id);
+  await call('face',{direction:'up'});await call('enterRoyaleZone');await get();assert.equal(state.world.district,'lumiose-royale');await walkTo('O');await call('royaleErica');await call('forfeit');await get();assert.equal(state.world.zaRoyaleVPoints,550);assert.equal(state.world.zaMission10Stage,4);assert.equal(state.world.activeId,id);assert.equal(state.world.district,'lumiose');
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Magenta 6 scaffold walk connects street and roof without losing saved progress',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta6-scaffold-qa',displayName:'마젠타비계저장테스트'};
  try{

@@ -512,3 +512,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 마젠타 6번지 배틀코트 초안
 
 [수집 위치 안내](https://sportsrant.indiatimes.com/gaming/list-of-all-colourful-screw-locations-in-pokmon-legends-z-a/articleshow/126639673.html)는 6번지의 배틀코트 근처에 비계가 있다고 설명한다. 기존 골목 옆에 걸어 들어갈 수 있는 코트를 마련하고 거리에서 골목으로 들어가 다시 비계 쪽으로 돌아가는 경로를 연결했다. 코트 윤곽·방향·골목 접점은 추정이다. 트레이너나 야간 배틀존 규칙은 자료가 부족해 추가하지 않았다. 기존 골목·거리 저장 위치와 비계 사다리는 유지한다.
+
+### 마젠타 6번지 야간 로열 접근 — 임시 연결
+
+[배틀존 목록](https://bulbapedia.bulbagarden.net/wiki/Battle_zone_%28Lumiose_City%29)은 마젠타 6번지가 밤에 활성화될 수 있는 배틀존이며 옥상으로 가려면 비계를 이용한다고 설명한다. 코트에서 기존 로열 임시 배틀존으로 진입하고 나온 코트로 돌아가도록 연결했다. 기존 랭크·시간·점수·승패와 세션 처리를 공유하며 이전 광장 입구도 그대로 둔다. 원작은 밤마다 활성 구역이 달라지지만 현재는 해당 선택 기능이 없어 밤에 조건을 만족하면 이용 가능하다. 실제 장소별 트레이너·코트 경계·비계 배틀은 재현하지 못했으며 기존 공용 경기장과 상대를 사용하는 초안이다.
