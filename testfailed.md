@@ -1,5 +1,20 @@
 # 배포 검증 실패 기록
 
+## 2026-11-13 — GitHub `a67fa3e` 배포 검사 실패
+
+- 대상 브랜치: `cloud/pokerogue-continue-20261105`; 대상 GitHub 커밋 `a67fa3eadf7b3339f74c810f1b26f31ee48367b0`. 검사 시작 시 이 커밋 뒤에 브랜치 커밋 하나가 있었으나 사용자가 확인한 대상까지만 반영했다.
+- 검증 소스: 기존 Sites 소스와 병합한 로컬 커밋 `a6b2fda9b4ba1a384e3e9ce3d32b8a46625887de`, Node.js v24.22.1.
+- 순차 검사: `npm run typecheck` 통과, `npm test` 3,431개 중 3,430개 통과·1개 실패 (342.2초), `npm run build` 통과.
+- 검증 실패로 배포하지 않았다. 검사 당시 운영본은 Sites v82.
+
+### 탐험 모험 — 미션 37 배틀 팀 순서
+
+- 테스트: `tests/cloud-adventure-api.test.mjs:984`, `mission 10 companion battle requires Absol and advances on either result`; 실패 단언 위치: 1080행.
+- 테스트 흐름에서 미션 37의 `mission37Wave` 배틀을 시작하고 상대 팀 종 ID의 순서를 검증한다.
+- 기대 배열: `[10073, 10039, 10058]`. 실제 배열: `[10073, 10058, 10039]`. 동일한 종들이 다른 순서로 나와 `assert.deepEqual`이 실패했다.
+- 이 결과만으로 게임의 팀 순서 오류인지, 난수에 따라 가능한 순서를 테스트가 고정해 기대하는 문제인지는 알 수 없다. 해당 웨이브의 의도된 상대 팀 순서와 생성·난수 로직 및 테스트 재현성을 확인한다.
+- 이전 실패였던 `zone 20 missing starters are catchable and register for research` 테스트와 스타터 1·4·7 자연 진행 테스트는 이번 실행에서 통과했다.
+
 ## 2026-11-12 — GitHub `ef9d145` 배포 검사 실패
 
 - 대상 브랜치: `cloud/pokerogue-continue-20261105`; 대상 GitHub 커밋 `ef9d145388e3228cce6389d9bef13cf17937475d`.
