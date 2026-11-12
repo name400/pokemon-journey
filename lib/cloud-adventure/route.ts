@@ -1,3 +1,4 @@
+import {museumSide21Available,museumSide21Requester,museumSide21Spot} from '@/lib/cloud-adventure/adventure-museum.mjs';
 import {isAdventureBench,benchRestUnlocked} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {adventureClockOffset,restUntilHour} from '@/lib/cloud-adventure/adventure-clock.mjs';
 import {introMove,introTalk,introEscapeMove} from '@/lib/cloud-adventure/adventure-intro.mjs';
@@ -512,6 +513,15 @@ else if(b.action==='mission35Griselle'){if(s.combat||s.interior||s.zaMission35St
 else if(b.action==='mission31Vinnie'){if(s.combat||s.interior||s.district!=='lumiose-quasartico'||cell()!=='j'||!s.zaMission31Started||s.zaMission31Stage)throw Error('콰자르티코 앞에서 Vinnie를 만나세요.');s.zaMission31Stage=1;s.log=['Vinnie가 Jett의 요청을 전했다. 사무실에 들어가자.'];}
 else if(b.action==='mission31Jett'){if(s.combat||s.interior!=='quasarticoOffice'||s.district!=='lumiose-quasartico'||cell()!=='j'||s.zaMission31Stage!==1)throw Error('콰자르티코 사무실에서 Jett를 만나세요.');s.zaMission31Stage=2;s.log=['Jett에게 도시 재개발과 프리즘타워의 에너지, 폭주 메가진화에 관해 들었다.','Hotel Z로 돌아가 팀 MZ와 논의하자.'];}
 else if(b.action==='mission31Meeting'){if(s.combat||s.interior!=='hotel'||s.district!=='lumiose'||cell()!=='F'||s.zaMission31Stage!==2)throw Error('Hotel Z에서 작전 회의를 하세요.');s.zaMission31Stage=3;s.log=['팀 MZ가 세 폭주 사건에 대응하기로 했다.','망나뇽·마기라스·아쿠스타 사건으로 가자. 현장 위치는 초안이다.'];}
+else if(b.action==='side21Start'){
+ const spot=interactionAt(s);if(s.combat||s.unionHost||!museumSide21Available(s)||!museumSide21Requester(s,spot)||s.zaSide21Started||s.zaSide21Complete)throw Error('미술관의 Bundo와 Wanda를 확인하세요.');s.zaSide21Started=true;s.zaSide21Found=[];s.log=['미술관에 숨은 분떠도리 열두 마리를 찾아보자. 위치는 2D 배치 초안이다.'];
+}
+else if(b.action==='side21Find'){
+ const spot=interactionAt(s),id=museumSide21Spot(s,spot);if(s.combat||s.unionHost||!s.zaSide21Started||s.zaSide21Complete||!id)throw Error('미술관의 분떠도리를 확인하세요.');const found=Array.isArray(s.zaSide21Found)?s.zaSide21Found:[];if(found.includes(id))throw Error('이미 찾은 분떠도리입니다.');s.zaSide21Found=[...found,id];s.log=[`분떠도리를 찾았다! ${s.zaSide21Found.length}/12`,...(s.zaSide21Found.length===12?['Bundo와 Wanda에게 돌아가자.']:[])];
+}
+else if(b.action==='side21Report'){
+ const spot=interactionAt(s),found=Array.isArray(s.zaSide21Found)?new Set(s.zaSide21Found):new Set();if(s.combat||s.unionHost||!museumSide21Requester(s,spot)||!s.zaSide21Started||s.zaSide21Complete||found.size!==12)throw Error('분떠도리 열두 마리를 모두 찾으세요.');const id=crypto.randomUUID();captured={...makeMon(30297,9),boxId:id,origin:'adventure-gift',moves:['독가루','실뿜기','단단해지기','저리가루'],pp:{},item:''};registerAdventureDex(s,665);if(s.teamIds.length<6)s.teamIds.push(id);bagChanges.wiseglasses=1;bagChanges.normalgem=3;reward=3000;s.zaSide21Complete=true;s.zaSide21RewardPokemonId=id;s.log=['열세 번째 분떠도리(마린의 모양)를 동료로 맞았다!','3000코인, 박식안경 1개와 노말주얼 3개를 받았다.',s.teamIds.includes(id)?'분떠도리가 파티에 합류했다.':'파티가 가득 차 분떠도리를 보유함으로 보냈다.'];
+}
 else if(b.action==='enterMuseum'){
  const spot=interactionAt(s);if(s.combat||s.unionHost||s.interior||s.district!=='lumiose-museum-front'||spot?.tile!=='u'||spot.x!==11||spot.y!==6)throw Error('미르미술관 입구를 확인하세요.');s.interior='museum1';s.x=11;s.y=14;s.facing='up';s.log=['미르미술관에 들어왔다. 전시실 배치는 초안이다.'];
 }

@@ -10,3 +10,8 @@ test('museum frontage and both exhibition floors connect without replacing boule
  assert.equal(stepField({...front,interior:'museum1',x:11,y:15},'down').interior,null);assert.equal(fieldMap({...front,interior:'museum2'})[16][11],'#');
  const old=restoreAdventurePosition(storeAdventurePosition({...road,x:15,y:2},82),82);assert.deepEqual([old.district,old.x,old.y,old.teamIds],[road.district,15,2,['kept']]);
 });
+
+test('marine gift retains the marine evolution target', async()=>{
+ const {makeMon}=await import('../lib/game.mjs');const {evolutionOptions}=await import('../lib/evolution.mjs');
+ const spewpa=makeMon(30297,12);assert.equal(spewpa.formName,'marine');assert.ok(evolutionOptions(spewpa,{},[],{}).some(o=>o.id===30093&&o.ready));
+});
