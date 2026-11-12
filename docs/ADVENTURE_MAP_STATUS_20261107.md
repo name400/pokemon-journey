@@ -608,3 +608,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 4 묘지와 남쪽 석조 건물 시각 표현
 
 [원작 구역 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_4)과 [현장 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-4-guide-all-pokemon-and-alphas)는 묘지와 묘비가 있는 구역을 설명한다. 기존 차단 묘비·담장·남쪽 건물 칸에 석조 형태를 그리고 묘지 안 풀과 길, 바깥 포장길을 구분했다. 풀 위 시각 경로는 기존처럼 조우가 가능한 풀임을 표시한다. 묘비와 건물 외형·배치 및 길의 정확한 선형은 기존 2D 초안을 따른 추정이다. 실제 타일, 이동, 조우 및 저장은 변경하지 않았다.
+
+### 구역 7 원형 광장 시각 표현
+
+[원작 광장 설명](https://bulbapedia.bulbagarden.net/wiki/Magenta_Plaza)은 원형 광장 아래 운하와 옆의 분수를 설명한다. 기존 중앙 기념비 주변의 포장 타일을 돌 포장으로, 조우 가능한 풀 타일을 풀로 구분하고 분수와 승강기 표시를 보강했다. 원작 화면의 풀과 통로 배치가 현재 타일과 동일한지는 미확인이다. 광장의 정확한 비율·분수 위치와 수로 연결은 기존 2D 초안이며 실제 타일, 조우, 이동 및 저장은 변경하지 않았다.

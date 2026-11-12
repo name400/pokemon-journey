@@ -411,13 +411,19 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      // Magenta Plaza stands between the two halves of the canal. Keep the
      // visual ring independent of the tiles that govern encounters.
      const r=Math.sqrt(((x-11)/9)**2+((y-8)/6)**2);
-     ctx.fillStyle=c==='#'?'#787373':r<=.48?'#a9bc8f':r<=.94?'#e4dac7':r<=1.12?'#c5baa8':(x+y)%2?'#d8cbb8':'#e4d8c5';ctx.fillRect(px,py,tile,tile);
-     if(r>.88&&r<1.12&&c!== '#'&&c!=='X'&&c!=='W'){ctx.fillStyle='#eee5d6';ctx.fillRect(px+2,py+tile-4,tile-4,2);}if(c==='~'){if(x===19&&y===5){ctx.fillStyle='#a39a8f';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#79b8c7';ctx.fillRect(px+5,py+6,tile-10,tile-12);ctx.fillStyle='#e8f4ef';ctx.fillRect(px+14,py+8,4,8);}else canalWater(px,py,x,y);}if(x===11&&y>=7&&y<=9){
+     // The grass ring remains visibly grassy and encounter-capable; the
+     // existing comma tiles are paved even inside the central circle.
+     ctx.fillStyle=c==='#'?'#787d76':c==='g'?(x+y)%2?'#8eaf7d':'#9cba87':c===','?(x+y)%2?'#d4cab4':'#e3dac7':r<=1.12?'#cbc0ae':(x+y)%2?'#ddd4c1':'#e8decb';ctx.fillRect(px,py,tile,tile);
+     if(c===','){ctx.fillStyle='#b8ad9b';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+3,2,tile-5);ctx.fillStyle='#eee5d3';ctx.fillRect(px+2,py+2,tile-4,2);}
+     if(r>.88&&r<1.12&&c!== '#'&&c!=='X'&&c!=='W'){ctx.fillStyle=c==='g'?'#bfd0a4':'#eee5d6';ctx.fillRect(px+2,py+tile-4,tile-4,2);}
+     if(c==='~'){if(x===19&&y===5){ctx.fillStyle='#a39a8f';ctx.fillRect(px+1,py+2,tile-2,tile-4);ctx.fillStyle='#79b8c7';ctx.fillRect(px+5,py+6,tile-10,tile-12);ctx.fillStyle='#e8f4ef';ctx.fillRect(px+13,py+7,6,11);ctx.fillRect(px+9,py+15,14,3);}else canalWater(px,py,x,y);}if(x===11&&y>=7&&y<=9){
       // Monument silhouette and pedestal use only the existing landmark footprint.
       if(y===7){ctx.fillStyle='#c3b7a6';ctx.beginPath();ctx.moveTo(px+tile/2,py+1);ctx.lineTo(px+tile-7,py+tile);ctx.lineTo(px+7,py+tile);ctx.closePath();ctx.fill();ctx.fillStyle='#eee5d7';ctx.beginPath();ctx.moveTo(px+tile/2,py+3);ctx.lineTo(px+tile/2,py+tile);ctx.lineTo(px+9,py+tile);ctx.closePath();ctx.fill();}
       if(y===8){ctx.fillStyle='#b0a494';ctx.fillRect(px+7,py,tile-14,tile);ctx.fillStyle='#e7ddcd';ctx.fillRect(px+9,py,tile/2-9,tile);ctx.fillStyle='#958879';ctx.fillRect(px+tile/2+2,py+8,3,13);}
       if(y===9){ctx.fillStyle='#9a8e7f';ctx.fillRect(px+5,py,tile-10,tile-9);ctx.fillStyle='#d9d0c0';ctx.fillRect(px+7,py,tile-14,tile-13);ctx.fillStyle='#8b8074';ctx.fillRect(px+2,py+tile-9,tile-4,9);ctx.fillStyle='#e2d8c6';ctx.fillRect(px+3,py+tile-8,tile-6,3);}
-     }if(c==='g'){ctx.fillStyle='#668e5c';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}if(c==='j'){ctx.fillStyle='#896b55';ctx.fillRect(px+5,py+4,tile-10,tile-8);}return;}
+     }if(c==='g'){ctx.fillStyle='#608c5a';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);ctx.fillRect(px+8,py+6,2,5);ctx.fillRect(px+22,py+11,2,5);}
+     if(c==='X'||c==='W'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#a5cfb8';ctx.fillRect(px+8,py+7,tile-16,tile-14);}
+     if(c==='j'){ctx.fillStyle='#6c7d78';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#dfc678';ctx.fillRect(px+7,py+5,tile-14,tile-10);ctx.fillStyle='#a1d5ca';ctx.fillRect(px+10,py+7,tile-20,tile-14);}return;}
     if(w.district==='lumiose-zone11'&&!w.interior){
      // The Saison Canal separates the banks. Beach and path details are a
      // visual approximation; the underlying collision and encounter tiles stay intact.
