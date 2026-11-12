@@ -2274,6 +2274,20 @@ test('Rank E documented trainers and waiter healing survive reload',async()=>{
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('Rank F additional trainers support battles, point limits, and restored saves',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-f-extra-qa',displayName:'랭크 F 추가 상대'};
+ try{
+  globalThis.__adventureTime={period:'night',hour:22};await get();await call('start',{species:152});const id=state.world.activeId,strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}},team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,strong);
+  const cases=[[5,12,5,'e','royale-f-lara',[676,678]],[6,3,11,'t','royale-f-clemence',[353,708]],[7,9,11,'j','royale-f-marion',[447,307]],[8,15,11,'k','royale-f-tyler',[618,450]],[9,19,5,'n','royale-f-yuna',[127,123]],[10,12,11,'q','royale-f-dylan',[361,459]]];
+  for(const [index,x,y,tile,trainerId,species] of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x,y:y+1,facing:'up',zaRoyaleRank:'F',zaMission14Stage:1,combat:null,encounter:null,trainer:null},state.revision+1));await get();assert.equal(state.world.map[y][x],tile);assert.ok(state.world.interaction,JSON.stringify({index,x,y,tile,at:[state.world.x,state.world.y],facing:state.world.facing,near:state.world.map[state.world.y]}));assert.equal(state.world.interaction.action,`royaleFExtra${index}`);if(index===5){await call('royaleFExtra6',{},409);globalThis.__adventureTime={period:'day',hour:12};await call(`royaleFExtra${index}`,{},409);globalThis.__adventureTime={period:'night',hour:22};}await call(`royaleFExtra${index}`);assert.equal(state.world.trainer.id,trainerId);assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),species);assert.ok(state.battle.teams[1].every(m=>m.level===(index===8?34:index===5||index===10?32:31)));if(index===5)assert.deepEqual(rawWorld().combat.teams[1][0].moves,['Cotton Guard','Charm','Crunch','Snarl']);await get();assert.equal(state.world.trainer.id,trainerId);
+   if(index<=6){const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.ok(rawWorld().zaRoyaleFSessionWins.includes(trainerId));assert.equal(rawWorld().zaRoyaleFPoints,(index-4)*3200);await get();await call(`royaleFExtra${index}`,{},409);}else{await call('forfeit');assert.ok(!rawWorld().zaRoyaleFSessionWins.includes(trainerId));}
+   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',interior:null,x:12,y:6,facing:'up',zaRoyaleFPoints:32000},state.revision+1));await get();await call('royaleFExtra5',{},409);assert.equal(rawWorld().zaRoyaleFPoints,32000);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
+
 test('Rank F waiters battle and heal once per visit with saved progress',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-f-waiters-qa',displayName:'랭크F회복테스트'};
  try{
