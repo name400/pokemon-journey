@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone12Map,zone12Encounter,zone12Visible,zone12Item} from '../lib/cloud-adventure/adventure-zone12.mjs';
+import {zone12Map,zone12Encounter,zone12WildMoves,zone12Visible,zone12Item} from '../lib/cloud-adventure/adventure-zone12.mjs';
 import {stepField,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 function reachable(s,target){const q=[s],seen=new Set([`${s.x},${s.y}`]);for(let i=0;i<q.length;i++){const p=q[i];if(p.x===target.x&&p.y===target.y)return true;for(const dir of ['up','down','left','right']){const n=stepField(p,dir),key=`${n.x},${n.y}`;if(!n.blocked&&!n.transitioned&&!seen.has(key)){seen.add(key);q.push({...p,...n});}}}return false;}
 test('Zone 12 pond-side grass can yield Vanillite while preserving its route and save',()=>{
@@ -9,6 +9,12 @@ test('Zone 12 pond-side grass can yield Vanillite while preserving its route and
  assert.deepEqual(zone12Encounter(s,()=>.999),{speciesId:582,level:36});
  assert.notEqual(zone12Encounter({...s,x:13,y:8},()=>.999).speciesId,582);
  const saved=restoreAdventurePosition(storeAdventurePosition(s,31),31);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[s.district,9,11,['kept']]);
+});
+test('new Zone 12 Vanillite learns Ice Beam at 35 without mutating existing moves',()=>{
+ const mon={speciesId:582,level:35,moves:['하나','둘','셋','넷']};
+ assert.deepEqual(zone12WildMoves(mon).moves,['둘','셋','넷','냉동빔']);assert.deepEqual(mon.moves,['하나','둘','셋','넷']);
+ const lower={...mon,level:34};assert.equal(zone12WildMoves(lower),lower);
+ const other={...mon,speciesId:225};assert.equal(zone12WildMoves(other),other);
 });
 test('draft Bleu 5 waterside entrance preserves ground gates and lower-layer saves',()=>{
  const city={area:3,district:'lumiose-bleu-sector5',interior:null,x:21,y:14,zaRoyaleRank:'E',teamIds:['kept']};

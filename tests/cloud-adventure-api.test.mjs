@@ -3817,10 +3817,13 @@ test('Zone 12 pond-side Vanillite can complete research after capture and reload
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:10,y:11,facing:'left',zaRoyaleRank:'E',adventureBalls:{masterball:1},adventureDexSpecies:LATER_ZONE_SPECIES[12].filter(id=>id!==582)},state.revision+1));
   await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===12).points,0);
   const rolls=[0,.9,.999,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;
-  await call('move',{direction:'left'});assert.equal(rawWorld().encounter?.speciesId,582);
+  await call('move',{direction:'left'});assert.equal(rawWorld().encounter?.speciesId,582);assert.ok(rawWorld().encounter.moves.includes('냉동빔'));
   await call('ball',{ball:'masterball'});await get();
   assert.ok(rawWorld().adventureDexSpecies.includes(582));assert.ok(state.box.some(mon=>mon.speciesId===582));
   assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===12).points,1000);
+  const vanillite=state.box.find(mon=>mon.speciesId===582);assert.ok(rawMon(vanillite.boxId).moves.includes('냉동빔'));
+  await call('switch',{id:vanillite.boxId});seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vernal',interior:null,x:17,y:11,facing:'down',zaMission19Stage:7},state.revision+1));
+  await get();await call('mission19Freeze');await get();assert.equal(rawWorld().zaMission19Stage,8);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
