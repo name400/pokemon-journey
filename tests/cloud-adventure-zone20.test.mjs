@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldPath,storeAdventurePosition,restoreAdventurePosition,stepField,cloudNpcTile,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
-import {zone20Map,zone20Visible,zone20Encounter,ZONE20_ALPHA,ZONE20_NORTHEAST_STREAM,ZONE20_CONTAINERS,ZONE20_ROCKS,ZONE20_RUIN_SUPPORTS} from '../lib/cloud-adventure/adventure-mission42.mjs';
+import {zone20Map,zone20Visible,zone20Encounter,zone20Habitat,ZONE20_HABITAT_POOLS,ZONE20_ALPHA,ZONE20_NORTHEAST_STREAM,ZONE20_CONTAINERS,ZONE20_ROCKS,ZONE20_RUIN_SUPPORTS} from '../lib/cloud-adventure/adventure-mission42.mjs';
 test('zone twenty retains Zygarde site and supports saved field position',()=>{
  const s={area:3,district:'lumiose-zone20',interior:null,x:11,y:14,facing:'up',zaMission42Stage:1};const map=zone20Map(s);
  assert.equal(map[6][11],'n');assert.ok(fieldPath(map,s,{x:11,y:7}).length);assert.equal(zone20Visible(s,'a').species,1);assert.equal(zone20Encounter(s,()=>0).speciesId,1);
@@ -130,6 +130,19 @@ test('every Zone 20 research species has a wild encounter slot',async()=>{
  const {ZONE20_ENCOUNTER_SPECIES,zone20Encounter}=await import('../lib/cloud-adventure/adventure-mission42.mjs');const {LATER_ZONE_SPECIES}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
  assert.deepEqual([...ZONE20_ENCOUNTER_SPECIES].sort((a,b)=>a-b),[...LATER_ZONE_SPECIES[20]].sort((a,b)=>a-b));
  for(let i=0;i<ZONE20_ENCOUNTER_SPECIES.length;i++)assert.equal(zone20Encounter({},()=>((i+.5)/ZONE20_ENCOUNTER_SPECIES.length)).speciesId,ZONE20_ENCOUNTER_SPECIES[i]);
+});
+
+test('Zone 20 habitat pools are reachable on grass and retain every research species',async()=>{
+ const {ZONE20_ENCOUNTER_SPECIES}=await import('../lib/cloud-adventure/adventure-mission42.mjs');
+ const map=zone20Map({}),samples={grass:{x:10,y:10},waterside:{x:17,y:9},dry:{x:5,y:10},ruins:{x:5,y:5}},seen=new Set();
+ for(const [habitat,pos] of Object.entries(samples)){
+  assert.equal(map[pos.y][pos.x],'g');assert.equal(zone20Habitat(pos),habitat);
+  assert.ok(fieldPath(map,{x:11,y:14},pos).length,habitat);
+  const pool=ZONE20_HABITAT_POOLS[habitat];
+  for(let i=0;i<pool.length;i++){const mon=zone20Encounter(pos,()=>((i+.5)/pool.length));assert.equal(mon.speciesId,pool[i]);seen.add(mon.speciesId);}
+ }
+ assert.deepEqual([...seen].sort((a,b)=>a-b),[...ZONE20_ENCOUNTER_SPECIES].sort((a,b)=>a-b));
+ assert.equal(map[10][18],'~');
 });
 
 test('Zone 20 stream and distinct land remain connected and migrate earlier positions',()=>{
