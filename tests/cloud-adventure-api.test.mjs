@@ -31,8 +31,10 @@ async function loadTS(relative){
  source=source.replace("const random=()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;","const random=()=>globalThis.__adventureRandom();");
  source=source.replace("import {evolutionOptions,evolutionContext,gameTime} from '@/lib/evolution.mjs';","import {evolutionOptions,evolutionContext,gameTime as realGameTime} from '@/lib/evolution.mjs';const gameTime=(now,offset=0)=>{const t=globalThis.__adventureTime;if(!t)return realGameTime(now,offset);if(!offset)return t;const hour=(t.hour+offset)%24;return {...t,hour,period:hour>=6&&hour<18?'day':'night',dusk:hour>=17&&hour<19};};");
  const inventoryURL=relative==='lib/cloud-adventure/route.ts'?await loadTS('lib/inventory.ts'):null;
+ const battleLockURL=relative==='app/api/trades/route.ts'?await loadTS('lib/battle-lock.ts'):null;
  source=source.replace(/from\s*(['"])(@\/[^'"]+|\.\.?\/[^'"]+)\1/g,(_,quote,specifier)=>{
   if(specifier==='@/lib/inventory')return `from '${inventoryURL}'`;
+  if(specifier==='@/lib/battle-lock')return `from '${battleLockURL}'`;
   const url=specifier.startsWith('@/')?pathToFileURL(root+specifier.slice(2)):new URL(specifier,new URL('../'+relative,import.meta.url));return `from '${url.href}'`;
  });
  const emitted=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
@@ -3395,4 +3397,20 @@ test('zone 9 crystals persist rewards and cooldown without changing old party or
   await place({x:4,y:6,zaMegaShards:9999});await call('smashZone9Crystal',{},409);assert.equal(rawWorld().zaResearchCrystalBreaks,3);assert.equal(rawWorld().zaZone9CrystalTimes['4,6'],undefined);
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawMon(id).id,mon.id);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
+
+test('trade evolution research belongs to the actual recipient and survives reload',async()=>{
+ const previous=globalThis.__adventureUser;try{
+  const a={userId:'research-trade-a',displayName:'교환 A'},b={userId:'research-trade-b',displayName:'교환 B'};
+  globalThis.__adventureUser=a;await get();await call('start',{species:152});const first=state.world.activeId;
+  seedMon(first,{...makeMon(64,30),boxId:first,moves:['염동력']});
+  globalThis.__adventureUser=b;await get();await call('start',{species:152});const second=state.world.activeId;
+  for(const [u,code] of [[a,'TRADEA'],[b,'TRADEB']])sql.prepare('INSERT OR REPLACE INTO profiles(user_id,nickname,nickname_key,friend_code,updated_at) VALUES(?,?,?,?,?)').run(u.userId,u.displayName,u.userId,code,1);
+  sql.prepare("INSERT INTO friendships(pair_key,requester,recipient,status,created_at) VALUES(?,?,?,'accepted',?)").run(JSON.stringify([a.userId,b.userId].sort()),a.userId,b.userId,1);
+  const trade=await import(await loadTS('app/api/trades/route.ts'));
+  async function tradeCall(payload){const response=await trade.POST(new Request('http://adventure.test/api/trades',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify(payload)}));const value=await response.json();assert.equal(response.status,200,JSON.stringify(value));return value;}
+  globalThis.__adventureUser=a;const offered=await tradeCall({action:'offer',friendCode:'TRADEB',boxId:first});const tradeId=offered.items.find(t=>t.status==='pending').id;
+  globalThis.__adventureUser=b;await tradeCall({action:'accept',id:tradeId,boxId:second});await get();assert.equal(rawMon(first).adventureResearchTradeRecipient,b.userId);await call('evolve',{boxId:first,target:65});assert.equal(rawWorld().zaResearchTradeEvolutions,1);assert.equal(rawMon(first).adventureResearchTradeRecipient,undefined);await get();assert.equal(rawWorld().zaResearchTradeEvolutions,1);
+  globalThis.__adventureUser=a;await get();assert.equal(rawWorld().zaResearchTradeEvolutions,undefined);
+ }finally{globalThis.__adventureUser=previous;}
 });
