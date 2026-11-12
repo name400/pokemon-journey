@@ -34,6 +34,7 @@ import {mission17Available} from '@/lib/cloud-adventure/adventure-zone1-mission1
 import {espaceVideMap} from '@/lib/cloud-adventure/adventure-espace-vide.mjs';
 import {zone20Visible,zone20Encounter,zone20Item,ZONE20_ALPHA,MISSION42_L,MISSION42_ZYGARDE_FORMS,MISSION42_ZYGARDE_MOVES,MISSION42_ZYGARDE_CAPTURE_MOVES} from '@/lib/cloud-adventure/adventure-mission42.mjs';
 import {zone19Visible,zone19Encounter,zone19Item,zone19SpawnInterval,refreshZone19Spawns} from '@/lib/cloud-adventure/adventure-zone19.mjs';
+import {refreshOrdinaryWildSpawns} from '@/lib/cloud-adventure/adventure-wild-refresh.mjs';
 import {zone18Map,zone18Visible,zone18Encounter,zone18Item,zone18Unlocked,magentaSector9Map} from '@/lib/cloud-adventure/adventure-zone18.mjs';
 import {zone17Map,zone17Visible,zone17Encounter,zone17Item} from '@/lib/cloud-adventure/adventure-zone17.mjs';
 import {zone16Map,zone16Visible,zone16Encounter,zone16Item} from '@/lib/cloud-adventure/adventure-zone16.mjs';
@@ -104,13 +105,13 @@ export const dynamic='force-dynamic';const db=()=>env.DB!;const random=()=>crypt
 const fieldWildResolvers:any={5:zone5Visible,6:zone6Visible,8:zone8Visible,9:zone9Visible,10:zone10Visible,11:zone11Visible,12:zone12Visible,13:zone13Visible,14:zone14Visible,15:zone15Visible,16:zone16Visible,17:zone17Visible,18:zone18Visible,19:zone19Visible,20:zone20Visible};
 function prepareVisibleWild(s:any){
  if(!s||s.interior||s.combat||s.adventureCatchWindow)return false;
- const offset=adventureClockOffset(s),now=Date.now(),time=gameTime(now,offset),period=time.period;let changed=s.district==='lumiose-zone19'&&refreshZone19Spawns(s,period,zone19SpawnInterval(now,offset));const ensure=(key:string)=>{if(typeof s.zaWildShinyRolls?.[key]!=='boolean'){assignWildShiny(s,{},random,key);changed=true;}};
+ const offset=adventureClockOffset(s),now=Date.now(),time=gameTime(now,offset),period=time.period;let changed=s.district==='lumiose-zone19'?refreshZone19Spawns(s,period,zone19SpawnInterval(now,offset)):refreshOrdinaryWildSpawns(s,period,zone19SpawnInterval(now,offset));const ensure=(key:string)=>{if(typeof s.zaWildShinyRolls?.[key]!=='boolean'){assignWildShiny(s,{},random,key);changed=true;}};
  if(s.district==='lumiose-lysandre-lab'){for(const p of lysandreVisibleWild(s))ensure(`lab:${p.id}:${p.species}`);return changed;}
  if(s.district==='lumiose-zone2'){if(zone2BudewPosition(s))ensure('field2:budew:406');if(zone2KakunaPosition(s))ensure('field2:kakuna:14');for(const p of zone2FieldMonsters(s,period))ensure(`field2:${p.id}:${p.speciesId}`);return changed;}
  if(s.district==='lumiose-zone3'){for(const p of zone3FieldMonsters(s,period))ensure(`field3:${p.id}:${p.speciesId}`);return changed;}
  if(s.district==='lumiose-crystal-sewer'){for(const p of magentaSewerMonsters(s,period))ensure(`sewer:${p.id}:${p.speciesId}`);return changed;}
  if(s.district==='lumiose-zone20'&&s.zaMission42Underground===true)return false;
- const match=/^lumiose-zone(5|6|8|9|10|11|12|13|14|15|16|17|18|19|20)(?:-garden|-drain)?$/.exec(s.district||'');if(!match)return false;
+ const match=/^lumiose-zone(5|6|8|9|10|11|12|13|14|15|16|17|18|19|20)(?:-garden|-drain)?$/.exec(s.district||'');if(!match)return changed;
  const n=Number(match[1]),view=n===19?{...s,zaZone19Period:time.period}:n===13?{...s,zaZone13Period:time.period}:n===14?{...s,zaZone14Period:time.period,weather:['water','poison'].includes(AREAS[s.area]?.biome)&&time.hour%2===0?'rain':''}:s,map=fieldMap(view),find=fieldWildResolvers[n];
  for(const tile of new Set(map.join(''))){const p=find(view,tile);if(!p||typeof p.id!=='string'||!Number.isInteger(p.species))continue;const key=`zone${n}:${p.id}:${p.species}`;if(typeof s.zaWildShinyRolls?.[key]==='boolean')continue;assignWildShiny(s,{},random,key);changed=true;}
  return changed;

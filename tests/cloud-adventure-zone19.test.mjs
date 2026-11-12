@@ -48,7 +48,7 @@ test('zone 19 refreshes one interval at a time without touching old saves or bat
  assert.equal(zone19SpawnInterval(6*50000),0);assert.equal(zone19SpawnInterval(18*50000),1);assert.equal(zone19SpawnInterval(30*50000),2);assert.equal(zone19SpawnInterval(17*50000,1),1);
  const s={district:'lumiose-zone19',zaZone19Spent:{'cleffa-night':true},zaWildShinyRolls:{'zone19:cleffa-night:173':true,'zone5:saved:1':true}};
  assert.equal(refreshZone19Spawns(s,'night',1),true);assert.equal(s.zaZone19Spent['cleffa-night'],true);assert.equal(s.zaWildShinyRolls['zone19:cleffa-night:173'],true);assert.equal(refreshZone19Spawns(s,'night',1),false);
- s.combat={snapshot:'keep'};assert.equal(refreshZone19Spawns(s,'day',2),false);assert.equal(s.zaZone19Spent['cleffa-night'],true);delete s.combat;s.adventureCatchWindow={foe:'keep'};assert.equal(refreshZone19Spawns(s,'day',2),false);delete s.adventureCatchWindow;
+ s.combat={snapshot:'keep'};assert.equal(refreshZone19Spawns(s,'day',2),false);assert.equal(s.zaZone19Spent['cleffa-night'],true);delete s.combat;s.adventureCatchWindow={foe:'keep'};assert.equal(refreshZone19Spawns(s,'day',2),false);delete s.adventureCatchWindow;s.encounter={snapshot:'keep'};assert.equal(refreshZone19Spawns(s,'day',2),false);delete s.encounter;
  assert.equal(refreshZone19Spawns(s,'day',2),true);assert.equal(s.zaZone19Spent,undefined);assert.equal(s.zaWildShinyRolls['zone19:cleffa-night:173'],undefined);assert.equal(s.zaWildShinyRolls['zone5:saved:1'],true);assert.equal(refreshZone19Spawns(s,'day',2),false);
  s.zaZone19Spent={audino:true};assert.equal(refreshZone19Spawns(s,'day',4),true,'same period after a full cycle still refreshes');assert.equal(s.zaZone19Spent,undefined);
 });

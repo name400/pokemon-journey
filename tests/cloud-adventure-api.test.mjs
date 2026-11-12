@@ -4569,3 +4569,12 @@ test('legacy in-progress L battle keeps the original Zygarde entry after victory
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up'},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='mission42Battle'));await call('mission42Battle');assert.equal(state.battle.teams[1][0].id,10181);await call('forfeit');
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('ordinary zone wild encounters refresh after a full cycle while preserving legacy progress',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;globalThis.__adventureUser={userId:'ordinary-wild-refresh-qa',displayName:'야생 갱신'};let now=12*50000;
+ try{Date.now=()=>now;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone5',interior:null,x:11,y:14,zaWildSpawnCycles:undefined,zaZone5Spent:{abra:true},zaZone5Tm040:true,zaWildShinyRolls:{'zone5:abra:63':true,'zone19:other:1':true}},state.revision+1));
+  await get();assert.equal(rawWorld().zaZone5Spent.abra,true);assert.equal(rawWorld().zaWildShinyRolls['zone5:abra:63'],true);const baseline=state.revision;await get();assert.equal(state.revision,baseline);
+  now+=1200000;await get();assert.equal(rawWorld().zaZone5Spent,undefined);assert.equal(rawWorld().zaWildShinyRolls['zone5:abra:63'],undefined);assert.equal(rawWorld().zaWildShinyRolls['zone19:other:1'],true);assert.equal(rawWorld().zaZone5Tm040,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);const revision=state.revision;await get();assert.equal(state.revision,revision);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});

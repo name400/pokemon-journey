@@ -1,0 +1,25 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {refreshOrdinaryWildSpawns} from '../lib/cloud-adventure/adventure-wild-refresh.mjs';
+
+test('ordinary zones refresh after time changes without disturbing old saves or other progress',()=>{
+ for(const zone of [5,6,8,9,10,11,12,13,14,15,16,17,18]){
+  const s={district:`lumiose-zone${zone}`,[`zaZone${zone}Spent`]:{wild:true},zaWildShinyRolls:{[`zone${zone}:wild:1`]:true,'zone19:other:2':true},zaMission40Complete:true,party:[{id:'owned',shiny:true}]};
+  assert.equal(refreshOrdinaryWildSpawns(s,'day',4),true);assert.equal(s[`zaZone${zone}Spent`].wild,true);
+  assert.equal(refreshOrdinaryWildSpawns(s,'day',4),false);
+  assert.equal(refreshOrdinaryWildSpawns(s,'day',6),true);
+  assert.equal(s[`zaZone${zone}Spent`],undefined);assert.equal(s.zaWildShinyRolls[`zone${zone}:wild:1`],undefined);
+  assert.equal(s.zaWildShinyRolls['zone19:other:2'],true);assert.equal(s.zaMission40Complete,true);assert.equal(s.party[0].shiny,true);
+ }
+});
+
+test('refresh waits for active encounters and ignores special zones',()=>{
+ for(const blocked of ['interior','combat','encounter','adventureCatchWindow']){
+  const s={district:'lumiose-zone5',zaZone5Spent:{abra:true},zaWildSpawnCycles:{5:{period:'day',interval:1}},[blocked]:{}};
+  assert.equal(refreshOrdinaryWildSpawns(s,'night',2),false);assert.equal(s.zaZone5Spent.abra,true);
+  delete s[blocked];assert.equal(refreshOrdinaryWildSpawns(s,'night',2),true);
+ }
+ for(const district of ['lumiose-zone1','lumiose-zone2','lumiose-zone3','lumiose-zone19','lumiose-zone20','lumiose-zone5-unknown'])assert.equal(refreshOrdinaryWildSpawns({district},'day',1),false);
+ const s={district:'lumiose-zone11-sw-top',zaZone11Spent:{wild:true}};
+ assert.equal(refreshOrdinaryWildSpawns(s,'day',1),true);s.district='lumiose-zone11';assert.equal(refreshOrdinaryWildSpawns(s,'night',2),true);assert.equal(s.zaZone11Spent,undefined);
+});
