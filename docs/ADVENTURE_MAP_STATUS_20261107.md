@@ -568,3 +568,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 20 유적 시각 표현
 
 [프리즘타워 자료](https://bulbapedia.bulbagarden.net/wiki/Prism_Tower)는 손상된 탑의 잔해가 센트리코 광장에 남았다고 설명한다. 기존 차단 지지대의 무너진 윤곽과 균열, 주변 풀·물결을 그리고 중앙 상호작용은 글자 대신 그림으로 나타냈다. 지지대 개수와 정확한 잔해 형태·높이는 원작과 정밀 대조되지 않은 2D 초안이다. 지형·조우·이동·저장 좌표는 바꾸지 않았다.
+
+### 구역 6 카페와 층 이동의 시각 표현
+
+[카페 목록](https://www.serebii.net/legendsz-a/cafes.shtml)은 Café Bataille이 구역 6에 있다고 설명하며, [구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-6-guide-all-pokemon-and-alphas)는 거리와 옥상을 설명한다. 기존 차단 타일에 카페 지붕·창과 입구를 그리고 수로 사다리와 홀로베이터를 구별했다. 세부 건물 형태·위치와 층 연결은 원작에서 정밀 확인되지 않은 초안이다. 기존 지형·이동·저장 판정은 바꾸지 않았다.
