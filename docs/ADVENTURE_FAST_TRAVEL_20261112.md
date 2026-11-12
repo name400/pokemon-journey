@@ -25,3 +25,5 @@
 [Lumi Cab 목적지 목록](https://bulbapedia.bulbagarden.net/wiki/Lumi_Cab)에 있는 여섯 광장과 Café Woof, Café Gallant, Nouveau Café 2호를 연결했다. 존느·마젠타 광장은 기존 게임에서 야생 구역과 겹치므로 잠긴 구역 안이 아니라 기존 도로 쪽에 도착한다. 루주 광장은 기존 미션 5 완료 이후 제공한다. 카페의 위치·광장 도착 좌표는 2D 초안이며 방문·택시 도착 시 지도 목록에 등록한다.
 
 [의뢰 안내](https://www.thonky.com/pokemon-legends-z-a/side-mission-088-the-nervous-novice-cabbie)는 루주 광장 북서쪽에 택시 기사가 있다고 설명한다. 다른 [의뢰 목록](https://bulbapedia.bulbagarden.net/wiki/Side_Mission)은 해당 의뢰의 선행 시점을 다르게 기재하므로, 기존 경계를 건드리지 않고 승강장은 미션 30 시작 이후 또는 랭크 B 이후에 보수적으로 제공한다. 정확한 화면 좌표는 미확인이며 기사 Tesse의 무료 첫 승차·사이드 미션 88과 보상은 구현하지 않았다. 구역을 택시로 떠날 때 기존 이동과 같은 일시 조우 상태 정리를 수행한다. 실제 기기·운영 환경은 미검증이다.
+
+갱신: 루주 승강장의 Tesse 무료 첫 승차와 사이드 미션 88이 구현되었다. 상세 조건과 원작 대비 차이는 [의뢰 기록](ADVENTURE_SIDE88_TESSE_20261112.md)을 참고한다.
