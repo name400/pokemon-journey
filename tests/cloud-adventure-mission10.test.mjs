@@ -101,3 +101,20 @@ test('multi battle replaces a defeated enemy from its own reserve',async()=>{
  for(let n=0;n<5&&!fight.ended;n++){const target=battle.p2.active[0]?.hp>0?1:2;fight=playMission10MultiTurn(fight,{type:'move',move:'psychic',target});battle=Battle.fromJSON(fight.snapshot);}
  assert.equal(fight.ended,true);assert.equal(fight.winner,0);assert.ok([...fight.teams[1],...fight.teams[3]].every(m=>m.hp===0));assert.deepEqual(fight.owners.player,['player']);
 });
+
+test('one-boss companion battle has no phantom target or switch-in ability',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {createCompanionBossSnapshot,mission10MultiView,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player={...makeMon(282,80),boxId:'trace-player',ability:'trace',moves:['10만볼트'],pp:{}},ally={...makeMon(25,30),boxId:'partner',moves:['10만볼트'],pp:{}},boss={...makeMon(80,60),boxId:'boss',moves:['물의파동'],pp:{}};
+ const initial=structuredClone([player,ally,boss]);let fight=createCompanionBossSnapshot([player],[ally],boss),sim=Battle.fromJSON(JSON.parse(JSON.stringify(fight.snapshot)));
+ assert.deepEqual([player,ally,boss],initial);assert.equal(sim.p1.active[0].ability,sim.p2.active[0].ability);assert.notEqual(sim.p1.active[0].ability,'swiftswim');assert.equal(sim.p4.pokemon[0].hp,0);assert.equal(sim.p4.pokemonLeft,0);assert.deepEqual(fight.teams.map(team=>team.length),[1,1,1,0]);
+ const view=mission10MultiView(fight);assert.deepEqual(view.activeBySide,[[0,1],[0,-1]]);assert.deepEqual(view.requests[0].moves[0].targets.filter(t=>t.side===1).map(t=>t.target),[1]);assert.throws(()=>playMission10MultiTurn(fight,{type:'move',move:'thunderbolt',target:2}));
+ fight=playMission10MultiTurn(fight,{type:'move',move:'thunderbolt',target:1});assert.equal(fight.ended,true);assert.equal(fight.winner,0);assert.deepEqual(fight.teams.map(team=>team.length),[1,1,1,0]);assert.ok(fight.log.every(line=>!line.includes('잉어킹')&&!line.includes('Magikarp')));
+});
+
+test('one-boss companion battle preserves player switches and handles defeat',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {createCompanionBossSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player=[{...makeMon(25,1),boxId:'lead',moves:['튀어오르기'],pp:{}},{...makeMon(25,1),boxId:'reserve',moves:['튀어오르기'],pp:{}}],ally={...makeMon(25,1),boxId:'ally',moves:['튀어오르기'],pp:{}},boss={...makeMon(150,100),boxId:'boss',moves:['사이코키네시스'],pp:{}};
+ let fight=createCompanionBossSnapshot(player,[ally],boss);fight=playMission10MultiTurn(fight,{type:'switch',slot:2});let b=Battle.fromJSON(fight.snapshot);assert.equal(b.p1.active[0].set.trainerToken,'reserve');
+ for(let i=0;i<10&&!fight.ended;i++){b=Battle.fromJSON(fight.snapshot);const request=b.p1.activeRequest;fight=playMission10MultiTurn(fight,request?.forceSwitch?.[0]?{type:'switch',slot:b.p1.pokemon.findIndex(p=>!p.isActive&&p.hp>0)+1}:{type:'move',move:'splash'});}
+ assert.equal(fight.ended,true);assert.equal(fight.winner,1);assert.deepEqual(fight.owners.player,['lead','reserve']);assert.deepEqual(fight.owners.ally,['ally']);assert.equal(fight.teams[3].length,0);
+});
