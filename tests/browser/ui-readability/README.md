@@ -159,3 +159,9 @@ See `docs/PC_REAL_ARTWORK_PERFORMANCE_QA_20261105.md` for the measured limits an
 memo candidate that was rejected and reverted because it did not improve the long log.
 
 The active alias script checks the conditional battle button, cancellation, wild and trainer normal and Sketch plus non-random and ability-random challenge, including fusion and trainer-test/Weird Dream events with verified challenge combinations, confirmation, saved reserve and return to the same turn in synthetic desktop and mobile layouts.
+
+Mission 36 companion battle fixture (mock API and replacement artwork):
+
+```sh
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs UI_TEST_URL=http://127.0.0.1:5476 node tests/browser/ui-readability/cloud-mission36-double.mjs
+```
