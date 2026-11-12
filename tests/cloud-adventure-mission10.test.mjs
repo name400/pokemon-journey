@@ -91,3 +91,13 @@ test('companion automatically replaces a fainted partner using its own roster',a
  const player={...makeMon(150,100),boxId:'player',moves:['사이코키네시스'],pp:{}},t=mission10GuardTeams('grass'),fight=createMission10DoubleSnapshot([player],t.ally,t.foes),next=playMission10MultiTurn(fight,{type:'move',move:'psychic',target:-2}),b=Battle.fromJSON(next.snapshot);
  assert.equal(b.p3.active[0].set.trainerToken,'mission10-ally-1');assert.equal(next.teams[2].find(m=>m.boxId==='mission10-ally-0').hp,0);assert.deepEqual(next.teams[0].map(m=>m.boxId),['player']);
 });
+
+test('multi battle replaces a defeated enemy from its own reserve',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player={...makeMon(150,100),boxId:'player',moves:['사이코키네시스'],pp:{}},ally={...makeMon(150,100),boxId:'ally',moves:['방어'],pp:{}},foes=Array.from({length:3},(_,i)=>({...makeMon(25,1),boxId:`foe-${i}`,moves:['튀어오르기'],pp:{}}));
+ assert.throws(()=>createMission10DoubleSnapshot([player],[ally],foes));
+ let fight=createMission10DoubleSnapshot([player],[ally],foes,{allowReserve:true});assert.deepEqual(fight.teams[1].map(m=>m.boxId),['foe-0','foe-2']);
+ fight=playMission10MultiTurn(fight,{type:'move',move:'psychic',target:1});let battle=Battle.fromJSON(fight.snapshot);assert.equal(battle.p2.pokemon.find(p=>p.set.trainerToken==='foe-0').hp,0);assert.equal(battle.p2.active[0].set.trainerToken,'foe-2');assert.equal(fight.ended,false);
+ for(let n=0;n<5&&!fight.ended;n++){const target=battle.p2.active[0]?.hp>0?1:2;fight=playMission10MultiTurn(fight,{type:'move',move:'psychic',target});battle=Battle.fromJSON(fight.snapshot);}
+ assert.equal(fight.ended,true);assert.equal(fight.winner,0);assert.ok([...fight.teams[1],...fight.teams[3]].every(m=>m.hp===0));assert.deepEqual(fight.owners.player,['player']);
+});
