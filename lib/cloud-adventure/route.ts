@@ -653,17 +653,19 @@ else if(['cityProjectStart','cityProjectBoard','cityProjectDetour','cityProjectH
 else if(b.action==='wildStudyStart'||b.action==='wildStudyReport'){if(s.combat||s.interior||s.district!=='lumiose-wild'||cell()!=='A')throw Error('야생 구역 안내원 앞에서 조사하세요.');const stage=wildStudyStage(s);if(b.action==='wildStudyStart'&&stage===0){s.wildStudy={...(s.wildStudy||{}),stage:1};s.log=['야생 조사 의뢰를 받았다. 야생 포켓몬 한 마리를 이기거나 포획하자.'];}else if(b.action==='wildStudyReport'&&stage===2){s.wildStudy={...s.wildStudy,stage:3};s.log=['야생 조사 결과를 보고했다. 동쪽 관측 정원의 트레이너를 만나자.'];}else throw Error('현재 조사 단계를 확인하세요.');}
 else if(b.action==='recordResearch'){if(s.combat||!['lab','lumioseLab','lumioseDirector'].includes(s.interior)||cell()!=='R')throw Error('연구소의 연구원 앞에서 기록하세요.');const id=active.id;if(!Number.isInteger(id)||!species.some(p=>p.id===id))throw Error('선두 포켓몬을 확인하세요.');const records=Array.isArray(s.labResearch)?s.labResearch:[];if(records.includes(id))throw Error('이미 연구 수첩에 기록한 포켓몬입니다.');s.labResearch=[...records,id];s.log=[`${active.name}의 관찰 기록을 연구 수첩에 남겼다!`];}
 else if(b.action==='habitatStart'||b.action==='habitatReport'){if(s.combat||s.interior!=='lab'||cell()!=='R'||habitatLabAction(s)?.action!==b.action)throw Error('연구소에서 현재 의뢰를 확인하세요.');const stage=b.action==='habitatStart'?1:4;s.habitatIncident={...(s.habitatIncident||{}),stage};s.log=[stage===1?'서식지 조사 의뢰를 받았다. 오렌지 항구의 안내원을 찾아가자.':'연구원에게 현장 결과를 전했다. 조사단은 공사 일정과 포켓몬의 보금자리를 함께 살피기로 했다.'];}
+else if(b.action==='migrateToLumiose'){
+ if(s.combat||s.interior||s.district||s.expedition||s.unionHost||s.adventureCatchWindow||s.adventurePendingMoves?.length)throw Error('전투나 진행 중인 선택을 마친 뒤 미르시티로 이동하세요.');
+ if(!Number.isInteger(s.area)||s.area<0||s.area>=AREAS.length||!Number.isInteger(s.x)||!Number.isInteger(s.y))throw Error('기존 위치를 확인할 수 없습니다.');
+ s.zaLegacyLocation??={area:s.area,x:s.x,y:s.y,facing:s.facing,regionId:s.regionId,locationId:s.locationId};
+ Object.assign(s,{area:3,regionId:6,districtReturnRegion:s.regionId??1,district:'lumiose',x:11,y:13,facing:'up'});s.log=['기존 모험을 보존하고 미르시티에 도착했다.'];
+}
 else if(b.action==='quickVisitLumiose'){
  if(s.combat||s.interior||s.district||s.expedition||s.unionHost||s.zaQuickReturn)throw Error('혼자 필드에 있을 때 미르시티로 이동할 수 있습니다.');
  if(!Number.isInteger(s.area)||s.area<0||s.area>=AREAS.length||!Number.isInteger(s.x)||!Number.isInteger(s.y))throw Error('기존 위치를 확인할 수 없습니다.');
  s.zaQuickReturn={area:s.area,x:s.x,y:s.y,facing:s.facing,...(Object.hasOwn(s,'regionId')?{regionId:s.regionId}:{}),...(Object.hasOwn(s,'locationId')?{locationId:s.locationId}:{})};
  Object.assign(s,{area:3,regionId:6,districtReturnRegion:s.regionId??1,district:'lumiose',x:11,y:13,facing:'up'});s.log=['미르시티에 도착했다. 이전 위치는 돌아갈 때 복원된다. 지도와 일부 진행은 초안이다.'];
 }
-else if(b.action==='returnFromLumiose'){
- const q=s.zaQuickReturn;if(s.combat||s.interior||!['lumiose',null,undefined].includes(s.district)||s.expedition||s.unionHost||!q||!Number.isInteger(q.area)||q.area<0||q.area>=AREAS.length||!Number.isInteger(q.x)||!Number.isInteger(q.y))throw Error('미르시티 광장에서 이전 장소를 확인하세요.');
- const target={...s,area:q.area,district:null,interior:null,expedition:null,x:q.x,y:q.y},tile=fieldMap(target)[q.y]?.[q.x];if(!tile||['#','~','^','r','c','%','|','1','2','3','4','5','E','W','X'].includes(tile))throw Error('이전 위치가 막혀 돌아갈 수 없습니다. 기존 저장은 유지됩니다.');
- Object.assign(s,{area:q.area,x:q.x,y:q.y,facing:['up','down','left','right'].includes(q.facing)?q.facing:'down',district:null,interior:null});if(Object.hasOwn(q,'regionId'))s.regionId=q.regionId;else delete s.regionId;if(Object.hasOwn(q,'locationId'))s.locationId=q.locationId;else delete s.locationId;delete s.zaQuickReturn;delete s.districtReturnRegion;s.log=['미르시티 방문 전 장소로 돌아왔다.'];
-}
+else if(b.action==='returnFromLumiose'){throw Error('이전 지역으로는 이동할 수 없습니다. 기존 저장은 보존됩니다.');}
 else if(b.action==='visitLumiose'){if(s.combat||s.interior||s.district||s.expedition||s.area!==3||cell()!=='Q'||habitatStage(s)!==4)throw Error('항구의 조사단 안내원에게 배편을 문의하세요.');if(s.unionHost)throw Error('그룹 탐험을 나간 뒤 도시로 이동하세요.');s.districtReturnRegion=s.regionId??1;s.regionId=6;s.district='lumiose';s.x=11;s.y=13;s.facing='up';s.log=['미르시티 광장 지구에 도착했다. 남쪽 정류장에서 항구로 돌아갈 수 있다.'];}
 else if(b.action==='habitatClue'){if(s.combat||s.interior||s.expedition||s.area!==3||cell()!=='Q'||habitatStage(s)!==1)throw Error('오렌지 항구 안내원에게 현장 소식을 들으세요.');s.habitatIncident={...(s.habitatIncident||{}),stage:2};s.log=['무지개 숲의 현장 트레이너를 만나 상황을 확인하자.'];}
 else if(b.action==='survey'){if(s.combat||cell()!=='Q')throw Error('안내원 앞에서 조사해 주세요.');const result=advanceSurvey(s);reward=result.reward;s.log=[result.text];}

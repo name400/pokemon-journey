@@ -84,7 +84,7 @@ test('city district has reachable services and stores a compatible port position
  const inside={area:3,district:'lumiose',x:11,y:9,facing:'up',badges:['a']};const saved=storeAdventurePosition(inside,9);
  assert.deepEqual([saved.area,saved.x,saved.y],[3,5,9]);const restored=restoreAdventurePosition(structuredClone(saved),9);assert.deepEqual([restored.x,restored.y,restored.district],[11,9,'lumiose']);
  const oldWrite=restoreAdventurePosition({...saved,x:5,y:8},10);assert.equal(oldWrite.district,null);assert.deepEqual([oldWrite.x,oldWrite.y],[5,8]);assert.deepEqual(oldWrite.badges,['a']);
- const back=stepField({area:3,district:'lumiose',x:11,y:14},'down');assert.deepEqual([back.area,back.x,back.y,back.district,back.transitioned],[3,5,9,null,true]);
+ const back=stepField({area:3,district:'lumiose',x:11,y:14},'down');assert.equal(back.blocked,true);
 });
 test('garden and hotel connect to the plaza and preserve compatible positions',()=>{
  const garden=lumioseGardenMap(),hotel=hotelMap();

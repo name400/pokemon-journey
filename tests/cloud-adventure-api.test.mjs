@@ -2555,6 +2555,18 @@ test('Hotel Richissime north boulevard entrance preserves the lobby and returns 
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('legacy cloud field migrates to Lumiose while retaining saved assets and blocks return',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-permanent-migration-qa',displayName:'이전 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  seedWorld({...rawWorld(),area:1,x:3,y:8,facing:'right',regionId:2,locationId:17,badges:['gym1'],league:1});await get();
+  const mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet),bag=structuredClone(state.inventory),team=[...state.world.teamIds];
+  await call('migrateToLumiose');assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);
+  await get();assert.deepEqual(state.world.zaLegacyLocation,{area:1,x:3,y:8,facing:'right',regionId:2,locationId:17});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,bag);assert.deepEqual(state.world.badges,['gym1']);assert.equal(state.world.league,1);
+  await call('returnFromLumiose',{},409);await get();assert.equal(state.world.district,'lumiose');await call('move',{direction:'up'});await get();assert.equal(rawMon(id).walkSteps,(mon.walkSteps||0)+1);assert.deepEqual(rawMon(id).ivs,mon.ivs);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('direct Lumiose visit preserves existing field position, progress and Pokémon',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-direct-visit-qa',displayName:'도시방문검증'};
  try{
@@ -2562,7 +2574,7 @@ test('direct Lumiose visit preserves existing field position, progress and Poké
   seedWorld({...rawWorld(),area:1,x:3,y:8,facing:'right',regionId:2,locationId:17,badges:['gym1'],league:1,zaSide72Stage:1});await get();
   const mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet),bag=structuredClone(state.inventory),team=[...state.world.teamIds];
   await call('quickVisitLumiose');assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);await get();assert.equal(state.world.zaQuickReturn.area,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,bag);assert.equal(state.world.zaSide72Stage,1);
-  await call('returnFromLumiose');await get();assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y,state.world.facing,state.world.regionId,state.world.locationId],[1,null,3,8,'right',2,17]);assert.equal(state.world.zaQuickReturn,undefined);assert.deepEqual(state.world.badges,['gym1']);assert.equal(state.world.league,1);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,bag);
+  await call('returnFromLumiose',{},409);await get();assert.equal(state.world.district,'lumiose');assert.equal(state.world.zaQuickReturn.area,1);assert.deepEqual(state.world.badges,['gym1']);assert.equal(state.world.league,1);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,bag);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
