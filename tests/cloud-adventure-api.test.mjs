@@ -131,6 +131,20 @@ test('Mission 37 awards Zygardite and safely recovers legacy rewards',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 38 AZ gift is optional, unique and survives reload with a full party',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission38-az-gift-qa',displayName:'AZ 선물 테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,coins=state.wallet.coins,team=[id];for(let n=0;n<5;n++){const boxId=`mission38-reserve-${n}`,mon={...makeMon(25,10),boxId};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(boxId,globalThis.__adventureUser.userId,mon.id,JSON.stringify(mon),'qa',n+1);team.push(boxId);}
+  const room={...rawWorld(),area:3,district:'lumiose',interior:'hotel202',x:11,y:7,facing:'up',teamIds:team,zaMission37Complete:false,zaMission38Started:false};seedWorld(storeAdventurePosition(room,state.revision+1));await get();assert.equal(state.world.map[6][11],'.');await call('claimMission38Lucario',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:'hotel202',x:11,y:7,facing:'up',zaMission37Complete:true,zaMission38Started:true},state.revision+1));await get();assert.equal(state.world.map[6][11],'g',JSON.stringify({district:state.world.district,interior:state.world.interior,x:state.world.x,y:state.world.y,raw:rawWorld().zaMission38Started}));assert.equal(state.world.interaction.action,'claimMission38Lucario');const before=structuredClone(rawMon(id));await call('claimMission38Lucario');assert.equal(state.world.zaMission38AZLucarioClaimed,true);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.deepEqual(rawMon(id),before);const giftId=state.world.zaMission38AZLucarioId,gift=rawMon(giftId);assert.deepEqual([gift.speciesId,gift.level,gift.gender,gift.nature,gift.ability,gift.shiny,gift.item],[448,50,'M','hardy','steadfast',false,'']);assert.deepEqual(gift.ivs,{hp:31,atk:20,def:31,spa:20,spd:31,spe:20});assert.deepEqual(gift.moves,['파동탄','불릿펀치','바위깨기','방어']);assert.equal(gift.adventureOriginalTrainer,'Korrina');assert.equal(gift.adventureOriginalTrainerId,'912562');assert.ok(gift.teraType);assert.equal(state.world.map[6][11],'.');await get();assert.deepEqual(rawMon(giftId),gift);assert.ok(rawWorld().adventureDexSpecies.includes(448));await call('claimMission38Lucario',{},409);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,7);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Mission 38 legacy completed saves can receive the Lucario into an open party slot',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission38-az-gift-old-qa',displayName:'이전 저장 선물'};
+ try{await get();await call('start',{species:4});const old=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:'hotel202',x:11,y:7,facing:'up',zaMission37Complete:true,zaMission38Started:true,zaMission38Complete:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'claimMission38Lucario',JSON.stringify({district:state.world.district,interior:state.world.interior,x:state.world.x,y:state.world.y,raw:rawWorld().districtPosition}));await call('claimMission38Lucario');assert.deepEqual(state.world.teamIds,[old,state.world.zaMission38AZLucarioId]);assert.equal(state.world.activeId,old);assert.equal(state.world.zaMission38Complete,true);await get();await call('claimMission38Lucario',{},409);}finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 37 route opens in sequence and preserves the legacy layout',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-route-qa',displayName:'방어경로테스트'};
  try{
