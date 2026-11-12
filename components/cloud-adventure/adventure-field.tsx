@@ -538,7 +538,19 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     if(w.district==='lumiose-rouge-sector4'&&!w.interior){ctx.fillStyle=c==='#'?'#8a7472':c==='g'?'#a8c7cb':c===','?'#b8b2aa':(x+y)%2?'#e2d8ca':'#eee5d7';ctx.fillRect(px,py,tile,tile);if(c==='q'||c==='W'||c==='E'){ctx.fillStyle=c==='q'?'#715c73':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'상점가':'출구',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-north-rouge-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#827d7a':c==='b'?'#a68060':c==='n'?'#b59d78':(x+y)%2?'#ddd4c5':'#eee6d7';ctx.fillRect(px,py,tile,tile);if(c==='j'||c==='q'||c==='l'){ctx.fillStyle=c==='j'||c==='l'?'#936e40':'#759a77';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='j'?'승강기':c==='l'?'사다리':'옥상',px+tile/2,py+20);}return;}
     if(['lumiose-rouge-sector1','lumiose-rouge-sector1-roof','lumiose-rouge-sector3-roof'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#91857d':c==='g'?'#a7bc83':c==='w'?'#ded6cf':c==='b'?'#9b7658':c==='v'?'#7c9c61':c===';'?'#c89575':c===','?'#b9b1a3':(x+y)%2?'#e1dacb':'#ebe5d8';ctx.fillRect(px,py,tile,tile);if(c==='g')sprite('grassDetail',px,py);if(c==='j'||c==='E'||c==='X'||c==='t'||c==='o'||c==='d'||(c==='l'&&w.district==='lumiose-rouge-sector3-roof')||(c==='q'&&w.district==='lumiose-rouge-sector3-roof')){ctx.fillStyle=c==='o'||c==='d'?'#716589':c==='t'?'#d8b64f':c==='j'?(w.zaSide04Won?'#c7a75f':'#9d6e55'):'#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'르 예':c==='l'?'사다리':c==='j'?'승강기':c==='t'?'TM':c==='o'?'SBC':c==='d'?'은행':'출구',px+tile/2,py+20);}return;}
-    if(w.district==='lumiose-zone1-high-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#756f68':(x+y)%2?'#c4b5a1':'#d1c4b2';ctx.fillRect(px,py,tile,tile);if(c==='j'){ctx.fillStyle='#8f6747';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('사다리',px+tile/2,py+20);}return;}
+    if(w.district==='lumiose-zone1-high-roof'&&!w.interior){
+     // Second roof and its ladder are confirmed; roof outline and materials are draft.
+     if(c==='#'){
+      ctx.fillStyle=(x+y)%2?'#899787':'#92a08e';ctx.fillRect(px,py,tile,tile);
+      if(y>=11&&x>=3&&x<=19){ctx.fillStyle='#a79c8b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#c7bba7';ctx.fillRect(px,py,tile,3);}
+     }else{
+      roofPaving(px,py,x,y);
+      if(c==='j'){
+       ctx.fillStyle='#6b5041';ctx.fillRect(px+7,py+2,4,tile-4);ctx.fillRect(px+tile-11,py+2,4,tile-4);
+       ctx.fillStyle='#e1c18d';for(let j=6;j<tile-4;j+=6)ctx.fillRect(px+9,py+j,tile-18,3);
+      }
+     }return;
+    }
     if(w.district==='lumiose-vert-sector9'&&!w.interior){ctx.fillStyle=c==='#'?'#97a18c':c===','?'#bbb9aa':c==='k'?'#a4c58e':(x+y)%2?'#e0ddcb':'#ebe6d4';ctx.fillRect(px,py,tile,tile);if(c==='~')canalWater(px,py,x,y);if(c===':'){ctx.fillStyle='#b7aa94';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6ddcd';for(let i=4;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}if(c==='W'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-zone3'&&w.zaZone3TowerUpper&&!w.interior){
      // The garden building has an accessible roof. Its footprint and stone
@@ -558,7 +570,18 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
       ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('TM',px+tile/2,py+20);
      }return;
     }
-    if(w.district==='lumiose-zone1-courtyard'&&!w.interior){ctx.fillStyle=c==='#'?'#8f9a86':c==='g'?'#87b273':(x+y)%2?'#ddd6bd':'#e8e1ca';ctx.fillRect(px,py,tile,tile);if(c==='g')sprite('grassDetail',px,py);if(c==='E'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(w.district==='lumiose-zone1-courtyard'&&!w.interior){
+     // Building courtyard and its connection are retained; planting and paving are approximate.
+     if(c==='#'){
+      ctx.fillStyle='#819088';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#b1bbb0';ctx.fillRect(px+1,py+1,tile-2,tile-4);ctx.fillStyle='#72827a';ctx.fillRect(px,py+tile-4,tile,4);
+      if(x>0&&x<22&&y>1&&y<15){ctx.fillStyle='#788e89';ctx.fillRect(px+8,py+7,tile-16,tile-14);ctx.fillStyle='#cfdbcc';ctx.fillRect(px+tile/2-1,py+8,2,tile-16);}
+     }else if(c==='g'){
+      ctx.fillStyle='#8eb676';ctx.fillRect(px,py,tile,tile);sprite('grassDetail',px,py);
+     }else{
+      ctx.fillStyle=(x+y)%2?'#d7d0bc':'#e7dfcc';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#bcb5a3';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);
+      if(c==='E'){ctx.fillStyle='#879a86';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#e6e4cd';ctx.fillRect(px+tile-9,py+5,3,tile-10);}
+     }return;
+    }
     if(w.district==='lumiose-zone1-roof'&&!w.interior){
      // Ladder access and two roof levels are documented; the 2D footprint,
      // parapet shape and paving are approximations of the existing map.
@@ -698,7 +721,6 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      // Zone 1's east–west street continues through the ordinary floor on
      // either side of the encounter grass. Its exact width is provisional.
      if(w.district==='lumiose-zone1'&&c==='%'){ctx.fillStyle=y===5?'#8e8275':'#d3c1a8';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===5?'#b4a08a':'#77918a';ctx.fillRect(px+4,py+5,tile-8,tile-10);if(y===6){ctx.fillStyle=x%2?'#e7d8ba':'#b16c5e';ctx.fillRect(px+2,py+2,tile-4,5);}}
-     if(w.district==='lumiose-zone1'&&(c==='.'||c===',')&&y===8){ctx.fillStyle='#aab29d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d8d5c3';ctx.fillRect(px+3,py+tile-4,tile-6,2);}
      if(w.district==='lumiose-vert-plaza'&&c===','){ctx.fillStyle=(x+y)%2?'#d0c4af':'#dbd0bc';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#eee4d2';ctx.fillRect(px+2,py+tile-3,tile-4,1);}
      if(w.district==='lumiose-vert-plaza'&&c==='%'){ctx.fillStyle=y===2||y===12?'#917f71':'#c4b5a1';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2||y===12?'#b2a08c':'#79918a';ctx.fillRect(px+5,py+6,tile-10,tile-12);}
      if(w.district==='lumiose-zone3'&&c==='.'){
@@ -798,7 +820,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
        ctx.fillStyle='#a49b89';ctx.fillRect(px+tile*.25,py+tile-5,tile*.5,4);
       }
      }
-     if(c==='l'&&w.district==='lumiose-zone1'){ctx.fillStyle='#8f6747';ctx.fillRect(px+5,py+3,tile-10,tile-6);}
+     if(c==='l'&&w.district==='lumiose-zone1'){ctx.fillStyle='#73503a';ctx.fillRect(px+7,py+3,4,tile-6);ctx.fillRect(px+tile-11,py+3,4,tile-6);ctx.fillStyle='#e1c18d';for(let j=7;j<tile-5;j+=6)ctx.fillRect(px+9,py+j,tile-18,3);}
      if(c==='i'&&w.district==='lumiose-zone3'){
       ctx.fillStyle='#bbb8a8';ctx.fillRect(px+4,py+8,tile-8,tile-10);ctx.fillStyle='#f5efdf';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#858d89';ctx.fillRect(px+4,py+4,tile-8,4);ctx.fillRect(px+9,py+1,tile-18,4);ctx.fillStyle='#617b76';ctx.fillRect(px+tile/2-3,py+12,6,12);ctx.fillStyle='#ded7c5';ctx.fillRect(px+4,py+tile-6,tile-8,3);
      }
