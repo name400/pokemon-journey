@@ -3740,6 +3740,31 @@ test('catching the missing Zone 20 species completes its research task',async()=
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
+test('Zone 20 habitat encounters can be caught and restored through the API',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;
+ try{
+  const {ZONE20_HABITAT_POOLS}=await import('../lib/cloud-adventure/adventure-mission42.mjs');
+  const samples=[
+   {habitat:'grass',species:1,x:9,y:10,direction:'right'},
+   {habitat:'waterside',species:7,x:16,y:9,direction:'right'},
+   {habitat:'dry',species:498,x:6,y:10,direction:'left'},
+   {habitat:'ruins',species:306,x:6,y:5,direction:'left'},
+  ];
+  for(const sample of samples){
+   globalThis.__adventureUser={userId:`zone20-habitat-${sample.habitat}-qa`,displayName:'구역20 서식지'};
+   globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:sample.x,y:sample.y,facing:sample.direction,zaRoyaleRank:'A',zaMission38Complete:true,adventureBalls:{masterball:1}},state.revision+1));
+   globalThis.__adventureRandom=()=>.999;await get();
+   const pool=ZONE20_HABITAT_POOLS[sample.habitat],rolls=[.999,0,(pool.indexOf(sample.species)+.5)/pool.length,.999];
+   globalThis.__adventureRandom=()=>rolls.shift()??.999;
+   await call('move',{direction:sample.direction});assert.equal(rawWorld().encounter?.speciesId,sample.species,`${sample.habitat}: ${JSON.stringify({x:state.world.x,y:state.world.y,log:state.world.log,battle:!!state.battle})}`);
+   await call('ball',{ball:'masterball'});await get();
+   assert.ok(rawWorld().adventureDexSpecies.includes(sample.species),sample.habitat);
+   assert.ok(state.box.some(mon=>mon.speciesId===sample.species),sample.habitat);
+  }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
+
 test('Zone 19 missing species can be caught and complete research after reload',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;
  globalThis.__adventureUser={userId:'zone19-research-completion-qa',displayName:'구역19 조사'};
