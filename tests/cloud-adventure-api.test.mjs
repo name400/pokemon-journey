@@ -3381,3 +3381,18 @@ test('mega research sync and ranked exchanges persist real owned stones once',as
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:18,y:10,facing:'down',zaRoyaleRank:'E'},state.revision+1));await get();await call('exchangeMegaShard',{item:'excadrite'});assert.equal(state.world.zaMegaShards,640);assert.equal(state.inventory.excadrite,1);assert.ok(rawWorld().zaResearchMegaStones.includes('excadrite'));await get();assert.ok(rawWorld().zaResearchMegaStones.includes('excadrite'));assert.equal(rawMon(id).id,152);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('zone 9 crystals persist rewards and cooldown without changing old party or wallet',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone9-crystal-qa',displayName:'결정 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],mon=rawMon(id),wallet=structuredClone(state.wallet);
+  seedMon(id,{...mon,moves:['몸통박치기']});
+  const place=async(extra)=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,zaZone9Upper:true,zaRooftopCrystalCleared:true,x:4,y:3,facing:'down',...extra},state.revision+1));await get();};
+  await place({zaMegaShards:0});assert.equal(state.world.interaction.action,'smashZone9Crystal');globalThis.__adventureRandom=()=>0;
+  const revision=state.revision;await call('smashZone9Crystal');assert.equal(rawWorld().zaMegaShards,1);assert.equal(rawWorld().zaResearchCrystalBreaks,1);const stamp=rawWorld().zaZone9CrystalTimes['4,3'];const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'smashZone9Crystal',revision})}));assert.equal(replay.status,409);await get();assert.equal(rawWorld().zaZone9CrystalTimes['4,3'],stamp);await call('smashZone9Crystal',{},409);
+  await place({x:6,y:3});await call('smashZone9Crystal');assert.equal(rawWorld().zaMegaShards,7);assert.equal(rawWorld().zaResearchCrystalBreaks,2);
+  await place({x:4,y:3,zaZone9CrystalTimes:{...rawWorld().zaZone9CrystalTimes,'4,3':Date.now()-600001}});await call('smashZone9Crystal');assert.equal(rawWorld().zaMegaShards,8);assert.equal(rawWorld().zaResearchCrystalBreaks,3);
+  await place({x:4,y:6,zaMegaShards:9999});await call('smashZone9Crystal',{},409);assert.equal(rawWorld().zaResearchCrystalBreaks,3);assert.equal(rawWorld().zaZone9CrystalTimes['4,6'],undefined);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawMon(id).id,mon.id);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
