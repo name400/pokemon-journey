@@ -36,3 +36,9 @@ test('Rouge Plaza driver and new destinations respect mission gates',async()=>{
  const early={area:3,district:'lumiose-zone3',interior:null,x:1,y:5,facing:'left',zaMission04Complete:true,zaRoyaleRank:'Y'};assert.equal(rougeTaxiUnlocked(early),false);assert.equal(fieldMap(early)[5][0],'#');assert.ok(!taxiDestinations(early).some(p=>p.id==='plaza-rouge'));
  const later={...early,zaRoyaleRank:'C',zaMission30Started:true};assert.equal(fieldMap(later)[5][0],'n');assert.ok(taxiAvailable(later,{tile:'n',x:0,y:5}));assert.ok(taxiDestinations(later).some(p=>p.id==='plaza-rouge'));assert.ok(fieldDialogue(later).actions.some(p=>p.action==='taxi-cafe-woof'));
 });
+
+test('Hibernal Center registers and permits map travel only at the center',async()=>{
+ const {centerAt,recordCenter,registeredCenters,taxiDestinations,canMapTravel}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const s={area:3,district:'lumiose-mission33-alley',interior:null,x:5,y:3,facing:'down',zaMission31Stage:3,zaRoyaleRank:'B',teamIds:['kept']};assert.equal(fieldMap(s)[3][5],'H');assert.equal(centerAt(s,{tile:'H',x:5,y:3}).id,'hibernal');assert.equal(recordCenter(s,{tile:'H',x:5,y:3}),true);assert.ok(registeredCenters(s).some(c=>c.id==='hibernal'));assert.ok(taxiDestinations(s).some(c=>c.id==='hibernal'));assert.equal(canMapTravel(s),true);assert.equal(canMapTravel({...s,x:5,y:11}),false);assert.equal(canMapTravel({...s,combat:{}}),false);
+ const restored=restoreAdventurePosition(storeAdventurePosition(s,99),99);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaMission31Stage,restored.teamIds],['lumiose-mission33-alley',5,3,3,['kept']]);
+});
