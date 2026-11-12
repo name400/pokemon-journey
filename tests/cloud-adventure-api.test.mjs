@@ -1029,6 +1029,18 @@ test('restaurant course state persists, blocks between-course healing and pays o
  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(29999,'adventure-qa');seedMon(id,strong);await get();await call('sushiRepeat',{},409);await get();assert.equal(state.wallet.coins,29999);assert.equal(state.world.zaSushiRun,undefined);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(30000,'adventure-qa');await get();await call('sushiRepeat');assert.equal(state.wallet.coins,0);for(let course=0;course<5;course++){if(course)await call('sushiNext');await battle();}assert.equal(state.world.zaSushiRewardPending,'repeat');const beforeRepeat=structuredClone(state.inventory);await call('claimSushiReward');assert.equal(state.inventory.bignugget,(beforeRepeat.bignugget||0)+2);assert.equal(state.inventory.seedofmasteryza,(beforeRepeat.seedofmasteryza||0)+1);await call('claimSushiReward',{},409);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(30000,'adventure-qa');seedMon(id,strong);await get();await call('sushiRepeat');await call('forfeit');assert.equal(state.world.zaSushiRun,undefined);assert.equal(state.world.zaSushiRewardPending,undefined);assert.equal(state.world.district,'lumiose');
 });
 
+test('mission 11 companion restores the party before and after Slowbro',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission11-companion-healing-qa',displayName:'동료회복검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  const strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{psystrike:0},status:'화상',hp:1};seedMon(id,strong);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:17,y:11,facing:'up',zaMission10Stage:10,zaMission11Complete:false,zaRoyaleRank:'F'},state.revision+1));
+  await get();await call('battleMission11Slowbro');assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});
+  await get();assert.ok(state.battle);const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p1.pokemon[0].hp=10;sim.p1.pokemon[0].setStatus('par');sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission11Complete,true);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});
+  await get();assert.equal(state.world.zaMission11RewardPending,true);assert.equal(rawMon(id).hp,rawMon(id).maxHp);await call('battleMission11Slowbro',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('mission 10 companion battle requires Absol and advances on either result',async()=>{
  globalThis.__adventureUser={userId:'adventure-qa',displayName:'동료검증'};await get();if(!state.world)await call('start',{species:1});const id=state.world.activeId;
  const strong={...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);
