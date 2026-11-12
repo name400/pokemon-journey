@@ -4794,3 +4794,10 @@ test('Mission 20 sewer crystals grant shards atomically without blocking progres
   await place({x:9,zaMission20Crystals:[],zaMegaShards:177});globalThis.__adventureRandom=()=>.999;await call('mission20BreakCrystal');assert.equal(rawWorld().zaMegaShards,180);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:18,y:10,facing:'down',zaShardExchangeUnlocked:true},state.revision+1));await get();await call('exchangeMegaShard',{item:'pidgeotite'});assert.equal(rawWorld().zaMegaShards,0);assert.equal(state.inventory.pidgeotite,1);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Infinite Royale Floette aura turn survives AI scoring and reload',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'infinite-floette-aura-qa',displayName:'플라엣테 전투 복원'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,player={...makeMon(150,100),boxId:id,moves:['방어'],pp:{}},foe={...makeMon(10061,72),boxId:'npc-infinite-rival-5',ability:'fairyaura',moves:['파멸의빛'],item:'floettite',pp:{}};seedMon(id,player);const combat=createCombat([player],[foe],{heals:0,strategy:'balanced'}),initialPP=combat.teams[1][0].pp.lightofruin;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaMission39Started:true,zaInfiniteSecondWon:true,zaInfiniteRewardWins:14,zaInfinitePoints:50000,combat,trainer:{id:'infinite-rival',name:'팀 MZ 동료'},encounter:null},state.revision+1));await get();const revision=state.revision;await call('battle',{command:{type:'move',move:'방어'}});assert.ok(state.revision>revision);assert.ok(state.battle.teams[1][0].pp.lightofruin<initialPP);await get();assert.ok(state.battle);assert.equal(state.battle.teams[1][0].speciesId,670);assert.deepEqual(state.world.teamIds,[id]);assert.equal(state.world.zaInfiniteRewardWins,14);await call('battle',{command:{type:'move',move:'방어'}});await get();assert.deepEqual(state.world.teamIds,[id]);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
