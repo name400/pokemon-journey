@@ -119,7 +119,7 @@ test('one-boss companion battle preserves player switches and handles defeat',as
  assert.equal(fight.ended,true);assert.equal(fight.winner,1);assert.deepEqual(fight.owners.player,['lead','reserve']);assert.deepEqual(fight.owners.ally,['ally']);assert.equal(fight.teams[3].length,0);
 });
 
-test('mission 16 and 21 companion rosters follow the original starter',async()=>{
+test('mission 16, 21 and 29 companion rosters follow the original starter',async()=>{
  const {rogueCompanionTeam}=await import('../lib/cloud-adventure/adventure-companion-rogue.mjs');
  for(const [choice,ids] of Object.entries({grass:[160,500,310],fire:[154,160,310],water:[500,154,310]})){
   const team=rogueCompanionTeam('beedrill',choice);assert.deepEqual(team.map(mon=>mon.speciesId),ids);assert.deepEqual(team.map(mon=>mon.level),[36,36,37]);assert.ok(team.every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
@@ -127,6 +127,16 @@ test('mission 16 and 21 companion rosters follow the original starter',async()=>
  for(const [choice,ids] of Object.entries({grass:[160,500,310],fire:[154,160,310],water:[500,154,310]})){
   const team=rogueCompanionTeam('mawile',choice);assert.deepEqual(team.map(mon=>mon.speciesId),ids);assert.deepEqual(team.map(mon=>mon.level),[43,43,44]);assert.ok(team.every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
  }
- for(const key of ['barbaracle','ampharos'])assert.ok(rogueCompanionTeam(key).every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
+ for(const [choice,ids] of Object.entries({grass:[160,500,310],fire:[154,160,310],water:[500,154,310]})){
+  const team=rogueCompanionTeam('venusaur',choice);assert.deepEqual(team.map(mon=>mon.speciesId),ids);assert.deepEqual(team.map(mon=>mon.level),[50,50,50]);assert.ok(team.every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
+ }
+ for(const key of ['barbaracle','ampharos','froslass','altaria'])assert.ok(rogueCompanionTeam(key).every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
  assert.throws(()=>rogueCompanionTeam('beedrill','__proto__'));assert.throws(()=>rogueCompanionTeam('__proto__'));
+});
+
+test('companion avoids a spread move that would hit the player when a safe attack exists',async()=>{
+ const {createCompanionBossSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player={...makeMon(129,60),boxId:'player',moves:['튀어오르기'],pp:{}},ally={...makeMon(120,60),boxId:'ally',moves:['파도타기','물의파동'],pp:{}},boss={...makeMon(129,100),boxId:'boss',moves:['튀어오르기'],pp:{}};
+ const before=createCompanionBossSnapshot([player],[ally],boss),next=playMission10MultiTurn(before,{type:'move',move:'splash'});
+ assert.equal(next.teams[0][0].hp,before.teams[0][0].hp);assert.ok(next.log.some(line=>line.includes('물의파동')));assert.ok(next.log.every(line=>!line.includes('파도타기')));
 });
