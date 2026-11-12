@@ -1163,6 +1163,17 @@ test('old in-progress Infinite Royale field battle keeps its visit roster',async
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
 });
 
+test('Infinite Royale center clerk heals once after victory and again on a new visit',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'infinite-field-heal-qa',displayName:'무한 로열 회복'};
+ try{globalThis.__adventureTime={period:'night',hour:22};await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),player={...makeMon(150,100),boxId:id,moves:['파동탄'],pp:{}};seedMon(id,player);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:12,y:11,facing:'down',zaRoyaleRank:'A',zaMission39Started:true,zaInfiniteRewardStreak:0,zaInfiniteFieldTier:0,zaInfiniteSessionWins:[],zaInfinitePoints:0},state.revision+1));await get();await call('move',{direction:'down'});assert.deepEqual([state.world.x,state.world.y],[12,12]);await call('face',{direction:'up'});assert.match(state.world.interaction.name,/Ilyana/);await call('royaleInfiniteHeal',{},409);await call('royaleInfiniteExtra10');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[531,199,702]);
+  const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaInfinitePoints,5000);assert.ok(state.world.zaInfiniteSessionWins.includes('infinite-standard-ilyana'));
+  seedMon(id,{...player,hp:1,status:'brn',pp:{'파동탄':0}});await get();assert.equal(state.world.interaction.action,'royaleInfiniteHeal');globalThis.__adventureTime={period:'day',hour:12};await call('royaleInfiniteHeal',{},409);globalThis.__adventureTime={period:'night',hour:22};await call('royaleInfiniteHeal');assert.equal(state.box.find(m=>m.boxId===id).hp,player.maxHp);assert.equal(state.box.find(m=>m.boxId===id).status,null);await get();await call('royaleInfiniteHeal',{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:11,y:10,facing:'up'},state.revision+1));await get();await call('enterRoyaleZone');assert.equal(rawWorld().zaInfiniteFieldHealed,false);assert.equal(rawWorld().zaInfinitePoints,5000);assert.deepEqual(rawWorld().zaInfiniteSessionWins,[]);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',x:12,y:12,facing:'up',zaInfiniteFieldTier:1},state.revision+1));await get();assert.match(state.world.interaction.name,/Maëlle/);await call('royaleInfiniteExtra10');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[715,681,531]);assert.equal(state.battle.teams[1][2].item,'audinite');await get();assert.equal(state.battle.teams[1][2].item,'audinite');await call('forfeit');assert.equal(rawWorld().zaInfiniteFieldHealed,false);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
+
 test('Infinite Royale random opponent sets survive save and retry',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'infinite-random-teams-qa',displayName:'무한로열추첨상대검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId;
