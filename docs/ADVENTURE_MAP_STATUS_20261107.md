@@ -548,3 +548,9 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 4 남쪽 건물 표현
 
 [묘지 자료](https://bulbapedia.bulbagarden.net/wiki/Dormez_Bien_Cemetery)는 직사각형 묘지를, [구역 자료](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/wild-zones/)는 묘지 안 길과 건물을 설명한다. 기존 차단된 남쪽 건물에 지붕과 정면을 구분해 그렸다. 건물의 실제 형태·크기와 묘비의 세부 좌표는 초안이며 충돌·조우는 바꾸지 않았다.
+
+### 마젠타 광장 오벨리스크와 미션 3 동료 이동
+
+[마젠타 광장 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Plaza)는 원형 광장의 중앙 오벨리스크와 측면 분수를 설명한다. 기존 중심 지형 안에서 오벨리스크의 앞·옆면과 받침을 그렸다. 기념물의 크기와 주변 광장·분수의 정확한 좌표는 초안이며 지형·조우·저장은 바꾸지 않았다.
+
+미션 3 동료는 플레이어가 밟았던 직전 칸을 따라가며 사다리와 낙하 후에도 착지 근처에 유지된다. 같은 층에서 유효한 기존 통행 칸을 사용하고 충돌은 일으키지 않아 되돌아갈 수 있다. 동료의 독립적인 경로 탐색, 원작의 정확한 행동과 충돌은 아직 미구현이다.

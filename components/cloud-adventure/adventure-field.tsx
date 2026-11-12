@@ -16,7 +16,7 @@ import {ZONE9_VISIBLE} from '@/lib/cloud-adventure/adventure-zone9.mjs';
 import {ZONE8_VISIBLE} from '@/lib/cloud-adventure/adventure-zone8.mjs';
 import {useEffect,useRef,useState} from 'react';
 import manifest from '@/data/cloud-town-tiles.json';
-import {wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,magentaSewerMonsters,cloudNpcTile} from '@/lib/cloud-adventure/adventure-world.mjs';
+import {wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,magentaSewerMonsters,cloudNpcTile,walkable} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {adventureAvatarRows} from '@/lib/cloud-adventure/adventure-avatar.mjs';
 import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel,zone11Visible} from '@/lib/cloud-adventure/adventure-zone11.mjs';
@@ -264,7 +264,12 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      // visual ring independent of the tiles that govern encounters.
      const r=Math.sqrt(((x-11)/9)**2+((y-8)/6)**2);
      ctx.fillStyle=c==='#'?'#787373':r<=.48?'#a9bc8f':r<=.94?'#e4dac7':r<=1.12?'#c5baa8':(x+y)%2?'#d8cbb8':'#e4d8c5';ctx.fillRect(px,py,tile,tile);
-     if(r>.88&&r<1.12&&c!== '#'&&c!=='X'&&c!=='W'){ctx.fillStyle='#eee5d6';ctx.fillRect(px+2,py+tile-4,tile-4,2);}if(c==='~'){if(x===19&&y===5){ctx.fillStyle='#a39a8f';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#79b8c7';ctx.fillRect(px+5,py+6,tile-10,tile-12);ctx.fillStyle='#e8f4ef';ctx.fillRect(px+14,py+8,4,8);}else canalWater(px,py,x,y);}if(x===11&&y>=7&&y<=9){ctx.fillStyle='#bfb7aa';ctx.fillRect(px+6,py,tile-12,tile);ctx.fillStyle='#eee7d9';ctx.fillRect(px+10,py,tile-20,tile);if(y===7){ctx.fillStyle='#d7cfc0';ctx.fillRect(px+12,py+2,tile-24,8);}if(y===9){ctx.fillStyle='#8f857b';ctx.fillRect(px+2,py+tile-7,tile-4,7);}}if(c==='g'){ctx.fillStyle='#668e5c';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}if(c==='j'){ctx.fillStyle='#896b55';ctx.fillRect(px+5,py+4,tile-10,tile-8);}return;}
+     if(r>.88&&r<1.12&&c!== '#'&&c!=='X'&&c!=='W'){ctx.fillStyle='#eee5d6';ctx.fillRect(px+2,py+tile-4,tile-4,2);}if(c==='~'){if(x===19&&y===5){ctx.fillStyle='#a39a8f';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#79b8c7';ctx.fillRect(px+5,py+6,tile-10,tile-12);ctx.fillStyle='#e8f4ef';ctx.fillRect(px+14,py+8,4,8);}else canalWater(px,py,x,y);}if(x===11&&y>=7&&y<=9){
+      // Monument silhouette and pedestal use only the existing landmark footprint.
+      if(y===7){ctx.fillStyle='#c3b7a6';ctx.beginPath();ctx.moveTo(px+tile/2,py+1);ctx.lineTo(px+tile-7,py+tile);ctx.lineTo(px+7,py+tile);ctx.closePath();ctx.fill();ctx.fillStyle='#eee5d7';ctx.beginPath();ctx.moveTo(px+tile/2,py+3);ctx.lineTo(px+tile/2,py+tile);ctx.lineTo(px+9,py+tile);ctx.closePath();ctx.fill();}
+      if(y===8){ctx.fillStyle='#b0a494';ctx.fillRect(px+7,py,tile-14,tile);ctx.fillStyle='#e7ddcd';ctx.fillRect(px+9,py,tile/2-9,tile);ctx.fillStyle='#958879';ctx.fillRect(px+tile/2+2,py+8,3,13);}
+      if(y===9){ctx.fillStyle='#9a8e7f';ctx.fillRect(px+5,py,tile-10,tile-9);ctx.fillStyle='#d9d0c0';ctx.fillRect(px+7,py,tile-14,tile-13);ctx.fillStyle='#8b8074';ctx.fillRect(px+2,py+tile-9,tile-4,9);ctx.fillStyle='#e2d8c6';ctx.fillRect(px+3,py+tile-8,tile-6,3);}
+     }if(c==='g'){ctx.fillStyle='#668e5c';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}if(c==='j'){ctx.fillStyle='#896b55';ctx.fillRect(px+5,py+4,tile-10,tile-8);}return;}
     if(w.district==='lumiose-zone11'&&!w.interior){
      // The Saison Canal separates the banks. Beach and path details are a
      // visual approximation; the underlying collision and encounter tiles stay intact.
@@ -546,7 +551,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    // The server saves the companion’s last step; it never blocks the player.
    if(w.zaMission03Stage===2&&w.zaMission03DetourRequired===true&&!w.interior&&['lumiose','lumiose-vert-street-route','lumiose-station-alley','lumiose-station-roof'].includes(w.district)){
     const p=w.zaMission03CompanionPosition;
-    if(p?.district===w.district&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&!(p.x===w.x&&p.y===w.y)&&['.',','].includes(w.map[p.y]?.[p.x]))trainer(p.x,p.y,'#a17d72',p.facing||'down',walking);
+    if(p?.district===w.district&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&!(p.x===w.x&&p.y===w.y)&&walkable(w.map[p.y]?.[p.x]))trainer(p.x,p.y,'#a17d72',p.facing||'down',walking);
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
    if(w.district==='lumiose-zone1'&&!w.interior&&[4,5].includes(w.zaMission03Stage)){const isFletchling=w.zaMission03Stage===4,x=isFletchling?8:14,y=6,px=x*tile,py=y*tile,img=fieldImages[isFletchling?661:659];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#668c80';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(isFletchling?'화살꼬빈':'파르빗',px+tile/2,py+20);}}
