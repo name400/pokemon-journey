@@ -63,3 +63,12 @@ test('extended preview is limited to quiet city pavement and server batches of e
  const group=createCloudMoveBuffer({...w,inUnion:true},first,'right');for(let i=0;i<4;i++)assert.ok(group.push());assert.equal(group.push(),null);
  const alert=createCloudMoveBuffer({...w,zaWildAlphaAlert:true},{...first,predictedHazard:true},'right');for(let i=0;i<4;i++)assert.ok(alert.push());assert.equal(alert.push(),null);
 });
+
+
+test('wild zone 1 extends only road preview; grass, moving wildlife and group paths stay bounded',async()=>{
+ const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const road={area:3,district:'lumiose-zone1',interior:null,x:2,y:8,facing:'right'},first=predictCloudStep(road,'right');const extended=createCloudMoveBuffer(road,first,'right');for(let i=0;i<8;i++)assert.ok(extended.push());assert.equal(extended.push(),null);assert.equal(extended.matches({world:{...road,...first}}),true);assert.equal(extended.matches({world:{...road,...first},battle:{}}),false);
+ const grass={...road,x:16,y:8},g=predictCloudStep(grass,'up',{allowGrass:true}),bounded=createCloudMoveBuffer(grass,g,'up');for(let i=0;i<4;i++)assert.ok(bounded.push());assert.equal(bounded.push(),null);
+ const group=createCloudMoveBuffer({...road,inUnion:true},first,'right');for(let i=0;i<4;i++)assert.ok(group.push());assert.equal(group.push(),null);
+ const zone2={area:3,district:'lumiose-zone2',interior:null,x:10,y:4,facing:'left'},other=predictCloudStep(zone2,'left',{allowGrass:true,allowHazard:true});assert.equal(other.predictedHazard,true);const wildlife=createCloudMoveBuffer(zone2,other,'left');for(let i=0;i<4;i++)assert.ok(wildlife.push());assert.equal(wildlife.push(),null);
+});
