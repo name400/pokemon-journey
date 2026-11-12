@@ -2235,6 +2235,19 @@ test('Mission 23 lower rooftop persists, returns to scaffolding and reaches Amph
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('research level 8 Whirlpool TM survives reload and only teaches compatible party members',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-tm070-qa',displayName:'연구 기술머신'};
+ try{
+  await get();await call('start',{species:158});const id=state.world.activeId,mon={...makeMon(158,20),moves:['몸통박치기','울음소리','전광석화','방어'],pp:{tackle:3,growl:7,quickattack:0,protect:4}};seedMon(id,mon);
+  await get();await call('claimResearchTm',{level:8},409);await call('teachResearchTm',{level:8,slot:1},409);
+  seedWorld({zaResearchTrainerWins:100,zaResearchEvolutions:3,zaResearchItemEvolutions:10,zaResearchActivities:{fossil:3,cafe:3,bench:3},adventureDexSpecies:[152,153,154,498,499]});await get();
+  await call('claimResearchTm',{level:8});await get();assert.ok(state.world.zaResearchRewards.includes(8));await call('claimResearchTm',{level:8},409);
+  await call('teachResearchTm',{level:8,slot:1});assert.deepEqual(rawMon(id).moves,['몸통박치기','바다회오리','전광석화','방어']);assert.equal(rawMon(id).pp.tackle,3);assert.equal(rawMon(id).pp.quickattack,0);await get();assert.equal(state.box.find(m=>m.boxId===id).moves[1],'바다회오리');await call('teachResearchTm',{level:8,slot:0},409);
+  seedMon(id,mon);await get();await call('teachResearchTm',{level:8,slot:0});assert.equal(rawMon(id).moves[0],'바다회오리');
+  const incompatible={...makeMon(152,20),moves:['몸통박치기']};seedMon(id,incompatible);await get();await call('teachResearchTm',{level:8,slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 23 TM089 is reusable for verified species and preserves existing moves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-tm089-qa',displayName:'기술머신 검증'};
  try{
