@@ -2807,3 +2807,14 @@ test('Mission 4 Zach promotion is reachable at the South Boulevard taxi lot',asy
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:11,y:13,facing:'up',zaRoyaleRank:'Z',zaMission04Started:undefined,zaMission05Stage:undefined,zaJoseeRequired:undefined},state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();await walkTo('T');assert.equal(state.world.interaction.action,'royaleZach');await call('royaleZach');assert.equal(state.world.trainer.id,'royale-z-zach');
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
 });
+
+test('Mission 8 finds Lida in Vert Sector 5 and preserves the older garden route',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission08-lida-vert5',displayName:'Lida 안뜰'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:'hotel',x:11,y:6,facing:'up',zaRoyaleRank:'W',zaMission08Started:true,zaLidaStage:0,zaLidaRequired:true},state.revision+1));await get();await call('takeLidaBag');await get();assert.equal(state.world.zaLidaStage,1);assert.match(state.world.log.join(' '),/베르 5/);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-plaza',interior:null,x:15,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-vert-sector5');await walkTo('n');assert.equal(state.world.interaction.action,'battleLida');const coins=state.wallet.coins;await call('battleLida');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[692,22],[582,22],[120,23]]);await call('forfeit');await get();assert.equal(state.world.zaLidaStage,1);assert.equal(state.wallet.coins,coins);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector5',interior:null,x:5,y:5,facing:'up'},state.revision+1));await get();await call('battleLida');await battle();await get();assert.equal(state.world.zaLidaStage,2);assert.equal(state.world.zaLidaRequired,false);assert.equal(state.wallet.coins,coins+1288);assert.deepEqual(state.world.teamIds,team);await call('battleLida',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-garden',interior:null,x:11,y:6,facing:'up',zaLidaStage:1,zaLidaRequired:true},state.revision+1));await get();await walkTo('Q');assert.ok(state.world.interaction.actions.some(a=>a.action==='battleLida'));await call('battleLida');assert.equal(state.world.trainer.id,'royale-story-lida');
+ }finally{globalThis.__adventureUser=oldUser;}
+});

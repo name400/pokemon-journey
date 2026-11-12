@@ -630,10 +630,10 @@ else if(b.action==='battleNaveen'){
 }
 else if(b.action==='takeLidaBag'){
  if(s.combat||s.district!=='lumiose'||s.interior!=='hotel'||cell()!=='F'||!lidaBagAction(s))throw Error('호텔 안내 직원에게 물건을 문의하세요.');
- s.zaLidaStage=1;s.log=['호텔에서 Lida의 물건을 맡았다. 정원 지구에서 만나자.'];
+ s.zaLidaStage=1;s.log=['호텔에서 Lida의 물건을 맡았다. 베르 5번지 안뜰에서 만나자.'];
 }
 else if(b.action==='battleLida'){
- if(s.combat||s.district!=='lumiose-garden'||s.interior||cell()!=='Q'||!lidaBattleAction(s))throw Error('정원 지구에서 Lida를 만나세요.');
+ const spot=interactionAt(s),legacy=s.district==='lumiose-garden'&&spot?.tile==='Q',court=s.district==='lumiose-vert-sector5'&&spot?.tile==='n'&&spot.x===5&&spot.y===4;if(s.combat||s.interior||(!legacy&&!court)||!lidaBattleAction(s))throw Error('베르 5번지 안뜰에서 Lida를 만나세요.');
  const trainer=ROYALE_LIDA,team=trainerTeam({...trainer,strategy:'balanced'});team.forEach((m:any,i:number)=>{m.moves=trainer.moves[i];m.pp={};});
  s.combat=createAdventureCombat(s,mons,team,{heals:0,strategy:'balanced'});s.trainer={id:trainer.id,name:trainer.name,title:'팀 MZ 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=['Lida에게 물건을 전하고 배틀을 시작했다!'];
 }
