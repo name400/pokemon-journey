@@ -3528,3 +3528,10 @@ test('catching the missing Zone 20 species completes its research task',async()=
   const rolls=[.999,0,(ZONE20_ENCOUNTER_SPECIES.indexOf(7)+.5)/ZONE20_ENCOUNTER_SPECIES.length,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter?.speciesId,7);await call('ball',{ball:'masterball'});await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===20).points,1000);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('Zone 20 earlier stream position migrates safely through API and reload',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-stream-migration-qa',displayName:'구역20 저장 검증'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:19,y:3,facing:'down',zaRoyaleRank:'A',zaMission38Complete:true,zaMission42Stage:3,zaZone20Items:['south-seed']},state.revision+1);old.districtPosition.zone20Layout=4;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone20');assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.equal(state.world.zaMission42Stage,3);const pos=[state.world.x,state.world.y];await get();assert.deepEqual([state.world.x,state.world.y],pos);
+ }finally{globalThis.__adventureUser=previous;}
+});

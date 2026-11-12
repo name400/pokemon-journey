@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldPath,storeAdventurePosition,restoreAdventurePosition,stepField,cloudNpcTile,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
-import {zone20Map,zone20Visible,zone20Encounter,ZONE20_ALPHA,ZONE20_CONTAINERS,ZONE20_ROCKS,ZONE20_RUIN_SUPPORTS} from '../lib/cloud-adventure/adventure-mission42.mjs';
+import {zone20Map,zone20Visible,zone20Encounter,ZONE20_ALPHA,ZONE20_NORTHEAST_STREAM,ZONE20_CONTAINERS,ZONE20_ROCKS,ZONE20_RUIN_SUPPORTS} from '../lib/cloud-adventure/adventure-mission42.mjs';
 test('zone twenty retains Zygarde site and supports saved field position',()=>{
  const s={area:3,district:'lumiose-zone20',interior:null,x:11,y:14,facing:'up',zaMission42Stage:1};const map=zone20Map(s);
  assert.equal(map[6][11],'n');assert.ok(fieldPath(map,s,{x:11,y:7}).length);assert.equal(zone20Visible(s,'a').species,1);assert.equal(zone20Encounter(s,()=>0).speciesId,1);
@@ -15,7 +15,7 @@ test('southeastern pond has a crossing and preserves older saves',()=>{
  let crossing=s;for(let i=0;i<4;i++){crossing={...crossing,...stepField(crossing,'right')};}assert.deepEqual([crossing.x,crossing.y],[21,11]);assert.ok(fieldPath(map,s,{x:11,y:7}).length);assert.ok(fieldPath(map,s,{x:11,y:7}).length);
  const old=storeAdventurePosition({...s,x:19,y:12},8);old.districtPosition.zone20Layout=1;
  const restored=restoreAdventurePosition(old,8);assert.equal(restored.district,'lumiose-zone20');assert.notEqual(map[restored.y][restored.x],'~');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone20Items,['south-seed']);assert.equal(restored.zaMission42Stage,3);
- const fresh=storeAdventurePosition(s,9);assert.equal(fresh.districtPosition.zone20Layout,4);const again=restoreAdventurePosition(fresh,9);assert.deepEqual([again.x,again.y],[17,11]);
+ const fresh=storeAdventurePosition(s,9);assert.equal(fresh.districtPosition.zone20Layout,5);const again=restoreAdventurePosition(fresh,9);assert.deepEqual([again.x,again.y],[17,11]);
 });
 
 test('Zone 20 urban containers and dry rocks preserve routes and older locations',()=>{
@@ -108,7 +108,7 @@ test('central ruined tower supports preserve all four approaches and migrate old
  const base={area:3,district:'lumiose-zone20',interior:null,zaMission38Complete:true,zaMission42Stage:3,zaZone20Items:['south-seed'],teamIds:['kept']},map=zone20Map(base);
  for(const [x,y] of ZONE20_RUIN_SUPPORTS){assert.equal(map[y][x],'|');const old=storeAdventurePosition({...base,x,y},166);old.districtPosition.zone20Layout=3;const restored=restoreAdventurePosition(structuredClone(old),166);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'|');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone20Items,['south-seed']);assert.equal(restored.zaMission42Stage,3);assert.equal(restoreAdventurePosition(structuredClone(old),167).district,null);}
  for(const point of [{x:11,y:1},{x:1,y:8},{x:21,y:8},{x:11,y:14}])assert.ok(fieldPath(map,point,{x:11,y:7}).length);
- assert.equal(map[6][11],'n');assert.equal(zone20Visible(base,'a').species,1);assert.equal(storeAdventurePosition({...base,x:11,y:7},166).districtPosition.zone20Layout,4);
+ assert.equal(map[6][11],'n');assert.equal(zone20Visible(base,'a').species,1);assert.equal(storeAdventurePosition({...base,x:11,y:7},166).districtPosition.zone20Layout,5);
 });
 
 test('two independent Zone 20 alpha locations preserve legacy and spent state',()=>{
@@ -130,4 +130,11 @@ test('every Zone 20 research species has a wild encounter slot',async()=>{
  const {ZONE20_ENCOUNTER_SPECIES,zone20Encounter}=await import('../lib/cloud-adventure/adventure-mission42.mjs');const {LATER_ZONE_SPECIES}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
  assert.deepEqual([...ZONE20_ENCOUNTER_SPECIES].sort((a,b)=>a-b),[...LATER_ZONE_SPECIES[20]].sort((a,b)=>a-b));
  for(let i=0;i<ZONE20_ENCOUNTER_SPECIES.length;i++)assert.equal(zone20Encounter({},()=>((i+.5)/ZONE20_ENCOUNTER_SPECIES.length)).speciesId,ZONE20_ENCOUNTER_SPECIES[i]);
+});
+
+test('Zone 20 stream and distinct land remain connected and migrate earlier positions',()=>{
+ const base={area:3,district:'lumiose-zone20',interior:null,x:11,y:14,facing:'up',zaMission38Complete:true,teamIds:['kept'],zaZone20Items:['south-seed'],zaMission42Stage:3},map=zone20Map(base);
+ for(const [x,y] of ZONE20_NORTHEAST_STREAM){assert.equal(map[y][x],'~');const old=storeAdventurePosition({...base,x,y},200);old.districtPosition.zone20Layout=4;const restored=restoreAdventurePosition(old,200);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'~');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone20Items,['south-seed']);assert.equal(restored.zaMission42Stage,3);assert.equal(restoreAdventurePosition(old,201).district,null);}
+ assert.equal(map[3][1],',');assert.equal(map[10][1],';');assert.equal(map[3][5],'g');
+ for(const target of [{x:11,y:1},{x:1,y:8},{x:21,y:8},{x:21,y:9},{x:17,y:11},{x:11,y:7}])assert.ok(fieldPath(map,base,target).length,`unreachable ${target.x},${target.y}`);
 });
