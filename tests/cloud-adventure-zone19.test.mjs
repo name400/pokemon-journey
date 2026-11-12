@@ -27,13 +27,18 @@ test('Zone 19 east entrance connects directly to Jaune Sector 8',()=>{
  assert.ok(fieldPath(zone19Map(saved),saved,{x:11,y:9}).length);const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-jaune-sector8',1,8]);
 });
 
-test('every Zone 19 research species can appear at its documented levels',async()=>{
- const {ZONE19_ENCOUNTERS}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
+test('Zone 19 research species follow the day and night encounter pools',async()=>{
+ const {ZONE19_ENCOUNTERS,zone19EncounterPool}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
  const {LATER_ZONE_SPECIES}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
  assert.deepEqual(new Set(ZONE19_ENCOUNTERS.map(row=>row[0])),new Set(LATER_ZONE_SPECIES[19]));
- for(const [i,[species,min,max]] of ZONE19_ENCOUNTERS.entries()){
-  const encounter=(levelRoll)=>{const rolls=[(i+.5)/ZONE19_ENCOUNTERS.length,levelRoll];return zone19Encounter({},()=>rolls.shift());};
-  assert.deepEqual(encounter(0),{speciesId:species,level:min});
-  assert.deepEqual(encounter(.999),{speciesId:species,level:max});
+ for(const period of ['day','night']){
+  const pool=zone19EncounterPool(period),ids=pool.map(row=>row[0]);assert.equal(ids.includes(780),period==='day');assert.equal(ids.includes(173),period==='night');assert.equal(ids.includes(35),period==='night');
+  for(const [i,[species,min,max]] of pool.entries()){
+   const encounter=(levelRoll)=>{const rolls=[(i+.5)/pool.length,levelRoll];return zone19Encounter({zaZone19Period:period},()=>rolls.shift());};
+   assert.deepEqual(encounter(0),{speciesId:species,level:min});assert.deepEqual(encounter(.999),{speciesId:species,level:max});
+  }
  }
+ const day={zaZone19Period:'day'},night={zaZone19Period:'night'};assert.equal(zone19Visible(day,'e'),null);assert.equal(zone19Visible(night,'e').species,173);assert.equal(zone19Visible(night,'f').species,35);assert.equal(zone19Visible({...night,zaZone19Spent:{'cleffa-night':true}},'e'),null);
+ assert.equal(zone19Map(day)[9][9],'g');assert.equal(zone19Map(night)[9][9],'e');assert.equal(zone19Map(night)[9][13],'f');
+ const old=restoreAdventurePosition(storeAdventurePosition({area:3,district:'lumiose-zone19',interior:null,x:9,y:9,facing:'down',zaRoyaleRank:'B',...night},31),31);assert.equal(old.x,9);assert.equal(old.y,9);const step=stepField(old,'down');assert.notEqual(step.blocked,true);assert.deepEqual([step.x,step.y],[9,10]);
 });

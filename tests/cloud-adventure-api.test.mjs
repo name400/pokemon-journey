@@ -4283,18 +4283,28 @@ test('Zone 12 pond-side Vanillite can complete research after capture and reload
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
+test('Zone 19 pavilion night encounters preserve shiny and captured state',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone19-pavilion-night-qa',displayName:'구역19 밤 정자'};
+ try{globalThis.__adventureTime={period:'day',hour:10};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:9,y:10,facing:'up',zaRoyaleRank:'B',zaZone19Spent:{},adventureBalls:{masterball:1},zaWildShinyRolls:{'zone19:cleffa-night:173':true}},state.revision+1));await get();assert.notEqual(state.world.map[9][9],'e');
+  globalThis.__adventureTime={period:'night',hour:22};await get();assert.equal(state.world.map[9][9],'e');assert.equal(state.world.map[9][13],'f');assert.equal(state.world.interaction.action,'zone19Wild-cleffa-night');assert.equal(state.world.zaWildShinyRolls['zone19:cleffa-night:173'],true);await call('zone19Wild-cleffa-night');assert.equal(state.battle.teams[1][0].speciesId,173);assert.equal(state.battle.teams[1][0].shiny,true);await get();await call('flee');await get();assert.equal(state.world.interaction.action,'zone19Wild-cleffa-night');assert.equal(state.world.zaWildShinyRolls['zone19:cleffa-night:173'],true);await call('zone19Wild-cleffa-night');await call('ball',{ball:'masterball'});await get();assert.equal(rawWorld().zaZone19Spent['cleffa-night'],true);assert.notEqual(state.world.map[9][9],'e');assert.ok(state.box.some(m=>m.speciesId===173&&m.shiny));assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.deepEqual(state.wallet,wallet);
+  globalThis.__adventureTime={period:'day',hour:10};await get();assert.notEqual(state.world.map[9][13],'f');globalThis.__adventureTime={period:'night',hour:22};await get();assert.notEqual(state.world.map[9][9],'e');assert.equal(state.world.map[9][13],'f');
+  seedWorld(storeAdventurePosition({...rawWorld(),x:2,y:2,facing:'right'},state.revision+1));await get();let rolls=[0,.999,0,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,35);await call('flee');globalThis.__adventureTime={period:'day',hour:10};seedWorld(storeAdventurePosition({...rawWorld(),x:2,y:2,facing:'right'},state.revision+1));await get();rolls=[0,.999,0,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,780);await call('flee');
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Zone 19 missing species can be caught and complete research after reload',async()=>{
- const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;
  globalThis.__adventureUser={userId:'zone19-research-completion-qa',displayName:'구역19 조사'};
  try{
-  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});
-  const team=[...state.world.teamIds],{ZONE19_ENCOUNTERS}=await import('../lib/cloud-adventure/adventure-zone19.mjs'),{LATER_ZONE_SPECIES,laterZoneResearch}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+  globalThis.__adventureTime={period:'day',hour:10};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});
+  const team=[...state.world.teamIds],{zone19EncounterPool}=await import('../lib/cloud-adventure/adventure-zone19.mjs'),{LATER_ZONE_SPECIES,laterZoneResearch}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:2,y:2,facing:'right',zaRoyaleRank:'B',adventureBalls:{masterball:1},adventureDexSpecies:LATER_ZONE_SPECIES[19].filter(id=>id!==780)},state.revision+1));
   await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===19).points,0);
-  const rolls=[0,(ZONE19_ENCOUNTERS.findIndex(row=>row[0]===780)+.5)/ZONE19_ENCOUNTERS.length,0,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;
+  const rolls=[0,(zone19EncounterPool('day').findIndex(row=>row[0]===780)+.5)/zone19EncounterPool('day').length,0,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;
   await call('move',{direction:'right'});assert.equal(rawWorld().encounter?.speciesId,780);
   await call('ball',{ball:'masterball'});await get();assert.ok(rawWorld().adventureDexSpecies.includes(780));assert.ok(state.box.some(m=>m.speciesId===780));assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===19).points,1000);
- }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=oldTime;}
 });
 
 test('Zone 20 earlier stream position migrates safely through API and reload',async()=>{
