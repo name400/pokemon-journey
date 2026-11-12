@@ -3425,3 +3425,20 @@ test('zone nine wild color persists across flee and capture and is cleared after
   assert.equal(rawWorld().zaWildShinyRolls['zone9:sableye:302'],undefined);assert.ok(state.box.some(p=>p.speciesId===302&&p.shiny));assert.ok(before.every(id=>state.world.teamIds.includes(id)));
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('direct wild catch keeps the generated color after saving',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'field-shiny-qa',displayName:'직접 포획 검증'};
+ try{
+  await get();await call('start',{species:152});globalThis.__adventureTime={period:'day',hour:12};
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:11,y:7,facing:'down',zaRoyaleRank:'F'},state.revision+1));sql.prepare('UPDATE wallets SET balls=10 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();
+  globalThis.__adventureRandom=()=>0;await call('throwZone3Field',{targetId:'flabebe'});await get();assert.ok(state.box.some(p=>p.speciesId===669&&p.shiny));assert.equal(rawWorld().zaZone3FieldSpent.flabebe,true);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
+});
+
+test('separate wild alpha retains color after escape and clears it on capture',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'alpha-shiny-qa',displayName:'우두머리 색 검사'};
+ try{
+  await get();await call('start',{species:152});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-wild',interior:null,x:8,y:8,facing:'up',adventureBalls:{masterball:1}},state.revision+1));await get();const target=findTile(state.world.map,'a');assert.ok(target);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:target.x,y:target.y},state.revision+1));await get();globalThis.__adventureRandom=()=>0;await call('encounterWildAlpha');assert.equal(rawWorld().encounter.shiny,true);await call('flee');globalThis.__adventureRandom=()=>.999;await call('encounterWildAlpha');assert.equal(rawWorld().encounter.shiny,true);await call('ball',{ball:'masterball'});await get();assert.equal(rawWorld().zaWildShinyRolls['alpha:wild-zone-pidgey:16'],undefined);assert.ok(state.box.some(p=>p.speciesId===16&&p.shiny));
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
