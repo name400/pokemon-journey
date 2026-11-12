@@ -471,6 +471,24 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     if(['lumiose-rouge-sector1','lumiose-rouge-sector1-roof','lumiose-rouge-sector3-roof'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#91857d':c==='g'?'#a7bc83':c==='w'?'#ded6cf':c==='b'?'#9b7658':c==='v'?'#7c9c61':c===';'?'#c89575':c===','?'#b9b1a3':(x+y)%2?'#e1dacb':'#ebe5d8';ctx.fillRect(px,py,tile,tile);if(c==='g')sprite('grassDetail',px,py);if(c==='j'||c==='E'||c==='X'||c==='t'||c==='o'||c==='d'||(c==='l'&&w.district==='lumiose-rouge-sector3-roof')||(c==='q'&&w.district==='lumiose-rouge-sector3-roof')){ctx.fillStyle=c==='o'||c==='d'?'#716589':c==='t'?'#d8b64f':c==='j'?(w.zaSide04Won?'#c7a75f':'#9d6e55'):'#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'르 예':c==='l'?'사다리':c==='j'?'승강기':c==='t'?'TM':c==='o'?'SBC':c==='d'?'은행':'출구',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-zone1-high-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#756f68':(x+y)%2?'#c4b5a1':'#d1c4b2';ctx.fillRect(px,py,tile,tile);if(c==='j'||c==='m'){ctx.fillStyle=c==='j'?'#8f6747':'#da90aa';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='j'?'사다리':'메리프',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-vert-sector9'&&!w.interior){ctx.fillStyle=c==='#'?'#97a18c':c===','?'#bbb9aa':c==='k'?'#a4c58e':(x+y)%2?'#e0ddcb':'#ebe6d4';ctx.fillRect(px,py,tile,tile);if(c==='~')canalWater(px,py,x,y);if(c===':'){ctx.fillStyle='#b7aa94';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6ddcd';for(let i=4;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}if(c==='W'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(w.district==='lumiose-zone3'&&w.zaZone3TowerUpper&&!w.interior){
+     // The garden building has an accessible roof. Its footprint and stone
+     // detailing are a visual approximation of the existing 2D floor.
+     ctx.fillStyle=c==='#'?'#77807a':(x+y)%2?'#c8c1b0':'#ddd5c3';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){
+      ctx.fillStyle='#a4aaa0';ctx.fillRect(px+1,py+1,tile-2,tile-5);
+      ctx.fillStyle='#d3d2c3';ctx.fillRect(px+1,py+2,tile-2,3);
+      ctx.fillStyle='#68736f';ctx.fillRect(px,py+tile-4,tile,4);
+     }else roofPaving(px,py,x,y);
+     if(c==='i'){
+      ctx.fillStyle='#647873';ctx.fillRect(px+7,py+4,tile-14,tile-8);
+      ctx.fillStyle='#ded4be';for(let j=7;j<tile-6;j+=6)ctx.fillRect(px+9,py+j,tile-18,3);
+     }else if(c==='t'){
+      ctx.fillStyle='#b89343';ctx.fillRect(px+6,py+6,tile-12,tile-12);
+      ctx.fillStyle='#f4df92';ctx.fillRect(px+9,py+9,tile-18,tile-18);
+      ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('TM',px+tile/2,py+20);
+     }return;
+    }
     if(w.district==='lumiose-zone1-courtyard'&&!w.interior){ctx.fillStyle=c==='#'?'#8f9a86':c==='g'?'#87b273':(x+y)%2?'#ddd6bd':'#e8e1ca';ctx.fillRect(px,py,tile,tile);if(c==='g')sprite('grassDetail',px,py);if(c==='E'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-zone1-roof'&&!w.interior){
      // Ladder access and two roof levels are documented; the 2D footprint,
@@ -711,11 +729,9 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
        ctx.fillStyle='#a49b89';ctx.fillRect(px+tile*.25,py+tile-5,tile*.5,4);
       }
      }
-     if(c==='t'&&w.district==='lumiose-zone3'&&w.zaZone3TowerUpper){ctx.fillStyle='#d8b64f';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('TM',px+tile/2,py+20);}
      if(c==='l'&&w.district==='lumiose-zone1'){ctx.fillStyle='#8f6747';ctx.fillRect(px+5,py+3,tile-10,tile-6);}
      if(c==='i'&&w.district==='lumiose-zone3'){
-      if(w.zaZone3TowerUpper){ctx.fillStyle='#c4bfb0';ctx.fillRect(px+3,py+2,tile-6,tile-4);ctx.fillStyle='#70857e';ctx.fillRect(px+11,py+8,10,18);ctx.fillStyle='#d8ccb3';for(let j=10;j<25;j+=5)ctx.fillRect(px+11,py+j,10,2);}
-      else{ctx.fillStyle='#bbb8a8';ctx.fillRect(px+4,py+8,tile-8,tile-10);ctx.fillStyle='#f5efdf';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#858d89';ctx.fillRect(px+4,py+4,tile-8,4);ctx.fillRect(px+9,py+1,tile-18,4);ctx.fillStyle='#617b76';ctx.fillRect(px+tile/2-3,py+12,6,12);ctx.fillStyle='#ded7c5';ctx.fillRect(px+4,py+tile-6,tile-8,3);}
+      ctx.fillStyle='#bbb8a8';ctx.fillRect(px+4,py+8,tile-8,tile-10);ctx.fillStyle='#f5efdf';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#858d89';ctx.fillRect(px+4,py+4,tile-8,4);ctx.fillRect(px+9,py+1,tile-18,4);ctx.fillStyle='#617b76';ctx.fillRect(px+tile/2-3,py+12,6,12);ctx.fillStyle='#ded7c5';ctx.fillRect(px+4,py+tile-6,tile-8,3);
      }
      if(c==='H'&&w.district==='lumiose-zone3'){ctx.fillStyle='#e4d8b9';ctx.fillRect(px+2,py+10,tile-4,tile-10);ctx.fillStyle='#cc6559';ctx.fillRect(px+1,py+5,tile-2,7);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('회복',px+tile/2,py+24);}
      if(c==='a'&&!w.zaWildAlphaSpent){ctx.fillStyle='#8e4939';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.38,tile*.30,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';const arrow=({up:'↑',down:'↓',left:'←',right:'→'} as any)[wildAlphaPosition(w).facing];ctx.fillText((w.zaWildAlphaAlert?'!':'왕')+arrow,px+tile/2,py+20);}if(c==='T'){ctx.fillStyle='#769b88';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('광장',px+tile/2,py+20);}
