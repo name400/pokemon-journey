@@ -564,3 +564,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 12 눈 공원 시각 표현
 
 [구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-12-guide-all-pokemon-and-alphas)는 북서쪽 배틀코트와 남서쪽 연못을 설명하고, [구역 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12)는 눈과 부분적으로 얼어 있는 연못을 설명한다. 기존 타일·출입구를 그대로 두고 눈 덮인 경계, 코트의 바닥과 얼음물·바위·도구 그림을 구분했다. 나무 위치와 세부 코트·연못 윤곽은 원작에서 정밀 확인되지 않은 초안이다. 게임 판정과 저장 좌표는 바꾸지 않았다.
+
+### 구역 20 유적 시각 표현
+
+[프리즘타워 자료](https://bulbapedia.bulbagarden.net/wiki/Prism_Tower)는 손상된 탑의 잔해가 센트리코 광장에 남았다고 설명한다. 기존 차단 지지대의 무너진 윤곽과 균열, 주변 풀·물결을 그리고 중앙 상호작용은 글자 대신 그림으로 나타냈다. 지지대 개수와 정확한 잔해 형태·높이는 원작과 정밀 대조되지 않은 2D 초안이다. 지형·조우·이동·저장 좌표는 바꾸지 않았다.
