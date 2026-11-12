@@ -522,3 +522,9 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 [닌텐도 공식 호텔 화면](https://www.nintendo.com/ph/news/article/6pnoebRONEPk1EiF2NJ4qK)의 밝은 외벽과 담쟁이, [공식 포켓몬센터 화면](https://legends.pokemon.com/es-es/news/adventure)의 붉은 외관과 몬스터볼 표식을 참고해 기존 건물의 그림을 구분했다. 상점은 기존 게임상의 위치를 유지한 임시 디자인이다. [미르시티 공개 지도](https://www.serebii.net/pokearth/lumiosecity/)와 기존 마젠타 6번지의 막힌 지형을 참고해 안뜰과 건물 지붕을 그렸으며, 건물의 정확한 외형과 안뜰의 방향·좌표는 확인되지 않은 초안이다. 기존 Kenney CC0 타일을 사용했고 지도 이미지는 복사하지 않았다.
 
 기존 저장 좌표와 출입구를 유지하기 위해 지형과 이동 판정은 바꾸지 않았다. 다만 기존 맵의 포켓몬센터는 호텔의 서쪽에 있으나 [공략](https://www.gameguides.space/guides/67/pokemon-legends-z-a.html)은 동쪽으로 안내한다. 원작과 다른 이 배치 및 거리의 정확한 구조·높낮이는 아직 수정되지 않았다. 다른 구역의 글자 표식과 단조로운 외형도 남아 있다.
+
+### 세존 운하 산책로 외형
+
+기존 운하·다리·부두·북쪽 건물의 막힌 칸을 그대로 사용해 수면과 강변 포장, 부두와 다리, 건물 정면을 서로 다른 그림으로 표현했다. [공개 지도](https://www.serebii.net/pokearth/lumiosecity/)의 수로를 참고했지만 현재 화면의 부두·다리와 건물 좌표 및 높이는 원작과 대조되지 않은 초안이다. 지도 이미지는 재사용하지 않았다.
+
+[미션 3 공략](https://www.gameguides.space/guides/67/pokemon-legends-z-a.html)은 호텔에서 동쪽의 미르역 앞 포켓몬센터로 골목·옥상 우회 후 간다고 설명한다. 현재 호텔 화면은 센터가 서쪽이고 동쪽의 건물은 상점이며, 역과 해당 우회 구간도 연결돼 있지 않다. 기존 출입과 저장을 보존하는 실제 경로 설계가 필요하므로 이번 변경에서 서쪽 센터를 옮기거나 동쪽 상점을 대체하지 않았다. 정확한 위치·좌표와 신규 역 구역은 미구현이다.
