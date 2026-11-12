@@ -558,3 +558,11 @@ test('street entrances reset the canal layer left by an earlier visit',()=>{
   assert.equal(restored.district,'lumiose-coulant-route',district);assert.equal(restored.zaCoulantLower,false,district);assert.deepEqual([restored.x,restored.y],[step.x,step.y],district);assert.deepEqual(restored.teamIds,['kept']);
  }
 });
+
+test('dialogue uses the current response map without retaining a stale interaction',()=>{
+ const s={area:3,district:'lumiose-zone3',interior:null,x:7,y:6,facing:'down',regionId:6,teamIds:['kept'],steps:42};
+ const map=fieldMap(s);assert.equal(interactionAt(s,map)?.tile,'i');assert.deepEqual(fieldDialogue(s,map),fieldDialogue(s));assert.equal(fieldDialogue(s,map)?.action,'zone3TowerUp');
+ const changed=[...map];changed[7]=changed[7].slice(0,7)+'.'+changed[7].slice(8);
+ assert.equal(interactionAt(s,changed),null);assert.equal(fieldDialogue(s,changed),null);
+ assert.equal(fieldDialogue(s)?.action,'zone3TowerUp','later requests construct their own map');
+});
