@@ -119,7 +119,7 @@ test('one-boss companion battle preserves player switches and handles defeat',as
  assert.equal(fight.ended,true);assert.equal(fight.winner,1);assert.deepEqual(fight.owners.player,['lead','reserve']);assert.deepEqual(fight.owners.ally,['ally']);assert.equal(fight.teams[3].length,0);
 });
 
-test('mission 16, 21 and 29 companion rosters follow the original starter',async()=>{
+test('starter-based companion rosters match the mission and original starter',async()=>{
  const {rogueCompanionTeam}=await import('../lib/cloud-adventure/adventure-companion-rogue.mjs');
  for(const [choice,ids] of Object.entries({grass:[160,500,310],fire:[154,160,310],water:[500,154,310]})){
   const team=rogueCompanionTeam('beedrill',choice);assert.deepEqual(team.map(mon=>mon.speciesId),ids);assert.deepEqual(team.map(mon=>mon.level),[36,36,37]);assert.ok(team.every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
@@ -130,7 +130,10 @@ test('mission 16, 21 and 29 companion rosters follow the original starter',async
  for(const [choice,ids] of Object.entries({grass:[160,500,310],fire:[154,160,310],water:[500,154,310]})){
   const team=rogueCompanionTeam('venusaur',choice);assert.deepEqual(team.map(mon=>mon.speciesId),ids);assert.deepEqual(team.map(mon=>mon.level),[50,50,50]);assert.ok(team.every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
  }
- for(const key of ['barbaracle','ampharos','froslass','altaria'])assert.ok(rogueCompanionTeam(key).every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
+ for(const [choice,ids] of Object.entries({grass:[160,500,678,310],fire:[154,160,678,310],water:[500,154,678,310]})){
+  const team=rogueCompanionTeam('dragonite',choice);assert.deepEqual(team.map(mon=>mon.speciesId),ids);assert.deepEqual(team.map(mon=>mon.level),[55,55,55,56]);assert.ok(team.every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
+ }
+ for(const key of ['barbaracle','ampharos','froslass','altaria','tyranitar','starmie'])assert.ok(rogueCompanionTeam(key).every(mon=>mon.moves.every(move=>Object.hasOwn(moves,move))));
  assert.throws(()=>rogueCompanionTeam('beedrill','__proto__'));assert.throws(()=>rogueCompanionTeam('__proto__'));
 });
 
