@@ -171,6 +171,20 @@ test('Late rogue mega encounters preserve distinct retry checkpoints and rewards
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Middle rogue mega encounters keep separate retry checkpoints and rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ try{
+  const cases=[['mission16-beedrill','battleMission15Case','lumiose-mission16-roof',18,6,16],['mission17-hawlucha','battleMission15Case','lumiose-magenta-sector3-roof',18,6,17],['mission18-banette','battleMission15Case','lumiose-jaune-sector9',14,9,18],['mission21-mawile','mission20CaseBattle','lumiose-rooftop',17,5,21],['mission22-barbaracle','mission20CaseBattle','lumiose-sewer',17,5,22],['mission23-ampharos','mission20CaseBattle','lumiose-rouge-north',17,5,23]];
+  for(const [key,action,district,x,y,mission] of cases){
+   globalThis.__adventureUser={userId:`middle-retry-${mission}`,displayName:'폭주 사건 재도전'};await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(1,1),moves:['튀어오르기'],pp:{},hp:1});
+   const pos=()=>({...rawWorld(),area:3,district,interior:null,x,y,facing:'up',zaMission15Stage:2,zaMission20Stage:5,zaMission23GwynnWon:true,zaBleuSewerOpened:true});seedWorld(storeAdventurePosition({...pos(),zaRogueMegaCheckpoints:{slowbro:75}},state.revision+1));await get();await call(action);let combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=Math.floor(sim.p2.pokemon[0].maxhp*.44);seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();for(let turn=0;state.battle;turn++){assert.ok(turn<25);await call('battle',{command:{type:'move',move:'튀어오르기'}});}
+   assert.equal(state.battleResult.winner,1);assert.equal(rawWorld().zaRogueMegaCheckpoints[key],50);assert.equal(rawWorld().zaRogueMegaCheckpoints.slowbro,75);assert.deepEqual([state.world.district,state.world.x,state.world.y],[district,x,y]);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.deepEqual(state.world.teamIds,team);await get();assert.ok(state.world.interaction.actions.some(a=>a.action===action+'Restart'));if(mission===22)assert.ok(state.world.interaction.actions.some(a=>a.action==='mission57Battle'));await call(action);combat=rawWorld().combat;assert.equal(combat.teams[1][0].hp,Math.ceil(combat.teams[1][0].maxHp*.5));await call('forfeit');assert.equal(rawWorld().zaRogueMegaCheckpoints[key],50);
+   seedWorld(storeAdventurePosition(pos(),state.revision+1));await get();await call(action+'Restart');combat=rawWorld().combat;assert.equal(combat.teams[1][0].hp,combat.teams[1][0].maxHp);assert.equal(rawWorld().zaRogueMegaCheckpoints[key],undefined);await call('forfeit');
+   seedMon(id,{...makeMon(150,100),moves:['사이코키네시스'],pp:{}});seedWorld(storeAdventurePosition({...pos(),zaRogueMegaCheckpoints:{slowbro:75,[key]:50}},state.revision+1));await get();await call(action);combat=rawWorld().combat;sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world[`zaMission${mission}RewardPending`],true);assert.equal(rawWorld().zaRogueMegaCheckpoints[key],undefined);assert.equal(rawWorld().zaRogueMegaCheckpoints.slowbro,75);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 37 route opens in sequence and preserves the legacy layout',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-route-qa',displayName:'방어경로테스트'};
  try{
