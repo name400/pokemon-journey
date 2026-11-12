@@ -125,3 +125,9 @@ test('documented central alpha pool supports every battle species',async()=>{
  const {makeMon}=await import('../lib/game.mjs');assert.equal(ZONE20_ALPHA.length,67);assert.equal(new Set(ZONE20_ALPHA.map(p=>p.species)).size,67);
  for(const p of ZONE20_ALPHA){const mon=makeMon(p.species,64);assert.equal(mon.speciesId,p.species);assert.equal(mon.name,p.name);}
 });
+
+test('every Zone 20 research species has a wild encounter slot',async()=>{
+ const {ZONE20_ENCOUNTER_SPECIES,zone20Encounter}=await import('../lib/cloud-adventure/adventure-mission42.mjs');const {LATER_ZONE_SPECIES}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+ assert.deepEqual([...ZONE20_ENCOUNTER_SPECIES].sort((a,b)=>a-b),[...LATER_ZONE_SPECIES[20]].sort((a,b)=>a-b));
+ for(let i=0;i<ZONE20_ENCOUNTER_SPECIES.length;i++)assert.equal(zone20Encounter({},()=>((i+.5)/ZONE20_ENCOUNTER_SPECIES.length)).speciesId,ZONE20_ENCOUNTER_SPECIES[i]);
+});

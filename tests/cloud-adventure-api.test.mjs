@@ -3511,3 +3511,20 @@ test('roaming field initialization retries without overwriting concurrent progre
   assert.equal(injected,true);assert.equal(rawWorld().concurrentFlag,'preserved');assert.equal(state.world.x,10);assert.equal(rawWorld().zaWildShinyRolls['field3:flabebe:669'],true);const rev=state.revision;await get();assert.equal(state.revision,rev);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
 });
+
+test('zone 20 missing starters are catchable and register for research',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;
+ try{
+  const {ZONE20_ENCOUNTER_SPECIES}=await import('../lib/cloud-adventure/adventure-mission42.mjs');
+  for(const speciesId of [7,498,158]){globalThis.__adventureUser={userId:`zone20-research-${speciesId}`,displayName:'구역20 조사'};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds];seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:5,y:3,facing:'right',zaRoyaleRank:'A',zaMission38Complete:true,adventureBalls:{masterball:1}},state.revision+1));await get();const rolls=[.999,0,(ZONE20_ENCOUNTER_SPECIES.indexOf(speciesId)+.5)/ZONE20_ENCOUNTER_SPECIES.length,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter?.speciesId,speciesId);await call('ball',{ball:'masterball'});await get();assert.ok(rawWorld().adventureDexSpecies.includes(speciesId));assert.ok(state.box.some(m=>m.speciesId===speciesId));assert.ok(team.every(id=>state.world.teamIds.includes(id)));}
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
+
+test('catching the missing Zone 20 species completes its research task',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-research-completion-qa',displayName:'구역20 완료'};
+ try{
+  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const {ZONE20_ENCOUNTER_SPECIES}=await import('../lib/cloud-adventure/adventure-mission42.mjs'),{LATER_ZONE_SPECIES,laterZoneResearch}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:5,y:3,facing:'right',zaRoyaleRank:'A',zaMission38Complete:true,adventureBalls:{masterball:1},adventureDexSpecies:LATER_ZONE_SPECIES[20].filter(id=>id!==7)},state.revision+1));await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===20).points,0);
+  const rolls=[.999,0,(ZONE20_ENCOUNTER_SPECIES.indexOf(7)+.5)/ZONE20_ENCOUNTER_SPECIES.length,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter?.speciesId,7);await call('ball',{ball:'masterball'});await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===20).points,1000);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
