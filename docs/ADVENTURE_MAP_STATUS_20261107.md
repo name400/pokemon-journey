@@ -654,3 +654,8 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 1 지상·안뜰·두 옥상 외형
 
 [원작 의뢰 안내](https://allthings.how/pokemon-legends-z-a-how-to-catch-the-guaranteed-shiny-mareep/)에서 북쪽 출입구 부근 연못·바위와 두 사다리를 거쳐 높은 옥상으로 오르는 큰 흐름을 확인했다. 기존 지도에 적용된 지상 도로의 덮어쓰기 오류를 고치고 안뜰의 건물 경계와 포장, 높은 옥상의 경계·포장 및 지상과 옥상의 사다리를 이미지 형태로 구분했다. 건물 창문, 포장, 옥상과 안뜰의 윤곽 및 세부 좌표는 원작에서 확인되지 않은 2D 추정이다. 기존 지도 타일, 충돌·조우 판정, 출입구와 저장 위치를 변경하지 않았다. 렌더링은 시험 데이터 및 대체 이미지로 확인했으며 원작 화면의 정확한 재현이나 실제 운영 검증을 뜻하지 않는다.
+
+
+### 구역 11 세존 운하와 남서쪽 접근 표시
+
+[구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-11-guide-all-pokemon-and-alphas)는 중앙 운하, 서쪽 갈라짐과 남쪽 주 통로를, [의뢰 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)는 남서쪽 입구의 두 계단과 물가를 설명한다. 수중 포켓몬 출현 칸도 물로 판정해 불필요한 가로 경계선 없이 운하가 이어지도록 하고, 강변 경계와 기존 출입구를 도트로 표시했다. 별도 높이층 두 개가 이미 계단을 표현하므로 남쪽 바닥에 중복으로 그리던 장식 계단은 없앴다. 색·물결·호안 모양과 정확한 윤곽은 기존 타일에 맞춘 추정이다. 지도 타일·통행·조우·저장 좌표는 변경하지 않았다. 시험 데이터와 대체 이미지로 모바일 화면을 확인했으며 운영 기기와 원작 지형의 정밀 일치는 검증하지 않았다.

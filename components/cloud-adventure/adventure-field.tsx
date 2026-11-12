@@ -19,7 +19,7 @@ import manifest from '@/data/cloud-town-tiles.json';
 import {wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,magentaSewerMonsters,cloudNpcTile,walkable} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {adventureAvatarRows} from '@/lib/cloud-adventure/adventure-avatar.mjs';
 import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
-import {ZONE11_VISIBLE,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel,zone11Visible} from '@/lib/cloud-adventure/adventure-zone11.mjs';
+import {ZONE11_VISIBLE,zone11WaterAt} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer,ZONE6_MARKET_STALLS} from '@/lib/cloud-adventure/adventure-zone6.mjs';
 import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
 import {zone3GardenPattern,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-zone3-garden.mjs';
@@ -522,16 +522,22 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     if(w.district==='lumiose-zone11'&&!w.interior){
      // The Saison Canal separates the banks. Beach and path details are a
      // visual approximation; the underlying collision and encounter tiles stay intact.
-     const aquatic=!!zone11Visible(w,c)?.water,shore=c!== 'g'&&c!=='#'&&c!=='~'&&!aquatic&&(y===6||y===10);
+     const aquatic=zone11WaterAt(w.map,x,y),shore=c!=='g'&&c!=='#'&&!aquatic&&(zone11WaterAt(w.map,x,y-1)||zone11WaterAt(w.map,x,y+1));
      ctx.fillStyle=c==='#'?'#597573':c==='g'?'#87af76':c===','?'#b9ad95':shore?'#c6b996':y<7?'#a9c99a':'#c9c2a6';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){
+      // Existing blocked boundary reads as an embankment, not a walkable bank.
+      ctx.fillStyle='#718d81';ctx.fillRect(px+1,py+1,tile-2,tile-4);ctx.fillStyle='#a4b6a4';ctx.fillRect(px+1,py+1,tile-2,3);ctx.fillStyle='#526e68';ctx.fillRect(px,py+tile-4,tile,4);
+     }
      if(c===','){ctx.fillStyle='#a39680';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+4,2,tile-6);}
-     if(ZONE11_SOUTHWEST_STAIRS.some(([sx,sy]:number[])=>sx===x&&sy===y)){ctx.fillStyle='#b5ae9a';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#8d897c';for(let j=5;j<tile;j+=7)ctx.fillRect(px,py+j,tile,2);ctx.fillStyle='#d9d1bf';ctx.fillRect(px,py+2,tile,2);}
-     if(c==='~'||aquatic){canalWater(px,py,x,y);ctx.fillStyle='#506f70';if(w.map[y-1]?.[x]!=='~')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]!=='~')ctx.fillRect(px,py+tile-3,tile,3);}
+     if(aquatic){
+      canalWater(px,py,x,y);ctx.fillStyle='#548d9c';ctx.fillRect(px,py+tile/2,tile,2);
+      ctx.fillStyle='#506f70';if(!zone11WaterAt(w.map,x,y-1))ctx.fillRect(px,py,tile,3);if(!zone11WaterAt(w.map,x,y+1))ctx.fillRect(px,py+tile-3,tile,3);
+     }
      if(c==='u'&&w.zaSide72Stage===1){ctx.fillStyle='#f8f4e9';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ad514b';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,4);ctx.fillStyle='#353638';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}
      if(c==='z'){ctx.fillStyle='#c9b994';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#f6e5b2';ctx.fillRect(px+tile/2-2,py+5,4,tile-10);ctx.fillRect(px+5,py+tile/2-2,tile-10,4);}
      if(shore){ctx.fillStyle='#a99f7e';ctx.fillRect(px+4+(x%3)*4,py+6,5,2);ctx.fillRect(px+18,py+22,4,2);}
      if(c==='g'){ctx.fillStyle='#5e8f58';for(let j=0;j<4;j++){const h=5+(x+y+j)%5;ctx.fillRect(px+4+j*7,py+tile-5-h,2,h);}ctx.fillStyle='#b4d393';ctx.fillRect(px+7+(x*3+y)%12,py+8,3,2);}
-     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(zone11ExitLabel(x,y),px+tile/2,py+20);}return;
+     if(c==='X'){ctx.fillStyle='#d3dec7';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#4a8272';ctx.fillRect(px+3,py+4,4,tile-8);ctx.fillRect(px+tile-7,py+4,4,tile-8);ctx.fillStyle='#a8ded0';ctx.fillRect(px+8,py+8,tile-16,tile-16);}return;
     }
     if(w.district==='lumiose-galerie-lune'&&!w.interior){ctx.fillStyle=c==='#'?'#8e8291':c===','?'#d6d2ca':(x+y)%2?'#e4dce0':'#f1e9eb';ctx.fillRect(px,py,tile,tile);if(c==='.'&&x>=8&&x<=14&&y>=4&&y<=9){ctx.fillStyle='rgba(166,200,211,.24)';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,tile*.3,0,Math.PI*2);ctx.fill();}if('abcdefghs'.includes(c)){ctx.fillStyle=c==='s'?'#6f9b9a':'#a66b82';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='s'?'미용실':'상점',px+tile/2,py+20);}if('WEX'.includes(c)){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-ombrage-arcade'&&!w.interior){ctx.fillStyle=c==='#'?'#80747c':c===','?'#d9d4ce':'#eee3e0';ctx.fillRect(px,py,tile,tile);if(c===','&&x>=9&&x<=13){ctx.fillStyle='rgba(129,190,197,.20)';ctx.fillRect(px+2,py+1,tile-4,4);}if(c==='u'){ctx.fillStyle='#d6b857';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();}if('abcdefghijkl mns'.replace(/ /g,'').includes(c)){ctx.fillStyle=c==='s'?'#66999d':'#a66b82';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='s'?'미용실':'상점',px+tile/2,py+20);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}

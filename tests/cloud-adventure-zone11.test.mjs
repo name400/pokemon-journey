@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone11Map,zone11Unlocked,zone11Encounter,zone11Visible,ZONE11_WEST_FORK,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '../lib/cloud-adventure/adventure-zone11.mjs';
+import {zone11Map,zone11Unlocked,zone11Encounter,zone11Visible,zone11WaterAt,ZONE11_WEST_FORK,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '../lib/cloud-adventure/adventure-zone11.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 11 northwest ledge preserves the old entrance and its saved position',()=>{
@@ -58,11 +58,20 @@ test('Zone 11 southern riverside path connects both gate approaches and preserve
  for(const [x,y] of [[2,10],[2,13],[19,11],[11,10]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},123),123);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[base.district,x,y,['kept']]);}
 });
 
-test('Zone 11 southwest stair artwork stays on walkable non-encounter terrain',()=>{
+test('Zone 11 former stair-art coordinates remain walkable non-encounter terrain',()=>{
  const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']},map=zone11Map(base);
  assert.deepEqual([...new Set(ZONE11_SOUTHWEST_STAIRS.map(([,y])=>y))],[11,13]);
  for(const [x,y] of ZONE11_SOUTHWEST_STAIRS){assert.ok(['.',','].includes(map[y][x]));const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},130),130);assert.deepEqual([saved.x,saved.y,saved.teamIds],[x,y,['kept']]);}
  assert.ok(fieldPath(map,{x:5,y:15},{x:2,y:10}).length);
+});
+
+test('Zone 11 river stays continuous under aquatic encounters and after capture',()=>{
+ const base={district:'lumiose-zone11',zaRoyaleRank:'E'};
+ for(const spent of [{},{inkay:true,gyarados:true,clauncher:true,'clawitzer-alpha':true}]){
+  const map=zone11Map({...base,zaZone11Spent:spent});
+  for(let y=7;y<=9;y++)for(let x=0;x<=22;x++)assert.equal(zone11WaterAt(map,x,y),true,`river ${x},${y}`);
+  assert.equal(zone11WaterAt(map,11,6),false);assert.equal(zone11WaterAt(map,11,10),false);
+ }
 });
 
 test('Zone 11 exit labels match every screen edge',()=>{
