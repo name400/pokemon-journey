@@ -16,8 +16,12 @@ const red=fixture(351);assert.equal(red.encounter.team[0].rogueSourceId,25);asse
 const redBattle=restoreClassicNativeBattle(createClassicCombat(red.run,red.encounter.team,{trainer:true}),red.run),pikachu=redBattle.p2.pokemon[0];
 assert.equal(pikachu.item,'lightball');const boosted=redBattle.runEvent('ModifyAtk',pikachu,null,null,100);pikachu.item='';const unboosted=redBattle.runEvent('ModifyAtk',pikachu,null,null,100);assert.equal(boosted,2*unboosted);
 const wallace=fixture(354),milotic=wallace.encounter.team[5];assert.equal(milotic.ability,'marvelscale');assert.equal(milotic.item,'toxicorb');
+// Champion Milotic Terastallizes on entry. Fix a nonimmune type when testing
+// Toxic Orb, then explicitly test both types that are immune to its poison.
+milotic.teraType='Water';
 wallace.run.combat=createClassicCombat(wallace.run,[milotic],{trainer:true});wallace.run.combat=playClassicCombat(wallace.run,{type:'move',move:'protect'});assert.equal(wallace.run.combat.teams[1][0].status,'맹독');
 const restored=restoreClassicNativeBattle(JSON.parse(JSON.stringify(wallace.run.combat)),wallace.run);assert.equal(restored.p2.active[0].status,'tox');assert.equal(restored.p2.active[0].item,'toxicorb');
+for(const teraType of ['Poison','Steel']){const f=fixture(354),immune=f.encounter.team[5];immune.teraType=teraType;f.run.combat=createClassicCombat(f.run,[immune],{trainer:true});f.run.combat=playClassicCombat(f.run,{type:'move',move:'protect'});assert.equal(f.run.combat.teams[1][0].terastallized,teraType);assert.equal(f.run.combat.teams[1][0].status,null);const b=restoreClassicNativeBattle(JSON.parse(JSON.stringify(f.run.combat)),f.run);assert.equal(b.p2.active[0].status,'');assert.equal(b.p2.active[0].item,'toxicorb');}
 for(const wave of [145,195]){
  const run={id:'rival-orb',wave,biome:0,rng:42,gymStart:20,party:[makeReferenceMon(151,100,{boxId:'player',moves:['Protect']})],modifiers:[],tools:{},seed:'fixture',trainerItemsRule:'source-v1',rivalChoices:{slot1:{index:2,subIndex:0}}};
  const encounter=classicEncounter(run),bird=encounter.team[1];assert.equal(bird.rogueSourceId,277);assert.equal(bird.ability,'guts');assert.equal(bird.item,'flameorb');run.encounter=encounter;
