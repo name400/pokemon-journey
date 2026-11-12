@@ -19,6 +19,7 @@ import manifest from '@/data/cloud-town-tiles.json';
 import {wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,magentaSewerMonsters,cloudNpcTile,walkable} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {adventureAvatarRows} from '@/lib/cloud-adventure/adventure-avatar.mjs';
 import {zygardeGuideTarget} from '@/lib/cloud-adventure/adventure-zygarde-guide.mjs';
+import {descentGuideTargets} from '@/lib/cloud-adventure/adventure-descent-guides.mjs';
 import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE,zone11WaterAt} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer,ZONE6_MARKET_STALLS} from '@/lib/cloud-adventure/adventure-zone6.mjs';
@@ -37,6 +38,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,width=736,height=544;
   let guide:{key:string,x:number,y:number,startX:number,startY:number,targetX:number,targetY:number,start:number}|null=null;
+  let descentKey='',descentGuides:Array<{x:number,y:number,startX:number,startY:number,targetX:number,targetY:number,start:number,direction:string}>=[];
   const scheduler=createFieldScheduler(requestAnimationFrame,cancelAnimationFrame,draw);invalidate.current=scheduler.invalidate;
   // Load field sprites only when a visible map actually refers to them. This
   // avoids competing with movement requests for dozens of unrelated images.
@@ -974,6 +976,12 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',Y:'#f4cf64',D:'#4b3741'};
     adventureAvatarRows(face).forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+ry*2+(ry>10?(rx<6?step:-step):0),2,2);}));
    }
+   // Naveen and Lida lead across the draft rooftop; positions are visual only.
+   if(w.district==='lumiose-protect'&&!w.interior&&w.zaMission36DescentPending&&w.zaMission36RooftopRoute&&w.zaMission37Stage===1){
+    const key=`${w.x},${w.y},${!!w.zaMission36AtPlaza}`;
+    if(key!==descentKey){const targets=w.zaMission36AtPlaza?[{x:5,y:4,direction:'down'},{x:6,y:4,direction:'down'}]:descentGuideTargets(w.map,w);descentGuides=targets.map((target:any,index:number)=>{const old=descentGuides[index],snap=!old||Math.abs(target.x-old.x)+Math.abs(target.y-old.y)>1.5;return {x:snap?target.x:old.x,y:snap?target.y:old.y,startX:snap?target.x:old.x,startY:snap?target.y:old.y,targetX:target.x,targetY:target.y,start:time,direction:target.direction};});descentKey=key;}
+    descentGuides.forEach((p,index)=>{const progress=reduce?1:Math.min(1,Math.max(0,(time-p.start)/140));p.x=p.startX+(p.targetX-p.startX)*progress;p.y=p.startY+(p.targetY-p.startY)*progress;if(Math.abs(p.x-w.x)+Math.abs(p.y-w.y)>.5)trainer(p.x,p.y,index===0?'#6b8799':'#b07883',p.direction,walking);});
+   }else{descentKey='';descentGuides=[];}
    // The server saves the companion’s last step; it never blocks the player.
    if(w.zaMission03Stage===2&&w.zaMission03DetourRequired===true&&!w.interior&&['lumiose','lumiose-vert-street-route','lumiose-station-alley','lumiose-station-roof'].includes(w.district)){
     const p=w.zaMission03CompanionPosition;
