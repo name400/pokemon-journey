@@ -508,3 +508,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 마젠타 6번지 배틀코트 옆 골목
 
 [공개 수집 위치 안내](https://sportsrant.indiatimes.com/gaming/list-of-all-colourful-screw-locations-in-pokmon-legends-z-a/articleshow/126639673.html)는 마젠타 6번지 배틀코트 근처 비계를 설명한다. 기존에 생략한 옥상 낙하 후 골목을 별도 화면으로 두고 비계가 있는 거리로 이어 놓았다. 골목의 폭·방향·착지점과 배틀코트의 정밀 위치는 확인되지 않은 초안이며 실제 코트나 아이템은 추가하지 않았다. 이전 거리 직행 선택지를 유지하고 골목에서 거리로 나가는 경로를 제공한다.
+
+### 마젠타 6번지 배틀코트 초안
+
+[수집 위치 안내](https://sportsrant.indiatimes.com/gaming/list-of-all-colourful-screw-locations-in-pokmon-legends-z-a/articleshow/126639673.html)는 6번지의 배틀코트 근처에 비계가 있다고 설명한다. 기존 골목 옆에 걸어 들어갈 수 있는 코트를 마련하고 거리에서 골목으로 들어가 다시 비계 쪽으로 돌아가는 경로를 연결했다. 코트 윤곽·방향·골목 접점은 추정이다. 트레이너나 야간 배틀존 규칙은 자료가 부족해 추가하지 않았다. 기존 골목·거리 저장 위치와 비계 사다리는 유지한다.

@@ -20,3 +20,10 @@ test('Magenta 6 scaffold links the street and roof while retaining legacy ladder
  for(const value of [scaffold,{...scaffold,x:18,y:4}]){const restored=restoreAdventurePosition(storeAdventurePosition(value,138),138);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaMission20Stage,restored.teamIds],[value.district,value.x,value.y,5,['kept']]);}
  const roof={...street,district:'lumiose-magenta-sector6-roof',x:2,y:13,facing:'down'};assert.deepEqual(fieldDialogue(roof).actions.map(x=>x.action),['magenta6Scaffold','magenta6Ladder']);assert.ok(fieldPath(fieldMap(roof),roof,{x:18,y:6}).length);
 });
+
+ test('Magenta court is walkable from the alley and retains stored positions',()=>{
+ const alley={area:3,district:'lumiose-magenta6-court-alley',interior:null,x:19,y:7,facing:'right',teamIds:['kept']},map=fieldMap(alley);
+ assert.equal(map[12][13],';');assert.ok(fieldPath(map,alley,{x:13,y:12}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...alley,x:13,y:12},139),139);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[alley.district,13,12,['kept']]);
+ const street={...alley,district:'lumiose-magenta-sector6',x:4,y:7};assert.equal(fieldDialogue(street).action,'magenta6CourtEnter');
+ });
