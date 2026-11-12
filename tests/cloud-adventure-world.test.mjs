@@ -53,7 +53,7 @@ test('water and structures block movement; paths stop at exits and batches are b
  assert.equal(stepField({area:0,x:1,y:8,badges:[]},'left').blocked,true);
  assert.equal(stepField({area:2,x:1,y:8,badges:[],expedition:{id:1}},'left').area,9);
  assert.equal(interactionAt({area:1,x:18,y:5,facing:'up'}).tile,'G');
- for(const path of [[],['constructor'],['__proto__'],Array(9).fill('up'),[null]])assert.throws(()=>validateAdventurePath(path));
+ for(const path of [[],['constructor'],['__proto__'],Array(13).fill('up'),[null]])assert.throws(()=>validateAdventurePath(path));
  assert.deepEqual(validateAdventurePath(['up','down']),['up','down']);
 });
 test('lab has reachable researcher and exit, with collision and a return to the field',()=>{

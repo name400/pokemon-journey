@@ -7,6 +7,7 @@ npx vite --config tests/browser/ui-readability/vite.config.mjs --host 127.0.0.1 
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/check.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-recovery.mjs
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
+CLOUD_TEST_WAIT_MS=1120 CLOUD_TEST_MIN_PREVIEW=10 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
 CLOUD_TEST_DISTRICT=lumiose-zone1 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
 CLOUD_TEST_DISTRICT=lumiose-zone1 CLOUD_TEST_BLOCK=1 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
 CLOUD_TEST_DISTRICT=lumiose-zone4 CLOUD_TEST_Y=14 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/ui-readability/cloud-movement-buffer.mjs
