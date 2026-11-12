@@ -4059,6 +4059,18 @@ test('trade evolution research belongs to the actual recipient and survives relo
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('trade evolution identifies old records with only a form ID',async()=>{
+ const previous=globalThis.__adventureUser;try{
+  const a={userId:'trade-legacy-a',displayName:'구형 교환 A'},b={userId:'trade-legacy-b',displayName:'구형 교환 B'};
+  globalThis.__adventureUser=a;await get();await call('start',{species:152});const first=state.world.activeId,old={...makeMon(64,30),boxId:first,moves:['염동력'],custom:{kept:'legacy'}};delete old.speciesId;delete old.stats;delete old.ivs;delete old.evs;delete old.growthRate;seedMon(first,old);
+  globalThis.__adventureUser=b;await get();await call('start',{species:152});const second=state.world.activeId;
+  for(const [u,code] of [[a,'OLDTRA'],[b,'OLDTRB']])sql.prepare('INSERT OR REPLACE INTO profiles(user_id,nickname,nickname_key,friend_code,updated_at) VALUES(?,?,?,?,?)').run(u.userId,u.displayName,u.userId,code,1);
+  sql.prepare("INSERT INTO friendships(pair_key,requester,recipient,status,created_at) VALUES(?,?,?,'accepted',?)").run(JSON.stringify([a.userId,b.userId].sort()),a.userId,b.userId,1);
+  const trade=await import(await loadTS('app/api/trades/route.ts'));async function tradeCall(payload){const response=await trade.POST(new Request('http://adventure.test/api/trades',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify(payload)}));const value=await response.json();assert.equal(response.status,200,JSON.stringify(value));return value;}
+  globalThis.__adventureUser=a;const offer=await tradeCall({action:'offer',friendCode:'OLDTRB',boxId:first}),tradeId=offer.items.find(t=>t.status==='pending').id;globalThis.__adventureUser=b;await tradeCall({action:'accept',id:tradeId,boxId:second});await get();assert.equal(rawMon(first).adventureTradeSpeciesId,64);assert.equal(rawMon(first).speciesId,undefined);assert.deepEqual(rawMon(first).custom,{kept:'legacy'});await call('evolve',{boxId:first,target:65});assert.equal(rawMon(first).speciesId,65);assert.equal(rawMon(first).adventureTradeConsumed,true);assert.deepEqual(rawMon(first).custom,{kept:'legacy'});assert.equal(rawWorld().zaResearchTradeEvolutions,1);await get();assert.equal(rawWorld().zaResearchTradeEvolutions,1);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('trade-held evolutions require the item during the new trade and credit the recipient once',async()=>{
  const previous=globalThis.__adventureUser;try{
   const a={userId:'trade-item-a',displayName:'도구 교환 A'},b={userId:'trade-item-b',displayName:'도구 교환 B'};
