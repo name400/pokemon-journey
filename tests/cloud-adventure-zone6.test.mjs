@@ -124,3 +124,9 @@ test('Zone 6 shallow underpass aligns with the bridge and preserves saved layers
  assert.equal(stepField(canal,'down').y,8);assert.ok(fieldPath(below,canal,{x:11,y:12}).length);
  for(const value of [ground,{...canal,x:11,y:10}]){const s=restoreAdventurePosition(storeAdventurePosition(value,121),121);assert.deepEqual([s.district,s.zaZone6Layer,s.x,s.y,s.teamIds],[value.district,value.zaZone6Layer,value.x,value.y,['kept']]);}
 });
+test('Zone 6 ground court shows Meditite only by day',()=>{
+ const day={area:3,district:'lumiose-zone6',zaZone6Period:'day'},night={...day,zaZone6Period:'night'};
+ assert.equal(zone6Visible(day,'b').species,307);assert.equal(zone6Map(day)[5][15],'b');assert.equal(zone6Visible(night,'b'),null);assert.equal(zone6Map(night)[5][15],'g');
+ for(const r of [0,.1,.3,.5,.7,.9,.999])assert.notEqual(zone6Encounter(()=>r,'night').speciesId,307);
+ assert.equal(zone6Encounter(()=>.5,'day').speciesId,307);
+});

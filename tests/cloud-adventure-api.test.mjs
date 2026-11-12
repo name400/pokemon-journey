@@ -4671,3 +4671,14 @@ test('Zone 19 waits for a player to leave a spent encounter position',async()=>{
   now+=1200000;await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',5,7]);assert.equal(rawWorld().zaZone19Spent.furfrou,true);await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone19',5,8]);assert.equal(rawWorld().zaZone19Spent,undefined);assert.equal(state.world.map[7][5],'a');assert.deepEqual(state.world.teamIds,team);
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zone 6 Meditite follows day and night without changing an active battle',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone6-court-time-qa',displayName:'낮 배틀코트'};
+ try{
+  globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone6',interior:null,x:15,y:6,facing:'up',zaRoyaleRank:'F',zaZone6Layer:'ground',zaZone6Period:'night',combat:null,encounter:null},state.revision+1));
+  await get();assert.equal(state.world.map[5][15],'b');assert.equal(state.world.interaction.action,'zone6Wild-meditite');assert.equal(typeof rawWorld().zaWildShinyRolls['zone6:meditite:307'],'boolean');
+  await call('zone6Wild-meditite');assert.equal(state.battle.teams[1][0].speciesId,307);globalThis.__adventureTime={period:'night',hour:22};await get();assert.equal(state.battle.teams[1][0].speciesId,307);await call('flee');await get();assert.equal(state.world.map[5][15],'g');assert.notEqual(state.world.interaction?.action,'zone6Wild-meditite');await call('zone6Wild-meditite',{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.world.map[5][15],'b');assert.equal(state.world.interaction.action,'zone6Wild-meditite');
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
