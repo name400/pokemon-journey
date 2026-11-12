@@ -2235,6 +2235,25 @@ test('Mission 23 lower rooftop persists, returns to scaffolding and reaches Amph
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('research levels 9 through 24 offer reusable verified TMs and preserve old rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-tm-9-15-qa',displayName:'연구 기술머신'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;
+  await call('claimResearchTm',{level:9},409);
+  const {RESEARCH_TYPES}=await import('../lib/cloud-adventure/adventure-research.mjs');
+  seedWorld({zaResearchRewards:[2,8],zaResearchTrainerWins:1000,zaResearchCaptures:Object.fromEntries(RESEARCH_TYPES.map(t=>[t,50]))});await get();
+  const cases=[[9,4,'섀도클로'],[11,25,'빛의장막'],[12,1,'기가드레인'],[13,7,'냉동펀치'],[14,64,'사이코쇼크'],[15,25,'번개펀치'],[16,25,'그림자분신'],[17,4,'불꽃펀치'],[18,66,'땅고르기'],[19,16,'유턴'],[20,7,'사념의박치기'],[21,1,'칼춤'],[22,9,'러스터캐논'],[23,4,'스톤샤워'],[24,25,'10만볼트']];
+  for(const [level,species,move] of cases){
+   await call('claimResearchTm',{level});await call('claimResearchTm',{level},409);
+   const mon={...makeMon(species,20),moves:['몸통박치기','울음소리','전광석화','방어'],pp:{tackle:3,growl:7,quickattack:0,protect:4}};seedMon(id,mon);await get();await call('teachResearchTm',{level,slot:1});
+   assert.deepEqual(rawMon(id).moves,['몸통박치기',move,'전광석화','방어']);assert.equal(rawMon(id).pp.tackle,3);assert.equal(rawMon(id).pp.quickattack,0);
+   await get();assert.equal(state.box.find(m=>m.boxId===id).moves[1],move);await call('teachResearchTm',{level,slot:0},409);
+  }
+  assert.ok([2,8,...cases.map(x=>x[0])].every(n=>state.world.zaResearchRewards.includes(n)));
+  const incompatible={...makeMon(1,20),moves:['몸통박치기']};seedMon(id,incompatible);await get();await call('teachResearchTm',{level:9,slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('research level 8 Whirlpool TM survives reload and only teaches compatible party members',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-tm070-qa',displayName:'연구 기술머신'};
  try{
