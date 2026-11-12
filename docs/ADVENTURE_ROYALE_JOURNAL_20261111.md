@@ -15,3 +15,6 @@
 
 
 [로열 안내](https://www.serebii.net/legendsz-a/z-aroyale.shtml)는 승리한 웨이터·웨이트리스에게 말을 걸면 포켓몬을 회복할 수 있다고 설명하며, [랭크 V 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankv.shtml)은 Anna를 웨이트리스로 분류한다. Anna를 이긴 후 말을 걸면 파티를 회복한다. 턴제 게임의 기존 회복 방식에 맞춰 HP·상태·PP를 회복하며, 횟수는 자료가 확인되지 않아 한 방문당 한 번으로 제한한 초안이다. 기존 세션 승리 이력은 유지한다.
+
+
+랭크 F의 [상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankf.shtml)에 기재된 웨이터 Malik과 웨이트리스 Alix의 팀과 기술을 추가했다. [로열 안내](https://www.serebii.net/legendsz-a/z-aroyale.shtml)에 따라 승리 후 대화로 파티를 회복할 수 있다. 상대 배치와 승리당 3,200점은 초안이며, 회복 횟수도 원작 근거가 부족해 각 상대마다 방문당 한 번으로 제한한다.

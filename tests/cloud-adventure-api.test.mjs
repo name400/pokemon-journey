@@ -1841,6 +1841,16 @@ test('Rank V royale trainers retain documented moves through battles and reload'
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('Rank F waiters battle and heal once per visit with saved progress',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-f-waiters-qa',displayName:'랭크F회복테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  const fixture={...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'F',zaMission14Stage:1,zaRoyaleFPoints:0};seedWorld(storeAdventurePosition(fixture,state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();await call('enterRoyaleZone');
+  for(const [tile,idx,team] of [['a',3,[[692,33],[582,33]]],['b',4,[[712,33],[459,33]]]]){await walkTo(tile);await call(`royaleFHeal${idx}`,{},409);await call(`royaleFExtra${idx}`);assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),team);await get();await battle();await get();assert.equal(state.world.interaction.action,`royaleFHeal${idx}`);const mon=rawMon(id);seedMon(id,{...mon,hp:1,status:'독',pp:{psystrike:1}});await get();const coins=state.wallet.coins;await call(`royaleFHeal${idx}`);await get();assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(state.wallet.coins,coins);await call(`royaleFHeal${idx}`,{},409);}
+  assert.equal(state.world.zaRoyaleFPoints,6400);await walkTo({x:11,y:14});await call('move',{direction:'down'});await walkTo('T');await call('enterRoyaleZone');await walkTo('a');await call('royaleFHeal3',{},409);assert.equal(state.world.interaction.action,'royaleFExtra3');
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Rank V waitress heals the party once after winning and survives reload',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-anna-heal-qa',displayName:'로열회복테스트'};
  try{
