@@ -4737,3 +4737,17 @@ test('early alpha returns after a time change without respawning under the playe
   await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaZone4AlphaSpent,undefined);assert.equal(state.world.map[10][4],'p');assert.equal(rawWorld().zaWildShinyRolls['alpha:zone4-spinarak:167'],false);await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('zone 3 tower alphas preserve their shiny identity through battle and capture',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone3-tower-alpha-qa',displayName:'정원 건물 우두머리'};
+ try{
+  globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const lead=state.world.activeId,wallet=structuredClone(state.wallet);
+  const cases=[{district:'lumiose-rouge-tower-interior',zaZone3TowerUpper:false,x:8,y:8,facing:'right',species:667,key:'alpha:zone3-tower-litleo:667',spent:'zaZone3LitleoSpent'}, {district:'lumiose-zone3',zaZone3TowerUpper:true,x:12,y:6,facing:'right',species:661,key:'alpha:zone3-roof-fletchling:661',spent:'zaZone3FletchlingSpent'}];
+  for(const c of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,interior:null,zaBunnelbyQuest:2,zaRoyaleRank:'F',combat:null,encounter:null,zaWildShinyRolls:{},adventureBalls:{masterball:2},...c},state.revision+1));await get();await call('zone3TowerAlpha',{},409);
+   seedWorld(storeAdventurePosition({...rawWorld(),zaBunnelbyQuest:3,[c.spent]:false,...c},state.revision+1));globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildShinyRolls[c.key],true);globalThis.__adventureRandom=()=>.999;await get();await call('zone3TowerAlpha');assert.equal(state.battle.teams[1][0].speciesId,c.species);assert.equal(state.battle.teams[1][0].shiny,true);await get();assert.equal(state.battle.teams[1][0].shiny,true);await call('flee');await get();assert.equal(rawWorld().zaWildShinyRolls[c.key],true);
+   await call('zone3TowerAlpha');await call('ball',{ball:'masterball'});await get();assert.equal(rawWorld()[c.spent],true);assert.equal(rawWorld().zaWildShinyRolls[c.key],undefined);assert.ok(state.box.some(m=>m.speciesId===c.species&&m.shiny===true));assert.equal(state.world.activeId,lead);assert.deepEqual(state.wallet,wallet);await call('zone3TowerAlpha',{},409);
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone3',zaZone3TowerUpper:true,x:11,y:10,facing:'up'},state.revision+1));await get();await call('zone3TowerDown');assert.equal(state.world.district,'lumiose-rouge-tower-interior');await call('zone3TowerUp');assert.equal(state.world.district,'lumiose-zone3');assert.equal(state.world.zaZone3TowerUpper,true);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
