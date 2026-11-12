@@ -572,3 +572,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 6 카페와 층 이동의 시각 표현
 
 [카페 목록](https://www.serebii.net/legendsz-a/cafes.shtml)은 Café Bataille이 구역 6에 있다고 설명하며, [구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-6-guide-all-pokemon-and-alphas)는 거리와 옥상을 설명한다. 기존 차단 타일에 카페 지붕·창과 입구를 그리고 수로 사다리와 홀로베이터를 구별했다. 세부 건물 형태·위치와 층 연결은 원작에서 정밀 확인되지 않은 초안이다. 기존 지형·이동·저장 판정은 바꾸지 않았다.
+
+### 구역 19 포도밭과 정자 시각 표현
+
+[구역 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_19)는 포도나무와 정자가 있는 공원을 설명한다. 기존 타일을 그대로 두고 포도나무 지지대·포도송이와 정자 경계의 지붕·기둥을 그렸다. 포도나무가 그려진 풀은 기존과 같이 통행과 조우가 가능하다. 나무줄의 위치와 실제 정자의 지붕·높이·정밀 좌표는 확인되지 않은 2D 초안이며 별도 높이층은 없다.
