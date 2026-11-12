@@ -565,6 +565,19 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      }return;}
     if(w.district==='lumiose-rust'||w.district==='lumiose'||w.district==='lumiose-floral'||w.district==='lumiose-vernal'||w.district==='lumiose-vert-plaza'||w.district==='lumiose-vert2'||w.district==='lumiose-centrico-route'||w.district==='lumiose-rouge-north'||w.district==='lumiose-north-boulevard'||w.district==='lumiose-quasartico'||w.district==='lumiose-rooftop'||w.district==='lumiose-zone1'||w.district==='lumiose-zone2'||w.district==='lumiose-zone3'||w.district==='lumiose-zone4'||w.district==='lumiose-bureau'||w.district==='lumiose-garden'||w.district==='lumiose-site'||w.district==='lumiose-wild'||w.district==='lumiose-observation'||w.district==='lumiose-royale'){
      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#ddd2ba':'#e8dec9'):((x+y)%2?'#e7dfce':'#ded7c5');ctx.fillRect(px,py,tile,tile);
+     // Southern Street crosses Zone 1 from west to east. Only ordinary floor
+     // and existing road tiles are paved: grass and event tiles retain their
+     // appearance and behaviour. Exact width and pavement are provisional.
+     if(w.district==='lumiose-zone1'&&!w.interior&&x>0&&x<22){
+      if(y===8&&(c==='.'||c===',')){
+       ctx.fillStyle='#7e8783';ctx.fillRect(px,py,tile,tile);
+       ctx.fillStyle='#aeb5a9';ctx.fillRect(px,py+2,tile,2);ctx.fillRect(px,py+tile-4,tile,2);
+       if(x%3===1){ctx.fillStyle='#e3ddc4';ctx.fillRect(px+5,py+tile/2-1,tile-10,2);}
+      }else if((y===7||y===9)&&c==='.'){
+       ctx.fillStyle='#ccc6b4';ctx.fillRect(px,py,tile,tile);
+       ctx.fillStyle='#afa998';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);
+      }
+     }
      // Hotel Z's paved forecourt, drawn on existing walkable tiles only.
      if(w.district==='lumiose'&&c==='.') {ctx.fillStyle=(x+y)%2?'#ded7c7':'#e7e0d0';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#cfc7b7';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:1),py+2,1,tile-4);if(x>=10&&x<=12&&y>=6&&y<=14){ctx.fillStyle='#c7bca9';ctx.fillRect(px,py,tile,2);ctx.fillStyle='#f0e9d9';ctx.fillRect(px+2,py+3,tile-4,tile-5);}}
 
