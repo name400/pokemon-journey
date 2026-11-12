@@ -17,6 +17,7 @@ import {fieldPath,findTile,storeAdventurePosition} from '../lib/cloud-adventure/
 import {TRAINERS} from '../lib/campaign.mjs';
 import {ZONE20_ALPHA} from '../lib/cloud-adventure/adventure-mission42.mjs';
 import lumioseDex from '../data/lumiose-dex.json' with {type:'json'};
+import {RESEARCH_TYPES,researchSummary,researchItemReward} from '../lib/cloud-adventure/adventure-research.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url)),sql=new DatabaseSync(':memory:');
 for(const name of (await fs.readdir(new URL('../drizzle/',import.meta.url))).filter(n=>/^\d.*\.sql$/.test(n)).sort())sql.exec(await fs.readFile(new URL('../drizzle/'+name,import.meta.url),'utf8'));
@@ -3340,5 +3341,18 @@ test('mega stone shop preserves one-off purchases and starter exclusions',async(
   const other='mega-held-boxed',mon={...makeMon(65,30),item:'medichamite'};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,mon.id,JSON.stringify(mon),'qa',1);await get();await call('buyEmporiumMega-medichamite',{},409);assert.equal(state.wallet.coins,200000);
   await place({zaMission37Complete:true,zaIntroStarterSpecies:null});assert.ok(!state.world.interaction.actions.some(a=>a.action==='buyEmporiumMega-meganiumite'));await call('buyEmporiumMega-emboarite',{},409);
   await place({zaIntroStarterSpecies:152});assert.ok(!state.world.interaction.actions.some(a=>a.action==='buyEmporiumMega-meganiumite'));assert.ok(state.world.interaction.actions.some(a=>a.action==='buyEmporiumMega-emboarite'));await call('buyEmporiumMega-meganiumite',{},409);await call('buyEmporiumMega-emboarite');assert.equal(state.wallet.coins,100000);assert.equal(state.inventory.emboarite,1);await get();assert.equal(state.inventory.emboarite,1);await call('buyEmporiumMega-emboarite',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+
+test('research item milestones preserve rewards until safely claimed once',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-item-rewards-qa',displayName:'연구 보상 검증'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],before=structuredClone(rawMon(state.world.activeId));await call('claimResearchItemReward',{level:10},409);await call('claimResearchItemReward',{level:8},409);await call('claimResearchItemReward',{level:'10'},409);
+  const wildTypes=Object.fromEntries(RESEARCH_TYPES.map(t=>[t,50]));seedWorld({adventureDexSpecies:lumioseDex.nationalSpeciesIds,zaResearchCaptures:wildTypes,zaResearchTrainerWins:1000,zaResearchEvolutions:50,zaResearchItemEvolutions:10});await get();assert.ok(researchSummary(rawWorld()).level>=36);
+  const sKey=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-s']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,990)').run(sKey,globalThis.__adventureUser.userId,'za-exp-candy-s');await get();await call('claimResearchItemReward',{level:10},409);assert.equal(rawWorld().zaResearchItemRewards,undefined);assert.equal(state.inventory['za-exp-candy-s'],990);
+  sql.prepare('UPDATE inventory SET quantity=989 WHERE key=?').run(sKey);await get();const binding=globalThis.__adventureEnv.DB,originalBatch=binding.batch;binding.batch=async statements=>{sql.prepare('UPDATE inventory SET quantity=999 WHERE key=?').run(sKey);return originalBatch(statements);};try{await call('claimResearchItemReward',{level:10},409);}finally{binding.batch=originalBatch;}await get();assert.equal(rawWorld().zaResearchItemRewards,undefined);assert.equal(state.inventory['za-exp-candy-s'],999);
+  sql.prepare('UPDATE inventory SET quantity=989 WHERE key=?').run(sKey);await get();const revision=state.revision;await call('claimResearchItemReward',{level:10});assert.equal(state.inventory['za-exp-candy-s'],999);assert.deepEqual(state.world.zaResearchItemRewards,[10]);const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'claimResearchItemReward',revision,level:10})}));assert.equal(replay.status,409);await get();await call('claimResearchItemReward',{level:10},409);assert.equal(state.inventory['za-exp-candy-s'],999);
+  await call('claimResearchItemReward',{level:25});assert.equal(state.inventory['za-exp-candy-m'],10);await call('claimResearchItemReward',{level:36});assert.equal(state.inventory.bottlecap,10);await get();assert.deepEqual(state.world.zaResearchItemRewards,[10,25,36]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(team[0]),before);await call('claimResearchItemReward',{level:49},409);assert.equal(researchItemReward(49).item,'masterball');assert.equal(researchItemReward(50),undefined);await call('useAdventureExpCandyS');assert.equal(state.inventory['za-exp-candy-s'],998);assert.ok(rawMon(team[0]).level>before.level||rawMon(team[0]).experience>before.experience);
  }finally{globalThis.__adventureUser=previous;}
 });
