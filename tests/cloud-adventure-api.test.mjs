@@ -3529,6 +3529,20 @@ test('catching the missing Zone 20 species completes its research task',async()=
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
+test('Zone 19 missing species can be caught and complete research after reload',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;
+ globalThis.__adventureUser={userId:'zone19-research-completion-qa',displayName:'구역19 조사'};
+ try{
+  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});
+  const team=[...state.world.teamIds],{ZONE19_ENCOUNTERS}=await import('../lib/cloud-adventure/adventure-zone19.mjs'),{LATER_ZONE_SPECIES,laterZoneResearch}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:2,y:2,facing:'right',zaRoyaleRank:'B',adventureBalls:{masterball:1},adventureDexSpecies:LATER_ZONE_SPECIES[19].filter(id=>id!==780)},state.revision+1));
+  await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===19).points,0);
+  const rolls=[0,(ZONE19_ENCOUNTERS.findIndex(row=>row[0]===780)+.5)/ZONE19_ENCOUNTERS.length,0,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;
+  await call('move',{direction:'right'});assert.equal(rawWorld().encounter?.speciesId,780);
+  await call('ball',{ball:'masterball'});await get();assert.ok(rawWorld().adventureDexSpecies.includes(780));assert.ok(state.box.some(m=>m.speciesId===780));assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===19).points,1000);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
+
 test('Zone 20 earlier stream position migrates safely through API and reload',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-stream-migration-qa',displayName:'구역20 저장 검증'};
  try{

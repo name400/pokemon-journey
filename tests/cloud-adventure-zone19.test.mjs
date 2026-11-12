@@ -26,3 +26,14 @@ test('Zone 19 east entrance connects directly to Jaune Sector 8',()=>{
  const saved=restoreAdventurePosition(storeAdventurePosition({...road,...entry,zaRoyaleRank:'B'},11),11);assert.deepEqual(saved.teamIds,['kept']);assert.deepEqual(saved.zaZone19Items,['tree-luxury']);
  assert.ok(fieldPath(zone19Map(saved),saved,{x:11,y:9}).length);const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-jaune-sector8',1,8]);
 });
+
+test('every Zone 19 research species can appear at its documented levels',async()=>{
+ const {ZONE19_ENCOUNTERS}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
+ const {LATER_ZONE_SPECIES}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+ assert.deepEqual(new Set(ZONE19_ENCOUNTERS.map(row=>row[0])),new Set(LATER_ZONE_SPECIES[19]));
+ for(const [i,[species,min,max]] of ZONE19_ENCOUNTERS.entries()){
+  const encounter=(levelRoll)=>{const rolls=[(i+.5)/ZONE19_ENCOUNTERS.length,levelRoll];return zone19Encounter({},()=>rolls.shift());};
+  assert.deepEqual(encounter(0),{speciesId:species,level:min});
+  assert.deepEqual(encounter(.999),{speciesId:species,level:max});
+ }
+});
