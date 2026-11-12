@@ -148,6 +148,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      ctx.fillStyle=c==='#'?'#a69b8d':c===','?'#c8bdad':(x+y)%2?'#d9dfd1':'#e3e9dc';ctx.fillRect(px,py,tile,tile);
      if(c===','){ctx.fillStyle='#b4ab9c';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:0),py,1,tile);}
      if(station){ctx.fillStyle=y===2?'#687980':'#ddd5c4';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2?'#a8b0aa':'#b2a99a';ctx.fillRect(px,py+tile-4,tile,4);if(y===3||y===4){ctx.fillStyle='#728f94';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle='#d5e5dc';ctx.fillRect(px+8,py+6,3,tile-12);ctx.fillRect(px+tile/2,py+4,2,tile-8);}if(y===5){ctx.fillStyle=(x===8||x===9)?'#536e76':'#819698';ctx.fillRect(px+4,py+4,tile-8,tile-4);ctx.fillStyle='#d8ded3';ctx.fillRect(px+tile/2,py+5,2,tile-5);}}
+     if(c==='r'){ctx.fillStyle='#c8bdad';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#746d63';ctx.fillRect(px+3,py+10,tile-6,tile-12);ctx.fillStyle='#aaa497';ctx.fillRect(px+7,py+5,tile-14,tile-14);ctx.fillStyle='#d0c7b7';ctx.fillRect(px+9,py+6,8,3);}
      if(c==='H'){ctx.fillStyle='#f0e8d8';ctx.fillRect(px+3,py+5,tile-6,tile-8);ctx.fillStyle='#bf4d55';ctx.fillRect(px+2,py+3,tile-4,8);ctx.fillStyle='#5b7780';ctx.fillRect(px+7,py+15,tile-14,tile-19);ctx.fillStyle='#fff';ctx.fillRect(px+tile/2-3,py+4,6,6);ctx.fillStyle='#a83d46';ctx.fillRect(px+tile/2-2,py+5,4,2);}
      if(c==='X'||c==='W'){ctx.fillStyle='#81998c';ctx.fillRect(px+9,py+9,tile-18,tile-18);}return;
     }
@@ -535,6 +536,11 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     ctx!.fillStyle='#28473155';ctx!.beginPath();ctx!.ellipse(px+12,py+28,12,4,0,0,Math.PI*2);ctx!.fill();
     const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',Y:'#f4cf64',D:'#4b3741'};
     adventureAvatarRows(face).forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+ry*2+(ry>10?(rx<6?step:-step):0),2,2);}));
+   }
+   // Visual companion accompanies the opening route; server positions stay authoritative.
+   if(w.zaMission03Stage===2&&w.zaMission03DetourRequired===true&&!w.interior&&['lumiose','lumiose-vert-street-route','lumiose-station-alley','lumiose-station-roof'].includes(w.district)){
+    const offsets:Record<string,[number,number]>={up:[0,1],down:[0,-1],left:[1,0],right:[-1,0]},[dx,dy]=offsets[w.facing]||[0,1],fx=w.x+dx,fy=w.y+dy;
+    if(['.',','].includes(w.map[fy]?.[fx]))trainer(s.x+dx*.75,s.y+dy*.75,'#a17d72',w.facing,walking);
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
    if(w.district==='lumiose-zone1'&&!w.interior&&[4,5].includes(w.zaMission03Stage)){const isFletchling=w.zaMission03Stage===4,x=isFletchling?8:14,y=6,px=x*tile,py=y*tile,img=fieldImages[isFletchling?661:659];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#668c80';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(isFletchling?'화살꼬빈':'파르빗',px+tile/2,py+20);}}
