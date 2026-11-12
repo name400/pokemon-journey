@@ -3190,3 +3190,39 @@ test('twelve-step movement preserves saves and stops at walls and encounters',as
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone1',interior:null,x:17,y:8,steps:19},state.revision+1));await get();globalThis.__adventureRandom=()=>0;await call('move',{path:['left','up',...Array(10).fill('right')],compact:true});assert.deepEqual([state.world.x,state.world.y,state.world.steps],[16,7,21]);assert.ok(state.battle);await get();assert.ok(state.battle);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
+
+test('movement fence preserves valid revision-bound state and rejects a delayed movement',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'movement-fence-qa',displayName:'이동 복구 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:8,facing:'right'},state.revision+1));await get();
+  const rev=state.revision,world=rawWorld(),mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet),inventory=structuredClone(state.inventory);
+  const req=(action,extra={})=>new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action,revision:rev,...extra})});
+  const fenced=await route.POST(req('movementFence'));assert.equal(fenced.status,200);assert.deepEqual(await fenced.json(),{settled:true});
+  const after=rawWorld();assert.deepEqual(after,{...world,districtPosition:{...world.districtPosition,revision:rev+1}});assert.deepEqual(rawMon(id),mon);
+  const late=await route.POST(req('move',{direction:'right',compact:true}));assert.equal(late.status,409);assert.deepEqual(rawWorld(),after);
+  const retry=await route.POST(req('movementFence'));assert.equal(retry.status,200);const current=sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId);assert.equal(current.revision,rev+1);
+  await get();assert.deepEqual([state.world.x,state.world.y],[3,8]);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,inventory);
+  const future=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:rev+20})}));assert.equal(future.status,409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('movement fence keeps only currently valid embedded revision markers',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'movement-fence-markers-qa',displayName:'복구 호환 검증'};
+ try{
+  await get();await call('start',{species:1});const rev=state.revision+1;
+  seedWorld({districtPosition:{x:3,y:8,revision:rev},interiorPosition:{x:5,y:6,revision:rev-1},adventureCatchWindow:{revision:rev,foe:{speciesId:1}}});
+  const before=rawWorld(),req=new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:rev})});
+  const response=await route.POST(req);assert.equal(response.status,200);const after=rawWorld();
+  assert.deepEqual(after,{...before,districtPosition:{...before.districtPosition,revision:rev+1},adventureCatchWindow:{...before.adventureCatchWindow,revision:rev+1}});
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('persisted movement fence cannot change another active partner',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'movement-fence-account-qa',displayName:'복구 계정 검증'};
+ try{
+  await get();await call('start',{species:1});const before=rawWorld(),rev=state.revision;
+  const req=new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:rev,activeId:'unrelated-partner'})});
+  const response=await route.POST(req);assert.equal(response.status,200);assert.deepEqual(rawWorld(),before);assert.equal(sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId).revision,rev);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

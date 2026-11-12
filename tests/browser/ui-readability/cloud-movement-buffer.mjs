@@ -13,7 +13,7 @@ try{
  await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
  await page.route('**/api/world**',async r=>{
   if(r.request().method()==='POST'){
-   posts++;inflight++;maxInflight=Math.max(maxInflight,inflight);const body=r.request().postDataJSON();assert.equal(body.revision,revision);assert.ok(body.path.length<=12);paths.push(body.path);
+   const body=r.request().postDataJSON();if(body.action==='movementFence'){if(body.revision===revision&&(body.activeId==null||body.activeId===world.activeId))revision++;return r.fulfill({json:{settled:true}});}posts++;inflight++;maxInflight=Math.max(maxInflight,inflight);assert.equal(body.revision,revision);assert.ok(body.path.length<=12);paths.push(body.path);
    if(posts===1){firstStarted();await gate;if(simulateBlock){inflight--;return r.fulfill({status:409,json:{error:'진행이 변경됐습니다.'}});}}
    for(const direction of body.path){const step=stepField(world,direction);if(step.blocked)break;world={...world,...step,steps:world.steps+1};if(step.transitioned)break;}
    revision++;inflight--;
