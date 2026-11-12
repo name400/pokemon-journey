@@ -4904,3 +4904,20 @@ test('Mission 35 solo multi-foe encounter resumes, retries, and preserves old co
   const oldFoes=[681,679,679].map((species,i)=>({...makeMon(species,i?34:50),boxId:`legacy-sword-${i}`,teraType:'Steel'})),legacy=createCombat([strong],oldFoes,{heals:0});seedMon(id,strong);seedWorld(storeAdventurePosition({...rawWorld(),...base,combat:legacy,trainer:{id:'mission35-aegislash',name:'기존 배틀'}},state.revision+1));await get();assert.equal(rawWorld().combat.format,undefined);await battle();assert.equal(state.world.zaLysandreAegislashWon,true);assert.deepEqual(state.world.teamIds,[id]);
  }finally{globalThis.__adventureUser=old;}
 });
+
+test('Rank D additional opponents preserve progression and enforce encounter boundaries',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-d-extra-qa',displayName:'랭크 D 추가 상대'};
+ try{
+  globalThis.__adventureTime={period:'night',hour:22};await get();await call('start',{species:152});const id=state.world.activeId,strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}},party=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,strong);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:11,y:14,facing:'up',zaRoyaleRank:'D',zaMission20Complete:true,zaRoyaleDPoints:3800,zaRoyaleDSessionWins:['royale-d-elise'],combat:null,encounter:null,trainer:null},state.revision+1));await get();await walkTo({x:19,y:12});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'royaleDExtra4');
+  const cases=[[4,19,11,'royale-d-gabriel',[[660,40],[505,40]]],[5,12,5,'royale-d-bryan',[[560,40],[587,40]]],[6,3,11,'royale-d-clara',[[676,41],[229,41]]],[7,9,11,'royale-d-amina',[[375,43],[227,43]]],[8,15,11,'royale-d-emmanuel',[[553,41],[553,41]]],[9,19,5,'royale-d-enora',[[695,42],[714,42]]]];
+  for(const [index,x,y,trainer,expected] of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x,y:y+1,facing:'up',zaRoyaleRank:'D',zaMission20Complete:true,combat:null,encounter:null,trainer:null},state.revision+1));await get();assert.equal(state.world.interaction.action,`royaleDExtra${index}`);
+   if(index===4){await call('royaleDExtra5',{},409);globalThis.__adventureTime={period:'day',hour:12};await call('royaleDExtra4',{},409);globalThis.__adventureTime={period:'night',hour:22};}
+   await call(`royaleDExtra${index}`);assert.equal(state.world.trainer.id,trainer);assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),expected);if(index===4)assert.deepEqual(rawWorld().combat.teams[1][0].moves,['Dig','Bounce','Take Down','Super Fang']);await get();assert.equal(state.world.trainer.id,trainer);
+   if(index===4){const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.ok(rawWorld().zaRoyaleDSessionWins.includes(trainer));await get();await call('royaleDExtra4',{},409);}else await call('forfeit');
+   assert.ok(rawWorld().zaRoyaleDSessionWins.includes('royale-d-elise'));assert.deepEqual(state.world.teamIds,party);assert.deepEqual(state.wallet,wallet);
+  }
+  assert.equal(rawWorld().zaRoyaleDPoints,7600);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',interior:null,x:15,y:12,facing:'up',zaRoyaleDPoints:38000},state.revision+1));await get();await call('royaleDExtra8',{},409);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
