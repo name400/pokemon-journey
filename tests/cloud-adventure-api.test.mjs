@@ -1841,6 +1841,16 @@ test('Rank V royale trainers retain documented moves through battles and reload'
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('Rank V waitress heals the party once after winning and survives reload',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-anna-heal-qa',displayName:'로열회복테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,other='royale-anna-benched',strong={...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);const fainted={...makeMon(25,5),hp:0,status:'독',pp:{thundershock:0}};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,25,JSON.stringify(fainted),'qa',1);await get();await call('team',{ids:[id,other]});
+  const fixture={...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:0};seedWorld(storeAdventurePosition(fixture,state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();await call('enterRoyaleZone');await walkTo('U');await call('royaleVAnnaHeal',{},409);await call('royaleDaniel');await battle();await get();assert.equal(state.world.zaRoyaleVPoints,550);assert.equal(state.world.interaction.action,'royaleVAnnaHeal');
+  const mon=rawMon(id);seedMon(id,{...mon,hp:1,status:'독',pp:{psystrike:1}});seedWorld({zaRoyaleVPoints:6000,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();assert.equal(state.world.interaction.action,'royaleVAnnaHeal');const wallet=structuredClone(state.wallet);await call('royaleVAnnaHeal');await get();assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(rawMon(other).hp,rawMon(other).maxHp);assert.equal(rawMon(other).status,null);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaRoyaleVPoints,6000);assert.deepEqual(state.world.teamIds,[id,other]);await call('royaleVAnnaHeal',{},409);seedWorld({zaRoyaleVPoints:550,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();await walkTo('T');await call('enterRoyaleZone');await walkTo('U');await call('royaleVAnnaHeal',{},409);assert.equal(state.world.interaction.action,'royaleDaniel');
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Magenta court night royale preserves rank progress and returns to the court',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'magenta6-royale-qa',displayName:'마젠타로열테스트'};
  try{
