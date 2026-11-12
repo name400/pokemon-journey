@@ -15,3 +15,13 @@ test('research TMs retain core effects in the existing turn-based simulator',()=
  combat=playDuel(combat,[{type:'move',move:'기가드레인'},{type:'move',move:'튀어오르기'}]);
  assert.ok(combat.teams[0][0].hp>before);assert.ok(combat.teams[1][0].hp<foe.hp);
 });
+
+test('late research TMs apply stat boosts and healing restrictions',()=>{
+ const caster={...makeMon(63,50),boxId:'caster',moves:['명상','회복봉인']};
+ const foe={...makeMon(35,50),boxId:'foe',moves:['튀어오르기']};
+ let combat=createCombat([caster],[foe]);
+ combat=playDuel(combat,[{type:'move',move:'명상'},{type:'move',move:'튀어오르기'}]);
+ let b=Battle.fromJSON(combat.snapshot);assert.equal(b.p1.active[0].boosts.spa,1);assert.equal(b.p1.active[0].boosts.spd,1);
+ combat=playDuel(combat,[{type:'move',move:'회복봉인'},{type:'move',move:'튀어오르기'}]);
+ b=Battle.fromJSON(combat.snapshot);assert.ok(b.p2.active[0].volatiles.healblock);
+});

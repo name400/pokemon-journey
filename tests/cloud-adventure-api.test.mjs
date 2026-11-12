@@ -2254,6 +2254,25 @@ test('research levels 9 through 24 offer reusable verified TMs and preserve old 
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('research levels 26 through 46 award and teach every remaining TM',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-late-tm-qa',displayName:'후반 연구 기술머신'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;
+  await call('claimResearchTm',{level:26},409);
+  const {RESEARCH_TYPES,researchSummary}=await import('../lib/cloud-adventure/adventure-research.mjs'),{RESEARCH_MEGA_STONES}=await import('../lib/cloud-adventure/adventure-mega-research.mjs');
+  seedWorld({zaResearchRewards:[2,8,24],adventureDexSpecies:lumioseDex.nationalSpeciesIds,zaResearchCaptures:Object.fromEntries(RESEARCH_TYPES.map(t=>[t,50])),zaResearchTrainerWins:1000,zaResearchEvolutions:50,zaResearchItemEvolutions:10,zaResearchTradeEvolutions:5,zaResearchMegaStones:RESEARCH_MEGA_STONES.slice(0,47),zaResearchCrystalBreaks:1000,zaMission40Anomalies:['steelix','gallade','pangoro'],zaResearchActivities:{fossil:3,cafe:3,bench:3}});await get();assert.ok(researchSummary(rawWorld()).level>=46);
+  const cases=[[26,63,'명상'],[27,23,'독찌르기'],[28,4,'열풍'],[29,7,'파도타기'],[30,25,'아이언테일'],[31,52,'회복봉인'],[32,1,'오물폭탄'],[33,25,'번개'],[34,9,'지진'],[35,9,'기가임팩트'],[37,66,'인파이트'],[38,25,'나쁜음모'],[39,1,'솔라빔'],[40,7,'하이드로펌프'],[41,4,'불대문자'],[42,7,'눈보라'],[44,4,'기합구슬'],[45,4,'오버히트'],[46,4,'역린']];
+  for(const [level,species,move] of cases){
+   await call('claimResearchTm',{level});await call('claimResearchTm',{level},409);
+   const mon={...makeMon(species,20),moves:['몸통박치기','울음소리','전광석화','방어'],pp:{tackle:3,growl:7,quickattack:0,protect:4}};seedMon(id,mon);await get();await call('teachResearchTm',{level,slot:1});
+   assert.deepEqual(rawMon(id).moves,['몸통박치기',move,'전광석화','방어']);assert.equal(rawMon(id).pp.tackle,3);assert.equal(rawMon(id).pp.quickattack,0);
+   await get();assert.equal(state.box.find(m=>m.boxId===id).moves[1],move);await call('teachResearchTm',{level,slot:0},409);
+  }
+  assert.ok([2,8,24,...cases.map(x=>x[0])].every(n=>state.world.zaResearchRewards.includes(n)));
+  const incompatible={...makeMon(1,20),moves:['몸통박치기']};seedMon(id,incompatible);await get();await call('teachResearchTm',{level:40,slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('research level 8 Whirlpool TM survives reload and only teaches compatible party members',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-tm070-qa',displayName:'연구 기술머신'};
  try{
