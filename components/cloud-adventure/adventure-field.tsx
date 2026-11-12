@@ -691,7 +691,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
       ctx.fillStyle='#a58b6c';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#d4c19e';ctx.fillRect(px+5,py+6,tile-10,3);ctx.fillStyle='#705f50';ctx.fillRect(px+tile/2-1,py+8,2,tile-13);
      }else if(c==='t'||c==='X'){
       ctx.fillStyle='#526d68';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#bdcbb7';ctx.fillRect(px+5,py+5,tile-10,3);ctx.fillStyle='#d3d8c6';ctx.fillRect(px+tile/2-1,py+9,2,tile-14);
-     }else if(c==='o'){
+     }else if(c==='o'&&(branch||(x===3&&y===8)||(x===9&&y===14)||(x===19&&y===11))){
       ctx.fillStyle='#e6ebe3';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b95251';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,4);ctx.fillStyle='#414d4d';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);
      }
      return;
@@ -972,6 +972,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
    if(w.district==='lumiose-zone1'&&!w.interior&&[4,5].includes(w.zaMission03Stage)){const isFletchling=w.zaMission03Stage===4,x=isFletchling?8:14,y=6,px=x*tile,py=y*tile,img=fieldImages[isFletchling?661:659];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#668c80';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(isFletchling?'화살꼬빈':'파르빗',px+tile/2,py+20);}}
+   if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaSewerIceBranch&&!w.zaMission19Inner&&w.zaBleuSewerOpened&&!w.zaMission57Won)trainer(17,4,'#8d7763','down');
    if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaSewerIceBranch&&w.zaMission19Stage===13&&(w.zaMission19Inner||!w.zaMission19InnerEnabled))trainer(w.zaMission19Inner?18:11,w.zaMission19Inner?3:2,'#916c8e','down');
    if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaSewerIceBranch&&!w.zaMission19Inner&&w.zaMission19Stage===10){const px=16*tile,py=10*tile,img=fieldImages[707];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#b8c7c3';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#6b7776';ctx.stroke();}}
    if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaMission19Inner&&w.zaMission19Stage===11&&[0,1].includes(w.zaMission19ChandelureStep)){const x=w.zaMission19ChandelureStep===0?16:11,y=w.zaMission19ChandelureStep===0?8:5,px=x*tile,py=y*tile,img=fieldImages[609];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#80699a';ctx.fillRect(px+7,py+7,tile-14,tile-14);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('샹델라',px+tile/2,py+20);}}

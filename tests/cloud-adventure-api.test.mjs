@@ -2543,6 +2543,22 @@ test('Zone 20 Magenta canal gate preserves progress and initializes both alphas'
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 19 southern sewer supplies persist and respect capacity',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'sewer-south-supplies-qa',displayName:'하수도 도구 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-sewer',interior:null,x:11,y:14,facing:'up',zaMission19Stage:9,adventureBalls:{greatball:99}},state.revision+1));await get();
+  const before=state.wallet.hyper_potions;await walkTo({x:3,y:8});assert.equal(state.world.interaction.action,'sewerSouthItem-southwest-hyper');
+  sql.prepare('UPDATE wallets SET hyper_potions=99 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('sewerSouthItem-southwest-hyper',{},409);assert.ok(!rawWorld().zaSewerSouthItems?.includes('southwest-hyper'));
+  sql.prepare('UPDATE wallets SET hyper_potions=? WHERE user_id=?').run(before,globalThis.__adventureUser.userId);await get();await call('sewerSouthItem-southwest-hyper');assert.equal(state.wallet.hyper_potions,before+1);await get();await call('sewerSouthItem-southwest-hyper',{},409);
+  await walkTo({x:9,y:14});const key=JSON.stringify([globalThis.__adventureUser.userId,'iron']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'iron');await get();await call('sewerSouthItem-south-iron',{},409);assert.ok(!rawWorld().zaSewerSouthItems.includes('south-iron'));
+  sql.prepare('UPDATE inventory SET quantity=0 WHERE key=?').run(key);await get();await call('sewerSouthItem-south-iron');assert.equal(state.inventory.iron,1);await get();await call('sewerSouthItem-south-iron',{},409);
+  await walkTo({x:19,y:11});await call('sewerSouthItem-southeast-great',{},409);assert.ok(!rawWorld().zaSewerSouthItems.includes('southeast-great'));
+  seedWorld({...rawWorld(),adventureBalls:{...rawWorld().adventureBalls,greatball:98},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('sewerSouthItem-southeast-great');assert.equal(state.world.adventureBalls.greatball,99);await get();await call('sewerSouthItem-southeast-great',{},409);
+  assert.deepEqual(rawWorld().zaSewerSouthItems,['southwest-hyper','south-iron','southeast-great']);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.activeId,id);assert.equal(state.world.zaMission19Stage,9);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 19 sewer ice branch persists bridge and teaches the reusable Crunch TM',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-sewer-ice-qa',displayName:'하수도 얼음 다리'};
  try{

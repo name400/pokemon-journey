@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat,playCpu} from '../lib/party-battle.mjs';
-import {sewerInspected} from '../lib/cloud-adventure/adventure-mission19.mjs';
-import {lumioseSewerMap,findTile,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {sewerInspected,SEWER_SOUTH_ITEMS} from '../lib/cloud-adventure/adventure-mission19.mjs';
+import {lumioseSewerMap,findTile,fieldPath,storeAdventurePosition,restoreAdventurePosition,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('sewer markers are reachable and saved locations restore safely',()=>{
  const map=lumioseSewerMap();for(const marker of ['t','q','a','b','e','d','i','u']){const target=findTile(map,marker);assert.ok(target);assert.ok(fieldPath(map,{x:11,y:14},target).length,marker);}
@@ -23,4 +23,17 @@ test('legacy sewer positions blocked by the new layout migrate only for the matc
  assert.equal(restoreAdventurePosition(structuredClone(saved),8).district,null);
  const updated=storeAdventurePosition(restored,8);assert.equal(updated.districtPosition.sewerLayout,1);
  assert.deepEqual([restoreAdventurePosition(updated,8).x,restoreAdventurePosition(updated,8).y],[restored.x,restored.y]);
+});
+
+
+test('southern sewer supplies keep old positions and main mission routes accessible',()=>{
+ const base={area:3,district:'lumiose-sewer',interior:null,x:11,y:14,facing:'up',zaMission19Stage:9,teamIds:['owned']},map=lumioseSewerMap(base);
+ for(const item of SEWER_SOUTH_ITEMS){
+  assert.equal(map[item.y][item.x],'o');assert.ok(fieldPath(map,base,item).length,item.id);
+  const old=storeAdventurePosition({...base,x:item.x,y:item.y},21);delete old.districtPosition.sewerLayout;const restored=restoreAdventurePosition(old,21);
+  assert.deepEqual([restored.x,restored.y,restored.teamIds],[item.x,item.y,['owned']]);
+  assert.equal(fieldDialogue(restored).action,`sewerSouthItem-${item.id}`);
+  assert.notEqual(lumioseSewerMap({...base,zaSewerSouthItems:[item.id]})[item.y][item.x],'o');
+ }
+ assert.ok(fieldPath(map,base,{x:11,y:11}).length);assert.ok(fieldPath(map,base,{x:16,y:10}).length);
 });
