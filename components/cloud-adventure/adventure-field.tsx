@@ -314,7 +314,35 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='l'||c==='n'){ctx.fillStyle=c==='l'?'#d4b45f':'#816d52';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#85beb2';ctx.fillRect(px+9,py+8,tile-18,tile-16);}
      if(c==='q'){ctx.fillStyle='#6d5544';ctx.fillRect(px+3,py+2,tile-6,tile-4);ctx.fillStyle='#bc584d';ctx.fillRect(px,py+2,tile,6);ctx.fillStyle='#f0d7ad';for(let k=3;k<tile;k+=8)ctx.fillRect(px+k,py+2,4,6);ctx.fillStyle='#9cbab2';ctx.fillRect(px+8,py+11,tile-16,tile-15);}
      if(c==='W'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
-    if(w.district==='lumiose-zone14'&&!w.interior){ctx.fillStyle=c==='#'?'#6d7880':c==='g'?'#c3aa7c':c===','?'#aeb8b8':(x+y)%2?'#d8d6c8':'#e2e0d2';ctx.fillRect(px,py,tile,tile);if(c==='g'){ctx.fillStyle='#9a8764';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-9-(j%2)*3,4,2);}if('ijkl'.includes(c)){ctx.fillStyle='#d8b64f';ctx.fillRect(px+8,py+8,tile-16,tile-16);}if(c==='^'){ctx.fillStyle='#58666a';ctx.fillRect(px+3,py+8,tile-6,tile-11);ctx.fillStyle='#929d98';ctx.fillRect(px+6,py+11,tile-12,tile-17);ctx.fillStyle='#e1b94e';ctx.fillRect(px+8,py+4,4,6);ctx.fillRect(px+tile-12,py+4,4,6);ctx.fillStyle='#424f50';ctx.fillRect(px+8,py+tile-9,tile-16,3);}if(c==='r'){ctx.fillStyle='#7e7267';ctx.fillRect(px+4,py+6,tile-8,tile-12);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(w.district==='lumiose-zone14'&&!w.interior){
+     // Substation buildings and electrical equipment use existing blocked
+     // cells. Their exact shapes and coordinates remain provisional.
+     const westRoof=x>=3&&x<=6&&y>=6&&y<=7&&c==='#',eastRoof=x>=16&&x<=19&&y>=4&&y<=6&&c==='#',roof=westRoof||eastRoof;
+     const perimeter=c==='#'&&(x===0||x===22||y===0||y===16);
+     ctx.fillStyle=roof?'#66777c':c==='#'?'#6d7880':c==='g'?'#c3aa7c':c===','?'#aeb8b8':(x+y)%2?'#d2d0c3':'#deddd0';ctx.fillRect(px,py,tile,tile);
+     if(roof){
+      // Repeated roof panels and edge caps make each blocked footprint a
+      // single large building rather than a field of separate boxes.
+      ctx.fillStyle='#8b9b9b';ctx.fillRect(px+1,py+2,tile-2,tile-4);ctx.fillStyle='#728584';ctx.fillRect(px+3,py+5,tile-6,tile-9);
+      ctx.fillStyle='#aab7b1';ctx.fillRect(px+3,py+5,tile-6,2);ctx.fillStyle='#53686d';ctx.fillRect(px,py+tile-3,tile,3);ctx.fillRect(px+tile-3,py,3,tile);
+      if((x===4&&y===6)||(x===18&&y===4)){ctx.fillStyle='#d4d7ca';ctx.fillRect(px+8,py+9,16,13);ctx.fillStyle='#617579';for(let k=0;k<3;k++)ctx.fillRect(px+10,py+11+k*3,12,1);}
+     }else if(perimeter){
+      // Chain-link boundary: background only; X exits remain existing tiles.
+      ctx.fillStyle='#879894';ctx.fillRect(px,py,tile,tile);ctx.save();ctx.beginPath();ctx.rect(px,py,tile,tile);ctx.clip();ctx.strokeStyle='#c2cac0';ctx.lineWidth=1;ctx.beginPath();for(let k=-tile;k<tile*2;k+=8){ctx.moveTo(px+k,py);ctx.lineTo(px+k+tile,py+tile);ctx.moveTo(px+k,py+tile);ctx.lineTo(px+k+tile,py);}ctx.stroke();ctx.restore();ctx.fillStyle='#566d70';ctx.fillRect(px,py,tile,3);ctx.fillRect(px,py+tile-3,tile,3);
+     }
+     if(c===','){ctx.fillStyle='#cbd2c9';ctx.fillRect(px,py+3,tile,2);ctx.fillStyle='#8b9b98';ctx.fillRect(px+(y%2?tile/2:2),py+5,2,tile-7);}
+     if(c==='g'){ctx.fillStyle='#9a8764';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-9-(j%2)*3,4,2);ctx.fillStyle='#dec99b';ctx.fillRect(px+4+(x*5+y*3)%9,py+6,5,2);}
+     if('ijkl'.includes(c)){ctx.fillStyle='#f4ead9';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c45b50';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#445356';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}
+     if(c==='^'){
+      const rack=y===10||y===11;ctx.fillStyle='#697b7b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#9dada7';ctx.fillRect(px+2,py+2,tile-4,tile-4);
+      ctx.fillStyle='#556c70';ctx.fillRect(px+4,py+(rack&&y===10?11:6),tile-8,rack&&y===10?tile-14:tile-9);
+      ctx.fillStyle='#aab9ae';ctx.fillRect(px+7,py+(rack&&y===10?13:9),tile-14,9);
+      ctx.fillStyle='#d8bd70';ctx.fillRect(px+7,py+3,4,6);ctx.fillRect(px+tile-11,py+3,4,6);
+      ctx.fillStyle='#e0d6a7';ctx.fillRect(px+8,py+2,2,4);ctx.fillRect(px+tile-10,py+2,2,4);
+      ctx.fillStyle='#4b6065';ctx.fillRect(px,py+tile-4,tile,3);
+     }
+     if(c==='r'){ctx.fillStyle='#827769';ctx.beginPath();ctx.moveTo(px+3,py+tile-6);ctx.lineTo(px+7,py+8);ctx.lineTo(px+20,py+4);ctx.lineTo(px+tile-3,py+15);ctx.lineTo(px+tile-5,py+tile-5);ctx.closePath();ctx.fill();ctx.fillStyle='#b3a38b';ctx.fillRect(px+8,py+9,10,3);ctx.fillRect(px+6,py+12,4,6);}
+     if(c==='X'){ctx.fillStyle='#5e8982';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#a1d7bb';ctx.fillRect(px+7,py+7,tile-14,tile-14);}return;}
     if(w.district==='lumiose-zone13'&&!w.interior){ctx.fillStyle=c==='#'?'#597350':c==='g'?'#93b37a':c===','?'#818984':(x+y)%2?'#a4bf8d':'#b2c99a';ctx.fillRect(px,py,tile,tile);
      if(c==='^'){if(ZONE13_STUMPS.some(([sx,sy]:number[])=>sx===x&&sy===y)){ctx.fillStyle='#6d5038';ctx.fillRect(px+6,py+15,tile-12,11);ctx.fillStyle='#c7a379';ctx.fillRect(px+5,py+12,tile-10,7);ctx.fillStyle='#8c6a4a';ctx.fillRect(px+9,py+14,tile-18,2);}else{ctx.fillStyle='#6f5137';ctx.fillRect(px+tile/2-3,py+tile-12,6,10);ctx.fillStyle='#365f3e';ctx.fillRect(px+3,py+8,tile-6,tile-18);ctx.fillRect(px+6,py+4,tile-12,6);ctx.fillStyle='#568b51';ctx.fillRect(px+5,py+8,tile-12,7);ctx.fillRect(px+9,py+4,tile-18,4);ctx.fillStyle='#81aa6c';ctx.fillRect(px+9,py+7,6,2);}}
      // North Boulevard cuts through the wooded zone; preserve encounter tiles.
