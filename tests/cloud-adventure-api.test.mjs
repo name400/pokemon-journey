@@ -3931,3 +3931,13 @@ test('Mission 37 tower approach follows the rooftop battle and preserves old sav
   seedWorld(storeAdventurePosition({...rawWorld(),x:18,y:3,facing:'up',zaProtectLayout:5,zaProtectRoof:true,zaProtectTowerApproachV1:undefined,zaProtectTowerApproach:undefined,zaMission37Stage:7},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission37FinalBattle');await call('mission37TowerApproach',{},409);await call('mission37FinalBattle');assert.deepEqual(state.battle.teams[1].map(m=>m.boxId),['ange-red','ange-blue']);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Mission 38 starts in room 202 after the new tower route and keeps legacy lobby saves',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission38-room-qa',displayName:'호텔 귀환 검증'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const finale={...rawWorld(),area:3,district:'lumiose-protect',interior:null,x:19,y:4,facing:'up',zaMission37Started:true,zaMission37Stage:7,zaMission37FinalPhase:7,zaProtectLayout:5,zaProtectRoof:true,zaProtectTowerApproachV1:true,zaProtectTowerApproach:true};
+  seedWorld(storeAdventurePosition(finale,state.revision+1));await get();await call('mission37Nihil');await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose','hotel202',8,5]);assert.equal(state.world.zaMission38Started,true);assert.equal(state.world.zaMission38RoomStart,true);await call('mission38Lobby',{},409);await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.equal(state.world.interior,'hotel2f');await walkTo({x:11,y:12});await call('face',{direction:'down'});await call('hotelLiftDown');await get();assert.equal(state.world.interior,'hotel');await walkTo({x:11,y:6});await call('face',{direction:'up'});assert.ok(state.world.interaction.actions.some(a=>a.action==='mission38Lobby'));await call('mission38Lobby');assert.equal(state.world.zaMission38Stage,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...finale,zaMission37Complete:false,zaMission38Started:false,zaMission38Stage:0,zaProtectTowerApproachV1:undefined,zaProtectTowerApproach:undefined,x:18,y:3},state.revision+1));await get();await call('mission37Nihil');await get();assert.equal(state.world.interior,'hotel');assert.equal(state.world.zaMission38RoomStart,false);await call('mission38Lobby');assert.equal(state.world.zaMission38Stage,1);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
