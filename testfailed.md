@@ -1,5 +1,22 @@
 # 배포 검증 실패 기록
 
+## 2026-11-13 — GitHub `96320d6d` 배포 검사 실패
+
+- 대상 브랜치: `cloud/pokerogue-continue-20261105`; GitHub 커밋 `96320d6de5e4c21b91b11b2278de1895a849ec5c`.
+- 실제 검증 소스: 기존 Sites 소스와 병합한 로컬 커밋 `776c83b75929e57e525e4e6347ea149db4384074`; Node.js v24.22.1.
+- 순차 검사: `npm run typecheck` 통과, `npm test` 3,547개 중 3,542개 통과·5개 실패 (179.3초), `npm run build` 통과.
+- 배포하지 않았다. 검사 당시 운영본은 Sites v82.
+
+### 실패 항목
+
+1. **메가 배틀 재시도 체크포인트** — `tests/cloud-adventure-api.test.mjs:209`, `Rogue mega encounters preserve retry checkpoints and permit restarting`. 215행에서 기대값 `1` 대신 `0`이 나왔다.
+2. **탐험 저장·배틀·성장 및 캠페인** — 같은 파일 824행, `world route: save migration, atomic purchases, actual battle/capture/growth and full campaign`. 945행의 `rawMon(owned).level >= 6`이 거짓이었다.
+3. **2·3구역 시간대별 배회 조우 복귀** — 같은 파일 4596행, `Zones 2 and 3 roaming encounters return across time cycles without changing progress`. 4604행에서 기대값 `true` 대신 `undefined`가 나왔다.
+4. **시간 변경 후 우두머리 복귀 위치** — 같은 파일 4731행, `early alpha returns after a time change without respawning under the player`. 4737행에서 기대값 `false` 대신 `true`가 나왔다.
+5. **필드 기술머신 호환성** — `tests/cloud-adventure-research-tm-effects.test.mjs:32`, `field TMs distinguish base and verified regional compatibility`. 33행에서 기대값 `19` 대신 `20`이 나왔다.
+
+각 항목의 실제 게임 규칙, 테스트 초기 상태·난수와 기대값 변경 여부를 대조해야 하며, 위 오류만으로 근본 원인을 확정할 수 없다. 이전에 실패한 20구역 스타터 포획 테스트와 스타터 1·4·7의 자연 진행 테스트는 이번 실행에서 통과했다.
+
 ## 개발 브랜치 검증 — 무한 로열 15번째 배틀 스택 오류
 
 - 대상: `75062da6`에 미션 20 하수도 메가조각 지급을 추가한 작업 트리. Sites 병합본이나 배포 검사는 아니다.
