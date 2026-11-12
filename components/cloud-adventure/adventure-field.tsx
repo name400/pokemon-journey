@@ -505,6 +505,32 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='X'){ctx.fillStyle='#a95850';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+21);}
      return;
     }
+    if(w.district==='lumiose-zone4'&&['#','.','g',',','%','|','^'].includes(c)){
+     // Dormez Bien cemetery: use the existing enclosure, graves and southern
+     // crypt footprints. The exact path and architectural shapes are drafts.
+     ctx.fillStyle=c==='#'?'#73847d':c==='g'?'#91ae82':c===','?'#c9c3b0':c==='|'?'#95a292':c==='%'?'#8ba880':c==='^'?'#adb6ab':(x+y)%2?'#d6d5c4':'#e1dfce';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){
+      ctx.fillStyle='#9aa9a0';ctx.fillRect(px+1,py+2,tile-2,tile-4);ctx.fillStyle='#71847d';ctx.fillRect(px,py+tile/2,tile,2);ctx.fillRect(px+(y%2?tile/3:tile*2/3),py+2,2,tile/2-2);ctx.fillStyle='#c9d0c0';ctx.fillRect(px,py,tile,2);
+     }
+     if(c===','){
+      ctx.fillStyle='#e2ddca';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#aaa998';ctx.fillRect(px,py+tile-3,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+4,2,tile-7);
+     }
+     if(c==='g'){
+      // Existing visual paths cross encounter grass; retain obvious grass.
+      const vertical=(x===10&&y>=4&&y<=8)||(x===11&&y>=8&&y<=12)||(x===13&&y>=6&&y<=10),horizontal=(y===6&&x>=7&&x<=13)||(y===9&&x>=10&&x<=15)||(y===11&&x>=8&&x<=11);
+      if(vertical||horizontal){ctx.fillStyle='#bcbba1';if(vertical)ctx.fillRect(px+tile*.35,py,tile*.30,tile);if(horizontal)ctx.fillRect(px,py+tile*.35,tile,tile*.30);}
+      ctx.fillStyle='#5d885b';for(const [dx,dy] of [[5,6],[19,8],[9,20],[24,23],[15,14]]){ctx.fillRect(px+dx,py+dy,2,5);ctx.fillRect(px+dx-2,py+dy+2,3,2);}
+     }
+     if(c==='%'){
+      ctx.fillStyle='#667c70';ctx.fillRect(px+3,py+23,tile-6,5);ctx.fillStyle='#c2c9ba';ctx.fillRect(px+5,py+20,tile-10,5);ctx.fillStyle='#aab7aa';ctx.fillRect(px+7,py+7,tile-14,14);ctx.fillRect(px+10,py+4,tile-20,4);ctx.fillStyle='#e2e2d1';ctx.fillRect(px+9,py+9,tile-18,2);ctx.fillRect(px+tile/2-1,py+8,2,9);
+     }
+     if(c==='|'){
+      const vertical=x===5||x===17;ctx.fillStyle='#667b72';if(vertical)ctx.fillRect(px+tile/2-5,py,10,tile);else ctx.fillRect(px,py+tile/2-5,tile,10);ctx.fillStyle='#c8d0bd';if(vertical)ctx.fillRect(px+tile/2-4,py,3,tile);else ctx.fillRect(px,py+tile/2-4,tile,3);ctx.fillStyle='#e0e1d1';if(vertical)ctx.fillRect(px+tile/2-5,py+4,10,3);else ctx.fillRect(px+4,py+tile/2-5,3,10);
+     }
+     if(c==='^'){
+      if(y===12){ctx.fillStyle='#627475';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#899994';ctx.fillRect(px,py+5,tile,4);ctx.fillRect(px,py+15,tile,3);ctx.fillStyle='#d1d2c3';ctx.fillRect(px,py+tile-5,tile,5);ctx.fillStyle='#9aa8a1';ctx.fillRect(px+tile-3,py+4,2,tile-9);}
+      else{ctx.fillStyle='#d6d8c9';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#a8b2a8';ctx.fillRect(px,py+tile-4,tile,4);ctx.fillStyle='#798d86';ctx.fillRect(px+8,py+7,tile-16,tile-11);ctx.fillStyle='#dae1d1';ctx.fillRect(px+11,py+9,3,tile-17);ctx.fillRect(px+tile/2,py+7,2,tile-13);if(x===15||x===16){ctx.fillStyle='#5c6c66';ctx.fillRect(px+7,py+8,tile-14,tile-8);ctx.fillStyle='#e5dfce';ctx.fillRect(px+tile/2-1,py+10,2,tile-10);}}
+     }return;}
     if(w.district==='lumiose-rust'||w.district==='lumiose'||w.district==='lumiose-floral'||w.district==='lumiose-vernal'||w.district==='lumiose-vert-plaza'||w.district==='lumiose-vert2'||w.district==='lumiose-centrico-route'||w.district==='lumiose-rouge-north'||w.district==='lumiose-north-boulevard'||w.district==='lumiose-quasartico'||w.district==='lumiose-rooftop'||w.district==='lumiose-zone1'||w.district==='lumiose-zone2'||w.district==='lumiose-zone3'||w.district==='lumiose-zone4'||w.district==='lumiose-bureau'||w.district==='lumiose-garden'||w.district==='lumiose-site'||w.district==='lumiose-wild'||w.district==='lumiose-observation'||w.district==='lumiose-royale'){
      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#ddd2ba':'#e8dec9'):((x+y)%2?'#e7dfce':'#ded7c5');ctx.fillRect(px,py,tile,tile);
      // Hotel Z's paved forecourt, drawn on existing walkable tiles only.

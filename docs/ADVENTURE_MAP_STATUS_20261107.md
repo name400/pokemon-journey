@@ -604,3 +604,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 18 공사 골목과 옥상 시각 표현
 
 [현장 자료](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-18/)는 비계와 사다리로 옥상에 접근하는 모습을, [구역 안내](https://pokequery.com/games/legends-za/wild-zones/18)는 남동쪽 공사 비계 사이 골목을 설명한다. 기존 공사 골목의 차단 칸에 건물과 비계, 통행 칸에 포장을 그렸고 별도 옥상층의 기존 연결 통로를 발판으로 구분했다. 비계 수·건물 외관·정밀 좌표는 기존 2D 초안을 따른 추정이다. 맵 타일·층 전환·조우·저장 판정은 바꾸지 않았다.
+
+### 구역 4 묘지와 남쪽 석조 건물 시각 표현
+
+[원작 구역 설명](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_4)과 [현장 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-4-guide-all-pokemon-and-alphas)는 묘지와 묘비가 있는 구역을 설명한다. 기존 차단 묘비·담장·남쪽 건물 칸에 석조 형태를 그리고 묘지 안 풀과 길, 바깥 포장길을 구분했다. 풀 위 시각 경로는 기존처럼 조우가 가능한 풀임을 표시한다. 묘비와 건물 외형·배치 및 길의 정확한 선형은 기존 2D 초안을 따른 추정이다. 실제 타일, 이동, 조우 및 저장은 변경하지 않았다.
