@@ -257,8 +257,8 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      // the existing map tile continues to control movement and encounters.
      const r=Math.sqrt(((x-11)/9)**2+((y-8)/6)**2);
      ctx.fillStyle=c==='#'?'#857c69':r<=.48?'#b58c5e':r<=.9?'#dfc387':r<=1.1?'#e8dcc3':(x+y)%2?'#ddd4bd':'#e6dec9';ctx.fillRect(px,py,tile,tile);
-     if(c==='^'){ctx.fillStyle='#775c45';ctx.fillRect(px+5,py+9,tile-10,tile-13);ctx.fillStyle='#bb6654';ctx.fillRect(px+3,py+5,tile-6,6);ctx.fillStyle='#f3ddae';ctx.fillRect(px+7,py+5,4,6);ctx.fillRect(px+tile-11,py+5,4,6);}
-     if(c==='g'){ctx.fillStyle=r<=.48?'#98734d':'#b9975f';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-8-(j%2)*4,4,2);}if('ijkl'.includes(c)){ctx.fillStyle='#d8b64f';ctx.fillRect(px+8,py+8,tile-16,tile-16);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+     if(c==='^'){ctx.fillStyle='#6f4b32';ctx.fillRect(px+4,py+10,tile-8,tile-11);ctx.fillStyle='#ac8053';ctx.fillRect(px+7,py+15,tile-14,tile-18);ctx.fillStyle='#a63f42';ctx.fillRect(px+2,py+4,tile-4,8);ctx.fillStyle='#f3dfb6';for(let i=3;i<tile-3;i+=8)ctx.fillRect(px+i,py+4,4,8);ctx.fillStyle='#d6a764';ctx.fillRect(px+3,py+12,tile-6,3);ctx.fillStyle='#b54749';ctx.fillRect(px+7,py+16,4,4);ctx.fillStyle='#9fbc68';ctx.fillRect(px+14,py+16,4,4);ctx.fillStyle='#efc46d';ctx.fillRect(px+21,py+16,4,4);}
+     if(c==='g'){ctx.fillStyle=r<=.48?'#98734d':'#b9975f';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-8-(j%2)*4,4,2);if((x*3+y)%4===0){ctx.fillStyle='#efd39a';ctx.fillRect(px+4,py+8,13,2);ctx.fillRect(px+10,py+6,9,2);ctx.fillStyle='#9b794b';ctx.fillRect(px+8,py+20,12,2);}}if('ijkl'.includes(c)){ctx.fillStyle='#d8b64f';ctx.fillRect(px+8,py+8,tile-16,tile-16);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-zone7'&&!w.interior){
      // Magenta Plaza stands between the two halves of the canal. Keep the
      // visual ring independent of the tiles that govern encounters.
