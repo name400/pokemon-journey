@@ -24,3 +24,6 @@
 
 
 랭크 D·C의 기존 세 상대씩의 팀·기술을 [랭크 D](https://www.serebii.net/legendsz-a/z-aroyale/rankd.shtml)와 [랭크 C](https://www.serebii.net/legendsz-a/z-aroyale/rankc.shtml)에 맞췄다. Elise의 빠졌던 괴력몬을 추가하고 웨이터 Hector·웨이트리스 Lena와 승리 후 파티 회복을 연결했다. 배치와 승리 점수는 기존 초안이고 회복은 원작 횟수를 확인하지 못해 방문당 한 번이다. 현재 진행 중인 배틀 스냅샷은 변경하지 않는다.
+
+
+[랭크 B 상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankb.shtml)을 바탕으로 기존 Katrina·Eden의 빠진 세 번째 포켓몬과 메가스톤을 복원하고 Hank까지 기술을 맞췄다. 포켓몬센터 직원 Maëlle과 웨이터 Lorenzo도 추가했으며 승리 후 [로열 회복 안내](https://www.serebii.net/legendsz-a/z-aroyale.shtml)에 따라 파티를 회복해 준다. 배치·승리당 4,500점은 초안이고 회복 횟수는 확인되지 않아 방문당 한 번이다. 기존 전투 스냅샷은 변경하지 않는다.

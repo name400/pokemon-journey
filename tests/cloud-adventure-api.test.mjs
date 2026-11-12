@@ -1841,6 +1841,16 @@ test('Rank V royale trainers retain documented moves through battles and reload'
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('Rank B trainers use source teams and healers preserve saved progress',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-b-healers-qa',displayName:'랭크B회복테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});const fixture={...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'B',zaMission35Started:true,zaRoyaleBPoints:0};seedWorld(storeAdventurePosition(fixture,state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();await call('enterRoyaleZone');
+  const cases=[['O','royaleErica',[[80,56],[604,56],[428,56]],'lopunnite'],['U','royaleDaniel',[[115,56],[282,56],[18,56]],'pidgeotite'],['V','royaleJean',[[123,49],[212,49]],''],['a','royaleBExtra3',[[715,56],[681,56],[531,56]],'audinite'],['b','royaleBExtra4',[[516,52],[689,52]],'']];
+  for(let i=0;i<cases.length;i++){const [tile,action,team,item]=cases[i];await walkTo(tile);if(i>=3)await call(`royaleBHeal${i}`,{},409);await call(action);assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),team);assert.deepEqual(rawWorld().combat.teams[1].map(m=>m.item),team.map((_,j)=>j===team.length-1?item:''));const moves=rawWorld().combat.teams[1].map(m=>m.moves);await get();assert.deepEqual(rawWorld().combat.teams[1].map(m=>m.moves),moves);await battle();assert.equal(state.world.zaRoyaleBPoints,(i+1)*4500);await call(action,{},409);if(i>=3){await get();assert.equal(state.world.interaction.action,`royaleBHeal${i}`);const m=rawMon(id);seedMon(id,{...m,hp:1,status:'독',pp:{psystrike:1}});await get();await call(`royaleBHeal${i}`);await get();assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});await call(`royaleBHeal${i}`,{},409);}}
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await walkTo('T');await call('enterRoyaleZone');await walkTo('a');await call('royaleBHeal3',{},409);assert.equal(state.world.interaction.action,'royaleBExtra3');
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Rank D and C trainers use documented teams and waiter healing',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-dc-waiters-qa',displayName:'랭크DC회복테스트'};
  try{
