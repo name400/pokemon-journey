@@ -2235,6 +2235,14 @@ test('Mission 23 lower rooftop persists, returns to scaffolding and reaches Amph
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('research compatibility blocks regional-only TM on base form without changing old moves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-tm-form-qa',displayName:'기술머신 폼 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,legacy={...makeMon(26,20),moves:['사이코쇼크','몸통박치기']};seedMon(id,legacy);seedWorld({zaResearchRewards:[14,26]});await get();assert.deepEqual(rawMon(id).moves,legacy.moves);
+  await call('teachResearchTm',{level:26,slot:0},409);await get();assert.deepEqual(rawMon(id).moves,legacy.moves);assert.deepEqual(state.world.zaResearchRewards,[14,26]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('research levels 9 through 24 offer reusable verified TMs and preserve old rewards',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-tm-9-15-qa',displayName:'연구 기술머신'};
  try{

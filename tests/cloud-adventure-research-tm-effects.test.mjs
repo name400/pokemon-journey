@@ -3,6 +3,20 @@ import assert from 'node:assert/strict';
 import {Battle} from '@pkmn/sim';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat,playDuel} from '../lib/party-battle.mjs';
+import {RESEARCH_TM_REWARDS,canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
+
+test('research TM compatibility covers available base species without mixing regional forms',()=>{
+ assert.equal(RESEARCH_TM_REWARDS.length,41);
+ for(const tm of RESEARCH_TM_REWARDS){assert.ok(tm.learners.length>0,`TM${tm.number}`);assert.equal(new Set(tm.learners).size,tm.learners.length);}
+ const state={zaResearchRewards:[4,12,14,26,40]};
+ assert.equal(canLearnResearchTm(state,{id:158,speciesId:158,moves:[]},4),true);
+ assert.equal(canLearnResearchTm(state,{id:69,speciesId:69,moves:[]},12),true);
+ assert.equal(canLearnResearchTm(state,{id:26,speciesId:26,moves:[]},14),false);
+ assert.equal(canLearnResearchTm(state,{id:26,speciesId:26,moves:[]},26),false);
+ assert.equal(canLearnResearchTm(state,{id:7,speciesId:7,moves:[]},40),true);
+ assert.equal(canLearnResearchTm(state,{id:1,speciesId:1,moves:[]},40),false);
+ assert.equal(canLearnResearchTm(state,{id:10026,speciesId:26,moves:[]},14),false);
+});
 
 test('research TMs retain core effects in the existing turn-based simulator',()=>{
  const foe={...makeMon(129,30),boxId:'foe',moves:['튀어오르기']};
