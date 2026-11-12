@@ -153,3 +153,16 @@ test('mission 36 rival team follows starter and can Mega Evolve its ace',async()
  }
  assert.throws(()=>mission36RivalTeam('__proto__'));
 });
+
+test('multi alpha battle stats are applied to both opposing sides only',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {makeAdventureAlpha,applyAdventureAlphaBattleStats}=await import('../lib/cloud-adventure/adventure-alpha.mjs');const {createMission10DoubleSnapshot,mission10MultiView}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player={...makeMon(25,30),boxId:'player'},ally={...makeMon(68,63),boxId:'ally'},foes=[0,1].map(i=>({...makeAdventureAlpha(makeMon(675,65)),boxId:`pangoro-${i}`}));
+ const combat=createMission10DoubleSnapshot([player],[ally],foes);const before=Battle.fromJSON(combat.snapshot),base=before.sides.map(side=>({...side.active[0].storedStats}));applyAdventureAlphaBattleStats(combat);const after=Battle.fromJSON(combat.snapshot);
+ for(const side of [1,3])for(const stat of ['atk','def','spa','spd'])assert.equal(after.sides[side].active[0].storedStats[stat],base[side][stat]*2);
+ for(const side of [0,2])assert.deepEqual(after.sides[side].active[0].storedStats,base[side]);assert.equal(mission10MultiView(combat).activeBySide[1].filter(i=>i>=0).length,2);
+});
+
+test('cloud single alpha combat retains its existing battle-only stat boost',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {createCombat}=await import('../lib/party-battle.mjs');const {makeAdventureAlpha,applyAdventureAlphaBattleStats}=await import('../lib/cloud-adventure/adventure-alpha.mjs');
+ const player={...makeMon(25,30),boxId:'player'},foe={...makeAdventureAlpha(makeMon(675,65)),boxId:'foe'};const combat=createCombat([player],[foe]),before=Battle.fromJSON(combat.snapshot),base={...before.p2.active[0].storedStats};applyAdventureAlphaBattleStats(combat);const after=Battle.fromJSON(combat.snapshot);for(const stat of ['atk','def','spa','spd'])assert.equal(after.p2.active[0].storedStats[stat],base[stat]*2);assert.equal(after.p2.active[0].storedStats.spe,base.spe);
+});
