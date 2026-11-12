@@ -560,3 +560,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 [존느 광장 자료](https://bulbapedia.bulbagarden.net/wiki/Jaune_Plaza)와 [구역 8 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_8)는 원형 광장의 중앙과 바깥 모래 지대, 동쪽·남쪽의 판매대를 설명한다. 기존 원형 바닥 안의 모래와 두 판매대를 구분해 그렸다. 정밀 위치와 판매대 모양은 초안이고 기존 조우·통행·저장은 그대로다.
 
 미션 3 동료는 같은 층에서 이전 플레이어 위치까지 일반 바닥을 탐색해 한 칸씩 따라간다. 출구·사다리·물·바위와 이벤트 칸을 경로에서 제외하고, 경로가 없으면 기다리며 플레이어를 막지 않는다. 층 전환은 기존 목적지 가까이 배치하는 방식이며 원작의 개별 대사와 실제 동료 충돌은 재현하지 않았다.
+
+### 구역 12 눈 공원 시각 표현
+
+[구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-12-guide-all-pokemon-and-alphas)는 북서쪽 배틀코트와 남서쪽 연못을 설명하고, [구역 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_12)는 눈과 부분적으로 얼어 있는 연못을 설명한다. 기존 타일·출입구를 그대로 두고 눈 덮인 경계, 코트의 바닥과 얼음물·바위·도구 그림을 구분했다. 나무 위치와 세부 코트·연못 윤곽은 원작에서 정밀 확인되지 않은 초안이다. 게임 판정과 저장 좌표는 바꾸지 않았다.
