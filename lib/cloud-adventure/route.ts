@@ -9,7 +9,7 @@ import {applyAdventureBattleEffort} from '@/lib/cloud-adventure/adventure-effort
 import {adventureEvResetUnlocked,resetAdventureEvs} from '@/lib/cloud-adventure/adventure-ev-reset.mjs';
 import {rogueRetryPercent,saveRogueRetry,clearRogueRetry} from '@/lib/cloud-adventure/adventure-rogue-retry.mjs';
 import {rogueRematch,rogueRematchUnlocked,rogueRematchPending} from '@/lib/cloud-adventure/adventure-rogue-rematches.mjs';
-import {LYSANDRE_WINGS,lysandrePower,lysandreWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
+import {LYSANDRE_WINGS,lysandrePower,lysandreWild,lysandreVisibleWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
 import {side27Available,side27Reg,side27Shop,FOSSILS,stoneShopStock,megaStoneShopStock,reviveFossilPokemon} from '@/lib/cloud-adventure/adventure-side27.mjs';
 import {museumSide21Available,museumSide21Requester,museumSide21Spot} from '@/lib/cloud-adventure/adventure-museum.mjs';
 import {isAdventureBench,benchRestUnlocked} from '@/lib/cloud-adventure/adventure-world.mjs';
@@ -100,6 +100,7 @@ const fieldWildResolvers:any={5:zone5Visible,6:zone6Visible,8:zone8Visible,9:zon
 function prepareVisibleWild(s:any){
  if(!s||s.interior||s.combat||s.adventureCatchWindow)return false;
  const period=gameTime(undefined,adventureClockOffset(s)).period;let changed=false;const ensure=(key:string)=>{if(typeof s.zaWildShinyRolls?.[key]!=='boolean'){assignWildShiny(s,{},random,key);changed=true;}};
+ if(s.district==='lumiose-lysandre-lab'){for(const p of lysandreVisibleWild(s))ensure(`lab:${p.id}:${p.species}`);return changed;}
  if(s.district==='lumiose-zone2'){if(zone2BudewPosition(s))ensure('field2:budew:406');if(zone2KakunaPosition(s))ensure('field2:kakuna:14');for(const p of zone2FieldMonsters(s,period))ensure(`field2:${p.id}:${p.speciesId}`);return changed;}
  if(s.district==='lumiose-zone3'){for(const p of zone3FieldMonsters(s,period))ensure(`field3:${p.id}:${p.speciesId}`);return changed;}
  if(s.district==='lumiose-crystal-sewer'){for(const p of magentaSewerMonsters(s,period))ensure(`sewer:${p.id}:${p.speciesId}`);return changed;}

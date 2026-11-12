@@ -4167,3 +4167,14 @@ test('bulk berry and candy purchases enforce quantity, funds and capacity atomic
   const candyKey=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-s']);sql.prepare('UPDATE inventory SET quantity=995 WHERE key=?').run(candyKey);await get();await call('exchangeMegaShardCandy',{item:'za-exp-candy-s',quantity:10},409);await get();assert.equal(rawWorld().zaMegaShards,920);assert.equal(state.inventory['za-exp-candy-s'],995);assert.deepEqual(rawMon(id),oldMon);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Lysandre wings preserve pre-rolled shinies across encounters, catches and reloads',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'lysandre-wings-qa',displayName:'연구소 구역 검증'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const playerId=state.world.activeId,team=[...state.world.teamIds];
+  for(const [wing,id,species,x,y,facing] of [['a','houndour',228,4,4,'left'],['b','noibat',714,4,6,'left'],['e','doublade',680,18,3,'down']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:wing,zaLysandreCards:['a','b','e'],zaLysandrePowers:['a','b','e'],adventureBalls:{masterball:6},x,y,facing},state.revision+1));await get();const key=`lab:${id}:${species}`;assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(state.world.interaction.action,`lysandreWild-${id}`);await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);
+   await call(`lysandreWild-${id}`);assert.equal(state.battle.teams[1][0].speciesId,species);assert.equal(state.battle.teams[1][0].shiny,true);await call('flee');await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);await call(`lysandreWild-${id}`);await call('ball',{ball:'masterball'});await get();assert.equal(rawWorld().zaLysandreWildSpent[id],true);assert.equal(rawWorld().zaWildShinyRolls?.[key],undefined);assert.ok(state.box.some(p=>p.speciesId===species&&p.shiny));assert.equal(state.world.teamIds[0],team[0]);assert.equal(rawMon(playerId).id,152);
+  }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
