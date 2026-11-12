@@ -3453,3 +3453,10 @@ test('research 50 charm is awarded once and improves newly generated wild odds',
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:11,y:9,facing:'up',zaRoyaleRank:'F',zaZone9Upper:false},state.revision+1));await get();globalThis.__adventureRandom=()=>1/2048;await call('zone9Wild-sableye');assert.equal(rawWorld().encounter.shiny,true);await call('ball',{ball:'masterball'});await get();assert.ok(state.box.some(p=>p.speciesId===302&&p.shiny));assert.ok(team.every(id=>state.world.teamIds.includes(id)));
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('zone nine field creates saved colors before the first encounter',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone9-field-colors-qa',displayName:'필드 색 검사'};
+ try{
+  await get();await call('start',{species:152});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:11,y:8,facing:'down',zaRoyaleRank:'F',zaZone9Upper:false},state.revision+1));await get();globalThis.__adventureRandom=()=>0;await call('face',{direction:'down'});assert.equal(rawWorld().zaWildShinyRolls['zone9:sableye:302'],true);await get();globalThis.__adventureRandom=()=>.999;await call('zone9Wild-sableye');assert.equal(rawWorld().encounter.shiny,true);await call('flee');await get();assert.equal(rawWorld().zaWildShinyRolls['zone9:sableye:302'],true);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
