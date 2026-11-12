@@ -1830,6 +1830,16 @@ test('Magenta 6 court connects the street and scaffold while preserving progress
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Rank V royale trainers retain documented moves through battles and reload',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-v-moves-qa',displayName:'로열기술테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:0},state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();await call('enterRoyaleZone');
+  const cases=[['O','royaleErica','royale-v-jaques',[['빛의장막','드레인키스','초음파','환상빔'],['실뿜기','단단해지기','기충전','세차게휘두르기']]],['U','royaleDaniel','royale-v-anna',[['물대포','환상빔','물의파동','박치기'],['핥기','물대포','거품광선','물기']]],['V','royaleJean','royale-v-warren',[['물기','뱀눈초리','세차게휘두르기','싫은소리'],['바람일으키기','전광석화','회오리','날개치기']]],['a','royaleVExtra3','royale-v-marie',[['신비의부적','잎날가르기','드레인키스','희망사항'],['전기쇼크','전기자석파','충전','이상한빛']]],['b','royaleVExtra4','royale-v-nils',[['세차게휘두르기','불릿펀치','탁쳐서떨구기','벌크업'],['몸통박치기','째려보기','머드샷','전광석화']]],['e','royaleVExtra5','royale-v-antoine',[['저주','모래지옥','구멍파기','깨물어부수기'],['째려보기','모래지옥','물기','구멍파기']]]];
+  for(let i=0;i<cases.length;i++){const [tile,action,trainer,moves]=cases[i];await walkTo(tile);await call(action);assert.equal(state.world.trainer.id,trainer);assert.deepEqual(rawWorld().combat.teams[1].map(m=>m.moves),moves);await get();assert.deepEqual(rawWorld().combat.teams[1].map(m=>m.moves),moves);await battle();assert.equal(state.world.zaRoyaleVPoints,(i+1)*550);await call(action,{},409);}
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Magenta court night royale preserves rank progress and returns to the court',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'magenta6-royale-qa',displayName:'마젠타로열테스트'};
  try{
