@@ -628,3 +628,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 3 정원 건물 옥상 표현
 
 [구역 자료](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_3)는 정원의 건물 옥상에 기술머신이 있다고 설명한다. 기존 별도 옥상층을 지상 정원과 구분되는 석재 바닥·경계·계단으로 그렸다. 실제 건물의 옥상 윤곽과 포장·계단 위치는 확인하지 못해 기존 2D 배치에 따른 추정이다. 맵 타일과 층 이동·도구 수령·저장은 바꾸지 않았다.
+
+### 구역 11 남서쪽 두 계단의 착지 공간 표현
+
+[현장 안내](https://www.siliconera.com/where-is-galarian-stunfisk-in-pokemon-legends-z-a/)에서 확인되는 두 계단 동선을 기존 상층·중간층의 경계와 돌 포장으로 구분했다. 바닥 색과 포장·난간의 형태 및 각 층의 정확한 크기는 기존 2D 배치에 따른 추정이다. 실제 높이층, 계단 전환, 맵 타일 및 저장은 바꾸지 않았다.
