@@ -2235,6 +2235,17 @@ test('Mission 23 lower rooftop persists, returns to scaffolding and reaches Amph
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('research TMs teach verified regional forms while preserving saved moves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-tm-regional-qa',displayName:'지역 폼 기술머신'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;
+  const mon={...makeMon(10100,30),moves:['몸통박치기','울음소리','전광석화','방어'],pp:{tackle:3,growl:7,quickattack:0,protect:4}};assert.equal(mon.speciesId,26);seedMon(id,mon);seedWorld({zaResearchRewards:[14,26]});await get();
+  await call('teachResearchTm',{level:14,slot:1});assert.deepEqual(rawMon(id).moves,['몸통박치기','사이코쇼크','전광석화','방어']);assert.equal(rawMon(id).pp.tackle,3);assert.equal(rawMon(id).pp.quickattack,0);await get();assert.equal(state.box.find(m=>m.boxId===id).id,10100);assert.equal(state.box.find(m=>m.boxId===id).moves[1],'사이코쇼크');await call('teachResearchTm',{level:14,slot:0},409);
+  await call('teachResearchTm',{level:26,slot:2});assert.equal(rawMon(id).moves[2],'명상');await get();assert.deepEqual(state.world.zaResearchRewards,[14,26]);
+  const base={...makeMon(26,30),moves:['몸통박치기']};seedMon(id,base);await get();await call('teachResearchTm',{level:14,slot:0},409);assert.deepEqual(rawMon(id).moves,base.moves);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('research compatibility blocks regional-only TM on base form without changing old moves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-tm-form-qa',displayName:'기술머신 폼 검사'};
  try{

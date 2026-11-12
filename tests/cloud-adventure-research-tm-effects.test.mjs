@@ -18,6 +18,16 @@ test('research TM compatibility covers available base species without mixing reg
  assert.equal(canLearnResearchTm(state,{id:10026,speciesId:26,moves:[]},14),false);
 });
 
+test('verified regional forms use their own TM lists and require matching species',()=>{
+ const state={zaResearchRewards:[4,9,14,22,26,27,32,40]};
+ for(const [id,speciesId,level] of [[10100,26,14],[10108,53,9],[10164,79,26],[10165,80,32],[10172,199,27],[10234,211,27],[10241,705,32],[10242,706,22],[10243,713,40]])assert.equal(canLearnResearchTm(state,{id,speciesId,moves:[]},level),true,`${id}:${level}`);
+ assert.equal(canLearnResearchTm(state,{id:26,speciesId:26,moves:[]},14),false);
+ assert.equal(canLearnResearchTm(state,{id:10100,speciesId:25,moves:[]},14),false);
+ assert.equal(canLearnResearchTm(state,{id:10100,speciesId:26,moves:['사이코쇼크']},14),false);
+ assert.equal(canLearnResearchTm({zaResearchRewards:[]},{id:10100,speciesId:26,moves:[]},14),false);
+ assert.equal(canLearnResearchTm(state,{id:10107,speciesId:52,moves:[]},4),false);
+});
+
 test('research TMs retain core effects in the existing turn-based simulator',()=>{
  const foe={...makeMon(129,30),boxId:'foe',moves:['튀어오르기']};
  const wall={...makeMon(25,30),boxId:'wall',moves:['빛의장막']};
