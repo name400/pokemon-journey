@@ -16,3 +16,15 @@ test('rival Manectric can mega evolve in the turn-based engine',()=>{
  const battle=playCpu(createCombat([player],[mission10RivalTeam('grass')[2]]),{type:'move',move:'방어'});
  assert.equal(battle.teams[1][0].battleAppearance,'manectricmega');
 });
+
+test('mission 10 partner and guards have separate, valid temporary teams',async()=>{
+ const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');
+ for(const [choice,ids] of Object.entries({grass:[159,499,310],fire:[153,159,310],water:[499,153,310]})){
+  const {ally,foes}=mission10GuardTeams(choice);
+  assert.deepEqual(ally.map(m=>m.speciesId),ids);assert.deepEqual(ally.map(m=>m.level),[29,29,30]);
+  assert.deepEqual(foes.map(m=>m.speciesId),[702,702]);assert.deepEqual(foes.map(m=>m.level),[30,30]);
+  assert.equal(new Set([...ally,...foes].map(m=>m.boxId)).size,5);
+  assert.ok([...ally,...foes].every(m=>m.moves.length===4&&m.moves.every(move=>Object.hasOwn(moves,move))));
+ }
+ assert.throws(()=>mission10GuardTeams('__proto__'));assert.throws(()=>mission10GuardTeams(''));
+});
