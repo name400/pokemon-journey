@@ -5,6 +5,9 @@ import {createCombat,playCpu} from '../lib/party-battle.mjs';
 import {INFINITE_GRISELLE,INFINITE_FOLLOWUPS,infiniteRewardTeam,infiniteTrainerBattleTeam,infiniteTrainerVerified} from '../lib/cloud-adventure/adventure-infinite-royale.mjs';
 
 const cases=[
+ [INFINITE_FOLLOWUPS.find(t=>t.id==='infinite-canari'),'eelektrossite','eelektrossmega',[73,74,74,74,74,75]],
+ [INFINITE_FOLLOWUPS.find(t=>t.id==='infinite-ivor'),'falinksite','falinksmega',[73,74,74,74,74,75]],
+ [INFINITE_FOLLOWUPS.find(t=>t.id==='infinite-jacinthe'),'clefablite','clefablemega',[73,74,74,74,74,75]],
  [INFINITE_FOLLOWUPS.find(t=>t.id==='infinite-tarragon'),'excadrite','excadrillmega',[73,73,73,73,75]],
  [INFINITE_FOLLOWUPS.find(t=>t.id==='infinite-lebanne'),'dragalgite','dragalgemega',[73,73,73,73,74]],
  [INFINITE_FOLLOWUPS.find(t=>t.id==='infinite-philippe'),'skarmorite','skarmorymega',[73,73,73,73,74]],
