@@ -658,7 +658,44 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     }
     if(w.district==='lumiose-crystal-sewer'&&!w.interior){ctx.fillStyle=c==='#'?'#526a6c':(x+y)%2?'#a1ada5':'#afbab0';ctx.fillRect(px,py,tile,tile);if(c==='g'){ctx.fillStyle='#6f8a7b';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#bdc9b6';ctx.fillRect(px+6,py+tile/2,tile-12,2);}if(c==='c'){ctx.fillStyle='#cc76b0';ctx.fillRect(px+8,py+4,tile-16,tile-8);ctx.fillStyle='#f9d3ed';ctx.fillRect(px+12,py+7,5,tile-14);}if(c==='X'){ctx.fillStyle='#8a5e50';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-ghost-house'&&!w.interior){ctx.fillStyle=c==='#'?'#6f666d':(x+y)%2?'#c9b7a8':'#d5c5b4';ctx.fillRect(px,py,tile,tile);if('qabnX'.includes(c)){ctx.fillStyle=c==='X'?'#8a5e50':'#77617f';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(({q:'고오스',a:'팬텀',b:'팬텀',n:'입주자',X:'출구'} as Record<string,string>)[c]||'',px+tile/2,py+20);}return;}
-    if(w.district==='lumiose-sewer'&&!w.interior){if(w.zaMission19Inner===true){ctx.fillStyle=c==='#'?'#514d60':(x+y)%2?'#928c9c':'#a39bac';ctx.fillRect(px,py,tile,tile);if(c==='X'){ctx.fillStyle='#79675f';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+20);}return;}if(c==='~'){ctx.fillStyle='#39777b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#70a6a4';ctx.fillRect(px+4,py+9,tile-8,2);ctx.fillRect(px+8,py+20,tile-12,2);return;}ctx.fillStyle=c==='#'?'#526a6c':(x+y)%2?'#a1ada5':'#afbab0';ctx.fillRect(px,py,tile,tile);if('tabediquoX'.includes(c)){ctx.fillStyle=c==='X'?'#8a5e50':'#55787b';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(({t:'문',a:'전기판',b:'기계',e:'파이프',d:'상자',i:'벽',q:'클레피',u:'Gwynn',o:'사건',X:'출구'} as Record<string,string>)[c]||'',px+tile/2,py+20);}return;}
+    if(w.district==='lumiose-sewer'&&!w.interior){
+     // The investigation objects and ice bridge are documented in Mission 19.
+     // Wall texture, pipe shapes and exact room geometry are 2D approximations.
+     const branch=w.zaSewerIceBranch===true,inner=w.zaMission19Inner===true;
+     if(c==='#'){
+      ctx.fillStyle=inner?'#494755':'#465d60';ctx.fillRect(px,py,tile,tile);
+      ctx.fillStyle=inner?'#686276':'#688083';ctx.fillRect(px+1,py+2,tile-2,tile-5);
+      ctx.fillStyle=inner?'#8b8290':'#91a59f';ctx.fillRect(px+1,py+2,tile-2,3);
+      ctx.fillStyle=inner?'#575262':'#50696a';ctx.fillRect(px,py+tile-5,tile,5);ctx.fillRect(px+(y%2?tile/2:1),py+6,2,tile-11);
+      return;
+     }
+     if(c==='~'){
+      ctx.fillStyle='#326b72';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#498991';ctx.fillRect(px,py+tile/2,tile,2);
+      ctx.fillStyle='#8ab7b0';ctx.fillRect(px+3+(x*7+y*3)%7,py+7,10,2);ctx.fillRect(px+13,py+tile-9,10,2);return;
+     }
+     if(branch&&c===':'){
+      ctx.fillStyle='#b8dfe5';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#eaf8f5';ctx.fillRect(px,py+3,tile,4);ctx.fillRect(px,py+tile-6,tile,3);
+      ctx.fillStyle='#77b5c7';ctx.fillRect(px,py+tile/2,tile,2);ctx.fillRect(px+(x%2?8:20),py+8,2,tile-16);return;
+     }
+     ctx.fillStyle=inner?((x+y)%2?'#aaa2aa':'#b6afb3'):((x+y)%2?'#9baea6':'#a9bab0');ctx.fillRect(px,py,tile,tile);
+     ctx.fillStyle=inner?'#8a818c':'#82978f';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);
+     if(branch&&c==='i'){
+      ctx.fillStyle='#83bed0';ctx.beginPath();ctx.moveTo(px+tile/2,py+2);ctx.lineTo(px+tile-5,py+tile-5);ctx.lineTo(px+5,py+tile-5);ctx.closePath();ctx.fill();ctx.fillStyle='#e9faf8';ctx.fillRect(px+tile/2-2,py+7,3,13);
+     }else if(c==='a'&&!branch&&!inner){
+      ctx.fillStyle='#556d70';ctx.fillRect(px+5,py+3,tile-10,tile-6);ctx.fillStyle='#b9c2ad';ctx.fillRect(px+8,py+6,tile-16,tile-12);ctx.fillStyle='#d7ae6e';ctx.fillRect(px+10,py+10,4,4);ctx.fillRect(px+18,py+10,4,4);
+     }else if(c==='b'&&!branch&&!inner){
+      ctx.fillStyle='#5a6b68';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#97a79a';ctx.fillRect(px+6,py+7,tile-12,tile-14);ctx.fillStyle='#455c5d';for(let j=9;j<tile-6;j+=5)ctx.fillRect(px+8,py+j,tile-16,2);
+     }else if(c==='e'&&!branch&&!inner){
+      ctx.fillStyle='#697d77';ctx.fillRect(px+3,py+12,tile-6,8);ctx.fillStyle='#adc0ac';ctx.fillRect(px+3,py+12,tile-6,3);ctx.strokeStyle='#b65f4f';ctx.lineWidth=2;ctx.beginPath();ctx.arc(px+tile/2,py+16,6,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#b65f4f';ctx.fillRect(px+tile/2-1,py+8,2,16);
+     }else if(c==='d'&&!branch&&!inner){
+      ctx.fillStyle='#a58b6c';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#d4c19e';ctx.fillRect(px+5,py+6,tile-10,3);ctx.fillStyle='#705f50';ctx.fillRect(px+tile/2-1,py+8,2,tile-13);
+     }else if(c==='t'||c==='X'){
+      ctx.fillStyle='#526d68';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#bdcbb7';ctx.fillRect(px+5,py+5,tile-10,3);ctx.fillStyle='#d3d8c6';ctx.fillRect(px+tile/2-1,py+9,2,tile-14);
+     }else if(c==='o'){
+      ctx.fillStyle='#e6ebe3';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b95251';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,4);ctx.fillStyle='#414d4d';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);
+     }
+     return;
+    }
     if(w.interior==='canariQuiz'){ctx.fillStyle=c==='#'?'#65736d':c===','?'#99c89a':c===';'?'#dc9b9b':'#d6d5bd';ctx.fillRect(px,py,tile,tile);if(c==='v'||c==='w'){ctx.fillStyle=c==='v'?'#3f9870':'#bc5660';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 18px sans-serif';ctx.textAlign='center';ctx.fillText(c==='v'?'O':'X',px+tile/2,py+23);}if(c==='X'){ctx.fillStyle='#927562';ctx.fillRect(px+4,py+4,tile-8,tile-8);}return;}
     if(w.interior==='cafeGallant'){ctx.fillStyle=c==='#'?'#907f71':(x+y)%2?'#dbd1bd':'#e8dfcc';ctx.fillRect(px,py,tile,tile);if(c==='k'){ctx.fillStyle='#a27555';ctx.fillRect(px+2,py+5,tile-4,tile-10);}if(c==='X'){ctx.fillStyle='#9b745b';ctx.fillRect(px+4,py+4,tile-8,tile-8);}return;}
     if(['racineGarage','racineRoom'].includes(w.interior)){ctx.fillStyle=c==='#'?'#747977':w.interior==='racineRoom'?(x+y)%2?'#d9cce0':'#e4d7e8':(x+y)%2?'#c8ccbe':'#d7d9ce';ctx.fillRect(px,py,tile,tile);if(c==='k'){ctx.fillStyle='#866c91';ctx.fillRect(px+2,py+5,tile-4,tile-10);}if(c==='u'||c==='X'){ctx.fillStyle=c==='u'?'#816c8c':'#927562';ctx.fillRect(px+4,py+4,tile-8,tile-8);}return;}
@@ -935,6 +972,8 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
    if(w.district==='lumiose-zone1'&&!w.interior&&[4,5].includes(w.zaMission03Stage)){const isFletchling=w.zaMission03Stage===4,x=isFletchling?8:14,y=6,px=x*tile,py=y*tile,img=fieldImages[isFletchling?661:659];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#668c80';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(isFletchling?'화살꼬빈':'파르빗',px+tile/2,py+20);}}
+   if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaSewerIceBranch&&w.zaMission19Stage===13&&(w.zaMission19Inner||!w.zaMission19InnerEnabled))trainer(w.zaMission19Inner?18:11,w.zaMission19Inner?3:2,'#916c8e','down');
+   if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaSewerIceBranch&&!w.zaMission19Inner&&w.zaMission19Stage===10){const px=16*tile,py=10*tile,img=fieldImages[707];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#b8c7c3';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#6b7776';ctx.stroke();}}
    if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaMission19Inner&&w.zaMission19Stage===11&&[0,1].includes(w.zaMission19ChandelureStep)){const x=w.zaMission19ChandelureStep===0?16:11,y=w.zaMission19ChandelureStep===0?8:5,px=x*tile,py=y*tile,img=fieldImages[609];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#80699a';ctx.fillRect(px+7,py+7,tile-14,tile-14);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('샹델라',px+tile/2,py+20);}}
    // Side Mission 17's one-time rooftop Mareep is always shiny. Its tile is
    // removed by the saved catch flag, so old saves keep the existing lifecycle.
