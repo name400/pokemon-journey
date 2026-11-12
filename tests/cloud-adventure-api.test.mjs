@@ -4201,6 +4201,16 @@ test('Lysandre first wing optional powered warp returns safely and preserves key
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('Mission 42 completed chamber can be revisited without duplicate rewards',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-revisit-qa',displayName:'지가르데 재방문 검증'};
+ try{
+  await get();await call('start',{species:1});const party=[...state.world.teamIds],lead=structuredClone(rawMon(state.world.activeId)),wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',zaMission42Stage:5,zaMission42Complete:true,zaMission42Caught:true,zaMission42ChamberV1:true,zaMission42Underground:false},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'mission42Descend');await call('mission42Descend');await get();assert.equal(state.world.zaMission42Underground,true);assert.equal(state.world.zaMission42Complete,true);await call('mission42Cube',{},409);await call('mission42OfferCapture',{},409);
+  await walkTo({x:11,y:14});await call('face',{direction:'down'});await call('mission42Ascend');await get();assert.equal(state.world.zaMission42Underground,false);assert.equal(state.world.zaMission42Stage,5);assert.deepEqual(state.world.teamIds,party);const after=rawMon(party[0]);assert.ok(after.walkSteps>=lead.walkSteps);assert.deepEqual({...after,walkSteps:lead.walkSteps},lead);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Mission 42 underground chamber preserves legacy entry, battles and capture',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission42-chamber-qa',displayName:'지가르데 유적 검증'};
  try{
@@ -4211,6 +4221,7 @@ test('Mission 42 underground chamber preserves legacy entry, battles and capture
   await call('mission42Battle');await call('forfeit');await get();assert.equal(state.world.zaMission42Stage,1);assert.equal(state.world.zaMission42Phase,0);assert.equal(state.world.zaMission42Underground,false);await place({});await call('mission42Descend');await walkTo('n');
   for(let phase=0;phase<3;phase++){seedMon(id,strong);await get();assert.equal(state.world.interaction?.name?.startsWith('지가르데'),true,JSON.stringify({phase,x:state.world.x,y:state.world.y,facing:state.world.facing,underground:state.world.zaMission42Underground,spot:state.world.interaction}));await call('mission42Battle');await battle();assert.equal(state.world.zaMission42Phase,phase+1);await get();}
   assert.equal(state.world.zaMission42Stage,3);await call('mission42OfferCapture');await call('catchWindowBall',{ball:'masterball'});await get();assert.equal(state.world.zaMission42Stage,4);assert.ok(state.box.some(p=>p.speciesId===718));await call('mission42Cube');assert.equal(state.world.zaMission42Complete,true);assert.equal(state.inventory['za-zygarde-cube'],1);assert.ok(state.world.teamIds.includes(team[0]));await walkTo({x:11,y:14});await call('face',{direction:'down'});await call('mission42Ascend');await get();assert.equal(state.world.zaMission42Underground,false);
+  const capturedBefore=state.box.filter(p=>p.speciesId===718).map(p=>p.boxId),partyBefore=[...state.world.teamIds];assert.equal(state.world.interaction.action,'mission42Descend');await call('mission42Descend');await get();assert.equal(state.world.zaMission42Underground,true);assert.equal(state.world.zaMission42Complete,true);assert.deepEqual(state.box.filter(p=>p.speciesId===718).map(p=>p.boxId),capturedBefore);assert.deepEqual(state.world.teamIds,partyBefore);await walkTo('n');assert.notEqual(state.world.interaction?.action,'mission42OfferCapture');await call('mission42OfferCapture',{},409);await call('mission42Cube',{},409);await walkTo({x:11,y:14});await call('face',{direction:'down'});await call('mission42Ascend');await get();assert.equal(state.world.zaMission42Underground,false);assert.equal(state.inventory['za-zygarde-cube'],1);
   // Earlier saves that already reached stage 1 have no new chamber flag.
   await place({zaMission42ChamberV1:undefined,zaMission42Underground:undefined,zaMission42Complete:false,zaMission42Caught:false});assert.ok(state.world.interaction.actions.some(a=>a.action==='mission42Battle'));await call('mission42Battle');await call('forfeit');assert.equal(state.world.zaMission42Stage,1);
  }finally{globalThis.__adventureUser=previous;}
