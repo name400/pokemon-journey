@@ -4105,3 +4105,16 @@ test('mega shard candy exchange enforces story stock and preserves inventory ato
   const key=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-s']);sql.prepare('UPDATE inventory SET quantity=999 WHERE key=?').run(key);await get();await call('exchangeMegaShardCandy',{item:'za-exp-candy-s'},409);await get();assert.equal(rawWorld().zaMegaShards,62);assert.equal(state.inventory['za-exp-candy-s'],999);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('postgame power item exchange, equip and effort survive reconnect without duplicate rewards',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'shard-power-qa',displayName:'파워 도구 교환 검증'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,lead={...makeMon(150,50),moves:['사이코키네시스'],pp:{},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0}};seedMon(id,lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:8,y:10,facing:'up',zaRoyaleRank:'F',zaMegaShards:400,zaShardExchangeUnlocked:true},state.revision+1));await get();await walkTo('x');
+  await call('exchangeMegaShardPowerItem',{item:'powerbracer'},409);assert.equal(rawWorld().zaMegaShards,400);
+  seedWorld(storeAdventurePosition({...rawWorld(),zaMission37Complete:true},state.revision+1));await get();await walkTo('x');await call('exchangeMegaShardPowerItem',{item:'pidgeotite'},409);
+  const rev=state.revision;await call('exchangeMegaShardPowerItem',{item:'powerbracer'});assert.equal(rawWorld().zaMegaShards,220);assert.equal(state.inventory.powerbracer,1);
+  const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'exchangeMegaShardPowerItem',item:'powerbracer',revision:rev})}));assert.equal(replay.status,409);await get();const fullKey=JSON.stringify([globalThis.__adventureUser.userId,'powerlens']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(fullKey,globalThis.__adventureUser.userId,'powerlens');await get();await call('exchangeMegaShardPowerItem',{item:'powerlens'},409);await get();assert.equal(rawWorld().zaMegaShards,220);assert.equal(state.inventory.powerlens,999);await call('equip',{boxId:id,item:'powerbracer'});assert.equal(rawMon(id).item,'powerbracer');assert.equal(state.inventory.powerbracer||0,0);
+  const foe={...makeMon(25,5),boxId:'wild',teraType:'Normal'},combat=createCombat([{...rawMon(id),boxId:id}],[foe]);combat.adventureEffortVersion=1;combat.adventureEffortFoes=[];seedWorld({combat,trainer:null,encounter:foe});await get();await call('battle',{command:{type:'move',move:'사이코키네시스'}});assert.equal(rawMon(id).evs.atk,8);assert.equal(rawMon(id).evs.spe,2);await get();assert.equal(rawMon(id).evs.atk,8);assert.equal(rawMon(id).item,'powerbracer');assert.equal(rawWorld().zaMegaShards,220);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});

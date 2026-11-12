@@ -18,3 +18,18 @@ test('power weight retains the simulator speed penalty during battle',async()=>{
 test('a held item changing during a turn does not receive an unverified weight bonus',async()=>{
  const {applyAdventureBattleEffort}=await import('../lib/cloud-adventure/adventure-effort.mjs'),mon={...makeMon(1,30),boxId:'p',item:'powerweight'},foe={...makeMon(25,5),boxId:'f'},before={adventureEffortVersion:1,teams:[[mon],[foe]]},after={...before,teams:[[{...mon,item:''}],[{...foe,hp:0}]],events:[{kind:'faint',side:1,boxId:'f',hp:0}]};const result=applyAdventureBattleEffort(before,after);assert.equal(result.teams[0][0].evs.hp,0);assert.equal(result.teams[0][0].evs.spe,2);
 });
+
+test('all six power items apply their stat bonus and battle speed penalty',async()=>{
+ const {Battle}=await import('@pkmn/sim'),{createCombat}=await import('../lib/party-battle.mjs');
+ const foe={...makeMon(25,5),boxId:'foe'},base={...makeMon(1,30),boxId:'p',evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0}};
+ const normal=Battle.fromJSON(createCombat([{...base,item:''}],[foe]).snapshot).p1.active[0].getStat('spe');
+ for(const [item,stat] of Object.entries({powerweight:'hp',powerbracer:'atk',powerbelt:'def',powerlens:'spa',powerband:'spd',poweranklet:'spe'})){
+  const mon={...base,item},result=grantAdventureEffort(mon,foe),expected={hp:0,atk:0,def:0,spa:0,spd:0,spe:2};expected[stat]+=8;assert.deepEqual(result.evs,expected,item);
+  assert.equal(Battle.fromJSON(createCombat([mon],[foe]).snapshot).p1.active[0].getStat('spe'),Math.floor(normal/2),item);
+ }
+});
+
+test('power bonus is not granted after swapping items during a turn',async()=>{
+ const {applyAdventureBattleEffort}=await import('../lib/cloud-adventure/adventure-effort.mjs'),foe={...makeMon(25,5),boxId:'f'},p={...makeMon(1,30),boxId:'p',item:'powerbracer'},before={adventureEffortVersion:1,teams:[[p],[foe]]},after={...before,teams:[[{...p,item:'powerlens'}],[{...foe,hp:0}]],events:[{kind:'faint',side:1,boxId:'f',hp:0}]};
+ const mon=applyAdventureBattleEffort(before,after).teams[0][0];assert.equal(mon.evs.atk,0);assert.equal(mon.evs.spa,0);assert.equal(mon.evs.spe,2);
+});
