@@ -3765,6 +3765,30 @@ test('Zone 20 habitat encounters can be caught and restored through the API',asy
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
+test('missing Zone 9, 16 and 17 species can be caught and registered after reload',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,clock=globalThis.__adventureTime;
+ try{
+  const samples=[
+   {zone:9,species:662,x:9,y:6,direction:'down',extra:{zaZone9Upper:true},period:'day',roll:.9},
+   {zone:16,species:671,x:9,y:9,direction:'right',period:'day',roll:.9},
+   {zone:16,species:689,x:9,y:9,direction:'right',period:'night',roll:.7},
+   {zone:16,species:121,x:9,y:9,direction:'right',period:'night',roll:.9},
+   {zone:17,species:227,x:9,y:12,direction:'right',period:'day',roll:.9},
+   {zone:17,species:608,x:9,y:12,direction:'right',period:'night',roll:.95},
+  ];
+  for(const sample of samples){
+   globalThis.__adventureUser={userId:`zone${sample.zone}-species-${sample.species}-qa`,displayName:'야생 구역 조사'};
+   globalThis.__adventureTime={period:sample.period,hour:sample.period==='night'?22:12};globalThis.__adventureRandom=()=>.999;
+   await get();await call('start',{species:152});
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:`lumiose-zone${sample.zone}`,interior:null,x:sample.x,y:sample.y,facing:sample.direction,zaRoyaleRank:'A',adventureBalls:{masterball:1},...sample.extra},state.revision+1));
+   await get();const rolls=[0,sample.roll,.999,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;
+   await call('move',{direction:sample.direction});assert.equal(rawWorld().encounter?.speciesId,sample.species,`zone ${sample.zone}: ${sample.species}`);
+   await call('ball',{ball:'masterball'});await get();
+   assert.ok(rawWorld().adventureDexSpecies.includes(sample.species));assert.ok(state.box.some(mon=>mon.speciesId===sample.species));
+  }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=clock;}
+});
+
 test('Zone 12 pond-side Vanillite can complete research after capture and reload',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;
  globalThis.__adventureUser={userId:'zone12-vanillite-research-qa',displayName:'구역12 조사'};
