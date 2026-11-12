@@ -2787,3 +2787,12 @@ test('Mission 10 reuses the original ZA starter and keeps legacy manual selectio
   seedWorld({zaMission10Starter:'invalid',districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('battleMission10Rival');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),foes);assert.equal(state.world.zaMission10Starter,chosen);await call('forfeit');await get();assert.equal(state.world.zaMission10Stage,2);assert.equal(state.world.zaMission10Starter,chosen);assert.deepEqual(state.world.teamIds,[id,absolId]);
  }}finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Mission 10 ticket permits Vinnie promotion by day and survives defeat',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'mission10-vinnie-day',displayName:'낮 승급전'};globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','10만볼트','화염방사'],pp:{}});
+  const place=(points)=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:null,x:11,y:7,facing:'up',zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:points},state.revision+1));place(5999);await get();await call('battleMission10Vinnie',{},409);place(6000);await get();assert.equal(state.world.interaction.action,'battleMission10Vinnie');assert.doesNotMatch(state.world.objective,/밤에.*도전/);const coins=state.wallet.coins;await call('battleMission10Vinnie');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[229,30],[319,30],[427,30],[780,32]]);await call('forfeit');await get();assert.equal(state.world.zaRoyaleVPoints,6000);assert.equal(state.world.zaMission10Stage,4);assert.equal(state.wallet.coins,coins);
+  place(6000);await get();await call('battleMission10Vinnie');await battle();await get();assert.equal(state.world.zaRoyaleRank,'F');assert.equal(state.world.zaMission10Stage,5);assert.equal(state.wallet.coins,coins+2048);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaVinnieTM051Pending,true);await call('battleMission10Vinnie',{},409);await call('claimVinnieTM');await get();assert.equal(state.world.zaMission10Stage,6);assert.equal(state.inventory['za-tm051'],1);await call('claimVinnieTM',{},409);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
