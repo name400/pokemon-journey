@@ -97,7 +97,7 @@ test('Zone 11 alpha Slowbro and Clawitzer are accessible without making the rive
 
 test('Zone 11 aquatic encounters remain in water and accessible from shore',()=>{
  const base={area:3,district:'lumiose-zone11',interior:null,zaRoyaleRank:'E',teamIds:['kept']};
- for(const [tile,x,y,species,id] of [['1',4,7,686,'inkay'],['2',18,9,130,'gyarados']]){
+ for(const [tile,x,y,species,id] of [['1',4,7,686,'inkay'],['2',18,9,130,'gyarados'],['3',8,7,692,'clauncher']]){
   const direction=y===7?'down':'up',shore={...base,x,y:y===7?6:10,facing:direction},map=zone11Map(shore);
   assert.equal(map[y][x],tile);assert.equal(zone11Visible(shore,tile).species,species);assert.equal(fieldDialogue(shore).action,`zone11Wild-${id}`);assert.equal(stepField(shore,direction).blocked,true);
   const spent={...shore,zaZone11Spent:{[id]:true}},saved=restoreAdventurePosition(storeAdventurePosition(spent,202),202);assert.equal(zone11Map(saved)[y][x],'~');assert.deepEqual(saved.teamIds,['kept']);
