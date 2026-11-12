@@ -242,7 +242,32 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(vineyard){ctx.fillStyle='#74523b';ctx.fillRect(px,py+tile-7,tile,3);ctx.fillRect(px+5,py+9,3,tile-15);ctx.fillRect(px+tile-8,py+9,3,tile-15);ctx.fillStyle='#3f7648';ctx.fillRect(px,py+6,tile,8);ctx.fillStyle='#77a75a';ctx.fillRect(px+3,py+5,7,3);ctx.fillRect(px+16,py+5,9,3);ctx.fillStyle='#694778';ctx.fillRect(px+8,py+12,5,5);ctx.fillRect(px+tile-13,py+12,5,5);ctx.fillStyle='#9874a1';ctx.fillRect(px+9,py+12,2,2);ctx.fillRect(px+tile-12,py+12,2,2);}
      if(c===','){ctx.fillStyle='#baa986';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:1),py+3,1,tile-5);}if(c==='r'){ctx.fillStyle='#496f42';ctx.fillRect(px+4,py+7,tile-8,tile-11);ctx.fillStyle='#7ca063';ctx.fillRect(px+7,py+5,7,6);ctx.fillRect(px+18,py+8,6,5);}if('ij'.includes(c)){ctx.fillStyle='#eee9da';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#bb5c56';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#4d5851';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}if('WEX'.includes(c)){ctx.fillStyle='#668b79';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
-    if(w.district==='lumiose-zone18'&&!w.interior){ctx.fillStyle=c==='#'?'#8f8886':c==='g'?'#94b87c':c===','?'#baac9c':'#ddd3c9';ctx.fillRect(px,py,tile,tile);if(c==='^'){ctx.fillStyle='#968e82';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#5d6261';ctx.fillRect(px+3,py+2,4,tile-4);ctx.fillRect(px+tile-7,py+2,4,tile-4);ctx.fillRect(px+3,py+6,tile-6,3);ctx.fillRect(px+3,py+tile-9,tile-6,3);ctx.fillStyle='#c8b79b';ctx.fillRect(px+6,py+10,tile-12,3);}if(c==='E'||c==='W'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}if(c==='h'){ctx.fillStyle='#6f827a';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('골목',px+tile/2,py+20);}if(c==='l'){ctx.fillStyle='#72523a';ctx.fillRect(px+9,py+4,14,tile-8);}if(c==='i'){ctx.fillStyle='#f4e069';ctx.fillRect(px+tile/2-4,py+tile/2-4,8,8);}if(c==='g'){ctx.fillStyle='#638f59';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}return;}
+    if(w.district==='lumiose-zone18'&&!w.interior){
+     // Rooftops and the southeast construction alley remain separate saved
+     // layers. Scaffold outlines are drawn over existing blocked cells only.
+     const alley=w.zaZone18Construction===true,upper=w.zaZone18Upper===true;
+     ctx.fillStyle=alley?(c==='#'?'#8b8c86':c===','?'#bdb5a7':'#cfc9bc'):upper?(c==='#'?'#6d7a7c':'#bfb4a6'):c==='#'?'#8f8886':c==='g'?'#94b87c':c===','?'#baac9c':'#ddd3c9';ctx.fillRect(px,py,tile,tile);
+     if(alley&&c==='#'){
+      // A continuous facade behind steel uprights frames the narrow route.
+      ctx.fillStyle=(x+y)%2?'#aaa59b':'#b8b1a5';ctx.fillRect(px+1,py+1,tile-2,tile-2);
+      ctx.fillStyle='#8a887f';ctx.fillRect(px,py+tile-3,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+2,2,tile-5);
+      ctx.fillStyle='#626f6e';ctx.fillRect(px+3,py,3,tile);ctx.fillRect(px+tile-6,py,3,tile);ctx.fillRect(px,py+6,tile,3);ctx.fillRect(px,py+tile-8,tile,3);
+      ctx.strokeStyle='#879894';ctx.lineWidth=2;ctx.beginPath();if((x+y)%2){ctx.moveTo(px+5,py+8);ctx.lineTo(px+tile-5,py+tile-8);}else{ctx.moveTo(px+tile-5,py+8);ctx.lineTo(px+5,py+tile-8);}ctx.stroke();
+     }
+     if(alley&&c===','){ctx.fillStyle='#d5cec0';ctx.fillRect(px,py+2,tile,2);ctx.fillStyle='#a9a294';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+4,2,tile-6);}
+     if(upper&&c!=='#'){
+      if(c===','){ctx.fillStyle='#9d8c73';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d5c4a4';for(let j=4;j<tile;j+=8)ctx.fillRect(px+2,py+j,tile-4,4);ctx.fillStyle='#646e6b';ctx.fillRect(px,py,3,tile);ctx.fillRect(px+tile-3,py,3,tile);}
+      else roofPaving(px,py,x,y);
+     }
+     if(!alley&&!upper&&c===','){ctx.fillStyle='#d7ccbc';ctx.fillRect(px,py+2,tile,2);ctx.fillStyle='#a89a8c';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+4,2,tile-6);}
+     if(c==='^'){
+      ctx.fillStyle='#968e82';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#586a6c';ctx.fillRect(px+3,py,4,tile);ctx.fillRect(px+tile-7,py,4,tile);ctx.fillRect(px,py+6,tile,3);ctx.fillRect(px,py+tile-9,tile,3);
+      ctx.strokeStyle='#b6c2b6';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+5,py+8);ctx.lineTo(px+tile-5,py+tile-8);ctx.moveTo(px+tile-5,py+8);ctx.lineTo(px+5,py+tile-8);ctx.stroke();ctx.fillStyle='#d6c5a7';ctx.fillRect(px+6,py+10,tile-12,3);
+     }
+     if(c==='E'||c==='W'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#9ec8b6';ctx.fillRect(px+8,py+7,tile-16,tile-14);}
+     if(c==='h'){ctx.fillStyle='#617c78';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#a7beb0';ctx.fillRect(px+8,py+6,tile-16,tile-12);ctx.fillStyle='#526b68';ctx.fillRect(px+tile/2-1,py+6,2,tile-12);}
+     if(c==='l'){ctx.fillStyle='#72523a';ctx.fillRect(px+8,py+4,3,tile-8);ctx.fillRect(px+tile-11,py+4,3,tile-8);ctx.fillStyle='#e5d1ad';for(let j=7;j<tile-5;j+=6)ctx.fillRect(px+9,py+j,tile-18,2);}
+     if(c==='i'){ctx.fillStyle='#f4e069';ctx.fillRect(px+tile/2-4,py+tile/2-4,8,8);}if(c==='g'){ctx.fillStyle='#638f59';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}return;}
     if(w.district==='lumiose-zone17'&&!w.interior&&w.zaZone17Promenade&&!w.zaZone17Upper){
      // Separate upper promenade: the Y-shaped path and three approaches use
      // the existing draft layer; landscape outlines are not surveyed.

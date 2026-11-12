@@ -600,3 +600,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 5 거리와 옥상 시각 표현
 
 [현장 자료](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-5/)는 도시 건물과 풀밭이 만나는 구역을 보여주고, [구역 안내](https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_5)는 주변 거리와 옥상 연결을 설명한다. 기존 차단된 건물 칸과 거리·수로 타일을 지붕과 포장·수변으로 구분하고 옥상의 닫힌 거미줄·펼쳐진 다리와 지하 입구를 그림으로 나타냈다. 건물의 형태·높이, 수로 윤곽과 정확한 좌표는 기존 2D 초안에 따른 추정이다. 이동·조우·높이층·저장 판정은 바꾸지 않았다.
+
+### 구역 18 공사 골목과 옥상 시각 표현
+
+[현장 자료](https://www.videogameschronicle.com/guide/pokemon-legends-z-a-wild-zone-18/)는 비계와 사다리로 옥상에 접근하는 모습을, [구역 안내](https://pokequery.com/games/legends-za/wild-zones/18)는 남동쪽 공사 비계 사이 골목을 설명한다. 기존 공사 골목의 차단 칸에 건물과 비계, 통행 칸에 포장을 그렸고 별도 옥상층의 기존 연결 통로를 발판으로 구분했다. 비계 수·건물 외관·정밀 좌표는 기존 2D 초안을 따른 추정이다. 맵 타일·층 전환·조우·저장 판정은 바꾸지 않았다.
