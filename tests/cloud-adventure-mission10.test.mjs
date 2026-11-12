@@ -166,3 +166,17 @@ test('cloud single alpha combat retains its existing battle-only stat boost',asy
  const {Battle}=await import('@pkmn/sim');const {createCombat}=await import('../lib/party-battle.mjs');const {makeAdventureAlpha,applyAdventureAlphaBattleStats}=await import('../lib/cloud-adventure/adventure-alpha.mjs');
  const player={...makeMon(25,30),boxId:'player'},foe={...makeAdventureAlpha(makeMon(675,65)),boxId:'foe'};const combat=createCombat([player],[foe]),before=Battle.fromJSON(combat.snapshot),base={...before.p2.active[0].storedStats};applyAdventureAlphaBattleStats(combat);const after=Battle.fromJSON(combat.snapshot);for(const stat of ['atk','def','spa','spd'])assert.equal(after.p2.active[0].storedStats[stat],base[stat]*2);assert.equal(after.p2.active[0].storedStats.spe,base.spe);
 });
+
+test('solo multi-foe battle has no phantom ally and replaces a defeated enemy',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {createSoloMultiFoeSnapshot,playMission10MultiTurn,mission10MultiView}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player={...makeMon(150,100),boxId:'player',moves:['화염방사'],pp:{}},foes=[681,679,679].map((id,i)=>({...makeMon(id,i?34:50),boxId:`foe-${i}`}));let combat=createSoloMultiFoeSnapshot([player],foes),view=mission10MultiView(combat);
+ assert.deepEqual(combat.teams.map(team=>team.length),[1,2,0,1]);assert.equal(view.activeBySide[0][1],-1);assert.equal(view.activeBySide[1].filter(i=>i>=0).length,2);assert.equal(view.teams[0].length,1);assert.ok(view.requests[0].moves[0].targets.filter(t=>t.side===1).length===2);
+ let battle=Battle.fromJSON(combat.snapshot);const reserve=battle.p2.pokemon[1].set.trainerToken;assert.notEqual(battle.p2.active[0].set.trainerToken,reserve);battle.p2.active[0].hp=1;combat={...combat,snapshot:{...battle.toJSON(),formatid:combat.snapshot.formatid}};
+ const m=mission10MultiView(combat).requests[0].moves[0],target=m.targets.find(t=>t.side===1&&t.slot===0);combat=playMission10MultiTurn(combat,{type:'move',move:m.id,target:target.target});assert.equal(Battle.fromJSON(combat.snapshot).p2.active[0].set.trainerToken,reserve);assert.equal(combat.teams[2].length,0);
+ for(let i=0;i<20&&!combat.ended;i++){view=mission10MultiView(combat);const move=view.requests[0].moves[0],foe=move.targets.find(t=>t.side===1);combat=playMission10MultiTurn(JSON.parse(JSON.stringify(combat)),{type:'move',move:move.id,target:foe.target});}assert.equal(combat.winner,0);
+});
+
+test('solo multi-foe battle only offers the player party when a replacement is needed',async()=>{
+ const {createSoloMultiFoeSnapshot,playMission10MultiTurn,mission10MultiView}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const weak={...makeMon(25,1),boxId:'weak',hp:1,moves:['튀어오르기'],pp:{}},reserve={...makeMon(150,100),boxId:'reserve',moves:['화염방사'],pp:{}},foes=[0,1].map(i=>({...makeMon(150,100),boxId:`foe-${i}`,moves:['몸통박치기'],pp:{}}));let c=createSoloMultiFoeSnapshot([weak,reserve],foes);c=playMission10MultiTurn(c,{type:'move',move:'splash'});let view=mission10MultiView(c);assert.equal(view.requests[0].kind,'switch');assert.deepEqual(view.requests[0].switches.map(p=>view.teams[0][p.index].boxId),['reserve']);c=playMission10MultiTurn(c,{type:'switch',slot:view.requests[0].switches[0].slot});view=mission10MultiView(c);assert.equal(view.teams[0][view.active[0]].boxId,'reserve');assert.equal(view.activeBySide[0][1],-1);
+});
