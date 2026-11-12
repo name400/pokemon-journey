@@ -9,7 +9,7 @@ import ts from 'typescript';
 import {makeMon,moves,effectiveness} from '../lib/game.mjs';
 import {stableTeraType,TERA_TYPES} from '../lib/tera-type.mjs';
 import {configure} from '../lib/pokemon-config.mjs';
-import {createCombat} from '../lib/party-battle.mjs';
+import {createCombat,playCpu} from '../lib/party-battle.mjs';
 import {Battle} from '@pkmn/sim';
 import {expToNext,gainExperience,victoryExperience} from '../lib/growth.mjs';
 import {activeRoyaleZones} from '../lib/cloud-adventure/adventure-royale-zones.mjs';
@@ -117,6 +117,17 @@ test('Mission 37 final battle defeat preserves phase and offers a recovered retr
   for(let turn=0;state.battle;turn++){assert.ok(turn<25);await call('battle',{command:{type:'move',move:'튀어오르기'}});}
   assert.equal(state.battleResult.winner,1);assert.equal(state.world.zaMission37FinalPhase,2);assert.equal(state.world.district,'lumiose-protect');assert.deepEqual([state.world.x,state.world.y],[11,9]);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);await get();assert.equal(state.world.zaMission37FinalPhase,2);await call('mission37FinalBattle');assert.equal(state.battle.teams[1].length,2);await call('forfeit');assert.equal(state.world.zaMission37FinalPhase,2);assert.equal(state.world.district,'lumiose-protect');
   await setup(undefined);await call('mission37FinalBattle');for(let turn=0;state.battle;turn++){assert.ok(turn<25);await call('battle',{command:{type:'move',move:'튀어오르기'}});}assert.equal(state.world.zaMission37FinalPhase,2);assert.equal(state.world.district,'lumiose-protect');assert.deepEqual([state.world.x,state.world.y],[3,5]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Mission 37 awards Zygardite and safely recovers legacy rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ try{
+  globalThis.__adventureUser={userId:'mission37-stone-new-qa',displayName:'지가르데나이트 테스트'};await get();await call('start',{species:1});const team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x:11,y:9,facing:'up',zaMission37Started:true,zaMission37Stage:7,zaMission37FinalPhase:6},state.revision+1));await get();await call('mission37Grip');assert.equal(state.inventory.zygardite,1);assert.ok(rawWorld().zaResearchMegaStones.includes('zygardite'));assert.equal(rawWorld().zaMission37ZygarditeClaimed,true);await get();await call('mission37Grip',{},409);await call('mission37Nihil');await get();assert.equal(state.inventory.zygardite,1);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);await call('claimMission37Zygardite',{},409);
+  globalThis.__adventureUser={userId:'mission37-stone-old-qa',displayName:'구형 보상 테스트'};await get();await call('start',{species:1});await call('claimMission37Zygardite',{},409);seedWorld({zaMission37Complete:true});await get();await call('claimMission37Zygardite');assert.equal(state.inventory.zygardite,1);await get();assert.ok(rawWorld().zaResearchMegaStones.includes('zygardite'));await call('claimMission37Zygardite',{},409);const zId=state.world.activeId,z={...makeMon(718,70),ability:'powerconstruct',moves:['방어'],pp:{}};z.hp=Math.floor(z.maxHp*.3);seedMon(zId,z);await get();await call('equip',{boxId:zId,item:'zygardite'});assert.equal(rawMon(zId).item,'zygardite');assert.equal(state.inventory.zygardite||0,0);const opponent={...makeMon(25,5),boxId:'enemy',moves:['튀어오르기'],pp:{}};let combat=createCombat([{...rawMon(zId),boxId:zId}],[opponent]);combat=playCpu(combat,{type:'move',move:'방어'});assert.ok(combat.requests[0].specials.some(s=>s.key==='mega'));combat=playCpu(combat,{type:'move',move:'방어',special:'mega'});assert.equal(combat.teams[0][0].battleAppearance,'zygardemega');
+  globalThis.__adventureUser={userId:'mission37-stone-held-qa',displayName:'보유함 도구 테스트'};await get();await call('start',{species:1});const held={...makeMon(718,50),boxId:'held-stone',item:'zygardite'};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(held.boxId,globalThis.__adventureUser.userId,held.id,JSON.stringify(held),'qa',1);seedWorld({zaMission37Complete:true});await get();await call('claimMission37Zygardite');assert.equal(state.inventory.zygardite||0,0);assert.equal(rawMon(held.boxId).item,'zygardite');assert.ok(rawWorld().zaResearchMegaStones.includes('zygardite'));await get();await call('claimMission37Zygardite',{},409);
+  globalThis.__adventureUser={userId:'mission37-stone-history-qa',displayName:'과거 도감 테스트'};await get();await call('start',{species:1});seedWorld({zaMission37Complete:true,zaResearchMegaStones:['zygardite']});await get();await call('claimMission37Zygardite');assert.equal(state.inventory.zygardite||0,0);assert.equal(rawWorld().zaMission37ZygarditeClaimed,true);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
