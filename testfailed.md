@@ -9,6 +9,9 @@
 
 ### 탐험 모험 — 로열 Erica 파티 검증
 
+- 개발 브랜치 확인: `royaleErica`는 랭크 B에서 베테랑 Katrina로 연결되며, 원작 자료의 파티는 야도란·저리더프·이어롭이다. 이전의 두 마리 기대값을 세 마리로 수정했다. 기존 랭크 B 별도 검사는 세 포켓몬의 레벨과 이어롭나이트도 확인한다. 수정된 미션 10 단독 검사와 랭크 B 검사는 Node.js v24.19.0에서 통과했다. 실제 실패한 Sites 병합본 `d2449cae`는 이 작업 공간에 없어 재검증하지 못했으므로 이 기록은 유지한다.
+- 자료: https://www.serebii.net/legendsz-a/z-aroyale/rankb.shtml
+
 - 테스트: `tests/cloud-adventure-api.test.mjs:890`, `mission 10 companion battle requires Absol and advances on either result`.
 - 실패 위치: 같은 파일 979행. 테스트가 야간 로열 구역에서 `royaleErica` 배틀을 시작한 뒤 상대 팀의 포켓몬 종 ID 배열을 검증했다.
 - 예상: `[80, 604]`. 실제: `[80, 604, 428]`. `assert.deepEqual`에서 실패했다.
