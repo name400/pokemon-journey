@@ -1094,6 +1094,27 @@ test('mission 11 companion fights Slowbro and saves checkpoint and reward',async
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('legacy Infinite Royale random rival uses the pre-Zygarde rematch team',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'infinite-rival-legacy-rematch-qa',displayName:'기존무한재대결검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaMission39Started:true,zaMission39Complete:true,zaInfiniteFirstWon:true,zaInfiniteSecondWon:true,zaInfiniteRewardWins:20,zaInfinitePoints:50000,zaInfiniteRandomTrainer:'infinite-rival',zaMission10Starter:'water'},state.revision+1));await get();await call('mission39NextReward');assert.deepEqual(state.battle.teams[1].map(mon=>[mon.speciesId,mon.level]),[[678,62],[706,62],[713,62],[500,63],[310,63],[154,64]]);assert.equal(state.battle.teams[1][5].item,'meganiumite');await get();await call('forfeit');assert.equal(state.world.zaInfiniteRewardWins,20);assert.equal(state.world.zaInfinitePoints,50000);assert.deepEqual(state.world.teamIds,[id]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('old fifteenth Infinite Royale battle resumes without changing its stored foe',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'infinite-rival-legacy-battle-qa',displayName:'기존무한로열검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(150,100),boxId:id,moves:['파동탄'],pp:{}},foe={...makeMon(10061,72),boxId:'legacy-floette',item:'',moves:['파멸의빛'],pp:{}};seedMon(id,player);const combat=createCombat([player],[foe]),sim=Battle.fromJSON(combat.snapshot);sim.p2.active[0].hp=1;sim.p2.active[0].setStatus('slp');sim.p2.active[0].statusState.time=99;combat.snapshot=sim.toJSON();
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaMission39Started:true,zaInfiniteFirstWon:true,zaInfiniteSecondWon:true,zaInfiniteRewardWins:14,zaInfinitePoints:50000,zaMission10Starter:'grass',combat,trainer:{id:'infinite-rival',name:'동료',title:'',sprite:'youngster-gen3'},encounter:null},state.revision+1));await get();assert.equal(state.battle.teams[1][0].item,'');await battle();assert.equal(state.world.zaInfiniteRewardWins,15);assert.equal(rawWorld().zaInfiniteFloettePending,true);assert.deepEqual(state.world.teamIds,[id]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Infinite Royale fifteenth match uses Mega Floette and grants the gift once',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'infinite-rival-mega-floette-qa',displayName:'무한로열최종동료검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,player);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaMission39Started:true,zaInfiniteFirstWon:true,zaInfiniteSecondWon:true,zaInfiniteRewardWins:14,zaInfinitePoints:50000,zaIntroStarterSpecies:152,zaMission10Starter:null},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission39NextReward');await call('mission39StarterFire',{},409);await call('mission39NextReward');assert.deepEqual(state.battle.teams[1].map(m=>m.id),[678,706,160,310,500,10061]);assert.equal(state.battle.teams[1][5].item,'floettite');await get();assert.equal(state.battle.teams[1][5].item,'floettite');
+  const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaInfiniteRewardWins,15);assert.equal(rawWorld().zaInfiniteFloettePending,true);assert.equal(state.world.zaInfinitePoints,0);await get();const before=state.inventory.floettite||0;await call('mission39Floette');assert.equal(state.inventory.floettite,before+1);assert.equal(state.world.zaMission39Complete,true);assert.equal(state.box.filter(m=>m.id===10061).length,1);await call('mission39Floette',{},409);assert.equal(state.box.filter(m=>m.id===10061).length,1);assert.ok(state.world.teamIds.includes(id));
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('mission 35 opponents use their Mega Stones and preserve story rewards',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission35-mega-opponents-qa',displayName:'미션35메가검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId;
