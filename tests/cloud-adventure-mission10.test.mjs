@@ -33,7 +33,30 @@ test('isolated mission 10 double snapshot preserves both sides, ownership and ex
  const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
  const player=Array.from({length:6},(_,i)=>({...makeMon(25,30),boxId:`owned-${i}`}));player[0].hp=Math.floor(player[0].maxHp/2);player[1].hp=0;
  const before=structuredClone(player),{ally,foes}=mission10GuardTeams('grass'),fight=createMission10DoubleSnapshot(player,ally,foes);
- assert.deepEqual(player,before);assert.equal(fight.format,'mission10-double-v1');assert.equal(fight.teams[0].length,9);assert.deepEqual(fight.owners.player,player.map(m=>m.boxId));assert.deepEqual(fight.owners.ally,ally.map(m=>m.boxId));
- const restored=Battle.fromJSON(JSON.parse(JSON.stringify(fight.snapshot)));assert.equal(restored.gameType,'doubles');assert.deepEqual(restored.p1.active.map(p=>p.set.trainerToken),['owned-0','mission10-ally-0']);assert.deepEqual(restored.p2.active.map(p=>p.set.trainerToken),['mission10-guard-0','mission10-guard-1']);assert.ok(restored.p1.active[0].hp<restored.p1.active[0].maxhp);assert.equal(restored.p1.pokemon.find(p=>p.set.trainerToken==='owned-1').hp,0);
+ assert.deepEqual(player,before);assert.equal(fight.format,'mission10-multi-v1');assert.equal(fight.teams[0].length,6);assert.equal(fight.teams[2].length,3);assert.deepEqual(fight.owners.player,player.map(m=>m.boxId));assert.deepEqual(fight.owners.ally,ally.map(m=>m.boxId));
+ const restored=Battle.fromJSON(JSON.parse(JSON.stringify(fight.snapshot)));assert.equal(restored.gameType,'multi');assert.deepEqual(restored.sides.map(side=>side.active[0]?.set.trainerToken),['owned-0','mission10-guard-0','mission10-ally-0','mission10-guard-1']);assert.ok(restored.format.customRules.includes('!Sleep Clause Mod'));assert.ok(restored.p1.active[0].hp<restored.p1.active[0].maxhp);assert.equal(restored.p1.pokemon.find(p=>p.set.trainerToken==='owned-1').hp,0);
  assert.throws(()=>createMission10DoubleSnapshot([],ally,foes));assert.throws(()=>createMission10DoubleSnapshot([player[0]],ally,[foes[0],foes[0]]));
+});
+
+test('isolated multi turn targets the selected guard and keeps the partner roster separate',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const p={...makeMon(150,100),boxId:'owned',moves:['사이코키네시스'],pp:{}},backup={...makeMon(25,30),boxId:'owned-backup'},t=mission10GuardTeams('grass'),start=createMission10DoubleSnapshot([p,backup],t.ally,t.foes);
+ assert.throws(()=>playMission10MultiTurn(start,{type:'move',move:'psychic',target:3}));assert.throws(()=>playMission10MultiTurn(start,{type:'switch',slot:3}));
+ const next=playMission10MultiTurn(start,{type:'move',move:'psychic',target:2}),b=Battle.fromJSON(JSON.parse(JSON.stringify(next.snapshot)));assert.ok(b.turn>1||b.ended);assert.equal(b.p4.pokemon[0].hp,0);assert.deepEqual(b.p1.pokemon.map(x=>x.set.trainerToken),['owned','owned-backup']);assert.deepEqual(b.p3.pokemon.map(x=>x.set.trainerToken),t.ally.map(x=>x.boxId));
+});
+
+
+test('isolated multi battle supports a player switch and resumes to victory',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const lead={...makeMon(150,100),boxId:'own-lead',moves:['사이코키네시스'],pp:{}},reserve={...makeMon(150,100),boxId:'own-reserve',moves:['사이코키네시스'],pp:{}},t=mission10GuardTeams('fire');let fight=createMission10DoubleSnapshot([lead,reserve],t.ally,t.foes);
+ fight=playMission10MultiTurn(fight,{type:'switch',slot:2});let b=Battle.fromJSON(fight.snapshot);assert.equal(b.p1.active[0].set.trainerToken,'own-reserve');assert.deepEqual(fight.owners.ally,t.ally.map(p=>p.boxId));
+ for(let i=0;i<8&&!b.ended;i++){const target=b.p2.active[0]?.hp>0?1:2;fight=playMission10MultiTurn(fight,{type:'move',move:'psychic',target});b=Battle.fromJSON(fight.snapshot);}
+ assert.equal(b.ended,true);assert.equal(b.p2.pokemon[0].hp,0);assert.equal(b.p4.pokemon[0].hp,0);assert.ok(fight.teams[0].every(p=>p.boxId.startsWith('own-')));assert.ok(fight.teams[2].every(p=>p.boxId.startsWith('mission10-ally-')));
+});
+
+test('isolated multi battle requires a player-owned replacement after fainting',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const lead={...makeMon(25,30),boxId:'lead',hp:1,moves:['튀어오르기'],pp:{}},reserve={...makeMon(25,30),boxId:'reserve'},t=mission10GuardTeams('grass');let fight=createMission10DoubleSnapshot([lead,reserve],t.ally,t.foes);
+ fight=playMission10MultiTurn(fight,{type:'move',move:'splash'});let b=Battle.fromJSON(fight.snapshot);assert.equal(b.p1.active[0].hp,0);assert.equal(b.p1.activeRequest.forceSwitch[0],true);assert.equal(fight.teams[0].find(p=>p.boxId==='lead').hp,0);
+ assert.throws(()=>playMission10MultiTurn(fight,{type:'switch',slot:3}));fight=playMission10MultiTurn(fight,{type:'switch',slot:2});b=Battle.fromJSON(fight.snapshot);assert.equal(b.p1.active[0].set.trainerToken,'reserve');assert.ok(b.p3.pokemon.every(p=>p.set.trainerToken.startsWith('mission10-ally-')));
 });
