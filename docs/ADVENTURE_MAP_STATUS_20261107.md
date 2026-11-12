@@ -644,3 +644,8 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 11 북서쪽 높은 턱 표현
 
 [원작 도구 위치 안내](https://gamepedia.jp/pokemon-legends-z-a/archives/16622)는 북서쪽 입구에서 턱을 내려가는 동선을 설명한다. 기존 별도 높이층의 바닥과 경계, 낙하 위치를 구분해 그렸다. 실제 턱의 형태·포장과 출입구·낙하 좌표는 기존 2D 초안에 따른 추정이다. 맵 타일과 일방향 낙하, 기존 직행 경로 및 저장은 변경하지 않았다.
+
+
+### 구역 1의 확정 이로치 메리프 표시
+
+[사이드 미션 17 안내](https://allthings.how/pokemon-legends-z-a-how-to-catch-the-guaranteed-shiny-mareep/)는 두 번째 사다리 위 옥상에서 한 번 포획할 수 있는 색이 다른 메리프를 설명한다. 기존 2D 옥상의 글자 표식을 이로치 메리프 이미지로 교체하고, 이미지가 없으면 분홍색 개체 모양을 표시한다. 기존 의뢰 단계·포획 여부·이동과 저장은 변경하지 않았다. 옥상의 정확한 좌표와 실시간 행동은 여전히 초안이며 화면에는 기존 외부 포켓몬 이미지 제공처를 사용한다.
