@@ -3363,6 +3363,18 @@ test('revived fossil rolls once and retains its individual traits after reload',
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Mission 35 new rooftop meeting and old lobby saves both advance',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission35-roof-qa',displayName:'호텔 옥상 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector2',interior:'lysandreCafe',x:15,y:8,facing:'up',zaMission35Stage:5,zaLysandreKeyRoomV3:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission35GrishamTalk');await call('mission35GrishamTalk');await get();assert.equal(state.world.zaMission35Stage,6);assert.equal(state.world.zaMission35RoofRequired,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:'hotel',x:11,y:6,facing:'up'},state.revision+1));await get();assert.ok(!state.world.interaction.actions?.some(a=>a.action==='mission35AZ'));await call('mission35AZ',{},409);assert.equal(state.world.zaMission35Stage,6);
+  await walkTo({x:14,y:6});await call('face',{direction:'up'});await call('hotelLiftRoof');await get();assert.equal(state.world.interior,'hotelRoof');await walkTo({x:11,y:8});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission35AZ');await get();await call('mission35AZ');await get();assert.equal(state.world.zaMission35Stage,7);assert.equal(state.world.zaMission35RoofSeen,true);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.activeId,id);assert.deepEqual(state.wallet,wallet);await call('mission35AZ',{},409);
+  const legacy={...rawWorld(),district:'lumiose',interior:'hotel',x:11,y:6,facing:'up',zaMission35Stage:6};legacy.zaMission35RoofRequired=undefined;legacy.zaMission35RoofSeen=undefined;legacy.zaLysandreKeyRoomV3=undefined;
+  seedWorld(storeAdventurePosition(legacy,state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='mission35AZ'));await call('mission35AZ');await get();assert.equal(state.world.zaMission35Stage,7);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Lysandre new maze requires powered warps and sequential keycards while preserving legacy saves',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lysandre-maze-qa',displayName:'연구소 탐험'};
  try{

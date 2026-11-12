@@ -975,6 +975,9 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     if(p?.district===w.district&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&!(p.x===w.x&&p.y===w.y)&&walkable(w.map[p.y]?.[p.x]))trainer(p.x,p.y,'#a17d72',p.facing||'down',walking);
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
+   // The rooftop discussion includes AZ and the team. Companion placement and
+   // clothing are visual approximations and do not change movement or saves.
+   if(w.district==='lumiose'&&w.interior==='hotelRoof'&&w.zaMission35Stage===6&&w.zaMission35RoofRequired){for(const [x,color] of [[9,'#597f9d'],[13,'#ad8175']] as const)if(!(w.x===x&&w.y===7))trainer(x,7,color,'down');}
    if(w.district==='lumiose-zone1'&&!w.interior&&[4,5].includes(w.zaMission03Stage)){const isFletchling=w.zaMission03Stage===4,x=isFletchling?8:14,y=6,px=x*tile,py=y*tile,img=fieldImages[isFletchling?661:659];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#668c80';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(isFletchling?'화살꼬빈':'파르빗',px+tile/2,py+20);}}
    if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaSewerIceBranch&&!w.zaMission19Inner&&w.zaBleuSewerOpened&&!w.zaMission57Won)trainer(17,4,'#8d7763','down');
    if(w.district==='lumiose-sewer'&&!w.interior&&!w.zaSewerIceBranch&&w.zaMission19Stage===13&&(w.zaMission19Inner||!w.zaMission19InnerEnabled))trainer(w.zaMission19Inner?18:11,w.zaMission19Inner?3:2,'#916c8e','down');
