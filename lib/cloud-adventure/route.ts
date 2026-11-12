@@ -36,6 +36,7 @@ import {zone20Visible,zone20Encounter,zone20Item,ZONE20_ALPHA,MISSION42_L,MISSIO
 import {zone19Visible,zone19Encounter,zone19Item,zone19SpawnInterval,refreshZone19Spawns} from '@/lib/cloud-adventure/adventure-zone19.mjs';
 import {refreshOrdinaryWildSpawns} from '@/lib/cloud-adventure/adventure-wild-refresh.mjs';
 import {refreshRoamingWildSpawns} from '@/lib/cloud-adventure/adventure-roaming-refresh.mjs';
+import {refreshEarlyAlpha} from '@/lib/cloud-adventure/adventure-alpha-refresh.mjs';
 import {zone18Map,zone18Visible,zone18Encounter,zone18Item,zone18Unlocked,magentaSector9Map} from '@/lib/cloud-adventure/adventure-zone18.mjs';
 import {zone17Map,zone17Visible,zone17Encounter,zone17Item} from '@/lib/cloud-adventure/adventure-zone17.mjs';
 import {zone16Map,zone16Visible,zone16Encounter,zone16Item} from '@/lib/cloud-adventure/adventure-zone16.mjs';
@@ -117,6 +118,7 @@ function canRefreshWildAtPosition(s:any,zone:number,period:string){
 function prepareVisibleWild(s:any){
  if(!s||s.interior||s.combat||s.adventureCatchWindow)return false;
  const offset=adventureClockOffset(s),now=Date.now(),time=gameTime(now,offset),period=time.period,interval=zone19SpawnInterval(now,offset),eligible=/^lumiose-zone(?:2|3|5|6|8|9|10|11|12|13|14|15|16|17|18|19)(?:-garden|-drain|-sw-top|-sw-middle)?$/.test(s.district||'');let changed=eligible&&migrateAdventureWildClock(s,period,interval);changed=(s.district==='lumiose-zone19'?refreshZone19Spawns(s,period,interval,canRefreshWildAtPosition):['lumiose-zone2','lumiose-zone3'].includes(s.district)?refreshRoamingWildSpawns(s,period,interval):refreshOrdinaryWildSpawns(s,period,interval,canRefreshWildAtPosition))||changed;const ensure=(key:string)=>{if(typeof s.zaWildShinyRolls?.[key]!=='boolean'){assignWildShiny(s,{},random,key);changed=true;}};
+ changed=refreshEarlyAlpha(s,period,interval)||changed;
  if(s.district==='lumiose-zone8'&&initializeZone8Burrows(s,random))changed=true;
  if(s.district==='lumiose-lysandre-lab'){for(const p of lysandreVisibleWild(s))ensure(`lab:${p.id}:${p.species}`);return changed;}
  if(s.district==='lumiose-zone1-roof'&&zone1RoofAlphaReady(s)){ensure('alpha:zone1-roof-pidgey:16');return changed;}

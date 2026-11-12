@@ -4727,3 +4727,13 @@ test('early visible alphas keep their field shiny state through battle and reloa
   }
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('early alpha returns after a time change without respawning under the player',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'early-alpha-respawn-qa',displayName:'우두머리 재출현'};
+ try{
+  Date.now=()=>now;globalThis.__adventureTime=null;globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone4',interior:null,x:4,y:10,zaRoyaleRank:'F',zaBunnelbyQuest:3,zaZone4AlphaSpent:true,zaEarlyAlphaCycles:undefined,zaWildShinyRolls:{'alpha:zone4-spinarak:167':true},combat:null,encounter:null},state.revision+1));
+  await get();assert.equal(rawWorld().zaZone4AlphaSpent,true);now=20*50000;await get();assert.equal(rawWorld().zaZone4AlphaSpent,true);
+  await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaZone4AlphaSpent,undefined);assert.equal(state.world.map[10][4],'p');assert.equal(rawWorld().zaWildShinyRolls['alpha:zone4-spinarak:167'],false);await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
