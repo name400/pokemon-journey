@@ -143,6 +143,16 @@ test('Mission 37 Ange damage survives defeat, retry and Zygarde attack without d
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('field obstacles accept stored English move IDs while preserving type and status rules',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'field-move-id-qa',displayName:'필드 기술 검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),mon=makeMon(150,50);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:11,y:4,facing:'down',zaRoyaleRank:'B',zaZone19BramblesCleared:false},state.revision+1));seedMon(id,{...mon,moves:['surf'],pp:{}});await get();await call('zone19Brambles',{},409);assert.equal(rawWorld().zaZone19BramblesCleared,false);
+  seedMon(id,{...mon,moves:['flamethrower'],hp:0,pp:{}});await get();await call('zone19Brambles',{},409);seedMon(id,{...mon,moves:['flamethrower'],pp:{}});await get();assert.equal(state.world.interaction.action,'zone19Brambles');await call('zone19Brambles');assert.equal(rawWorld().zaZone19BramblesCleared,true);assert.deepEqual(rawMon(id).moves,['flamethrower']);await get();assert.equal(rawWorld().zaZone19BramblesCleared,true);await call('zone19Brambles',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-mission22-tunnel',x:11,y:8,facing:'up',zaMission22IceBridge:false},state.revision+1));seedMon(id,{...mon,moves:['swordsdance'],pp:{}});await get();await call('mission22IceBridge',{},409);seedMon(id,{...mon,moves:['tackle'],pp:{}});await get();await call('mission22IceBridge');assert.equal(rawWorld().zaMission22IceBridge,true);assert.deepEqual(rawMon(id).moves,['tackle']);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-crystal-sewer',x:3,y:5,facing:'up',zaMission20Stage:9,zaMission20Crystals:[]},state.revision+1));seedMon(id,{...mon,moves:['Swords Dance'],pp:{}});await get();await call('mission20BreakCrystal',{},409);seedMon(id,{...mon,moves:['Thunderbolt'],pp:{}});await get();await call('mission20BreakCrystal');assert.deepEqual(rawWorld().zaMission20Crystals,['3,4']);await get();assert.deepEqual(rawWorld().zaMission20Crystals,['3,4']);await call('mission20BreakCrystal',{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(id).moves,['Thunderbolt']);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Mission 37 final Nihil Light battle preserves party, retry and old saves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-nihil-qa',displayName:'니힐라이트 검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),before=JSON.stringify(rawMon(id));
