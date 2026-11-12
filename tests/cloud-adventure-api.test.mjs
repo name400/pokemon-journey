@@ -4949,3 +4949,18 @@ test('Side Mission 92 Beldum battle does not count as a trainer win',async()=>{
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:4,y:7,facing:'up',zaRoyaleRank:'B',zaSide92Won:false,zaResearchTrainerWins:9,combat:null,trainer:null},state.revision+1));await get();await call('side92Battle');await battle();assert.equal(state.world.zaSide92Won,true);assert.equal(state.world.zaSide92RewardPending,true);assert.equal(rawWorld().zaResearchTrainerWins,9);await get();assert.equal(rawWorld().zaResearchTrainerWins,9);assert.deepEqual(state.world.teamIds,[id]);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('treasure sales use the shop and atomically preserve stock, wallet and saved progress',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'treasure-sale-qa',displayName:'귀중품 판매'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],id=state.world.activeId,mon=structuredClone(rawMon(id));
+  for(const item of ['pearl','bigpearl','pearlstring','nugget','bignugget','bottlecap'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item,2);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(1000,globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:5,y:8,facing:'down',zaMission29Complete:true},state.revision+1));await get();await call('sellAdventureTreasure',{item:'pearlstring',quantity:1},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:7,y:7,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'shop');await call('sellAdventureTreasure',{item:'bottlecap',quantity:1},409);await call('sellAdventureTreasure',{item:'__proto__',quantity:1},409);await call('sellAdventureTreasure',{item:'nugget',quantity:0},409);await call('sellAdventureTreasure',{item:'nugget',quantity:3},409);assert.equal(state.wallet.coins,1000);
+  const stale=state.revision;await call('sellAdventureTreasure',{item:'pearlstring',quantity:2});assert.equal(state.wallet.coins,21000);assert.equal(state.inventory.pearlstring||0,0);await call('sellAdventureTreasure',{item:'nugget',quantity:1,revision:stale},409);await get();assert.equal(state.wallet.coins,21000);assert.equal(state.inventory.nugget,2);
+  for(const [item,price] of [['pearl',1000],['bigpearl',4000],['nugget',5000],['bignugget',20000]]){const before=state.wallet.coins;await call('sellAdventureTreasure',{item,quantity:1});assert.equal(state.wallet.coins,before+price);assert.equal(state.inventory[item],1);}
+  await get();assert.equal(state.inventory.bottlecap,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);assert.equal(state.world.zaMission29Complete,true);
+  seedWorld({...rawWorld(),zaLeWowRun:{course:1},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('sellAdventureTreasure',{item:'nugget',quantity:1},409);assert.equal(state.inventory.nugget,1);
+  seedWorld({...rawWorld(),zaLeWowRun:null,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER,globalThis.__adventureUser.userId);await get();await call('sellAdventureTreasure',{item:'nugget',quantity:1},409);await get();assert.equal(state.inventory.nugget,1);assert.equal(state.wallet.coins,Number.MAX_SAFE_INTEGER);
+ }finally{globalThis.__adventureUser=previous;}
+});
