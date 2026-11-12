@@ -1809,9 +1809,13 @@ test('Magenta 3 rooftop descent reaches Sector 6 without losing mission or save'
  try{
   await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
   const roof={...rawWorld(),area:3,district:'lumiose-magenta-sector3-roof',interior:null,x:19,y:11,facing:'right',zaMission15Stage:2,zaMission17Complete:false};
-  seedWorld(storeAdventurePosition(roof,state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta3DropSector6');await call('magenta3DropSector6');await get();
+  seedWorld(storeAdventurePosition(roof,state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta3DropCourtAlley');await call('magenta3DropCourtAlley');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta6-court-alley',4,12]);assert.equal(state.world.zaMission15Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await get();assert.equal(state.world.district,'lumiose-magenta6-court-alley');await walkTo({x:19,y:7});await call('face',{direction:'right'});assert.equal(state.world.interaction.action,'magenta6CourtExit');await call('magenta6CourtExit');await get();
   assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector6',3,6]);assert.equal(state.world.zaMission15Stage,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
   await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector6',3,6]);assert.equal(state.world.zaMission17Complete,false);
+  await walkTo({x:2,y:6});await call('face',{direction:'up'});await call('magenta6Scaffold');await get();assert.equal(state.world.district,'lumiose-magenta6-scaffold');
+  seedWorld(storeAdventurePosition(roof,state.revision+1));await get();await call('magenta3DropSector6');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-magenta-sector6',3,6]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 

@@ -504,3 +504,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 [구역 안내](https://gamewith.jp/pokemon-za/524524)에 따르면 북쪽과 남쪽 강변은 구역 안에서 직접 건널 수 없고, 밖으로 나가 다른 입구를 이용해야 한다. 기존 구현에서 북쪽 강변 → 존느 10·6번지 → 세존 운하 다리 → 베르 3번지 → 쿨랑 수로 → 남쪽 강변과 역방향을 실제 API 이동으로 확인했다. 이는 현재 초안 도시망의 경로이며 각 화면의 좌표와 실제 지리적 정렬은 검증되지 않았다.
 
 [출현 자료](https://www.serebii.net/pokearth/lumiosecity/wildzone11.shtml)와 위 현장 안내를 바탕으로 강의 오케이징과 갸라도스를 양쪽 물가에서 상호작용할 수 있는 고정 개체로 추가했다. 둘의 정확한 좌표·고정 출현·레벨 32는 2D 초안이며 원작의 무작위 위치·희귀도와 수중 행동을 재현하지 않는다. 물은 여전히 통행 불가이고 도주·포획 기록은 기존 구역 방식으로 유지한다.
+
+### 마젠타 6번지 배틀코트 옆 골목
+
+[공개 수집 위치 안내](https://sportsrant.indiatimes.com/gaming/list-of-all-colourful-screw-locations-in-pokmon-legends-z-a/articleshow/126639673.html)는 마젠타 6번지 배틀코트 근처 비계를 설명한다. 기존에 생략한 옥상 낙하 후 골목을 별도 화면으로 두고 비계가 있는 거리로 이어 놓았다. 골목의 폭·방향·착지점과 배틀코트의 정밀 위치는 확인되지 않은 초안이며 실제 코트나 아이템은 추가하지 않았다. 이전 거리 직행 선택지를 유지하고 골목에서 거리로 나가는 경로를 제공한다.
