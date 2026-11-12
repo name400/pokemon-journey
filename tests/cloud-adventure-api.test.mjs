@@ -120,6 +120,15 @@ test('Mission 37 companion battles preserve progress and legacy saves',async()=>
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 37 partner mega evolution persists without altering player ownership',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-partner-mega-qa',displayName:'동료 메가진화'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,player={...makeMon(150,100),boxId:id,moves:['방어'],pp:{}};seedMon(id,player);const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x:19,y:5,facing:'up',zaMission36Complete:true,zaMission37Started:true,zaMission37Stage:3,zaMission37MultiV1:true,zaProtectLayout:5,zaProtectCanal:false,zaProtectBuilding:false,zaProtectRoof:false,zaProtectScaffoldV1:false},state.revision+1));await get();await call('mission37Wave');assert.equal(rawWorld().combat.adventureCompanionMegaV1,true);
+  const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const side of [sim.p2,sim.p4])for(const foe of side.pokemon){foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'protect'}]}});assert.ok(state.battle);assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p3.active[0].species.isMega,true);assert.equal(state.battle.teams[0].find(m=>m.battleOwner==='ally').battleAppearance,'eelektrossmega');await get();assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p3.active[0].species.isMega,true);await call('forfeit');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
+ }finally{globalThis.__adventureUser=prior;}
+});
+
 test('Mission 37 preserves a previously saved companion battle',async()=>{
  const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-old-companion-qa',displayName:'이전 동료 배틀'};
  try{
