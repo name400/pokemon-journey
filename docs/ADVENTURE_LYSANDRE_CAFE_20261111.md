@@ -33,3 +33,10 @@ The existing Sector 4 screen provides a provisional approach to nearby Sector 2;
 [원작 층 안내](https://game8.co/games/Pokemon-Legends-Z-A/archives/559427)는 지하 2층이 경험사탕 L이 있는 막다른 층이라고 설명하고, [도구 목록](https://www.serebii.net/pokearth/lumiosecity/lysandrelabs.shtml)은 문 근처의 해당 도구를 명시한다. 승강기 열쇠를 얻은 뒤 지하 1·2·3층을 선택할 수 있도록 통로와 일회성 도구를 연결했다. 기존 승강기 행동과 이전 저장의 지하 1↔3층 동작은 유지한다.
 
 방·통로·문 및 도구의 정확한 좌표는 2D 초안이다. 원작의 상세 실내 형상과 후속 DLC 이벤트는 구현하지 않았고 실제 운영 기기는 검증하지 않았다.
+
+
+## 승강기 열쇠 방의 입구 귀환 전송기
+
+[원작 진행 안내](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Part_24)는 우두머리 킬가르도 뒤에서 승강기 열쇠를 얻고 전원을 켜 입구로 돌아가는 전송기를 설명한다. 기존 C구역에 해당 전원과 귀환 전송기를 추가했다. 킬가르도 승리와 열쇠가 있어야 장치가 나타나며 전원을 켜기 전에는 사용할 수 없다. 귀환 후 키카드·전원·파티·스토리 진행은 유지한다. 기존 C구역 왕복 전송기와 출구, 자유 배치 구형 저장은 그대로 사용 가능하다.
+
+이 구현은 기존 C구역의 통행 가능한 칸에 배치한 2D 초안이다. 원작의 별도 열쇠 방 형상·장치의 정확한 위치 및 전송 연출은 재현하지 않았다. 새 미션 진행과 이전 저장의 대표 API 검사는 격리 데이터로 수행했으며 실제 운영 환경은 확인하지 않았다.

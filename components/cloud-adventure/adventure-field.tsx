@@ -109,6 +109,8 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      else{ctx.fillStyle=accent;ctx.fillRect(px+2,py+tile-4,tile-4,2);ctx.fillStyle='#d2dad2';ctx.fillRect(px+1,py+1,tile-2,1);}
      if(wing==='hub'&&['n','p','q'].includes(c)){ctx.fillStyle=({n:'#c47b3e',p:'#6a9d70',q:'#9174a6'} as Record<string,string>)[c];ctx.fillRect(px+3,py+2,tile-6,tile-4);ctx.fillStyle='#dce3da';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#435a5c';ctx.fillRect(px+9,py+8,tile-18,tile-16);}
      if(c==='t'&&['a','b','e'].includes(wing)){ctx.fillStyle='#454f55';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle=w.zaLysandrePowers?.includes(wing)?'#a5e3a3':'#e98173';ctx.fillRect(px+9,py+8,tile-18,7);}
+     if(wing==='e'&&c==='z'){ctx.fillStyle='#454f55';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle=w.zaLysandreExitPower?'#a5e3a3':'#e98173';ctx.fillRect(px+9,py+8,tile-18,7);}
+     if(wing==='e'&&c==='n'){ctx.fillStyle='#546a74';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.strokeStyle=w.zaLysandreExitPower?'#9ae5e2':'#8b9894';ctx.lineWidth=2;ctx.strokeRect(px+8,py+8,tile-16,tile-16);}
      if(c==='u'){ctx.fillStyle='#546a74';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.strokeStyle=w.zaLysandrePowers?.includes(wing)?'#9ae5e2':'#8b9894';ctx.lineWidth=2;ctx.strokeRect(px+8,py+8,tile-16,tile-16);}
      if('abek'.includes(c)){ctx.fillStyle='#65787a';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle='#d9e5ce';ctx.fillRect(px+8,py+7,tile-16,8);ctx.fillStyle='#f3c95b';ctx.fillRect(px+10,py+18,tile-20,3);}
      if(c==='l'){ctx.fillStyle='#59696c';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d6ded3';ctx.fillRect(px+7,py+5,tile-14,tile-10);ctx.fillStyle='#627578';ctx.fillRect(px+tile/2-1,py+5,2,tile-10);}

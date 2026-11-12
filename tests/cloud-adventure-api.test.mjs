@@ -3372,10 +3372,24 @@ test('Lysandre new maze requires powered warps and sequential keycards while pre
   for(const [wing,gx] of [['a',4],['b',11],['e',18]]){
    await at(gx,5,'up');await call(`lysandreWing-${wing}`);await get();assert.equal(state.world.zaLysandreWing,wing);await at(8,9,'up');await call('lysandreWarp',{},409);await at(5,6,'up');await call('lysandrePower');await get();await call('lysandrePower',{},409);await at(8,9,'up');await call('lysandreWarp');await get();assert.deepEqual([state.world.x,state.world.y],[15,8]);await at(17,6,'up');await call('mission35LabInspect');await get();assert.ok(state.world.zaLysandreCards.includes(wing));
    if(wing==='e'){await at(17,10,'up');await call('mission35Aegislash');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[681,50],[679,34],[679,34]]);assert.equal(state.battle.teams[1][0].adventureAlpha,true);await call('ball',{},409);await call('forfeit');await get();assert.notEqual(state.world.zaLysandreAegislashWon,true);await call('mission35LabInspect',{},409);seedMon(id,strong);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:17,y:10,facing:'up',zaLysandreFloor:1,zaLysandreWing:'e'},state.revision+1));await get();await call('mission35Aegislash');await get();assert.equal(state.battle.teams[1].length,3);await battle();await get();assert.equal(state.world.zaLysandreAegislashWon,true);await at(18,12,'up');await call('mission35LabInspect');assert.equal(state.world.zaLysandreElevatorKey,true);}
-   await at(15,8,'left');await call('lysandreWarp');await at(4,11,'down');await call('lysandreWingExit');await get();assert.equal(state.world.zaLysandreWing,'hub');
+   if(wing==='e'){await at(20,12,'up');await call('lysandreExitPower');await get();await at(20,11,'up');await call('lysandreExitWarp');}else{await at(15,8,'left');await call('lysandreWarp');await at(4,11,'down');await call('lysandreWingExit');}await get();assert.equal(state.world.zaLysandreWing,'hub');
   }
   assert.deepEqual(state.world.zaLysandrePowers,['a','b','e']);assert.deepEqual(state.world.teamIds,team);await at(18,12,'down');await call('mission35Elevator');await get();assert.equal(state.world.zaLysandreFloor,3);await call('mission35Elevator');assert.equal(state.world.zaLysandreWing,'hub');
   const old={...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:4,y:5,facing:'up',zaLysandreMazeV2:false,zaLysandreFloor:1,zaLysandreCards:[],zaMission35Stage:4};seedWorld(storeAdventurePosition(old,state.revision+1));await get();assert.equal(state.world.interaction.action,'mission35LabInspect');await call('mission35LabInspect');assert.deepEqual(state.world.zaLysandreCards,['a']);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
+test('Lysandre exit warp requires the key and power and preserves old progress',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lysandre-exit-warp-qa',displayName:'연구소 귀환 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon=structuredClone(rawMon(id)),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const base={...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:20,y:12,facing:'up',zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:'e',zaLysandreCards:['a','b','e'],zaLysandrePowers:['a','b','e']};
+  seedWorld(storeAdventurePosition(base,state.revision+1));await get();await call('lysandreExitPower',{},409);await call('lysandreExitWarp',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),...base,zaLysandreAegislashWon:true,zaLysandreElevatorKey:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'lysandreExitPower');
+  await call('lysandreExitWarp',{},409);await call('lysandreExitPower');await get();assert.equal(state.world.zaLysandreExitPower,true);await call('lysandreExitPower',{},409);
+  await walkTo({x:20,y:11});await get();assert.equal(state.world.interaction.action,'lysandreExitWarp');const beforeWarp=structuredClone(rawMon(id));assert.deepEqual({...beforeWarp,walkSteps:mon.walkSteps},mon);await call('lysandreExitWarp');await get();
+  assert.deepEqual([state.world.zaLysandreWing,state.world.x,state.world.y],['hub',11,10]);assert.deepEqual(state.world.zaLysandreCards,['a','b','e']);assert.deepEqual(state.world.zaLysandrePowers,['a','b','e']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),beforeWarp);assert.deepEqual(state.wallet,wallet);await call('lysandreExitWarp',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),...base,zaLysandreMazeV2:false,zaLysandreAegislashWon:true,zaLysandreElevatorKey:true,zaLysandreExitPower:true},state.revision+1));await get();await call('lysandreExitWarp',{},409);
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
