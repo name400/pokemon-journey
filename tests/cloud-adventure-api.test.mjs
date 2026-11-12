@@ -4130,3 +4130,15 @@ test('Quasartico reception offers shard exchange alongside existing rewards',asy
   await place({x:8,y:8,zaMegaShards:432});assert.notEqual(state.world.interaction?.shardExchange,true);await call('exchangeMegaShardCandy',{item:'za-exp-candy-s'},409);assert.equal(rawWorld().zaMegaShards,432);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('zone 8 berry stalls sell their own stock and berries adjust a party member',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone8-berry-qa',displayName:'열매 가판대 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,initial={...rawMon(id),evs:{hp:25,atk:13,def:0,spa:0,spd:0,spe:0},friendship:70};seedMon(id,initial);sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const place=async(extra)=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:20,y:8,facing:'right',...extra},state.revision+1));await get();};
+  await place({});assert.ok(state.world.interaction.actions.some(a=>a.action==='zone8BuyBerry-pomegberry'));await call('zone8BuyBerry-occaberry',{},409);const rev=state.revision;await call('zone8BuyBerry-pomegberry');assert.equal(state.wallet.coins,800);assert.equal(state.inventory.pomegberry,1);
+  const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'zone8BuyBerry-pomegberry',revision:rev})}));assert.equal(replay.status,409);await get();await call('useAdventureEvBerry',{item:'pomegberry',boxId:id});assert.equal(rawMon(id).evs.hp,15);assert.equal(rawMon(id).friendship,80);assert.equal(state.inventory.pomegberry||0,0);await get();assert.equal(rawMon(id).evs.hp,15);assert.deepEqual(rawMon(id).ivs,initial.ivs);const key=JSON.stringify([globalThis.__adventureUser.userId,'pomegberry']);sql.prepare('UPDATE inventory SET quantity=999 WHERE key=?').run(key);await get();await call('zone8BuyBerry-pomegberry',{},409);await get();assert.equal(state.wallet.coins,800);assert.equal(state.inventory.pomegberry,999);
+  await place({x:15,y:14,facing:'down'});assert.ok(state.world.interaction.actions.some(a=>a.action==='zone8BuyBerry-occaberry'));await call('zone8BuyBerry-occaberry');assert.equal(state.wallet.coins,600);assert.equal(state.inventory.occaberry,1);await call('zone8BuyBerry-pomegberry',{},409);
+  sql.prepare('UPDATE wallets SET coins=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('zone8BuyBerry-occaberry',{},409);assert.equal(state.inventory.occaberry,1);
+ }finally{globalThis.__adventureUser=previous;}
+});

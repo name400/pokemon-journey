@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {makeMon} from '../lib/game.mjs';import {configure} from '../lib/pokemon-config.mjs';import {ADVENTURE_EV_BERRIES,useAdventureEvBerry} from '../lib/cloud-adventure/adventure-ev-berries.mjs';
+test('EV berries reduce the selected effort, raise friendship, and preserve old fields',()=>{
+ for(const berry of ADVENTURE_EV_BERRIES){const evs={hp:20,atk:20,def:20,spa:20,spd:20,spe:20},m=configure({...makeMon(1,30),evs,friendship:70},{hp:10});const r=useAdventureEvBerry(m,berry.id);assert.equal(r.mon.evs[berry.stat],10);for(const stat of Object.keys(evs))if(stat!==berry.stat)assert.equal(r.mon.evs[stat],20);assert.equal(r.mon.friendship,80);assert.deepEqual(r.mon.ivs,m.ivs);assert.equal(r.mon.hp,Math.max(1,m.hp+r.mon.maxHp-m.maxHp));assert.equal(m.evs[berry.stat],20);}
+});
+test('berries respect caps and reject invalid data or ineffective use',()=>{const base={...makeMon(1,30),evs:{hp:3},friendship:255};assert.equal(useAdventureEvBerry(base,'pomegberry').mon.evs.hp,0);assert.throws(()=>useAdventureEvBerry({...base,evs:{hp:0}},'pomegberry'));assert.throws(()=>useAdventureEvBerry({...base,evs:{hp:-1}},'pomegberry'));assert.throws(()=>useAdventureEvBerry(base,'occaberry'));assert.equal(useAdventureEvBerry({...base,friendship:160,evs:{hp:0}},'pomegberry').mon.friendship,161);});
