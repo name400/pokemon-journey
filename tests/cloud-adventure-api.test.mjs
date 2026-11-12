@@ -1126,6 +1126,18 @@ test('Infinite Royale verified opponents retain their teams across retry and sav
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Infinite Royale extra field trainers award points once per visit',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'infinite-field-extra-qa',displayName:'무한 로열 추가 상대'};
+ try{globalThis.__adventureTime={period:'night',hour:22};await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);
+  for(const e of [{action:'royaleInfiniteExtra3',x:3,y:6,foes:[121,130],id:'infinite-standard-axel',points:5000},{action:'royaleInfiniteExtra8',x:15,y:12,foes:[530,323],id:'infinite-standard-asuka',points:10000}]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:e.x,y:e.y,facing:'up',zaRoyaleRank:'A',zaMission39Started:true},state.revision+1));await get();assert.equal(state.world.interaction.action,e.action);globalThis.__adventureTime={period:'day',hour:12};await call(e.action,{},409);globalThis.__adventureTime={period:'night',hour:22};await call(e.action);assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),e.foes);assert.ok(state.battle.teams[1].every(m=>!m.item));await get();assert.equal(state.world.trainer.id,e.id);
+   if(e.points===5000){await call('forfeit');assert.equal(state.world.zaInfinitePoints||0,0);assert.ok(!rawWorld().zaInfiniteSessionWins?.includes(e.id));seedMon(id,strong);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',x:e.x,y:e.y,facing:'up'},state.revision+1));await get();await call(e.action);}
+   const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaInfinitePoints,e.points);assert.ok(state.world.zaInfiniteSessionWins.includes(e.id));await get();await call(e.action,{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);seedMon(id,strong);
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:11,y:10,facing:'up'},state.revision+1));await get();await call('enterRoyaleZone');assert.deepEqual(state.world.zaInfiniteSessionWins,[]);assert.equal(state.world.zaInfinitePoints,10000);await get();assert.equal(state.world.district,'lumiose-royale');
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
+
 test('Infinite Royale random opponent sets survive save and retry',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'infinite-random-teams-qa',displayName:'무한로열추첨상대검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId;

@@ -27,3 +27,5 @@
 
 
 [랭크 B 상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankb.shtml)을 바탕으로 기존 Katrina·Eden의 빠진 세 번째 포켓몬과 메가스톤을 복원하고 Hank까지 기술을 맞췄다. 포켓몬센터 직원 Maëlle과 웨이터 Lorenzo도 추가했으며 승리 후 [로열 회복 안내](https://www.serebii.net/legendsz-a/z-aroyale.shtml)에 따라 파티를 회복해 준다. 배치·승리당 4,500점은 초안이고 회복 횟수는 확인되지 않아 방문당 한 번이다. 기존 전투 스냅샷은 변경하지 않는다.
+
+무한 로열 배틀존에는 기존 세 명 외에 [원작 일반 상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankinfinity.shtml)의 Axel·Sara·Colette·Rania·Amaury·Asuka·Wyatt를 추가했다. 원작 목록의 연승 0~5 기준 포켓몬·레벨·기술을 사용하며, 기존 공용 경기장의 일곱 표식과 상대당 5,000점은 게임의 임시 위치·점수다. 한 방문에서 각 상대를 한 번 이길 수 있고 재입장하면 다시 도전하되 누적 점수는 보존한다. 기존 세 상대, 구형 진행 및 진행 중 전투는 그대로 유지한다. 높은 연승 구간의 원작 팀·점수와 정확한 배틀존 위치는 구현하지 않았다. 야간 제한, 패배·재도전, 승리 후 중복 점수 방지, 재접속과 재입장을 격리 API에서 대표 확인했다.
