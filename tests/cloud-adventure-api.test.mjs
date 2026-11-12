@@ -1856,6 +1856,19 @@ test('Magenta court night royale preserves rank progress and returns to the cour
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('active field entrances allow return to the same city district',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-field-qa',displayName:'현장배틀존테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,wallet=structuredClone(state.wallet);globalThis.__adventureTime={period:'night',hour:22};
+  for(const [zone,district] of [['vert6','lumiose-vert-sector6'],['rouge68','lumiose-rouge-sector8']]){
+   const offset=Array.from({length:11},(_,i)=>i*24).find(zaClockOffsetHours=>activeRoyaleZones({zaClockOffsetHours}).some(z=>z.id===zone));assert.notEqual(offset,undefined);
+   const world={...rawWorld(),area:3,district,interior:null,x:2,y:3,facing:'up',zaClockOffsetHours:offset,zaRoyaleRank:'V',zaMission10Stage:4,zaRoyaleVPoints:550};
+   const inactive=Array.from({length:11},(_,i)=>i*24).find(zaClockOffsetHours=>!activeRoyaleZones({zaClockOffsetHours}).some(z=>z.id===zone));seedWorld(storeAdventurePosition({...world,zaClockOffsetHours:inactive},state.revision+1));await get();assert.match(state.world.interaction.text,/이번 밤의 배틀존/);await call('enterRoyaleZone',{},409);assert.equal(state.world.district,district);
+   seedWorld(storeAdventurePosition(world,state.revision+1));globalThis.__adventureTime={period:'day',hour:12};await get();await call('enterRoyaleZone',{},409);assert.equal(state.world.district,district);globalThis.__adventureTime={period:'night',hour:22};await get();assert.equal(state.world.interaction.action,'enterRoyaleZone');await call('enterRoyaleZone');await get();assert.equal(state.world.district,'lumiose-royale');assert.equal(rawWorld().zaRoyaleReturn,zone);await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[district,2,3]);assert.equal(state.world.zaRoyaleVPoints,550);assert.equal(state.world.activeId,id);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Magenta 6 scaffold walk connects street and roof without losing saved progress',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta6-scaffold-qa',displayName:'마젠타비계저장테스트'};
  try{

@@ -1,3 +1,4 @@
+import {royaleFieldEntry} from '@/lib/cloud-adventure/adventure-royale-zones.mjs';
 import {LYSANDRE_WILD,lysandreWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
 import {museumSide21Spot,museumSide21Requester} from '@/lib/cloud-adventure/adventure-museum.mjs';
 'use client';
@@ -77,6 +78,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{
     if(x<bounds.left||x>bounds.right||y<bounds.top||y>bounds.bottom)return;
     const px=x*tile,py=y*tile;ctx.fillStyle=palette[0];ctx.fillRect(px,py,tile,tile);
+    const royaleEntry=royaleFieldEntry(w);if(c==='T'&&royaleEntry&&x===royaleEntry.x&&y===royaleEntry.y){ctx.fillStyle='#ddd3c6';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#a84c54';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('로열',px+tile/2,py+20);return;}
     // Museum and laboratory maps have their own structures, not outdoor trees.
     // The 2D outlines and fixtures remain draft interpretations of the sources.
     if(w.district==='lumiose-museum-front'){
