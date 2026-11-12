@@ -2714,3 +2714,15 @@ test('Red Canari Plush modifies battle experience only when actually owned',asyn
   const sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.deepEqual([rawMon(id).level,rawMon(id).experience],[expected.level,expected.experience]);await get();assert.equal(!!state.world.zaRedCanariPlush,owned);
  }}finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
+
+test('mission 6 bench changes only the personal clock and preserves legacy positions',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'za-bench-qa',displayName:'벤치 휴식'};globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedMon(id,{...rawMon(id),hp:1,status:'독',pp:{몸통박치기:1}});const mon=rawMon(id),wallet=structuredClone(state.wallet),team=[...state.world.teamIds];
+  const place=(patch={})=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:2,y:6,facing:'up',zaRoyaleRank:'Y',...patch},state.revision+1));place({zaMission05Stage:7});await get();assert.match(state.world.interaction.text,/Emma/);await call('benchNight',{},409);
+  place({zaEmmaMegaSeen:true,zaMission06Started:true});await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='benchNight'));await call('benchNight');await get();assert.equal(state.gameTime.hour,20);assert.equal(state.gameTime.period,'night');assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.teamIds,team);const offset=state.world.zaClockOffsetHours;
+  await call('benchMorning');await get();assert.equal(state.gameTime.hour,8);assert.equal(state.gameTime.period,'day');assert.ok(state.world.zaClockOffsetHours>offset);await call('benchMorning');await get();assert.equal(state.gameTime.hour,8);
+  place({x:11,y:13});await get();await call('benchNight',{},409);place({zaEmmaMegaSeen:undefined,zaMission06Started:undefined,zaRoyaleRank:'X'});await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='benchNight'));await call('benchNight');await get();assert.equal(state.gameTime.period,'night');
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone17',interior:null,x:4,y:13,facing:'down',zaRoyaleRank:'C'},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='benchMorning'));await call('benchMorning');await get();assert.equal(state.gameTime.period,'day');assert.equal(state.world.district,'lumiose-zone17');assert.deepEqual(rawMon(id),mon);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
