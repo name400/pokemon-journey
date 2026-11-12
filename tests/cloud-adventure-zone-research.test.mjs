@@ -18,7 +18,7 @@ test('anomalies and three activities count once and preserve provable legacy fos
 
 test('trainer battle research does not count scripted wild and simulated encounters',()=>{
  const s={zaResearchTrainerWins:4};
- for(const id of ['mission10-guard','mission11-slowbro','mission18-banette','mission29-venusaur','mission34-starmie','mission35-aegislash','side117-pangoro','mission37-wave-2','mission41-sim-0','mission42-form-2','rogue-rematch-slowbro']){assert.equal(recordResearchTrainerWin(s,id),false,id);assert.equal(s.zaResearchTrainerWins,4,id);}
+ for(const id of ['mission10-guard','mission11-slowbro','mission18-banette','mission29-venusaur','mission34-starmie','mission35-aegislash','side117-pangoro','side92-beldum','mission37-wave-2','mission41-sim-0','mission42-form-2','rogue-rematch-slowbro']){assert.equal(recordResearchTrainerWin(s,id),false,id);assert.equal(s.zaResearchTrainerWins,4,id);}
  assert.equal(recordResearchTrainerWin(s,'side117-josee'),true);assert.deepEqual(researchTrainerProgress(s),{wins:5,completed:1,points:200,next:10});
  assert.equal(recordResearchTrainerWin(s,'mission34-philippe'),false);assert.equal(s.zaResearchTrainerWins,6);
 });
