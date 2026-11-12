@@ -18,6 +18,7 @@ import {useEffect,useRef,useState} from 'react';
 import manifest from '@/data/cloud-town-tiles.json';
 import {wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,magentaSewerMonsters,cloudNpcTile,walkable} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {adventureAvatarRows} from '@/lib/cloud-adventure/adventure-avatar.mjs';
+import {zygardeGuideTarget} from '@/lib/cloud-adventure/adventure-zygarde-guide.mjs';
 import {ZONE5_VISIBLE} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE,zone11WaterAt} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer,ZONE6_MARKET_STALLS} from '@/lib/cloud-adventure/adventure-zone6.mjs';
@@ -35,6 +36,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,width=736,height=544;
+  let guide:{key:string,x:number,y:number,startX:number,startY:number,targetX:number,targetY:number,start:number}|null=null;
   const scheduler=createFieldScheduler(requestAnimationFrame,cancelAnimationFrame,draw);invalidate.current=scheduler.invalidate;
   // Load field sprites only when a visible map actually refers to them. This
   // avoids competing with movement requests for dozens of unrelated images.
@@ -1006,7 +1008,10 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    if(['lumiose-zone16','lumiose-zone16-garden'].includes(w.district)&&!w.interior&&!w.zaZone16Upper)for(const m of ZONE16_VISIBLE.filter(p=>zone16Visible(w,p.tile)===p)){const img=(w.zaWildShinyRolls?.[`zone16:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]),px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#668c80';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
    if(w.district==='lumiose-zone15'&&!w.interior)for(const m of ZONE15_VISIBLE.filter(p=>zone15Visible(w,p.tile)===p)){const img=(w.zaWildShinyRolls?.[`zone15:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]),px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#728464';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
    if(w.district==='lumiose-zone14'&&!w.interior)for(const m of ZONE14_VISIBLE.filter(p=>!!zone14Visible(w,p.tile))){const img=(w.zaWildShinyRolls?.[`zone14:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]),px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#786c5b';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
-   if(w.district==='lumiose-protect'&&w.zaProtectTowerApproachV1&&w.zaProtectTowerApproach&&w.zaMission37Stage===7){const img=fieldImages[718],px=17*tile,py=5*tile;if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#5e9b75';ctx.fillRect(px+8,py+7,tile-16,tile-14);}}
+   if(w.district==='lumiose-protect'&&w.zaProtectTowerApproachV1&&w.zaProtectTowerApproach&&w.zaMission37Stage===7){
+    const key=`${w.x},${w.y}`;if(!guide||guide.key!==key){const target=zygardeGuideTarget(w.map,w);if(!target)guide=null;else if(!guide)guide={key,x:target.x,y:target.y,startX:target.x,startY:target.y,targetX:target.x,targetY:target.y,start:time};else if(Math.abs(target.x-guide.x)+Math.abs(target.y-guide.y)>1.5)guide={key,x:target.x,y:target.y,startX:target.x,startY:target.y,targetX:target.x,targetY:target.y,start:time};else guide={...guide,key,startX:guide.x,startY:guide.y,targetX:target.x,targetY:target.y,start:time};}
+    if(guide){const progress=reduce?1:Math.min(1,Math.max(0,(time-guide.start)/140));guide.x=guide.startX+(guide.targetX-guide.startX)*progress;guide.y=guide.startY+(guide.targetY-guide.startY)*progress;const img=fieldImages[718],px=guide.x*tile,py=guide.y*tile;if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#5e9b75';ctx.fillRect(px+8,py+7,tile-16,tile-14);}}
+   }else guide=null;
    if(w.district==='lumiose-lysandre-lab'&&!w.interior){
     const visible=LYSANDRE_WILD.filter(p=>lysandreWild(w,{tile:p.tile,x:p.x,y:p.y}));
     if(w.zaLysandreFloor!==2&&w.zaLysandreFloor!==3&&w.zaMission35Stage===4&&!w.zaLysandreAegislashWon&&(!w.zaLysandreMazeV2||(w.zaLysandreWing==='e'&&!w.zaLysandreBossRoomV5)||w.zaLysandreWing==='e-boss'))visible.push({id:'guardian',tile:'g',x:w.zaLysandreWing==='e-boss'?11:w.zaLysandreMazeV2?17:19,y:w.zaLysandreWing==='e-boss'?6:w.zaLysandreMazeV2?9:4,species:681,level:50,name:'킬가르도',alpha:true});
