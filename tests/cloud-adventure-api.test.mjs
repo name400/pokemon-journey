@@ -4592,3 +4592,17 @@ test('Zone 15 and 18 time-dependent wild shiny identity is stored before the fir
   }
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zones 2 and 3 roaming encounters return across time cycles without changing progress',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;
+ globalThis.__adventureUser={userId:'roaming-refresh-qa',displayName:'야생 구역 재출현'};
+ try{
+  Date.now=()=>now;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const {zone,id,story} of [{zone:2,id:'patrat',story:{zaZone2AlphaSpent:true}},{zone:3,id:'litleo',story:{zaMission05Complete:true,zaRoyaleRank:'A'}}]){
+   seedWorld(storeAdventurePosition({...rawWorld(),...story,area:3,district:`lumiose-zone${zone}`,interior:null,x:3,y:3,combat:null,encounter:null,zaWildSpawnCycles:{},[`zaZone${zone}FieldSpent`]:{[id]:true}},state.revision+1));
+   await get();assert.equal(rawWorld()[`zaZone${zone}FieldSpent`][id],true);const revision=state.revision;await get();assert.equal(state.revision,revision);
+   now+=1200000;await get();assert.equal(rawWorld()[`zaZone${zone}FieldSpent`][id],undefined);assert.equal(rawWorld()[Object.keys(story)[0]],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+   const refreshed=state.revision;await get();assert.equal(state.revision,refreshed);
+  }
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
