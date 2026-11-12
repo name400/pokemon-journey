@@ -34,3 +34,18 @@ test('central burrows preserve paths and old player positions',()=>{
  const old=storeAdventurePosition(s,23),loaded=restoreAdventurePosition(old,23);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.teamIds],['lumiose-zone8',11,9,['kept']]);
  for(const random of [0,.25,.5,.75,.999]){assert.ok(![443,529].includes(zone8Encounter({x:11,y:8},()=>random).speciesId));assert.ok(![443,529].includes(zone8Encounter({x:3,y:8},()=>random).speciesId));}
 });
+test('burrow species is generated once, with legacy and shiny preservation',async()=>{
+ const {initializeZone8Burrows,resetZone8Burrows}=await import('../lib/cloud-adventure/adventure-zone8.mjs');const s={district:'lumiose-zone8'};let draws=0;
+ assert.equal(initializeZone8Burrows(s,()=>{draws++;return draws===1?.01:.5;}),true);assert.deepEqual(s.zaZone8Burrows,{gible:443,drilbur:529});assert.equal(initializeZone8Burrows(s,()=>{throw Error('must not reroll');}),false);assert.equal(zone8Visible(s,'c').species,443);assert.equal(zone8Visible(s,'f').species,529);
+ s.zaWildShinyRolls={'zone8:gible:443':true,'zone8:drilbur:529':false};resetZone8Burrows(s);assert.deepEqual(s.zaZone8Burrows,{gible:443});assert.equal(s.zaWildShinyRolls['zone8:gible:443'],true);assert.equal(s.zaWildShinyRolls['zone8:drilbur:529'],undefined);
+ assert.equal(initializeZone8Burrows(s,()=>.01),true);assert.equal(zone8Visible(s,'f').species,443);assert.equal(zone8Visible(s,'c').species,443);
+ s.zaZone8Spent={gible:true};resetZone8Burrows(s);assert.equal(s.zaWildShinyRolls['zone8:gible:443'],undefined);
+ const legacy={district:'lumiose-zone8',zaWildShinyRolls:{'zone8:gible:443':false,'zone8:drilbur:529':true}};assert.equal(initializeZone8Burrows(legacy,()=>{throw Error('legacy identity must be kept');}),true);assert.deepEqual(legacy.zaZone8Burrows,{gible:443,drilbur:529});
+});
+test('time refresh and fast travel reroll ordinary burrows but keep unspent shiny ones',async()=>{
+ const {refreshOrdinaryWildSpawns}=await import('../lib/cloud-adventure/adventure-wild-refresh.mjs'),{clearMapTravelTransient}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ for(const reset of [s=>refreshOrdinaryWildSpawns(s,'night',2),s=>clearMapTravelTransient(s)]){
+  const s={district:'lumiose-zone8',zaWildSpawnCycles:{8:{period:'day',interval:1}},zaZone8Burrows:{gible:443,drilbur:529},zaZone8Spent:{machop:true},zaWildShinyRolls:{'zone8:gible:443':true,'zone8:drilbur:529':false}};
+  reset(s);assert.deepEqual(s.zaZone8Burrows,{gible:443});assert.equal(s.zaWildShinyRolls['zone8:gible:443'],true);assert.equal(s.zaWildShinyRolls['zone8:drilbur:529'],undefined);assert.equal(s.zaZone8Spent,undefined);
+ }
+});
