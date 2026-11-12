@@ -612,3 +612,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 7 원형 광장 시각 표현
 
 [원작 광장 설명](https://bulbapedia.bulbagarden.net/wiki/Magenta_Plaza)은 원형 광장 아래 운하와 옆의 분수를 설명한다. 기존 중앙 기념비 주변의 포장 타일을 돌 포장으로, 조우 가능한 풀 타일을 풀로 구분하고 분수와 승강기 표시를 보강했다. 원작 화면의 풀과 통로 배치가 현재 타일과 동일한지는 미확인이다. 광장의 정확한 비율·분수 위치와 수로 연결은 기존 2D 초안이며 실제 타일, 조우, 이동 및 저장은 변경하지 않았다.
+
+### 구역 9 옥상과 높은 발판 시각 표현
+
+[원작 구역 안내](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-9-guide-all-pokemon-and-alphas)는 건물·옥상과 비계가 있는 수직 구역을 설명한다. 기존 두 옥상층의 바닥과 풀 조우 칸, 그 사이의 높은 발판과 사다리를 그림으로 구분하고 지상의 기존 건물 차단 칸을 건물 지붕으로 나타냈다. 실제 비계의 위치·높이·폭과 건물 윤곽은 기존 2D 초안에 따른 추정이다. 실제 타일, 이동·조우 판정, 높이층 및 저장 좌표는 변경하지 않았다.

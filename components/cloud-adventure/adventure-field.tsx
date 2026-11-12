@@ -399,7 +399,33 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     if(w.district==='lumiose-zone10'&&!w.interior){const aquatic=!!zone10Visible(w,c)?.water;ctx.fillStyle=c==='#'?'#66777a':c==='w'?'#a5c9cb':c==='~'||aquatic?'#79adc1':c==='g'?'#94ae80':c===','?'#c2b6a0':w.zaZone10Upper?'#c9bcb0':(x+y)%2?'#dad3bf':'#e7dfca';ctx.fillRect(px,py,tile,tile);if(!w.zaZone10Upper&&(c==='~'||c==='w'||aquatic)){canalWater(px,py,x,y);if(c==='w'){ctx.fillStyle='rgba(212,238,226,.35)';ctx.fillRect(px,py,tile,tile);}if(y>=8&&y<=10&&((x>=4&&x<=8)||(x>=14&&x<=18))){ctx.fillStyle='rgba(40,65,67,.20)';ctx.fillRect(px,py,tile,tile);}}
      if(!w.zaZone10Upper&&c===','){ctx.fillStyle='#c2b6a0';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#aa9f8d';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(x%2?tile/2:1),py+3,1,tile-5);if(y===7){ctx.fillStyle='#e5d9c0';ctx.fillRect(px,py+tile-4,tile,2);}}
      if(w.zaZone10Upper){if(c==='#'&&y>=8&&y<=12)canalWater(px,py,x,y);else if(c!=='#'){roofPaving(px,py,x,y);if(c==='g'){ctx.fillStyle='#8c725d';ctx.fillRect(px+4,py+tile-10,tile-8,5);ctx.fillStyle='#aa8a6d';ctx.fillRect(px+8,py+tile-12,tile-16,3);}}}if(c==='^'){ctx.fillStyle='#78604a';ctx.fillRect(px+4,py+12,tile-8,9);ctx.fillStyle='#ad8a63';ctx.fillRect(px+5,py+10,tile-10,4);ctx.fillStyle='#574538';ctx.fillRect(px+6,py+21,4,5);ctx.fillRect(px+tile-10,py+21,4,5);}if(c==='r'){ctx.fillStyle='#76527c';ctx.fillRect(px+4,py+7,tile-8,tile-11);}if(c==='i'||c==='j'||c==='t'){ctx.fillStyle='#eee9dc';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle=c==='t'?'#d4b557':'#c45d58';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#4c5855';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}if(c==='l'){ctx.fillStyle='#806448';ctx.fillRect(px+8,py+4,3,tile-8);ctx.fillRect(px+tile-11,py+4,3,tile-8);for(let k=7;k<tile-5;k+=6)ctx.fillRect(px+8,py+k,tile-16,2);}if(c==='W'||c==='E'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
-    if(w.district==='lumiose-zone9'&&!w.interior){ctx.fillStyle=c==='#'?'#6d6b70':c==='g'?'#9caf83':c===','?'#a1917d':w.zaZone9Upper?'#c8b8ac':(x+y)%2?'#dad2c0':'#e6decb';ctx.fillRect(px,py,tile,tile);if(c==='#'&&!w.zaZone9Upper&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle='#a28d7d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#c9b39f';ctx.fillRect(px+4,py+5,tile-8,tile-10);}if(x>=8&&x<=14&&y===11){if(w.zaZone9Upper&&c===','){ctx.fillStyle='#786856';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#c7a981';for(let j=3;j<tile;j+=8)ctx.fillRect(px+j,py+3,5,tile-6);ctx.fillStyle='#5d5e5a';ctx.fillRect(px,py+2,tile,2);ctx.fillRect(px,py+tile-4,tile,2);}else if(!w.zaZone9Upper){ctx.fillStyle='rgba(71,74,71,.18)';ctx.fillRect(px,py+3,tile,tile-6);ctx.fillStyle='#79817c';ctx.fillRect(px,py+4,tile,2);ctx.fillRect(px,py+tile-6,tile,2);}}if('ijk'.includes(c)){ctx.fillStyle='#d8b64f';ctx.fillRect(px+8,py+8,tile-16,tile-16);}if(c==='l'||c==='h'||c==='o'){ctx.fillStyle='#816d52';ctx.fillRect(px+6,py+4,tile-12,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='o'?'비계':'사다리',px+tile/2,py+20);}if(c==='*'){ctx.fillStyle='#ca69b4';ctx.fillRect(px+9,py+5,tile-18,tile-10);ctx.fillStyle='#ffe0f6';ctx.fillRect(px+13,py+8,4,tile-16);}return;}
+    if(w.district==='lumiose-zone9'&&!w.interior){
+     // The two roofs, grass and raised scaffold follow existing provisional
+     // cells; the drawing never changes movement, encounters or saved layers.
+     const upper=w.zaZone9Upper===true,inside=x>0&&x<22&&y>0&&y<16;
+     ctx.fillStyle=c==='#'?(upper?'#65777d':'#6d6b70'):c==='g'?'#98b27f':c===','?'#a1917d':upper?'#c8b8ac':(x+y)%2?'#dad2c0':'#e6decb';ctx.fillRect(px,py,tile,tile);
+     if(upper&&c==='#'){
+      // Dark lower city separates the roof footprints from the walkway.
+      ctx.fillStyle=(x+y)%2?'#6b7b7f':'#728285';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#5f7277';ctx.fillRect(px,py+tile-4,tile,4);
+     }
+     if(upper&&c!=='#'&&c!=='g'&&c!==',')roofPaving(px,py,x,y);
+     if(upper&&c==='g'){
+      ctx.fillStyle=(x+y)%2?'#8cae78':'#9abb83';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#608e5b';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);ctx.fillRect(px+9,py+5,2,5);
+     }
+     if(upper&&c===','){
+      ctx.fillStyle='#786856';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d0b38a';for(let j=3;j<tile;j+=8)ctx.fillRect(px+j,py+4,5,tile-8);ctx.fillStyle='#5d6c69';ctx.fillRect(px,py+1,tile,3);ctx.fillRect(px,py+tile-4,tile,3);ctx.fillStyle='#b9c3b4';ctx.fillRect(px,py+1,tile,1);ctx.fillRect(px,py+tile-4,tile,1);
+     }
+     if(!upper&&c==='#'&&inside){
+      // Existing ground-level building footprints have continuous roof caps.
+      ctx.fillStyle='#a28d7d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#c4b39f';ctx.fillRect(px+1,py+2,tile-2,tile-4);ctx.fillStyle='#9d8c7d';ctx.fillRect(px+3,py+5,tile-6,tile-9);ctx.fillStyle='#e0d2ba';ctx.fillRect(px+3,py+5,tile-6,2);ctx.fillStyle='#756f69';ctx.fillRect(px,py+tile-3,tile,3);ctx.fillRect(px+tile-3,py,3,tile);
+     }
+     if(!upper&&c===','){ctx.fillStyle='#b9b4a7';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d8d3c4';ctx.fillRect(px,py+2,tile,2);ctx.fillStyle='#a19e93';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+4,2,tile-6);}
+     if(!upper&&x>=8&&x<=14&&y===11){ctx.fillStyle='rgba(71,74,71,.18)';ctx.fillRect(px,py+3,tile,tile-6);ctx.fillStyle='#79817c';ctx.fillRect(px,py+4,tile,2);ctx.fillRect(px,py+tile-6,tile,2);}
+     if('ijk'.includes(c)){ctx.fillStyle='#f1eadb';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c85e55';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#4f5d59';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}
+     if(c==='l'||c==='h'){ctx.fillStyle='#72543d';ctx.fillRect(px+8,py+4,3,tile-8);ctx.fillRect(px+tile-11,py+4,3,tile-8);ctx.fillStyle='#e8d4af';for(let j=7;j<tile-5;j+=6)ctx.fillRect(px+9,py+j,tile-18,2);}
+     if(c==='o'){ctx.fillStyle='#667976';ctx.fillRect(px+3,py+6,tile-6,tile-12);ctx.fillStyle='#c1b091';for(let j=7;j<tile-5;j+=7)ctx.fillRect(px+5,py+j,tile-10,3);ctx.fillStyle='#e2d1b0';ctx.fillRect(px+4,py+4,tile-8,2);}
+     if(c==='*'){ctx.fillStyle='#ca69b4';ctx.fillRect(px+9,py+5,tile-18,tile-10);ctx.fillStyle='#ffe0f6';ctx.fillRect(px+13,py+8,4,tile-16);}
+     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#a1cbb8';ctx.fillRect(px+8,py+7,tile-16,tile-14);}return;}
     if(w.district==='lumiose-zone8'&&!w.interior){
      // Jaune Plaza's central earth and surrounding sand ring are visual only:
      // the existing map tile continues to control movement and encounters.
