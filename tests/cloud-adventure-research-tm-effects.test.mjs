@@ -30,7 +30,9 @@ test('verified regional forms use their own TM lists and require matching specie
 });
 
 test('field TMs distinguish base and verified regional compatibility',()=>{
- assert.equal(STORY_TMS.length,19);
+ assert.equal(STORY_TMS.length,20);
+ assert.ok(STORY_TMS.some(tm=>tm.id==='za-tm090'&&tm.move==='악의파동'));
+ assert.equal(new Set(STORY_TMS.map(tm=>tm.id)).size,STORY_TMS.length);
  const bag={'za-tm013':1,'za-tm034':1,'za-tm066':1};
  for(const [id,speciesId,tm] of [[10100,26,'za-tm066'],[10108,53,'za-tm034'],[10164,79,'za-tm013'],[10165,80,'za-tm013'],[10172,199,'za-tm013'],[10234,211,'za-tm013'],[10241,705,'za-tm013'],[10242,706,'za-tm013'],[10243,713,'za-tm013']])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},tm),true,`${id}:${tm}`);
  assert.equal(canLearnStoryTm(bag,{id:52,speciesId:52,moves:[]},'za-tm034'),false);

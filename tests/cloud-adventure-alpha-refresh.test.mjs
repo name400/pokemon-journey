@@ -21,3 +21,12 @@ test('early alpha refresh respects old saves, occupied spawn tiles, and active b
   s.zaWildShinyRolls[key]=true;assert.equal(refreshEarlyAlpha(s,'day',3),true);assert.equal(s.zaWildShinyRolls[key],true);
  }
 });
+
+test('a spent single alpha clears a stale shiny roll without clearing another time-exclusive alpha',()=>{
+ for(const [district,spent,x,y,key] of cases){
+  const other='alpha:zone2-island:120',s={district,x:x+1,y,[spent]:true,zaEarlyAlphaCycles:{[district]:{period:'day',interval:1}},zaWildShinyRolls:{[key]:true,[other]:true}};
+  assert.equal(refreshEarlyAlpha(s,'night',2),true);
+  assert.equal(s.zaWildShinyRolls[key],district==='lumiose-zone2'?true:undefined);
+  assert.equal(s.zaWildShinyRolls[other],true);
+ }
+});

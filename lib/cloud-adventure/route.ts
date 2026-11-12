@@ -1017,7 +1017,7 @@ else if(b.action==='throwZone3Field'){
 }
 else if(b.action==='throwZone2IslandAlpha'){
  if(s.combat||!zone2IslandAlphaTarget(s))throw Error('가까이에 보이는 섬의 우두머리를 조준하세요.');
- const period=gameTime(undefined,adventureClockOffset(s)).period,foe=makeZone2IslandAlpha(period);assignWildShiny(s,foe,random,`alpha:${foe.adventureAlphaId}:${foe.speciesId}`);consume='balls';const attempt=adventureCaptureAttempt(foe,'pokeball',{overworld:true,unaware:false,moveCount:0,royaleRank:s.zaRoyaleRank,alpha:true,night:period==='night'},random);
+ const offset=adventureClockOffset(s),now=Date.now(),period=gameTime(now,offset).period;refreshEarlyAlpha(s,period,zone19SpawnInterval(now,offset));const foe=makeZone2IslandAlpha(period);assignWildShiny(s,foe,random,`alpha:${foe.adventureAlphaId}:${foe.speciesId}`);consume='balls';const attempt=adventureCaptureAttempt(foe,'pokeball',{overworld:true,unaware:false,moveCount:0,royaleRank:s.zaRoyaleRank,alpha:true,night:period==='night'},random);
  if(attempt.caught){clearWildShiny(s,`alpha:${foe.adventureAlphaId}:${foe.speciesId}`);s.zaZone2AlphaSpent=true;captured={...afterCapture(foe,'pokeball'),boxId:crypto.randomUUID(),origin:'capture',experience:0};recordResearchCapture(s,captured.types);registerAdventureDex(s,captured.speciesId);if(s.teamIds.length<6)s.teamIds.push(captured.boxId);s.log=[`우두머리 ${foe.name}을(를) 포획했다!`];s.events=[{kind:'capture',side:0,targetSide:1,type:'water',category:'status',hit:false,ball:'pokeball',shakes:attempt.shakes,caught:true,targetBoxId:'wild'}];}
  else{s.combat=applyAdventureAlphaBattleStats(createAdventureCombat(s,mons,[foe],{weather:s.weather==='rain'?'raindance':undefined}));s.encounter=foe;s.trainer=null;s.log=[`볼에서 빠져나온 우두머리 ${foe.name}와 배틀이 시작됐다!`];}
 }
