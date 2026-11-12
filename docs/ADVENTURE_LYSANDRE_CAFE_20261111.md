@@ -65,3 +65,9 @@ The existing Sector 4 screen provides a provisional approach to nearby Sector 2;
 [미션 35 진행 안내](https://www.neoseeker.com/pokemon-legends-z-a/Main_Mission_35)는 보라색 구역의 전원을 켠 뒤 작은 방의 전송기를 한 번 더 거쳐 C 키카드가 있는 공간에 도착한다고 설명한다. 새로 연구소에 진입하는 진행은 두 전송기 사이의 방을 양방향으로 오가며, 전원과 키카드 조건을 유지한다. 이미 연구소에 들어간 기존 저장은 기존의 직접 전송을 유지한다.
 
 중간 방의 크기·배치와 전송기의 좌표는 확인된 원작 평면이 아닌 2D 추정이다. 실기 원작과 운영 서버는 검증하지 않았다.
+
+## 첫 구역의 기술머신
+
+[미션 35 공략](https://www.neoseeker.com/pokemon-legends-z-a/Main_Mission_35)은 A 키카드 방 뒤쪽의 기술머신을, [기술머신 목록](https://www.serebii.net/legendsz-a/tm.shtml)은 이를 090 악의파동으로 안내한다. 첫 구역의 전원을 켠 뒤 전송기로 도착하는 방에서 획득하고 기존 기술 관리 화면에서 반복해 가르칠 수 있다. 정확한 타일 좌표는 기존 2D 지도에 맞춘 추정이다. 수령 기록과 기존 포켓몬·파티·기술은 보존한다.
+
+학습 가능 기본 종은 기존에 지원하는 종과 미르 도감에 해당하는 범위에서 [Z-A 2.0 학습 데이터](https://github.com/Fortelle/pokemon-learnsets/tree/79351bcf414276f82efda89c474f9de6e837af06/raw/legendsza%402.0.0)의 090번 관계를 확인했으며, 이미 지원하던 지역 폼도 별도 대조했다. 다른 폼과 이 범위 밖의 종은 확인 전 제한한다. 기존 저장의 과거 보유 여부는 추측하지 않는다. 운영 및 원작 기기는 확인하지 않았다.

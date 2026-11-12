@@ -17,6 +17,8 @@ import {canariBattleExperience} from '../lib/cloud-adventure/adventure-canari.mj
 import {fieldPath,fieldMap,findTile,storeAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {ZONE20_ALPHA} from '../lib/cloud-adventure/adventure-mission42.mjs';
+import {ADVENTURE_BALLS} from '../lib/cloud-adventure/adventure-balls.mjs';
+import {RARE_ADVENTURE_BALLS} from '../lib/cloud-adventure/adventure-rare-balls.mjs';
 import lumioseDex from '../data/lumiose-dex.json' with {type:'json'};
 import {RESEARCH_TYPES,researchSummary,researchItemReward} from '../lib/cloud-adventure/adventure-research.mjs';
 
@@ -596,6 +598,17 @@ test('Mission 41 Yveltal is reachable on the Galerie dome and remains retryable'
   await call('mission41Yveltal');assert.deepEqual([state.battle.teams[1][0].speciesId,state.battle.teams[1][0].level],[717,75]);await call('flee');await get();assert.equal(state.world.map[2][16],'0');assert.equal(state.world.zaMission41Stage,3);
   await call('mission41Yveltal');const legendary=structuredClone(rawWorld().encounter);await get();assert.deepEqual(rawWorld().encounter.ivs,legendary.ivs);assert.equal(rawWorld().encounter.nature,legendary.nature);await call('ball',{ball:'masterball'});await get();const captured=sql.prepare('SELECT data FROM pokemon_box WHERE user_id=? AND species_id=?').all(globalThis.__adventureUser.userId,legendary.speciesId).map(row=>JSON.parse(row.data)).find(mon=>mon.personality===legendary.personality);assert.ok(captured);assert.deepEqual(captured.ivs,legendary.ivs);assert.equal(captured.nature,legendary.nature);assert.deepEqual(captured.moves,legendary.moves);assert.equal(captured.teraType,legendary.teraType);assert.equal(state.world.zaMission41Complete,true);assert.equal(state.world.zaMission42Ready,true);assert.notEqual(state.world.map[2][16],'0');assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);await call('mission41Yveltal',{},409);
  }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Mission 42 Zygarde is guaranteed and never shiny with every supported ball',async()=>{
+ const previous=globalThis.__adventureUser;
+ try{
+  for(const {id:ball} of ADVENTURE_BALLS){
+   globalThis.__adventureUser={userId:`mission42-all-ball-${ball}`,displayName:'지가르데 볼 검증'};await get();await call('start',{species:1});const rare=RARE_ADVENTURE_BALLS.includes(ball),adventureBalls=ball!=='pokeball'&&!rare?{[ball]:1}:{};
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:7,facing:'up',zaMission42Stage:3,adventureBalls},state.revision+1));sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(ball==='pokeball'?1:0,globalThis.__adventureUser.userId);if(rare)sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,ball]),globalThis.__adventureUser.userId,ball);
+   await get();await call('mission42Cube',{},409);await call('mission42OfferCapture');assert.equal(state.world.adventureCatchWindow.foe.shiny,false,ball);await call('catchWindowBall',{ball});assert.equal(state.world.zaMission42Caught,true,ball);assert.equal(state.world.zaMission42Stage,4,ball);await get();const mon=state.box.find(m=>m.speciesId===718);assert.ok(mon,ball);const saved=rawMon(mon.boxId);assert.equal(saved.shiny,false,ball);assert.equal(saved.originBall,ball,ball);
+  }
+ }finally{globalThis.__adventureUser=previous;}
 });
 
 test('Mission 42 respects rare balls in the bag and grants the cube after capture',async()=>{
@@ -4198,6 +4211,21 @@ test('Lysandre first wing optional powered warp returns safely and preserves key
   const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'lysandreSideStone',revision:rev})}));assert.equal(replay.status,409);await get();assert.equal(state.world.zaLysandreWing,'a-side');assert.equal(state.inventory.dawnstone,1);assert.notEqual(state.world.map[5][11],'o');
   await walkTo({x:11,y:11});await call('face',{direction:'down'});await call('lysandreSideWarp');await get();assert.deepEqual([state.world.zaLysandreWing,state.world.x,state.world.y],['a',8,11]);await walkTo({x:8,y:9});await call('face',{direction:'up'});await call('lysandreWarp');await get();assert.deepEqual([state.world.x,state.world.y],[15,8]);await walkTo({x:17,y:6});await call('face',{direction:'up'});await call('mission35LabInspect');assert.ok(state.world.zaLysandreCards.includes('a'));assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).id,152);
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:8,y:11,facing:'down',zaLysandreMazeV2:false,zaLysandreWing:undefined},state.revision+1));await get();await call('lysandreSideWarp',{},409);assert.equal(state.world.x,8);assert.equal(state.world.y,11);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('Lysandre Lab TM090 is reachable, reusable and restricted to verified learners',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lysandre-tm090-qa',displayName:'연구소 기술머신 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],original={...makeMon(94,50),moves:['몸통박치기','울음소리','전광석화','방어'],pp:{tackle:3,growl:7,quickattack:0,protect:4}};seedMon(id,original);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:8,y:9,facing:'up',zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:'a',zaLysandrePowers:[],zaLysandreCards:[]},state.revision+1));await get();await call('lysandreWarp',{},409);await call('teachStoryTm',{item:'za-tm090',slot:1},409);
+  await walkTo({x:5,y:6});await call('face',{direction:'up'});await call('lysandrePower');await walkTo({x:8,y:9});await call('face',{direction:'up'});await call('lysandreWarp');await walkTo({x:18,y:5});await call('face',{direction:'right'});assert.equal(state.world.interaction.action,'lysandreTM090');const revision=state.revision;await call('lysandreTM090');assert.equal(state.inventory['za-tm090'],1);assert.equal(state.world.zaLysandreTm090,true);
+  const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'lysandreTM090',revision})}));assert.equal(replay.status,409);await get();assert.notEqual(state.world.map[5][19],'o');assert.equal(state.inventory['za-tm090'],1);seedWorld(storeAdventurePosition({...rawWorld(),x:18,y:5,facing:'right',zaLysandreTm090:false},state.revision+1));await get();await call('lysandreTM090');assert.equal(state.inventory['za-tm090'],1);assert.equal(state.world.zaLysandreTm090,true);
+  await call('teachStoryTm',{item:'za-tm090',boxId:id,slot:1});let mon=rawMon(id);assert.deepEqual(mon.moves,['몸통박치기','악의파동','전광석화','방어']);assert.deepEqual(mon.pp,{tackle:3,quickattack:0,protect:4});await get();assert.equal(state.inventory['za-tm090'],1);assert.deepEqual(state.world.teamIds,team);assert.equal(state.box.find(m=>m.boxId===id).moves[1],'악의파동');
+  const fight=createCombat([{...mon,boxId:id}],[{...makeMon(92,20),boxId:'tm090-target'}]);assert.ok(fight.requests[0].moves.some(move=>move.name==='악의파동'));const fought=playCpu(fight,{type:'move',move:'악의파동'});assert.ok(fought.teams[1][0].hp<fought.teams[1][0].maxHp);
+  const incompatible={...makeMon(25,20),moves:['전광석화'],pp:{quickattack:2}};seedMon(id,incompatible);await get();await call('teachStoryTm',{item:'za-tm090',slot:0},409);assert.deepEqual(rawMon(id),incompatible);
+  const regional={...makeMon(10108,20),moves:['몸통박치기'],pp:{tackle:1}};seedMon(id,regional);await get();await call('teachStoryTm',{item:'za-tm090',slot:0});assert.equal(rawMon(id).moves[0],'악의파동');assert.equal(state.inventory['za-tm090'],1);
+  const qwilfish={...makeMon(211,20),moves:['몸통박치기']};seedMon(id,qwilfish);await get();await call('teachStoryTm',{item:'za-tm090',slot:0},409);const hisui={...makeMon(10234,20),moves:['몸통박치기']};seedMon(id,hisui);await get();await call('teachStoryTm',{item:'za-tm090',slot:0});assert.equal(rawMon(id).moves[0],'악의파동');
  }finally{globalThis.__adventureUser=previous;}
 });
 
