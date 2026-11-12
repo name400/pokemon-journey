@@ -4715,3 +4715,15 @@ test('day-only shiny field Pokémon returns unchanged after night and reload',as
   now=28*50000;await get();assert.equal(state.gameTime.period,'day');assert.equal(state.world.map[5][15],'b');assert.equal(rawWorld().zaWildShinyRolls['zone6:meditite:307'],true);await call('zone6Wild-meditite');assert.equal(state.battle.teams[1][0].shiny,true);await get();assert.equal(state.battle.teams[1][0].shiny,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('early visible alphas keep their field shiny state through battle and reload',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'early-alpha-shiny-qa',displayName:'우두머리 이로치'};
+ try{
+  globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const cases=[{district:'lumiose-zone1-roof',x:18,y:6,facing:'up',key:'alpha:zone1-roof-pidgey:16',species:16,action:'zone1RoofAlpha'},{district:'lumiose-zone2',x:20,y:12,facing:'up',key:'alpha:zone2-island:129',species:129,action:'encounterZone2Alpha',zaZone2RockCleared:true},{district:'lumiose-zone4',x:5,y:10,facing:'left',key:'alpha:zone4-spinarak:167',species:167,action:'encounterZone4Alpha'},{district:'lumiose-zone7',x:10,y:8,facing:'right',key:'alpha:zone7-fletchinder:662',species:662,action:'zone7Alpha'}];
+  for(const c of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,interior:null,zaRoyaleRank:'F',zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3,zaZone1RoofAlphaSpent:false,zaZone2AlphaSpent:false,zaZone4AlphaSpent:false,zaZone7AlphaSpent:false,zaWildShinyRolls:{},combat:null,encounter:null,...c},state.revision+1));
+   globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildShinyRolls[c.key],true,c.district);globalThis.__adventureRandom=()=>.999;await get();assert.equal(rawWorld().zaWildShinyRolls[c.key],true);await call(c.action);assert.equal(state.battle.teams[1][0].speciesId,c.species);assert.equal(state.battle.teams[1][0].shiny,true);await get();assert.equal(state.battle.teams[1][0].shiny,true);await call('flee');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});

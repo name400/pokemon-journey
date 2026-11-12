@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {fieldMap} from '../../../lib/cloud-adventure/adventure-world.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+try{
+ for(const c of [{district:'lumiose-zone1-roof',x:18,y:6,key:'alpha:zone1-roof-pidgey:16',species:16},{district:'lumiose-zone2',x:20,y:12,key:'alpha:zone2-island:129',species:129,zaZone2RockCleared:true},{district:'lumiose-zone2',x:20,y:12,key:'alpha:zone2-island:120',species:120,period:'night',zaZone2RockCleared:true},{district:'lumiose-zone4',x:5,y:10,key:'alpha:zone4-spinarak:167',species:167},{district:'lumiose-zone7',x:10,y:8,key:'alpha:zone7-fletchinder:662',species:662}]){
+  const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),requests=[];
+  await page.route('https://**/*',r=>{const url=r.request().url();requests.push(url);const color=url.includes(`/shiny/${c.species}.png`)?'#ff00ff':'#777';return r.fulfill({status:200,contentType:'image/svg+xml',body:`<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="96" height="96" fill="${color}"/></svg>`});});
+  const mon={boxId:'fixture',id:1,speciesId:1,name:'이상해씨',types:['풀','독'],level:5,hp:18,maxHp:20,experience:0,expToNext:20,evolutions:[]};
+  const world={area:3,interior:null,areaInfo:{name:'야생 구역',biome:'city'},facing:'up',teamIds:['fixture'],activeId:'fixture',badges:[],objective:'탐험',log:[],adventureBalls:{},steps:0,zaRoyaleRank:'F',zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3,zaWildShinyRolls:{[c.key]:true},...c};world.map=fieldMap(world);
+  await page.route('**/api/account',r=>r.fulfill({json:{authenticated:true,profile:{nickname:'격리 테스트',friendCode:'TEST'},signOut:'#'}}));await page.route('**/api/world**',r=>new URL(r.request().url()).searchParams.has('engineOnly')?r.fulfill({json:{engine:'cloud'}}):r.fulfill({json:{engine:'cloud',revision:7,box:[mon],wallet:{coins:100,balls:5},inventory:{},fieldShop:[],expeditions:[],gameTime:{period:c.period||'day'},battle:null,world}}));
+  await page.goto((process.env.UI_TEST_URL||'http://127.0.0.1:5468')+'/?mode=adventure&tab=adventure');const canvas=page.locator('canvas.adv-field');await canvas.waitFor({timeout:15000});await page.waitForTimeout(800);
+  assert.ok(requests.some(url=>url.endsWith(`/shiny/${c.species}.png`)),`${c.district}: shiny image requested`);const shot=await canvas.screenshot({path:`/tmp/${c.district}-${c.period||'day'}-alpha-shiny.png`});const pixels=await page.evaluate(async base64=>{const img=await createImageBitmap(await (await fetch(`data:image/png;base64,${base64}`)).blob());const el=document.createElement('canvas');el.width=img.width;el.height=img.height;const ctx=el.getContext('2d');ctx.drawImage(img,0,0);const data=ctx.getImageData(0,0,el.width,el.height).data;let n=0;for(let i=0;i<data.length;i+=4)if(data[i]>220&&data[i+1]<35&&data[i+2]>220)n++;return n;},shot.toString('base64'));assert.ok(pixels>10,`${c.district}: shiny sprite rendered (${pixels} pixels)`);await page.close();
+ }
+ console.log('Early alpha shiny rendering verified (mock API and placeholder sprites).');
+}finally{await browser.close();}
