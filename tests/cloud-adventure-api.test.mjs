@@ -4178,3 +4178,16 @@ test('Lysandre wings preserve pre-rolled shinies across encounters, catches and 
   }
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('Lysandre first wing optional powered warp returns safely and preserves keycard progress',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lysandre-side-warp-qa',displayName:'연구소 분기 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:8,y:11,facing:'down',zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:'a',zaLysandrePowers:[],zaLysandreCards:[]},state.revision+1));await get();assert.equal(state.world.map[12][8],'v');await call('lysandreSideWarp',{},409);assert.equal(state.world.zaLysandreWing,'a');
+  await walkTo({x:5,y:6});await call('face',{direction:'up'});await call('lysandrePower');await walkTo({x:8,y:11});await call('face',{direction:'down'});assert.equal(state.world.interaction.action,'lysandreSideWarp');await call('lysandreSideWarp');await get();assert.deepEqual([state.world.zaLysandreWing,state.world.x,state.world.y],['a-side',11,11]);assert.equal(state.world.map[5][11],'o');
+  await walkTo({x:11,y:6});await call('face',{direction:'up'});const key=JSON.stringify([globalThis.__adventureUser.userId,'dawnstone']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'dawnstone');await get();await call('lysandreSideStone',{},409);assert.notEqual(rawWorld().zaLysandreDawnStone,true);sql.prepare('UPDATE inventory SET quantity=0 WHERE key=?').run(key);await get();const rev=state.revision;await call('lysandreSideStone');assert.equal(state.inventory.dawnstone,1);assert.equal(rawWorld().zaLysandreDawnStone,true);
+  const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'lysandreSideStone',revision:rev})}));assert.equal(replay.status,409);await get();assert.equal(state.world.zaLysandreWing,'a-side');assert.equal(state.inventory.dawnstone,1);assert.notEqual(state.world.map[5][11],'o');
+  await walkTo({x:11,y:11});await call('face',{direction:'down'});await call('lysandreSideWarp');await get();assert.deepEqual([state.world.zaLysandreWing,state.world.x,state.world.y],['a',8,11]);await walkTo({x:8,y:9});await call('face',{direction:'up'});await call('lysandreWarp');await get();assert.deepEqual([state.world.x,state.world.y],[15,8]);await walkTo({x:17,y:6});await call('face',{direction:'up'});await call('mission35LabInspect');assert.ok(state.world.zaLysandreCards.includes('a'));assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).id,152);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:8,y:11,facing:'down',zaLysandreMazeV2:false,zaLysandreWing:undefined},state.revision+1));await get();await call('lysandreSideWarp',{},409);assert.equal(state.world.x,8);assert.equal(state.world.y,11);
+ }finally{globalThis.__adventureUser=previous;}
+});
