@@ -105,11 +105,11 @@ export default function Adventure(){
      // Route steps are bounded; held input buffers only safe steps already shown.
      const path=pathQueue.current.length?pathQueue.current.splice(0,4):[direction];
      const bufferDirection=path.at(-1)||direction;lastFacing.current=bufferDirection;
-     const projected=path.length>1?predictCloudPath(d.world,path,{allowTransition:true}):predictCloudStep(d.world,path[0],{allowGrass:true,allowTransition:true,allowHazard:true}),epoch=movementEpoch.current,inputAtStart=inputSequence.current;let buffer=createCloudMoveBuffer(d.world,projected,bufferDirection);
+     const projected=path.length>1?predictCloudPath(d.world,path,{allowTransition:true}):predictCloudStep(d.world,path[0],{allowGrass:true,allowTransition:true,allowHazard:true}),epoch=movementEpoch.current;let buffer=createCloudMoveBuffer(d.world,projected,bufferDirection);
      const queuedPreview=projected&&!('predictedTransition' in projected&&projected.predictedTransition)&&pathQueue.current.length?predictCloudPath({...d.world,...projected},pathQueue.current):null;
      if(projected)setPrediction({revision:d.revision,...(queuedPreview||projected)});
      // Accumulate only displayed steps; transitions wait for server confirmation.
-     const previewTimer=heldDirection.current===bufferDirection&&!pathQueue.current.length&&projected?setInterval(()=>{if(!alive||movementEpoch.current!==epoch||inputSequence.current!==inputAtStart||heldDirection.current!==bufferDirection)return;const next=buffer.push();if(next){if(inflightMove.current)inflightMove.current.bufferedPosition=next;setPrediction({revision:revision.current,...next});}},adventureMovementInterval(d.world)):null;
+     const previewTimer=projected&&!('predictedTransition' in projected&&projected.predictedTransition)?setInterval(()=>{if(!alive||movementEpoch.current!==epoch)return;const queued=pathQueue.current[0],nextDirection=queued||heldDirection.current;if(!nextDirection)return;const next=buffer.push(nextDirection);if(next){if(queued)pathQueue.current.shift();if(inflightMove.current)inflightMove.current.bufferedPosition=next;const remaining=pathQueue.current.length?predictCloudPath({...d.world,...next},pathQueue.current):null;setPrediction({revision:revision.current,...(remaining||next)});}},adventureMovementInterval(d.world)):null;
      moved=true;inflightMove.current=projected?{revision:d.revision,position:projected}:null;let r=await act('move',{path});inflightMove.current=null;
      while(alive&&mounted.current&&movementEpoch.current===epoch&&buffer.path.length&&buffer.matches(r)&&(r.world?.steps||0)-(d.world.steps||0)>=path.length){
       const pending=buffer.path,before=r,nextBuffer=createCloudMoveBuffer(before.world,buffer.position,bufferDirection);

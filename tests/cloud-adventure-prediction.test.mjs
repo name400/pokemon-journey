@@ -88,3 +88,16 @@ test('queued directions preview in order and stop at blocked tiles',async()=>{
  const boundary={...world,x:1,y:1};assert.equal(predictCloudPath(boundary,['up','right']),null);
  assert.deepEqual(predictCloudPath(boundary,['right','up']),{x:2,y:1,facing:'right'});
 });
+
+test('buffer retains held turns in order and requires the earlier server position',async()=>{
+ const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const world={area:3,district:'lumiose',interior:null,x:5,y:8,facing:'right'},first=predictCloudStep(world,'right');
+ const buffer=createCloudMoveBuffer(world,first,'right');
+ assert.deepEqual(buffer.push('up'),{x:6,y:7,facing:'up'});
+ assert.deepEqual(buffer.push('left'),{x:5,y:7,facing:'left'});
+ assert.deepEqual(buffer.path,['up','left']);
+ assert.equal(buffer.matches({world:{...world,...first},battle:null}),true);
+ assert.equal(buffer.matches({world:{...world,...first},battle:{}}),false);
+ assert.equal(buffer.matches({world:{...world,...first,adventureCatchWindow:{}},battle:null}),false);
+ assert.equal(buffer.matches({world:{...world,x:5,y:8},battle:null}),false);
+});
