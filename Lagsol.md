@@ -25,7 +25,7 @@
 | 예측마다 상위 화면 전체 상태 갱신 | PredictedAdventureField 내부 state로 예측 분리 | 서버 응답의 상위 setData/보유함 전체 병합은 남음 |
 | 모든 지역 후속 예측 4칸 | 검토한 일부 평지에서 최대 12칸 | 다른 지역·실내·위험·경계에는 4칸 또는 전환 대기 |
 | 진화 목록 전체 탐색 | 종/폼별 불변 데이터 인덱스 추가 | 동적 진화 조건은 계속 평가 |
-| 대화/필드 클릭도 전부 busy로 차단 | 필드 disabled에서는 busy 제외 | interact는 여전히 lock 중 반환, 대화 버튼도 busy 중 비활성 |
+| 대화/필드 클릭도 전부 busy로 차단 | 필드 disabled에서는 busy 제외. 이동 중 대화는 확인된 위치·방향·선두가 표시된 예측과 일치할 때 서버가 반환한 대화를 연다 | 미확정 경로와 구역 전환, 다른 요청 중 대화는 자동 실행하지 않는다. 실제 운영 환경은 미검증 |
 
 근거:
 - [라우터 사전 조회](https://github.com/name400/pokemon-journey/blob/970bcf63f81d94513b87518ed0cd449cca857c6a/app/api/world/route.ts#L7), [단일 조회 SQL](https://github.com/name400/pokemon-journey/blob/970bcf63f81d94513b87518ed0cd449cca857c6a/lib/cloud-adventure/movement-prefetch.mjs#L3).
@@ -123,18 +123,18 @@
 
 근거: [accept/load](https://github.com/name400/pokemon-journey/blob/970bcf63f81d94513b87518ed0cd449cca857c6a/components/cloud-adventure/entry.tsx#L58), [그룹 폴링](https://github.com/name400/pokemon-journey/blob/970bcf63f81d94513b87518ed0cd449cca857c6a/components/cloud-adventure/entry.tsx#L142).
 
-accept는 새 응답마다 setPrediction(null)을 실행하고, 이동 루프는 후속 버퍼/회전 예측을 다시 설정한다. React 배칭으로 중간 상태가 실제 그려지지 않을 수도 있으므로 매번 깜빡인다고 확정하지 않는다. 그룹 폴링은 시작할 때 lock을 확인하지만 GET 진행 중 이동 시작을 잠그지는 않는다. 같은 revision 응답도 accept하므로 미리 시작한 GET이 이동 예측을 지울 가능성도 검사한다.
+accept는 새 응답마다 setPrediction(null)을 실행하고, 이동 루프는 후속 버퍼/회전 예측을 다시 설정한다. React 배칭으로 중간 상태가 실제 그려지지 않을 수도 있으므로 매번 깜빡인다고 확정하지 않는다. 그룹 조회가 이동 중 동일 리비전·동일 위치로 돌아와 예측을 지우는 사례는 모의 브라우저에서 재현 후 보완했다. 더 최신 리비전, 다른 위치, 전투·포획·기술 선택은 반영한다. 그룹의 같은 리비전 표시 변경은 다음 조회까지 늦어질 수 있으며 실제 운영에서의 효과는 미측정이다. [검사 기록](docs/ADVENTURE_GROUP_POLL_MOVEMENT_20261112.md).
 
-해결: 서버 상태+미확정 입력의 재계산을 하나의 reconcile 단계로 처리하고, 응답 출처/sequence를 구분한다. 그룹 멤버 업데이트가 로컬 이동 예측을 초기화하지 않도록 분리하되 더 최신의 서버 전투/위치 변경은 놓치지 않는다.
+남은 작업: 일반 이동 응답의 서버 상태와 미확정 입력 재계산을 확인하고, 실제 그룹 기기에서 구성원 표시 지연과 최신 전투·위치 반영을 측정한다.
 
 ### P2. 대화/도입부/회피는 일반 평지 이동과 다른 지연 경로
 
-- [interact](https://github.com/name400/pokemon-journey/blob/970bcf63f81d94513b87518ed0cd449cca857c6a/components/cloud-adventure/entry.tsx#L86)는 lock 중 바로 반환한다. 서버 응답 전 NPC에 도착해 E를 누르면 입력이 무시될 수 있다. 대화 버튼 역시 busy에 묶여 있다. 이것은 이동 프레임 지연과 구분한다.
+- 이동 중 대화는 표시한 위치·방향·선두가 서버 확인 결과와 일치하면 대화창을 연다. 일치하지 않거나 전투·실패가 발생하면 실행하지 않는다. [검사 기록](docs/ADVENTURE_PENDING_INTERACTION_20261112.md). 다른 요청과 구역 전환 중 입력은 자동 대기하지 않으며 실제 운영은 미검증이다.
 - 도입부 introMove/introEscapeMove는 일반 이동 버퍼를 쓰지 않는다.
 - dodge는 클라이언트에서 compact를 붙이지 않고 라우터 사전 묶음 조회 대상에도 없다.
 - 실패 복구는 4초 제한을 도입했지만 fence와 GET이 차례로 추가된다. 총 복구가 4초 안에 끝난다는 뜻이 아니다. [이미 기록된 새로고침/펜스 경합](https://github.com/name400/pokemon-journey/blob/970bcf63f81d94513b87518ed0cd449cca857c6a/docs/ADVENTURE_FENCE_RELOAD_RACE_20261112.md)을 보존한다.
 
-해결: 도착 후 상호작용 요청을 한 번 보류해 서버 위치 확정 후 대상을 재검증하고 실행하는 방식, 도입부의 별도 예측, dodge의 경량 경로를 각각 설계한다. 펜스 제거·자동 이동 재시도로 데이터 안전을 희생하지 않는다.
+남은 작업: 도입부의 별도 예측과 dodge의 경량 경로를 검토한다. 펜스 제거·자동 이동 재시도로 데이터 안전을 희생하지 않는다.
 
 ## 3. 기존 측정 결과와 한계
 
