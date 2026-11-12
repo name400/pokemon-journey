@@ -4606,3 +4606,17 @@ test('Zones 2 and 3 roaming encounters return across time cycles without changin
   }
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('water field encounters preserve Lure Ball habitat across battle reload',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'water-wild-ball-qa',displayName:'물가 포획'};
+ try{
+  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),{rareBallContext,rareBallModifier}=await import('../lib/cloud-adventure/adventure-rare-balls.mjs');
+  const cases=[{zone:6,id:'magikarp',species:129,x:12,y:7,more:{zaZone6Layer:'canal'}},{zone:10,id:'carvanha',species:318,x:11,y:7},{zone:11,id:'inkay',species:686,x:4,y:6},{zone:12,id:'bergmite',species:712,x:7,y:11}];
+  for(const {zone,id,species,x,y,more} of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:`lumiose-zone${zone}`,interior:null,x,y,facing:'down',zaRoyaleRank:'A',adventureBalls:{...rawWorld().adventureBalls,lureball:1},combat:null,encounter:null,...more},state.revision+1));await get();await call(`zone${zone}Wild-${id}`);await get();
+   const foe=rawWorld().combat.teams[1][0];assert.equal(foe.speciesId,species);assert.equal(foe.adventureInWater,true,`zone ${zone} habitat`);assert.equal(rareBallModifier('lureball',foe,rareBallContext(foe,rawWorld().combat.teams[0][0])),3.5);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+   if(zone===12){const {adventureCaptureAttempt}=await import('../lib/cloud-adventure/adventure-balls.mjs');const roll=Array.from({length:99},(_,i)=>(i+1)/100).find(v=>adventureCaptureAttempt(foe,'lureball',{rareMultiplier:3.5,royaleRank:'A'},()=>v).caught&&!adventureCaptureAttempt(foe,'lureball',{rareMultiplier:1,royaleRank:'A'},()=>v).caught);assert.ok(roll,'there is a roll that distinguishes the water bonus');globalThis.__adventureRandom=()=>roll;await call('ball',{ball:'lureball'});assert.equal(state.world.zaZone12Spent.bergmite,true);assert.equal(state.world.adventureBalls.lureball,0);globalThis.__adventureRandom=()=>.999;}else await call('flee');
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:5,y:6,facing:'up',zaZone10Upper:false,combat:null,encounter:null},state.revision+1));await get();await call('zone10Wild-slowpoke');await get();const land=rawWorld().combat.teams[1][0];assert.notEqual(land.adventureInWater,true);assert.equal(rareBallModifier('lureball',land,rareBallContext(land,rawWorld().combat.teams[0][0])),1);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
