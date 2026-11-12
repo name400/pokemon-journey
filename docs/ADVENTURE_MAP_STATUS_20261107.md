@@ -532,3 +532,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 미르역 앞 베르 센터와 미션 3
 
 [미르역 자료](https://bulbapedia.bulbagarden.net/wiki/Gare_de_Lumiose)와 [베르 구역 자료](https://bulbapedia.bulbagarden.net/wiki/Vert_District)를 참고해 기존 베르 거리의 역과 맞은편 센터를 확인했다. 기존 호텔 북동쪽 출구에서 베르 거리로 접근하며, 미션 3에서 동쪽 센터를 이용해도 도감 안내가 진행된다. 기존 서쪽 임시 센터와 상점, 등록된 빠른 이동 지점, 저장 좌표와 출입 경로는 유지한다. 역·센터의 모양과 정밀 좌표는 초안이고 원작의 골목과 옥상 우회는 여전히 미구현이다.
+
+### 미션 3 미르역 우회 초안
+
+[미션 안내](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/A_New_Life_in_Lumiose_City)와 [공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough%3APok%C3%A9mon_Legends%3A_Z-A/Part_3)은 바위가 막은 길 옆 골목에서 사다리로 올라 옥상을 지나 내려가 베르 센터에 도착한다고 설명한다. 기존 베르 거리 서쪽에 골목과 별도 옥상 화면을 연결하고 사다리·일방향 낙하를 추가했다. 기존 도로는 유지해 예전 저장과 이동을 보호했다. 원작의 바위 차단과 동료 동행은 아직 구현되지 않았으므로 우회가 필수는 아니다. 골목과 옥상 윤곽, 사다리·낙하 좌표와 거리 접점은 자료로 정밀 확인되지 않은 2D 초안이다.
