@@ -42,3 +42,12 @@ test('Hibernal Center registers and permits map travel only at the center',async
  const s={area:3,district:'lumiose-mission33-alley',interior:null,x:5,y:3,facing:'down',zaMission31Stage:3,zaRoyaleRank:'B',teamIds:['kept']};assert.equal(fieldMap(s)[3][5],'H');assert.equal(centerAt(s,{tile:'H',x:5,y:3}).id,'hibernal');assert.equal(recordCenter(s,{tile:'H',x:5,y:3}),true);assert.ok(registeredCenters(s).some(c=>c.id==='hibernal'));assert.ok(taxiDestinations(s).some(c=>c.id==='hibernal'));assert.equal(canMapTravel(s),true);assert.equal(canMapTravel({...s,x:5,y:11}),false);assert.equal(canMapTravel({...s,combat:{}}),false);
  const restored=restoreAdventurePosition(storeAdventurePosition(s,99),99);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaMission31Stage,restored.teamIds],['lumiose-mission33-alley',5,3,3,['kept']]);
 });
+
+test('Bleu sewer map point requires opening and entry and only allows departure at the entrance',async()=>{
+ const {mapTravelDestinations,canMapTravel,taxiDestinations}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const base={area:3,district:'lumiose-sewer',x:11,y:15,zaRoyaleRank:'D',zaMission19Complete:true,zaBleuSewerOpened:true,zaBleuSewerVisited:true,zaSewerReturn:'bleu3'};
+ assert.ok(mapTravelDestinations(base).some(p=>p.id==='bleu-sewer'));assert.equal(canMapTravel(base),true);
+ for(const patch of [{zaBleuSewerVisited:false},{zaBleuSewerOpened:false},{zaMission19Complete:false}])assert.ok(!mapTravelDestinations({...base,...patch}).some(p=>p.id==='bleu-sewer'));
+ for(const patch of [{x:10},{zaSewerReturn:null},{zaSewerIceBranch:true},{zaMission19Inner:true},{combat:{}},{interior:'museum1'}])assert.equal(canMapTravel({...base,...patch}),false);
+ assert.ok(!taxiDestinations(base).some(p=>p.id==='bleu-sewer'));
+});
