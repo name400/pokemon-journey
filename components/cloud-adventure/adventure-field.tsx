@@ -102,16 +102,17 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='X'){ctx.fillStyle='#637e86';ctx.fillRect(px+6,py+5,tile-12,tile-10);}return;
     }
     if(w.district==='lumiose-lysandre-lab'&&!w.interior){
-     const wing=w.zaLysandreFloor===2?'b2':w.zaLysandreFloor===3?'b3':w.zaLysandreWing||'hub',accent=({a:'#c47b3e',b:'#6a9d70',e:'#9174a6','e-vault':'#9174a6',hub:'#b5a28d',b2:'#718187',b3:'#655d77'} as Record<string,string>)[wing]||'#b5a28d';
-     const floorTones=({a:['#bc9b7e','#cbb099'],b:['#8eaa94','#a5bca8'],e:['#a093b3','#b4a9c3'],'e-vault':['#a093b3','#b4a9c3'],hub:['#a99f91','#c1b8a9'],b2:['#849597','#a0afb0'],b3:['#716a7e','#8b8297']} as Record<string,string[]>)[wing]||['#9ba9a4','#acb8b1'];ctx.fillStyle=c==='#'?'#333f48':c==='|'?'#687379':floorTones[(x+y)%2];ctx.fillRect(px,py,tile,tile);
+     const wing=w.zaLysandreFloor===2?'b2':w.zaLysandreFloor===3?'b3':w.zaLysandreWing||'hub',accent=({a:'#c47b3e',b:'#6a9d70','b-mid':'#6a9d70',e:'#9174a6','e-vault':'#9174a6',hub:'#b5a28d',b2:'#718187',b3:'#655d77'} as Record<string,string>)[wing]||'#b5a28d';
+     const floorTones=({a:['#bc9b7e','#cbb099'],b:['#8eaa94','#a5bca8'],'b-mid':['#8eaa94','#a5bca8'],e:['#a093b3','#b4a9c3'],'e-vault':['#a093b3','#b4a9c3'],hub:['#a99f91','#c1b8a9'],b2:['#849597','#a0afb0'],b3:['#716a7e','#8b8297']} as Record<string,string[]>)[wing]||['#9ba9a4','#acb8b1'];ctx.fillStyle=c==='#'?'#333f48':c==='|'?'#687379':floorTones[(x+y)%2];ctx.fillRect(px,py,tile,tile);
      if(c==='#'){ctx.fillStyle='#52616a';ctx.fillRect(px,py+tile-5,tile,4);ctx.fillRect(px+(y%2?tile/2:0),py,2,tile-5);}
      else if(c==='|'){ctx.fillStyle='#b7c2bd';for(let n=5;n<tile;n+=8)ctx.fillRect(px+n,py+2,3,tile-4);}
      else{ctx.fillStyle=accent;ctx.fillRect(px+2,py+tile-4,tile-4,2);ctx.fillStyle='#d2dad2';ctx.fillRect(px+1,py+1,tile-2,1);}
+     if(wing==='b-mid'&&y===8&&c!=='#'){ctx.fillStyle='#89a99b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#c0d7c2';ctx.fillRect(px,py+2,tile,2);ctx.fillRect(px,py+tile-4,tile,2);}
      if(wing==='hub'&&['n','p','q'].includes(c)){ctx.fillStyle=({n:'#c47b3e',p:'#6a9d70',q:'#9174a6'} as Record<string,string>)[c];ctx.fillRect(px+3,py+2,tile-6,tile-4);ctx.fillStyle='#dce3da';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#435a5c';ctx.fillRect(px+9,py+8,tile-18,tile-16);}
      if(c==='t'&&['a','b','e'].includes(wing)){ctx.fillStyle='#454f55';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle=w.zaLysandrePowers?.includes(wing)?'#a5e3a3':'#e98173';ctx.fillRect(px+9,py+8,tile-18,7);}
      if(['e','e-vault'].includes(wing)&&c==='z'){ctx.fillStyle='#454f55';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle=w.zaLysandreExitPower?'#a5e3a3':'#e98173';ctx.fillRect(px+9,py+8,tile-18,7);}
      if(['e','e-vault'].includes(wing)&&c==='n'){ctx.fillStyle='#546a74';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.strokeStyle=w.zaLysandreExitPower?'#9ae5e2':'#8b9894';ctx.lineWidth=2;ctx.strokeRect(px+8,py+8,tile-16,tile-16);}
-     if(c==='u'){ctx.fillStyle='#546a74';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.strokeStyle=w.zaLysandrePowers?.includes(wing)?'#9ae5e2':'#8b9894';ctx.lineWidth=2;ctx.strokeRect(px+8,py+8,tile-16,tile-16);}
+     if(c==='u'){ctx.fillStyle='#546a74';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.strokeStyle=w.zaLysandrePowers?.includes(wing==='b-mid'?'b':wing)?'#9ae5e2':'#8b9894';ctx.lineWidth=2;ctx.strokeRect(px+8,py+8,tile-16,tile-16);}
      if('abek'.includes(c)){ctx.fillStyle='#65787a';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle='#d9e5ce';ctx.fillRect(px+8,py+7,tile-16,8);ctx.fillStyle='#f3c95b';ctx.fillRect(px+10,py+18,tile-20,3);}
      if(c==='l'){ctx.fillStyle='#59696c';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d6ded3';ctx.fillRect(px+7,py+5,tile-14,tile-10);ctx.fillStyle='#627578';ctx.fillRect(px+tile/2-1,py+5,2,tile-10);}
      if(c==='j'&&['e','e-vault'].includes(wing)){ctx.fillStyle='#5a5e70';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d6ddd5';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#747084';ctx.fillRect(px+tile/2-1,py+7,2,tile-14);}
