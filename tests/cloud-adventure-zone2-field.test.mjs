@@ -33,3 +33,12 @@ test('Patrat and Staryu move within their habitats and contact is detected',asyn
  assert.notDeepEqual([first.x,first.y],[11,8]);assert.notDeepEqual([star.x,star.y],[8,8]);assert.notDeepEqual([first.x,first.y],[second.x,second.y]);
  s.x=first.x;s.y=first.y;assert.equal(zone2FieldContact(s,'night').id,'patrat');s.zaZone2FieldSpent={patrat:true};assert.equal(zone2FieldContact(s,'night'),null);
 });
+
+test('Zone 2 reused terrain preserves individual positions and later terrain changes',async()=>{
+ const {lumioseZone2Map}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const state={district:'lumiose-zone2',x:3,y:10,steps:3,zaZone2FieldPositions:{patrat:{x:11,y:8},patrat2:{x:10,y:7},magikarp:{x:8,y:9,ttl:2},staryu:{x:8,y:8}}};
+ assert.deepEqual(zone2FieldMonsters(state,'night',lumioseZone2Map(state)),zone2FieldMonsters(state,'night'));
+ const next={...state,zaZone2RockCleared:true,zaZone2FieldSpent:{patrat:true},zaZone2FieldPositions:{...state.zaZone2FieldPositions,magikarp:{x:7,y:10}}};
+ assert.deepEqual(zone2FieldMonsters(next,'night',lumioseZone2Map(next)),zone2FieldMonsters(next,'night'));
+ assert.ok(!zone2FieldMonsters(next,'night').some(p=>p.id==='patrat'));
+});
