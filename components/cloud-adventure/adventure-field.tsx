@@ -351,7 +351,12 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(w.district==='lumiose-north-boulevard'&&c==='d'&&x===15&&y===8){ctx.fillStyle='#879772';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#7b3488';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('사건',px+tile/2,py+20);}
      if((c===','||c===';')&&['lumiose-centrico-route','lumiose-rouge-north','lumiose-north-boulevard'].includes(w.district)){ctx.fillStyle='#737c7b';ctx.fillRect(px,py,tile,tile);if(c===';'){ctx.fillStyle='#e5e2d4';for(let i=3;i<tile;i+=8)ctx.fillRect(px+3,py+i,tile-6,4);}else if(y===8&&x%3===0){ctx.fillStyle='#dfddd0';ctx.fillRect(px+5,py+tile/2-1,tile-10,2);}}
      if(c==='%'&&w.district==='lumiose-zone4'){ctx.fillStyle='#90aa80';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#7d8580';ctx.fillRect(px+6,py+10,tile-12,tile-14);ctx.fillRect(px+9,py+6,tile-18,5);ctx.fillStyle='#d3d6ca';ctx.fillRect(px+8,py+12,tile-16,3);ctx.fillRect(px+tile/2-1,py+10,2,8);}
-     if(c==='^'&&w.district==='lumiose-zone4'){ctx.fillStyle=y===12?'#687577':'#a2aaa1';ctx.fillRect(px,py,tile,tile);if(y===12){ctx.fillStyle='#99a6a3';ctx.fillRect(px,py+tile-6,tile,4);ctx.fillStyle='#b7c1b9';ctx.fillRect(px+2,py+tile-9,tile-4,2);}else{ctx.fillStyle='#d1d5c7';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#667674';ctx.fillRect(px+10,py+7,tile-20,13);ctx.fillStyle='#e0ded0';ctx.fillRect(px+tile/2-1,py+8,2,11);ctx.fillRect(px+11,py+12,tile-22,2);}}
+     // Cemetery chapel: use only its existing blocked footprint. Shape is a draft.
+     if(c==='^'&&w.district==='lumiose-zone4'){
+      ctx.fillStyle=y===12?'#596b6d':'#d2d0c4';ctx.fillRect(px,py,tile,tile);
+      if(y===12){ctx.fillStyle='#7b8b89';for(let i=4;i<tile;i+=7)ctx.fillRect(px+2,py+i,tile-4,2);ctx.fillStyle='#a6b1a9';ctx.fillRect(px,py+tile-5,tile,5);}
+      else{ctx.fillStyle='#aaa99d';ctx.fillRect(px,py+tile-4,tile,4);ctx.fillStyle='#647979';ctx.fillRect(px+8,py+6,tile-16,tile-10);ctx.fillStyle='#bdcec4';ctx.fillRect(px+11,py+9,3,tile-16);ctx.fillRect(px+tile/2,py+7,2,tile-12);if(x===15||x===16){ctx.fillStyle='#5a605d';ctx.fillRect(px+8,py+9,tile-16,tile-9);ctx.fillStyle='#d9d7c8';ctx.fillRect(px+tile/2-1,py+11,2,tile-11);}}
+     }
      if(c==='#'){ctx.fillStyle=w.district==='lumiose-zone3'?'#547e60':'#8e9c91';ctx.fillRect(px,py,tile,tile);if(w.district==='lumiose-zone3'){ctx.fillStyle='#78a47a';ctx.fillRect(px+3,py+5,tile-6,4);ctx.fillRect(px+5,py+tile-9,tile-10,3);}}if(w.district==='lumiose-zone2'&&c==='#'&&(x===0||x===22||y===0||y===16)){ctx.fillStyle='#5b805c';ctx.fillRect(px,py,tile,tile);sprite((x+y)%2?'tree':'treeRound',px,py);}if(c==='r'){ctx.fillStyle='#757b78';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.4,tile*.33,-.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c7cbc5';ctx.fillRect(px+8,py+10,9,3);}
      if(w.district==='lumiose-rust'&&c==='#'&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle=y===2?'#292e32':'#464b4b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2?'#858681':'#696c68';ctx.fillRect(px+2,py+tile-5,tile-4,3);}
      if(w.district==='lumiose-rouge-north'&&c==='h'){ctx.fillStyle='#767a76';ctx.fillRect(px+5,py+3,tile-10,tile-6);ctx.fillStyle='#d8d3c5';ctx.fillRect(px+5,py+9,tile-10,3);ctx.fillRect(px+5,py+19,tile-10,3);}
@@ -538,10 +543,10 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',Y:'#f4cf64',D:'#4b3741'};
     adventureAvatarRows(face).forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+ry*2+(ry>10?(rx<6?step:-step):0),2,2);}));
    }
-   // Visual companion accompanies the opening route; server positions stay authoritative.
+   // The server saves the companion’s last step; it never blocks the player.
    if(w.zaMission03Stage===2&&w.zaMission03DetourRequired===true&&!w.interior&&['lumiose','lumiose-vert-street-route','lumiose-station-alley','lumiose-station-roof'].includes(w.district)){
-    const offsets:Record<string,[number,number]>={up:[0,1],down:[0,-1],left:[1,0],right:[-1,0]},[dx,dy]=offsets[w.facing]||[0,1],fx=w.x+dx,fy=w.y+dy;
-    if(['.',','].includes(w.map[fy]?.[fx]))trainer(s.x+dx*.75,s.y+dy*.75,'#a17d72',w.facing,walking);
+    const p=w.zaMission03CompanionPosition;
+    if(p?.district===w.district&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&!(p.x===w.x&&p.y===w.y)&&['.',','].includes(w.map[p.y]?.[p.x]))trainer(p.x,p.y,'#a17d72',p.facing||'down',walking);
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
    if(w.district==='lumiose-zone1'&&!w.interior&&[4,5].includes(w.zaMission03Stage)){const isFletchling=w.zaMission03Stage===4,x=isFletchling?8:14,y=6,px=x*tile,py=y*tile,img=fieldImages[isFletchling?661:659];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#668c80';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(isFletchling?'화살꼬빈':'파르빗',px+tile/2,py+20);}}
