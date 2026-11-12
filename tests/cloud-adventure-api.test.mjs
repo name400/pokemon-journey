@@ -3765,6 +3765,25 @@ test('Zone 20 habitat encounters can be caught and restored through the API',asy
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
+test('Zone 7 missing research species can be caught and complete research after reload',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,clock=globalThis.__adventureTime;
+ try{
+  const {LATER_ZONE_SPECIES,laterZoneResearch}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+  for(const sample of [{species:315,index:4,period:'day'},{species:14,index:5,period:'night'},{species:670,index:6,period:'day'}]){
+   globalThis.__adventureUser={userId:`zone7-research-${sample.species}-qa`,displayName:'구역7 조사'};
+   globalThis.__adventureTime={period:sample.period,hour:sample.period==='night'?22:12};globalThis.__adventureRandom=()=>.999;
+   await get();await call('start',{species:152});
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone7',interior:null,x:15,y:9,facing:'right',zaRoyaleRank:'F',adventureBalls:{masterball:1},adventureDexSpecies:LATER_ZONE_SPECIES[7].filter(id=>id!==sample.species)},state.revision+1));
+   await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===7).points,0);
+   const rolls=[0,(sample.index+.5)/7,.999,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;
+   await call('move',{direction:'right'});assert.equal(rawWorld().encounter?.speciesId,sample.species);
+   await call('ball',{ball:'masterball'});await get();
+   assert.ok(rawWorld().adventureDexSpecies.includes(sample.species));assert.ok(state.box.some(mon=>mon.speciesId===sample.species));
+   assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===7).points,1000);
+  }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=clock;}
+});
+
 test('missing Zone 9, 16 and 17 species can be caught and registered after reload',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,clock=globalThis.__adventureTime;
  try{

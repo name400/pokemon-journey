@@ -2,6 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone7Map,zone7Unlocked,zone7Encounter} from '../lib/cloud-adventure/adventure-zone7.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Zone 7 missing research species can be found by day and night',()=>{
+ const map=zone7Map({}),pos={x:16,y:9};assert.equal(map[pos.y][pos.x],'g');assert.ok(fieldPath(map,{x:17,y:15},pos).length);
+ for(const period of ['day','night'])for(const [index,id] of [[4,315],[5,14],[6,670]])assert.equal(zone7Encounter(period,()=>((index+.5)/7)).speciesId,id);
+ const saved=restoreAdventurePosition(storeAdventurePosition({area:3,district:'lumiose-zone7',interior:null,...pos,teamIds:['kept']},62),62);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone7',16,9,['kept']]);
+});
 test('zone seven gate, plaza and stored location',()=>{
  const base={area:3,district:'lumiose-centrico-route',interior:null,x:5,y:1,facing:'up',zaRoyaleRank:'V'};
  assert.equal(stepField(base,'up').blocked,true);const entered=stepField({...base,zaRoyaleRank:'F'},'up');assert.equal(entered.district,'lumiose-zone7');
