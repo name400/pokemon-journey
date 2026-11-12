@@ -42,7 +42,7 @@ test('isolated multi turn targets the selected guard and keeps the partner roste
  const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
  const p={...makeMon(150,100),boxId:'owned',moves:['사이코키네시스'],pp:{}},backup={...makeMon(25,30),boxId:'owned-backup'},t=mission10GuardTeams('grass'),start=createMission10DoubleSnapshot([p,backup],t.ally,t.foes);
  assert.throws(()=>playMission10MultiTurn(start,{type:'move',move:'psychic',target:3}));assert.throws(()=>playMission10MultiTurn(start,{type:'switch',slot:3}));
- const next=playMission10MultiTurn(start,{type:'move',move:'psychic',target:2}),b=Battle.fromJSON(JSON.parse(JSON.stringify(next.snapshot)));assert.ok(b.turn>1||b.ended);assert.equal(b.p4.pokemon[0].hp,0);assert.deepEqual(b.p1.pokemon.map(x=>x.set.trainerToken),['owned','owned-backup']);assert.deepEqual(b.p3.pokemon.map(x=>x.set.trainerToken),t.ally.map(x=>x.boxId));
+ const next=playMission10MultiTurn(start,{type:'move',move:'psychic',target:2}),b=Battle.fromJSON(JSON.parse(JSON.stringify(next.snapshot)));assert.equal(next.teams[0][0].moveUsage.psychic,1);assert.ok(b.turn>1||b.ended);assert.equal(b.p4.pokemon[0].hp,0);assert.deepEqual(b.p1.pokemon.map(x=>x.set.trainerToken),['owned','owned-backup']);assert.deepEqual(b.p3.pokemon.map(x=>x.set.trainerToken),t.ally.map(x=>x.boxId));
 });
 
 
@@ -64,5 +64,30 @@ test('isolated multi battle requires a player-owned replacement after fainting',
 test('multi battle view exposes both guard targets and only player-controlled switches',async()=>{
  const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,mission10MultiView}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
  const player=[{...makeMon(150,100),boxId:'lead',moves:['사이코키네시스'],pp:{}},{...makeMon(25,30),boxId:'reserve'}],t=mission10GuardTeams('water'),view=mission10MultiView(createMission10DoubleSnapshot(player,t.ally,t.foes));
- assert.deepEqual(view.activeBySide,[[0,2],[0,1]]);assert.equal(view.requests[0].actors.length,1);assert.deepEqual(view.requests[0].actors[0].switches.map(s=>s.slot),[2]);assert.deepEqual(view.requests[0].actors[0].moves[0].targets.map(t=>t.target),[1,2]);
+ assert.deepEqual(view.activeBySide,[[0,2],[0,1]]);assert.equal(view.requests[0].actors.length,1);assert.deepEqual(view.requests[0].actors[0].switches.map(s=>s.slot),[2]);assert.deepEqual(view.requests[0].actors[0].moves[0].targets.map(t=>t.target),[1,-2,2]);
+});
+
+test('multi battle supports Mega Evolution and rejects unavailable special forms',async()=>{
+ const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,mission10MultiView,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player={...makeMon(359,50),boxId:'absol',item:'absolite',moves:['깜짝베기'],pp:{}},t=mission10GuardTeams('fire'),fight=createMission10DoubleSnapshot([player],t.ally,t.foes),view=mission10MultiView(fight);
+ assert.ok(view.requests[0].specials.some(s=>s.key==='mega'));assert.throws(()=>playMission10MultiTurn(fight,{type:'move',move:'nightslash',target:1,special:'dynamax'}));
+ const next=playMission10MultiTurn(fight,{type:'move',move:'nightslash',target:1,special:'mega'});assert.equal(next.teams[0][0].battleAppearance,'absolmega');
+});
+
+test('companion can finish after the player has no usable Pokémon without leaving a wait-only battle',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ for(const choice of ['grass','fire','water'])for(let n=0;n<4;n++){
+  const player={...makeMon(25,1),boxId:'weak-player',hp:1,moves:['튀어오르기'],pp:{}},t=mission10GuardTeams(choice);const next=playMission10MultiTurn(createMission10DoubleSnapshot([player],t.ally,t.foes),{type:'move',move:'splash'}),b=Battle.fromJSON(next.snapshot);assert.equal(b.ended,true,'companion-only battle must resolve rather than wait for the defeated player');
+ }
+});
+
+test('multi battle reports defeat when both player and partner teams are exhausted',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player={...makeMon(25,1),boxId:'weak',hp:1,moves:['튀어오르기'],pp:{}},t=mission10GuardTeams('grass');for(const p of t.ally)p.hp=1;t.foes=t.foes.map((p,i)=>({...makeMon(150,100),boxId:p.boxId,moves:['파동탄'],pp:{}}));const combat=playMission10MultiTurn(createMission10DoubleSnapshot([player],t.ally,t.foes),{type:'move',move:'splash'}),b=Battle.fromJSON(combat.snapshot);assert.equal(b.ended,true);assert.equal(combat.winner,1);assert.equal(combat.teams[0][0].hp,0);
+});
+
+test('companion automatically replaces a fainted partner using its own roster',async()=>{
+ const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player={...makeMon(150,100),boxId:'player',moves:['사이코키네시스'],pp:{}},t=mission10GuardTeams('grass'),fight=createMission10DoubleSnapshot([player],t.ally,t.foes),next=playMission10MultiTurn(fight,{type:'move',move:'psychic',target:-2}),b=Battle.fromJSON(next.snapshot);
+ assert.equal(b.p3.active[0].set.trainerToken,'mission10-ally-1');assert.equal(next.teams[2].find(m=>m.boxId==='mission10-ally-0').hp,0);assert.deepEqual(next.teams[0].map(m=>m.boxId),['player']);
 });
