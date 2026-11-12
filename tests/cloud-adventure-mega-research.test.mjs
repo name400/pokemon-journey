@@ -9,3 +9,9 @@ test('mega research deduplicates verified stones and preserves purchased history
 test('new exchange stock is gated by rank and does not remove legacy offers',()=>{
  const find=id=>SHARD_MEGA_STONES.find(x=>x.id===id),s={zaShardExchangeUnlocked:true,zaRoyaleRank:'F'};assert.equal(shardItemUnlocked(s,find('pidgeotite')),true);assert.equal(shardItemUnlocked(s,find('excadrite')),false);s.zaRoyaleRank='E';assert.equal(shardItemUnlocked(s,find('excadrite')),true);assert.equal(shardItemUnlocked(s,find('metagrossite')),false);s.zaRoyaleRank='A';assert.equal(shardItemUnlocked(s,find('metagrossite')),true);assert.equal(shardItemUnlocked({...s,zaShardExchangeUnlocked:false},find('metagrossite')),false);
 });
+
+test('shard stone prices and rank B stock follow the exchange table',()=>{
+ const find=id=>SHARD_MEGA_STONES.find(x=>x.id===id),s={zaShardExchangeUnlocked:true,zaRoyaleRank:'C'};
+ assert.equal(find('falinksite').cost,240);assert.equal(shardItemUnlocked(s,find('falinksite')),true);
+ for(const id of ['salamencite','metagrossite']){assert.equal(find(id).cost,360);assert.equal(shardItemUnlocked(s,find(id)),false);assert.equal(shardItemUnlocked({...s,zaRoyaleRank:'B'},find(id)),true);assert.equal(shardItemUnlocked({...s,zaRoyaleRank:'A'},find(id)),true);}
+});

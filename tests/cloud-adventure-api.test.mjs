@@ -4142,3 +4142,14 @@ test('zone 8 berry stalls sell their own stock and berries adjust a party member
   sql.prepare('UPDATE wallets SET coins=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('zone8BuyBerry-occaberry',{},409);assert.equal(state.inventory.occaberry,1);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('rank B shard exchange charges source prices without altering prior ownership',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'shard-rank-b-qa',displayName:'교환소 랭크 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,original=structuredClone(rawMon(id));
+  const place=async(rank)=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaMission10Stage:8,zaShardExchangeUnlocked:true,zaRoyaleRank:rank,zaMegaShards:1000},state.revision+1));await get();};
+  await place('C');await call('exchangeMegaShard',{item:'salamencite'},409);await call('exchangeMegaShard',{item:'metagrossite'},409);assert.equal(rawWorld().zaMegaShards,1000);
+  await place('B');const rev=state.revision;await call('exchangeMegaShard',{item:'falinksite'});assert.equal(rawWorld().zaMegaShards,760);await call('exchangeMegaShard',{item:'salamencite'});await call('exchangeMegaShard',{item:'metagrossite'});assert.equal(rawWorld().zaMegaShards,40);
+  const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'exchangeMegaShard',item:'falinksite',revision:rev})}));assert.equal(replay.status,409);await get();for(const item of ['falinksite','salamencite','metagrossite'])assert.equal(state.inventory[item],1);assert.equal(rawWorld().zaMegaShards,40);assert.deepEqual(rawMon(id),original);
+ }finally{globalThis.__adventureUser=previous;}
+});
