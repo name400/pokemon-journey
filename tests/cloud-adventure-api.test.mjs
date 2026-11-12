@@ -2555,6 +2555,17 @@ test('Hotel Richissime north boulevard entrance preserves the lobby and returns 
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('router-prefetched world uses revision guard when another update wins',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'movement-prefetch-qa',displayName:'저장 경합 검증'};
+ try{
+  await get();await call('start',{species:1});const before=sql.prepare('SELECT state,revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId),id=state.world.activeId,mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet);
+  seedWorld({log:['newer update retained'],x:4});const newer=rawWorld();
+  const req=new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'move',revision:before.revision,direction:'right'})});const res=await route.POST(req,before);assert.equal(res.status,409);
+  assert.deepEqual(rawWorld(),newer);assert.deepEqual(rawMon(id),mon);await get();assert.deepEqual(state.wallet,wallet);
+  const fresh=sql.prepare('SELECT state,revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId);const move=new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'move',revision:fresh.revision,direction:'right'})});const ok=await route.POST(move,fresh);assert.equal(ok.status,200);const result=await ok.json();assert.equal(result.revision,fresh.revision+1);await get();assert.equal(state.revision,result.revision);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('legacy cloud field migrates to Lumiose while retaining saved assets and blocks return',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-permanent-migration-qa',displayName:'이전 검증'};
  try{
