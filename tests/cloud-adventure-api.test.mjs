@@ -2818,3 +2818,15 @@ test('Mission 8 finds Lida in Vert Sector 5 and preserves the older garden route
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-garden',interior:null,x:11,y:6,facing:'up',zaLidaStage:1,zaLidaRequired:true},state.revision+1));await get();await walkTo('Q');assert.ok(state.world.interaction.actions.some(a=>a.action==='battleLida'));await call('battleLida');assert.equal(state.world.trainer.id,'royale-story-lida');
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Rouge Sector 2 routes survive API reloads and preserve the party',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'rouge-sector2-routes',displayName:'루주 2번지'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector6',interior:null,x:11,y:15,zaAcademyCourtyard:true,zaRoyaleRank:'X'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-rouge-sector2');assert.match(state.world.areaInfo.name,/초안/);assert.deepEqual(state.world.teamIds,team);
+  await walkTo({x:1,y:8});await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-rouge-north');await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-rouge-sector2');
+  await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-hibernal-approach');await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-rouge-sector2');
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-galerie-lune');await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-rouge-sector2');
+  await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.equal(state.world.zaAcademyCourtyard,true);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
