@@ -3430,8 +3430,8 @@ test('direct wild catch keeps the generated color after saving',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'field-shiny-qa',displayName:'직접 포획 검증'};
  try{
   await get();await call('start',{species:152});globalThis.__adventureTime={period:'day',hour:12};
-  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:11,y:7,facing:'down',zaRoyaleRank:'F'},state.revision+1));sql.prepare('UPDATE wallets SET balls=10 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();
-  globalThis.__adventureRandom=()=>0;await call('throwZone3Field',{targetId:'flabebe'});await get();assert.ok(state.box.some(p=>p.speciesId===669&&p.shiny));assert.equal(rawWorld().zaZone3FieldSpent.flabebe,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:11,y:7,facing:'down',zaRoyaleRank:'F'},state.revision+1));sql.prepare('UPDATE wallets SET balls=10 WHERE user_id=?').run(globalThis.__adventureUser.userId);globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildShinyRolls['field3:flabebe:669'],true);
+  globalThis.__adventureRandom=()=>.01;await call('throwZone3Field',{targetId:'flabebe'});await get();assert.ok(state.box.some(p=>p.speciesId===669&&p.shiny));assert.equal(rawWorld().zaZone3FieldSpent.flabebe,true);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
 });
 
@@ -3484,4 +3484,30 @@ test('legacy field first read records colors across represented wild zones',asyn
   await get();await call('start',{species:152});globalThis.__adventureRandom=()=>0;
   for(const n of [5,6,8,9,10,11,12,13,14,15,16,17,18,19,20]){const next={...rawWorld(),area:3,district:`lumiose-zone${n}`,interior:null,x:11,y:8,facing:'down',zaRoyaleRank:'A'},spot=findTile(fieldMap(next),'.')||findTile(fieldMap(next),'g');assert.ok(spot,`zone ${n} land`);seedWorld(storeAdventurePosition({...next,...spot},state.revision+1));await get();const entries=Object.entries(rawWorld().zaWildShinyRolls||{}).filter(([key])=>key.startsWith(`zone${n}:`));assert.ok(entries.length,`zone ${n} has visible rolls: ${JSON.stringify({district:state.world.district,raw:rawWorld().district,combat:!!rawWorld().combat,window:!!rawWorld().adventureCatchWindow})}`);assert.ok(entries.every(([,value])=>value===true));const revision=state.revision;await get();assert.equal(state.revision,revision,`zone ${n} re-read preserves revision`);}
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
+
+test('roaming field colors remain fixed through reload and direct capture',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'roaming-color-qa',displayName:'필드 이로치 검사'};
+ try{
+  await get();await call('start',{species:152});globalThis.__adventureTime={period:'day',hour:12};sql.prepare('UPDATE wallets SET balls=30 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const scenarios=[{district:'lumiose-zone2',x:10,y:8,action:'throwZone2Field',id:'patrat',species:504,key:'field2:patrat:504'}, {district:'lumiose-crystal-sewer',x:17,y:5,action:'throwMagentaSewerField',id:'inkay',species:686,key:'sewer:inkay:686'}];
+  for(const p of scenarios){seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:p.district,interior:null,x:p.x,y:p.y,facing:'right',zaRoyaleRank:'A',zaMission20Stage:9},state.revision+1));globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildShinyRolls[p.key],true);const revision=state.revision;globalThis.__adventureRandom=()=>.01;await get();assert.equal(state.revision,revision);assert.equal(rawWorld().zaWildShinyRolls[p.key],true);await call(p.action,{targetId:p.id});await get();assert.equal(rawWorld().zaWildShinyRolls[p.key],undefined);assert.ok(state.box.some(m=>m.speciesId===p.species&&m.shiny),p.id);}
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
+});
+
+test('roaming contact battle uses the previously displayed spawn color',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'roaming-contact-shiny-qa',displayName:'접촉 이로치 검사'};
+ try{
+  await get();await call('start',{species:152});globalThis.__adventureTime={period:'day',hour:12};seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:10,y:8,facing:'right',zaRoyaleRank:'F'},state.revision+1));globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildShinyRolls['field2:patrat:504'],true);globalThis.__adventureRandom=()=>.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,504);assert.equal(rawWorld().encounter.shiny,true);assert.equal(rawWorld().zaWildShinyRolls['field2:patrat:504'],undefined);await get();assert.equal(rawWorld().encounter.shiny,true);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
+});
+
+test('roaming field initialization retries without overwriting concurrent progress',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'roaming-shiny-race-qa',displayName:'이동 개체 경합'};
+ try{
+  await get();await call('start',{species:152});globalThis.__adventureTime={period:'day',hour:12};seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:11,y:7,facing:'down',zaRoyaleRank:'A'},state.revision+1));
+  const db=globalThis.__adventureEnv.DB,original=db.prepare;let injected=false;db.prepare=(query,...args)=>{const prepared=original(query,...args);if(injected||!query.startsWith('UPDATE worlds SET state=?,revision=revision+1,updated_at=? WHERE user_id=? AND revision=?'))return prepared;const bind=prepared.bind;prepared.bind=(...values)=>{const statement=bind(...values),run=statement.run;statement.run=async()=>{if(!injected){injected=true;const row=sql.prepare('SELECT state,revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId),s=JSON.parse(row.state);s.districtPosition={...s.districtPosition,x:10,revision:row.revision+1};s.concurrentFlag='preserved';sql.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').run(JSON.stringify(s),globalThis.__adventureUser.userId);}return run();};return statement;};return prepared;};
+  try{globalThis.__adventureRandom=()=>0;await get();}finally{db.prepare=original;}
+  assert.equal(injected,true);assert.equal(rawWorld().concurrentFlag,'preserved');assert.equal(state.world.x,10);assert.equal(rawWorld().zaWildShinyRolls['field3:flabebe:669'],true);const rev=state.revision;await get();assert.equal(state.revision,rev);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
 });
