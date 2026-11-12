@@ -102,8 +102,8 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='X'){ctx.fillStyle='#637e86';ctx.fillRect(px+6,py+5,tile-12,tile-10);}return;
     }
     if(w.district==='lumiose-lysandre-lab'&&!w.interior){
-     const wing=w.zaLysandreFloor===2?'b2':w.zaLysandreFloor===3?'b3':w.zaLysandreWing||'hub',accent=({a:'#c47b3e',b:'#6a9d70','b-mid':'#6a9d70',e:'#9174a6','e-vault':'#9174a6',hub:'#b5a28d',b2:'#718187',b3:'#655d77'} as Record<string,string>)[wing]||'#b5a28d';
-     const floorTones=({a:['#bc9b7e','#cbb099'],b:['#8eaa94','#a5bca8'],'b-mid':['#8eaa94','#a5bca8'],e:['#a093b3','#b4a9c3'],'e-vault':['#a093b3','#b4a9c3'],hub:['#a99f91','#c1b8a9'],b2:['#849597','#a0afb0'],b3:['#716a7e','#8b8297']} as Record<string,string[]>)[wing]||['#9ba9a4','#acb8b1'];ctx.fillStyle=c==='#'?'#333f48':c==='|'?'#687379':floorTones[(x+y)%2];ctx.fillRect(px,py,tile,tile);
+     const wing=w.zaLysandreFloor===2?'b2':w.zaLysandreFloor===3?'b3':w.zaLysandreWing||'hub',accent=({a:'#c47b3e',b:'#6a9d70','b-mid':'#6a9d70',e:'#9174a6','e-vault':'#9174a6','e-boss':'#795d91',hub:'#b5a28d',b2:'#718187',b3:'#655d77'} as Record<string,string>)[wing]||'#b5a28d';
+     const floorTones=({a:['#bc9b7e','#cbb099'],b:['#8eaa94','#a5bca8'],'b-mid':['#8eaa94','#a5bca8'],e:['#a093b3','#b4a9c3'],'e-vault':['#a093b3','#b4a9c3'],'e-boss':['#8c7b9e','#a99ab8'],hub:['#a99f91','#c1b8a9'],b2:['#849597','#a0afb0'],b3:['#716a7e','#8b8297']} as Record<string,string[]>)[wing]||['#9ba9a4','#acb8b1'];ctx.fillStyle=c==='#'?'#333f48':c==='|'?'#687379':floorTones[(x+y)%2];ctx.fillRect(px,py,tile,tile);
      if(c==='#'){ctx.fillStyle='#52616a';ctx.fillRect(px,py+tile-5,tile,4);ctx.fillRect(px+(y%2?tile/2:0),py,2,tile-5);}
      else if(c==='|'){ctx.fillStyle='#b7c2bd';for(let n=5;n<tile;n+=8)ctx.fillRect(px+n,py+2,3,tile-4);}
      else{ctx.fillStyle=accent;ctx.fillRect(px+2,py+tile-4,tile-4,2);ctx.fillStyle='#d2dad2';ctx.fillRect(px+1,py+1,tile-2,1);}
@@ -115,7 +115,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='u'){ctx.fillStyle='#546a74';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.strokeStyle=w.zaLysandrePowers?.includes(wing==='b-mid'?'b':wing)?'#9ae5e2':'#8b9894';ctx.lineWidth=2;ctx.strokeRect(px+8,py+8,tile-16,tile-16);}
      if('abek'.includes(c)){ctx.fillStyle='#65787a';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle='#d9e5ce';ctx.fillRect(px+8,py+7,tile-16,8);ctx.fillStyle='#f3c95b';ctx.fillRect(px+10,py+18,tile-20,3);}
      if(c==='l'){ctx.fillStyle='#59696c';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d6ded3';ctx.fillRect(px+7,py+5,tile-14,tile-10);ctx.fillStyle='#627578';ctx.fillRect(px+tile/2-1,py+5,2,tile-10);}
-     if(c==='j'&&['e','e-vault'].includes(wing)){ctx.fillStyle='#5a5e70';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d6ddd5';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#747084';ctx.fillRect(px+tile/2-1,py+7,2,tile-14);}
+     if((c==='j'&&['e','e-boss','e-vault'].includes(wing))||(c==='f'&&wing==='e'&&w.zaLysandreBossRoomV5)){ctx.fillStyle='#5a5e70';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d6ddd5';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#747084';ctx.fillRect(px+tile/2-1,py+7,2,tile-14);}
      if(c==='h'||c==='X'){ctx.fillStyle='#637f81';ctx.fillRect(px+6,py+5,tile-12,tile-10);}
      if(c==='o'){ctx.fillStyle='#e4d7b5';ctx.fillRect(px+10,py+10,12,12);ctx.fillStyle='#d4665b';ctx.fillRect(px+10,py+10,12,5);}
      return;
@@ -1005,7 +1005,8 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    if(w.district==='lumiose-zone14'&&!w.interior)for(const m of ZONE14_VISIBLE.filter(p=>!!zone14Visible(w,p.tile))){const img=(w.zaWildShinyRolls?.[`zone14:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]),px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#786c5b';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
    if(w.district==='lumiose-lysandre-lab'&&!w.interior){
     const visible=LYSANDRE_WILD.filter(p=>lysandreWild(w,{tile:p.tile,x:p.x,y:p.y}));
-    if(w.zaLysandreFloor!==2&&w.zaLysandreFloor!==3&&w.zaMission35Stage===4&&!w.zaLysandreAegislashWon&&(!w.zaLysandreMazeV2||w.zaLysandreWing==='e'))visible.push({id:'guardian',tile:'g',x:w.zaLysandreMazeV2?17:19,y:w.zaLysandreMazeV2?9:4,species:681,level:50,name:'킬가르도',alpha:true});
+    if(w.zaLysandreFloor!==2&&w.zaLysandreFloor!==3&&w.zaMission35Stage===4&&!w.zaLysandreAegislashWon&&(!w.zaLysandreMazeV2||(w.zaLysandreWing==='e'&&!w.zaLysandreBossRoomV5)||w.zaLysandreWing==='e-boss'))visible.push({id:'guardian',tile:'g',x:w.zaLysandreWing==='e-boss'?11:w.zaLysandreMazeV2?17:19,y:w.zaLysandreWing==='e-boss'?6:w.zaLysandreMazeV2?9:4,species:681,level:50,name:'킬가르도',alpha:true});
+    if(w.zaLysandreWing==='e-boss'&&w.zaMission35Stage===4&&!w.zaLysandreAegislashWon)for(const x of [9,13])visible.push({id:`honedge-${x}`,tile:'',x,y:6,species:679,level:34,name:'단칼빙'});
     for(const m of visible){const px=m.x*tile,py=m.y*tile,img=fieldImages[m.species];if(m.alpha){ctx.fillStyle='#aa4b4c';ctx.fillRect(px+3,py+3,tile-6,tile-6);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle=m.alpha?'#d18b7a':'#a2bac1';ctx.fillRect(px+8,py+7,tile-16,tile-14);}}
    }
    if(w.district==='lumiose-zone13'&&!w.interior)for(const m of ZONE13_VISIBLE.filter(p=>!!zone13Visible(w,p.tile))){const img=(w.zaWildShinyRolls?.[`zone13:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]),px=m.x*tile,py=m.y*tile;if(m.alpha){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#658b5e';ctx.fillRect(px+6,py+6,tile-12,tile-12);}}
