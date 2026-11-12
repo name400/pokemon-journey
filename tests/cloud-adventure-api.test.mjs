@@ -185,6 +185,16 @@ test('Middle rogue mega encounters keep separate retry checkpoints and rewards',
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 38 wish choices survive reload and only the battle wish advances',async()=>{
+ const previousUser=globalThis.__adventureUser;
+ try{for(const [index,order] of [['a',['mission38WishHarmony','mission38WishMore']],['b',['mission38WishMore','mission38WishHarmony']]]){
+  globalThis.__adventureUser={userId:`mission38-wish-${index}`,displayName:'미래의 소원'};await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins,mon=structuredClone(rawMon(id));
+  await call(order[0],{},409);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:15,y:6,facing:'up',zaMission37Complete:true,zaMission38Started:true,zaMission38Stage:1},state.revision+1));await get();assert.equal(state.world.interaction.actions.filter(a=>a.action.startsWith('mission38Wish')).length,3);
+  for(const action of order){await call(action);assert.equal(state.world.zaMission38Stage,1);assert.notEqual(state.world.zaMission39Started,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);assert.equal(state.wallet.coins,coins);await get();assert.ok(!state.world.interaction.actions.some(a=>a.action===action));await call(action,{},409);}
+  assert.deepEqual(state.world.interaction.actions.filter(a=>a.action.startsWith('mission38Wish')).map(a=>a.action),['mission38Wish']);await call('mission38Wish');assert.equal(state.world.zaMission38Complete,true);assert.equal(state.world.zaMission39Started,true);assert.equal(state.world.zaMission38Stage,2);assert.deepEqual(state.world.teamIds,team);await get();await call('mission38Wish',{},409);await call(order[0],{},409);
+ }}finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 37 route opens in sequence and preserves the legacy layout',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-route-qa',displayName:'방어경로테스트'};
  try{
