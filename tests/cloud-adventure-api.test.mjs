@@ -3023,3 +3023,13 @@ test('side 27 honors pre-existing fossils and sends a gift to storage when party
   const key=JSON.stringify([globalThis.__adventureUser.userId,'sailfossil']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,2)').run(key,globalThis.__adventureUser.userId,'sailfossil');seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-floral',interior:'lumioseLab2',x:7,y:8,facing:'up',zaRoyaleRank:'D',teamIds:team},state.revision+1));await get();await call('side27Start');await get();await call('side27Revive-sail');await get();assert.deepEqual(state.world.teamIds,team);assert.ok(state.box.some(p=>p.boxId===state.world.zaSide27FirstPokemonId&&p.speciesId===698));assert.equal(state.inventory.sailfossil,1);const coins=state.wallet.coins;await call('side27Revive-sail');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.inventory.sailfossil||0,0);assert.equal(state.wallet.coins,coins);assert.equal(state.box.filter(p=>p.speciesId===698).length,2);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('revived fossil rolls once and retains its individual traits after reload',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'fossil-random-qa',displayName:'복원 개체'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,oldMon=rawMon(id),key=JSON.stringify([globalThis.__adventureUser.userId,'jawfossil']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,2)').run(key,globalThis.__adventureUser.userId,'jawfossil');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-floral',interior:'lumioseLab2',x:7,y:8,facing:'up',zaMission10Stage:10,zaSide27Started:true},state.revision+1));await get();
+  const seq=[0,31/32,1/32,15/32,22/32,30/32,24/25,0];let i=0;globalThis.__adventureRandom=()=>seq[i++];await call('side27Revive-jaw');assert.equal(i,8);const giftedId=state.world.zaSide27FirstPokemonId,mon=rawMon(giftedId);assert.deepEqual(mon.ivs,{hp:0,atk:31,def:1,spa:15,spd:22,spe:30});assert.equal(mon.nature,'timid');assert.equal(mon.shiny,true);assert.equal(mon.hp,mon.maxHp);await get();assert.deepEqual(rawMon(giftedId),mon);assert.deepEqual(rawMon(id),oldMon);
+  globalThis.__adventureRandom=()=>.5;await call('side27Revive-jaw');await get();assert.deepEqual(rawMon(giftedId),mon);const other=state.box.find(p=>p.speciesId===696&&p.boxId!==giftedId);assert.ok(other);assert.notDeepEqual(rawMon(other.boxId).ivs,mon.ivs);assert.equal(rawMon(other.boxId).shiny,false);assert.equal(state.inventory.jawfossil||0,0);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
