@@ -1850,6 +1850,18 @@ test('Infinite Royale random prize survives full ball storage and is claimed onc
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('movement initializes a missing wallet atomically without weakening revision guards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'movement-wallet-init-qa',displayName:'지갑 복구 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:11,y:6,steps:20},state.revision+1));await get();
+  const old=sql.prepare('SELECT state,revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId),mon=structuredClone(rawMon(id));sql.prepare('DELETE FROM wallets WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld({log:['newer state'],districtPosition:{...rawWorld().districtPosition,revision:old.revision+1}});const latest=rawWorld();
+  const req=new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'move',revision:old.revision,direction:'right',compact:true})});const rejected=await route.POST(req,old);assert.equal(rejected.status,409);assert.deepEqual(rawWorld(),latest);assert.deepEqual(rawMon(id),mon);
+  let wallet=sql.prepare('SELECT coins,balls FROM wallets WHERE user_id=?').get(globalThis.__adventureUser.userId);assert.deepEqual({...wallet},{coins:300,balls:5});
+  await get();sql.prepare('DELETE FROM wallets WHERE user_id=?').run(globalThis.__adventureUser.userId);const result=await call('move',{direction:'right',compact:true});assert.equal(result.world.x,12);assert.equal(result.wallet.coins,300);assert.equal(result.wallet.balls,5);assert.equal(rawMon(id).walkSteps,(mon.walkSteps||0)+1);await get();assert.equal(state.world.x,12);assert.equal(state.wallet.coins,300);
+  sql.prepare('DELETE FROM wallets WHERE user_id=?').run(globalThis.__adventureUser.userId);await call('face',{direction:'right'});assert.equal(state.wallet.coins,300);sql.prepare('DELETE FROM wallets WHERE user_id=?').run(globalThis.__adventureUser.userId);await call('dodge',{direction:'right'});assert.equal(state.world.x,14);assert.equal(state.wallet.coins,300);await get();assert.equal(state.world.x,14);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('concurrent movement uses a single authoritative revision and keeps inventory intact',async()=>{
  const previousUser=globalThis.__adventureUser,db=globalThis.__adventureEnv.DB,prepareBefore=db.prepare,batchBefore=db.batch;globalThis.__adventureUser={userId:'concurrent-movement-qa',displayName:'동시 이동 검증'};
  try{
