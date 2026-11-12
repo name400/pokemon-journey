@@ -1094,6 +1094,17 @@ test('mission 11 companion fights Slowbro and saves checkpoint and reward',async
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Infinite Royale verified opponents retain their teams across retry and save',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'infinite-verified-teams-qa',displayName:'무한로열상대검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId;
+  for(const entry of [{action:'mission39Griselle',wins:1,item:'pyroarite',ace:668},{action:'mission39NextReward',wins:2,item:'starminite',ace:121},{action:'mission39NextReward',wins:7,item:'scraftinite',ace:560},{action:'mission39NextReward',wins:12,item:'malamarite',ace:687}]){
+   const player={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,player);
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaMission39Started:true,zaInfiniteFirstWon:true,zaInfiniteSecondWon:entry.wins>=2,zaInfiniteRewardWins:entry.wins,zaInfinitePoints:50000},state.revision+1));await get();await call(entry.action);assert.equal(state.battle.teams[1].at(-1).speciesId,entry.ace);assert.equal(state.battle.teams[1].at(-1).item,entry.item);assert.ok(state.battle.teams[1].slice(0,-1).every(mon=>!mon.item));await get();assert.equal(state.battle.teams[1].at(-1).item,entry.item);await call('forfeit');assert.equal(state.world.zaInfinitePoints,50000);
+   seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up'},state.revision+1));await get();await call(entry.action);const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaInfinitePoints,0);if(entry.wins===1)assert.equal(state.world.zaInfiniteSecondWon,true);else assert.equal(state.world.zaInfiniteRewardWins,entry.wins+1);assert.deepEqual(state.world.teamIds,[id]);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('legacy Infinite Royale random rival uses the pre-Zygarde rematch team',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'infinite-rival-legacy-rematch-qa',displayName:'기존무한재대결검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:15,y:13,facing:'up',zaMission39Started:true,zaMission39Complete:true,zaInfiniteFirstWon:true,zaInfiniteSecondWon:true,zaInfiniteRewardWins:20,zaInfinitePoints:50000,zaInfiniteRandomTrainer:'infinite-rival',zaMission10Starter:'water'},state.revision+1));await get();await call('mission39NextReward');assert.deepEqual(state.battle.teams[1].map(mon=>[mon.speciesId,mon.level]),[[678,62],[706,62],[713,62],[500,63],[310,63],[154,64]]);assert.equal(state.battle.teams[1][5].item,'meganiumite');await get();await call('forfeit');assert.equal(state.world.zaInfiniteRewardWins,20);assert.equal(state.world.zaInfinitePoints,50000);assert.deepEqual(state.world.teamIds,[id]);
