@@ -17,3 +17,13 @@ test('prediction waits for the server near sewer field Pokémon, including noctu
  assert.equal(predictCloudStep(s,'up'),null);
  assert.ok(predictCloudStep({...s,zaMagentaSewerSpent:{noibat:true}},'up'));
 });
+
+test('sewer roaming reuses current terrain while respecting changed occupants',()=>{
+ const s={area:3,district:'lumiose-crystal-sewer',interior:null,x:11,y:14,steps:3,zaMission20Stage:9,zaMagentaSewerPositions:{ariados:{x:4,y:5},inkay:{x:18,y:5},skrelp:{x:4,y:11},noibat:{x:18,y:11}}};
+ assert.deepEqual(magentaSewerMonsters(s,'night',fieldMap(s)),magentaSewerMonsters(s,'night'));
+ stepMagentaSewerMonsters(s,'night');const roaming=magentaSewerMonsters(s,'night');
+ assert.equal(new Set(roaming.map(p=>`${p.x},${p.y}`)).size,roaming.length);
+ const next={...s,zaMission20Stage:10,zaMagentaSewerSpent:{ariados:true}};
+ assert.deepEqual(magentaSewerMonsters(next,'night',fieldMap(next)),magentaSewerMonsters(next,'night'));
+ assert.ok(!magentaSewerMonsters(next,'night').some(p=>p.id==='ariados'));
+});
