@@ -4089,3 +4089,19 @@ test('Mission 36 companion double defeat keeps the player party and allows a ret
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x:3,y:5,facing:'up',zaMission36Stage:3,zaMission36DescentPending:true,zaMission36DoubleV1:true,zaMission37Started:true,zaMission37Stage:1,zaProtectLayout:undefined},state.revision+1));await get();await call('mission37Wave');const base=rawWorld().combat,ally=[{...makeMon(121,1),boxId:'mission36-lida',hp:1,moves:['튀어오르기'],pp:{}},{...makeMon(560,1),boxId:'mission36-naveen',hp:1,moves:['튀어오르기'],pp:{}}],foes=[0,1].map(i=>({...makeMon(150,100),boxId:`mission36-test-foe-${i}`,moves:['파동탄'],pp:{}}));const synthetic=createMission10DoubleSnapshot([weak],ally,foes);seedWorld({combat:{...synthetic,adventureBattleBase:base.adventureBattleBase},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'splash'}]}});assert.equal(state.battleResult.winner,1);assert.equal(state.battle,null);assert.equal(state.world.zaMission36DescentPending,true);assert.notEqual(state.world.zaMission36Complete,true);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.deepEqual(state.world.teamIds,[id]);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);await get();await call('mission37Wave');assert.equal(rawWorld().combat.format,'mission10-multi-v1');
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('mega shard candy exchange enforces story stock and preserves inventory atomically',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'shard-candy-qa',displayName:'경험사탕 교환 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:8,y:10,facing:'up',zaRoyaleRank:'F',zaMegaShards:200,zaShardExchangeUnlocked:false},state.revision+1));await get();await walkTo('x');
+  await call('exchangeMegaShardCandy',{item:'za-exp-candy-s'},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),zaShardExchangeUnlocked:true},state.revision+1));await get();
+  await walkTo('x');await call('exchangeMegaShardCandy',{item:'za-exp-candy-m'},409);await call('exchangeMegaShardCandy',{item:'pidgeotite'},409);
+  const revision=state.revision;await call('exchangeMegaShardCandy',{item:'za-exp-candy-s'});assert.equal(rawWorld().zaMegaShards,192);assert.equal(state.inventory['za-exp-candy-s'],1);
+  const replay=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'exchangeMegaShardCandy',item:'za-exp-candy-s',revision})}));assert.equal(replay.status,409);
+  await get();assert.equal(rawWorld().zaMegaShards,192);assert.equal(state.inventory['za-exp-candy-s'],1);assert.equal(rawMon(id).id,152);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),zaMission37Complete:true},state.revision+1));await get();await walkTo('x');await call('exchangeMegaShardCandy',{item:'za-exp-candy-m'});await call('exchangeMegaShardCandy',{item:'za-exp-candy-l'});assert.equal(rawWorld().zaMegaShards,62);assert.equal(state.inventory['za-exp-candy-m'],1);assert.equal(state.inventory['za-exp-candy-l'],1);await call('exchangeMegaShardCandy',{item:'za-exp-candy-l'},409);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-s']);sql.prepare('UPDATE inventory SET quantity=999 WHERE key=?').run(key);await get();await call('exchangeMegaShardCandy',{item:'za-exp-candy-s'},409);await get();assert.equal(rawWorld().zaMegaShards,62);assert.equal(state.inventory['za-exp-candy-s'],999);
+ }finally{globalThis.__adventureUser=previous;}
+});
