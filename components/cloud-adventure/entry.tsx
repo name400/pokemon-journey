@@ -21,10 +21,11 @@ type Screen='party'|'manage'|'bag'|'shop'|'journal'|'travel'|null;
 // A timeout is uncertain: reload authoritative state instead of retrying the action.
 const MOVEMENT_RECOVERY_TIMEOUT_MS=4000;
 type PendingMovement={revision:number|null;activeId:string|null};
+class SettledMovementConflict extends Error {}
 async function api(body?:any,light=false,recovery=false){
  const timeout=recovery||['move','face','dodge'].includes(body?.action)?MOVEMENT_RECOVERY_TIMEOUT_MS:undefined;
  const {response,data}=await adventureJson(light?'/api/world?light=1':'/api/world',body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store'},timeout);
- if(!response.ok)throw Error(data.error||'탐험 요청 실패');return data;
+ if(!response.ok){if(response.status===409&&data.code==='MOVEMENT_PRECHECK_CONFLICT')throw new SettledMovementConflict(data.error||'진행이 변경됐습니다.');throw Error(data.error||'탐험 요청 실패');}return data;
 }
 export function AdventureHP({mon}:{mon:any}){const ratio=Math.max(0,Math.min(1,mon.hp/Math.max(1,mon.maxHp)));return <div className="adv-health"><div><b>HP</b><span>{mon.hp} / {mon.maxHp}</span></div><div className="adv-meter" role="progressbar" aria-label={`${mon.name} HP`} aria-valuenow={mon.hp} aria-valuemin={0} aria-valuemax={mon.maxHp}><i className={ratio<.25?'low':ratio<.5?'half':''} style={{transform:`scaleX(${ratio})`}}/></div></div>;}
 function MoveSummary({name}:{name:string}){const m=(moves as any)[name];if(!m)return null;const category=m.category==='Physical'?'물리':m.category==='Special'?'특수':'변화';return <small>{m.type} · {category} · 위력 {m.power||'—'} · 명중 {typeof m.acc==='number'?`${m.acc}%`:'—'} · 기본 PP {m.pp}</small>;}
@@ -76,7 +77,7 @@ export default function Adventure(){
     if(same&&!result.battle&&!w.adventureCatchWindow&&!w.adventurePendingMoves?.length&&!resultRef.current&&!screenRef.current&&!dialogueRef.current){if(w.interaction)setDialogue(w.interaction);else setHint('NPC나 건물 입구로 다가가 바라본 뒤 대화하세요.');}
     else if(!result.battle&&!w?.adventureCatchWindow)setHint('위치가 확정된 뒤 다시 대화해 주세요.');
    }return result;}
-  catch(e){if(!mounted.current)return null;stop();setPrediction(null);syncRequired.current=true;if(isMovement)pendingMovement.current=marker;if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load(false,true);return null;}
+  catch(e){if(!mounted.current)return null;stop();setPrediction(null);syncRequired.current=true;if(isMovement&&!(e instanceof SettledMovementConflict))pendingMovement.current=marker;if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load(false,true);return null;}
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  },[accept,load,stop]);
  useEffect(()=>{mounted.current=true;pendingMovement.current={revision:null,activeId:null};syncRequired.current=true;void load(false,true);return()=>{mounted.current=false;stop();};},[load,stop]);

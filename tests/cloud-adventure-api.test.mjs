@@ -3404,7 +3404,7 @@ test('movement fence preserves valid revision-bound state and rejects a delayed 
   const req=(action,extra={})=>new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action,revision:rev,...extra})});
   const fenced=await route.POST(req('movementFence'));assert.equal(fenced.status,200);assert.deepEqual(await fenced.json(),{settled:true});
   const after=rawWorld();assert.deepEqual(after,{...world,districtPosition:{...world.districtPosition,revision:rev+1}});assert.deepEqual(rawMon(id),mon);
-  const late=await route.POST(req('move',{direction:'right',compact:true}));assert.equal(late.status,409);assert.deepEqual(rawWorld(),after);
+  const late=await route.POST(req('move',{direction:'right',compact:true}));assert.equal(late.status,409);assert.equal((await late.json()).code,'MOVEMENT_PRECHECK_CONFLICT');assert.deepEqual(rawWorld(),after);assert.deepEqual(rawMon(id),mon);const unrelated=await route.POST(req('interact'));assert.equal(unrelated.status,409);assert.equal((await unrelated.json()).code,undefined);
   const retry=await route.POST(req('movementFence'));assert.equal(retry.status,200);const current=sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId);assert.equal(current.revision,rev+1);
   await get();assert.deepEqual([state.world.x,state.world.y],[3,8]);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,inventory);
   const future=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:rev+20})}));assert.equal(future.status,409);
@@ -3806,6 +3806,19 @@ test('missing Zone 9, 16 and 17 species can be caught and registered after reloa
    assert.ok(rawWorld().adventureDexSpecies.includes(sample.species));assert.ok(state.box.some(mon=>mon.speciesId===sample.species));
   }
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=clock;}
+});
+
+test('Mission 19 accepts an existing Ice Beam partner and a compatible TM learner',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-existing-ice-qa',displayName:'냉동빔 경로 검증'};
+ try{
+  await get();await call('start',{species:7});const id=state.world.activeId;
+  const existing={...rawMon(id),moves:['냉동빔']};seedMon(id,existing);
+  const fountain=()=>({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:17,y:11,facing:'down',zaMission19Stage:7});
+  seedWorld(storeAdventurePosition(fountain(),state.revision+1));await get();await call('mission19Freeze');await get();assert.equal(rawWorld().zaMission19Stage,8);assert.deepEqual(rawMon(id),existing);
+  const learner={...existing,moves:['몸통박치기']};seedMon(id,learner);seedWorld(storeAdventurePosition(fountain(),state.revision+1));
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm013']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm013');
+  await get();await call('teachStoryTm',{item:'za-tm013',slot:0});assert.ok(rawMon(id).moves.includes('냉동빔'));assert.equal(state.inventory['za-tm013'],1);const taught=structuredClone(rawMon(id));await get();await call('mission19Freeze');await get();assert.equal(rawWorld().zaMission19Stage,8);assert.deepEqual(rawMon(id),taught);
+ }finally{globalThis.__adventureUser=previous;}
 });
 
 test('Zone 12 pond-side Vanillite can complete research after capture and reload',async()=>{
