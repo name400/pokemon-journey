@@ -3367,3 +3367,17 @@ test('research activity counts persist only when cafe, bench and fossil actions 
   const key=JSON.stringify([globalThis.__adventureUser.userId,'sailfossil']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,2)').run(key,globalThis.__adventureUser.userId,'sailfossil');await place({district:'lumiose-floral',interior:'lumioseLab2',x:7,y:8,facing:'up',zaMission10Stage:10,zaSide27Complete:true});await call('side27Revive-sail');assert.equal(rawWorld().zaResearchActivities.fossil,2);await call('side27Revive-sail');assert.equal(rawWorld().zaResearchActivities.fossil,3);await call('side27Revive-sail',{},409);await get();assert.equal(rawWorld().zaResearchActivities.fossil,3);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('mega research sync and ranked exchanges persist real owned stones once',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mega-research-qa',displayName:'메가도감 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  for(const item of ['pidgeotite','manectite','gengarite','firestone']){const key=JSON.stringify([globalThis.__adventureUser.userId,item]);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,item);}
+  const heldId='mega-research-held',held={...makeMon(6,35),item:'charizarditex'};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(heldId,globalThis.__adventureUser.userId,held.id,JSON.stringify(held),'qa',1);
+  seedWorld({zaEmporiumMegaPurchases:['scizorite'],zaShardExchangeUnlocked:true,zaRoyaleRank:'F',zaMegaShards:1000});await get();await call('syncResearchMegaDex');assert.deepEqual(rawWorld().zaResearchMegaStones,['charizarditex','gengarite','manectite','pidgeotite','scizorite']);assert.ok(researchSummary(rawWorld()).points>=500);await call('syncResearchMegaDex');assert.equal(rawWorld().zaResearchMegaStones.length,5);assert.equal(state.inventory.firestone,1);assert.equal(rawMon(heldId).item,'charizarditex');assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:8,y:10,facing:'up'},state.revision+1));await get();
+  // Locate the existing exchange interaction rather than relying on a new UI.
+  await walkTo('x');assert.equal(state.world.interaction.tile,'x');await call('exchangeMegaShard',{item:'excadrite'},409);assert.equal(state.world.zaMegaShards,1000);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:18,y:10,facing:'down',zaRoyaleRank:'E'},state.revision+1));await get();await call('exchangeMegaShard',{item:'excadrite'});assert.equal(state.world.zaMegaShards,640);assert.equal(state.inventory.excadrite,1);assert.ok(rawWorld().zaResearchMegaStones.includes('excadrite'));await get();assert.ok(rawWorld().zaResearchMegaStones.includes('excadrite'));assert.equal(rawMon(id).id,152);
+ }finally{globalThis.__adventureUser=previous;}
+});
