@@ -18,3 +18,6 @@
 
 
 랭크 F의 [상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankf.shtml)에 기재된 웨이터 Malik과 웨이트리스 Alix의 팀과 기술을 추가했다. [로열 안내](https://www.serebii.net/legendsz-a/z-aroyale.shtml)에 따라 승리 후 대화로 파티를 회복할 수 있다. 상대 배치와 승리당 3,200점은 초안이며, 회복 횟수도 원작 근거가 부족해 각 상대마다 방문당 한 번으로 제한한다.
+
+
+랭크 E의 Henri·Clarisse·Apolline 기술을 [상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/ranke.shtml)에 맞추고 웨이터 Gianni의 팀·기술을 추가했다. 승리 후 대화로 파티를 회복할 수 있다. 상대 배치와 승리당 3,500점은 기존 초안이며 회복 횟수는 확인되지 않아 방문당 한 번으로 제한한다. 기존 전투 스냅샷은 바꾸지 않는다.

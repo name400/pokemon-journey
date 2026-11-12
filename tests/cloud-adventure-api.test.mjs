@@ -1841,6 +1841,17 @@ test('Rank V royale trainers retain documented moves through battles and reload'
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('Rank E documented trainers and waiter healing survive reload',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-e-waiter-qa',displayName:'랭크E회복테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});const fixture={...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'E',zaMission19Stage:1,zaRoyaleEPoints:0};seedWorld(storeAdventurePosition(fixture,state.revision+1));globalThis.__adventureTime={period:'night',hour:22};await get();await call('enterRoyaleZone');
+  const cases=[['O','royaleErica',[[560,39],[229,39]],[['Protect','Parting Shot','Brick Break','Detect'],['Snarl','Take Down','Fire Fang','Dark Pulse']]],['U','royaleDaniel',[[353,35],[607,35]],[['Shadow Claw','Curse','Shadow Ball','Swords Dance'],['Will-O-Wisp','Fire Spin','Flamethrower','Shadow Ball']]],['V','royaleJean',[[694,35],[310,35]],[['Bulldoze','Volt Switch','Breaking Swipe','Morning Sun'],['Eerie Impulse','Thunder Fang','Roar','Snarl']]],['a','royaleEGianniBattle',[[690,39],[689,39]],[['Toxic','Water Pulse','Poison Jab','Dragon Pulse'],['Rock Blast','Bulldoze','Slash','Iron Defense']]]];
+  for(let i=0;i<cases.length;i++){const [tile,action,team,moves]=cases[i];await walkTo(tile);if(i===3)await call('royaleEGianniHeal',{},409);await call(action);assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),team);assert.deepEqual(rawWorld().combat.teams[1].map(m=>m.moves),moves);await get();assert.deepEqual(rawWorld().combat.teams[1].map(m=>m.moves),moves);await battle();assert.equal(state.world.zaRoyaleEPoints,(i+1)*3500);await call(action,{},409);}
+  await get();assert.equal(state.world.interaction.action,'royaleEGianniHeal');const mon=rawMon(id);seedMon(id,{...mon,hp:1,status:'독',pp:{psystrike:1}});await get();await call('royaleEGianniHeal');await get();assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(state.world.zaRoyaleEPoints,14000);await call('royaleEGianniHeal',{},409);
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await walkTo('T');await call('enterRoyaleZone');await walkTo('a');await call('royaleEGianniHeal',{},409);assert.equal(state.world.interaction.action,'royaleEGianniBattle');
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Rank F waiters battle and heal once per visit with saved progress',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-f-waiters-qa',displayName:'랭크F회복테스트'};
  try{
