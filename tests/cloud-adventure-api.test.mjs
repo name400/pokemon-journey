@@ -1850,6 +1850,18 @@ test('Infinite Royale random prize survives full ball storage and is claimed onc
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('compact movement omits static catalogs without changing encounter or save semantics',async()=>{
+ const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'compact-move-qa',displayName:'이동 응답 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),shop=structuredClone(state.fieldShop),places=structuredClone(state.expeditions);assert.ok(shop.length&&places.length);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:17,y:8,facing:'left'},state.revision+1));await get();globalThis.__adventureRandom=()=>0;
+  const road=await call('move',{direction:'left',compact:true});assert.equal(road.boxMode,'patch');assert.equal(Object.hasOwn(road,'fieldShop'),false);assert.equal(Object.hasOwn(road,'expeditions'),false);assert.equal(road.battle,null);assert.equal(road.world.x,16);assert.deepEqual(road.wallet,wallet);
+  const grass=await call('move',{direction:'up',compact:true});assert.equal(Object.hasOwn(grass,'fieldShop'),false);assert.equal(grass.battle.teams[1][0].speciesId,13);await get();assert.deepEqual(state.fieldShop,shop);assert.deepEqual(state.expeditions,places);assert.deepEqual(state.world.teamIds,team);assert.equal(state.battle.teams[1][0].speciesId,13);const fled=await call('flee',{compact:true});assert.ok(fled.fieldShop.length&&fled.expeditions.length);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:11,y:14,facing:'down'},state.revision+1));await get();const rev=state.revision;await call('move',{direction:'down',compact:true},409);await get();assert.equal(state.revision,rev);assert.equal(state.world.district,'lumiose');
+  const legacy=await call('move',{direction:'up'});assert.ok(legacy.fieldShop.length&&legacy.expeditions.length);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('Zone 1 road does not encounter but neighboring grass does',async()=>{
  const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-road-qa',displayName:'구역1길테스트'};
  try{

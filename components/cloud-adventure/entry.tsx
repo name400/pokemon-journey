@@ -49,7 +49,7 @@ export default function Adventure(){
  const load=useCallback(async(light=false,recovery=false)=>{try{const result=await api(undefined,light);if(syncRequired.current&&!recovery)return false;if(recovery&&result.revision<revision.current)throw Error('서버의 최신 진행 상태를 확인하지 못했습니다.');accept(result);if(recovery)syncRequired.current=false;if(mounted.current)setError('');return true;}catch(e){if(mounted.current){setError(recovery?'연결을 복구하지 못했습니다. 다시 불러와 주세요.':e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept]);
  const act=useCallback(async(action:string,extra:any={})=>{
   if(lock.current||syncRequired.current)return null;lock.current=true;setBusy(true);setError('');
-  try{const result=await api({action,revision:revision.current,...extra});if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result);return result;}
+  try{const result=await api({action,revision:revision.current,...extra,...(['move','face'].includes(action)?{compact:true}:{})});if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result);return result;}
   catch(e){stop();setPrediction(null);syncRequired.current=true;if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load(false,true);return null;}
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  },[accept,load,stop]);
