@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {refreshEarlyAlpha} from '../lib/cloud-adventure/adventure-alpha-refresh.mjs';
+import {refreshEarlyAlpha,markEarlyAlphaSpent} from '../lib/cloud-adventure/adventure-alpha-refresh.mjs';
 
 const cases=[
  ['lumiose-zone1-roof','zaZone1RoofAlphaSpent',18,5,'alpha:zone1-roof-pidgey:16'],
@@ -28,5 +28,16 @@ test('a spent single alpha clears a stale shiny roll without clearing another ti
   assert.equal(refreshEarlyAlpha(s,'night',2),true);
   assert.equal(s.zaWildShinyRolls[key],district==='lumiose-zone2'?true:undefined);
   assert.equal(s.zaWildShinyRolls[other],true);
+ }
+});
+
+test('resolved early alphas use the current interval without changing unrelated saved state',()=>{
+ const ids=['zone1-roof-pidgey','zone2-island','zone4-spinarak','zone7-fletchinder'];
+ for(let i=0;i<cases.length;i++){
+  const [district,spent,x,y]=cases[i],s={district,x:x+1,y,teamIds:['owned'],coins:100,zaEarlyAlphaCycles:{[district]:{period:'day',interval:1},other:{period:'day',interval:1}}};
+  assert.equal(markEarlyAlphaSpent(s,ids[i],'night',2),true);assert.equal(s[spent],true);
+  assert.deepEqual(s.zaEarlyAlphaCycles[district],{period:'night',interval:2});assert.equal(refreshEarlyAlpha(s,'night',2),false);
+  assert.deepEqual(s.teamIds,['owned']);assert.equal(s.coins,100);assert.deepEqual(s.zaEarlyAlphaCycles.other,{period:'day',interval:1});
+  assert.equal(refreshEarlyAlpha(s,'day',3),true);assert.equal(s[spent],undefined);
  }
 });

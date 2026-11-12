@@ -4728,6 +4728,18 @@ test('early visible alphas keep their field shiny state through battle and reloa
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('early alpha resolved after a time change stays spent for its new interval',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'early-alpha-battle-clock-qa',displayName:'시간 전환 전투'};
+ try{
+  Date.now=()=>now;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const id=state.world.activeId,strong={...makeMon(150,100),boxId:id,moves:['사이코키네시스'],pp:{}};seedMon(id,strong);const team=[...state.world.teamIds];
+  for(const finish of ['victory','capture']){
+   now+=50000;globalThis.__adventureTime={period:'day',hour:12};seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone4',interior:null,x:5,y:10,facing:'left',zaRoyaleRank:'F',zaBunnelbyQuest:3,zaZone4AlphaSpent:false,zaEarlyAlphaCycles:undefined,combat:null,encounter:null},state.revision+1));await get();assert.equal(rawWorld().zaEarlyAlphaCycles['lumiose-zone4'].period,'day');await call('encounterZone4Alpha');
+   now+=50000;globalThis.__adventureTime={period:'night',hour:22};if(finish==='victory')await battle();else{globalThis.__adventureRandom=()=>0;await call('ball');assert.equal(state.battle,null);}
+   assert.equal(rawWorld().zaZone4AlphaSpent,true,finish);await get();assert.equal(rawWorld().zaZone4AlphaSpent,true,finish);assert.equal(rawWorld().zaEarlyAlphaCycles['lumiose-zone4'].period,'night');assert.deepEqual(state.world.teamIds.slice(0,team.length),team);now+=50000;globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(rawWorld().zaZone4AlphaSpent,undefined,finish);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);
+  }
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('early alpha returns after a time change without respawning under the player',async()=>{
  const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'early-alpha-respawn-qa',displayName:'우두머리 재출현'};
  try{
