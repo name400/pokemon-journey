@@ -549,3 +549,12 @@ test('Zone 2 draft overlook preserves the old stairs and saves its separate heig
  const high={...ground,district:'lumiose-zone2-overlook',x:4,y:12,facing:'down'},highMap=fieldMap(high);assert.equal(fieldDialogue(high)?.action,'zone2Overlook');assert.ok(fieldPath(highMap,high,{x:18,y:8}).length);assert.equal(walkable(highMap[5][12]),false);
  const restored=restoreAdventurePosition(storeAdventurePosition(high,42),42);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[high.district,4,12,['kept']]);
 });
+
+test('street entrances reset the canal layer left by an earlier visit',()=>{
+ for(const [district,x,y,direction] of [['lumiose-vert-sector3',21,7,'right'],['lumiose-vert-street-route',21,8,'right'],['lumiose-vert-sector6',19,1,'up'],['lumiose-vert-sector7',18,1,'up']]){
+  const before={area:3,district,x,y,zaCoulantLower:true,zaRoyaleRank:'E',badges:[],teamIds:['kept']},step=stepField(before,direction);
+  assert.equal(step.district,'lumiose-coulant-route',district);assert.equal(step.zaCoulantLower,false,district);
+  const stored=storeAdventurePosition({...before,...step},7),restored=restoreAdventurePosition(structuredClone(stored),7);
+  assert.equal(restored.district,'lumiose-coulant-route',district);assert.equal(restored.zaCoulantLower,false,district);assert.deepEqual([restored.x,restored.y],[step.x,step.y],district);assert.deepEqual(restored.teamIds,['kept']);
+ }
+});

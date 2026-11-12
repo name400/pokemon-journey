@@ -38,16 +38,16 @@ test('a spent Orb does not grant a captured replacement another use',()=>{
 });
 test('an available Orb permits the captured member and preserves legitimate Tera across save and wild boundaries',async()=>{
  let run=fixture({orb:true});catchDuck(run);nextWild(run);play(run,{type:'switch',slot:2});assert.equal(canTera(classicCombatView(run.combat).requests[0]),true);
- play(run,tera);assert.equal(run.party[1].terastallized,'Water');assert.equal(run.teraCharged,false);
- run=await decodeGameData(await encodeGameData(run));assert.equal(restoreClassicNativeBattle(run.combat,run).p1.active[0].terastallized,'Water');
+ const chosenType=run.party[1].teraType;assert.ok(chosenType);play(run,tera);assert.equal(run.party[1].terastallized,chosenType);assert.equal(run.teraCharged,false);
+ run=await decodeGameData(await encodeGameData(run));assert.equal(restoreClassicNativeBattle(run.combat,run).p1.active[0].terastallized,chosenType);
  // A one-hit knockout is unnecessary here: use a low-HP next foe and a real turn.
  const b=restoreClassicNativeBattle(run.combat,run);b.p2.active[0].hp=1;run.combat.snapshot=snapshotClassicNativeBattle(b);play(run,{type:'move',move:'watergun'});assert.ok(run.combat.ended);
- nextWild(run);assert.equal(run.party[1].terastallized,'Water');assert.equal(canTera(classicCombatView(run.combat).requests[0]),false);
+ nextWild(run);assert.equal(run.party[1].terastallized,chosenType);assert.equal(run.party[1].teraType,chosenType);assert.equal(canTera(classicCombatView(run.combat).requests[0]),false);
  play(run,{type:'switch',slot:2});assert.throws(()=>playClassicCombat(run,tera),/변화/);
 });
 test('acquiring the Orb between wild encounters enables the existing party without creating another battle',()=>{
  const run=fixture();catchDuck(run);run.tools.teraOrb=true;run.teraCharged=true;nextWild(run);
- assert.equal(canTera(classicCombatView(run.combat).requests[0]),true);play(run,tera);assert.equal(run.party[0].terastallized,'Psychic');
+ assert.equal(canTera(classicCombatView(run.combat).requests[0]),true);const chosenType=run.party[0].teraType;assert.ok(chosenType);play(run,tera);assert.equal(run.party[0].terastallized,chosenType);
 });
 test('legacy permissive snapshots are gated by actual run tools in GET view and server commands',()=>{
  const run=fixture(),b=restoreClassicNativeBattle(run.combat,run);b.p1.active[0].canTerastallize='Psychic';run.combat.snapshot=snapshotClassicNativeBattle(b);delete run.combat.teraOrb;delete run.combat.teraCharged;
@@ -57,7 +57,7 @@ test('legacy permissive snapshots are gated by actual run tools in GET view and 
 });
 test('new wild opponents remain gated while designated trainer Tera still works',()=>{
  const run=fixture();catchDuck(run);nextWild(run);assert.equal(restoreClassicNativeBattle(run.combat,run).p2.active[0].canTerastallize,null);
- const enemy={...mon(54,'tera-trainer'),rogueInstantTera:true};run.encounter={kind:'trainer'};run.combat=createClassicCombat(run,[enemy],{trainer:true});run.party=run.combat.teams[0];play(run,{type:'move',move:'splash'});assert.equal(run.combat.teams[1][0].terastallized,'Water');assert.equal(run.party[0].terastallized,null);
+ const enemy={...mon(54,'tera-trainer'),rogueInstantTera:true};run.encounter={kind:'trainer'};run.combat=createClassicCombat(run,[enemy],{trainer:true});run.party=run.combat.teams[0];play(run,{type:'move',move:'splash'});assert.equal(run.combat.teams[1][0].terastallized,enemy.teraType);assert.equal(run.party[0].terastallized,null);
 });
 test('restored Mega and temporary Dynamax forms cannot bypass Tera form restrictions',()=>{
  const run=fixture({orb:true}),b=restoreClassicNativeBattle(run.combat,run);b.p1.active[0].formeChange('Mewtwo-Mega-X',null,true);run.combat.snapshot=snapshotClassicNativeBattle(b);run.party[0].rogueBattleSpecies='mewtwomegax';run.combat.teams[0]=structuredClone(run.party);
