@@ -1850,6 +1850,20 @@ test('Infinite Royale random prize survives full ball storage and is claimed onc
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('concurrent movement uses a single authoritative revision and keeps inventory intact',async()=>{
+ const previousUser=globalThis.__adventureUser,db=globalThis.__adventureEnv.DB,prepareBefore=db.prepare,batchBefore=db.batch;globalThis.__adventureUser={userId:'concurrent-movement-qa',displayName:'동시 이동 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(JSON.stringify([globalThis.__adventureUser.userId,'firestone']),globalThis.__adventureUser.userId,'firestone',3);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:11,y:6,steps:20},state.revision+1));await get();const rev=state.revision,before=rawMon(id),wallet=structuredClone(state.wallet);let inventoryReads=0;
+  db.prepare=(query,...args)=>{if(query.startsWith('SELECT item,quantity FROM inventory'))inventoryReads++;return prepareBefore(query,...args);};
+  let queue=Promise.resolve();db.batch=statements=>{const result=queue.then(()=>batchBefore(statements));queue=result.catch(()=>{});return result;};
+  const request=()=>new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'move',direction:'right',compact:true,revision:rev})});
+  const responses=await Promise.all([route.POST(request()),route.POST(request())]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);assert.match((await responses.find(r=>r.status===409).json()).error,/다른 화면/);assert.equal(inventoryReads,1,'only the successful response rereads the bag');
+  db.prepare=prepareBefore;await get();assert.equal(state.world.x,12);assert.equal(state.world.steps,21);assert.equal(state.revision,rev+1);assert.equal(rawMon(id).walkSteps,(before.walkSteps||0)+1);assert.equal(state.inventory.firestone,3);assert.deepEqual(state.wallet,wallet);
+  await call('face',{direction:'up',compact:true});await get();assert.equal(state.inventory.firestone,3);
+ }finally{db.prepare=prepareBefore;db.batch=batchBefore;globalThis.__adventureUser=previousUser;}
+});
+
 test('compact movement omits static catalogs without changing encounter or save semantics',async()=>{
  const previousUser=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'compact-move-qa',displayName:'이동 응답 검증'};
  try{
