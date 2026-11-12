@@ -2830,3 +2830,12 @@ test('Rouge Sector 2 routes survive API reloads and preserve the party',async()=
   await walkTo({x:11,y:1});await call('move',{direction:'up'});await get();assert.equal(state.world.zaAcademyCourtyard,true);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Le Wow entrance and return preserve the party across reloads',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'le-wow-door-qa',displayName:'르 와우'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector2',interior:null,x:5,y:6,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'enterLeWow');await call('enterLeWow');await get();assert.equal(state.world.interior,'leWow');assert.match(state.world.areaInfo.name,/르 와우/);assert.deepEqual(state.world.teamIds,team);
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.interior,null);assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector2',5,6]);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
