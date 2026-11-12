@@ -4578,3 +4578,17 @@ test('ordinary zone wild encounters refresh after a full cycle while preserving 
   now+=1200000;await get();assert.equal(rawWorld().zaZone5Spent,undefined);assert.equal(rawWorld().zaWildShinyRolls['zone5:abra:63'],undefined);assert.equal(rawWorld().zaWildShinyRolls['zone19:other:1'],true);assert.equal(rawWorld().zaZone5Tm040,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);const revision=state.revision;await get();assert.equal(state.revision,revision);
  }finally{Date.now=oldNow;globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zone 15 and 18 time-dependent wild shiny identity is stored before the first view',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;
+ globalThis.__adventureUser={userId:'timed-field-shiny-qa',displayName:'시간대 필드 개체'};
+ try{
+  globalThis.__adventureTime={period:'night',hour:22};globalThis.__adventureRandom=()=>0;await get();await call('start',{species:152});
+  for(const {zone,x,y,id,species,period} of [{zone:15,x:5,y:12,id:'shuppet',species:353,period:'night'},{zone:18,x:7,y:7,id:'noibat',species:714,period:'night'},{zone:15,x:5,y:12,id:'scolipede',species:545,period:'day'},{zone:18,x:7,y:7,id:'swablu',species:333,period:'day'}]){
+   globalThis.__adventureTime={period,hour:period==='day'?12:22};
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:`lumiose-zone${zone}`,interior:null,x,y,facing:'up',zaRoyaleRank:'B',zaZone18Upper:zone===18,zaZone15Upper:false,[`zaZone${zone}Period`]:period==='day'?'night':'day',zaWildShinyRolls:{},combat:null,encounter:null},state.revision+1));
+   await get();const key=`zone${zone}:${id}:${species}`,saved=rawWorld().zaWildShinyRolls[key];assert.equal(typeof saved,'boolean',`zone ${zone} ${period} identity must be stored on first view`);assert.equal(state.world.interaction.action,`zone${zone}Wild-${id}`);
+   globalThis.__adventureRandom=()=>.999;await get();assert.equal(rawWorld().zaWildShinyRolls[key],saved);await call(`zone${zone}Wild-${id}`);assert.equal(state.battle.teams[1][0].speciesId,species);assert.equal(state.battle.teams[1][0].shiny,saved);await call('flee');globalThis.__adventureRandom=()=>0;
+  }
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});

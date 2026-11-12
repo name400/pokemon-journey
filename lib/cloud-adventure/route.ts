@@ -112,7 +112,7 @@ function prepareVisibleWild(s:any){
  if(s.district==='lumiose-crystal-sewer'){for(const p of magentaSewerMonsters(s,period))ensure(`sewer:${p.id}:${p.speciesId}`);return changed;}
  if(s.district==='lumiose-zone20'&&s.zaMission42Underground===true)return false;
  const match=/^lumiose-zone(5|6|8|9|10|11|12|13|14|15|16|17|18|19|20)(?:-garden|-drain)?$/.exec(s.district||'');if(!match)return changed;
- const n=Number(match[1]),view=n===19?{...s,zaZone19Period:time.period}:n===13?{...s,zaZone13Period:time.period}:n===14?{...s,zaZone14Period:time.period,weather:['water','poison'].includes(AREAS[s.area]?.biome)&&time.hour%2===0?'rain':''}:s,map=fieldMap(view),find=fieldWildResolvers[n];
+ const n=Number(match[1]),view=n===19?{...s,zaZone19Period:time.period}:n===18?{...s,zaZone18Period:time.period}:n===15?{...s,zaZone15Period:time.period}:n===13?{...s,zaZone13Period:time.period}:n===14?{...s,zaZone14Period:time.period,weather:['water','poison'].includes(AREAS[s.area]?.biome)&&time.hour%2===0?'rain':''}:s,map=fieldMap(view),find=fieldWildResolvers[n];
  for(const tile of new Set(map.join(''))){const p=find(view,tile);if(!p||typeof p.id!=='string'||!Number.isInteger(p.species))continue;const key=`zone${n}:${p.id}:${p.species}`;if(typeof s.zaWildShinyRolls?.[key]==='boolean')continue;assignWildShiny(s,{},random,key);changed=true;}
  return changed;
 }
