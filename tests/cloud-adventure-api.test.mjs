@@ -92,6 +92,22 @@ test('Mission 36 descent survives reentry and starts mission 37 after both enemi
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 37 companion battles preserve progress and legacy saves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-companion-qa',displayName:'방어작전테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  const cases=[[3,19,5,'up',false,[10072,10036],'mission37-canari'],[4,19,13,'up',false,[10053,10089],'mission37-lebanne'],[5,11,6,'up',true,[10051,10068],'mission37-corbeau']];
+  for(const [stage,x,y,facing,building,enemies,ally] of cases){
+   seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x,y,facing,zaMission36Complete:true,zaMission36DescentPending:false,zaMission37Started:true,zaMission37Stage:stage,zaMission37MultiV1:true,zaProtectLayout:5,zaProtectCanal:false,zaProtectBuilding:building,zaProtectRoof:false,zaProtectScaffoldV1:false},state.revision+1));await get();await call('mission37Wave');
+   assert.equal(rawWorld().combat.format,'mission10-multi-v1');assert.deepEqual(state.battle.teams[1].map(m=>m.id),enemies);assert.deepEqual(rawWorld().combat.teams[2].map(m=>m.boxId),[ally]);assert.equal(state.battle.teams[0].find(m=>m.boxId===ally).battleOwner,'ally');assert.deepEqual(state.battle.activeBySide[1],[0,1]);assert.ok(state.battle.requests[0].actors[0].moves.some(m=>m.targets?.some(t=>t.side===1&&t.target===2)));await get();assert.equal(rawWorld().combat.format,'mission10-multi-v1');
+   if(stage===3){await call('forfeit');assert.equal(state.world.zaMission37Stage,3);await call('mission37Wave');}
+   const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const side of [sim.p2,sim.p4])for(const foe of side.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}const teams=combat.teams.map((a,i)=>i===1||i===3?a.map(m=>({...m,hp:1,status:'잠듦'})):a);seedWorld({combat:{...combat,teams,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission37Stage,stage+1);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);await get();assert.equal(state.world.zaMission37Stage,stage+1);
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-protect',interior:null,x:19,y:5,facing:'up',zaMission37Stage:3,zaMission37MultiV1:undefined,zaProtectBuilding:false,zaProtectLayout:5},state.revision+1));await get();await call('mission37Wave');assert.notEqual(rawWorld().combat.format,'mission10-multi-v1');assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 37 route opens in sequence and preserves the legacy layout',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-route-qa',displayName:'방어경로테스트'};
  try{
