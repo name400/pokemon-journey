@@ -472,7 +472,27 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     if(w.district==='lumiose-zone1-high-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#756f68':(x+y)%2?'#c4b5a1':'#d1c4b2';ctx.fillRect(px,py,tile,tile);if(c==='j'||c==='m'){ctx.fillStyle=c==='j'?'#8f6747':'#da90aa';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='j'?'사다리':'메리프',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-vert-sector9'&&!w.interior){ctx.fillStyle=c==='#'?'#97a18c':c===','?'#bbb9aa':c==='k'?'#a4c58e':(x+y)%2?'#e0ddcb':'#ebe6d4';ctx.fillRect(px,py,tile,tile);if(c==='~')canalWater(px,py,x,y);if(c===':'){ctx.fillStyle='#b7aa94';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6ddcd';for(let i=4;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}if(c==='W'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-zone1-courtyard'&&!w.interior){ctx.fillStyle=c==='#'?'#8f9a86':c==='g'?'#87b273':(x+y)%2?'#ddd6bd':'#e8e1ca';ctx.fillRect(px,py,tile,tile);if(c==='g')sprite('grassDetail',px,py);if(c==='E'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
-    if(w.district==='lumiose-zone1-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#756f68':c==='g'?'#b5a798':(x+y)%2?'#c4b5a1':'#d1c4b2';ctx.fillRect(px,py,tile,tile);if(c==='l'||c==='k'||c==='p'||c==='d'||c==='t'||c==='j'){ctx.fillStyle=c==='l'?'#8f6747':c==='p'?'#b64d42':c==='d'?'#547d76':'#e1c456';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='l'||c==='j'?'사다리':c==='p'?'우두머리':c==='d'?'낙하':c==='t'?'TM':'도구',px+tile/2,py+20);}return;}
+    if(w.district==='lumiose-zone1-roof'&&!w.interior){
+     // Ladder access and two roof levels are documented; the 2D footprint,
+     // parapet shape and paving are approximations of the existing map.
+     ctx.fillStyle=c==='#'?'#6d7572':c==='g'?'#9ab389':(x+y)%2?'#c5b8a4':'#d5cab7';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){
+      ctx.fillStyle='#89908a';ctx.fillRect(px+1,py+2,tile-2,tile-5);
+      ctx.fillStyle='#adb0a1';ctx.fillRect(px+1,py+2,tile-2,3);
+      ctx.fillStyle='#626d69';ctx.fillRect(px,py+tile-4,tile,4);
+     }else if(c==='g'){
+      ctx.fillStyle='#668f61';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);
+      ctx.fillStyle='#bcd1a4';ctx.fillRect(px+6,py+6,4,2);ctx.fillRect(px+20,py+12,5,2);
+     }else roofPaving(px,py,x,y);
+     if(c==='l'||c==='j'){
+      ctx.fillStyle='#76513a';ctx.fillRect(px+7,py+3,4,tile-6);ctx.fillRect(px+tile-11,py+3,4,tile-6);
+      ctx.fillStyle='#dfbf87';for(let j=7;j<tile-5;j+=6)ctx.fillRect(px+9,py+j,tile-18,3);
+     }else if(c==='d'){
+      ctx.fillStyle='#65877d';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#e7eee1';ctx.beginPath();ctx.moveTo(px+tile/2,py+tile-7);ctx.lineTo(px+8,py+12);ctx.lineTo(px+tile-8,py+12);ctx.closePath();ctx.fill();
+     }else if(c==='p'||c==='t'||c==='k'){
+      ctx.fillStyle=c==='p'?'#b64d42':'#e1c456';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='p'?'우두머리':c==='t'?'TM':'도구',px+tile/2,py+20);
+     }return;
+    }
     if(w.district==='lumiose-zone5'&&!w.interior){
      // Existing Bleu Street, roofs and canal use provisional 2D footprints.
      // Drawing stays inside each tile and does not alter route or encounters.
