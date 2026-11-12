@@ -516,3 +516,9 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 마젠타 6번지 야간 로열 접근 — 임시 연결
 
 [배틀존 목록](https://bulbapedia.bulbagarden.net/wiki/Battle_zone_%28Lumiose_City%29)은 마젠타 6번지가 밤에 활성화될 수 있는 배틀존이며 옥상으로 가려면 비계를 이용한다고 설명한다. 코트에서 기존 로열 임시 배틀존으로 진입하고 나온 코트로 돌아가도록 연결했다. 기존 랭크·시간·점수·승패와 세션 처리를 공유하며 이전 광장 입구도 그대로 둔다. 원작은 밤마다 활성 구역이 달라지지만 현재는 해당 선택 기능이 없어 밤에 조건을 만족하면 이용 가능하다. 실제 장소별 트레이너·코트 경계·비계 배틀은 재현하지 못했으며 기존 공용 경기장과 상대를 사용하는 초안이다.
+
+### 호텔 Z 주변과 마젠타 6번지 시각 초안
+
+[닌텐도 공식 호텔 화면](https://www.nintendo.com/ph/news/article/6pnoebRONEPk1EiF2NJ4qK)의 밝은 외벽과 담쟁이, [공식 포켓몬센터 화면](https://legends.pokemon.com/es-es/news/adventure)의 붉은 외관과 몬스터볼 표식을 참고해 기존 건물의 그림을 구분했다. 상점은 기존 게임상의 위치를 유지한 임시 디자인이다. [미르시티 공개 지도](https://www.serebii.net/pokearth/lumiosecity/)와 기존 마젠타 6번지의 막힌 지형을 참고해 안뜰과 건물 지붕을 그렸으며, 건물의 정확한 외형과 안뜰의 방향·좌표는 확인되지 않은 초안이다. 기존 Kenney CC0 타일을 사용했고 지도 이미지는 복사하지 않았다.
+
+기존 저장 좌표와 출입구를 유지하기 위해 지형과 이동 판정은 바꾸지 않았다. 다만 기존 맵의 포켓몬센터는 호텔의 서쪽에 있으나 [공략](https://www.gameguides.space/guides/67/pokemon-legends-z-a.html)은 동쪽으로 안내한다. 원작과 다른 이 배치 및 거리의 정확한 구조·높낮이는 아직 수정되지 않았다. 다른 구역의 글자 표식과 단조로운 외형도 남아 있다.
