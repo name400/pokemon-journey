@@ -2288,6 +2288,22 @@ test('Rank F additional trainers support battles, point limits, and restored sav
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
 });
 
+test('Rank F remaining trainers preserve earlier wins and support three-Pokémon teams',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-f-remaining-qa',displayName:'랭크 F 나머지 상대'};
+ try{
+  globalThis.__adventureTime={period:'night',hour:22};await get();await call('start',{species:152});const id=state.world.activeId,strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}},party=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,strong);
+  seedWorld({...rawWorld(),zaRoyaleFPoints:3200,zaRoyaleFSessionWins:['royale-f-lara'],districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  const cases=[[11,5,3,'e','royale-f-joris',[[5,32],[148,32],[93,32]]],[12,9,3,'t','royale-f-nolhan',[[686,32],[704,32]]],[13,15,3,'j','royale-f-jonathan',[[359,34],[676,34]]],[14,19,3,'k','royale-f-mathilde',[[8,34],[123,34],[65,34]]],[15,5,13,'n','royale-f-stan',[[323,34],[618,34]]],[16,17,13,'q','royale-f-bernie',[[602,34],[587,34]]]];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:11,y:14,facing:'up',zaRoyaleRank:'F',zaMission14Stage:1,combat:null,encounter:null,trainer:null},state.revision+1));await get();await walkTo({x:5,y:4});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'royaleFExtra11');
+  for(const [index,x,y,tile,trainer,expected] of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x,y:y+1,facing:'up',zaRoyaleRank:'F',zaMission14Stage:1,combat:null,encounter:null,trainer:null},state.revision+1));await get();assert.equal(state.world.map[y][x],tile,JSON.stringify({index,x,y,at:[state.world.x,state.world.y],rank:state.world.zaRoyaleRank,stage:state.world.zaMission14Stage,district:state.world.district}));assert.equal(state.world.interaction.action,`royaleFExtra${index}`);await call(`royaleFExtra${index}`);assert.equal(state.world.trainer.id,trainer);assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),expected);await get();assert.equal(state.world.trainer.id,trainer);
+   if(index===11||index===16){const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.ok(rawWorld().zaRoyaleFSessionWins.includes(trainer));await get();await call(`royaleFExtra${index}`,{},409);}else await call('forfeit');
+   assert.ok(rawWorld().zaRoyaleFSessionWins.includes('royale-f-lara'));assert.deepEqual(state.world.teamIds,party);assert.deepEqual(state.wallet,wallet);
+  }
+  assert.equal(rawWorld().zaRoyaleFPoints,9600);assert.deepEqual(rawWorld().zaRoyaleFSessionWins,['royale-f-lara','royale-f-joris','royale-f-bernie']);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
+
 test('Rank F waiters battle and heal once per visit with saved progress',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-f-waiters-qa',displayName:'랭크F회복테스트'};
  try{
