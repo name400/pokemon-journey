@@ -27,3 +27,9 @@ The existing Sector 4 screen provides a provisional approach to nearby Sector 2;
 [연구소 출현 자료](https://www.serebii.net/pokearth/lumiosecity/lysandrelabs.shtml)는 보라색 구역 키카드 C가 있는 방의 고정 우두머리 아보크를 기재하고, [현장 안내](https://game8.co/games/Pokemon-Legends-Z-A/archives/559732)는 레벨 60과 지진 기술을 명시한다. 해당 구역에 포획 가능한 우두머리를 추가하고 기존 우두머리 전투·포획·저장 처리를 적용했다. 도망 시 다시 만날 수 있고 포획 또는 처치 후 해당 방문 동안 사라진다. 원작의 조우 위치·재출현 조건 및 실시간 동시 전투는 재현하지 않은 초안이다. 기존 지도 저장도 같은 대표 조우를 사용할 수 있다.
 
 일부 공략이 라이볼트를 우두머리로 언급하지만, 위 출현 자료에서 고정 우두머리로 명시된 것은 아보크이며 라이볼트는 일반 출현의 우두머리 확률로 설명된다. 라이볼트를 필수 고정 우두머리로 추가하지 않았다. 실제 운영 기기 검증은 하지 않았다.
+
+## 지하 2층
+
+[원작 층 안내](https://game8.co/games/Pokemon-Legends-Z-A/archives/559427)는 지하 2층이 경험사탕 L이 있는 막다른 층이라고 설명하고, [도구 목록](https://www.serebii.net/pokearth/lumiosecity/lysandrelabs.shtml)은 문 근처의 해당 도구를 명시한다. 승강기 열쇠를 얻은 뒤 지하 1·2·3층을 선택할 수 있도록 통로와 일회성 도구를 연결했다. 기존 승강기 행동과 이전 저장의 지하 1↔3층 동작은 유지한다.
+
+방·통로·문 및 도구의 정확한 좌표는 2D 초안이다. 원작의 상세 실내 형상과 후속 DLC 이벤트는 구현하지 않았고 실제 운영 기기는 검증하지 않았다.

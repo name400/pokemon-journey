@@ -3060,3 +3060,14 @@ test('Lysandre Labs can be revisited and its purple-room Pokemon can be caught',
   const legacy={...rawWorld(),district:'lumiose-magenta-sector2',interior:'lysandreCafe',x:11,y:5,facing:'up',zaLysandreMazeV2:false,zaMission35Stage:8};seedWorld(storeAdventurePosition(legacy,state.revision+1));await get();await call('mission35LabEnter');await get();assert.equal(state.world.zaLysandreMazeV2,false);await walkTo({x:4,y:5});await call('face',{direction:'left'});assert.equal(state.world.interaction.action,'lysandreWild-beldum');
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Lysandre B2F lift and candy preserve old saves and prevent duplicate collection',async()=>{
+ const oldUser=globalThis.__adventureUser;
+ try{for(const version of [false,true]){
+  globalThis.__adventureUser={userId:version?'lysandre-b2-new':'lysandre-b2-old',displayName:'연구소 지하'};await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  const loc={...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:18,y:13,facing:'up',zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:version,zaLysandreWing:'hub',zaLysandreCards:['a','b','e'],zaLysandreElevatorKey:false};seedWorld(storeAdventurePosition(loc,state.revision+1));await get();await call('lysandreFloor-2',{},409);
+  seedWorld(storeAdventurePosition({...loc,zaLysandreElevatorKey:true},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='lysandreFloor-2'));await call('lysandreFloor-2');await get();assert.equal(state.world.zaLysandreFloor,2);assert.deepEqual([state.world.x,state.world.y],[18,13]);assert.deepEqual(state.world.zaLysandreCards,['a','b','e']);await walkTo({x:5,y:8});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'lysandreB2Candy');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-l']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-exp-candy-l');await call('lysandreB2Candy',{},409);await get();assert.notEqual(state.world.zaLysandreB2Candy,true);sql.prepare('UPDATE inventory SET quantity=0 WHERE key=?').run(key);await get();await call('lysandreB2Candy');await get();assert.equal(state.inventory['za-exp-candy-l'],1);assert.equal(state.world.zaLysandreB2Candy,true);await call('lysandreB2Candy',{},409);
+  await walkTo({x:18,y:12});await call('face',{direction:'down'});await call('lysandreFloor-3');await get();assert.equal(state.world.zaLysandreFloor,3);await call('mission35Elevator');await get();assert.equal(state.world.zaLysandreFloor,1);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaMission35Stage,4);await call('lysandreFloor-2');await get();assert.equal(state.world.zaLysandreB2Candy,true);assert.equal(state.world.map[7][5],'.');
+ }}finally{globalThis.__adventureUser=oldUser;}
+});
