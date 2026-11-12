@@ -1,5 +1,20 @@
 # 배포 검증 실패 기록
 
+## 2026-11-12 — GitHub `96359b3` 배포 검사 실패
+
+- 검증 대상 GitHub 커밋: `96359b398fda627e26cbc3df0be33fe3e87e2b05`. 이 커밋을 포함하는 지정 브랜치의 HEAD에는 검사 당시 추가 커밋이 하나 있었으나, 요청한 커밋까지만 반영했다.
+- 실제 검증 소스: 기존 Sites v82 소스와 병합한 로컬 커밋 `d2449cae45cadca74cdd4a1f9390ee7c5628f6ba`, Node.js v24.22.1.
+- 순차 검사: `npm run typecheck` 통과, `npm test` 3,394개 중 3,393개 통과·1개 실패 (434.9초), `npm run build` 통과.
+- 배포는 수행하지 않았다. 검사 당시 운영본은 Sites v82.
+
+### 탐험 모험 — 로열 Erica 파티 검증
+
+- 테스트: `tests/cloud-adventure-api.test.mjs:890`, `mission 10 companion battle requires Absol and advances on either result`.
+- 실패 위치: 같은 파일 979행. 테스트가 야간 로열 구역에서 `royaleErica` 배틀을 시작한 뒤 상대 팀의 포켓몬 종 ID 배열을 검증했다.
+- 예상: `[80, 604]`. 실제: `[80, 604, 428]`. `assert.deepEqual`에서 실패했다.
+- 이 결과만으로 종 428의 추가가 올바른 게임 변경인데 테스트 기대값이 오래된 것인지, 실제 트레이너 파티 구성의 오류인지는 확정할 수 없다. Erica의 의도된 랭크 B 파티와 데이터 출처, 테스트 기대값을 대조해야 한다.
+- 스타터 1·4·7의 리그 진행 테스트는 이번 전체 실행에서 모두 통과했다.
+
 ## 2026-11-12 — 미션 3 포획 기회 간헐 실패 확인 중
 
 - 독립 검증 대상 `bc8459c`: `Mission 3 capture lesson, research and Royale transition preserve progress` 첫 실행에서 뒤쪽 포획 기회 단언이 실패했고 재실행은 통과했다. 실제 실패 로그의 상세값·원인은 아직 제공되지 않았다.
