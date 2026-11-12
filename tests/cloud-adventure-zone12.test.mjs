@@ -3,6 +3,13 @@ import assert from 'node:assert/strict';
 import {zone12Map,zone12Encounter,zone12Visible,zone12Item} from '../lib/cloud-adventure/adventure-zone12.mjs';
 import {stepField,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 function reachable(s,target){const q=[s],seen=new Set([`${s.x},${s.y}`]);for(let i=0;i<q.length;i++){const p=q[i];if(p.x===target.x&&p.y===target.y)return true;for(const dir of ['up','down','left','right']){const n=stepField(p,dir),key=`${n.x},${n.y}`;if(!n.blocked&&!n.transitioned&&!seen.has(key)){seen.add(key);q.push({...p,...n});}}}return false;}
+test('Zone 12 pond-side grass can yield Vanillite while preserving its route and save',()=>{
+ const s={area:3,district:'lumiose-zone12',interior:null,x:9,y:11,zaRoyaleRank:'E',teamIds:['kept']},map=zone12Map(s);
+ assert.equal(map[s.y][s.x],'g');assert.ok(fieldPath(map,{x:10,y:11},s).length);
+ assert.deepEqual(zone12Encounter(s,()=>.999),{speciesId:582,level:36});
+ assert.notEqual(zone12Encounter({...s,x:13,y:8},()=>.999).speciesId,582);
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,31),31);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[s.district,9,11,['kept']]);
+});
 test('draft Bleu 5 waterside entrance preserves ground gates and lower-layer saves',()=>{
  const city={area:3,district:'lumiose-bleu-sector5',interior:null,x:21,y:14,zaRoyaleRank:'E',teamIds:['kept']};
  assert.equal(stepField({...city,zaRoyaleRank:'F'},'right').blocked,true);

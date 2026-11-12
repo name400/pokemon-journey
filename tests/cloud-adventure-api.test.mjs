@@ -3765,6 +3765,22 @@ test('Zone 20 habitat encounters can be caught and restored through the API',asy
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
+test('Zone 12 pond-side Vanillite can complete research after capture and reload',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;
+ globalThis.__adventureUser={userId:'zone12-vanillite-research-qa',displayName:'구역12 조사'};
+ try{
+  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});
+  const {LATER_ZONE_SPECIES,laterZoneResearch}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:10,y:11,facing:'left',zaRoyaleRank:'E',adventureBalls:{masterball:1},adventureDexSpecies:LATER_ZONE_SPECIES[12].filter(id=>id!==582)},state.revision+1));
+  await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===12).points,0);
+  const rolls=[0,.9,.999,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;
+  await call('move',{direction:'left'});assert.equal(rawWorld().encounter?.speciesId,582);
+  await call('ball',{ball:'masterball'});await get();
+  assert.ok(rawWorld().adventureDexSpecies.includes(582));assert.ok(state.box.some(mon=>mon.speciesId===582));
+  assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===12).points,1000);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
+
 test('Zone 19 missing species can be caught and complete research after reload',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;
  globalThis.__adventureUser={userId:'zone19-research-completion-qa',displayName:'구역19 조사'};
