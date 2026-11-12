@@ -169,7 +169,27 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='H'){ctx.fillStyle='#f0e8d8';ctx.fillRect(px+3,py+5,tile-6,tile-8);ctx.fillStyle='#bf4d55';ctx.fillRect(px+2,py+3,tile-4,8);ctx.fillStyle='#5b7780';ctx.fillRect(px+7,py+15,tile-14,tile-19);ctx.fillStyle='#fff';ctx.fillRect(px+tile/2-3,py+4,6,6);ctx.fillStyle='#a83d46';ctx.fillRect(px+tile/2-2,py+5,4,2);}
      if(c==='X'||c==='W'){ctx.fillStyle='#81998c';ctx.fillRect(px+9,py+9,tile-18,tile-18);}return;
     }
-    if(['lumiose-zone5-drain','lumiose-bleu3-sewer-approach'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#526a6c':c==='r'?'#75517d':(x+y)%2?'#a1ada5':'#afbab0';ctx.fillRect(px,py,tile,tile);if(w.district==='lumiose-zone5-drain'&&c==='#'){ctx.fillStyle='#718583';ctx.fillRect(px,py+tile/2,tile,2);ctx.fillRect(px+(y%2?tile/3:tile*2/3),py+2,2,tile/2-2);}if(w.district==='lumiose-zone5-drain'&&c==='w'){ctx.fillStyle='#76a6a1';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#a8c9bf';ctx.fillRect(px+3,py+7,tile-8,2);ctx.fillRect(px+9,py+20,tile-12,2);}if(w.district==='lumiose-zone5-drain'&&c==='.') {ctx.fillStyle='#8b9d97';ctx.fillRect(px+2,py+tile-3,tile-4,1);}if(c==='h'||c==='X'||c==='W'){ctx.fillStyle=c==='h'?'#946448':'#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);if(c==='h'&&w.district==='lumiose-zone5-drain'){ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('사다리',px+tile/2,py+20);}}return;}
+    if(w.district==='lumiose-zone5-drain'&&!w.interior){
+     // The source describes a shallow waterway, sludge and a tunnel to the
+     // clearing; the tile geometry and stonework remain provisional.
+     ctx.fillStyle=c==='#'?'#526a6c':c==='w'?'#77a8a4':(x+y)%2?'#a1ada5':'#afbab0';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){
+      ctx.fillStyle='#718583';ctx.fillRect(px,py+tile/2,tile,2);ctx.fillRect(px+(y%2?tile/3:tile*2/3),py+2,2,tile/2-2);
+      ctx.fillStyle='#3f5a5d';if(w.map[y+1]?.[x]&&w.map[y+1][x]!=='#')ctx.fillRect(px,py+tile-5,tile,5);
+     }else if(c==='w'){
+      ctx.fillStyle='#b5d3c6';ctx.fillRect(px+3,py+7,tile-8,2);ctx.fillRect(px+9,py+20,tile-12,2);
+      ctx.fillStyle='#91bdb0';if(w.map[y]?.[x-1]==='#')ctx.fillRect(px,py,3,tile);if(w.map[y]?.[x+1]==='#')ctx.fillRect(px+tile-3,py,3,tile);
+     }else{
+      ctx.fillStyle='#8b9d97';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+4,2,tile-6);
+     }
+     if(c==='r'){
+      ctx.fillStyle='#563b65';ctx.beginPath();ctx.moveTo(px+3,py+tile-5);ctx.lineTo(px+6,py+12);ctx.lineTo(px+12,py+8);ctx.lineTo(px+17,py+3);ctx.lineTo(px+tile-5,py+10);ctx.lineTo(px+tile-3,py+tile-5);ctx.closePath();ctx.fill();
+      ctx.fillStyle='#a16ca9';ctx.fillRect(px+8,py+12,5,4);ctx.fillRect(px+18,py+8,4,3);ctx.fillStyle='#c79ac6';ctx.fillRect(px+10,py+11,3,2);
+     }else if(c==='h'){
+      ctx.fillStyle='#704e39';ctx.fillRect(px+7,py+3,4,tile-6);ctx.fillRect(px+tile-11,py+3,4,tile-6);ctx.fillStyle='#dfbd87';for(let j=7;j<tile-5;j+=6)ctx.fillRect(px+9,py+j,tile-18,3);
+     }else if(c==='X'||c==='W'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
+    if(w.district==='lumiose-bleu3-sewer-approach'&&!w.interior){ctx.fillStyle=c==='#'?'#526a6c':c==='r'?'#75517d':(x+y)%2?'#a1ada5':'#afbab0';ctx.fillRect(px,py,tile,tile);if(c==='h'||c==='X'||c==='W'){ctx.fillStyle=c==='h'?'#946448':'#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-rouge-tower-interior'&&!w.interior){ctx.fillStyle=c==='#'?'#787d7c':(x+y)%2?'#d8d2c6':'#e5dfd1';ctx.fillRect(px,py,tile,tile);if(c==='i'){ctx.fillStyle='#9b9b92';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e9e4d9';for(let j=0;j<4;j++)ctx.fillRect(px+5,py+6+j*6,tile-10,2);}if(c==='j'){ctx.fillStyle='#896b55';ctx.fillRect(px+5,py+4,tile-10,tile-8);}return;}
     if(w.district==='lumiose-lune-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#6d7779':c===','?'#a89b8b':c===';'?'#98c8ce':'#d4c9b8';ctx.fillRect(px,py,tile,tile);if(c==='.')roofPaving(px,py,x,y);if(c===','){ctx.fillStyle='#6e6c66';ctx.fillRect(px+2,py+5,tile-4,3);ctx.fillRect(px+2,py+tile-8,tile-4,3);}if(c===';'){ctx.strokeStyle='#dceff0';ctx.strokeRect(px+1,py+1,tile-2,tile-2);}if(c==='z'){ctx.fillStyle='#fbe5a5';ctx.fillRect(px+tile/2-2,py+5,4,tile-10);ctx.fillRect(px+5,py+tile/2-2,tile-10,4);}if(c==='h'||c==='l'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}if(x===17&&(y===2||y===4)){ctx.fillStyle='#ecd07d';ctx.fillRect(px+4,py+4,tile-8,3);ctx.fillRect(px+4,py+tile-7,tile-8,3);}return;}
     if(w.district==='lumiose-rust-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#68706c':c==='^'?'#698963':c==='l'?'#826347':'#b8aca0';ctx.fillRect(px,py,tile,tile);if(c==='.')roofPaving(px,py,x,y);if(c==='^'){ctx.fillStyle='#416e48';ctx.fillRect(px+6,py+3,4,tile-6);ctx.fillRect(px+tile-10,py+2,4,tile-4);ctx.fillStyle='#a7bd75';ctx.fillRect(px+4,py+8,tile-8,3);}if(x===15&&(y===6||y===9)){ctx.fillStyle='#ecd07d';ctx.fillRect(px+4,py+4,tile-8,3);ctx.fillRect(px+4,py+tile-7,tile-8,3);}if(c==='l'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}return;}

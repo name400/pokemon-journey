@@ -636,3 +636,7 @@ The [Gamepedia item list](https://gamepedia.jp/pokemon-legends-z-a/archives/1662
 ### 구역 2 높은 지형의 물가 표현
 
 [구역 안내](https://allthings.how/pokemon-legends-z-a-wild-zone-2-every-spawn-and-where-to-find-them/)는 중앙의 높은 지형과 얕은 호수를 설명한다. 기존 전망층의 바닥·계단·물가 경계를 그려 수면과 구별했다. 이 층의 정확한 범위와 계단 연결, 석재 포장과 난간 형태는 기존 2D 초안에 따른 추정이다. 맵 타일, 높이 이동, 충돌, 조우 및 저장은 변경하지 않았다.
+
+### 구역 5 물길과 지하 터널 표현
+
+[현장 안내](https://www.powerpyx.com/pokemon-legends-z-a-whirlipede-location/)는 오염물을 치우고 낮은 물길과 터널을 지나 휠구가 있는 곳에 도달하는 경로를 설명한다. 기존 지하층의 물길·터널 벽·오염물과 사다리를 구분해 그렸다. 물길의 윤곽, 벽 재질과 사다리의 정확한 위치는 기존 2D 배치에 따른 추정이다. 맵 타일, 오염물 제거 조건, 조우·이동·저장은 변경하지 않았다.
