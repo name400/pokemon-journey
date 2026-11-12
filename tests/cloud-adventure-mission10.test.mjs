@@ -60,3 +60,9 @@ test('isolated multi battle requires a player-owned replacement after fainting',
  fight=playMission10MultiTurn(fight,{type:'move',move:'splash'});let b=Battle.fromJSON(fight.snapshot);assert.equal(b.p1.active[0].hp,0);assert.equal(b.p1.activeRequest.forceSwitch[0],true);assert.equal(fight.teams[0].find(p=>p.boxId==='lead').hp,0);
  assert.throws(()=>playMission10MultiTurn(fight,{type:'switch',slot:3}));fight=playMission10MultiTurn(fight,{type:'switch',slot:2});b=Battle.fromJSON(fight.snapshot);assert.equal(b.p1.active[0].set.trainerToken,'reserve');assert.ok(b.p3.pokemon.every(p=>p.set.trainerToken.startsWith('mission10-ally-')));
 });
+
+test('multi battle view exposes both guard targets and only player-controlled switches',async()=>{
+ const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot,mission10MultiView}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const player=[{...makeMon(150,100),boxId:'lead',moves:['사이코키네시스'],pp:{}},{...makeMon(25,30),boxId:'reserve'}],t=mission10GuardTeams('water'),view=mission10MultiView(createMission10DoubleSnapshot(player,t.ally,t.foes));
+ assert.deepEqual(view.activeBySide,[[0,2],[0,1]]);assert.equal(view.requests[0].actors.length,1);assert.deepEqual(view.requests[0].actors[0].switches.map(s=>s.slot),[2]);assert.deepEqual(view.requests[0].actors[0].moves[0].targets.map(t=>t.target),[1,2]);
+});
