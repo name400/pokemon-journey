@@ -1,5 +1,12 @@
 # 배포 검증 실패 기록
 
+## 개발 브랜치 검증 — 무한 로열 15번째 배틀 스택 오류
+
+- 대상: `75062da6`에 미션 20 하수도 메가조각 지급을 추가한 작업 트리. Sites 병합본이나 배포 검사는 아니다.
+- 검사: `node --test --test-name-pattern='Mission 20 sewer crystals grant|crystal experience is awarded|mission 10 companion battle requires Absol and advances on either result' tests/cloud-adventure-api.test.mjs`.
+- 하수도 조각·결정 경험치 검사는 통과했다. 긴 메인 진행 검사는 무한 로열 15번째 동료 보상 배틀을 진행하는 `battle` 요청에서 HTTP 409와 `Maximum call stack size exceeded`가 반환되어 실패했다 (`tests/cloud-adventure-api.test.mjs` 1356행). 실패 당시 구체적인 기술·전투 스냅샷과 내부 스택은 수집하지 못했다.
+- 원인과 이번 하수도 변경과의 관련성은 확인되지 않았다. 변경 전 `75062da6`을 분리한 작업 트리에서 같은 메인 진행 검사 한 차례가 통과했다. 한 번의 통과로 비결정적 오류의 부재나 변경과의 무관함을 증명할 수 없으므로 동일 조건 재현 및 스택 확보 전까지 이 항목을 유지한다.
+
 ## 2026-11-13 — GitHub `a67fa3e` 배포 검사 실패
 
 - 대상 브랜치: `cloud/pokerogue-continue-20261105`; 대상 GitHub 커밋 `a67fa3eadf7b3339f74c810f1b26f31ee48367b0`. 검사 시작 시 이 커밋 뒤에 브랜치 커밋 하나가 있었으나 사용자가 확인한 대상까지만 반영했다.

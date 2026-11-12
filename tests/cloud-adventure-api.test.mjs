@@ -4781,3 +4781,16 @@ test('crystal experience is awarded once to the active Pokémon and survives rel
 
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Mission 20 sewer crystals grant shards atomically without blocking progress at the cap',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'mission20-crystal-shard-qa',displayName:'하수도 조각'};
+ try{
+  const {CRYSTAL_POSITIONS}=await import('../lib/cloud-adventure/adventure-mission20-jobs.mjs');globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const id=state.world.activeId,mon={...makeMon(150,50),boxId:id,experience:0,moves:['몸통박치기'],pp:{}};seedMon(id,mon);const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const place=async extra=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-crystal-sewer',interior:null,x:3,y:5,facing:'up',zaMission20Stage:9,zaMission20Crystals:[],zaMegaShards:10,combat:null,encounter:null,...extra},state.revision+1));await get();};
+  await place({});const revision=state.revision;globalThis.__adventureRandom=()=>0;await call('mission20BreakCrystal');assert.equal(rawWorld().zaMegaShards,11);assert.equal(rawMon(id).experience,50);assert.deepEqual(rawWorld().zaMission20Crystals,['3,4']);await get();assert.equal(rawWorld().zaMegaShards,11);const stale=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'mission20BreakCrystal',revision})}));assert.equal(stale.status,409);await call('mission20BreakCrystal',{},409);assert.equal(rawWorld().zaMegaShards,11);assert.equal(rawMon(id).experience,50);
+  await place({x:5,zaMission20Crystals:['3,4'],zaMegaShards:9998});globalThis.__adventureRandom=()=>.999;await call('mission20BreakCrystal');assert.equal(rawWorld().zaMegaShards,9999);assert.equal(rawMon(id).experience,100);assert.equal(rawWorld().zaMission20Crystals.length,2);
+  const cleared=CRYSTAL_POSITIONS.filter(p=>p.key!=='7,4').map(p=>p.key);await place({x:7,zaMission20Crystals:cleared,zaMegaShards:9999});await call('mission20BreakCrystal');assert.equal(rawWorld().zaMegaShards,9999);assert.equal(rawWorld().zaMission20Crystals.length,27);assert.equal(rawWorld().zaMission20Stage,10);assert.equal(rawMon(id).experience,150);await get();assert.equal(rawWorld().zaMission20Stage,10);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await place({x:9,zaMission20Crystals:[],zaMegaShards:10050});await call('mission20BreakCrystal');assert.equal(rawWorld().zaMegaShards,10050);
+  await place({x:9,zaMission20Crystals:[],zaMegaShards:177});globalThis.__adventureRandom=()=>.999;await call('mission20BreakCrystal');assert.equal(rawWorld().zaMegaShards,180);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:18,y:10,facing:'down',zaShardExchangeUnlocked:true},state.revision+1));await get();await call('exchangeMegaShard',{item:'pidgeotite'});assert.equal(rawWorld().zaMegaShards,0);assert.equal(state.inventory.pidgeotite,1);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
