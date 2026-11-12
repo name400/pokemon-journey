@@ -20,7 +20,7 @@ import lumioseDex from '../data/lumiose-dex.json' with {type:'json'};
 
 const root=fileURLToPath(new URL('../',import.meta.url)),sql=new DatabaseSync(':memory:');
 for(const name of (await fs.readdir(new URL('../drizzle/',import.meta.url))).filter(n=>/^\d.*\.sql$/.test(n)).sort())sql.exec(await fs.readFile(new URL('../drizzle/'+name,import.meta.url),'utf8'));
-function prepare(query,args=[]){return {bind(...values){return prepare(query,values);},async first(){return sql.prepare(query).get(...args)||null;},async all(){return {results:sql.prepare(query).all(...args)};},async run(){const r=sql.prepare(query).run(...args);return {meta:{changes:Number(r.changes)}};}};}
+function prepare(query,args=[]){return {bind(...values){return prepare(query,values);},async first(){return sql.prepare(query).get(...args)||null;},async all(){return {results:sql.prepare(query).all(...args)};},async run(){if(/^\s*SELECT\b/i.test(query))return {results:sql.prepare(query).all(...args),meta:{changes:0}};const r=sql.prepare(query).run(...args);return {meta:{changes:Number(r.changes)}};}};}
 globalThis.__adventureEnv={DB:{prepare,async batch(statements){sql.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());sql.exec('COMMIT');return result;}catch(e){sql.exec('ROLLBACK');throw e;}}}};
 globalThis.__adventureUser={userId:'adventure-qa',displayName:'탐험테스트'};globalThis.__adventureRandom=()=>.999;
 async function loadTS(relative){
@@ -1870,10 +1870,29 @@ test('concurrent movement uses a single authoritative revision and keeps invento
   db.prepare=(query,...args)=>{if(query.startsWith('SELECT item,quantity FROM inventory'))inventoryReads++;return prepareBefore(query,...args);};
   let queue=Promise.resolve();db.batch=statements=>{const result=queue.then(()=>batchBefore(statements));queue=result.catch(()=>{});return result;};
   const request=()=>new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'move',direction:'right',compact:true,revision:rev})});
-  const responses=await Promise.all([route.POST(request()),route.POST(request())]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);assert.match((await responses.find(r=>r.status===409).json()).error,/다른 화면/);assert.equal(inventoryReads,1,'only the successful response rereads the bag');
+  const responses=await Promise.all([route.POST(request()),route.POST(request())]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);assert.match((await responses.find(r=>r.status===409).json()).error,/다른 화면/);assert.equal(inventoryReads,2,'each transaction reads its own inventory snapshot');
   db.prepare=prepareBefore;await get();assert.equal(state.world.x,12);assert.equal(state.world.steps,21);assert.equal(state.revision,rev+1);assert.equal(rawMon(id).walkSteps,(before.walkSteps||0)+1);assert.equal(state.inventory.firestone,3);assert.deepEqual(state.wallet,wallet);
   await call('face',{direction:'up',compact:true});await get();assert.equal(state.inventory.firestone,3);
  }finally{db.prepare=prepareBefore;db.batch=batchBefore;globalThis.__adventureUser=previousUser;}
+});
+
+test('compact movement response stays at committed revision when another update follows',async()=>{
+ const previousUser=globalThis.__adventureUser,db=globalThis.__adventureEnv.DB,batchBefore=db.batch,prepareBefore=db.prepare;globalThis.__adventureUser={userId:'movement-snapshot-race-qa',displayName:'저장 스냅샷 검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:11,y:6,steps:10},state.revision+1));await get();const oldRevision=state.revision,oldWallet=state.wallet.coins,oldHP=rawMon(id).hp;let afterBatch=false,readsAfter=0;
+  db.prepare=(query,...args)=>{if(afterBatch&&/^\s*SELECT\b/i.test(query))readsAfter++;return prepareBefore(query,...args);};
+  db.batch=async statements=>{const result=await batchBefore(statements);const next=rawWorld();seedWorld({log:['later tab update'],districtPosition:{...next.districtPosition,revision:oldRevision+2}});const m=rawMon(id);seedMon(id,{...m,hp:m.hp-1});sql.prepare('UPDATE wallets SET coins=coins+7 WHERE user_id=?').run(globalThis.__adventureUser.userId);afterBatch=true;return result;};
+  const result=await call('move',{direction:'right',compact:true});assert.equal(result.revision,oldRevision+1);assert.equal(result.world.x,12);assert.equal(result.wallet.coins,oldWallet);assert.equal(result.box.find(m=>m.boxId===id).hp,oldHP);assert.equal(readsAfter,0,'response uses one committed transaction snapshot');
+  db.batch=batchBefore;db.prepare=prepareBefore;await get();assert.equal(state.revision,oldRevision+2);assert.equal(state.wallet.coins,oldWallet+7);assert.equal(rawMon(id).hp,oldHP-1);assert.deepEqual(rawWorld().log,['later tab update']);
+ }finally{db.batch=batchBefore;db.prepare=prepareBefore;globalThis.__adventureUser=previousUser;}
+});
+
+test('group movement retains live member lookup and the existing response path',async()=>{
+ const previousUser=globalThis.__adventureUser,db=globalThis.__adventureEnv.DB,batchBefore=db.batch,prepareBefore=db.prepare;globalThis.__adventureUser={userId:'movement-union-fallback-qa',displayName:'그룹 이동 검증'};
+ try{await get();await call('start',{species:1});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:11,y:6,unionHost:'movement-union-fallback-qa'},state.revision+1));await get();assert.equal(state.world.inUnion,true);const wallet=structuredClone(state.wallet);let afterBatch=false,worldReads=0;
+  db.batch=async statements=>{const result=await batchBefore(statements);afterBatch=true;return result;};db.prepare=(query,...args)=>{if(afterBatch&&query.startsWith('SELECT state,revision FROM worlds'))worldReads++;return prepareBefore(query,...args);};
+  const moved=await call('move',{direction:'right',compact:true});assert.equal(moved.world.x,12);assert.equal(moved.world.inUnion,true);assert.equal(worldReads,1,'group movement keeps the live post-commit read');assert.deepEqual(moved.wallet,wallet);
+  db.batch=batchBefore;db.prepare=prepareBefore;await get();assert.equal(state.world.x,12);assert.equal(state.world.inUnion,true);
+ }finally{db.batch=batchBefore;db.prepare=prepareBefore;globalThis.__adventureUser=previousUser;}
 });
 
 test('eight-step movement persists each step and stops at walls and encounters',async()=>{
@@ -2755,7 +2774,7 @@ test('Opening simultaneous knockout recovers the party and keeps escape playable
  try{
   await get();await call('start',{species:152,destination:'lumiose'});const id=state.world.activeId;
   seedMon(id,{...rawMon(id),hp:1,moves:['이판사판태클'],pp:{}});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:13,zaIntroStage:'andi'},state.revision+1));await get();await call('introBattle');
-  const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;const teams=combat.teams.map((team,index)=>index===1?team.map(foe=>({...foe,hp:1})):team);seedWorld({combat:{...combat,teams,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].teraType='Normal';sim.p2.pokemon[0].set.teraType='Normal';sim.p2.pokemon[0].canTerastallize='Normal';if(sim.p2.activeRequest?.active?.[0])sim.p2.activeRequest.active[0].canTerastallize='Normal';sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;const teams=combat.teams.map((team,index)=>index===1?team.map(foe=>({...foe,hp:1,teraType:'Normal'})):team);seedWorld({combat:{...combat,teams,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
   await call('battle',{command:{type:'move',move:'이판사판태클'}});await get();assert.equal(state.world.zaIntroStage,'escape');assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.match(state.world.log.join(' '),/회복/);await call('introEscapeMove',{direction:'right'});assert.equal(state.world.zaIntroX,2);
  }finally{globalThis.__adventureUser=previousUser;}
 });
