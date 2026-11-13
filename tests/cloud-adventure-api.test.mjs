@@ -6052,6 +6052,17 @@ test('Odette gives the Skiddo quest rewards once, preserving party and rejecting
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('taxi and registered cafe map points support side mission 14 without duplicate rewards',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side14-cafe-travel-qa',displayName:'카페 이동 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];sql.prepare('UPDATE wallets SET coins=1420 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:14,y:7,facing:'up',zaVert7RoofUpper:false,zaMission04Complete:true,zaMission07Started:true,zaRoyaleRank:'X'},state.revision+1));await get();await call('mapFastTravel',{destination:'cafe-shutterbug'},409);assert.ok(state.world.interaction.actions.some(p=>p.action==='taxi-cafe-shutterbug'));
+  const taxiRev=state.revision;await call('taxi-cafe-shutterbug');await call('taxi-cafe-shutterbug',{revision:taxiRev},409);await get();assert.deepEqual([state.world.x,state.world.y,state.world.facing],[12,6,'up']);assert.equal(state.wallet.coins,710);assert.equal(state.world.zaVert7RoofUpper,false);assert.equal(state.world.interaction.action,'side14Start');assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='cafe-shutterbug'));await call('side14Start');
+  await walkTo({x:14,y:7});await call('face',{direction:'up'});await call('taxi-cafe-soleil');await get();assert.deepEqual([state.world.x,state.world.y,state.world.facing],[17,6,'up']);assert.equal(state.wallet.coins,0);assert.equal(state.world.interaction.action,'side14Reward');assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='cafe-soleil'));
+  const rewardRev=state.revision;await call('side14Reward');await call('side14Reward',{revision:rewardRev},409);await get();assert.equal(state.world.zaSide14Complete,true);assert.equal(state.inventory.whippeddream,2);assert.equal(state.wallet.coins,3000);await call('mapFastTravel',{destination:'cafe-shutterbug'});await get();assert.deepEqual([state.world.x,state.world.y],[12,6]);assert.equal(state.wallet.coins,3000);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaSide14Complete,true);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Bleu market catches and Slurpuff cafe quest persist and grant Whipped Dreams once',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'side14-market-qa',displayName:'블루 시장 검사'};
  try{

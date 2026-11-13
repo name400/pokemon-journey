@@ -101,3 +101,11 @@ test('zone 11 elevated bank is not recorded or used as a ground travel origin',a
  assert.equal(canMapTravel(upper),false);const unregistered={...upper,zaFastTravelZones:{}};assert.equal(recordZoneEntry(unregistered,'lumiose-zone11-sw-top','.'),false);assert.deepEqual(unregistered.zaFastTravelZones,{});assert.equal(recordZoneEntry(upper,'lumiose-zone11-sw-top','.'),false);assert.deepEqual(upper.zaFastTravelZones[11],{x:19,y:2});assert.deepEqual(groundDestinationFlags('lumiose-zone11'),{zaZone11Upper:false});
  const ground={...upper,zaZone11Upper:false,zaFastTravelZones:{},x:19,y:2};assert.equal(canMapTravel(ground),true);assert.equal(recordZoneEntry(ground,'lumiose-test','.'),true);assert.deepEqual(ground.zaFastTravelZones[11],{x:19,y:2});clearMapTravelTransient(upper);assert.equal(upper.zaZone11Upper,undefined);assert.deepEqual(upper.teamIds,['kept']);assert.deepEqual(upper.zaFastTravelZones[11],{x:19,y:2});
 });
+
+test('two side mission cafe landmarks register only from the boulevard ground',async()=>{
+ const {recordLandmarks,registeredLandmarks,taxiDestinations,groundDestinationFlags}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const state={area:3,district:'lumiose-south-boulevard',interior:null,x:12,y:6,zaMission04Complete:true,zaMission07Started:true,zaVert7RoofUpper:true,teamIds:['kept']};
+ assert.equal(recordLandmarks(state),false);assert.equal(state.zaFastTravelLandmarks,undefined);assert.deepEqual(groundDestinationFlags(state.district),{zaVert7RoofUpper:false});
+ state.zaVert7RoofUpper=false;assert.equal(recordLandmarks(state),true);assert.deepEqual(registeredLandmarks(state).map(p=>p.id),['cafe-shutterbug']);state.x=17;assert.equal(recordLandmarks(state),true);assert.deepEqual(registeredLandmarks(state).map(p=>p.id),['cafe-shutterbug','cafe-soleil']);
+ assert.ok(taxiDestinations(state).some(p=>p.id==='cafe-shutterbug'));assert.ok(taxiDestinations(state).some(p=>p.id==='cafe-soleil'));assert.deepEqual(state.teamIds,['kept']);
+});
