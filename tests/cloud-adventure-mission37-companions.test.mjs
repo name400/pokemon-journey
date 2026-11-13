@@ -1,7 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {moves} from '../lib/game.mjs';
-import {mission36Partners,mission37Companion} from '../lib/cloud-adventure/adventure-mission37-companions.mjs';
+import {mission36Partners,mission37Companion,mission37CompanionGroups} from '../lib/cloud-adventure/adventure-mission37-companions.mjs';
+
+test('mission 37 keeps the two documented companion rosters separately owned',()=>{
+ for(const [stage,names,secondIds,stone] of [[2,['Ivor','Gwynn'],[609,354,10030,94],'chandelurite'],[6,['Griselle','Grisham'],[6,675,687,668,248,373],'charizarditex']]){
+  const groups=mission37CompanionGroups(stage);assert.deepEqual(groups.map(g=>g.name),names);assert.deepEqual(groups[1].team.map(m=>m.id),secondIds);assert.equal(groups[1].team[0].item,stone);assert.ok(groups.flatMap(g=>g.team).every(m=>m.moves.length===4&&m.moves.every(move=>Object.hasOwn(moves,move))));const ids=groups.flatMap(g=>g.team.map(m=>m.boxId));assert.equal(new Set(ids).size,ids.length);assert.deepEqual(JSON.parse(JSON.stringify(groups)),groups);
+ }
+ assert.equal(mission37CompanionGroups(3).length,1);assert.deepEqual(mission37CompanionGroups(0),[]);
+});
 import {createMission10DoubleSnapshot,playMission10MultiTurn} from '../lib/cloud-adventure/adventure-mission10-double.mjs';
 import {makeMon} from '../lib/game.mjs';
 import {Battle} from '@pkmn/sim';
