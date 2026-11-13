@@ -99,7 +99,7 @@ test('Zone 16 northwest gate reaches the Rust office without changing older exit
 test('raised garden stairs and shared Ampharos keep ground and garden saves',()=>{
  const ground={area:3,district:'lumiose-zone16',interior:null,x:17,y:7,facing:'up',zaRoyaleRank:'C',teamIds:['kept']};
  assert.equal(zone16Map(ground)[6][17],'j');assert.equal(fieldDialogue(ground).action,'zone16GardenStairs');
- const garden={...ground,district:'lumiose-zone16-garden',x:17,y:11,facing:'down'},map=fieldMap(garden);assert.equal(fieldDialogue(garden).action,'zone16GardenStairs');assert.ok(fieldPath(map,garden,{x:18,y:3}).length);assert.equal(map[2][18],'d');assert.equal(zone16Visible(garden,'d').species,181);
+ const garden={...ground,district:'lumiose-zone16-garden',x:17,y:11,facing:'down'},map=fieldMap(garden);for(const [x,y] of [[17,11],[17,7],[5,7]])assert.equal(map[y][x],',');assert.equal(fieldDialogue(garden).action,'zone16GardenStairs');assert.ok(fieldPath(map,garden,{x:18,y:3}).length);assert.equal(map[2][18],'d');assert.equal(zone16Visible(garden,'d').species,181);
  for(const state of [ground,garden]){const saved=restoreAdventurePosition(storeAdventurePosition(state,152),152);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[state.district,state.x,state.y,['kept']]);}
  const spent={...garden,zaZone16Spent:{'ampharos-alpha':true}};assert.equal(fieldMap(spent)[2][18],'.');assert.equal(zone16Visible(spent,'d'),null);assert.equal(zone16Visible({...ground,zaZone16Spent:spent.zaZone16Spent},'d'),null);
 });

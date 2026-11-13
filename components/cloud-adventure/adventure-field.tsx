@@ -527,7 +527,16 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      return;
     }
     if(w.district==='lumiose-zone9-scaffold'&&!w.interior){ctx.fillStyle=c==='#'?'#68787d':'#ac9475';ctx.fillRect(px,py,tile,tile);if(c===','){ctx.fillStyle='#d4b995';for(let n=5;n<tile;n+=8)ctx.fillRect(px+n,py+3,2,tile-6);ctx.fillStyle='#756b5d';if(w.map[y-1]?.[x]==='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]==='#')ctx.fillRect(px,py+tile-3,tile,3);}if(c==='o'){ctx.fillStyle='#846742';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
-    if(w.district==='lumiose-zone16-garden'&&!w.interior){ctx.fillStyle=c==='#'?'#697e70':(x+y)%2?'#aac39a':'#b6cea4';ctx.fillRect(px,py,tile,tile);if(c==='j'){ctx.fillStyle='#917d60';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#e9ddbc';for(let n=0;n<3;n++)ctx.fillRect(px+5,py+7+n*7,tile-10,2);}return;}
+    if(w.district==='lumiose-zone16-garden'&&!w.interior){
+     // Raised garden perimeter, lawns and paving. Exact planting and terrace
+     // shape are draft; collision remains defined by the existing map.
+     const edge=c==='#'&&((y===1&&x>=3&&x<=19)||(y===12&&x>=3&&x<=19)||(x===2&&y>=2&&y<=11)||(x===20&&y>=2&&y<=11));
+     ctx.fillStyle=c==='#'?'#64796d':c===','?'#c8bc9d':(x+y)%2?'#9fbd88':'#b0c99a';ctx.fillRect(px,py,tile,tile);
+     if(edge){ctx.fillStyle='#a6987b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e0d1af';ctx.fillRect(px+2,py+3,tile-4,5);ctx.fillStyle='#777f6b';ctx.fillRect(px+4,py+tile-7,tile-8,3);}
+     if(c===','){ctx.fillStyle='#e0d4b8';ctx.fillRect(px+2,py+3,tile-4,2);ctx.fillStyle='#ab9e83';ctx.fillRect(px,py+tile-3,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+5,2,tile-8);}
+     if(c==='.'&&((x>=4&&x<=9&&[3,4,9,10].includes(y))||(x>=12&&x<=15&&[3,4,9,10].includes(y)))){ctx.fillStyle='#779c68';ctx.fillRect(px+3,py+tile-7,tile-6,3);ctx.fillStyle='#eee0ae';ctx.fillRect(px+7,py+10,3,3);ctx.fillStyle='#d8a9ac';ctx.fillRect(px+tile-10,py+16,3,3);}
+     if(c==='j'){ctx.fillStyle='#917d60';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#e9ddbc';for(let n=0;n<3;n++)ctx.fillRect(px+5,py+7+n*7,tile-10,2);}return;
+    }
     if(w.district==='lumiose-zone16'&&!w.interior&&w.zaZone16Upper){ctx.fillStyle=c==='#'?'#777e79':c===','?'#a68d76':(x+y)%2?'#cfc5b4':'#dfd7c7';ctx.fillRect(px,py,tile,tile);if(c==='l'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}return;}
     if(w.district==='lumiose-zone16'&&!w.interior){
      // Bleu Plaza's island, monument and northern Florges fountain follow
