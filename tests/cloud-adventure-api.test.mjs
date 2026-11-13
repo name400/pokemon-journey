@@ -5953,3 +5953,12 @@ test('Mega research reaches 45 through shard exchange, shop and story rewards',a
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-north-boulevard',interior:null,x:14,y:8,facing:'right',zaMission13RewardPending:true},state.revision+1));await get();await call('claimMission13Stone');await call('claimMission13Stone',{},409);await get();assert.equal(megaResearchProgress(rawWorld()).count,45);assert.equal(megaResearchProgress(rawWorld()).points,4500);assert.deepEqual(rawWorld().teamIds,[original]);assert.deepEqual(rawMon(original),starter);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Zone 2 northeast crossing connects the island and northern bank across reloads',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone2-northeast-bridge-qa',displayName:'구역2 북동 연결 검사'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={hour:12,period:'day'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],mon=rawMon(team[0]),wallet=structuredClone(state.wallet),spent={patrat:true,patrat2:true,binacle:true,magikarp:true,staryu:true};
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:15,y:6,facing:'up',zaZone2FieldSpent:spent,zaZone2RockCleared:false},state.revision+1));await get();
+  for(const y of [5,4,3]){await call('move',{direction:'up'});assert.deepEqual([state.world.x,state.world.y],[15,y]);}await get();assert.deepEqual([state.world.x,state.world.y],[15,3]);await call('move',{direction:'right'});assert.deepEqual([state.world.x,state.world.y],[16,3]);await call('move',{direction:'left'});for(const y of [4,5,6]){await call('move',{direction:'down'});assert.deepEqual([state.world.x,state.world.y],[15,y]);}await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.world.zaZone2FieldSpent,spent);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(team[0]).moves,mon.moves);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
+});

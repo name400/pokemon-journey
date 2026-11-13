@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {lumioseZone2Map,fieldPath,restoreAdventurePosition,storeAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('east shore is reached over northeast bridge, then through the rock',()=>{
- const start={x:11,y:15},before=lumioseZone2Map({}),bridge=before.map((row,y)=>y===6?row.slice(0,15)+'#'+row.slice(16):row);
+ const start={x:11,y:15},before=lumioseZone2Map({}),bridge=before.map((row,y)=>y>=3&&y<=6?row.slice(0,15)+'#'+row.slice(16):row);
  assert.ok(fieldPath(before,start,{x:18,y:12}).length);
  assert.equal(fieldPath(bridge,start,{x:18,y:12}).length,0);
  assert.equal(fieldPath(before,start,{x:20,y:11}).length,0);
@@ -52,4 +52,13 @@ test('irregular island expands only water and preserves existing paths, spawns a
  assert.equal(zone2FieldMonsters(s,'night',map).find(p=>p.id==='staryu').x,8);assert.equal(zone2FieldMonsters(s,'night',map).find(p=>p.id==='staryu').y,8);
  const saved=storeAdventurePosition({...s,x:12,y:8},128),restored=restoreAdventurePosition(saved,128);assert.deepEqual([restored.x,restored.y],[12,8]);assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone2FieldPositions,s.zaZone2FieldPositions);
  assert.equal(zone2BankTint(11,8),true);assert.equal(zone2BankTint(0,0),false);
+});
+
+test('northeast crossing extends toward northern bank without closing old paths',async()=>{
+ const {ZONE2_NORTHEAST_BRIDGE,zone2FieldMonsters}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const state={area:3,district:'lumiose-zone2',x:11,y:15,teamIds:['kept'],zaZone2FieldPositions:{staryu:{x:8,y:8}}},map=lumioseZone2Map(state);
+ assert.deepEqual(ZONE2_NORTHEAST_BRIDGE,[[15,3],[15,4],[15,5],[15,6]]);for(const [x,y] of ZONE2_NORTHEAST_BRIDGE)assert.equal(map[y][x],'=');
+ for(const target of [{x:4,y:1},{x:8,y:4},{x:8,y:10},{x:11,y:8},{x:15,y:3},{x:16,y:3},{x:21,y:5}])assert.ok(fieldPath(map,state,target).length,JSON.stringify(target));
+ assert.deepEqual(zone2FieldMonsters(state,'night',map).find(p=>p.id==='staryu')?.x,8);assert.deepEqual(zone2FieldMonsters(state,'night',map).find(p=>p.id==='staryu')?.y,8);
+ const saved=storeAdventurePosition({...state,x:15,y:3},128);saved.districtPosition.zone2Layout=7;const restored=restoreAdventurePosition(saved,128);assert.deepEqual([restored.x,restored.y,restored.teamIds],[15,3,['kept']]);
 });
