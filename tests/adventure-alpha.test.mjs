@@ -2,17 +2,37 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {makeAdventureAlpha} from '../lib/adventure-alpha.mjs';
+import {makeAdventureAlpha as makeCloudAdventureAlpha} from '../lib/cloud-adventure/adventure-alpha.mjs';
+import {rules} from '../lib/pokemon-config.mjs';
+import {adventureMoveMastered} from '../lib/cloud-adventure/adventure-plus-mastery.mjs';
 
 test('new alpha preserves existing wild IV policy and gets 252 HP EVs at full HP',()=>{
  const base=makeMon(16,24),alpha=makeAdventureAlpha(base);
  assert.ok(Object.values(alpha.ivs).filter(value=>value===31).length>=3);
  assert.equal(alpha.evs.hp,252);assert.equal(alpha.adventureAlphaMove,'유턴');assert.equal(alpha.moves[0],'유턴');assert.equal(new Set(alpha.moves).size,alpha.moves.length);assert.ok(alpha.maxHp>base.maxHp);assert.equal(alpha.hp,alpha.maxHp);assert.equal(alpha.adventureAlpha,true);
  assert.ok(!base.moves.includes('유턴'));assert.equal(base.evs.hp,0);assert.ok(Object.values(base.ivs).every(value=>value===31));
+ const cloudAlpha=makeCloudAdventureAlpha(base);
+ assert.deepEqual(cloudAlpha.adventurePlusMastered,[...new Set(cloudAlpha.moves.map(name=>rules.moves[name]?.key).filter(Boolean))]);
+ assert.equal(adventureMoveMastered(cloudAlpha,'uturn'),true);
+ assert.equal(adventureMoveMastered({...cloudAlpha,moves:['전기쇼크']},'thundershock'),false);
+ assert.equal(adventureMoveMastered({...base,moves:['유턴']},'uturn'),false);
 });
 
 test('new Spinarak alpha knows its documented special move without changing input',()=>{
  const base=makeMon(167,20),before=[...base.moves],alpha=makeAdventureAlpha(base);
  assert.equal(alpha.adventureAlphaMove,'구멍파기');assert.equal(alpha.moves[0],'구멍파기');assert.deepEqual(base.moves,before);assert.equal(alpha.evs.hp,252);
+});
+
+test('captured alpha can use an initially mastered Plus move after reload',async()=>{
+ const {createCombat,combatView,playCpu}=await import('../lib/party-battle.mjs');
+ const caught=JSON.parse(JSON.stringify({...makeCloudAdventureAlpha(makeMon(16,24)),boxId:'caught'}));
+ const foe={...makeMon(143,70),boxId:'foe',moves:['튀어오르기']};
+ const legacy=createCombat([caught],[foe]),fresh={...legacy,adventurePlusGaugeV1:{charge:1,max:3}};
+ assert.equal(combatView(fresh).requests[0].moves.find(m=>m.id==='uturn').plusReady,true);
+ assert.throws(()=>playCpu(legacy,{type:'move',move:'유턴',plus:true}));
+ const next=playCpu(fresh,{type:'move',move:'유턴',plus:true});
+ assert.equal(next.adventurePlusGaugeV1.charge,0);
+ assert.deepEqual(JSON.parse(JSON.stringify(next)).teams[0][0].adventurePlusMastered,caught.adventurePlusMastered);
 });
 
 test('wild alpha doubles four battle stats in the serialized battle only',async()=>{

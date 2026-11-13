@@ -4,7 +4,9 @@
 - 새 탐험 단일 배틀에서 기술별 숙달, 숙달의씨 소모, 공격 기술과 지원되는 회복 기술의 플러스 선택 및 서버 검증을 지원한다. 기존 진행 중인 배틀과 탐험 외 전투에는 새 게이지를 추가하지 않는다. 새 2대2 동료 전투와 혼자 상대 둘을 상대하는 전투에서도 플레이어 기술을 선택할 수 있다. 새 미션 36·37 세 아군 전투에서도 플레이어만 직접 기술과 대상을 선택한다. 동료는 별도로 자동 행동한다. 새 미션 35의 세 상대 전투도 지원하며, 진행 중이던 구형 전투는 그대로 유지한다.
 - 실시간 축적을 턴제로 옮기는 임시 규칙: 시작 1/3칸, 통상 기술 실행마다 1칸 충전, 플러스는 실행 시 1칸 소모, 메가진화는 3칸을 소모한다. 실제 원작의 충전 속도·변신 지속 시간과는 다르다. 이미 메가진화한 포켓몬의 공격은 자동 플러스 피해 보정만 적용된다.
 - 공격 피해는 이전 구현과 같이 보통 20%, 약점 30% 상승으로 잠정 처리했다. [Serebii](https://www.serebii.net/legendsz-a/plusmoves.shtml)는 25%를 기재하므로 원작 정확 수치는 미확정이다. 방어·판별 외의 보호 기술 상호작용, 다른 변화 기술의 개별 효과, 범위 및 사용 간격은 미구현이다.
-- 스타터 치코리타·뚜꾸리·리아코의 각 진화 계열은 [치코리타](https://www.dittobase.com/legends-za/pokedex/chikorita), [뚜꾸리](https://www.dittobase.com/legends-za/pokedex/tepig), [리아코](https://www.dittobase.com/legends-za/pokedex/totodile) 및 진화형 도감에 기재된 공격 기술별 숙달 레벨을 사용한다. 레벨과 종으로 판정하므로 구형 저장을 수정하지 않는다. [이상해씨 계열](https://www.dittobase.com/legends-za/pokedex/bulbasaur)의 확인된 공격 기술도 지원한다. 다른 종의 자동 숙달, 우두머리의 선행 숙달과 HP회복·광합성·아침햇살·달빛·모래모으기·텍스처를 제외한 변화 기술 플러스는 아직 지원하지 않는다. 기존 숙달의씨 이력은 보존한다.
+- 스타터 치코리타·뚜꾸리·리아코의 각 진화 계열은 [치코리타](https://www.dittobase.com/legends-za/pokedex/chikorita), [뚜꾸리](https://www.dittobase.com/legends-za/pokedex/tepig), [리아코](https://www.dittobase.com/legends-za/pokedex/totodile) 및 진화형 도감에 기재된 공격 기술별 숙달 레벨을 사용한다. 레벨과 종으로 판정하므로 구형 저장을 수정하지 않는다. [이상해씨 계열](https://www.dittobase.com/legends-za/pokedex/bulbasaur)의 확인된 공격 기술도 지원한다. 다른 종의 자동 숙달과 HP회복·광합성·아침햇살·달빛·모래모으기·텍스처를 제외한 변화 기술 플러스는 아직 지원하지 않는다. 기존 숙달의씨 이력은 보존한다.
+
+- [Serebii](https://www.serebii.net/legendsz-a/plusmoves.shtml)의 우두머리 초기 숙달에 따라 새로 생성한 우두머리는 당시 가진 기술을 숙달한다. 포획 후에도 이력이 유지되며 나중에 배운 기술은 자동 숙달하지 않는다. 기존 보유 개체와 진행 중인 구형 조우는 소급 변경하지 않는다. 변화 기술은 현재 구현된 플러스 효과만 사용할 수 있다.
 
 - [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Plus_Move) 및 [Serebii](https://www.serebii.net/legendsz-a/plusmoves.shtml)에 따라 새 메가링 탐험 배틀의 HP회복은 통상 최대 HP의 30%, 플러스는 40%를 회복한다. Josée에게 숙달의씨로 숙달하며 메가진화 중에는 자동 플러스다. 회복 비율은 원작을 따르지만 실시간 이동·사용 간격은 턴제로 근사한다. 이전에 시작한 저장 전투는 시뮬레이터의 50% 회복을 유지한다.
 
