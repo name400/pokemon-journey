@@ -171,3 +171,11 @@ test('Zone 5 western stall preserves investigation paths and older saved positio
  assert.ok(fieldPath(map,{x:1,y:10},{x:5,y:7}).length);assert.ok(fieldPath(map,{x:11,y:1},{x:5,y:7}).length);assert.equal(fieldDialogue({...base,x:5,y:7,facing:'up'}).action,'mission40OtherAlpha');
  assert.equal(storeAdventurePosition({...base,x:1,y:10},101).districtPosition.zone5MarketLayout,1);assert.equal(stepField({...base,x:1,y:6},'right').blocked,true);
 });
+
+test('southeast two-ladder landing preserves its layer and old drain and roof saves',async()=>{
+ const landing={area:3,district:'lumiose-zone5-drain',interior:null,x:10,y:8,facing:'down',zaZone5DrainLanding:true,zaZone5DrainSecondCleared:true,zaZone5Spent:{'whirlipede-alpha':true},teamIds:['kept']},map=fieldMap(landing);
+ assert.equal(map[9][10],'h');assert.equal(map[5][14],'j');assert.equal(fieldDialogue(landing).action,'zone5DrainRoofLadder');
+ assert.ok(fieldPath(map,landing,{x:14,y:6}).length);assert.equal(fieldDialogue({...landing,x:14,y:6,facing:'up'}).action,'zone5DrainLandingUp');
+ const restored=restoreAdventurePosition(storeAdventurePosition(landing,143),143);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone5DrainLanding,restored.zaZone5Spent,restored.teamIds],[landing.district,10,8,true,landing.zaZone5Spent,['kept']]);
+ const {clearMapTravelTransient}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');const travel={...landing,zaZone5RoofLadderRoute:true};clearMapTravelTransient(travel);assert.equal(travel.zaZone5DrainLanding,undefined);assert.equal(travel.zaZone5RoofLadderRoute,undefined);
+});

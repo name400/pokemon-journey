@@ -2133,9 +2133,11 @@ test('Zone 5 drain rooftop ladder preserves progress and cannot bypass the sludg
   await get();await call('zone5DrainRoofLadder',{},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone5',17,5]);
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone5-drain',x:18,y:7,facing:'right',zaZone5Upper:false,zaZone5DrainSecondCleared:true,zaZone5Spent:{'whirlipede-alpha':true}},state.revision+1));
   await get();assert.equal(state.world.interaction.action,'zone5DrainRoofLadder');await call('zone5DrainRoofLadder');await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone5DrainLanding],['lumiose-zone5-drain',10,8,true]);await walkTo({x:14,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone5DrainLandingUp');await call('zone5DrainLandingUp');await get();
   assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone5Upper],['lumiose-zone5',18,5,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaZone5Spent['whirlipede-alpha'],true);
-  await call('move',{direction:'left'});await call('move',{direction:'down'});await get();await call('zone5DrainRoofLadder');await get();
+  await call('move',{direction:'left'});await call('move',{direction:'down'});await get();await call('zone5DrainRoofLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone5DrainLanding],['lumiose-zone5-drain',14,6,true]);await walkTo({x:10,y:8});await call('face',{direction:'down'});await call('zone5DrainRoofLadder');await get();
   assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone5Upper],['lumiose-zone5-drain',18,7,false]);assert.equal(state.world.zaZone5DrainSecondCleared,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone5',zaZone5Upper:true,zaZone5RoofLadderRoute:false,x:17,y:5,facing:'down'},state.revision+1));await get();await call('zone5DrainRoofLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone5-drain',18,7]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
