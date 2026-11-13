@@ -5510,3 +5510,21 @@ test('Zone 13 brambles and TM persist without duplicate rewards',async()=>{
   await call('teachStoryTm',{item:'za-tm081',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'시저크로스');assert.equal(state.inventory['za-tm081'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('X-Scissor TM supports verified species and Galarian form without duplicate learning',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone13-tm081-compat-qa',displayName:'기술머신테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm081']);
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm081');
+  for(const pokemon of [212,10161]){
+   seedMon(id,{...makeMon(pokemon,20),moves:['몸통박치기','울음소리'],pp:{tackle:3,growl:7}});await get();
+   await call('teachStoryTm',{item:'za-tm081',boxId:id,slot:0});await get();
+   assert.equal(rawMon(id).moves[0],'시저크로스');assert.equal(rawMon(id).moves[1],'울음소리');assert.equal(rawMon(id).pp.growl,7);assert.equal(state.inventory['za-tm081'],1);
+   await call('teachStoryTm',{item:'za-tm081',boxId:id,slot:1},409);assert.equal(rawMon(id).moves[1],'울음소리');
+  }
+  for(const pokemon of [1,52,10107]){
+   seedMon(id,{...makeMon(pokemon,20),moves:['몸통박치기'],pp:{tackle:3}});await get();await call('teachStoryTm',{item:'za-tm081',boxId:id,slot:0},409);assert.deepEqual(rawMon(id).moves,['몸통박치기']);
+  }
+  await get();assert.equal(state.inventory['za-tm081'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
