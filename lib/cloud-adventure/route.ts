@@ -1,4 +1,4 @@
-import {cityResearchEncounter,visibleCityResearchEncounters,CITY_RESEARCH_ENCOUNTERS} from '@/lib/cloud-adventure/adventure-city-research.mjs';
+import {cityResearchEncounter,visibleCityResearchEncounters,CITY_RESEARCH_ENCOUNTERS,refreshCityResearchSpawns} from '@/lib/cloud-adventure/adventure-city-research.mjs';
 import {bleu5MarketPokemon,side14Available,side14Spot} from '@/lib/cloud-adventure/adventure-side14.mjs';
 import {side10Available,side10Spot} from '@/lib/cloud-adventure/adventure-side10.mjs';
 import {northMonkeyTree} from '@/lib/cloud-adventure/adventure-city-monkeys.mjs';
@@ -137,7 +137,7 @@ function consumeEarlyAlpha(s:any,id:string){const offset=adventureClockOffset(s)
 function prepareVisibleWild(s:any){
  if(!s||s.interior||s.combat||s.adventureCatchWindow)return false;
  const offset=adventureClockOffset(s),now=Date.now(),time=gameTime(now,offset),period=time.period,interval=zone19SpawnInterval(now,offset),eligible=/^lumiose-zone(?:2|3|5|6|8|9|10|11|12|13|14|15|16|17|18|19)(?:-garden|-drain|-sw-top|-sw-middle)?$/.test(s.district||'');let changed=eligible&&migrateAdventureWildClock(s,period,interval);changed=(s.district==='lumiose-zone19'?refreshZone19Spawns(s,period,interval,canRefreshWildAtPosition):['lumiose-zone2','lumiose-zone3'].includes(s.district)?refreshRoamingWildSpawns(s,period,interval):refreshOrdinaryWildSpawns(s,period,interval,canRefreshWildAtPosition))||changed;const ensure=(key:string)=>{if(typeof s.zaWildShinyRolls?.[key]!=='boolean'){assignWildShiny(s,{},random,key);changed=true;}};
- if(CITY_RESEARCH_ENCOUNTERS.some((p:any)=>p.district===s.district)){const cityView={...s,zaCityResearchPeriod:period,weather:adventureFieldWeather(s,time,AREAS[s.area]?.biome)};for(const p of visibleCityResearchEncounters(cityView,fieldMap(cityView)))ensure(`cityResearch:${p.id}:${p.species}`);}
+ if(CITY_RESEARCH_ENCOUNTERS.some((p:any)=>p.district===s.district)){changed=refreshCityResearchSpawns(s,period,interval)||changed;const cityView={...s,zaCityResearchPeriod:period,weather:adventureFieldWeather(s,time,AREAS[s.area]?.biome)};for(const p of visibleCityResearchEncounters(cityView,fieldMap(cityView)))ensure(`cityResearch:${p.id}:${p.species}`);}
  changed=refreshEarlyAlpha(s,period,interval)||changed;
  if(s.district==='lumiose-zone8'&&initializeZone8Burrows(s,random))changed=true;
  if(s.district==='lumiose-rouge-tower-interior'&&s.zaBunnelbyQuest===3&&!s.zaZone3LitleoSpent)ensure('alpha:zone3-tower-litleo:667');
