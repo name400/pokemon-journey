@@ -7,6 +7,7 @@ test('Mission 27 lift and ice bridges preserve progress and legacy encounter',()
  assert.equal(fieldDialogue({...street,zaMission20Stage:4}).action,undefined);
  assert.equal(fieldDialogue(street).action,'mission61Battle');
  assert.equal(fieldDialogue({...street,zaMission61Won:true}).action,'mission27Holovator');
+ assert.deepEqual(fieldDialogue({...street,zaMission61Won:true,zaSide61RewardPending:true}).actions.map(a=>a.action),['mission27Holovator','side61Reward']);
  const roof={...street,district:'lumiose-mission27-roof',x:2,y:4,facing:'up',zaMission61Won:true};
  assert.equal(fieldDialogue(roof).action,'mission27Holovator');
  assert.equal(fieldMap(roof)[11][7],','); // southern arch
