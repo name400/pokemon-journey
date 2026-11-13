@@ -59,6 +59,15 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('Zone 20 Floral Avenue south access preserves progress and alpha encounters',async()=>{
+ const previous=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-floral-gate-qa',displayName:'플로랄 출입 검증'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+ const seed=(patch={})=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-floral',interior:null,x:12,y:1,facing:'up',zaMission38Complete:false,zaMission42Stage:0,...patch},state.revision+1));
+ seed();await get();await call('move',{direction:'up'},409);seed({zaMission38Complete:true,zaMission42Stage:2});await get();await call('move',{direction:'up'},409);seed({zaMission38Complete:true,zaMission42Stage:3,zaZone20Items:['south-seed']});await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone20',12,15]);assert.ok(ZONE20_ALPHA.some(p=>p.species===state.world.zaZone20AlphaSpecies));assert.ok(ZONE20_ALPHA.some(p=>p.species===state.world.zaZone20AlphaSpecies2));assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-floral',12,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission42Stage,3);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('Zone 8 opposed street gates keep encounters and saves',async()=>{
  const previous=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone8-opposed-gates-qa',displayName:'광장 출입 검증'};globalThis.__adventureRandom=()=>.999;
  try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);

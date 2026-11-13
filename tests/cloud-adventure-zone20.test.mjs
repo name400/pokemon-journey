@@ -151,3 +151,17 @@ test('Zone 20 stream and distinct land remain connected and migrate earlier posi
  assert.equal(map[3][1],',');assert.equal(map[10][1],';');assert.equal(map[3][5],'g');
  for(const target of [{x:11,y:1},{x:1,y:8},{x:21,y:8},{x:21,y:9},{x:17,y:11},{x:11,y:7}])assert.ok(fieldPath(map,base,target).length,`unreachable ${target.x},${target.y}`);
 });
+
+test('Floral Avenue connects to the south of Zone 20 without replacing legacy gates',()=>{
+ const floral={area:3,district:'lumiose-floral',interior:null,x:12,y:1,teamIds:['kept'],zaMission38Complete:false};
+ assert.equal(stepField(floral,'up').blocked,true);
+ assert.equal(stepField({...floral,zaMission38Complete:true,zaMission42Stage:2},'up').blocked,true);
+ for(const extra of [{zaMission38Complete:true},{zaMission42Stage:1},{zaMission42Stage:3},{zaMission42Stage:4}]){
+  const entered=stepField({...floral,...extra},'up');assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone20',12,15]);
+  const zone={...floral,...extra,...entered,zaZone20Items:['south-seed'],zaZone20Spent:{alpha:true},coins:321};
+  const restored=restoreAdventurePosition(storeAdventurePosition(zone,27),27);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds,restored.coins,restored.zaZone20Items,restored.zaZone20Spent],['lumiose-zone20',12,15,['kept'],321,['south-seed'],{alpha:true}]);
+  const exit=stepField(restored,'down');assert.deepEqual([exit.district,exit.x,exit.y],['lumiose-floral',12,1]);
+  assert.ok(fieldPath(zone20Map(zone),zone,{x:11,y:7}).length);assert.ok(fieldPath(zone20Map(zone),zone,{x:17,y:11}).length);
+ }
+ const old={area:3,district:'lumiose-zone20',interior:null,x:11,y:14,zaMission38Complete:true};assert.equal(stepField(old,'down').district,'lumiose-centrico-route');
+});
