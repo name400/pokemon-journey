@@ -5834,3 +5834,15 @@ test('north boulevard trees provide all three elemental monkeys and retain captu
   assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.equal(rawWorld().adventureBalls.masterball,0);assert.ok([511,513,515].every(id=>rawWorld().adventureDexSpecies.includes(id)));
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('Odette gives the Skiddo quest rewards once, preserving party and rejecting full bags',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side10-skiddo-qa',displayName:'메이클 의뢰 검사'};
+ try{
+  await get();await call('start',{species:152});const first=state.world.teamIds[0];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:3,y:1,facing:'up',zaRoyaleRank:'Y'},state.revision+1));await get();await call('side10ShowSkiddo',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),zaMission07Started:true,x:3,y:1,facing:'up'},state.revision+1));await get();await call('side10ShowSkiddo',{},409);
+  const id='side10-skiddo',m={...makeMon(672,10),boxId:id};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(id,globalThis.__adventureUser.userId,672,JSON.stringify(m),'qa',1);seedWorld(storeAdventurePosition({...rawWorld(),teamIds:[first,id],x:3,y:1,facing:'up'},state.revision+1));await get();
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'sachet']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,998)').run(key,globalThis.__adventureUser.userId,'sachet');await get();const before=state.wallet.coins;await call('side10ShowSkiddo',{},409);assert.notEqual(rawWorld().zaSide10Complete,true);assert.equal(state.wallet.coins,before);
+  sql.prepare('UPDATE inventory SET quantity=997 WHERE key=?').run(key);const berry=JSON.stringify([globalThis.__adventureUser.userId,'persimberry']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,995)').run(berry,globalThis.__adventureUser.userId,'persimberry');await get();await call('side10ShowSkiddo',{},409);assert.notEqual(rawWorld().zaSide10Complete,true);sql.prepare('DELETE FROM inventory WHERE key=?').run(berry);await get();const rev=state.revision;await call('side10ShowSkiddo');await get();assert.equal(state.inventory.sachet,999);assert.equal(state.inventory.persimberry,5);assert.equal(state.wallet.coins,before+800);assert.equal(rawWorld().zaSide10Complete,true);assert.deepEqual(state.world.teamIds,[first,id]);assert.equal(rawMon(id).speciesId,672);await call('side10ShowSkiddo',{},409);await call('side10ShowSkiddo',{revision:rev},409);await get();assert.equal(state.inventory.sachet,999);assert.equal(state.inventory.persimberry,5);assert.equal(state.wallet.coins,before+800);
+ }finally{globalThis.__adventureUser=previous;}
+});
