@@ -75,7 +75,7 @@ test('an unexpired card retains progress across rank promotion without rewarding
 test('all 18 type cards rotate across nights and match the actual move type',()=>{
  const seen=new Set();
  for(let night=0;night<9;night++){
-  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const offered=royaleBonusCards(s,t);assert.equal(offered.length,4);
+  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const offered=royaleBonusCards(s,t);assert.equal(offered.length,5);
   for(const def of offered.slice(1,3)){seen.add(def.id);assert.equal(takeRoyaleBonus(s,t,def.id),true);const wrong=hit.map(e=>e.kind==='move'?{...e,type:'not-a-type'}:e),correct=hit.map(e=>e.kind==='move'?{...e,type:def.id}:e);assert.equal(recordRoyaleBonus(s,{events:wrong,log:[]},'night',t),false);assert.equal(recordRoyaleBonus(s,{events:[...correct,...correct],log:[]},'night',t),true);assert.equal(s.zaRoyaleBonusExtraCards[def.id].completed,true);}
   assert.equal(s.zaRoyaleYPoints,400);assert.equal(s.zaRoyalePrizeMedals,40);
  }
@@ -105,5 +105,26 @@ test('replacing a type card retains other cards and discarded type cannot be ret
 test('fourth card stays on walkable empty ground at each rank',()=>{
  for(const rank of 'YXWVFEDCBA'){
   const s={district:'lumiose-royale',zaRoyaleRank:rank,zaMission39Started:true,zaMission35Started:true,zaMission30Started:true,zaMission20Complete:true,zaMission19Stage:1,zaMission14Stage:1,zaMission10Stage:4};const cards=royaleBonusCards(s);for(const card of cards.slice(0,3))assert.equal(takeRoyaleBonus(s,Date.now(),card.id),true);assert.equal(lumioseRoyaleMap(s)[12][11],'!');assert.equal(takeRoyaleBonus(s,Date.now(),cards[3].id,cards[0].id),true);assert.equal(lumioseRoyaleMap(s)[12][11],'.');
+ }
+});
+
+test('type-specific super-effective cards rotate and reward only matching direct hits',()=>{
+ const types=new Set();
+ for(let night=0;night<17;night++){
+  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const def=royaleBonusCards(s,t)[4];types.add(def.type);assert.equal(takeRoyaleBonus(s,t,def.id),true);
+  const wrong=hit.map(e=>e.kind==='move'?{...e,type:'not-a-type'}:e),neutral=hit.filter(e=>e.kind!=='effect').map(e=>e.kind==='move'?{...e,type:def.type}:e),correct=hit.map(e=>e.kind==='move'?{...e,type:def.type}:e);
+  assert.equal(recordRoyaleBonus(s,{events:wrong,log:[]},'night',t),false);assert.equal(recordRoyaleBonus(s,{events:neutral,log:[]},'night',t),false);assert.equal(recordRoyaleBonus(s,{events:correct,log:[]},'night',t),true);assert.equal(s.zaRoyaleBonusExtraCards[def.id].completed,true);assert.equal(s.zaRoyaleYPoints,500);assert.equal(s.zaRoyalePrizeMedals,50);assert.equal(recordRoyaleBonus(s,{events:correct,log:[]},'night',t),false);
+ }
+ assert.equal(types.size,17);assert.equal(types.has('normal'),false);
+});
+
+test('new typed card can be replaced without awarding progress or damaging older cards',()=>{
+ const s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const cards=royaleBonusCards(s,now);assert.equal(takeRoyaleBonus(s,now,cards[4].id),true);assert.equal(takeRoyaleBonus(s,now,cards[1].id),true);assert.equal(takeRoyaleBonus(s,now,cards[2].id),true);assert.equal(takeRoyaleBonus(s,now,cards[3].id,cards[4].id),true);assert.equal(s.zaRoyaleBonusExtraCards[cards[4].id].discarded,true);assert.equal(s.zaRoyalePrizeMedals,undefined);assert.equal(activeRoyaleBonusCards(JSON.parse(JSON.stringify(s)),now).length,3);
+});
+
+test('the new card marker remains accessible across Royale ranks',()=>{
+ for(const rank of ['Y','X','W','V','F','E','D','C','B','A']){
+  const s={district:'lumiose-royale',interior:null,x:13,y:13,facing:'up',zaRoyaleRank:rank,zaMission39Started:true,zaMission35Started:true,zaMission30Started:true,zaMission20Complete:true,zaMission19Stage:1,zaMission14Stage:1,zaMission10Stage:4};
+  const card=royaleBonusCards(s)[4];assert.equal(lumioseRoyaleMap(s)[12][13],'!');assert.equal(fieldDialogue(s).action,'takeRoyaleBonus');assert.ok(fieldDialogue(s).text.includes(card.label));
  }
 });
