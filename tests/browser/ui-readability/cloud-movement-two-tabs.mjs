@@ -14,7 +14,7 @@ await context.route('**/api/world**',async r=>{
  if(r.request().method()==='POST'){
   const body=r.request().postDataJSON();if(body.action==='movementFence'){fences++;if((body.revision===null||body.revision===revision)&&(body.activeId==null||body.activeId===world.activeId))revision++;return r.fulfill({json:{settled:true}});}
   const n=++moves;if(n===1){firstArrived();await gate;}if(body.revision!==revision){outcomes.push([n,409]);return r.fulfill({status:409,json:{error:'다른 화면에서 진행이 변경됐습니다.',...(precheck?{code:'MOVEMENT_PRECHECK_CONFLICT'}:{})}});}
-  for(const dir of body.path){const next=stepField(world,dir);if(next.blocked)break;world={...world,...next,steps:world.steps+1};if(next.transitioned)break;}revision++;outcomes.push([n,200]);
+  for(const dir of body.path){const next=stepField(world,dir);if(next.blocked)break;world={...world,...next,facing:dir,steps:world.steps+1};if(next.transitioned)break;}revision++;outcomes.push([n,200]);
  }
  const isRecovery=r.request().method()==='GET'&&r.request().frame().page()===a&&outcomes.some(([n,status])=>n===1&&status===409);
  await r.fulfill({json:state()});if(isRecovery)resolveRecovery();
@@ -28,6 +28,6 @@ try{
  releaseFirst();await recovery;await a.waitForFunction(()=>document.querySelector('canvas.adv-field')?.getAttribute('aria-label')?.includes('현재 위치 3, 8'));
  for(let i=0;i<100&&outcomes.length<1;i++)await a.waitForTimeout(20);assert.deepEqual(outcomes,[[1,409]]);assert.equal(world.steps,0);assert.equal(fences,precheck?4:5);
  await a.bringToFront();await a.waitForTimeout(100);await a.keyboard.press('ArrowDown');for(let i=0;i<100&&outcomes.length<2;i++)await a.waitForTimeout(20);
- assert.deepEqual(outcomes,[[1,409],[2,200]]);assert.deepEqual([world.x,world.y,world.steps],[3,9,1]);
+ assert.deepEqual(outcomes,[[1,409],[2,200]]);assert.deepEqual([world.x,world.y,world.steps,world.facing],[3,9,1,'down']);
  console.log(JSON.stringify({fences,outcomes,position:[world.x,world.y],steps:world.steps}));
 }finally{releaseFirst();await browser.close();}
