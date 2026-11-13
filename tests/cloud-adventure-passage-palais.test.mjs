@@ -12,3 +12,13 @@ test('Palais arcade connects both roads and preserves saved position',()=>{
  assert.equal(fieldDialogue({...s,x:15,y:10,facing:'right'}).name,'The Usual');
  assert.equal(fieldDialogue({...s,x:7,y:13,facing:'left'}).name,'Marquage');
 });
+
+test('Palais Tracie uses a previously blocked tile and retains the legacy endpoint',async()=>{
+ const {tracieAt}=await import('../lib/cloud-adventure/adventure-passage-palais.mjs');
+ const s={area:3,district:'lumiose-passage-palais',interior:null,x:7,y:8,facing:'left',zaEmmaMet:true};
+ assert.equal(fieldMap(s)[8][6],'v');assert.equal(fieldDialogue(s).action,'startPikachuTrade');assert.equal(fieldDialogue({...s,zaTradeQuest:1}).tracie,true);
+ assert.ok(fieldPath(fieldMap(s),{...s,x:11,y:15},{x:7,y:8}).length);
+ assert.equal(tracieAt(s,{x:6,y:8,tile:'v'}),true);assert.equal(tracieAt(s,{x:6,y:9,tile:'v'}),false);
+ assert.equal(tracieAt({...s,interior:'hotel'},{x:6,y:8,tile:'v'}),false);
+ assert.equal(tracieAt({...s,district:'lumiose-zone3'},{x:11,y:4,tile:'v'}),true);
+});
