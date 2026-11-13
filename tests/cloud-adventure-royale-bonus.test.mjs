@@ -75,7 +75,7 @@ test('an unexpired card retains progress across rank promotion without rewarding
 test('all 18 type cards rotate across nights and match the actual move type',()=>{
  const seen=new Set();
  for(let night=0;night<9;night++){
-  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const offered=royaleBonusCards(s,t);assert.equal(offered.length,5);
+  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const offered=royaleBonusCards(s,t);assert.equal(offered.length,6);
   for(const def of offered.slice(1,3)){seen.add(def.id);assert.equal(takeRoyaleBonus(s,t,def.id),true);const wrong=hit.map(e=>e.kind==='move'?{...e,type:'not-a-type'}:e),correct=hit.map(e=>e.kind==='move'?{...e,type:def.id}:e);assert.equal(recordRoyaleBonus(s,{events:wrong,log:[]},'night',t),false);assert.equal(recordRoyaleBonus(s,{events:[...correct,...correct],log:[]},'night',t),true);assert.equal(s.zaRoyaleBonusExtraCards[def.id].completed,true);}
   assert.equal(s.zaRoyaleYPoints,400);assert.equal(s.zaRoyalePrizeMedals,40);
  }
@@ -126,5 +126,25 @@ test('the new card marker remains accessible across Royale ranks',()=>{
  for(const rank of ['Y','X','W','V','F','E','D','C','B','A']){
   const s={district:'lumiose-royale',interior:null,x:13,y:13,facing:'up',zaRoyaleRank:rank,zaMission39Started:true,zaMission35Started:true,zaMission30Started:true,zaMission20Complete:true,zaMission19Stage:1,zaMission14Stage:1,zaMission10Stage:4};
   const card=royaleBonusCards(s)[4];assert.equal(lumioseRoyaleMap(s)[12][13],'!');assert.equal(fieldDialogue(s).action,'takeRoyaleBonus');assert.ok(fieldDialogue(s).text.includes(card.label));
+ }
+});
+
+test('type knockout cards count direct finishing hits, including the last hit of a multi-hit move',()=>{
+ const types=new Set();for(let night=0;night<18;night++){
+  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}},def=royaleBonusCards(s,t)[5];types.add(def.type);assert.equal(takeRoyaleBonus(s,t,def.id),true);
+  const move={kind:'move',side:0,actorBoxId:'p',type:def.type},damage={kind:'damage',targetSide:1,targetBoxId:'e',actorBoxId:'p',hit:true,amount:5,beforeHp:10,hp:5};
+  assert.equal(recordRoyaleBonus(s,{events:[move,damage],log:[]},'night',t),false);
+  assert.equal(recordRoyaleBonus(s,{events:[move,{...damage,hit:false,beforeHp:5,hp:0}],log:[]},'night',t),false);
+  assert.equal(recordRoyaleBonus(s,{events:[{...move,side:1},{...damage,beforeHp:5,hp:0}],log:[]},'night',t),false);
+  assert.equal(recordRoyaleBonus(s,{events:[move,damage,{...damage,beforeHp:5,hp:0}],log:[]},'night',t),true);
+  assert.equal(s.zaRoyaleBonusExtraCards[def.id].completed,true);assert.equal(s.zaRoyaleYPoints,150);assert.equal(s.zaRoyalePrizeMedals,15);assert.equal(recordRoyaleBonus(s,{events:[move,{...damage,beforeHp:5,hp:0}],log:[]},'night',t),false);
+ }
+ assert.equal(types.size,18);assert.equal(types.has('normal'),true);
+});
+
+test('knockout card placement and replacement preserve the other cards',()=>{
+ for(const rank of 'YXWVFEDCBA'){
+  const s={district:'lumiose-royale',interior:null,x:9,y:13,facing:'up',zaRoyaleRank:rank,zaMission39Started:true,zaMission35Started:true,zaMission30Started:true,zaMission20Complete:true,zaMission19Stage:1,zaMission14Stage:1,zaMission10Stage:4};
+  const cards=royaleBonusCards(s);assert.equal(lumioseRoyaleMap(s)[12][9],'!');assert.equal(fieldDialogue(s).action,'takeRoyaleBonus');assert.equal(takeRoyaleBonus(s,Date.now(),cards[5].id),true);assert.equal(takeRoyaleBonus(s,Date.now(),cards[0].id),true);assert.equal(takeRoyaleBonus(s,Date.now(),cards[1].id),true);assert.equal(takeRoyaleBonus(s,Date.now(),cards[3].id,cards[5].id),true);assert.equal(s.zaRoyaleBonusExtraCards[cards[5].id].discarded,true);assert.equal(activeRoyaleBonusCards(JSON.parse(JSON.stringify(s))).length,3);
  }
 });
