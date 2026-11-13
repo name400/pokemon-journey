@@ -98,7 +98,7 @@ export default function Adventure(){
   setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:mergeAdventureBox(old.box,d.box,d.world?.zaTradedPikachuId)};});
   setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();return true;
  },[stop,resetVisual,setPrediction]);
- const load=useCallback(async(light=false,recovery=false)=>{try{if(recovery&&pendingMovement.current){await api({action:'movementFence',...pendingMovement.current},false,true);pendingMovement.current=null;}const result=await api(undefined,light,recovery);if(syncRequired.current&&!recovery)return false;if(recovery&&result.revision<revision.current)throw Error('서버의 최신 진행 상태를 확인하지 못했습니다.');
+ const load=useCallback(async(light=false,recovery=false,preserveError=false)=>{try{if(recovery&&pendingMovement.current){await api({action:'movementFence',...pendingMovement.current},false,true);pendingMovement.current=null;}const result=await api(undefined,light,recovery);if(syncRequired.current&&!recovery)return false;if(recovery&&result.revision<revision.current)throw Error('서버의 최신 진행 상태를 확인하지 못했습니다.');
   // A group poll that started before a move can return the same old state
   // while its preview is visible. Leave newer or event-bearing state alone.
   const w=result.world,current=snapshot.current?.world,samePosition=w&&current&&['area','district','interior','x','y','facing','activeId'].every(key=>(w[key]??null)===(current[key]??null));
@@ -106,7 +106,7 @@ export default function Adventure(){
   // A GET restores the authoritative turn; it is not a new action response.
   // Do not replay an already saved multi-battle turn after reload or recovery.
   if(result.battle?.adventureMultiEventsV1)result.battle={...result.battle,events:[]};
-  if(inflightMove.current&&result.revision>=revision.current)stop();accept(result);if(recovery)syncRequired.current=false;if(mounted.current)setError('');return true;}catch(e){if(mounted.current){setError(recovery?(e instanceof Error&&e.message.includes('계정이나 파트너가 변경')?e.message:'연결을 복구하지 못했습니다. 다시 불러와 주세요.'):e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept,stop]);
+  if(inflightMove.current&&result.revision>=revision.current)stop();accept(result);if(recovery)syncRequired.current=false;if(mounted.current&&!preserveError)setError('');return true;}catch(e){if(mounted.current){setError(recovery?(e instanceof Error&&e.message.includes('계정이나 파트너가 변경')?e.message:'연결을 복구하지 못했습니다. 다시 불러와 주세요.'):e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept,stop]);
  const act=useCallback(async(action:string,extra:any={},visualToken:number|null=null)=>{
   if(lock.current||syncRequired.current)return null;lock.current=true;setBusy(true);setError('');const issuedRevision=revision.current,isMovement=['move','face','dodge'].includes(action),marker:PendingMovement={revision:issuedRevision,activeId:typeof snapshot.current?.world?.activeId==='string'?snapshot.current.world.activeId:null};
   try{const result=await api({action,revision:issuedRevision,...extra,...(['move','face','dodge'].includes(action)?{compact:true}:{})});if(!mounted.current)return null;if(action==='move'&&result.revision<=issuedRevision)throw Error('이동 응답이 오래되어 최신 진행을 확인합니다.');if(result.revision<revision.current||(action==='move'&&result.revision===revision.current))return null;const visual=visualToken===null?null:visualRequests.current.settle(visualToken,result);if(visual?.kind==='reset')stop();if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result,visual);
@@ -115,7 +115,7 @@ export default function Adventure(){
     if(same&&!result.battle&&!w.adventureCatchWindow&&!w.adventurePendingMoves?.length&&!resultRef.current&&!screenRef.current&&!dialogueRef.current){if(w.interaction)setDialogue(w.interaction);else setHint('NPC나 건물 입구로 다가가 바라본 뒤 대화하세요.');}
     else if(!result.battle&&!w?.adventureCatchWindow)setHint('위치가 확정된 뒤 다시 대화해 주세요.');
    }return action==='move'?{...result,visualStatus:visual?.kind||'unavailable'}:result;}
-  catch(e){if(!mounted.current)return null;stop();syncRequired.current=true;if(isMovement&&!(e instanceof SettledMovementConflict))pendingMovement.current=marker;if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load(false,true);return null;}
+  catch(e){if(!mounted.current)return null;stop();syncRequired.current=true;if(isMovement&&!(e instanceof SettledMovementConflict))pendingMovement.current=marker;if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load(false,true,true);return null;}
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  },[accept,load,stop]);
  useEffect(()=>{mounted.current=true;pendingMovement.current={revision:null,activeId:null};syncRequired.current=true;void load(false,true);return()=>{mounted.current=false;stop();};},[load,stop]);
