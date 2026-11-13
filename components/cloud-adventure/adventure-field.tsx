@@ -28,7 +28,7 @@ import {ZONE5_VISIBLE,ZONE5_WEST_STALL} from '@/lib/cloud-adventure/adventure-zo
 import {ZONE11_VISIBLE,zone11WaterAt,zone11Visible} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer,zone6Visible,ZONE6_MARKET_STALLS} from '@/lib/cloud-adventure/adventure-zone6.mjs';
 import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails,zone2BankTint} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
-import {zone3GardenPattern,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-zone3-garden.mjs';
+import {zone3GardenMosaic,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-zone3-garden.mjs';
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 
@@ -1148,6 +1148,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(w.district==='lumiose-zone3'&&c==='.'){
       ctx.fillStyle='#cfc2aa';if((x+y)%2===0)ctx.fillRect(px+3,py+tile/2,tile-6,1);
       ctx.fillRect(px+tile/2,py+3,1,5);ctx.fillRect(px+tile/2,py+tile-8,1,5);
+      // Curved paving marks the central plaza without changing path or grass tiles.
+      if(!w.zaZone3TowerUpper&&x>=10&&x<=12&&y>=7&&y<=9){ctx.save();ctx.beginPath();ctx.rect(px,py,tile,tile);ctx.clip();ctx.beginPath();ctx.arc(11.5*tile,8.5*tile,1.22*tile,0,Math.PI*2);ctx.strokeStyle='#968f7d';ctx.lineWidth=5;ctx.stroke();ctx.strokeStyle='#eee5d3';ctx.lineWidth=2;ctx.stroke();ctx.restore();}
      }
      if(c==='%'&&w.district==='lumiose-vernal'&&!w.zaVernalEastRoof&&!w.zaVernalSlowbroBank){const cafe=x>=10&&x<=14;ctx.fillStyle=cafe?'#ad6b5a':'#8e8174';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=cafe?(y===2?'#854d48':'#e0c3a0'):'#d9cbb7';ctx.fillRect(px+2,py+2,tile-4,tile-4);if(cafe&&y===4){ctx.fillStyle='#a74e49';ctx.fillRect(px+2,py+2,tile-4,7);ctx.fillStyle='#f9e9ce';for(let j=4;j<tile-3;j+=8)ctx.fillRect(px+j,py+2,4,7);ctx.fillStyle='#789796';ctx.fillRect(px+5,py+12,tile-10,tile-16);}else{ctx.fillStyle=cafe&&y===2?'#c68872':'#9ab1a8';ctx.fillRect(px+5,py+7,tile-10,tile-13);}}
      if(c===','&&w.district==='lumiose-vernal'){ctx.fillStyle=(x+y)%2?'#dfc4a1':'#e9d2b2';ctx.fillRect(px,py,tile,tile);ctx.strokeStyle='#b69677';ctx.strokeRect(px+.5,py+.5,tile-1,tile-1);if(y===7&&(x===10||x===14)){ctx.fillStyle='#8b6a55';ctx.fillRect(px+12,py+12,8,8);ctx.fillStyle='#fbedd9';ctx.fillRect(px+13,py+13,6,6);}}
@@ -1216,10 +1218,10 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       // Ground mosaics, sampled only inside existing encounter grass tiles;
       // their source-inspired shapes and exact positions remain provisional.
       if(w.district==='lumiose-zone3'&&!gardenGrassPath&&((x>=7&&x<=9)||(x>=13&&x<=15))&&((y>=5&&y<=7)||(y>=9&&y<=11))){
-       const colors:Record<string,string>={bud:'#c2d38e',leaf:'#6f9c6d','rose-red':'#d9a5a0','rose-blue':'#a1b8d0'};
-       const cell=tile/8;
+       const colors:Record<string,string>={border:'#aaa798',bud:'#c2d38e',leaf:'#6f9c6d','rose-red':'#d9a5a0','rose-blue':'#a1b8d0'};
+       const cell=tile/8,mosaic=zone3GardenMosaic(x,y);
        for(let iy=0;iy<8;iy++)for(let ix=0;ix<8;ix++){
-        const part=zone3GardenPattern(x+(ix+.5)/8,y+(iy+.5)/8);
+        const part=mosaic[iy][ix];
         if(part){ctx.fillStyle=colors[part];ctx.fillRect(px+ix*cell,py+iy*cell,Math.ceil(cell),Math.ceil(cell));}
        }
       }
@@ -1231,6 +1233,11 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       const vertical=x===9||x===13||x===6||x===16;ctx.fillStyle='#407a51';
       if(vertical){ctx.fillRect(px+tile/2-3,py,6,tile);ctx.fillStyle='#9ecb92';ctx.fillRect(px+tile/2-1,py+2,2,tile-4);}
       else{ctx.fillRect(px,py+tile/2-3,tile,6);ctx.fillStyle='#9ecb92';ctx.fillRect(px+2,py+tile/2-1,tile-4,2);}
+     }
+     // The west building has a passable interior. Put the visible piers on
+     // existing fence cells; the adjacent walking and encounter tiles stay intact.
+     if(w.district==='lumiose-zone3'&&!w.zaZone3TowerUpper&&c==='|'&&[6,9].includes(x)&&[6,7].includes(y)){
+      ctx.fillStyle='#858a80';ctx.fillRect(px+7,py+4,tile-14,tile-7);ctx.fillStyle='#d5cebb';ctx.fillRect(px+9,py+5,tile-18,tile-10);ctx.fillStyle='#f0ead9';ctx.fillRect(px+6,py+3,tile-12,4);ctx.fillStyle='#a8a496';ctx.fillRect(px+6,py+tile-5,tile-12,4);
      }
      // A monumental arch faces the central garden. Its precise orientation,
      // dimensions and placement are not established: this is a visual draft.

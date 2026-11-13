@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone3GardenPattern,zone3ExitLabel} from '../lib/cloud-adventure/adventure-zone3-garden.mjs';
+import {zone3GardenPattern,zone3GardenMosaic,zone3ExitLabel} from '../lib/cloud-adventure/adventure-zone3-garden.mjs';
 import {lumioseZone3Map,fieldPath} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('four ground patterns follow west Budew and east Roselia without changing garden routes',()=>{
@@ -12,6 +12,13 @@ test('four ground patterns follow west Budew and east Roselia without changing g
   for(const x of [8,14]){assert.equal(map[Math.floor(y)][x],'g');assert.ok(fieldPath(map,{x:11,y:8},{x,y:Math.floor(y)}).length);}
  }
  assert.equal(zone3GardenPattern(11,8),null);assert.equal(zone3GardenPattern(NaN,2),null);assert.equal(JSON.stringify(map),before);
+});
+
+test('garden mosaics cache curved borders for all four planted gardens',()=>{
+ for(const [x,y,part] of [[8,6,'bud'],[14,6,'rose-red'],[8,10,'bud'],[14,10,'rose-red']]){
+  const mosaic=zone3GardenMosaic(x,y),cells=mosaic.flat();assert.equal(zone3GardenMosaic(x,y),mosaic);assert.ok(cells.includes(part));assert.ok(cells.includes('border'));assert.ok(Object.isFrozen(mosaic));assert.ok(mosaic.every(Object.isFrozen));
+ }
+ const map=lumioseZone3Map();for(const [x,y] of [[6,6],[6,7],[9,7]])assert.equal(map[y][x],'|');assert.equal(map[7][7],'i');assert.ok(fieldPath(map,{x:11,y:8},{x:7,y:8}).length);
 });
 
 test('plaza edge labels identify city connections without calling them garden gates',()=>{
