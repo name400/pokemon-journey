@@ -7044,3 +7044,16 @@ test('Moire can be found beside the western cemetery entrance with legacy reward
   seedWorld(storeAdventurePosition({...rawWorld(),x:19,y:7,facing:'up',zaSableyeRevivePending:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'claimSableyeRevives');
  }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('early alphas unlock after Bunnelby independently of other requests and support old story saves',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureRandom=()=>0.5;globalThis.__adventureTime={hour:12,period:'day',absoluteHour:12};
+ try{for(const p of [
+  {id:'early-unlock-roof',district:'lumiose-zone1-roof',x:18,y:6,facing:'up',battle:'zone1RoofAlpha',throwAction:'throwEarlyAlpha',species:16,spent:'zaZone1RoofAlphaSpent'},
+  {id:'early-unlock-island',district:'lumiose-zone2',x:20,y:12,facing:'up',battle:'encounterZone2Alpha',throwAction:'throwZone2IslandAlpha',species:129,spent:'zaZone2AlphaSpent',zaZone2RockCleared:true},
+  {id:'early-unlock-legacy',district:'lumiose-zone4',x:5,y:10,facing:'left',battle:'encounterZone4Alpha',throwAction:'throwEarlyAlpha',species:167,spent:'zaZone4AlphaSpent',legacy:true},
+ ]){
+  globalThis.__adventureUser={userId:p.id,displayName:'우두머리 해금 검사'};await get();await call('start',{species:152});const lead=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,interior:null,...p,zaRoyaleRank:'Y',zaBunnelbyQuest:1,zaTradeQuest:1,zaSableyeQuest:1,adventureBalls:{masterball:1}},state.revision+1));await get();await call(p.battle,{},409);
+  seedWorld(storeAdventurePosition({...state.world,zaBunnelbyQuest:p.legacy?undefined:3,zaMission05Complete:p.legacy?true:undefined},state.revision+1));await get();assert.equal(state.world.interaction.action,p.battle);const rev=state.revision;await call(p.battle);await get();assert.equal(state.battle.teams[1][0].speciesId,p.species);await call('flee');await get();assert.equal(state.world[p.spent],undefined);await call(p.throwAction,{ball:'masterball'});await call(p.throwAction,{ball:'masterball',revision:rev},409);await get();assert.equal(state.world[p.spent],true);assert.ok(state.box.some(mon=>mon.speciesId===p.species));assert.equal(state.world.activeId,lead);assert.equal(state.world.zaTradeQuest,1);assert.equal(state.world.zaSableyeQuest,1);await call(p.battle,{},409);
+ }}finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});

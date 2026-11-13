@@ -241,8 +241,8 @@ test('zone two eastern bank connects through the northeast side and old shore sa
  const stale=storeAdventurePosition({area:3,district:'lumiose-zone2',x:16,y:10,regionId:6,districtReturnRegion:1},9);stale.districtPosition.zone2Layout=5;assert.equal(restoreAdventurePosition(stale,10).district,null);
 });
 
-test('zone two island alpha requires the route and Emma requests and preserves existing saves',()=>{
- const base={district:'lumiose-zone2',x:20,y:12,zaZone2RockCleared:true,zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3};assert.equal(zone2IslandAlphaTarget(base).distance,1);assert.equal(zone2IslandAlphaTarget({...base,x:17,y:8}),null);assert.equal(zone2IslandAlphaTarget({...base,zaZone2AlphaSpent:true}),null);assert.equal(lumioseZone2Map(base)[11][20],'p');assert.equal(lumioseZone2Map({...base,zaSableyeQuest:2})[11][20],'g');assert.equal(lumioseZone2Map({...base,zaZone2RockCleared:false})[11][20],'g');assert.equal(lumioseZone2Map({...base,zaZone2AlphaSpent:true})[11][20],'g');
+test('zone two island alpha requires the route and the Bunnelby request and preserves existing saves',()=>{
+ const base={district:'lumiose-zone2',x:20,y:12,zaZone2RockCleared:true,zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3};assert.equal(zone2IslandAlphaTarget(base).distance,1);assert.equal(zone2IslandAlphaTarget({...base,x:17,y:8}),null);assert.equal(zone2IslandAlphaTarget({...base,zaZone2AlphaSpent:true}),null);assert.equal(lumioseZone2Map(base)[11][20],'p');assert.equal(lumioseZone2Map({...base,zaSableyeQuest:2})[11][20],'p');assert.equal(lumioseZone2Map({...base,zaBunnelbyQuest:undefined,zaMission06Started:true})[11][20],'p');assert.equal(lumioseZone2Map({...base,zaBunnelbyQuest:2})[11][20],'g');assert.equal(lumioseZone2Map({...base,zaZone2RockCleared:false})[11][20],'g');assert.equal(lumioseZone2Map({...base,zaZone2AlphaSpent:true})[11][20],'g');
 });
 
 test('Vernal waterside retains cafe and plaza access and safely restores old saves',()=>{
