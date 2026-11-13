@@ -41,3 +41,13 @@ test('legacy spawn cycles are rebased once without losing wild or player progres
  assert.equal(migrateAdventureWildClock(s,'day',900),true);assert.equal(s.zaWildSpawnCycles[5].interval,900);assert.equal(s.zaZone19SpawnCycle.period,'day');assert.equal(s.zaZone5Spent.abra,true);assert.equal(s.zaWildShinyRolls['zone5:other:1'],true);assert.deepEqual(s.teamIds,['kept']);assert.equal(s.zaClockOffsetHours,8);assert.equal(migrateAdventureWildClock(s,'night',901),false);assert.equal(s.zaZone19SpawnCycle.interval,900);
  const inBattle={combat:{},zaZone5Spent:{abra:true}};assert.equal(migrateAdventureWildClock(inBattle,'day',900),false);assert.equal(inBattle.zaWildClockV2,undefined);
 });
+
+test('city weather stays consistent across districts, changes with the hour and ignores interiors',async()=>{
+ const {adventureGameTime,adventureFieldWeather,restUntilHour}=await import('../lib/cloud-adventure/adventure-clock.mjs');
+ const hill={area:3,district:'lumiose-jaune-sector10'},other={area:3,district:'lumiose-zone14'};
+ const rain=adventureGameTime(16*50000),clear=adventureGameTime(18*50000);
+ assert.equal(adventureFieldWeather(hill,rain,'electric'),'rain');assert.equal(adventureFieldWeather(other,rain,'electric'),'rain');
+ assert.equal(adventureFieldWeather(hill,clear,'electric'),'');assert.equal(adventureFieldWeather({...hill,interior:'shop'},rain,'electric'),'');assert.equal(adventureFieldWeather({...hill,district:'lumiose-sewer'},rain,'electric'),'');
+ const saved={zaClockOffsetHours:0};restUntilHour(saved,16,20);assert.deepEqual(saved,{zaClockOffsetHours:4});assert.deepEqual(adventureGameTime(16*50000,saved.zaClockOffsetHours),adventureGameTime(20*50000));
+ assert.equal(adventureFieldWeather({area:2},rain,'water'),'rain');
+});
