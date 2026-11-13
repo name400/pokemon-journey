@@ -3,6 +3,13 @@ import assert from 'node:assert/strict';
 import {zone10Map,zone10Encounter,zone10Visible,zone10Item,ZONE10_GROUND_BENCHES,ZONE10_CENTRAL_BUILDING,ZONE10_BANK_STAIRS} from '../lib/cloud-adventure/adventure-zone10.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('lower bank connects to existing steps, preserves water encounters and saves',async()=>{
+ const ground={area:3,district:'lumiose-zone10',interior:null,x:5,y:6,facing:'down',zaRoyaleRank:'F',teamIds:['kept'],zaZone10Items:['canal-quick']};assert.equal(fieldDialogue(ground).action,'zone10BankStairs');
+ const lower={...ground,x:5,y:4,facing:'up',zaZone10LowerBank:true},map=zone10Map(lower);assert.equal(fieldDialogue(lower).action,'zone10BankStairs');assert.ok(fieldPath(map,lower,{x:11,y:7}).length);assert.equal(map[8][11],'c');assert.equal(zone10Visible(lower,'c').species,318);assert.equal(zone10Visible(lower,'d'),null);assert.equal(stepField({...lower,x:11,y:7},'down').blocked,true);assert.equal(fieldPath(map,lower,{x:11,y:13}).length,0);
+ const saved=restoreAdventurePosition(storeAdventurePosition(lower,221),221);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone10LowerBank,saved.teamIds,saved.zaZone10Items],[lower.district,5,4,true,['kept'],['canal-quick']]);assert.equal(restoreAdventurePosition(storeAdventurePosition(lower,221),222).district,null);
+ const {canMapTravel}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');assert.equal(canMapTravel(lower),false);
+});
+
 test('central building and bank steps preserve saved positions and both entrances',()=>{
  const base={area:3,district:'lumiose-zone10',interior:null,zaRoyaleRank:'F',teamIds:['kept'],zaZone10Items:['canal-quick'],zaZone10Spent:{staryu:true}},map=zone10Map(base);
  for(const [x,y] of ZONE10_CENTRAL_BUILDING){assert.equal(map[y][x],'#');const old=storeAdventurePosition({...base,x,y},202),saved=restoreAdventurePosition(old,202);assert.equal(saved.district,base.district);assert.ok(walkable(map[saved.y][saved.x]));assert.deepEqual(saved.teamIds,['kept']);assert.deepEqual(saved.zaZone10Items,['canal-quick']);assert.equal(saved.zaZone10Spent.staryu,true);assert.equal(restoreAdventurePosition(old,203).district,null);}

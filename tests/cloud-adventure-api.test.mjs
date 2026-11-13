@@ -59,6 +59,14 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('Zone 10 lower bank stairs, encounters and reentry preserve progress',async()=>{
+ const previous=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone10-lower-bank-qa',displayName:'낮은 수변 검증'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:5,y:6,facing:'down',zaRoyaleRank:'F',zaZone10Upper:false,zaZone10Items:['canal-quick'],zaZone10Spent:{staryu:true},zaWildShinyRolls:{'zone10:carvanha:318':true}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone10BankStairs');const revision=state.revision;await call('zone10BankStairs');await call('zone10BankStairs',{revision},409);await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone10LowerBank],[5,4,true]);assert.equal(state.world.zaMapTravelAllowed,false);await call('mapFastTravel',{destination:'zone10'},409);
+  await walkTo({x:11,y:7});await call('face',{direction:'down'});assert.equal(state.world.interaction.action,'zone10Wild-carvanha');await call('zone10Wild-carvanha');assert.equal(state.battle.teams[1][0].speciesId,318);assert.equal(state.battle.teams[1][0].shiny,true);await call('flee');await get();assert.equal(state.world.zaZone10LowerBank,true);assert.notEqual(state.world.zaZone10Spent?.carvanha,true);
+  await walkTo({x:5,y:4});await call('face',{direction:'up'});await call('zone10BankStairs');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone10LowerBank],[5,6,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone10Items,['canal-quick']);assert.equal(state.world.zaZone10Spent.staryu,true);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('Zone 10 central building safely restores older ground saves and keeps route to ladder',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-building-qa',displayName:'구역 10 검증'};
  try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
