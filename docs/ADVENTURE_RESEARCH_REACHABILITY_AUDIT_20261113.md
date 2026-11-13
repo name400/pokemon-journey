@@ -20,3 +20,13 @@
 3. 49·50 보상 및 중복 방지는 시험 상태를 직접 구성한 격리 API에서 통과했다. 기존 보상 이력·저장 데이터를 변경하지 않았고 실제 운영 DB·원작 기기·Sites 병합본은 검사하지 않았다.
 
 과제·보상 대조 자료: [Serebii 연구 과제](https://www.serebii.net/legendsz-a/mablesresearch.shtml), [메가스톤 목록](https://www.nintendolife.com/guides/pokemon-legends-z-a-all-mega-evolutions-and-mega-stone-locations). 테스트: `tests/cloud-adventure-zone-research.test.mjs`, `tests/cloud-adventure-mega-research.test.mjs`, `tests/cloud-adventure-trade-research.test.mjs`, API의 `research 50 charm`, `trade evolution research`, `research item milestones`, `Sewer Scraggy`.
+
+## 2026-11-13 후속: 주요 스톤·교환 경로 대표 검증
+
+후반 해금과 재화만 시험 데이터로 준비한 격리 API에서, 실제 메가조각 교환 요청으로 31종(7,860조각), 돌 가게 구매 요청으로 12종(910,000원), 미션 11·13의 수령 대기 상태에서 실제 요청으로 2종을 얻었다. 중복 없는 연구 기록이 45종·4,500점에 도달했고 재접속·오래된 리비전 재요청·일회성 수령·기존 파트너 보존을 확인했다. 조각과 돈의 자연 축적, 스토리 선행 전투 및 전체 플레이는 시드 처리했으므로 이 검사는 정상 완주가 아니다.
+
+데이터 검사에서는 스타터가 각각 치코리타·리아코·뚜꾸리인 경우와 스타터 기록이 없는 구형 저장을 확인했다. 전자는 교환 31종·상점 12종·스토리 4종의 합집합이 47종, 후자는 상점의 스타터 스톤을 보수적으로 숨겨 45종이다. 모든 후보가 아이템 등록과 메가 연구 목록에 존재한다. 구형 저장의 45종 전체를 실제로 획득한 API 검사는 아니며 과거에 소유하고 없어진 돌의 이력은 추측해 복구하지 않는다.
+
+격리 교환 API에서 친구 관계를 설정한 두 사용자로 윤겔라 일반 교환 진화, 구형 폼 ID 기록, 금속코트를 지닌 롱스톤 교환 진화를 각각 확인했다. 받기 전부터 도구를 지닌 교환이어야 하며, 진화 후 수령자의 연구 횟수만 한 번 오른다. 별도 API에서 결정 획득·재생 대기, 상점 중복 구매와 잔액 경합, 연구 레벨 50 시험 상태에서 빛나는부적 중복 수령을 대표 확인했다. 이 범위에서 새 진행 차단은 재현되지 않았다. 실제 두 사람의 연결, 재화의 자연 축적, 교환 진화 5회, 다른 모든 과제의 단일 저장 완주는 미검증이다.
+
+원작에서 콰자르티코 접수원이 조각을 교환하는 점은 [건물 안내](https://bulbapedia.bulbagarden.net/wiki/Quasartico_Inc._%28building%29)로 대조했다. 정확한 각 품목 해금 경계와 전체 원작 규칙이 검증됐다는 뜻은 아니다.

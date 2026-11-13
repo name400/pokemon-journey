@@ -5939,3 +5939,17 @@ test('Sewer Scraggy can be caught and evolved across sewer reentry',async()=>{
   seedMon(captured,{...makeMon(559,39),boxId:captured,shiny:true});await get();const evoRev=state.revision;await call('evolve',{boxId:captured,target:560});assert.equal(rawMon(captured).id,560);await call('evolve',{boxId:captured,target:560,revision:evoRev},409);await get();assert.ok(state.world.adventureDexSpecies.includes(560));assert.equal(rawMon(captured).shiny,true);assert.deepEqual([rawMon(starter).id,rawMon(starter).hp,rawMon(starter).moves],[original.id,original.hp,original.moves]);assert.ok(state.world.teamIds.includes(starter));
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Mega research reaches 45 through shard exchange, shop and story rewards',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'research-45-path-qa',displayName:'메가 연구 경로 검사'};
+ try{
+  const {SHARD_MEGA_STONES}=await import('../lib/cloud-adventure/adventure-mega-exchange.mjs'),{megaStoneShopStock}=await import('../lib/cloud-adventure/adventure-side27.mjs'),{megaResearchProgress}=await import('../lib/cloud-adventure/adventure-mega-research.mjs');
+  await get();await call('start',{species:152});const original=state.world.activeId,starter=rawMon(original),shardCost=SHARD_MEGA_STONES.reduce((n,p)=>n+p.cost,0),stock=megaStoneShopStock({zaMission37Complete:true,zaIntroStarterSpecies:152}),shopCost=stock.reduce((n,p)=>n+p[1],0);assert.equal(SHARD_MEGA_STONES.length,31);assert.equal(stock.length,12);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(shopCost,globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:18,y:10,facing:'down',zaIntroStarterSpecies:152,zaMission37Complete:true,zaShardExchangeUnlocked:true,zaRoyaleRank:'A',zaMegaShards:shardCost},state.revision+1));await get();
+  const exchangeRevision=state.revision;for(const item of SHARD_MEGA_STONES)await call('exchangeMegaShard',{item:item.id});assert.equal(rawWorld().zaMegaShards,0);assert.equal(megaResearchProgress(rawWorld()).count,31);await call('exchangeMegaShard',{item:SHARD_MEGA_STONES[0].id,revision:exchangeRevision},409);await get();assert.equal(megaResearchProgress(rawWorld()).count,31);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vernal',interior:null,x:9,y:4,facing:'up'},state.revision+1));await get();const buyRevision=state.revision;for(const [item] of stock)await call('buyEmporiumMega-'+item);assert.equal(state.wallet.coins,0);assert.equal(megaResearchProgress(rawWorld()).count,43);await call('buyEmporiumMega-'+stock[0][0],{revision:buyRevision},409);await get();assert.equal(megaResearchProgress(rawWorld()).count,43);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vernal',interior:null,x:16,y:10,facing:'right',zaMission11RewardPending:true},state.revision+1));await get();await call('claimMission11Stone');await call('claimMission11Stone',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-north-boulevard',interior:null,x:14,y:8,facing:'right',zaMission13RewardPending:true},state.revision+1));await get();await call('claimMission13Stone');await call('claimMission13Stone',{},409);await get();assert.equal(megaResearchProgress(rawWorld()).count,45);assert.equal(megaResearchProgress(rawWorld()).points,4500);assert.deepEqual(rawWorld().teamIds,[original]);assert.deepEqual(rawMon(original),starter);
+ }finally{globalThis.__adventureUser=previous;}
+});

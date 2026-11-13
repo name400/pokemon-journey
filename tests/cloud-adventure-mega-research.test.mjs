@@ -15,3 +15,12 @@ test('shard stone prices and rank B stock follow the exchange table',()=>{
  assert.equal(find('falinksite').cost,240);assert.equal(shardItemUnlocked(s,find('falinksite')),true);
  for(const id of ['salamencite','metagrossite']){assert.equal(find(id).cost,360);assert.equal(shardItemUnlocked(s,find(id)),false);assert.equal(shardItemUnlocked({...s,zaRoyaleRank:'B'},find(id)),true);assert.equal(shardItemUnlocked({...s,zaRoyaleRank:'A'},find(id)),true);}
 });
+
+test('postgame candidate stones include 45 distinct research entries for each starter and legacy saves',async()=>{
+ const {megaStoneShopStock}=await import('../lib/cloud-adventure/adventure-side27.mjs'),{rules}=await import('../lib/pokemon-config.mjs');
+ for(const starter of [152,158,498,undefined]){
+  const world={zaMission37Complete:true,zaShardExchangeUnlocked:true,zaIntroStarterSpecies:starter};
+  const shard=SHARD_MEGA_STONES.filter(item=>shardItemUnlocked(world,item)).map(item=>item.id),shop=megaStoneShopStock(world).map(item=>item[0]),story=['absolite','slowbronite','cameruptite','victreebelite'];
+  const candidates=[...new Set([...shard,...shop,...story])];assert.equal(candidates.length,starter===undefined?45:47);assert.ok(candidates.every(id=>Object.hasOwn(rules.items,id)&&RESEARCH_MEGA_STONES.includes(id)));
+ }
+});
