@@ -69,6 +69,9 @@ export default function Adventure(){
   // while its preview is visible. Leave newer or event-bearing state alone.
   const w=result.world,current=snapshot.current?.world,samePosition=w&&current&&['area','district','interior','x','y','facing','activeId'].every(key=>(w[key]??null)===(current[key]??null));
   if(light&&!recovery&&lock.current&&inflightMove.current&&result.revision===revision.current&&samePosition&&!result.battle&&!w.adventureCatchWindow&&!w.adventurePendingMoves?.length)return true;
+  // A GET restores the authoritative turn; it is not a new action response.
+  // Do not replay an already saved multi-battle turn after reload or recovery.
+  if(result.battle?.adventureMultiEventsV1)result.battle={...result.battle,events:[]};
   accept(result);if(recovery)syncRequired.current=false;if(mounted.current)setError('');return true;}catch(e){if(mounted.current){setError(recovery?(e instanceof Error&&e.message.includes('계정이나 파트너가 변경')?e.message:'연결을 복구하지 못했습니다. 다시 불러와 주세요.'):e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept]);
  const act=useCallback(async(action:string,extra:any={})=>{
   if(lock.current||syncRequired.current)return null;lock.current=true;setBusy(true);setError('');const issuedRevision=revision.current,isMovement=['move','face','dodge'].includes(action),marker:PendingMovement={revision:issuedRevision,activeId:typeof snapshot.current?.world?.activeId==='string'?snapshot.current.world.activeId:null};
