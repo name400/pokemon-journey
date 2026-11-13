@@ -62,3 +62,17 @@ test('northeast crossing extends toward northern bank without closing old paths'
  assert.deepEqual(zone2FieldMonsters(state,'night',map).find(p=>p.id==='staryu')?.x,8);assert.deepEqual(zone2FieldMonsters(state,'night',map).find(p=>p.id==='staryu')?.y,8);
  const saved=storeAdventurePosition({...state,x:15,y:3},128);saved.districtPosition.zone2Layout=7;const restored=restoreAdventurePosition(saved,128);assert.deepEqual([restored.x,restored.y,restored.teamIds],[15,3,['kept']]);
 });
+
+test('Zone 2 west connections preserve earlier walkability and saved roaming-water positions',async()=>{
+ const {ZONE2_WEST_CONNECTIONS,ZONE2_ISLAND_NORTH_EDGE,zone2FieldMonsters}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const old=['####W##################','#...:..........~......#','#...:g......^..~......#','#..h:g.........=..^...#','#...,,g;;;ggggg=g.....#','#.^..,gg=~~~~~==g.....X','#....,g~=~gggg==g,,,,,#','#..^.,g~=ggggg=~g...^.#','#....,g~~ggggg~~~.....#','#...^,g~==gggg~~~.....#','#.....g~=~gggg~~~..~~~#','#.....gg=~~~~~~g~..~g~#','#....^gg=ggggggg~..rw~#','#......,,gg.....~~.~~~#','#........gg,.....~~...#','#..........,......~...#','###########E###########'];
+ const base={area:3,district:'lumiose-zone2',x:11,y:15,teamIds:['kept'],zaZone2RockCleared:false},map=lumioseZone2Map(base);
+ for(let y=0;y<old.length;y++)for(let x=0;x<old[y].length;x++){
+  if(walkable(old[y][x]))assert.ok(walkable(map[y][x]),`old walkable ${x},${y}`);
+  if(old[y][x]==='~'&&Math.abs(x-8)+Math.abs(y-8)<=3)assert.equal(map[y][x],'~',`saved Staryu water ${x},${y}`);
+ }
+ for(const [x,y] of ZONE2_WEST_CONNECTIONS){assert.equal(old[y][x],'~');assert.equal(map[y][x],'=');}
+ for(const [x,y] of ZONE2_ISLAND_NORTH_EDGE){assert.equal(old[y][x],'~');assert.equal(map[y][x],'g');}
+ for(const [x,y] of [[7,6],[9,10],[8,8]]){const state={...base,zaZone2FieldPositions:{staryu:{x,y,custom:'kept'}}},saved=storeAdventurePosition(state,99),restored=restoreAdventurePosition(saved,99),staryu=zone2FieldMonsters(restored,'night',map).find(p=>p.id==='staryu');assert.deepEqual([staryu.x,staryu.y],[x,y]);assert.equal(restored.zaZone2FieldPositions.staryu.custom,'kept');}
+ for(const target of [{x:4,y:1},{x:7,y:5},{x:10,y:5},{x:10,y:10},{x:8,y:11},{x:11,y:14},{x:15,y:3},{x:21,y:5}])assert.ok(fieldPath(map,base,target).length,JSON.stringify(target));
+});

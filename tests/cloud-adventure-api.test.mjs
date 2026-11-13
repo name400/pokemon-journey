@@ -5962,3 +5962,13 @@ test('Zone 2 northeast crossing connects the island and northern bank across rel
   for(const y of [5,4,3]){await call('move',{direction:'up'});assert.deepEqual([state.world.x,state.world.y],[15,y]);}await get();assert.deepEqual([state.world.x,state.world.y],[15,3]);await call('move',{direction:'right'});assert.deepEqual([state.world.x,state.world.y],[16,3]);await call('move',{direction:'left'});for(const y of [4,5,6]){await call('move',{direction:'down'});assert.deepEqual([state.world.x,state.world.y],[15,y]);}await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.world.zaZone2FieldSpent,spent);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(team[0]).moves,mon.moves);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
 });
+
+test('Zone 2 west crossings support return trips and preserve old field state',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone2-west-crossings-qa',displayName:'구역2 서쪽 연결 검사'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={hour:12,period:'day'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),spent={patrat:true,patrat2:true,binacle:true,magikarp:true,staryu:true},positions={staryu:{x:9,y:10,custom:'kept'}};
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:8,y:5,facing:'right',zaZone2FieldSpent:spent,zaZone2FieldPositions:positions,zaZone2Budew:{escaped:true}},state.revision+1));await get();
+  for(const [direction,x,y] of [['right',9,5],['right',10,5],['down',10,6],['up',10,5],['left',9,5],['left',8,5]]){await call('move',{direction});assert.deepEqual([state.world.x,state.world.y],[x,y]);}await get();
+  seedWorld(storeAdventurePosition({...rawWorld(),x:10,y:10,facing:'down'},state.revision+1));await get();for(const [direction,x,y] of [['down',10,11],['left',9,11],['left',8,11],['right',9,11],['right',10,11],['up',10,10]]){await call('move',{direction});assert.deepEqual([state.world.x,state.world.y],[x,y]);}await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone2FieldSpent,spent);assert.deepEqual(state.world.zaZone2FieldPositions,positions);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=time;}
+});
