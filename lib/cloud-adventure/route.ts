@@ -1304,6 +1304,7 @@ else if(b.action==='evolve'){if(s.combat)throw Error('전투 후 직접 진화�
 
 else throw Error('알 수 없는 행동입니다.');
 if(s.zaMegaRing===true&&!s.zaSushiRun&&!s.zaLoanBattle&&!s.combat?.adventurePlusGaugeV1&&(s.combat?.format==='mission10-multi-v1'||s.combat?.format==='mission37-triples-prototype-v1'&&(s.combat.adventureMegaPlusDamageV1===true||s.combat.adventureSoloTripleFoeV1===true))&&!JSON.parse(row.state).combat){s.combat.adventurePlusGaugeV1={charge:1,max:3};s.combat.adventurePlusStatusV1=true;s.combat.adventurePlusStatusV2=true;s.combat.adventurePlusStatusV3=true;s.combat.adventurePlusProtectV1=true;}
+if(s.zaMegaRing===true&&s.combat&&!JSON.parse(row.state).combat&&(s.combat.adventureRogueRetryV1===true||b.action==='mission37Wave'||b.action==='mission41Sim'||typeof b.action==='string'&&b.action.startsWith('rogueRematch-'))){const foes=s.combat.format==='mission10-multi-v1'?[...(s.combat.teams[1]||[]),...(s.combat.teams[3]||[])]:s.combat.teams[1]||[];const targets=foes.filter((m:any)=>m&&m.adventureEmptySlot!==true&&typeof m.boxId==='string').map((m:any)=>m.boxId);if(targets.length)s.combat.adventureRogueAuraV1={targets};}
 if(oldCityResearchArea)refreshCityResearchOnExit(s,oldCityResearchArea);
 prepareVisibleWild(s);
 const obtainedMegaStones=[...Object.entries(bagChanges).filter(([,count])=>count>0).map(([item])=>item),captured?.item].filter(Boolean);if(obtainedMegaStones.length)recordResearchMegaStones(s,obtainedMegaStones);
