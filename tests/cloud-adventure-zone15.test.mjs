@@ -27,6 +27,14 @@ test('Zone 15 southwest gate connects Jaune Sector 7 without losing legacy route
  assert.notEqual(zone15Map({...zone,zaZone15Upper:true})[13][0],'X');
 });
 
+test('western Ultimo entrance is reachable and keeps the legacy counter',()=>{
+ const s={area:3,district:'lumiose-zone15',interior:null,x:1,y:6,facing:'left',zaRoyaleRank:'D',teamIds:['kept'],zaZone15Items:['cafe-ultra']},map=zone15Map(s);
+ assert.equal(map[6][0],'q');assert.equal(fieldDialogue(s).action,'ultimoCoffee');assert.equal(fieldDialogue({...s,x:17,y:7,facing:'up'}).action,'ultimoCoffee');
+ for(const gate of [{x:11,y:1},{x:1,y:13},{x:17,y:15}])assert.ok(fieldPath(map,gate,s).length);
+ for(const [x,y] of [[1,6],[17,7]]){const loaded=restoreAdventurePosition(storeAdventurePosition({...s,x,y},141),141);assert.deepEqual([loaded.district,loaded.x,loaded.y,loaded.teamIds,loaded.zaZone15Items],[s.district,x,y,['kept'],['cafe-ultra']]);}
+ assert.notEqual(zone15Map({...s,zaZone15Upper:true})[6][0],'q');
+});
+
 test('Zone 15 street approaches retain grass, object positions and old floor saves',()=>{
  const s={area:3,district:'lumiose-zone15',interior:null,zaRoyaleRank:'D',regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone15Map(s);
  for(let y=1;y<=5;y++)for(const x of [10,11,12])assert.equal(map[y][x],',');

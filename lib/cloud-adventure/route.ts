@@ -886,7 +886,7 @@ else if(b.action==='enterHotel202'){if(s.zaIntroStage==='reception')throw Error(
 // Ultimo's base-game menu has one unusually expensive drink.
 // https://www.serebii.net/legendsz-a/cafes.shtml
 else if(b.action==='ultimoCoffee'){
- const spot=interactionAt(s);if(s.combat||s.adventureCatchWindow||s.interior||s.district!=='lumiose-zone15'||s.zaZone15Upper===true||spot?.tile!=='q'||spot.x!==17||spot.y!==6||b.confirmed!==true)throw Error('카페 Ultimo에서 100,000코인 주문을 확인하세요.');
+ const spot=interactionAt(s);if(s.combat||s.adventureCatchWindow||s.interior||s.district!=='lumiose-zone15'||s.zaZone15Upper===true||spot?.tile!=='q'||![0,17].includes(spot.x)||spot.y!==6||b.confirmed!==true)throw Error('카페 Ultimo에서 100,000코인 주문을 확인하세요.');
  const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<100000)throw Error('음료를 주문할 코인이 부족합니다.');
  reward=-100000;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,1);mons.set(id,rested);changed.set(id,rested);}s.log=['Ultimo Coffee를 주문해 파티가 회복했다.','100,000코인을 지불했다.'];
 }

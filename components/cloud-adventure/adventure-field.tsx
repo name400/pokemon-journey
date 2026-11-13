@@ -632,7 +632,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       if(c==='X'){ctx.fillStyle='#4d7379';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#8fc0b5';ctx.fillRect(px+7,py+6,tile-14,tile-12);}
       return;
      }
-     const cafeBuilding=x>=16&&x<=19&&y>=3&&y<=5&&c==='#';
+     // Western façade is a draft; retain the older eastern building for old saves.
+     const cafeBuilding=((x===0&&y>=4&&y<=5)||(x>=16&&x<=19&&y>=3&&y<=5))&&c==='#';
      ctx.fillStyle=cafeBuilding?'#c8b69b':c==='#'?'#777c75':c==='g'?'#94b17b':c===','?'#b9a990':(x+y)%2?'#dad5c3':'#e5dfce';ctx.fillRect(px,py,tile,tile);
      if(cafeBuilding){
       if(y===3){ctx.fillStyle='#70675c';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#9b8c78';ctx.fillRect(px+2,py+4,tile-4,tile-8);ctx.fillStyle='#d8c6a6';ctx.fillRect(px,py+tile-4,tile,4);}
