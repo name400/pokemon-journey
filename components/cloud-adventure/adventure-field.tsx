@@ -205,7 +205,24 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     if(w.district==='lumiose-bleu-cafe2'&&!w.interior){if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?'#909488':c===','?'#c8bdae':(x+y)%2?'#e0ded0':'#ebe9dd';ctx.fillRect(px,py,tile,tile);if(c==='q'||c==='s'||c==='X'){ctx.fillStyle=c==='q'?'#a7534d':c==='s'?'#867156':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'카페':c==='s'?'계단':'거리',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-aymlis-park'&&!w.interior){const lower=w.zaMission11ParkLower===true;if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?(lower?'#71827f':'#779079'):c===','?'#d0c5b0':(x+y)%2?'#d9d5be':'#e7e1cc';ctx.fillRect(px,py,tile,tile);if(c==='H'||c==='j'||c==='d'||c==='X'||c===';'){ctx.fillStyle=c==='H'?'#c95d61':c==='j'?'#907758':c==='d'?'#668eaa':c===';'?'#aaa092':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='H'?'센터':c==='j'?'계단':c==='d'?'사건':c===';'?'아치':'거리',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-mission21-glide'&&!w.interior){ctx.fillStyle=c==='#'?'#756d70':'#b59980';ctx.fillRect(px,py,tile,tile);if(c===','){ctx.fillStyle='#e1c5a2';ctx.fillRect(px+2,py+tile-5,tile-4,2);}if(c==='l'||c==='j'||(y===6&&(x===9||x===13))){ctx.fillStyle=c==='l'||c==='j'?'#936e40':'#477d93';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='l'||c==='j'?'사다리':'활공',px+tile/2,py+20);}return;}
-    if(w.district==='lumiose-jaune-sector9'&&!w.interior&&c==='n'){ctx.fillStyle='#c1b596';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#7d6256';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('Naveen',px+tile/2,py+20);return;}
+    if(w.district==='lumiose-jaune-sector9'&&!w.interior){
+     // City Hall, the fountain and surrounding scaffold are source-grounded;
+     // their compressed footprint, colours and exact placement remain drafts.
+     const hall=x>=3&&x<=7&&y>=2&&y<=5,east=x>=15&&x<=19&&y>=11&&y<=14;
+     const plaza=x>=3&&x<=9&&y>=7&&y<=13;
+     ctx.fillStyle=c==='#'?'#7d8480':c===','?'#b9b4a3':(x+y)%2?'#dcd8c8':'#e9e6d8';ctx.fillRect(px,py,tile,tile);
+     if(c===','||plaza){ctx.fillStyle=plaza?'#c7c6b5':'#a9a79b';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py,1,tile-3);}
+     if(c==='#'&&(hall||east)){
+      const roof=hall?y===2:y===11;ctx.fillStyle=roof?(hall?'#788480':'#777979'):(hall?'#e0dac7':'#cfc8b9');ctx.fillRect(px,py,tile,tile);
+      if(roof){ctx.fillStyle='#adb4a5';ctx.fillRect(px+1,py+tile-5,tile-2,3);ctx.fillStyle='rgba(255,255,255,.22)';ctx.fillRect(px+2,py+4,tile-4,2);}
+      else{ctx.fillStyle='#6d8e8a';ctx.beginPath();ctx.arc(px+tile/2,py+tile*.38,tile*.22,Math.PI,0);ctx.lineTo(px+tile*.72,py+tile*.78);ctx.lineTo(px+tile*.28,py+tile*.78);ctx.fill();ctx.fillStyle='#dce6d6';ctx.fillRect(px+tile/2-2,py+tile*.39,3,tile*.34);ctx.fillStyle='#aba694';ctx.fillRect(px,py+tile-3,tile,3);}
+     }
+     if(c==='u'){ctx.fillStyle='#d9d2bf';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#8c9f91';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#e4e4d0';for(let n=0;n<3;n++)ctx.fillRect(px+5,py+5+n*6,tile-10,2);ctx.fillStyle='#587b77';ctx.fillRect(px+tile/2-3,py+3,6,tile-6);}
+     if(c===';'){ctx.fillStyle='#d5d0bd';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,tile*.42,0,Math.PI*2);ctx.fill();ctx.fillStyle='#7ab6be';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,tile*.31,0,Math.PI*2);ctx.fill();ctx.fillStyle='#e9eee0';ctx.fillRect(px+tile/2-2,py+tile/2-7,4,10);ctx.fillRect(px+tile/2-5,py+tile/2+2,10,2);}
+     if(c==='j'){ctx.fillStyle='#597f84';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle='#d1e7d9';ctx.fillRect(px+8,py+7,tile-16,3);ctx.fillRect(px+8,py+tile-10,tile-16,3);}
+     if(c==='X'){ctx.fillStyle='#819c90';ctx.fillRect(px+6,py+6,tile-12,tile-12);ctx.fillStyle='#d8e8d8';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
+     return;
+    }
     if(w.district==='lumiose-jaune-sector8'&&!w.interior){
      // The café and Wild Zone 19 are documented in this sector; the compressed
      // street plan, façade details and exact positions are a 2D approximation.
