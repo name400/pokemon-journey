@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {royaleBonusPickable,takeRoyaleBonus,recordRoyaleBonus} from '../lib/cloud-adventure/adventure-royale-bonus.mjs';
+import {royaleBonusPickable,takeRoyaleBonus,recordRoyaleBonus,royaleMedalSettlement,recordRoyaleMedalBattle} from '../lib/cloud-adventure/adventure-royale-bonus.mjs';
 import {lumioseRoyaleMap,fieldDialogue,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 const now=20*50000,hit=[{kind:'move',side:0,actorBoxId:'p'},{kind:'effect',targetSide:1,targetBoxId:'e',text:'효과가 굉장했다!'},{kind:'damage',targetSide:1,targetBoxId:'e',actorBoxId:'p',hit:true,amount:10}];
@@ -26,4 +26,21 @@ test('concurrent cards count only matching hits, pay medals once, and preserve l
  assert.equal(recordRoyaleBonus(s,{events:fire,log:[]},'night',now),true);assert.equal(s.zaRoyaleBonusExtraCards.fire.progress,1);assert.equal(s.zaRoyaleBonusExtraCards.water.progress,0);assert.equal(s.zaRoyalePrizeMedals,7);
  assert.equal(recordRoyaleBonus(s,{events:[...fire,...water,...water],log:[]},'night',now),true);assert.equal(s.zaRoyalePrizeMedals,47);assert.equal(s.zaRoyaleYPoints,400);assert.equal(s.zaRoyaleBonusCard.completed,true);assert.equal(recordRoyaleBonus(s,{events:fire,log:[]},'night',now),false);
  assert.equal(royaleBonusPickable(s,now+1200000,'fire'),true);assert.equal(takeRoyaleBonus(s,now+1200000,'fire'),true);assert.equal(s.zaRoyaleBonusExtraCards.fire.progress,0);assert.equal(s.zaRoyalePrizeMedals,47);
+});
+
+test('medal settlement uses nightly wins, gold plush, and preserves old pending balances',()=>{
+ for(const [wins,multiple] of [[0,10],[4,10],[5,15],[9,15],[10,20],[19,20],[20,25],[29,25],[30,30]]){
+  const s={zaRoyalePrizeMedals:100,zaRoyaleMedalNight:0,zaRoyaleMedalWins:wins,log:[]};assert.equal(royaleMedalSettlement(s,'night',now),0);assert.equal(royaleMedalSettlement(s,'day',now),100*multiple);assert.equal(royaleMedalSettlement(s,'day',now),0);
+ }
+ const old={zaRoyalePrizeMedals:50,log:[]};assert.equal(royaleMedalSettlement(old,'night',now),0);assert.equal(royaleMedalSettlement(old,'day',now,3),750);
+ const later={zaRoyalePrizeMedals:20,zaRoyaleMedalNight:0,zaRoyaleMedalWins:1,log:[]};assert.equal(royaleMedalSettlement(later,'night',now+1200000),200);
+ const battle={zaRoyalePrizeMedals:80,zaRoyaleMedalNight:0,zaRoyaleMedalWins:5,combat:{}};assert.equal(royaleMedalSettlement(battle,'day',now),0);delete battle.combat;battle.adventureCatchWindow={revision:1};assert.equal(royaleMedalSettlement(battle,'day',now),0);
+});
+test('only ended Royale trainer battles count wins or halve medals on defeat',()=>{
+ const s={district:'lumiose-royale',zaRoyalePrizeMedals:71},trainer={title:'Z-A 로열 배틀'};
+ recordRoyaleMedalBattle(s,{ended:false,winner:0},trainer,now);assert.equal(s.zaRoyaleMedalWins,undefined);
+ recordRoyaleMedalBattle(s,{ended:true,winner:0},trainer,now);assert.equal(s.zaRoyaleMedalWins,1);
+ recordRoyaleMedalBattle(s,{ended:true,winner:1},trainer,now);assert.equal(s.zaRoyalePrizeMedals,35);
+ recordRoyaleMedalBattle(s,{ended:true,winner:1},{title:'야생'},now);assert.equal(s.zaRoyalePrizeMedals,35);
+ const empty={district:'lumiose-royale',zaRoyalePrizeMedals:0,zaRoyaleMedalNight:0,zaRoyaleMedalWins:4};recordRoyaleMedalBattle(empty,{ended:true,winner:0},trainer,now+1200000);assert.equal(empty.zaRoyaleMedalNight,1);assert.equal(empty.zaRoyaleMedalWins,1);
 });
