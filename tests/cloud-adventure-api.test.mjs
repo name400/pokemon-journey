@@ -6523,6 +6523,19 @@ test('mission 36 independent partners fight two opponents without exposing the e
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('Josée dialogue exposes reserve party moves and masters them without touching the lead',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-reserve-qa',displayName:'파티 숙달 검사'};
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,reserve={...makeMon(25,30),boxId:'plus-reserve-pikachu',moves:['몸통박치기','울음소리'],adventurePlusMastered:[]},outside={...makeMon(4,30),boxId:'plus-outside-charmander'};
+  for(const mon of [reserve,outside])sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(mon.boxId,globalThis.__adventureUser.userId,mon.id,JSON.stringify(mon),'qa',1);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'seedofmasteryza']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'seedofmasteryza');
+  seedWorld(storeAdventurePosition({...rawWorld(),teamIds:[lead,reserve.boxId],area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',zaMission19JoseeWon:true},state.revision+1));await get();
+  assert.equal(state.box.find(m=>m.boxId===reserve.boxId).moves,undefined);
+  await call('talk');assert.equal(state.world.dialogue.plusMastery,true);assert.deepEqual(state.box.find(m=>m.boxId===reserve.boxId).moves,reserve.moves);assert.equal(state.box.some(m=>m.boxId===outside.boxId),false);
+  const rev=state.revision,leadBefore=rawMon(lead);await call('masterAdventureMove',{boxId:reserve.boxId,move:'몸통박치기'});assert.deepEqual(rawMon(reserve.boxId).adventurePlusMastered,['tackle']);assert.deepEqual(rawMon(lead),leadBefore);await call('masterAdventureMove',{boxId:reserve.boxId,move:'몸통박치기',revision:rev},409);await get();assert.equal(state.inventory.seedofmasteryza,undefined);assert.deepEqual(rawMon(reserve.boxId).adventurePlusMastered,['tackle']);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Josée masters a party attack once with a seed and retains it after reload',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-mastery-qa',displayName:'숙달 검사'};
  try{
