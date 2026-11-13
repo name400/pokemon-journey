@@ -496,6 +496,14 @@ test('Mission 32 eastern courtyard lift and glide preserve progress and old rewa
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Jaune Sector 8 café exterior preserves old positions and street access',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'jaune8-cafe-front-qa',displayName:'존느 거리'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:18,y:6,facing:'up',zaRoyaleRank:'B',zaMission29Complete:true},state.revision+1));await get();assert.deepEqual([state.world.x,state.world.y],[18,6]);assert.equal(state.world.interaction.name,'리테이크 카페 (위치 초안)');await get();assert.deepEqual([state.world.x,state.world.y],[18,6]);await walkTo({x:5,y:7});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'heal');await walkTo({x:11,y:1});await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-zone19');await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-sector8',11,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Mission 29 Jaune Sector 8 links center, garden and legacy reward',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission29-jaune8-qa',displayName:'존느8테스트'};
  try{
