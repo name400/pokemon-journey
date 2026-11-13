@@ -99,3 +99,13 @@ test('diagonal promenade approach connects its three northern gates and legacy s
  const saved=restoreAdventurePosition(storeAdventurePosition(s,35),35);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone17Promenade,saved.coins,saved.teamIds,saved.zaZone17Spent,saved.zaZone17Items],['lumiose-zone17',8,13,true,250,['kept'],{'pyroar-alpha':true},['stairs-timer']]);assert.equal(fieldDialogue(saved,fieldMap(saved)).action,'zone17PromenadeStairs');
  const legacy={...s,x:11,y:13};assert.equal(fieldDialogue(legacy,fieldMap(legacy)).action,'zone17PromenadeStairs');
 });
+
+
+test('promenade earth paths join the three northern gates and southern stair',()=>{
+ const s={area:3,district:'lumiose-zone17',interior:null,zaRoyaleRank:'C',zaZone17Promenade:true,x:8,y:13,teamIds:['kept'],zaZone17Spent:{'pyroar-alpha':true},zaZone17Items:['stairs-timer']},map=zone17Map(s);
+ // Walk only the visible path to verify its shape, independent of the grass.
+ const seen=new Set(['8,13']),queue=[[8,13]];for(let i=0;i<queue.length;i++){const [x,y]=queue[i];for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=`${nx},${ny}`;if(!seen.has(k)&&[',','X','h'].includes(map[ny]?.[nx])){seen.add(k);queue.push([nx,ny]);}}}
+ for(const [x,y] of [[6,0],[11,0],[16,0],[8,14]])assert.ok(seen.has(`${x},${y}`),`path to ${x},${y}`);
+ assert.equal(map[6][13],'l');assert.equal(map[3][4],'^');assert.equal(map[3][18],'^');
+ const old=restoreAdventurePosition(storeAdventurePosition({...s,x:10,y:9},101),101);assert.deepEqual([old.x,old.y,old.teamIds,old.zaZone17Items],[10,9,['kept'],['stairs-timer']]);
+});
