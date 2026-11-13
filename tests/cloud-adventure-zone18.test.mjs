@@ -166,3 +166,9 @@ test('Zone 18 Lopunny alley reaches the rooftop ladder and old chimney saves res
  const roof={...alley,zaZone18Construction:false,zaZone18Upper:true,zaZone18LadderReturn:'construction',x:15,y:6};const old=storeAdventurePosition(roof,82);delete old.districtPosition.zone18RoofLayout;const restored=restoreAdventurePosition(old,82);assert.ok(walkable(zone18Map(restored)[restored.y][restored.x]));assert.equal(restored.zaZone18LadderReturn,'construction');assert.deepEqual(restored.teamIds,['kept']);
  assert.ok(fieldPath(zone18Map(restored),restored,{x:6,y:9}).length);assert.ok(fieldPath(zone18Map(restored),restored,{x:16,y:8}).length);
 });
+
+test('Zone 18 separate scaffold gate has a reversible path and no ground spawns',()=>{
+ const s={area:3,district:'lumiose-zone18',interior:null,x:6,y:11,facing:'down',zaRoyaleRank:'B',zaZone18Scaffold:true,zaZone18Upper:false,zaZone18Construction:false,zaZone18Spent:{'lopunny-alpha':true},teamIds:['kept']};
+ const map=zone18Map(s);assert.equal(map[12][6],'l');assert.equal(map[4][14],'h');assert.equal(fieldDialogue(s).action,'zone18ScaffoldLadder');assert.equal(fieldDialogue({...s,x:14,y:5,facing:'up'}).action,'zone18ScaffoldGate');assert.ok(fieldPath(map,s,{x:14,y:5}).length);assert.equal(zone18Visible(s,'a'),null);
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,71),71);assert.deepEqual([saved.x,saved.y,saved.zaZone18Scaffold,saved.teamIds],[6,11,true,['kept']]);assert.equal(saved.zaZone18Spent['lopunny-alpha'],true);
+});

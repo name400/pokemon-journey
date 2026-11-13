@@ -466,6 +466,14 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(c===','){ctx.fillStyle='#baa986';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:1),py+3,1,tile-5);}if(c==='r'){ctx.fillStyle='#496f42';ctx.fillRect(px+4,py+7,tile-8,tile-11);ctx.fillStyle='#7ca063';ctx.fillRect(px+7,py+5,7,6);ctx.fillRect(px+18,py+8,6,5);}if('ij'.includes(c)){ctx.fillStyle='#eee9da';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#bb5c56';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#4d5851';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}if('WEX'.includes(c)){ctx.fillStyle='#668b79';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
     if(w.district==='lumiose-zone18'&&!w.interior){
+     if(w.zaZone18Scaffold===true){
+      // Separate scaffold landing; layout and gate location are 2D drafts.
+      if(c==='#'){ctx.fillStyle='#7a8885';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#a5afa4';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#657774';ctx.fillRect(px+4,py,3,tile);ctx.fillRect(px+tile-7,py,3,tile);ctx.fillRect(px,py+6,tile,3);ctx.fillRect(px,py+tile-8,tile,3);}
+      else{ctx.fillStyle='#b39b78';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d4c0a0';for(let j=4;j<tile;j+=8)ctx.fillRect(px+2,py+j,tile-4,3);ctx.fillStyle='#8e795e';ctx.fillRect(px,py+tile-2,tile,2);}
+      if(c==='l'){ctx.fillStyle='#72523a';ctx.fillRect(px+8,py+4,3,tile-8);ctx.fillRect(px+tile-11,py+4,3,tile-8);ctx.fillStyle='#e5d1ad';for(let j=7;j<tile-5;j+=6)ctx.fillRect(px+9,py+j,tile-18,2);}
+      if(c==='h'){ctx.fillStyle='#3b7561';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#a3e3b3';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#d9ffdb';ctx.fillRect(px+7,py+7,tile-14,3);}
+      return;
+     }
      // Rooftops and the southeast construction alley remain separate saved
      // layers. Scaffold outlines are drawn over existing blocked cells only.
      const alley=w.zaZone18Construction===true,upper=w.zaZone18Upper===true;
