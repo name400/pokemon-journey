@@ -19,6 +19,7 @@ import {SALON_COLORS,SALON_PRICE,SALON_STYLES,salonAppearance} from '@/lib/cloud
 import {TRAINERS} from '@/lib/campaign.mjs';
 import {stepField,wildAlphaTarget,zone2BudewTarget,zone2KakunaTarget,zone2FieldMonsters,zone2FieldTarget,zone2IslandAlphaTarget,zone3FieldMonsters,zone3FieldTarget,magentaSewerMonsters,magentaSewerTarget} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {ADVENTURE_BALLS,RARE_ADVENTURE_BALL_IDS} from '@/lib/cloud-adventure/adventure-balls.mjs';
+import {alphaMoveReplacementWarning} from '@/lib/cloud-adventure/adventure-alpha-move-warning.mjs';
 import './cloud-adventure.css';
 import {predictCloudStep,predictCloudPath,predictCloudPathSteps,createCloudMoveBuffer,adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 import {createVisualMovementRequests} from '@/lib/cloud-adventure/adventure-visual-request.mjs';
@@ -239,7 +240,7 @@ export default function Adventure(){
   </Sheet>}
   {pendingMove&&!inBattle&&<Sheet title="새 기술 배우기" close={()=>{}} dismissible={false}>
    <div className="adv-management"><p>{pendingMon?`${pendingMon.name}이(가) ${pendingMove.move}을(를) 배우려 합니다. 바꿀 기술을 선택하세요.`:'포켓몬 정보를 찾을 수 없습니다. 이 선택을 건너뛰고 계속할 수 있습니다.'}</p><p><b>{pendingMove.move}</b><br/><MoveSummary name={pendingMove.move}/></p>
-    {pendingMon?.moves&&[0,1,2,3].map(index=><p key={index}><button autoFocus={index===0} disabled={busy} onClick={()=>act('resolveAdventureMove',{slot:index})}>{pendingMon.moves[index]?`${pendingMon.moves[index]} 대신 `:'빈 칸에 '}{pendingMove.move} 배우기</button>{pendingMon.moves[index]&&<><br/><MoveSummary name={pendingMon.moves[index]}/></>}</p>)}
+    {pendingMon?.moves&&[0,1,2,3].map(index=><p key={index}><button autoFocus={index===0} disabled={busy} onClick={()=>{const warning=alphaMoveReplacementWarning(pendingMon,index,w,data.inventory);if(!warning||window.confirm(warning))void act('resolveAdventureMove',{slot:index});}}>{pendingMon.moves[index]?`${pendingMon.moves[index]} 대신 `:'빈 칸에 '}{pendingMove.move} 배우기</button>{pendingMon.moves[index]&&<><br/><MoveSummary name={pendingMon.moves[index]}/></>}</p>)}
     <button disabled={busy} onClick={()=>act('resolveAdventureMove',{slot:null})}>배우지 않기</button><p>남은 선택 {pendingEntries.length}개</p>{error&&<p role="alert">{error}</p>}
    </div>
   </Sheet>}
