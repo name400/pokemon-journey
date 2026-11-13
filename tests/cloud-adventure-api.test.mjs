@@ -7313,3 +7313,13 @@ test('boulevard twelve-step movement retains saves, friendship and stale-request
   }
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Jaune and Floral long movement retains save and stops at the next district',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'jaune-floral-buffer-qa',displayName:'거리 이동 검사'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId;
+  for(const district of ['lumiose-jaune-sector11','lumiose-jaune-sector12','lumiose-floral']){
+   const mon={...rawMon(id),boxId:id,walkSteps:0,friendship:50};seedMon(id,mon);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x:2,y:8,facing:'right',steps:120,zaRoyaleRank:'A',combat:null,encounter:null},state.revision+1));await get();const revision=state.revision,wallet=structuredClone(state.wallet);await call('move',{path:Array(12).fill('right'),compact:true});assert.deepEqual([state.world.x,state.world.y,state.world.steps],[14,8,132]);assert.equal(rawMon(id).walkSteps,12);assert.equal(rawMon(id).friendship,51);assert.deepEqual(state.wallet,wallet);await call('move',{path:['right'],revision,compact:true},409);await get();assert.equal(state.world.x,14);
+   seedWorld(storeAdventurePosition({...rawWorld(),district,interior:null,x:20,y:8,facing:'right',steps:120},state.revision+1));await get();const {stepField}=await import('../lib/cloud-adventure/adventure-world.mjs'),expected=stepField({...state.world,x:21},'right');assert.ok(expected.transitioned||expected.blocked);await call('move',{path:['right','right','right'],compact:true});assert.equal(state.world.district,expected.transitioned?expected.district:district);assert.equal(state.world.steps,expected.transitioned?122:121);await get();assert.equal(state.world.steps,expected.transitioned?122:121);
+  }
+ }finally{globalThis.__adventureUser=previous;}
+});

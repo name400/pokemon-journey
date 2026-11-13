@@ -134,3 +134,14 @@ test('the two boulevards extend only paved steps and retain group and boundary l
   const edge={...w,x:17},edgeBuffer=createCloudMoveBuffer(edge,predictCloudStep(edge,'right'),'right');let count=0;while(edgeBuffer.push())count++;assert.ok(count<4);assert.equal(edgeBuffer.position.x,21);
  }
 });
+
+test('Jaune 11, Jaune 12 and Floral extend paved roads without crossing gates or group limits',async()=>{
+ const {createCloudMoveBuffer,predictCloudStep}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ for(const district of ['lumiose-jaune-sector11','lumiose-jaune-sector12','lumiose-floral']){
+  const w={area:3,district,interior:null,x:2,y:8,facing:'right',steps:0,zaRoyaleRank:'A'},first=predictCloudStep(w,'right'),buffer=createCloudMoveBuffer(w,first,'right');
+  for(let i=0;i<12;i++)assert.ok(buffer.push(),`${district} pavement ${i}`);assert.equal(buffer.push(),null);assert.equal(buffer.path.length,12);
+  const group={...w,inUnion:true},g=createCloudMoveBuffer(group,predictCloudStep(group,'right'),'right');for(let i=0;i<4;i++)assert.ok(g.push());assert.equal(g.push(),null);
+  const edge={...w,x:17},e=createCloudMoveBuffer(edge,predictCloudStep(edge,'right'),'right');while(e.push()){}assert.equal(e.position.x,21);assert.ok(e.path.length<4);
+  const hazard={...w,zaWildAlphaAlert:true},h=createCloudMoveBuffer(hazard,predictCloudStep(hazard,'right',{allowHazard:true}),'right');for(let i=0;i<4;i++)assert.ok(h.push());assert.equal(h.push(),null);
+ }
+});
