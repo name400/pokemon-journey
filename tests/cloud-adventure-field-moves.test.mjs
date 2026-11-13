@@ -10,7 +10,7 @@ test('field actions resolve localized names and English move IDs with identical 
 });
 
 test('brambles accept documented cutting and other attacks while retaining earlier flying compatibility',()=>{
- for(const move of ['시저크로스','X-Scissor','사이코커터','Psycho Cut','잎날가르기','Leaf Blade','Shadow Claw','Super Fang','화염방사'])assert.equal(canClearBramble({hp:10,moves:[move]},{legacyFlying:false}),true,move);
+ for(const move of ['시저크로스','X-Scissor','사이코커터','Psycho Cut','잎날가르기','Leaf Blade','Shadow Claw','Super Fang','Draco Meteor','화염방사'])assert.equal(canClearBramble({hp:10,moves:[move]},{legacyFlying:false}),true,move);
  for(const move of ['Surf','Tackle','Swords Dance','not a move'])assert.equal(canClearBramble({hp:10,moves:[move]}),false,move);
  assert.equal(canClearBramble({hp:10,moves:['Wing Attack']}),true);assert.equal(canClearBramble({hp:10,moves:['Wing Attack']},{legacyFlying:false}),false);
  assert.equal(canClearBramble({hp:0,moves:['시저크로스']}),false);assert.equal(canClearBramble(null),false);assert.equal(canClearBramble({hp:10}),false);

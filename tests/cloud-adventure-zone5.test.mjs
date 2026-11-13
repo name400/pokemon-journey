@@ -1,5 +1,4 @@
 import test from 'node:test';
-import {moves} from '../lib/game.mjs';
 import assert from 'node:assert/strict';
 import {zone5Map,zone5Encounter,canClearZone5Sludge} from '../lib/cloud-adventure/adventure-zone5.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
@@ -94,11 +93,10 @@ test('Café Gallant is reachable from the Zone 5 approach without moving saved p
 });
 
 
-test('sludge accepts water attacks and Confusion but not Psybeam or fainted Pokémon',()=>{
- assert.equal(canClearZone5Sludge({hp:1,moves:['물대포']},moves),true);
- assert.equal(canClearZone5Sludge({hp:1,moves:['염동력']},moves),true);
- assert.equal(canClearZone5Sludge({hp:1,moves:['환상빔']},moves),false);
- assert.equal(canClearZone5Sludge({hp:0,moves:['염동력']},moves),false);
+test('sludge accepts documented attacks and saved move IDs but not unrelated moves or fainted Pokémon',()=>{
+ for(const move of ['물대포','Surf','염동력','Psychic','Fire Spin','Sand Tomb','Hurricane','Boomburst'])assert.equal(canClearZone5Sludge({hp:1,moves:[move]}),true,move);
+ for(const move of ['환상빔','Tackle','Swords Dance','unknown'])assert.equal(canClearZone5Sludge({hp:1,moves:[move]}),false,move);
+ assert.equal(canClearZone5Sludge({hp:0,moves:['염동력']}),false);
 });
 
 

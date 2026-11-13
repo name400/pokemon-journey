@@ -360,6 +360,19 @@ test('documented bramble moves work across zones and persist without duplicate a
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('documented sludge moves open field routes while preserving saves and rejecting duplicates',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'sludge-moves-qa',displayName:'오염물 기술 검사'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const c of [
+   {district:'lumiose-zone5',x:6,y:3,facing:'up',zaZone5Upper:false,action:'clearZone5DrainSludge',flag:'zaZone5DrainFirstCleared',move:'Psychic'},
+   {district:'lumiose-zone5-drain',x:11,y:5,facing:'right',zaZone5DrainLanding:false,action:'clearZone5DrainSludge',flag:'zaZone5DrainSecondCleared',move:'Surf'},
+   {district:'lumiose-zone10',x:3,y:5,facing:'left',zaZone10Upper:true,action:'zone10ClearSludge',flag:'zaZone10SludgeCleared',move:'Fire Spin'},
+  ]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:c.district,interior:null,x:c.x,y:c.y,facing:c.facing,zaRoyaleRank:'B',zaZone5Upper:c.zaZone5Upper,zaZone5DrainLanding:c.zaZone5DrainLanding,zaZone10Upper:c.zaZone10Upper,[c.flag]:false},state.revision+1));seedMon(id,{...makeMon(150,50),boxId:id,moves:['Swords Dance'],pp:{}});await get();await call(c.action,{},409);assert.equal(rawWorld()[c.flag],false);seedMon(id,{...rawMon(id),moves:[c.move]});await get();assert.equal(state.world.interaction.action,c.action);const rev=state.revision;await call(c.action);assert.equal(rawWorld()[c.flag],true);assert.deepEqual(rawMon(id).moves,[c.move]);await call(c.action,{revision:rev},409);await get();assert.equal(rawWorld()[c.flag],true);await call(c.action,{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Mission 37 final Nihil Light battle preserves party, retry and old saves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-nihil-qa',displayName:'니힐라이트 검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),before=JSON.stringify(rawMon(id));
@@ -6003,7 +6016,7 @@ test('Bleu Sector 3 actual stairs enter the underground junction and preserve pr
  const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu3-underground-stairs-qa',displayName:'지하 계단 검증'};
  try{
   await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const city=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector3',interior:null,x:21,y:6,facing:'up',zaMission19Complete:true,zaBleuSewerOpened:false},state.revision+1);seedWorld(city);await get();assert.equal(state.world.interaction.action,'bleu3UndergroundStairs');const revision=state.revision;await call('bleu3UndergroundStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu3-sewer-approach',1,8]);assert.equal(state.world.zaBleuSewerOpened,false);await call('bleu3UndergroundStairs',{revision},409);
-  await walkTo({x:8,y:8});await call('move',{direction:'right'},409);assert.deepEqual([state.world.x,state.world.y],[8,8]);assert.equal(state.world.zaBleuSewerSludgeCleared,undefined);seedMon(id,{...makeMon(7,10),boxId:id,moves:['물대포']});await get();await call('face',{direction:'right'});await call('clearBleuSludge');await walkTo({x:17,y:3});await call('face',{direction:'up'});await call('openBleuSewer');await get();assert.equal(state.world.zaBleuSewerOpened,true);await walkTo({x:17,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-zone5-drain');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await walkTo({x:8,y:8});await call('move',{direction:'right'},409);assert.deepEqual([state.world.x,state.world.y],[8,8]);assert.equal(state.world.zaBleuSewerSludgeCleared,undefined);seedMon(id,{...makeMon(7,10),boxId:id,moves:['Psychic']});await get();await call('face',{direction:'right'});await call('clearBleuSludge');await walkTo({x:17,y:3});await call('face',{direction:'up'});await call('openBleuSewer');await get();assert.equal(state.world.zaBleuSewerOpened,true);await walkTo({x:17,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-zone5-drain');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=prior;}
 });
 
