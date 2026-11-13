@@ -6619,3 +6619,13 @@ test('mission 11 Rogue aura preserves battle progress and grants the reward once
   const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.active[0].hp=1;sim.p2.active[0].setStatus('slp');sim.p2.active[0].statusState.time=99;const snapshot=sim.toJSON();snapshot.formatid=combat.snapshot.formatid;seedWorld({combat:{...combat,snapshot},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'thundershock',target:1,plus:true}]}});assert.equal(state.world.zaMission11Complete,true);assert.equal(state.world.zaMission11RewardPending,true);await get();await call('claimMission11Stone');assert.equal(state.inventory.slowbronite,1);await call('claimMission11Stone',{},409);assert.deepEqual(state.world.teamIds,[id]);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('new visible shiny queue persists across zone entry without touching party or legacy saves',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'shiny-queue-qa',displayName:'야생 이로치 순서 검사'};
+ try{
+  globalThis.__adventureRandom=()=>0;globalThis.__adventureTime={hour:12,period:'day',absoluteHour:12};await get();await call('start',{species:152});const id=state.world.activeId,lead=rawMon(id),keys=Array.from({length:10},(_,i)=>`old-zone:${i}:25`),rolls=Object.fromEntries(keys.map(k=>[k,true]));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone4',interior:null,x:5,y:10,facing:'left',zaRoyaleRank:'F',zaBunnelbyQuest:3,zaZone4AlphaSpent:false,zaWildShinyRolls:rolls,zaWildShinyOrder:keys},state.revision+1));await get();
+  const key='alpha:zone4-spinarak:167',saved=rawWorld();assert.equal(saved.zaWildShinyRolls[key],true);assert.equal(saved.zaWildShinyRolls[keys[0]],undefined);assert.deepEqual(saved.zaWildShinyOrder,[...keys.slice(1),key]);assert.deepEqual(rawMon(id),lead);
+  globalThis.__adventureRandom=()=>.99;await get();assert.deepEqual(rawWorld().zaWildShinyOrder,saved.zaWildShinyOrder);await call('encounterZone4Alpha');assert.equal(state.battle.teams[1][0].shiny,true);assert.equal(rawWorld().encounter.shiny,true);assert.deepEqual(rawMon(id),lead);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
