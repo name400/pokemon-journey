@@ -5428,3 +5428,17 @@ test('Zone 6 roof link round trips onto paved ground and persists',async()=>{
   await get();assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y,state.world.teamIds[0]],['ground',18,5,id]);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 19 continues with a full Ultra Ball pocket and preserves the deferred gift',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-full-ball-pocket-qa',displayName:'하수도 볼 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-sewer',interior:null,x:11,y:12,facing:'up',zaMission19Stage:9,adventureBalls:{...rawWorld().adventureBalls,ultraball:99}},state.revision+1));await get();
+  const wallet=structuredClone(state.wallet),revision=state.revision;await call('mission19Lock');assert.equal(state.world.zaMission19Stage,10);assert.equal(state.world.adventureBalls.ultraball,99);assert.equal(rawWorld().zaMission19UltraPending,10);
+  await get();assert.equal(state.world.interaction.action,'mission19ClaimBalls');await call('mission19ClaimBalls',{},409);await call('mission19Lock',{revision},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-sewer',x:11,y:12,facing:'up',adventureBalls:{...rawWorld().adventureBalls,ultraball:95}},state.revision+1));await get();await call('mission19ClaimBalls');assert.equal(rawWorld().adventureBalls.ultraball,99);assert.equal(rawWorld().zaMission19UltraPending,6);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-sewer',x:11,y:12,facing:'up',adventureBalls:{...rawWorld().adventureBalls,ultraball:93},zaMission19Stage:14},state.revision+1));await get();await call('mission19ClaimBalls');assert.equal(rawWorld().adventureBalls.ultraball,99);assert.equal(rawWorld().zaMission19UltraPending,0);
+  await get();assert.equal(rawWorld().teamIds[0],id);assert.deepEqual(state.wallet,wallet);await call('mission19ClaimBalls',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-sewer',x:11,y:12,facing:'up',zaMission19Stage:9,zaMission19UltraPending:undefined,adventureBalls:{...rawWorld().adventureBalls,ultraball:95}},state.revision+1));await get();await call('mission19Lock');assert.equal(rawWorld().adventureBalls.ultraball,99);assert.equal(rawWorld().zaMission19UltraPending,6);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
