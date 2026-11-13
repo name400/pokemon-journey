@@ -75,3 +75,13 @@ test('Zone 7 neighbouring roof is separated by a gap and keeps saved locations',
  assert.equal(fieldDialogue(roof).action,'zone7RoofRoll');const other={...roof,x:11,y:13,facing:'up'};assert.equal(fieldDialogue(other).action,'zone7RoofRoll');
  for(const state of [roof,other,{...roof,x:11,y:10}]){const saved=restoreAdventurePosition(storeAdventurePosition(state,134),134);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[state.district,state.x,state.y,['kept']]);}
 });
+
+test('monument brambles preserve legacy saves and expose the candy after clearing',()=>{
+ const old={area:3,district:'lumiose-zone7',interior:null,x:11,y:6,facing:'right',teamIds:['kept'],zaRoyaleRank:'F'};
+ const saved=storeAdventurePosition(old,81);delete saved.districtPosition.zone7BrambleLayout;
+ const restored=restoreAdventurePosition(saved,81);assert.deepEqual([restored.x,restored.y],[10,6]);assert.deepEqual(restored.teamIds,['kept']);
+ assert.equal(fieldDialogue(restored).action,'zone7NorthBrambles');assert.equal(stepField(restored,'right').blocked,true);
+ const cleared={...restored,zaZone7NorthBramblesCleared:true};assert.equal(fieldDialogue(cleared).action,'zone7NorthCandy');
+ assert.equal(zone7Map({...cleared,zaZone7NorthCandyClaimed:true})[6][11],',');
+ assert.ok(fieldPath(zone7Map(cleared),{x:1,y:8},{x:17,y:15}).length);
+});

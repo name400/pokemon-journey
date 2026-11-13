@@ -720,6 +720,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       if(y===8){ctx.fillStyle='#b0a494';ctx.fillRect(px+7,py,tile-14,tile);ctx.fillStyle='#e7ddcd';ctx.fillRect(px+9,py,tile/2-9,tile);ctx.fillStyle='#958879';ctx.fillRect(px+tile/2+2,py+8,3,13);}
       if(y===9){ctx.fillStyle='#9a8e7f';ctx.fillRect(px+5,py,tile-10,tile-9);ctx.fillStyle='#d9d0c0';ctx.fillRect(px+7,py,tile-14,tile-13);ctx.fillStyle='#8b8074';ctx.fillRect(px+2,py+tile-9,tile-4,9);ctx.fillStyle='#e2d8c6';ctx.fillRect(px+3,py+tile-8,tile-6,3);}
      }if(c==='g'){ctx.fillStyle='#608c5a';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);ctx.fillRect(px+8,py+6,2,5);ctx.fillRect(px+22,py+11,2,5);}
+     if(c==='r'){ctx.fillStyle='#426e43';ctx.fillRect(px+4,py+10,tile-8,tile-14);ctx.fillStyle='#75a356';ctx.fillRect(px+6,py+6,7,11);ctx.fillRect(px+17,py+4,8,14);ctx.fillStyle='#d8c98c';for(let i=0;i<3;i++)ctx.fillRect(px+7+i*8,py+12+(i%2)*6,3,3);}
+     if(c==='k'){ctx.fillStyle='#ec5654';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.fillRect(px+9,py+tile/2,14,4);}
      if(c==='X'||c==='W'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#a5cfb8';ctx.fillRect(px+8,py+7,tile-16,tile-14);}
      if(c==='j'){ctx.fillStyle='#6c7d78';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#dfc678';ctx.fillRect(px+7,py+5,tile-14,tile-10);ctx.fillStyle='#a1d5ca';ctx.fillRect(px+10,py+7,tile-20,tile-14);}return;}
     if(w.district==='lumiose-zone11'&&!w.interior){

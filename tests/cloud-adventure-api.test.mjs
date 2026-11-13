@@ -5634,3 +5634,16 @@ test('Zone 6 source-based lift and high ladder round trip across saved layers',a
   seedWorld(storeAdventurePosition({...rawWorld(),x:18,y:7,facing:'right'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone6PikachuLadder');await call('zone6PikachuLadder');await get();assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y],['high',15,7]);assert.equal(state.world.zaZone6Spent['pikachu-alpha'],true);await call('zone6PikachuLadder');await get();assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y],['ground',18,7]);assert.deepEqual(state.world.zaZone6Items,['south-potion']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 7 monument brambles preserve saves and award candy once',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone7-brambles-qa',displayName:'기념비 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone7',interior:null,x:11,y:6,facing:'right',zaRoyaleRank:'F'},state.revision+1);delete old.districtPosition.zone7BrambleLayout;seedWorld(old);await get();
+  assert.deepEqual([state.world.x,state.world.y],[10,6]);assert.equal(state.world.interaction.action,'zone7NorthBrambles');
+  seedMon(id,{...makeMon(123,20),moves:['몸통박치기']});await get();await call('zone7NorthBrambles',{},409);
+  seedMon(id,{...makeMon(123,20),moves:['불꽃세례']});await get();await call('zone7NorthBrambles');await get();assert.equal(state.world.interaction.action,'zone7NorthCandy');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-m']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-exp-candy-m');await get();await call('zone7NorthCandy',{},409);assert.notEqual(rawWorld().zaZone7NorthCandyClaimed,true);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const revision=state.revision;await call('zone7NorthCandy');await get();assert.equal(state.inventory['za-exp-candy-m'],1);await call('zone7NorthCandy',{revision},409);await get();assert.equal(state.inventory['za-exp-candy-m'],1);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
