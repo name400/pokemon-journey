@@ -76,3 +76,11 @@ test('time-exclusive shiny alpha keeps its identity through the opposite period'
  const key='zone19:cleffa-night:173',s={district:'lumiose-zone19',zaZone19SpawnCycle:{period:'night',interval:1},zaWildShinyRolls:{[key]:true,'zone19:furfrou:676':false},zaWildVisibleAlphaLevels:{[key]:59,'zone19:furfrou:676':58}};
  assert.equal(refreshZone19Spawns(s,'day',2),true);assert.equal(s.zaWildShinyRolls[key],true);assert.equal(s.zaWildVisibleAlphaLevels[key],59);assert.equal(s.zaWildVisibleAlphaLevels['zone19:furfrou:676'],undefined);assert.equal(refreshZone19Spawns(s,'night',3),true);assert.equal(s.zaWildVisibleAlphaLevels[key],59);
 });
+
+test('Zone 19 brambles recover only after elapsed game time and a safe exit',async()=>{
+ const {refreshZone19Brambles}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
+ const s={district:'lumiose-zone19',x:11,y:5,zaZone19BramblesCleared:true,zaZone19BramblesClearedAt:100000,zaZone19Items:['retained']};
+ assert.equal(refreshZone19Brambles(s,110000),false);assert.notEqual(zone19Map(s)[5][11],'r');s.district='lumiose-jaune-street';assert.equal(refreshZone19Brambles(s,108333),false);assert.equal(refreshZone19Brambles(s,108334),true);assert.equal(s.zaZone19BramblesCleared,false);assert.deepEqual(s.zaZone19Items,['retained']);assert.equal(refreshZone19Brambles(s,120000),false);
+ const old={district:'lumiose-jaune-street',zaZone19BramblesCleared:true};assert.equal(refreshZone19Brambles(old,999999),false);assert.equal(old.zaZone19BramblesCleared,true);
+ const paused={district:'lumiose-jaune-street',zaZone19BramblesCleared:true,zaZone19BramblesClearedAt:100000,zaClockPausedMs:15000};assert.equal(refreshZone19Brambles(paused,120000),false);paused.zaClockOffsetHours=1;assert.equal(refreshZone19Brambles(paused,120000),true);
+});

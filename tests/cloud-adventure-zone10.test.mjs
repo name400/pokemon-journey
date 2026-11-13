@@ -142,3 +142,11 @@ test('roof link crosses above canal and preserves ground and rooftop saves',()=>
  assert.equal(stepField({...s,zaZone10Upper:true,x:8,y:9},'right').blocked,undefined);
  assert.equal(stepField({...s,zaZone10Upper:false,x:8,y:7},'down').blocked,true);
 });
+
+test('rooftop sludge respawns only after ten game minutes outside and preserves old cleared saves',async()=>{
+ const {refreshZone10Sludge}=await import('../lib/cloud-adventure/adventure-zone10.mjs');
+ const state={district:'lumiose-zone10',zaZone10Upper:true,x:1,y:5,zaZone10SludgeCleared:true,zaZone10SludgeClearedAt:100000,zaZone10Items:['roof-tm034']};
+ assert.equal(refreshZone10Sludge(state,110000),false);assert.equal(zone10Map(state)[5][2],'.');state.district='lumiose-vert2';assert.equal(refreshZone10Sludge(state,108333),false);assert.equal(refreshZone10Sludge(state,108334),true);assert.equal(state.zaZone10SludgeCleared,false);assert.deepEqual(state.zaZone10Items,['roof-tm034']);assert.equal(refreshZone10Sludge(state,120000),false);
+ const old={district:'lumiose-vert2',zaZone10SludgeCleared:true};assert.equal(refreshZone10Sludge(old,999999),false);assert.equal(old.zaZone10SludgeCleared,true);
+ const paused={district:'lumiose-vert2',zaZone10SludgeCleared:true,zaZone10SludgeClearedAt:100000,zaClockPausedMs:15000};assert.equal(refreshZone10Sludge(paused,120000),false);paused.zaClockOffsetHours=1;assert.equal(refreshZone10Sludge(paused,120000),true);
+});
