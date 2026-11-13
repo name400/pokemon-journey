@@ -1,0 +1,10 @@
+# Cloud multi-battle reconnect browser check
+
+Run the Vite fixture from the repository root:
+
+```sh
+node_modules/.bin/vite --config tests/browser/cloud-multi-reconnect/vite.config.mjs --host 127.0.0.1 --port 5218 tests/browser/cloud-multi-reconnect
+PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/browser/cloud-multi-reconnect/check.mjs
+```
+
+The browser uses an in-memory mocked `/api/world`; it does not access player accounts or a database. A real multi-battle engine generates the saved turn. At mobile and desktop sizes, the check submits one turn, reloads while that turn's events remain in the saved response, and checks final HP, the next command and action count. Remote Pokémon images are replaced by empty test responses. This does not verify production D1 or real-device performance.
