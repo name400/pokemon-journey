@@ -651,7 +651,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      }
      if(c===','){ctx.fillStyle='#cbd2c9';ctx.fillRect(px,py+3,tile,2);ctx.fillStyle='#8b9b98';ctx.fillRect(px+(y%2?tile/2:2),py+5,2,tile-7);}
      if(c==='g'){ctx.fillStyle='#9a8764';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-9-(j%2)*3,4,2);ctx.fillStyle='#dec99b';ctx.fillRect(px+4+(x*5+y*3)%9,py+6,5,2);}
-     if('ijkl'.includes(c)){ctx.fillStyle='#f4ead9';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c45b50';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#445356';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}
+     if('ijklmn'.includes(c)){ctx.fillStyle='#f4ead9';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c45b50';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#445356';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}
      if(c==='^'){
       const rack=y===10||y===11;ctx.fillStyle='#697b7b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#9dada7';ctx.fillRect(px+2,py+2,tile-4,tile-4);
       ctx.fillStyle='#556c70';ctx.fillRect(px+4,py+(rack&&y===10?11:6),tile-8,rack&&y===10?tile-14:tile-9);

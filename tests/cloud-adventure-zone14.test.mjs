@@ -92,3 +92,10 @@ test('central converters preserve gate access and migrate old positions',()=>{
  const current=restoreAdventurePosition(storeAdventurePosition({...s,x:11,y:5},83),83);
  assert.deepEqual([current.x,current.y,current.zaZone14Items],[11,5,['south-ultra']]);
 });
+
+test('northeastern rock area gates two items and protects previous saves',async()=>{
+ const {ZONE14_NORTHEAST_ROCKS}=await import('../lib/cloud-adventure/adventure-zone14.mjs');const base={area:3,district:'lumiose-zone14',interior:null,x:15,y:1,facing:'right',zaRoyaleRank:'D',teamIds:['kept'],zaZone14Items:['south-ultra']};const map=zone14Map(base);
+ assert.equal(fieldPath(map,base,{x:18,y:1}).length,0);assert.equal(zone14Item(base,'m').kind,'calcium');assert.equal(zone14Item(base,'n').kind,'nugget');const opened={...base,zaZone14RocksCleared:['16,1']};assert.ok(fieldPath(zone14Map(opened),opened,{x:18,y:1}).length);assert.equal(zone14Map(opened)[2][16],'r');
+ for(const rock of ZONE14_NORTHEAST_ROCKS){const old=storeAdventurePosition({...base,...rock},84);delete old.districtPosition.zone14NortheastRocksLayout;const restored=restoreAdventurePosition(old,84);assert.notEqual(zone14Map(restored)[restored.y][restored.x],'r');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone14Items,['south-ultra']);}
+ const legacy={...base,zaZone14RockCleared:true};assert.ok(fieldPath(zone14Map(legacy),legacy,{x:18,y:1}).length);
+});
