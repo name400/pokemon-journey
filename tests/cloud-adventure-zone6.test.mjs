@@ -150,3 +150,15 @@ test('Faye appears after the meeting without blocking old positions or roof rout
  const saved=storeAdventurePosition(s,47),restored=restoreAdventurePosition(saved,47);assert.equal(restored.x,10);assert.equal(restored.y,4);assert.deepEqual(restored.teamIds,['kept']);assert.equal(fieldDialogue({...s,x:10,y:5,facing:'up'},map).action,'side42Battle');
  assert.notEqual(zone6Map({...s,zaZone6Layer:'roof'})[4][10],'F');assert.notEqual(zone6Map({...s,zaZone6Layer:'canal'})[4][10],'F');
 });
+
+test('Ticien appears after Lida while preserving the court and old saved tiles',()=>{
+ const base={area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',x:12,y:4,facing:'down',zaRoyaleRank:'W',zaLidaStage:1,teamIds:['kept']};
+ assert.notEqual(fieldMap(base)[4][12],'T');const s={...base,zaLidaStage:2},map=fieldMap(s);assert.equal(map[4][12],'T');assert.ok(fieldPath(map,{x:11,y:1},{x:11,y:15}).length);
+ const saved=storeAdventurePosition(s,61),restored=restoreAdventurePosition(saved,61);assert.equal(restored.x,12);assert.equal(restored.y,4);assert.deepEqual(restored.teamIds,['kept']);assert.equal(fieldDialogue({...s,x:12,y:5,facing:'up'},map).action,'side020Battle');assert.notEqual(zone6Map({...s,zaZone6Layer:'canal'})[4][12],'T');const both={...s,zaRoyaleRank:'E',zaMission15Stage:1};assert.equal(fieldMap(both)[4][10],'F');assert.equal(fieldMap(both)[4][12],'T');assert.equal(fieldDialogue({...both,x:10,y:5,facing:'up'}).action,'side42Battle');
+});
+
+test('Ticien berry healing is preserved in the turn-based battle snapshot',async()=>{
+ const {makeMon}=await import('../lib/game.mjs'),{createCombat,playCpu}=await import('../lib/party-battle.mjs');
+ const player={...makeMon(150,10),boxId:'player',moves:['튀어오르기'],pp:{}},base=makeMon(333,22),half=Math.floor(base.maxHp/2),foe={...base,boxId:'foe',hp:half,item:'oranberry',moves:['튀어오르기'],pp:{}};
+ let battle=createCombat([player],[foe]);assert.equal(battle.teams[1][0].hp,half+10);assert.equal(battle.teams[1][0].item,'');battle=playCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'튀어오르기'});assert.equal(battle.teams[1][0].hp,half+10);assert.equal(battle.teams[1][0].item,'');
+});
