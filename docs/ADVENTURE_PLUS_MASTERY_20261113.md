@@ -17,3 +17,5 @@
 - 새 전투 V3에서 텍스처 플러스는 타입 변경과 방어 상승을 함께 적용한다. [Serebii](https://advent.serebii.net/attackdex-sv/conversion.shtml)는 방어 상승을 명시하지만 상승 폭은 제시하지 않아, 턴제에서는 1랭크로 근사했다. 기존 엔진의 타입 변경이 실패하면 상승도 일어나지 않으며 이 실패 조건의 원작 일치는 미확인이다. [폴리곤](https://www.dittobase.com/legends-za/pokedex/porygon)과 그 진화형·켈리몬은 레벨 10에 텍스처를 자연 숙달한다. 이전 V1·V2 및 구형 배틀은 변경하지 않는다.
 
 - 새 전투의 공격 기술플러스 추가 효과로 차지빔은 특수공격 상승 확률 100%, 열탕은 화상 확률 50%, 원시의힘·괴상한바람·은빛바람은 능력 상승 확률 60%를 적용한다. [Serebii](https://www.serebii.net/legendsz-a/plusmoves.shtml)와 [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Plus_Move)의 플러스 수치에 근거한다. 명중·면역과 부가효과는 기존 턴제 시뮬레이터에 따르며, 일반 원시의힘 등의 확률은 시뮬레이터의 기존 값(10%)을 유지하므로 원작 일반 기술 수치(30%)와 다르다. 이미 시작한 구형 전투는 이전 효과를 유지한다.
+
+- [물수리검의 원작 설명](https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move))과 [Serebii 기술 정보](https://stats.serebii.net/attackdex-sv/watershuriken.shtml)에 따라 새 메가링 전투에서 일반 물수리검은 위력 15로 다섯 번, 플러스와 메가진화 중에는 위력 75로 한 번 공격한다. 기존 기술플러스 공격 피해 배율을 한 번 적용하며 대상·명중·기절과 피해 반올림은 턴제 시뮬레이터 규칙을 따른다. 이미 시작된 전투는 기존 연속 타격 규칙을 유지한다. 원작의 실시간 투사체 궤적·사용 간격은 재현하지 않는다.
