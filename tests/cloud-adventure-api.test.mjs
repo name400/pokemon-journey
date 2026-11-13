@@ -59,6 +59,13 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('Zone 4 post-story memorial survives reload without changing progress',async()=>{
+ const previous=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone4-memorial-qa',displayName:'묘지 기록'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const seed=(done)=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone4',interior:null,x:10,y:4,facing:'left',zaMission38Complete:done,zaZone4RearTmClaimed:true,zaZone4AlphaSpent:true},state.revision+1));
+ seed(false);await get();assert.notEqual(state.world.interaction?.name,'A.Z.의 묘 (위치 초안)');seed(true);await get();assert.equal(state.world.interaction?.name,'A.Z.의 묘 (위치 초안)');const revision=state.revision;await get();assert.equal(state.revision,revision);assert.equal(state.world.interaction?.name,'A.Z.의 묘 (위치 초안)');assert.equal(state.world.zaZone4RearTmClaimed,true);assert.equal(state.world.zaZone4AlphaSpent,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-zone4');assert.equal(state.world.zaMission38Complete,true);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('Zone 20 Floral Avenue south access preserves progress and alpha encounters',async()=>{
  const previous=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-floral-gate-qa',displayName:'플로랄 출입 검증'};globalThis.__adventureRandom=()=>.999;
  try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
