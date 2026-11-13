@@ -30,7 +30,8 @@ test('verified regional forms use their own TM lists and require matching specie
 });
 
 test('field TMs distinguish base and verified regional compatibility',()=>{
- assert.equal(STORY_TMS.length,22);
+ // These field rewards must remain available as the catalog grows.
+ for(const number of ['072','092','076','081','090','047','045','025','089','013','056','034','039','005','103','022','041','040','051','066','011','020','100','104'])assert.ok(STORY_TMS.some(tm=>tm.id===`za-tm${number}`),number);
  for(const id of [7,158,656,693])assert.equal(canLearnStoryTm({'za-tm076':1},{id,speciesId:id,moves:[]},'za-tm076'),true);
  for(const id of [1,25,498])assert.equal(canLearnStoryTm({'za-tm076':1},{id,speciesId:id,moves:[]},'za-tm076'),false);
  assert.equal(canLearnStoryTm({'za-tm076':1},{id:10165,speciesId:80,moves:[]},'za-tm076'),true);

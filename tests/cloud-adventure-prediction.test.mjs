@@ -76,7 +76,9 @@ test('wild zone 1 extends only road preview; grass, moving wildlife and group pa
 
 test('zone 4 and zone 6 ground paths extend, while grass and elevated layers do not',async()=>{
  const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
- for(const [district,x,y] of [['lumiose-zone4',2,14],['lumiose-zone6',9,7]]){const w={area:3,district,x,y,interior:null},first=predictCloudStep(w,'right');const buffer=createCloudMoveBuffer(w,first,'right');for(let i=0;i<8;i++)assert.ok(buffer.push(),district);while(buffer.push()){}assert.ok(buffer.path.length<=12);assert.equal(buffer.matches({world:{...w,...first},battle:{}}),false);}
+ for(const [district,x,y] of [['lumiose-zone4',2,14],['lumiose-zone6',9,8]]){const w={area:3,district,x,y,interior:null},first=predictCloudStep(w,'right');const buffer=createCloudMoveBuffer(w,first,'right');for(let i=0;i<8;i++)assert.ok(buffer.push(),district);while(buffer.push()){}assert.ok(buffer.path.length<=12);assert.equal(buffer.matches({world:{...w,...first},battle:{}}),false);}
+ // Zone 6's rooftop lift at (16,7) must stop prediction before interaction.
+ {const w={area:3,district:'lumiose-zone6',x:9,y:7,interior:null},first=predictCloudStep(w,'right'),buffer=createCloudMoveBuffer(w,first,'right');for(let i=0;i<5;i++)assert.ok(buffer.push());assert.equal(buffer.push(),null);}
  for(const [district,x,y] of [['lumiose-zone4',10,3],['lumiose-zone6',3,2]]){const w={area:3,district,x,y,interior:null},first=predictCloudStep(w,'down',{allowGrass:true});assert.ok(first,district);const buffer=createCloudMoveBuffer(w,first,'down');for(let i=0;i<4;i++)assert.ok(buffer.push(),district);assert.equal(buffer.push(),null);}
  for(const [layer,x,y] of [['canal',2,3],['roof',4,2],['high',17,1]]){const w={area:3,district:'lumiose-zone6',zaZone6Layer:layer,x,y,interior:null},first=predictCloudStep(w,'down',{allowGrass:true});assert.ok(first,layer);const buffer=createCloudMoveBuffer(w,first,'down');for(let i=0;i<4;i++)assert.ok(buffer.push(),layer);assert.equal(buffer.push(),null);}
 });
