@@ -5464,3 +5464,15 @@ test('Mission 3 retains both ball gifts when the pocket is full and progress con
   sql.prepare('UPDATE wallets SET balls=? WHERE user_id=?').run(84,globalThis.__adventureUser.userId);await get();await call('mission03ClaimBalls');assert.equal(state.wallet.balls,99);assert.equal(rawWorld().zaMission03BallsPending,0);await get();assert.equal(state.world.zaMission03Stage,9);assert.equal(state.world.activeId,id);await call('mission03ClaimBalls',{},409);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 41 simulator uses sourced boss moves and preserves retry and reentry',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission41-simulator-moves-qa',displayName:'시뮬레이터 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,party=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,{...makeMon(150,100),moves:['방어'],pp:{}});
+  const entries=[[10279,['씨기관총','파워휩','오물폭탄'],['bulletseed','powerwhip','sludgebomb']],[10300,['깨뜨리다','에어슬래시','플라잉프레스'],['brickbreak','airslash','flyingpress']],[10049,['스톤샤워','모래지옥','스톤에지'],['rockslide','sandtomb','stoneedge']]];
+  for(let i=0;i<entries.length;i++){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:11,y:6,facing:'up',zaMission41Stage:2,zaMission41Sim:i,combat:null,trainer:null},state.revision+1));await get();await call('mission41Sim');assert.deepEqual([state.battle.teams[1][0].id,state.battle.teams[1][0].level,state.battle.teams[1][0].moves],[entries[i][0],70,entries[i][1]]);
+   const snapshot=structuredClone(rawWorld().combat);assert.deepEqual(Battle.fromJSON(snapshot.snapshot).p2.pokemon[0].moveSlots.map(m=>m.id),entries[i][2]);await get();assert.deepEqual(rawWorld().combat,snapshot);await call('battle',{command:{type:'move',move:'방어'}});assert.ok(Battle.fromJSON(rawWorld().combat.snapshot).p2.pokemon[0].moveSlots.some(m=>m.pp<m.maxpp));await call('forfeit');assert.equal(rawWorld().zaMission41Sim,i);await get();assert.deepEqual(state.world.teamIds,party);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
