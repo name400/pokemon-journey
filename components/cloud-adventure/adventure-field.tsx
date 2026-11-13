@@ -7,7 +7,7 @@ import {ZONE19_VISIBLE,zone19Visible} from '@/lib/cloud-adventure/adventure-zone
 import {ZONE18_VISIBLE,zone18Visible} from '@/lib/cloud-adventure/adventure-zone18.mjs';
 import {ZONE17_VISIBLE,zone17Visible} from '@/lib/cloud-adventure/adventure-zone17.mjs';
 import {ZONE16_VISIBLE,zone16Visible} from '@/lib/cloud-adventure/adventure-zone16.mjs';
-import {ZONE15_VISIBLE,zone15Visible} from '@/lib/cloud-adventure/adventure-zone15.mjs';
+import {ZONE15_VISIBLE,zone15Visible,ZONE15_TREES,ZONE15_BENCHES} from '@/lib/cloud-adventure/adventure-zone15.mjs';
 import {ZONE14_VISIBLE,zone14Visible} from '@/lib/cloud-adventure/adventure-zone14.mjs';
 import {ZONE13_VISIBLE,zone13Visible,ZONE13_STUMPS} from '@/lib/cloud-adventure/adventure-zone13.mjs';
 import {ZONE12_VISIBLE,zone12Visible} from '@/lib/cloud-adventure/adventure-zone12.mjs';
@@ -494,6 +494,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      }
      if(c===','){ctx.fillStyle='#d6c7ad';ctx.fillRect(px,py,tile,2);ctx.fillStyle='#a18f78';ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);}
      if(c==='g'){ctx.fillStyle='#648e5c';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}
+     if(c==='^'&&ZONE15_TREES.some(([tx,ty])=>x===tx&&y===ty)){ctx.fillStyle='#6b4b34';ctx.fillRect(px+tile/2-3,py+tile/2,6,tile/2-2);ctx.fillStyle='#47724d';ctx.beginPath();ctx.arc(px+tile/2,py+11,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#79a469';ctx.beginPath();ctx.arc(px+tile/2-4,py+8,7,0,Math.PI*2);ctx.fill();}
+     if(c==='^'&&ZONE15_BENCHES.some(([bx,by])=>x===bx&&y===by)){ctx.fillStyle='#604b39';ctx.fillRect(px+6,py+11,tile-12,10);ctx.fillStyle='#bc966d';ctx.fillRect(px+5,py+9,tile-10,5);ctx.fillRect(px+6,py+17,tile-12,4);ctx.fillStyle='#574638';ctx.fillRect(px+7,py+21,3,5);ctx.fillRect(px+tile-10,py+21,3,5);}
      if('ijk'.includes(c)){ctx.fillStyle='#d8b64f';ctx.fillRect(px+8,py+8,tile-16,tile-16);}
      if(c==='l'||c==='n'){ctx.fillStyle=c==='l'?'#d4b45f':'#816d52';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#85beb2';ctx.fillRect(px+9,py+8,tile-18,tile-16);}
      if(c==='q'){ctx.fillStyle='#6d5544';ctx.fillRect(px+3,py+2,tile-6,tile-4);ctx.fillStyle='#bc584d';ctx.fillRect(px,py+2,tile,6);ctx.fillStyle='#f0d7ad';for(let k=3;k<tile;k+=8)ctx.fillRect(px+k,py+2,4,6);ctx.fillStyle='#9cbab2';ctx.fillRect(px+8,py+11,tile-16,tile-15);}

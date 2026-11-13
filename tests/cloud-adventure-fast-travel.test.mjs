@@ -54,6 +54,14 @@ test('Café Bataille destination uses its ground entrance and the mission gate',
  const restored=restoreAdventurePosition(storeAdventurePosition(s,66),66);assert.ok(mapTravelDestinations(restored).some(p=>p.id==='cafe-bataille'));assert.deepEqual(restored.teamIds,['kept']);
 });
 
+test('Café Ultimo destination respects Zone 15 access and ground layer',async()=>{
+ const {recordLandmarks,taxiDestinations,mapTravelDestinations,groundDestinationFlags}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const s={area:3,district:'lumiose-zone15',interior:null,x:17,y:7,facing:'up',zaRoyaleRank:'D',zaZone15Upper:false,teamIds:['kept']};
+ assert.equal(fieldMap(s)[7][17],',');assert.equal(fieldMap(s)[6][17],'q');assert.match(fieldDialogue(s).name,/Ultimo/);assert.equal(recordLandmarks({...s,zaZone15Upper:true}),false);assert.equal(recordLandmarks(s),true);assert.ok(mapTravelDestinations(s).some(p=>p.id==='cafe-ultimo'));
+ assert.ok(taxiDestinations(s).some(p=>p.id==='cafe-ultimo'));assert.ok(!taxiDestinations({...s,zaRoyaleRank:'E'}).some(p=>p.id==='cafe-ultimo'));assert.deepEqual(groundDestinationFlags('lumiose-zone15'),{zaZone15Upper:false});
+ const restored=restoreAdventurePosition(storeAdventurePosition(s,66),66);assert.ok(mapTravelDestinations(restored).some(p=>p.id==='cafe-ultimo'));assert.deepEqual(restored.teamIds,['kept']);
+});
+
 test('taxi landmarks land on walkable tiles facing their existing entrances',async()=>{
  const {FAST_TRAVEL_LANDMARKS}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');const expected={'museum':'enterMuseum','gare':'stationLeave','hotel-z':'enterHotel','research-lab':'enterLumioseLab','richissime':'enterRichissime','le-wow':'enterLeWow','le-nah':'enterLeNah','sushi':'enterSushi','quasartico':'enterQuasarticoOffice','cafe-woof':'woofNatural','cafe-gallant':'enterCafeGallant','cafe-nouveau2':'cafe2Water'};
  for(const p of FAST_TRAVEL_LANDMARKS){const s={area:3,...p,interior:null,zaMission10Stage:6,zaRoyaleRank:'V',zaRougeStreetSouth:false};assert.ok(['.',',',';','g','H'].includes(fieldMap(s)[s.y][s.x]),p.id);const d=fieldDialogue(s),actions=d?.actions||(d?.action?[d]:[]);if(expected[p.id])assert.ok(actions.some(a=>a.action===expected[p.id]),`${p.id}: ${d?.name}`);if(p.id==='richissime')assert.match(d.name,/리시심/);}

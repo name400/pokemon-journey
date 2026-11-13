@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone15Map,zone15Encounter,zone15Visible,zone15Item} from '../lib/cloud-adventure/adventure-zone15.mjs';
+import {zone15Map,zone15Encounter,zone15Visible,zone15Item,ZONE15_TREES,ZONE15_BENCHES} from '../lib/cloud-adventure/adventure-zone15.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 15 southern gate connects North Boulevard while retaining the older west route',()=>{
@@ -37,6 +37,12 @@ test('Zone 15 street approaches retain grass, object positions and old floor sav
   const restored=restoreAdventurePosition(storeAdventurePosition({...s,x,y},109),109);
   assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[s.district,x,y,['kept']]);
  }
+});
+test('Zone 15 park obstacles preserve routes and migrate matching old ground saves',()=>{
+ const s={area:3,district:'lumiose-zone15',interior:null,zaRoyaleRank:'D',regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone15Map(s);
+ for(const [x,y] of [...ZONE15_TREES,...ZONE15_BENCHES]){assert.equal(map[y][x],'^');const old=storeAdventurePosition({...s,x,y,zaZone15Items:['cafe-ultra']},110);delete old.districtPosition.zone15ParkLayout;const restored=restoreAdventurePosition(structuredClone(old),110);assert.notEqual(map[restored.y][restored.x],'^');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone15Items,['cafe-ultra']);const mismatch=restoreAdventurePosition(structuredClone(old),111);assert.deepEqual([mismatch.x,mismatch.y],[5,9]);}
+ for(const start of [{x:11,y:1},{x:1,y:13},{x:17,y:15}])assert.ok(fieldPath(map,start,{x:17,y:7}).length);
+ const roof={...s,zaZone15Upper:true,x:8,y:10};const restored=restoreAdventurePosition(storeAdventurePosition(roof,110),110);assert.deepEqual([restored.x,restored.y,restored.zaZone15Upper],[8,10,true]);
 });
 test('zone fifteen gate, day/night encounters and saved position',()=>{
  const base={area:3,district:'lumiose-north-boulevard',interior:null,x:19,y:1,facing:'up',zaRoyaleRank:'E'};assert.equal(stepField(base,'up').blocked,true);
