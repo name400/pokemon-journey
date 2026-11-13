@@ -5991,3 +5991,17 @@ test('Hibernal lift dispute unlocks the Zone 15 rooftop without duplicating rewa
   await call('zone15OuterLift');await get();assert.equal(state.world.district,'lumiose-jaune7-roof');await walkTo({x:9,y:8});await call('face',{direction:'right'});await call('zone15Web');await call('move',{direction:'right'});await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-zone15');assert.equal(state.world.zaZone15Upper,true);assert.equal(state.world.zaZone15WebOpen,true);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins+3500);assert.equal(state.world.zaMission26Complete,true);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('Revive targets a fainted party member without changing the lead or duplicating consumption',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'party-revive-qa',displayName:'파티회복테스트'};
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,reserveId='revive-party-reserve',boxedId='revive-party-boxed';
+  const reserve={...makeMon(25,15),boxId:reserveId,hp:0,status:'독',pp:{전기쇼크:2},custom:{keep:true}},boxed={...makeMon(4,9),boxId:boxedId,hp:0};
+  for(const m of [reserve,boxed])sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(m.boxId,globalThis.__adventureUser.userId,m.id,JSON.stringify(m),'qa',1);
+  seedWorld({...rawWorld(),teamIds:[lead,reserveId],zaRevives:2,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  await call('useAdventureRevive',{boxId:boxedId},409);await call('useAdventureRevive',{boxId:lead},409);assert.equal(state.world.zaRevives,2);assert.equal(rawMon(reserveId).hp,0);
+  seedWorld({zaSushiRun:{course:0,repeat:false},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('useAdventureRevive',{boxId:reserveId},409);assert.equal(rawMon(reserveId).hp,0);assert.equal(state.world.zaRevives,2);seedWorld({zaSushiRun:null,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  const revision=state.revision;await call('useAdventureRevive',{boxId:reserveId});await get();const healed=rawMon(reserveId);assert.equal(healed.hp,Math.max(1,Math.floor(reserve.maxHp/2)));assert.equal(healed.status,reserve.status);assert.deepEqual(healed.pp,reserve.pp);assert.deepEqual(healed.ivs,reserve.ivs);assert.deepEqual(healed.custom,reserve.custom);assert.equal(state.world.zaRevives,1);assert.deepEqual(state.world.teamIds,[lead,reserveId]);assert.equal(state.world.activeId,lead);
+  await call('useAdventureRevive',{boxId:reserveId,revision},409);await call('useAdventureRevive',{boxId:reserveId},409);await get();assert.equal(state.world.zaRevives,1);assert.equal(rawMon(reserveId).hp,healed.hp);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
