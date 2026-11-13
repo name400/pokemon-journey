@@ -59,6 +59,18 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('Zone 17 map travel arrives at southwest gate while preserving legacy registration',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone17-map-travel-qa',displayName:'빠른 이동 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:13,zaRoyaleRank:'C',zaFastTravelZones:{17:{x:21,y:8}},zaZone17Upper:true,zaZone17Promenade:true},state.revision+1));await get();
+  assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='zone17'));await call('mapFastTravel',{destination:'zone17'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone17Upper,state.world.zaZone17Promenade],['lumiose-zone17',5,15,false,false]);
+  assert.deepEqual(rawWorld().zaFastTravelZones[17],{x:21,y:8});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-vert-street-route');
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 36 rooftop visit persists and legacy tower progress remains available',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission36-roof-qa',displayName:'옥상테스트'};
  try{
