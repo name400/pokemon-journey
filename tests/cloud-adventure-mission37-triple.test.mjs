@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {mission37CompanionGroups} from '../lib/cloud-adventure/adventure-mission37-companions.mjs';
-import {createMission37TripleSnapshot,restoreMission37TripleSnapshot,playMission37TriplePrototype} from '../lib/cloud-adventure/adventure-mission37-triple.mjs';
+import {createMission37TripleSnapshot,restoreMission37TripleSnapshot,playMission37TriplePrototype,mission37PlayerTeam,mission37TripleView} from '../lib/cloud-adventure/adventure-mission37-triple.mjs';
 
 test('prototype snapshot has three separate allied leads and restores full owned rosters',()=>{
  const owned=Array.from({length:6},(_,i)=>({...makeMon(25,60),boxId:`owned-${i}`,moves:['튀어오르기'],pp:{}}));
@@ -38,4 +38,13 @@ test('prototype resolves victory and preserves owner parties after restoring the
  const foes=Array.from({length:3},(_,i)=>{const mon=makeMon(143,1);return {...mon,boxId:`foe-${i}`,hp:1,moves:['튀어오르기'],pp:{}};});
  const initial=createMission37TripleSnapshot(player,groups[0].team,groups[1].team,foes);
  const result=playMission37TriplePrototype(initial,{type:'move',move:'swift'});assert.equal(result.ended,true);assert.equal(result.winner,0);assert.deepEqual(result.owners,initial.owners);assert.equal(restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(result))).ended,true);assert.throws(()=>playMission37TriplePrototype(result,null),/끝난/);
+});
+
+test('triple view exposes three active slots but only player-owned switches and persistence entries',()=>{
+ const player=Array.from({length:2},(_,i)=>({...makeMon(25,60),boxId:`player-view-${i}`,moves:['전기쇼크'],pp:{}})),groups=mission37CompanionGroups(2),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`foe-view-${i}`,moves:['튀어오르기'],pp:{}}));
+ const combat=createMission37TripleSnapshot(player,groups[0].team,groups[1].team,foes),view=mission37TripleView(JSON.parse(JSON.stringify(combat)));
+ assert.deepEqual(mission37PlayerTeam(combat).map(mon=>mon.boxId),player.map(mon=>mon.boxId));assert.deepEqual(view.activeBySide.map(side=>side.length),[3,3]);assert.deepEqual(view.requests[0].switches.map(p=>view.teams[0][p.index].boxId),[player[1].boxId]);
+ for(let i=0;i<3;i++)assert.equal(view.teams[0][view.activeBySide[0][i]].boxId,[player[0],groups[0].team[0],groups[1].team[0]][i].boxId);
+ const move=view.requests[0].moves[0];assert.ok(move.targets.some(target=>target.side===1));assert.ok(move.targets.every(target=>target.index===view.activeBySide[target.side][target.slot]));
+ assert.throws(()=>mission37PlayerTeam({...combat,owners:{...combat.owners,player:['missing']}}),/포켓몬/);
 });
