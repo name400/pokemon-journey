@@ -75,3 +75,13 @@ test('triple events retain each spread target, previous HP and the outgoing slot
  assert.deepEqual(view.beforeActiveBySide.map(side=>side.length),[3,3]);assert.equal(view.before[0][view.beforeActiveBySide[0][2]].battleOwner,'ally2');for(let slot=0;slot<3;slot++){const event=turn.events.find(event=>event.kind==='damage'&&event.targetBoxId===foes[slot].boxId);assert.ok(event,`foe ${slot}`);assert.equal(event.activeSlot,slot);assert.equal(event.beforeHp,combat.teams[1][slot].hp);assert.ok(event.hp<event.beforeHp);}
  const switched=playMission37TriplePrototype(combat,{type:'switch',slot:4});assert.equal(switched.before[0][switched.beforeActiveBySide[0][0]].boxId,player[0].boxId);assert.ok(switched.events.some(event=>event.kind==='switch'&&event.targetBoxId===player[1].boxId&&event.activeSlot===0));
 });
+
+test('each trainer can reach the last opposing edge slot in the story battle',()=>{
+ const mon=(id)=>({...makeMon(25,60),boxId:id,moves:['전기쇼크'],pp:{}}),initial=createMission37TripleSnapshot([mon('edge-player')],[mon('edge-ally1')],[mon('edge-ally2')],[mon('edge-foe1'),mon('edge-foe2'),mon('edge-foe3')]),battle=restoreMission37TripleSnapshot(initial);
+ for(const foe of battle.p2.pokemon.slice(0,2)){foe.hp=0;foe.fainted=true;foe.status='fnt';battle.p2.pokemonLeft--;}battle.makeRequest('move');const snapshot=battle.toJSON();snapshot.formatid=initial.snapshot.formatid;const combat={...initial,snapshot};assert.ok(mission37TripleView(combat).requests[0].moves[0].targets.some(target=>target.side===1&&target.slot===2));const turn=playMission37TriplePrototype(combat,{type:'move',move:'thundershock',target:3});for(const id of ['edge-player','edge-ally1','edge-ally2']){assert.ok(turn.events.some(event=>event.kind==='move'&&event.actorBoxId===id),id);assert.ok(turn.events.some(event=>event.kind==='damage'&&event.actorBoxId===id&&event.targetBoxId==='edge-foe3'),`${id} reaches the foe`);}
+});
+
+test('a companion can recharge after hyper beam without blocking the next turn',()=>{
+ const mon=(id,move)=>({...makeMon(143,80),boxId:id,moves:[move],pp:{}}),initial=createMission37TripleSnapshot([mon('recharge-player','튀어오르기')],[mon('recharge-ally','파괴광선')],[mon('recharge-ally2','튀어오르기')],[mon('recharge-foe1','튀어오르기'),mon('recharge-foe2','튀어오르기'),mon('recharge-foe3','튀어오르기')]);
+ const first=playMission37TriplePrototype(initial,{type:'move',move:'splash'}),sim=restoreMission37TripleSnapshot(first);assert.equal(sim.p1.activeRequest.active[1].moves[0].id,'recharge');const second=playMission37TriplePrototype(first,{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(second).turn,3);
+});
