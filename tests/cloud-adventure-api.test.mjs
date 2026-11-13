@@ -5096,3 +5096,19 @@ test('center fast travel clears destination layer flags and preserves an old sav
   }
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('salon changes persist atomically, reject duplicate requests and preserve the party',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'salon-atomic-qa',displayName:'미용실 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],original=rawMon(id);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(6000,globalThis.__adventureUser.userId);
+  const place=(district,x,y,facing)=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing,combat:null,encounter:null,trainer:null},state.revision+1);
+  seedWorld(place('lumiose-ombrage-arcade',15,8,'right'));await get();assert.equal(state.world.interaction.hairSalon,true);assert.equal(state.world.zaSalonAppearance,undefined);
+  await call('salonChange',{style:'__proto__',color:'brown'},409);assert.equal(state.wallet.coins,6000);
+  const oldRevision=state.revision;await call('salonChange',{style:'bob',color:'black'});assert.deepEqual(state.world.zaSalonAppearance,{style:'bob',color:'black'});assert.equal(state.wallet.coins,3000);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),original);
+  const duplicate=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'salonChange',style:'bob',color:'black',revision:oldRevision})}));assert.equal(duplicate.status,409);await get();assert.equal(state.wallet.coins,3000);assert.deepEqual(state.world.zaSalonAppearance,{style:'bob',color:'black'});
+  await call('salonChange',{style:'bob',color:'black'},409);assert.equal(state.wallet.coins,3000);
+  seedWorld(place('lumiose-galerie-lune',11,4,'up'));await get();assert.equal(state.world.interaction.hairSalon,true);await call('salonChange',{style:'long',color:'gold'});assert.equal(state.wallet.coins,0);await get();assert.deepEqual(state.world.zaSalonAppearance,{style:'long',color:'gold'});
+  seedWorld(place('lumiose-bleu-sector8',16,15,'up'));await get();assert.equal(state.world.interaction.hairSalon,true);await call('salonChange',{style:'short',color:'brown'},409);assert.equal(state.wallet.coins,0);assert.deepEqual(state.world.zaSalonAppearance,{style:'long',color:'gold'});
+  seedWorld(place('lumiose',3,5,'down'));await get();await call('salonChange',{style:'short',color:'brown'},409);assert.deepEqual(rawMon(id),original);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
