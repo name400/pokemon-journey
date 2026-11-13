@@ -1118,6 +1118,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
        ctx.fillStyle='#bedbd0';const ripple=(x*13+y*7)%11;ctx.fillRect(px+7+ripple,py+Math.floor(tile*.58),7,2);if((x+y)%3===0)ctx.fillRect(px+4,py+Math.floor(tile*.33),5,2);
       }else if(c==='w'){ctx.fillStyle='#d8eeee';ctx.fillRect(px+5,py+15,tile-10,2);}
      }
+     if(c==='^'&&w.district==='lumiose-zone2'){ctx.fillStyle='#8cb47d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#6d543c';ctx.fillRect(px+13,py+16,6,14);ctx.fillStyle='#487545';ctx.beginPath();ctx.arc(px+16,py+13,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#83ad68';ctx.beginPath();ctx.arc(px+12,py+9,7,0,Math.PI*2);ctx.fill();}
+     if(c===','&&w.district==='lumiose-zone2'){ctx.fillStyle='#d3c6a6';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#b6ad92';ctx.fillRect(px,py+tile-3,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+4,2,tile-7);}
      if(c==='='&&w.district==='lumiose-zone2'){
       // Wooden crossings are documented; the three 2D axes are still provisional.
       const vertical=zone2BridgeAxis(w.map,x,y);ctx.fillStyle='#a5794e';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d1ad78';

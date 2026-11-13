@@ -32,3 +32,11 @@ test('new northern shore safely migrates matching player and Budew saves',()=>{
   assert.equal(restoreAdventurePosition(structuredClone(old),97).district,null);
  }
 });
+
+test('Zone 2 bank trees keep bridges, lookout and old player and Budew saves safe',async()=>{
+ const {ZONE2_BANK_TREES,fieldMap,fieldDialogue,stepField}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const base={area:3,district:'lumiose-zone2',interior:null,x:11,y:15,teamIds:['kept'],zaZone2RockCleared:true};const map=fieldMap(base);
+ for(const [x,y] of ZONE2_BANK_TREES){assert.equal(map[y][x],'^');const old=storeAdventurePosition({...base,x,y,zaZone2Budew:{x,y,alert:2,custom:'kept'}},103);old.districtPosition.zone2Layout=8;const restored=restoreAdventurePosition(old,103);assert.ok(walkable(map[restored.y][restored.x]));assert.ok(walkable(map[restored.zaZone2Budew.y][restored.zaZone2Budew.x]));assert.equal(restored.zaZone2Budew.custom,'kept');assert.deepEqual(restored.teamIds,['kept']);}
+ for(const target of [{x:4,y:1},{x:3,y:4},{x:8,y:10},{x:11,y:8},{x:15,y:6},{x:20,y:11},{x:21,y:5}])assert.ok(fieldPath(map,base,target).length,JSON.stringify(target));
+ assert.equal(fieldDialogue({...base,x:3,y:4,facing:'up'}).action,'zone2Overlook');assert.equal(stepField({...base,x:8,y:11},'up').x,8);
+});
