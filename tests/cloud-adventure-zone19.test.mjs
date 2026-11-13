@@ -62,3 +62,11 @@ test('zone 19 preserves the old cycle when a respawn is blocked',async()=>{
  const {refreshZone19Spawns}=await import('../lib/cloud-adventure/adventure-zone19.mjs');const s={district:'lumiose-zone19',zaZone19SpawnCycle:{period:'day',interval:0},zaZone19Spent:{furfrou:true}};
  assert.equal(refreshZone19Spawns(s,'day',2,()=>false),false);assert.equal(s.zaZone19Spent.furfrou,true);assert.equal(s.zaZone19SpawnCycle.interval,0);assert.equal(refreshZone19Spawns(s,'day',2,()=>true),true);assert.equal(s.zaZone19Spent,undefined);
 });
+
+test('vineyard trellises retain entrances, pavilion and legacy positions',async()=>{
+ const {ZONE19_TRELLIS,ZONE19_ITEMS,ZONE19_VISIBLE}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
+ const base={area:3,district:'lumiose-zone19',interior:null,x:1,y:8,facing:'right',zaRoyaleRank:'B',zaZone19Period:'day',teamIds:['kept'],zaZone19Items:['tree-luxury'],zaZone19Spent:{furfrou:true}};
+ const map=zone19Map(base);assert.ok(ZONE19_TRELLIS.every(([x,y])=>map[y][x]==='#'));
+ for(const point of [{x:21,y:8},{x:21,y:9},{x:11,y:9},{x:11,y:1},{x:11,y:15},...ZONE19_ITEMS.map(({x,y})=>({x,y})),...ZONE19_VISIBLE.map(({x,y})=>({x,y}))])assert.ok([[0,0],[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>fieldPath(map,base,{x:point.x+dx,y:point.y+dy}).length),`${point.x},${point.y}`);
+ for(const [x,y] of ZONE19_TRELLIS){const old=storeAdventurePosition({...base,x,y},23);delete old.districtPosition.zone19TrellisLayout;const restored=restoreAdventurePosition(old,23);assert.notEqual(zone19Map(restored)[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone19Items,['tree-luxury']);assert.equal(restored.zaZone19Spent.furfrou,true);}
+});

@@ -5762,3 +5762,11 @@ test('Zone 3 central bramble protects legacy position and its HP Up reward',asyn
   const key=JSON.stringify([globalThis.__adventureUser.userId,'hpup']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'hpup');await get();await call('zone3CentralHpUp',{},409);assert.notEqual(rawWorld().zaZone3CentralHpUp,true);sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();const claimRevision=state.revision;await call('zone3CentralHpUp');assert.equal(state.inventory.hpup,999);await call('zone3CentralHpUp',{revision:claimRevision},409);await get();assert.equal(state.world.zaZone3CentralHpUp,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission40Stage,2);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('Zone 19 trellis restores old saves and allows movement and reload',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone19-vineyard-qa',displayName:'포도밭 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:4,y:3,facing:'down',zaRoyaleRank:'B',zaZone19Items:['tree-luxury'],zaZone19Spent:{furfrou:true}},state.revision+1);delete old.districtPosition.zone19TrellisLayout;seedWorld(old);await get();assert.notDeepEqual([state.world.x,state.world.y],[4,3]);assert.equal(state.world.map[state.world.y][state.world.x]!=='#',true);
+  await walkTo({x:11,y:9});await get();assert.deepEqual([state.world.x,state.world.y],[11,9]);assert.deepEqual(state.world.zaZone19Items,['tree-luxury']);assert.equal(state.world.zaZone19Spent.furfrou,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=prior;}
+});

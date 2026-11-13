@@ -4,7 +4,7 @@ import {LYSANDRE_WILD,lysandreWild} from '@/lib/cloud-adventure/adventure-lysand
 import {museumSide21Spot,museumSide21Requester} from '@/lib/cloud-adventure/adventure-museum.mjs';
 'use client';
 import {ZONE20_VISIBLE,zone20Visible} from '@/lib/cloud-adventure/adventure-mission42.mjs';
-import {ZONE19_VISIBLE,zone19Visible} from '@/lib/cloud-adventure/adventure-zone19.mjs';
+import {ZONE19_VISIBLE,zone19Visible,ZONE19_TRELLIS} from '@/lib/cloud-adventure/adventure-zone19.mjs';
 import {ZONE18_VISIBLE,zone18Visible} from '@/lib/cloud-adventure/adventure-zone18.mjs';
 import {ZONE17_VISIBLE,zone17Visible} from '@/lib/cloud-adventure/adventure-zone17.mjs';
 import {ZONE16_VISIBLE,zone16Visible} from '@/lib/cloud-adventure/adventure-zone16.mjs';
@@ -452,7 +452,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      // Vineyard rows and slope shading are provisional artwork, not a new height layer.
      // Existing tile values still determine collision and wild encounters.
      const pavilion=c==='#'&&x>=8&&x<=14&&y>=5&&y<=11;
-     const vineyard=c==='g'&&((x>=3&&x<=7)||(x>=15&&x<=19))&&[3,6,10,12].includes(y);
+     const trellis=c==='#'&&ZONE19_TRELLIS.some(([tx,ty])=>tx===x&&ty===y);
      ctx.fillStyle=pavilion?'#977f68':c==='#'?'#51764e':c==='g'?(y<8?'#a5c88a':'#90b776'):c===','?'#d4c49f':'#d6d4ba';ctx.fillRect(px,py,tile,tile);
      if(pavilion){
       // Existing blocked kiosk boundary, not a new roof or collision layer.
@@ -462,7 +462,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       else{ctx.fillStyle='#8b775e';ctx.fillRect(px+tile/2-3,py,6,tile);ctx.fillStyle='#ece1c7';ctx.fillRect(px+tile/2-2,py+3,3,tile-6);}
      }
      if(c==='g'){ctx.fillStyle='#6b985e';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}
-     if(vineyard){ctx.fillStyle='#74523b';ctx.fillRect(px,py+tile-7,tile,3);ctx.fillRect(px+5,py+9,3,tile-15);ctx.fillRect(px+tile-8,py+9,3,tile-15);ctx.fillStyle='#3f7648';ctx.fillRect(px,py+6,tile,8);ctx.fillStyle='#77a75a';ctx.fillRect(px+3,py+5,7,3);ctx.fillRect(px+16,py+5,9,3);ctx.fillStyle='#694778';ctx.fillRect(px+8,py+12,5,5);ctx.fillRect(px+tile-13,py+12,5,5);ctx.fillStyle='#9874a1';ctx.fillRect(px+9,py+12,2,2);ctx.fillRect(px+tile-12,py+12,2,2);}
+     if(trellis){ctx.fillStyle=y<8?'#a5c88a':'#90b776';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#74523b';ctx.fillRect(px,py+tile-7,tile,3);ctx.fillRect(px+5,py+9,3,tile-15);ctx.fillRect(px+tile-8,py+9,3,tile-15);ctx.fillStyle='#3f7648';ctx.fillRect(px,py+6,tile,8);ctx.fillStyle='#77a75a';ctx.fillRect(px+3,py+5,7,3);ctx.fillRect(px+16,py+5,9,3);ctx.fillStyle='#694778';ctx.fillRect(px+8,py+12,5,5);ctx.fillRect(px+tile-13,py+12,5,5);ctx.fillStyle='#9874a1';ctx.fillRect(px+9,py+12,2,2);ctx.fillRect(px+tile-12,py+12,2,2);}
      if(c===','){ctx.fillStyle='#baa986';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:1),py+3,1,tile-5);}if(c==='r'){ctx.fillStyle='#496f42';ctx.fillRect(px+4,py+7,tile-8,tile-11);ctx.fillStyle='#7ca063';ctx.fillRect(px+7,py+5,7,6);ctx.fillRect(px+18,py+8,6,5);}if('ij'.includes(c)){ctx.fillStyle='#eee9da';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#bb5c56';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#4d5851';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}if('WEX'.includes(c)){ctx.fillStyle='#668b79';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
     if(w.district==='lumiose-zone18'&&!w.interior){
