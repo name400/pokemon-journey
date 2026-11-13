@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {royaleBonusPickable,royaleBonusCards,takeRoyaleBonus,recordRoyaleBonus,royaleMedalSettlement,recordRoyaleMedalBattle,ROYALE_FIELD_MEDALS,royaleFieldMedalPickable,takeRoyaleFieldMedal,royaleFieldMedalAmount} from '../lib/cloud-adventure/adventure-royale-bonus.mjs';
+import {royaleBonusPickable,royaleBonusOfferable,activeRoyaleBonusCards,royaleBonusCards,takeRoyaleBonus,recordRoyaleBonus,royaleMedalSettlement,recordRoyaleMedalBattle,ROYALE_FIELD_MEDALS,royaleFieldMedalPickable,takeRoyaleFieldMedal,royaleFieldMedalAmount} from '../lib/cloud-adventure/adventure-royale-bonus.mjs';
 import {lumioseRoyaleMap,fieldDialogue,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 const now=20*50000,hit=[{kind:'move',side:0,actorBoxId:'p'},{kind:'effect',targetSide:1,targetBoxId:'e',text:'효과가 굉장했다!'},{kind:'damage',targetSide:1,targetBoxId:'e',actorBoxId:'p',hit:true,amount:10}];
@@ -75,8 +75,8 @@ test('an unexpired card retains progress across rank promotion without rewarding
 test('all 18 type cards rotate across nights and match the actual move type',()=>{
  const seen=new Set();
  for(let night=0;night<9;night++){
-  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const offered=royaleBonusCards(s,t);assert.equal(offered.length,3);
-  for(const def of offered.slice(1)){seen.add(def.id);assert.equal(takeRoyaleBonus(s,t,def.id),true);const wrong=hit.map(e=>e.kind==='move'?{...e,type:'not-a-type'}:e),correct=hit.map(e=>e.kind==='move'?{...e,type:def.id}:e);assert.equal(recordRoyaleBonus(s,{events:wrong,log:[]},'night',t),false);assert.equal(recordRoyaleBonus(s,{events:[...correct,...correct],log:[]},'night',t),true);assert.equal(s.zaRoyaleBonusExtraCards[def.id].completed,true);}
+  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const offered=royaleBonusCards(s,t);assert.equal(offered.length,4);
+  for(const def of offered.slice(1,3)){seen.add(def.id);assert.equal(takeRoyaleBonus(s,t,def.id),true);const wrong=hit.map(e=>e.kind==='move'?{...e,type:'not-a-type'}:e),correct=hit.map(e=>e.kind==='move'?{...e,type:def.id}:e);assert.equal(recordRoyaleBonus(s,{events:wrong,log:[]},'night',t),false);assert.equal(recordRoyaleBonus(s,{events:[...correct,...correct],log:[]},'night',t),true);assert.equal(s.zaRoyaleBonusExtraCards[def.id].completed,true);}
   assert.equal(s.zaRoyaleYPoints,400);assert.equal(s.zaRoyalePrizeMedals,40);
  }
  assert.equal(seen.size,18);
@@ -84,4 +84,26 @@ test('all 18 type cards rotate across nights and match the actual move type',()=
 test('old saved cards remain active through rotation and the three-card limit is enforced',()=>{
  const t=now+1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'},zaRoyaleBonusCard:{night:1,rank:'Y',progress:0,completed:false},zaRoyaleBonusExtraCards:{fire:{night:1,rank:'Y',progress:1,completed:false},water:{night:1,rank:'Y',progress:0,completed:false}}};
  assert.equal(royaleBonusPickable(s,t,'grass'),false);const fire=hit.map(e=>e.kind==='move'?{...e,type:'fire'}:e);assert.equal(recordRoyaleBonus(s,{events:fire,log:[]},'night',t),true);assert.equal(s.zaRoyaleBonusExtraCards.fire.completed,true);assert.equal(takeRoyaleBonus(s,t,'grass'),true);assert.equal(takeRoyaleBonus(s,t,'electric'),false);assert.equal(s.zaRoyaleBonusExtraCards.water.progress,0);
+});
+
+
+test('a fourth card can replace exactly one active card without regranting discarded progress',()=>{
+ const s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const [superCard,first,second,fourth]=royaleBonusCards(s,now);
+ for(const def of [superCard,first,second])assert.equal(takeRoyaleBonus(s,now,def.id),true);
+ s.zaRoyaleBonusCard.progress=2;s.zaRoyaleBonusExtraCards[first.id].progress=1;
+ assert.equal(royaleBonusPickable(s,now,fourth.id),false);assert.equal(royaleBonusOfferable(s,now,fourth.id),true);assert.equal(takeRoyaleBonus(s,now,fourth.id),false);assert.equal(takeRoyaleBonus(s,now,fourth.id,'not-active'),false);assert.equal(s.zaRoyaleBonusCard.progress,2);
+ assert.equal(takeRoyaleBonus(s,now,fourth.id,'super'),true);assert.deepEqual(s.zaRoyaleBonusCard,{night:0,rank:'Y',progress:2,completed:true,discarded:true});assert.equal(s.zaRoyaleBonusExtraCards[first.id].progress,1);assert.equal(activeRoyaleBonusCards(s,now).length,3);assert.equal(takeRoyaleBonus(s,now,fourth.id,'super'),false);assert.equal(royaleBonusOfferable(s,now,'super'),false);assert.equal(s.zaRoyalePrizeMedals,undefined);
+ assert.equal(recordRoyaleBonus(s,{events:hit,log:[]},'night',now),false);assert.equal(s.zaRoyaleYPoints,undefined);
+ const restored=JSON.parse(JSON.stringify(s));assert.equal(activeRoyaleBonusCards(restored,now).length,3);assert.equal(royaleBonusOfferable(restored,now,'super'),false);
+});
+
+test('replacing a type card retains other cards and discarded type cannot be retaken that night',()=>{
+ const s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const cards=royaleBonusCards(s,now);for(const c of cards.slice(0,3))assert.equal(takeRoyaleBonus(s,now,c.id),true);
+ s.zaRoyaleBonusExtraCards[cards[1].id].progress=1;assert.equal(takeRoyaleBonus(s,now,cards[3].id,cards[1].id),true);assert.equal(s.zaRoyaleBonusExtraCards[cards[1].id].discarded,true);assert.equal(s.zaRoyaleBonusExtraCards[cards[1].id].progress,1);assert.equal(s.zaRoyaleBonusCard.completed,false);assert.equal(s.zaRoyaleBonusExtraCards[cards[2].id].completed,false);assert.equal(royaleBonusOfferable(s,now,cards[1].id),false);
+});
+
+test('fourth card stays on walkable empty ground at each rank',()=>{
+ for(const rank of 'YXWVFEDCBA'){
+  const s={district:'lumiose-royale',zaRoyaleRank:rank,zaMission39Started:true,zaMission35Started:true,zaMission30Started:true,zaMission20Complete:true,zaMission19Stage:1,zaMission14Stage:1,zaMission10Stage:4};const cards=royaleBonusCards(s);for(const card of cards.slice(0,3))assert.equal(takeRoyaleBonus(s,Date.now(),card.id),true);assert.equal(lumioseRoyaleMap(s)[12][11],'!');assert.equal(takeRoyaleBonus(s,Date.now(),cards[3].id,cards[0].id),true);assert.equal(lumioseRoyaleMap(s)[12][11],'.');
+ }
 });

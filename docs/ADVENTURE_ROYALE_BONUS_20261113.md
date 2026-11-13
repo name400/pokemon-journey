@@ -11,3 +11,9 @@ The original single-card save field remains intact; the two additional cards and
 Infinite Royale card completion credits `zaInfinitePoints` with the same 50,000-point cap as trainer wins; it does not modify prior-rank scores. Unexpired cards retain their progress when the player advances to a higher rank; crediting the current rank on completion is a compatibility choice, not a verified original rule. The existing card save format and revision-guarded reward transaction are unchanged.
 
 The active-card limit applies to incomplete cards; expired or completed cards do not consume a slot. The rotation uses the saved offset-aware Royale night, so it remains consistent across midnight, battle pauses and reconnects.
+
+## Card replacement
+
+[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Bonus_card) describes selecting a card to discard when a fourth card is found. A fourth draft pickup now offers another rotating type objective; when three cards are active, its dialogue lets the player choose one of them to replace. The discarded card retains its night and progress as a completed/discarded record, cannot pay its old reward or be picked up again that night, and does not consume an active slot. Other cards and existing scores and medals remain unchanged. The fourth marker position and deterministic selection are provisional, and the original game's exact card distribution and whether a discarded pickup can reappear are not established.
+
+Representative unit and isolated SQLite API tests check the original and type-card replacements, invalid and stale requests, reload, score and medal preservation, rank transitions and walkable placement. PC and mobile Chromium checks use a mocked API. Actual Sites, production D1 and hardware remain unverified.
