@@ -5751,3 +5751,14 @@ test('Zone 9 rare candy levels once, preserves choices and rejects duplicates an
   seedMon(id,{...makeMon(1,99),boxId:id,experience:0,moves:['몸통박치기','울음소리','덩굴채찍','성장']});await get();await call('useAdventureRareCandy');assert.equal(rawMon(id).level,100);assert.equal(rawMon(id).experience,0);await get();sql.prepare('UPDATE inventory SET quantity=1 WHERE key=?').run(key);await get();const maxMon=rawMon(id);await call('useAdventureRareCandy',{},409);await get();assert.equal(state.inventory.rarecandy,1);assert.deepEqual(rawMon(id),maxMon);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('Zone 3 central bramble protects legacy position and its HP Up reward',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone3-central-qa',displayName:'중앙 정원 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:10,y:7,facing:'down',zaRoyaleRank:'F',zaMission40Stage:2},state.revision+1);delete old.districtPosition.zone3BrambleLayout;seedWorld(old);await get();assert.notDeepEqual([state.world.x,state.world.y],[10,7]);assert.equal(state.world.map[state.world.y][state.world.x]!== 'r',true);assert.equal(state.world.zaMission40Stage,2);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:10,y:8,facing:'up'},state.revision+1));seedMon(id,{...makeMon(1,15),boxId:id,moves:['몸통박치기']});await get();assert.equal(state.world.interaction.action,'zone3CentralBramble');await call('zone3CentralBramble',{},409);
+  seedMon(id,{...makeMon(4,15),boxId:id,moves:['불꽃세례']});await get();const revision=state.revision;await call('zone3CentralBramble');assert.equal(state.world.zaZone3CentralBrambleCleared,true);await call('zone3CentralBramble',{revision},409);await get();assert.equal(state.world.interaction.action,'zone3CentralHpUp');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'hpup']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'hpup');await get();await call('zone3CentralHpUp',{},409);assert.notEqual(rawWorld().zaZone3CentralHpUp,true);sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();const claimRevision=state.revision;await call('zone3CentralHpUp');assert.equal(state.inventory.hpup,999);await call('zone3CentralHpUp',{revision:claimRevision},409);await get();assert.equal(state.world.zaZone3CentralHpUp,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission40Stage,2);
+ }finally{globalThis.__adventureUser=prior;}
+});

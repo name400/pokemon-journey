@@ -24,3 +24,10 @@ test('draft arch uses existing fence piers and leaves the central approach open'
  for(const x of [10,11,12])assert.equal(map[4][x],'.');
  assert.ok(fieldPath(map,{x:11,y:3},{x:11,y:8}).length);
 });
+
+test('central bramble keeps the garden cross and opens its item after clearing',()=>{
+ const base={area:3,district:'lumiose-zone3',interior:null,zaRoyaleRank:'F'};
+ const closed=lumioseZone3Map(base),open=lumioseZone3Map({...base,zaZone3CentralBrambleCleared:true}),collected=lumioseZone3Map({...base,zaZone3CentralBrambleCleared:true,zaZone3CentralHpUp:true});
+ assert.equal(closed[7][10],'r');assert.equal(open[7][10],'o');assert.equal(collected[7][10],'.');
+ assert.ok(fieldPath(closed,{x:11,y:3},{x:10,y:8}).length);assert.ok(fieldPath(closed,{x:11,y:13},{x:10,y:8}).length);assert.ok(fieldPath(collected,{x:11,y:3},{x:10,y:7}).length);
+});
