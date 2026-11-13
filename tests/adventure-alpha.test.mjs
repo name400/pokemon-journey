@@ -56,7 +56,7 @@ test('wild alpha doubles four battle stats in the serialized battle only',async(
 });
 
 test('new surveyed wild alphas receive documented exclusive moves without changing their base or unsupported forms',()=>{
- for(const [id,key,name] of [[13,'electroweb','일렉트릭네트'],[406,'swift','스피드스타'],[543,'spikes','압정뿌리기'],[371,'thunderfang','번개엄니'],[1,'sludgebomb','오물폭탄'],[870,'poisonjab','독찌르기']]){
+ for(const [id,key,name] of [[13,'electroweb','일렉트릭네트'],[406,'swift','스피드스타'],[543,'spikes','압정뿌리기'],[371,'thunderfang','번개엄니'],[63,'shadowball','섀도볼'],[712,'bulldoze','땅고르기'],[1,'sludgebomb','오물폭탄'],[870,'poisonjab','독찌르기']]){
   const base=makeMon(id,45),before=JSON.stringify(base),alpha=makeCloudAdventureAlpha(base);
   assert.equal(alpha.adventureAlphaMove,name);assert.equal(alpha.moves[0],name);assert.equal(alpha.moves.filter(move=>move===name).length,1);assert.ok(alpha.adventurePlusMastered.includes(key));assert.equal(JSON.stringify(base),before);
  }

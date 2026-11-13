@@ -70,3 +70,9 @@ test('vineyard trellises retain entrances, pavilion and legacy positions',async(
  for(const point of [{x:21,y:8},{x:21,y:9},{x:11,y:9},{x:11,y:1},{x:11,y:15},...ZONE19_ITEMS.map(({x,y})=>({x,y})),...ZONE19_VISIBLE.map(({x,y})=>({x,y}))])assert.ok([[0,0],[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>fieldPath(map,base,{x:point.x+dx,y:point.y+dy}).length),`${point.x},${point.y}`);
  for(const [x,y] of ZONE19_TRELLIS){const old=storeAdventurePosition({...base,x,y},23);delete old.districtPosition.zone19TrellisLayout;const restored=restoreAdventurePosition(old,23);assert.notEqual(zone19Map(restored)[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone19Items,['tree-luxury']);assert.equal(restored.zaZone19Spent.furfrou,true);}
 });
+
+test('time-exclusive shiny alpha keeps its identity through the opposite period',async()=>{
+ const {refreshZone19Spawns}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
+ const key='zone19:cleffa-night:173',s={district:'lumiose-zone19',zaZone19SpawnCycle:{period:'night',interval:1},zaWildShinyRolls:{[key]:true,'zone19:furfrou:676':false},zaWildVisibleAlphaLevels:{[key]:59,'zone19:furfrou:676':58}};
+ assert.equal(refreshZone19Spawns(s,'day',2),true);assert.equal(s.zaWildShinyRolls[key],true);assert.equal(s.zaWildVisibleAlphaLevels[key],59);assert.equal(s.zaWildVisibleAlphaLevels['zone19:furfrou:676'],undefined);assert.equal(refreshZone19Spawns(s,'night',3),true);assert.equal(s.zaWildVisibleAlphaLevels[key],59);
+});

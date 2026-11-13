@@ -7144,3 +7144,21 @@ test('Zone 14 existing visible individual is not rerolled after its survey becom
  try{globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const key='zone14:aron:304';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:11,y:4,facing:'up',zaRoyaleRank:'D',zaMission05Complete:true,adventureDexSpecies:[304,305,529,587,530,95,694],zaWildShinyRolls:{[key]:false}},state.revision+1));globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildShinyRolls[key],false);assert.equal(rawWorld().zaWildVisibleAlphaLevels?.[key],undefined);assert.doesNotMatch(state.world.interaction.name,/우두머리/);await call('zone14Wild-aron');assert.notEqual(rawWorld().encounter.adventureAlpha,true);assert.equal(rawWorld().encounter.level,30);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('visible random alphas across representative zones survive flee, capture and reload',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureTime={period:'day',hour:12};
+ const {LATER_ZONE_SPECIES}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+ try{for(const p of [
+  {n:5,id:'abra',species:63,level:24,x:6,y:4,zaZone5Upper:true},
+  {n:6,id:'houndour',species:228,level:29,x:6,y:6},
+  {n:6,id:'magikarp',species:129,level:29,x:12,y:7,facing:'down',zaZone6Layer:'canal',water:true},
+  {n:12,id:'delibird',species:225,level:42,x:4,y:11},
+  {n:15,id:'pumpkaboo',species:710,level:52,x:11,y:9},
+  {n:18,id:'bagon',species:371,level:54,x:8,y:9},
+  {n:19,id:'furfrou',species:676,level:58,x:5,y:8},
+  {n:20,id:'bulbasaur',species:1,level:62,x:7,y:11},
+ ]){
+  globalThis.__adventureUser={userId:`visible-alpha-many-${p.n}-${p.id}`,displayName:'필드 우두머리 검증'};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const lead=state.world.activeId,key=`zone${p.n}:${p.id}:${p.species}`;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:`lumiose-zone${p.n}`,interior:null,x:p.x,y:p.y,facing:p.facing||'up',zaRoyaleRank:'A',zaMission19Complete:true,zaMission05Complete:true,adventureDexSpecies:LATER_ZONE_SPECIES[p.n],adventureBalls:{masterball:1},zaWildShinyRolls:{},zaWildVisibleAlphaLevels:{},...(p.zaZone5Upper?{zaZone5Upper:true}:{}),...(p.zaZone6Layer?{zaZone6Layer:p.zaZone6Layer}:{})},state.revision+1));globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildVisibleAlphaLevels[key],p.level,`zone ${p.n}`);assert.match(state.world.interaction.name,/우두머리/);assert.equal(rawWorld().zaWildShinyRolls[key],true);const preparedRevision=state.revision;await get();assert.equal(state.revision,preparedRevision);await call(`zone${p.n}Wild-${p.id}`);assert.equal(rawWorld().encounter.adventureAlpha,true);assert.equal(rawWorld().encounter.level,p.level);if(p.water)assert.equal(rawWorld().encounter.adventureInWater,true);await call('flee');await get();assert.equal(rawWorld().zaWildVisibleAlphaLevels[key],p.level);const revision=state.revision;await call('throwZoneVisible',{ball:'masterball'});await call('throwZoneVisible',{ball:'masterball',revision},409);await get();const caught=state.box.find(m=>m.speciesId===p.species&&m.origin==='capture');assert.ok(caught,`zone ${p.n}`);assert.equal(caught.adventureAlpha,true);assert.equal(caught.shiny,true);assert.equal(rawWorld().zaWildVisibleAlphaLevels[key],undefined);assert.equal(state.world.activeId,lead);
+ }}finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
