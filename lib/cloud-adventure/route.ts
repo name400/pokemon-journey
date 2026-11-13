@@ -1010,7 +1010,9 @@ else if(typeof b.action==='string'&&b.action.startsWith('taxi-')){
 else if(typeof b.action==='string'&&b.action.startsWith('fastTravel-')){
  const origin=centerAt(s,interactionAt(s)),target=registeredCenters(s).find(c=>c.id===b.action.slice('fastTravel-'.length));
  if(s.combat||s.adventureCatchWindow||s.unionHost||!fastTravelEnabled(s)||!origin||!target||origin.id===target.id)throw Error('등록된 포켓몬센터에서 이동할 곳을 확인하세요.');
- Object.assign(s,{district:target.district,interior:null,area:3,x:target.x,y:target.y,facing:'down',zaRougeStreetSouth:target.zaRougeStreetSouth===true});
+ const arrival={...s,district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,zaRougeStreetSouth:target.zaRougeStreetSouth===true};
+ if(fieldMap(arrival)[target.y]?.[target.x]!=='H')throw Error('포켓몬센터 도착 지점을 확인하세요.');
+ Object.assign(s,{district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,facing:'down',zaRougeStreetSouth:target.zaRougeStreetSouth===true});
  s.log=[`${target.name} 포켓몬센터로 이동했다.`];
 }
 else if(b.action==='use'){if(s.zaLoanBattle)throw Error('대여 배틀에서는 소지 도구를 사용할 수 없습니다.');consume=hasOwnKey(columns,b.item)?columns[b.item]:'';if(!consume||consume==='balls')throw Error('도구를 선택하세요.');const m=mons.get(b.boxId||s.activeId);if(!m)throw Error('보유 포켓몬이 아닙니다.');if(b.item==='antidote'){if(!['독','맹독'].includes(m.status))throw Error('독 상태가 아닙니다.');m.status=null;}else{if(m.hp<=0)throw Error('기절한 포켓몬은 센터에서 회복하세요.');if(m.hp===m.maxHp&&!(b.item==='fullrestore'&&m.status))throw Error('HP가 가득 찼습니다.');m.hp=Math.min(m.maxHp,m.hp+(b.item==='max'||b.item==='fullrestore'?m.maxHp:b.item==='hyper'?120:b.item==='super'?60:20));}if(b.item==='fullrestore')m.status=null;changed.set(m.boxId,m);s.log=['도구를 사용했다.'];}

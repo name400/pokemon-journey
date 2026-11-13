@@ -5084,3 +5084,15 @@ test('long companion battle persists its checkpoint and rejects duplicate contin
   assert.equal(state.battle,null);assert.equal(state.battleResult?.ended,true);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,originalTeam);await get();await call('continueCompanionBattle',{},409);assert.equal(state.wallet.coins,coins);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('center fast travel clears destination layer flags and preserves an old save',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'center-layer-recovery-qa',displayName:'센터 높이층'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  for(const [target,district,x,y,flag,move] of [['bleu','lumiose-bleu-sector7',11,13,'zaBleu7Upper','up'],['printemps','lumiose-aymlis-park',20,3,'zaMission11ParkLower','left'],['rouge-plaza','lumiose-zone3',11,2,'zaZone3TowerUpper','down']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:5,facing:'down',zaMission06Started:true,zaFastTravelCenters:['hotel','bleu','printemps','rouge-plaza'],[flag]:true,combat:null,trainer:null,encounter:null},state.revision+1));await get();const before=rawMon(id),coins=state.wallet.coins;
+   await call(`fastTravel-${target}`);assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world[flag]],[district,x,y,false]);assert.equal(state.world.map[y][x],'H');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),before);assert.equal(state.wallet.coins,coins);
+   await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world[flag]],[district,x,y,false]);await call('move',{direction:move});assert.notDeepEqual([state.world.x,state.world.y],[x,y]);assert.deepEqual(state.world.teamIds,team);
+  }
+ }finally{globalThis.__adventureUser=oldUser;}
+});
