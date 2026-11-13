@@ -104,3 +104,11 @@ test('Adjacent rooftop web gates the exit and recovers older positions',()=>{
  const old=storeAdventurePosition({...roof,x:10},118),restored=restoreAdventurePosition(old,118);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-jaune7-roof',9,8,['kept']]);
  assert.equal(restoreAdventurePosition(storeAdventurePosition({...open,x:10},119),119).x,10);
 });
+
+test('Hibernal lift offers Side Mission 80 after Lebanne and preserves the legacy encounter',()=>{
+ const street={area:3,district:'lumiose-hibernal-approach',interior:null,x:14,y:6,facing:'up',zaRoyaleRank:'D',teamIds:['kept']};
+ assert.equal(fieldDialogue(street).action,undefined);assert.equal(fieldDialogue({...street,zaMission26Stage:1}).action,undefined);
+ const complete={...street,zaMission26Complete:true};assert.equal(fieldDialogue(complete).action,'zone15Side80');assert.equal(fieldDialogue({...complete,zaZone15LiftUnlocked:true}).action,'zone15OuterLift');assert.equal(fieldDialogue({...street,zaMission30Started:true}).action,'zone15Side80');
+ const saved=restoreAdventurePosition(storeAdventurePosition(complete,88),88);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-hibernal-approach',14,6,['kept']]);assert.equal(fieldDialogue(saved).action,'zone15Side80');
+ const old={area:3,district:'lumiose-zone15',interior:null,x:3,y:13,facing:'left',zaMission26Stage:1};assert.equal(fieldDialogue(old).action,'zone15Side80');
+});
