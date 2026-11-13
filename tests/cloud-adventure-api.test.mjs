@@ -59,6 +59,19 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('Rouge mint purchase and use preserve original nature and persist battle stats',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-mint-qa',displayName:'민트 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,original=configure({...rawMon(id),nature:'hardy',hp:1},{hp:1});seedMon(id,original);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector6',interior:null,x:3,y:6,facing:'up',zaAcademyCourtyard:false},state.revision+1));await get();
+  assert.ok(state.world.interaction.actions.some(a=>a.action==='buyAdventureMint-adamantmint'));await call('buyAdventureMint-modestmint',{},409);await call('buyAdventureMint-adamantmint',{},409);
+  sql.prepare('UPDATE wallets SET coins=40000 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();let revision=state.revision;await call('buyAdventureMint-adamantmint');await call('buyAdventureMint-adamantmint',{revision},409);await get();assert.equal(state.wallet.coins,20000);assert.equal(state.inventory.adamantmint,1);
+  revision=state.revision;await call('useAdventureMint',{item:'adamantmint',boxId:id});await call('useAdventureMint',{item:'adamantmint',boxId:id,revision},409);await get();const minted=rawMon(id);assert.equal(minted.nature,'hardy');assert.equal(minted.rogueNatureOverride,'adamant');assert.equal(minted.hp,1);assert.ok(minted.stats.atk>original.stats.atk||minted.stats.spa<original.stats.spa);assert.equal(state.inventory.adamantmint,undefined);const snapshot=Battle.fromJSON(createCombat([minted],[makeMon(25,5)]).snapshot);assert.equal(snapshot.p1.active[0].set.nature,'adamant');assert.equal(snapshot.p1.active[0].storedStats.atk,minted.stats.atk);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:7,y:6,facing:'up'},state.revision+1));await get();await call('buyAdventureMint-modestmint');await get();await call('useAdventureMint',{item:'modestmint',boxId:id});await get();assert.equal(rawMon(id).nature,'hardy');assert.equal(rawMon(id).rogueNatureOverride,'modest');assert.equal(state.wallet.coins,0);
+  await call('useAdventureMint',{item:'modestmint',boxId:id},409);seedWorld(storeAdventurePosition({...rawWorld(),x:3,y:6,facing:'up'},state.revision+1));sql.prepare('UPDATE wallets SET coins=20000 WHERE user_id=?').run(globalThis.__adventureUser.userId);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999) ON CONFLICT(key) DO UPDATE SET quantity=999').run(JSON.stringify([globalThis.__adventureUser.userId,'adamantmint']),globalThis.__adventureUser.userId,'adamantmint');await get();await call('buyAdventureMint-adamantmint',{},409);assert.equal(state.wallet.coins,20000);await call('useAdventureMint',{item:'adamantmint',boxId:'not-in-party'},409);seedWorld(storeAdventurePosition({...rawWorld(),zaAcademyCourtyard:true},state.revision+1));await get();await call('buyAdventureMint-adamantmint',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 17 map travel arrives at southwest gate while preserving legacy registration',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone17-map-travel-qa',displayName:'빠른 이동 검증'};
  try{
