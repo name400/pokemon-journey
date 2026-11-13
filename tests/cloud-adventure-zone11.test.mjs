@@ -127,6 +127,7 @@ test('northern upper bank links to existing bank and retains old position data',
  const lower={area:3,district:'lumiose-zone11',interior:null,x:19,y:2,facing:'right',zaRoyaleRank:'E',zaZone11Spent:{furfrou:true},teamIds:['kept']};
  assert.equal(fieldDialogue(lower).action,'zone11NorthernStairs');assert.equal(zone11Map(lower)[3][17],'g');
  const upper={...lower,zaZone11Upper:true,x:19,y:11,facing:'down'};assert.equal(fieldDialogue(upper).action,'zone11NorthernStairs');assert.equal(zone11Map(upper)[3][17],'p');assert.ok(fieldPath(zone11Map(upper),upper,{x:17,y:4}).length);
+ const elevated=zone11Map(upper);assert.ok(fieldPath(elevated,upper,{x:7,y:8}).length);assert.equal(elevated[5][8],'g');assert.equal(elevated[8][7],',');assert.equal(elevated[4][7],'#');const west=restoreAdventurePosition(storeAdventurePosition({...upper,x:7,y:8},45),45);assert.deepEqual([west.zaZone11Upper,west.x,west.y,west.teamIds],[true,7,8,['kept']]);assert.ok(fieldPath(elevated,west,{x:19,y:11}).length);
  const restored=restoreAdventurePosition(storeAdventurePosition(upper,44),44);assert.deepEqual([restored.district,restored.zaZone11Upper,restored.x,restored.y],['lumiose-zone11',true,19,11]);assert.equal(restored.zaZone11Spent.furfrou,true);assert.deepEqual(restored.teamIds,['kept']);
  const spent={...upper,zaZone11Spent:{slowpoke:true}};assert.equal(zone11Map(spent)[3][17],'.');
 });
