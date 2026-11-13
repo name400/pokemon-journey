@@ -429,6 +429,15 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      }
      if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
+    if(w.district==='lumiose-screw-rouge8'&&!w.interior){
+     // Draft scaffold platforms and the street below their glide gap.
+     ctx.fillStyle=c==='#'?'#536b7a':(x+y)%2?'#b89b78':'#c9ad89';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'){ctx.fillStyle='#6d8490';ctx.fillRect(px,py+tile-3,tile,2);}
+     else{ctx.fillStyle='#8c765f';ctx.fillRect(px,py+tile-3,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py,2,tile);}
+     if((x===10||x===14)&&y===6){ctx.fillStyle='#f4d069';ctx.beginPath();ctx.moveTo(px+tile/2,py+tile/4);ctx.lineTo(px+tile*3/4,py+tile/2);ctx.lineTo(px+tile/2,py+tile*3/4);ctx.lineTo(px+tile/4,py+tile/2);ctx.fill();}
+     if(c==='j'||c==='v'){ctx.fillStyle='#65584d';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e7d8b6';for(let n=0;n<3;n++)ctx.fillRect(px+6,py+7+n*7,tile-12,2);}
+     return;
+    }
     if(w.district==='lumiose-zone9-scaffold'&&!w.interior){ctx.fillStyle=c==='#'?'#68787d':'#ac9475';ctx.fillRect(px,py,tile,tile);if(c===','){ctx.fillStyle='#d4b995';for(let n=5;n<tile;n+=8)ctx.fillRect(px+n,py+3,2,tile-6);ctx.fillStyle='#756b5d';if(w.map[y-1]?.[x]==='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]==='#')ctx.fillRect(px,py+tile-3,tile,3);}if(c==='o'){ctx.fillStyle='#846742';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-zone16-garden'&&!w.interior){ctx.fillStyle=c==='#'?'#697e70':(x+y)%2?'#aac39a':'#b6cea4';ctx.fillRect(px,py,tile,tile);if(c==='j'){ctx.fillStyle='#917d60';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#e9ddbc';for(let n=0;n<3;n++)ctx.fillRect(px+5,py+7+n*7,tile-10,2);}return;}
     if(w.district==='lumiose-zone16'&&!w.interior&&w.zaZone16Upper){ctx.fillStyle=c==='#'?'#777e79':c===','?'#a68d76':(x+y)%2?'#cfc5b4':'#dfd7c7';ctx.fillRect(px,py,tile,tile);if(c==='l'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}return;}

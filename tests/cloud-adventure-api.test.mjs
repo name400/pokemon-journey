@@ -3015,6 +3015,17 @@ test('screw rooftops support entry, collection, restoration and return in each s
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
+test('Rouge 8 scaffolds require a glide and old saves can safely return',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge8-glide-qa',displayName:'루주 활공'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector8',interior:null,x:9,y:4,facing:'up',zaRoyaleRank:'A',zaRedCanariPlush:true,zaMission15Stage:1},state.revision+1));await get();await call('screwRoofAccess');await walkTo({x:10,y:6});assert.equal(state.world.map[6][11],'#');await call('rotoGlide',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:10,y:6,zaMission15Stage:2},state.revision+1));await get();await call('rotoGlide');assert.deepEqual([state.world.x,state.world.y],[14,6]);await walkTo({x:15,y:5});const rev=state.revision;await call('collectColorfulScrew');await call('collectColorfulScrew',{revision:rev},409);await get();assert.ok(rawWorld().zaColorfulScrewsFound.includes('rouge8-scaffold-b'));await walkTo({x:14,y:6});await call('rotoGlide');assert.deepEqual([state.world.x,state.world.y],[10,6]);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:12,y:6,zaMission15Stage:1},state.revision+1));await get();assert.notEqual(state.world.map[state.world.y][state.world.x],'#');
+  seedWorld(storeAdventurePosition({...rawWorld(),x:14,y:10,facing:'down',zaMission15Stage:1},state.revision+1));await get();assert.equal(state.world.interaction.action,'screwRoofDrop');await call('screwRoofDrop');assert.deepEqual([state.world.x,state.world.y],[9,10]);await walkTo({x:4,y:11});await call('face',{direction:'down'});await call('screwRoofAccess');await get();assert.equal(state.world.district,'lumiose-rouge-sector8');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('61 distinct collected screws buy all implemented plush upgrades exactly once',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'all-plush-upgrades-qa',displayName:'인형 전체 단계'};
  try{
