@@ -1,5 +1,24 @@
 # 배포 검증 실패 기록
 
+## 2026-11-13 — GitHub `b77892f7` 배포 검사 실패
+
+- 대상 브랜치: `cloud/pokerogue-continue-20261105`; GitHub 커밋 `b77892f7c35fb51b4a0a539df0ea2612295b8e6f`.
+- 실제 검증 소스: 기존 Sites 소스와 병합한 로컬 커밋 `b423e29d5abbf43f5a535e7ea5e59192fff1bf90`; Node.js v24.22.1.
+- 순차 검사: `npm run typecheck` 통과, `npm test` 3,681개 중 3,674개 통과·7개 실패 (199.9초), `npm run build` 통과.
+- 배포하지 않았다. 검사 당시 운영본은 Sites v87.
+
+### 실패 항목
+
+1. `tests/cloud-adventure-api.test.mjs:878` — 저장·전투·캠페인 검증 중 1066행에서 `Cannot read properties of null (reading 'teams')`.
+2. 같은 파일 1325행 — 미션 10 동료 배틀 및 후속 진행 검증 중 1426행에서 `Cannot read properties of null (reading 'teams')`.
+3. 같은 파일 1726행 — 18구역 외부 비계 재진입: 1736행 `zone18OutsideLadder`가 예상 200 대신 409 `비계 도착 위치를 확인하세요.`.
+4. 같은 파일 3286행 — 18구역 중정 서쪽 출구와 외부 비계 재접속: 3295행의 동일 `zone18OutsideLadder`에서 같은 409.
+5. 같은 파일 5501행 — 13구역 가시덤불과 기술머신 보상 지속성: 5511행 `zone13Item-bramble-tm081`이 예상 200 대신 409 `구역 13의 도구를 확인하세요.`.
+6. `tests/cloud-adventure-prediction.test.mjs:77` — 4·6구역 지상 경로 예측 검사 79행에서 `lumiose-zone6`의 결과가 기대한 참 값 대신 `null`.
+7. `tests/cloud-adventure-research-tm-effects.test.mjs:32` — 필드 기술머신 호환성 수량 검증 33행에서 예상 `22`, 실제 `24`.
+
+실제 이동·조우 회귀인지 테스트의 좌표, 상태, 기대값이 오래된 것인지는 위 결과만으로 확정할 수 없다. 각 시나리오의 저장 상태와 좌표·대상 팀·도구 조건을 대조하고 수정한 정확한 소스로 전체 검사를 다시 실행해야 한다.
+
 ## 2026-11-13 — GitHub `63f8a1a9` 배포 검사 실패
 
 - 대상 브랜치: `cloud/pokerogue-continue-20261105`; GitHub 커밋 `63f8a1a97e25eaf1a2cf51c04472cadaf4ba6aeb`. 브랜치에 이후 커밋이 있었으나 요청된 커밋까지만 병합했다.
