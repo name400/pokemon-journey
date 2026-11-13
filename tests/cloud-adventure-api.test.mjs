@@ -6399,6 +6399,15 @@ test('status medicine cures owned party in field and battle once',async()=>{
  }}finally{globalThis.__adventureUser=previous;}
 });
 
+test('full restore cures confusion in single and multi battles without duplicating stock',async()=>{
+ const previous=globalThis.__adventureUser;
+ try{for(const format of ['single','solo','companion'])for(const injured of [false,true]){
+  globalThis.__adventureUser={userId:`full-restore-confusion-${format}-${injured}`,displayName:'회복약 혼란 검사'};await get();await call('start',{species:1});const id=state.world.activeId,lead={...makeMon(1,80),boxId:id,moves:['튀어오르기'],pp:{}},foes=[0,1].map(i=>({...makeMon(129,5),boxId:`confusion-foe-${i}`,moves:['튀어오르기'],pp:{}})),ally=[{...makeMon(25,80),boxId:'confusion-ally',moves:['튀어오르기'],pp:{}}];seedMon(id,lead);sql.prepare('UPDATE wallets SET full_restores=1 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const combat=format==='single'?createCombat([lead],foes.slice(0,1)):format==='solo'?createSoloMultiFoeSnapshot([lead],foes):createMission10DoubleSnapshot([lead],ally,foes),sim=Battle.fromJSON(combat.snapshot);sim.p1.active[0].addVolatile('confusion');if(injured){sim.p1.active[0].hp=Math.floor(sim.p1.active[0].maxhp/2);sim.p1.active[0].setStatus('brn');}const snapshot=sim.toJSON();snapshot.formatid=combat.snapshot.formatid;
+  seedWorld({...storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8},state.revision+1),combat:{...combat,snapshot},trainer:{id:'confusion-test',name:'검증'},encounter:null});await get();assert.ok(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].volatiles.confusion);const rev=state.revision;await call('use',{item:'fullrestore'});assert.equal(state.wallet.full_restores,0);assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].volatiles.confusion,undefined);assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].status,'');assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].hp,Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].maxhp);await call('use',{item:'fullrestore',revision:rev},409);await get();assert.equal(state.wallet.full_restores,0);assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].volatiles.confusion,undefined);
+ }}finally{globalThis.__adventureUser=previous;}
+});
+
 test('medicine shop purchases preserve old revive stock and enforce atomic limits',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'medicine-shop-qa',displayName:'회복 도구 상점'};
  try{

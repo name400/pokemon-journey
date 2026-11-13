@@ -98,7 +98,7 @@ test('status medicine in triple battle respects ownership and restores state',()
  const initial=createMission37TripleSnapshot([lead,reserve],groups[0].team,groups[1].team,foes);
  assert.throws(()=>playMission37TriplePrototype(initial,{type:'item',item:'fullheal',boxId:groups[0].team[1].boxId}),/플레이어/);
  for(const item of ['fullheal','lumiosegalette']){const next=playMission37TriplePrototype(initial,{type:'item',item,boxId:reserve.boxId});assert.equal(mission37PlayerTeam(next).find(m=>m.boxId===reserve.boxId).status,null);assert.equal(restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(next))).turn,2);}
- const sim=restoreMission37TripleSnapshot(initial);sim.p1.active[0].addVolatile('confusion');const snapshot=sim.toJSON();snapshot.formatid=initial.snapshot.formatid;const confused={...initial,snapshot};assert.ok(restoreMission37TripleSnapshot(confused).p1.active[0].volatiles.confusion);const cured=playMission37TriplePrototype(confused,{type:'item',item:'fullheal'});assert.equal(restoreMission37TripleSnapshot(cured).p1.active[0].volatiles.confusion,undefined);
+ const sim=restoreMission37TripleSnapshot(initial);sim.p1.active[0].addVolatile('confusion');const snapshot=sim.toJSON();snapshot.formatid=initial.snapshot.formatid;const confused={...initial,snapshot};assert.ok(restoreMission37TripleSnapshot(confused).p1.active[0].volatiles.confusion);for(const item of ['fullheal','fullrestore']){const cured=playMission37TriplePrototype(confused,{type:'item',item});assert.equal(restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(cured))).p1.active[0].volatiles.confusion,undefined);}
 });
 
 test('mission 36 two full partners mega evolve against two real foes and restore cleanly',async()=>{
