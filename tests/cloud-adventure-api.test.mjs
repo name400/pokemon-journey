@@ -5788,3 +5788,12 @@ test('Bleu Sector 3 actual stairs enter the underground junction and preserve pr
   await walkTo({x:8,y:8});await call('move',{direction:'right'},409);assert.deepEqual([state.world.x,state.world.y],[8,8]);assert.equal(state.world.zaBleuSewerSludgeCleared,undefined);seedMon(id,{...makeMon(7,10),boxId:id,moves:['물대포']});await get();await call('face',{direction:'right'});await call('clearBleuSludge');await walkTo({x:17,y:3});await call('face',{direction:'up'});await call('openBleuSewer');await get();assert.equal(state.world.zaBleuSewerOpened,true);await walkTo({x:17,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-zone5-drain');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('Zone 16 raised fountain restores legacy saves and keeps garden routes',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone16-fountain-qa',displayName:'높은 정원 분수 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone16-garden',interior:null,x:9,y:4,facing:'down',zaRoyaleRank:'C',zaZone16Spent:{'ampharos-alpha':true},zaZone16Items:['battle-ultra']},state.revision+1);delete old.districtPosition.zone16GardenFountainLayout;seedWorld(old);await get();assert.notDeepEqual([state.world.x,state.world.y],[9,4]);assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.equal(state.world.zaZone16Spent['ampharos-alpha'],true);
+  await walkTo({x:6,y:5});await call('face',{direction:'right'});assert.equal(state.world.interaction.action,'zone16Item-garden-tm076');const revision=state.revision;await call('zone16Item-garden-tm076');await call('zone16Item-garden-tm076',{revision},409);await get();assert.equal(state.inventory['za-tm076'],1);assert.ok(state.world.zaZone16Items.includes('battle-ultra'));
+  await walkTo({x:17,y:11});await call('face',{direction:'down'});await call('zone16GardenStairs');await get();assert.equal(state.world.district,'lumiose-zone16');assert.equal(state.world.zaZone16Spent['ampharos-alpha'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=prior;}
+});

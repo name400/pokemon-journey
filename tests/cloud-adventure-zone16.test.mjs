@@ -103,3 +103,9 @@ test('raised garden stairs and shared Ampharos keep ground and garden saves',()=
  for(const state of [ground,garden]){const saved=restoreAdventurePosition(storeAdventurePosition(state,152),152);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[state.district,state.x,state.y,['kept']]);}
  const spent={...garden,zaZone16Spent:{'ampharos-alpha':true}};assert.equal(fieldMap(spent)[2][18],'.');assert.equal(zone16Visible(spent,'d'),null);assert.equal(zone16Visible({...ground,zaZone16Spent:spent.zaZone16Spent},'d'),null);
 });
+
+test('raised garden fountain keeps stair, TM, alpha and legacy positions accessible',async()=>{
+ const {zone16GardenMap,ZONE16_GARDEN_FOUNTAIN}=await import('../lib/cloud-adventure/adventure-zone16.mjs');const s={area:3,district:'lumiose-zone16-garden',interior:null,x:17,y:11,zaRoyaleRank:'C',teamIds:['kept'],zaZone16Items:['battle-ultra'],zaZone16Spent:{'ampharos-alpha':true}};const map=zone16GardenMap(s);
+ assert.equal(map[4][9],'^');assert.ok(ZONE16_GARDEN_FOUNTAIN.every(([x,y])=>!walkable(map[y][x])));assert.ok(fieldPath(map,s,{x:6,y:5}).length);assert.ok(fieldPath(map,s,{x:18,y:3}).length);assert.equal(map[12][17],'j');
+ for(const [x,y] of ZONE16_GARDEN_FOUNTAIN){const old=storeAdventurePosition({...s,x,y},71);delete old.districtPosition.zone16GardenFountainLayout;const restored=restoreAdventurePosition(old,71);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone16Items,['battle-ultra']);assert.equal(restored.zaZone16Spent['ampharos-alpha'],true);}
+});
