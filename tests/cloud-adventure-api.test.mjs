@@ -5905,3 +5905,14 @@ test('Zone 14 weather changes update the sunny encounter without changing saved 
   globalThis.__adventureTime={hour:18,period:'day',absoluteHour:18};await get();assert.equal(state.world.weather,'');assert.equal(state.world.map[3][14],'v');assert.equal(state.world.zaZone14Spent.aron,true);assert.deepEqual([state.world.x,state.world.y],[11,2]);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=time;}
 });
+
+test('Vert 6 rooftop Dratini can be caught and evolved after reentry',async()=>{
+ const previous=globalThis.__adventureUser,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'vert6-dratini-qa',displayName:'미뇽 검사'};
+ try{
+  globalThis.__adventureTime={hour:12,period:'day'};await get();await call('start',{species:152});const starter=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector6',interior:null,x:18,y:3,facing:'up',zaMission15Stage:2,adventureBalls:{masterball:1}},state.revision+1));await get();await call('vert6RoofLadder');await walkTo({x:13,y:8});await call('rotoGlide');await walkTo({x:3,y:6});await call('face',{direction:'left'});assert.equal(state.world.interaction.action,'cityResearchBattle');
+  globalThis.__adventureTime={hour:22,period:'night'};await get();await call('cityResearchBattle',{},409);assert.deepEqual([state.world.x,state.world.y],[3,6]);
+  globalThis.__adventureTime={hour:12,period:'day'};await get();await call('cityResearchBattle');assert.equal(rawWorld().encounter.speciesId,147);await get();assert.equal(rawWorld().encounter.speciesId,147);const revision=state.revision;await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision},409);await get();assert.ok(state.world.adventureDexSpecies.includes(147));assert.ok(state.world.teamIds.includes(starter));
+  const captured=state.box.find(p=>p.speciesId===147).boxId;seedMon(captured,{...makeMon(147,30),boxId:captured,shiny:true});await get();await call('evolve',{boxId:captured,target:148});assert.equal(rawMon(captured).id,148);while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});seedMon(captured,{...makeMon(148,55),boxId:captured,shiny:true});await get();const evoRevision=state.revision;await call('evolve',{boxId:captured,target:149});assert.equal(rawMon(captured).id,149);await call('evolve',{boxId:captured,target:149,revision:evoRevision},409);await get();assert.equal(rawMon(captured).shiny,true);assert.ok(state.world.adventureDexSpecies.includes(149));
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=time;}
+});
