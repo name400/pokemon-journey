@@ -991,6 +991,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      }
      ctx.fillStyle=inner?((x+y)%2?'#aaa2aa':'#b6afb3'):((x+y)%2?'#9baea6':'#a9bab0');ctx.fillRect(px,py,tile,tile);
      ctx.fillStyle=inner?'#8a818c':'#82978f';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);
+     if(!branch&&!inner&&c==='^'&&x===8&&y===2){ctx.fillStyle='#465d60';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e9dfdb';ctx.fillRect(px+10,py+12,12,14);ctx.fillStyle='#ac8ab6';ctx.fillRect(px+10,py+9,12,4);ctx.fillStyle='#e4b6d3';ctx.beginPath();ctx.ellipse(px+16,py+6,3,5,0,0,Math.PI*2);ctx.fill();}
      if(branch&&c==='i'){
       ctx.fillStyle='#83bed0';ctx.beginPath();ctx.moveTo(px+tile/2,py+2);ctx.lineTo(px+tile-5,py+tile-5);ctx.lineTo(px+5,py+tile-5);ctx.closePath();ctx.fill();ctx.fillStyle='#e9faf8';ctx.fillRect(px+tile/2-2,py+7,3,13);
      }else if(c==='a'&&!branch&&!inner){
