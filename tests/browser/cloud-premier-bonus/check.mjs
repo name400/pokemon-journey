@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {makeMon} from '../../../lib/game.mjs';
+import {fieldDialogue,fieldMap} from '../../../lib/cloud-adventure/adventure-world.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});
+try{for(const viewport of [{width:390,height:844},{width:1280,height:850}]){
+ const mon={...makeMon(25,40),boxId:'player',evolutions:[]};let revision=1,coins=20000,purchases=0,claims=0;
+ const world={area:3,district:'lumiose-rouge-sector3',interior:null,x:16,y:14,facing:'down',badges:[],activeId:'player',teamIds:['player'],areaInfo:{name:'루주 3번지',biome:'city'},objective:'탐험',log:[],adventureBalls:{premierball:99}};
+ const response=()=>({revision,world:{...world,map:fieldMap(world),interaction:fieldDialogue(world)},box:[mon],wallet:{coins,balls:5},inventory:{},fieldShop:[],gameTime:{period:'day',hour:12}});
+ const context=await browser.newContext({viewport,isMobile:viewport.width<500,hasTouch:viewport.width<500,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('https://**/*',r=>r.fulfill({status:200,body:'',contentType:'image/png'}));await page.route('**/api/world**',async route=>{const body=route.request().postDataJSON();if(body?.action==='buyBoutiqueBall-nestball'){assert.equal(body.revision,revision);assert.equal(body.quantity,10);coins-=10000;world.adventureBalls.nestball=10;world.zaPremierBallPending=1;revision++;purchases++;}if(body?.action==='claimPremierBalls'){assert.equal(body.revision,revision);world.adventureBalls.premierball++;world.zaPremierBallPending=0;revision++;claims++;}await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(response())});});
+ await page.goto(process.env.TEST_URL||'http://127.0.0.1:5235/');await page.getByRole('button',{name:/대화/}).click();const dialog=page.getByRole('dialog');await page.getByLabel('볼 구매 수량').selectOption('10');await dialog.getByRole('button',{name:'네스트볼 · 개당 1000코인 · 합계 10,000코인'}).click();assert.equal(purchases,1);await page.getByRole('button',{name:'가방',exact:true}).click();const pending=page.getByRole('dialog').locator('article').filter({hasText:'보관된 프레미어볼'});await pending.getByText(/프레미어볼 1개/).waitFor();assert.equal(await pending.getByRole('button',{name:'보너스 받기'}).isDisabled(),true);
+ world.adventureBalls.premierball=98;await page.reload();await page.getByRole('button',{name:'가방',exact:true}).click();const reloaded=page.getByRole('dialog').locator('article').filter({hasText:'보관된 프레미어볼'});await reloaded.getByRole('button',{name:'보너스 받기'}).click();assert.equal(claims,1);await reloaded.waitFor({state:'detached'});assert.deepEqual(errors,[]);console.log(JSON.stringify({viewport,purchases,claims}));await context.close();
+}}finally{await browser.close();}

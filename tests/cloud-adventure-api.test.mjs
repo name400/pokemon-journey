@@ -6919,3 +6919,42 @@ test('Rouge ball boutique purchases preserve wallet, capacity, saves and stale-r
   seedWorld(storeAdventurePosition({...state.world,x:10,y:8,facing:'up'},state.revision+1));await get();await call('buyBoutiqueBall-healball',{},409);assert.equal(state.wallet.coins,2500);assert.deepEqual(state.world.teamIds,[lead]);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('Boutique Premier bonuses are atomic, bank overflow and respect purchase batches',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'boutique-premier-qa',displayName:'프레미어볼 보너스'};
+ try{await get();await call('start',{species:1});const lead=state.world.activeId;sql.prepare('UPDATE wallets SET coins=100000 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector3',interior:null,x:16,y:14,facing:'down',adventureBalls:{premierball:0}},state.revision+1));await get();
+  await call('buyBoutiqueBall-healball',{quantity:9});await get();assert.equal(state.world.adventureBalls.premierball,0);await call('buyBoutiqueBall-healball',{quantity:1});await get();assert.equal(state.world.adventureBalls.premierball,0);
+  let revision=state.revision;await call('buyBoutiqueBall-nestball',{quantity:10});await call('buyBoutiqueBall-nestball',{quantity:10,revision},409);await get();assert.equal(state.world.adventureBalls.nestball,10);assert.equal(state.world.adventureBalls.premierball,1);
+  seedWorld(storeAdventurePosition({...state.world,adventureBalls:{...state.world.adventureBalls,premierball:98}},state.revision+1));await get();await call('buyBoutiqueBall-diveball',{quantity:20});await get();assert.equal(state.world.adventureBalls.premierball,99);assert.equal(state.world.zaPremierBallPending,1);await call('claimPremierBalls',{},409);
+  seedWorld(storeAdventurePosition({...state.world,adventureBalls:{...state.world.adventureBalls,premierball:98}},state.revision+1));await get();revision=state.revision;const coins=state.wallet.coins;await call('claimPremierBalls');await call('claimPremierBalls',{revision},409);await get();assert.equal(state.world.adventureBalls.premierball,99);assert.equal(state.world.zaPremierBallPending,0);assert.equal(state.wallet.coins,coins);await call('claimPremierBalls',{},409);
+  seedWorld(storeAdventurePosition({...state.world,adventureBalls:{...state.world.adventureBalls,premierball:0}},state.revision+1));await get();await call('buyBoutiqueBall-premierball',{quantity:10});await get();assert.equal(state.world.adventureBalls.premierball,11);assert.equal(state.world.activeId,lead);
+  const before=state.wallet.coins;await call('buyBoutiqueBall-repeatball',{quantity:99},409);await get();assert.equal(state.wallet.coins,before);assert.equal(state.world.adventureBalls.repeatball,undefined);
+ }finally{globalThis.__adventureUser=prior;}
+});
+
+test('Repeat and Dive Ball capture bonuses use persisted dex and water context',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;const {adventureCaptureAttempt}=await import('../lib/cloud-adventure/adventure-balls.mjs');
+ try{for(const ball of ['repeatball','diveball'])for(const eligible of [false,true]){
+  globalThis.__adventureUser={userId:`boutique-context-${ball}-${eligible}`,displayName:'볼 효과 검사'};await get();await call('start',{species:152});const foe={...makeMon(25,30),boxId:'wild',hp:0,...(ball==='diveball'&&eligible?{adventureInWater:true}:{})};
+  const boosted=ball==='repeatball'?{registered:true}:{inWater:true},plain={catchWindow:true,royaleRank:'Z'};const value=Array.from({length:999},(_,i)=>(i+1)/1000).find(x=>adventureCaptureAttempt(foe,ball,{...plain,...boosted},()=>x).caught&&!adventureCaptureAttempt(foe,ball,plain,()=>x).caught);assert.ok(value,'capture roll distinguishes the bonus');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:11,y:10,zaRoyaleRank:'Z',adventureDexSpecies:ball==='repeatball'&&eligible?[152,25]:[152],adventureBalls:{[ball]:1},combat:null,encounter:null,adventureCatchWindow:{foe,moveCount:0,revision:state.revision+1}},state.revision+1));globalThis.__adventureRandom=()=>value;await get();const rev=state.revision;await call('catchWindowBall',{ball});await call('catchWindowBall',{ball,revision:rev},409);await get();assert.equal(state.box.some(m=>m.origin==='capture'&&m.speciesId===25),eligible,`${ball} ${eligible}`);assert.equal(state.world.adventureBalls[ball],0);if(eligible)assert.equal(rawMon(state.box.find(m=>m.origin==='capture'&&m.speciesId===25).boxId).originBall,ball);
+ }}finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('Lumiose center awards Premier Balls for batches of basic and Great Balls',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'center-premier-bonus-qa',displayName:'센터 구매 보너스'};
+ try{await get();await call('start',{species:1});sql.prepare('UPDATE wallets SET coins=20000,balls=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:19,y:5,facing:'down'},state.revision+1));await get();const coins=state.wallet.coins;await call('buy',{item:'ball',quantity:10});await get();assert.equal(state.wallet.balls,10);assert.equal(state.wallet.coins,coins-1500);assert.equal(state.world.adventureBalls.premierball,1);
+  await call('buyBall',{ball:'greatball',quantity:20});await get();assert.equal(state.world.adventureBalls.greatball,20);assert.equal(state.world.adventureBalls.premierball,3);assert.equal(state.wallet.coins,coins-7500);await call('buyBall',{ball:'repeatball'},409);assert.equal(state.world.adventureBalls.repeatball,undefined);
+ }finally{globalThis.__adventureUser=prior;}
+});
+
+test('Dive and Repeat Balls use water and dex state in visible field and battle encounters',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;const {adventureCaptureAttempt}=await import('../lib/cloud-adventure/adventure-balls.mjs');
+ try{for(const ball of ['diveball','repeatball']){
+  globalThis.__adventureUser={userId:`boutique-visible-${ball}`,displayName:'필드 볼 효과'};globalThis.__adventureRandom=()=>.5;await get();await call('start',{species:152});const foe=makeMon(712,33),base={overworld:true,unaware:false,alpha:false,moveCount:0,royaleRank:'Z'},bonus=ball==='diveball'?{inWater:true}:{registered:true};
+  const roll=Array.from({length:999},(_,i)=>(i+1)/1000).find(x=>adventureCaptureAttempt(foe,ball,{...base,...bonus},()=>x).caught&&!adventureCaptureAttempt(foe,ball,base,()=>x).caught);assert.ok(roll);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:7,y:11,facing:'down',zaRoyaleRank:'Z',adventureDexSpecies:ball==='repeatball'?[152,712]:[152],zaWildShinyRolls:{'zone12:bergmite:712':false},adventureBalls:{[ball]:1},combat:null,encounter:null},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='throwZoneVisible'));globalThis.__adventureRandom=()=>roll;await call('throwZoneVisible',{ball});await get();assert.equal(state.world.zaZone12Spent.bergmite,true);assert.equal(state.world.adventureBalls[ball],0);assert.ok(state.box.some(m=>m.origin==='capture'&&m.speciesId===712));
+ }
+ globalThis.__adventureUser={userId:'boutique-battle-dive',displayName:'배틀 다이브볼'};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:7,y:11,facing:'down',zaRoyaleRank:'A',adventureBalls:{diveball:1},combat:null,encounter:null},state.revision+1));await get();await call('zone12Wild-bergmite');await get();const foe=rawWorld().combat.teams[1][0];assert.equal(foe.adventureInWater,true);const base={royaleRank:'A'},roll=Array.from({length:999},(_,i)=>(i+1)/1000).find(x=>adventureCaptureAttempt(foe,'diveball',{...base,inWater:true},()=>x).caught&&!adventureCaptureAttempt(foe,'diveball',base,()=>x).caught);assert.ok(roll);globalThis.__adventureRandom=()=>roll;await call('ball',{ball:'diveball'});await get();assert.equal(state.world.zaZone12Spent.bergmite,true);assert.ok(state.box.some(m=>m.origin==='capture'&&m.speciesId===712));
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
+});
