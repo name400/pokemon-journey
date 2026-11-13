@@ -116,3 +116,15 @@ test('lower pond north bank remains separated from the staircase until the ice b
  const saved=restoreAdventurePosition(storeAdventurePosition({...base,x:5,y:7},83),83);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower,saved.zaZone12Spent.delibird],[5,7,true,true]);
  const open={...saved,zaZone12IceBridge:true};assert.equal(reachable(open,{x:9,y:13}),true);assert.equal(zone12Visible(open,'v').species,713);
 });
+
+test('expanded southwest pond restores old shore positions and preserves park routes',()=>{
+ const base={area:3,district:'lumiose-zone12',interior:null,zaRoyaleRank:'E',teamIds:['kept'],zaZone12Items:['south-super'],zaZone12Spent:{gogoat:true}};
+ const map=zone12Map(base),water=[[4,9],[5,9],[6,9],[5,10],[6,10],[5,11],[6,11]];
+ for(const [x,y] of water){
+  assert.equal(map[y][x],'~');const previous=storeAdventurePosition({...base,x,y},140);delete previous.districtPosition.zone12ShoreLayout;
+  const loaded=restoreAdventurePosition(previous,140);assert.notDeepEqual([loaded.x,loaded.y],[x,y]);assert.notEqual(map[loaded.y][loaded.x],'~');assert.deepEqual([loaded.teamIds,loaded.zaZone12Items,loaded.zaZone12Spent],[['kept'],['south-super'],{gogoat:true}]);assert.ok(fieldPath(map,loaded,{x:9,y:13}).length);assert.equal(restoreAdventurePosition(previous,141).district,null);
+ }
+ for(const [x,y] of [[6,1],[16,1],[1,5],[1,12],[21,8],[12,15]]){assert.ok(fieldPath(map,{x,y},{x:7,y:6}).length);assert.ok(fieldPath(map,{x,y},{x:9,y:13}).length);}
+ assert.equal(stepField({...base,x:7,y:9},'left').blocked,true);
+ const lower={...base,zaZone12PondLower:true,x:5,y:9},saved=restoreAdventurePosition(storeAdventurePosition(lower,141),141);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower],[5,9,true]);
+});

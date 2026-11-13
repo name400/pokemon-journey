@@ -6005,3 +6005,13 @@ test('Revive targets a fainted party member without changing the lead or duplica
   await call('useAdventureRevive',{boxId:reserveId,revision},409);await call('useAdventureRevive',{boxId:reserveId},409);await get();assert.equal(state.world.zaRevives,1);assert.equal(rawMon(reserveId).hp,healed.hp);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 12 wider pond recovers an older upper-park save and keeps its progress',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone12-shore-qa',displayName:'눈 공원 복원'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedMon(id,{...makeMon(1,10),boxId:id,moves:['몸통박치기']});const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:5,y:10,facing:'right',zaRoyaleRank:'E',zaZone12Items:['south-super'],zaZone12Spent:{gogoat:true}},state.revision+1);delete old.districtPosition.zone12ShoreLayout;seedWorld(old);
+  await get();assert.notDeepEqual([state.world.x,state.world.y],[5,10]);assert.equal(state.world.map[10][5],'~');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone12Items,['south-super']);assert.equal(state.world.zaZone12Spent.gogoat,true);
+  await walkTo({x:9,y:13});await call('face',{direction:'left'});await get();assert.deepEqual([state.world.x,state.world.y],[9,13]);assert.equal(state.world.interaction?.action,'zone12PondSteps');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=prior;}
+});
