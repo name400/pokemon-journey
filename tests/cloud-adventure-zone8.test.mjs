@@ -19,6 +19,17 @@ test('Jaune Street entrance honors Zone 8 access and reconnects on exit',()=>{
  assert.ok(fieldPath(zone8Map(open),zone,{x:11,y:8}).length);
 });
 
+test('garden entrance respects unlock while legacy saves can leave',()=>{
+ const garden={area:3,district:'lumiose-jaune-garden-route',interior:null,x:4,y:15,facing:'down',zaRoyaleRank:'V',teamIds:['kept']};
+ assert.equal(stepField(garden,'down').blocked,true);
+ const open={...garden,zaRoyaleRank:'F'},entered=stepField(open,'down');
+ assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone8',19,1]);
+ const restored=restoreAdventurePosition(storeAdventurePosition({...open,...entered},23),23);
+ assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],['lumiose-zone8',19,1,['kept']]);
+ const old={...restored,zaRoyaleRank:'V',facing:'up'};
+ assert.equal(stepField(old,'up').district,'lumiose-jaune-garden-route');
+});
+
 test('Jaune Plaza stall footprints keep paths, grass and old saves',()=>{
  const base={area:3,district:'lumiose-zone8',interior:null,x:21,y:8,zaRoyaleRank:'F',teamIds:['kept']},map=zone8Map(base);
  for(const [x,y] of [[21,8],[15,15]]){

@@ -2185,6 +2185,17 @@ test('Zone 16 northwest office connection respects rank and persists across relo
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 8 garden entrance requires unlock without trapping old saves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone8-garden-unlock-qa',displayName:'정원출입검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const garden={...rawWorld(),area:3,district:'lumiose-jaune-garden-route',interior:null,x:4,y:15,facing:'down',zaRoyaleRank:'V',zaMission09Complete:false,zaMysteryTrail:0};
+  seedWorld(storeAdventurePosition(garden,state.revision+1));await get();await call('move',{direction:'down'},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-garden-route',4,15]);
+  seedWorld(storeAdventurePosition({...garden,zaRoyaleRank:'F'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone8',19,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:19,y:1,facing:'up',zaRoyaleRank:'V',zaMission09Complete:false,zaMysteryTrail:0},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-garden-route',4,15]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 7 west rooftop lift persists and restores the plaza after reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone7-west-roof-qa',displayName:'광장옥상저장테스트'};
  try{
