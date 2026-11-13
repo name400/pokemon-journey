@@ -59,6 +59,20 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('adventure Toxel uses original nature for evolution after mint and reload',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-mint-toxel-qa',displayName:'폼 검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(848,30),boxId:id,nature:'hardy'});sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'modestmint']),globalThis.__adventureUser.userId,'modestmint');await get();await call('useAdventureMint',{item:'modestmint',boxId:id});await get();assert.equal(rawMon(id).nature,'hardy');assert.equal(rawMon(id).rogueNatureOverride,'modest');await call('evolve',{boxId:id,target:849});await get();assert.equal(rawMon(id).id,849);assert.equal(rawMon(id).nature,'hardy');assert.equal(rawMon(id).rogueNatureOverride,'modest');assert.equal(state.inventory.modestmint,undefined);assert.deepEqual(state.world.teamIds,[id]);}
+ finally{globalThis.__adventureUser=previous;}
+});
+
+test('Zone 15 expanded park restores an older position and retains travel and progress',async()=>{
+ const prior=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone15-park-expansion-qa',displayName:'공원 검증'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const saved=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone15',interior:null,x:8,y:5,facing:'right',zaRoyaleRank:'D',zaZone15Upper:false,zaZone15Items:['cafe-ultra'],zaZone15Spent:{pumpkaboo:true},zaMission19Complete:true},state.revision+1);seedWorld(saved);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone15',8,5]);assert.equal(state.world.map[5][8],'g');
+  await call('move',{direction:'right'});await get();assert.deepEqual([state.world.x,state.world.y],[9,5]);assert.equal(state.battle,null);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone15Items,['cafe-ultra']);assert.equal(state.world.zaZone15Spent.pumpkaboo,true);assert.equal(state.world.zaMission19Complete,true);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=priorRandom;}
+});
+
 test('Rouge mint purchase and use preserve original nature and persist battle stats',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-mint-qa',displayName:'민트 검증'};
  try{

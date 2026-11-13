@@ -46,6 +46,13 @@ test('Zone 15 street approaches retain grass, object positions and old floor sav
   assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[s.district,x,y,['kept']]);
  }
 });
+
+test('extended central park preserves legacy floor saves and gate routes',()=>{
+ const base={area:3,district:'lumiose-zone15',interior:null,zaRoyaleRank:'D',regionId:6,districtReturnRegion:1,teamIds:['kept'],zaZone15Items:['cafe-ultra']},map=zone15Map(base);
+ for(const [x,y] of [[8,5],[15,6],[9,10],[14,10],[9,13]]){assert.equal(map[y][x],'g');const old=storeAdventurePosition({...base,x,y},142),restored=restoreAdventurePosition(old,142);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds,restored.zaZone15Items],[base.district,x,y,['kept'],['cafe-ultra']]);}
+ for(const target of [{x:1,y:6},{x:1,y:13},{x:11,y:1},{x:11,y:15},{x:17,y:15},{x:17,y:7}])assert.ok(fieldPath(map,{x:11,y:9},target).length);
+ assert.equal(map[6][0],'q');assert.equal(map[6][17],'q');assert.equal(map[13][2],'l');assert.equal(zone15Visible(base,'a').species,710);assert.equal(zone15Item(base,'i'),null);
+});
 test('Zone 15 park obstacles preserve routes and migrate matching old ground saves',()=>{
  const s={area:3,district:'lumiose-zone15',interior:null,zaRoyaleRank:'D',regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone15Map(s);
  for(const [x,y] of [...ZONE15_TREES,...ZONE15_BENCHES]){assert.equal(map[y][x],'^');const old=storeAdventurePosition({...s,x,y,zaZone15Items:['cafe-ultra']},110);delete old.districtPosition.zone15ParkLayout;const restored=restoreAdventurePosition(structuredClone(old),110);assert.notEqual(map[restored.y][restored.x],'^');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone15Items,['cafe-ultra']);const mismatch=restoreAdventurePosition(structuredClone(old),111);assert.deepEqual([mismatch.x,mismatch.y],[5,9]);}
