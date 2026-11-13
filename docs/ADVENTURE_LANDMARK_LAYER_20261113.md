@@ -1,0 +1,5 @@
+# Landmark registration on the correct map layer
+
+Landmark discovery uses proximity on this project's provisional 2D maps. The Vernal ground, roof and waterside bank share a district ID but use different maps and overlapping coordinates. Previously walking on the roof or bank near the ground-level Café Woof coordinates registered the café as visited, making it available as a free map destination. New discovery now requires the Vernal ground layer. The same ground-layer rule covers Rouge Plaza's separate tower layer.
+
+Existing `zaFastTravelLandmarks` entries are retained, including unknown entries and destinations previously registered by the old code. Other districts' layer flags do not block registration. The maps, coordinates, taxi pricing and saved player positions are unchanged. Tests cover actual walkable roof/bank positions, ground discovery, repeated discovery, save restoration, existing entries, other districts and tower state. These are isolated tests of the game's current 2D approximation, not a claim that the original game's exact discovery radius has been measured.
