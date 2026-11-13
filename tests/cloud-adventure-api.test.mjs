@@ -5822,3 +5822,15 @@ test('Zone 17 promenade building restores old saves and keeps the rooftop ladder
   await walkTo({x:13,y:7});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone17Ladder');await call('zone17Ladder');await get();assert.equal(state.world.zaZone17Upper,true);await call('zone17Ladder');await get();assert.deepEqual([state.world.zaZone17Upper,state.world.zaZone17Promenade,state.world.x,state.world.y],[false,true,13,7]);assert.deepEqual(state.world.zaZone17Items,['stairs-timer']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('north boulevard trees provide all three elemental monkeys and retain captures on reload',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'north-monkeys-qa',displayName:'나무 조우 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-north-boulevard',interior:null,x:4,y:1,facing:'up',adventureBalls:{masterball:3}},state.revision+1));await get();
+  for(const [x,species] of [[4,511],[7,513],[11,515]]){
+   await walkTo({x,y:1});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'northMonkeyBattle');await call('northMonkeyBattle');assert.equal(rawWorld().encounter.speciesId,species);await call('northMonkeyBattle',{},409);await get();assert.equal(rawWorld().encounter.speciesId,species);const rev=state.revision;await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision:rev},409);await get();assert.ok(rawWorld().adventureDexSpecies.includes(species));assert.ok(state.box.some(p=>p.speciesId===species));
+  }
+  assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.equal(rawWorld().adventureBalls.masterball,0);assert.ok([511,513,515].every(id=>rawWorld().adventureDexSpecies.includes(id)));
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
