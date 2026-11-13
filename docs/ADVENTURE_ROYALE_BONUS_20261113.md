@@ -1,0 +1,9 @@
+# Z-A Royale bonus card: initial implementation
+
+Sources: [Bulbapedia: Bonus card](https://bulbapedia.bulbagarden.net/wiki/Bonus_card) and [Serebii: Z-A Royale](https://www.serebii.net/legendsz-a/z-aroyale.shtml). The original has multiple tasks and can hold three cards; the super-effective-move task requires three uses and has a 1,000 ticket-point / 50 prize-medal reward in the cited table.
+
+This initial implementation provides one super-effective card per night in ranks Y through B. Its location in the 2D battle zone is a draft, not a verified original location. Successful direct HP damage from the player's super-effective move counts once per move; opponent moves, misses, status moves and damage absorbed by a substitute do not count. Completing the card awards 1,000 ticket points immediately within the existing rank cap. Prize medals and other card types are not implemented, and rank A and the scripted Z battle are excluded. The current battle clock does not pause during a fight as the original does. A pickup marker can remain visible if the player stays in the zone after dawn, but pickup and progress are rejected in daytime.
+
+The optional card state is stored in the existing world object and is only created when collected, preserving older saves. Night identity uses the existing offset-aware Royale night index so that midnight does not reset the card. The implementation reuses the existing battle event stream and the existing persisted trainer score; duplicate requests cannot award the card twice.
+
+Representative checks cover pickup, three actual API battle hits, completing on a winning turn, persistence, duplicate rejection, rank caps, night rollover, and unrelated or unsuccessful events. The PC and mobile browser checks use a mocked API; they do not establish a deployed Sites or production D1 result.
