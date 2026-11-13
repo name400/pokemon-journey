@@ -112,8 +112,8 @@ test('snow park gates remain connected and old saves on new trees recover safely
 
 test('lower pond north bank remains separated from the staircase until the ice bridge opens',()=>{
  const base={area:3,district:'lumiose-zone12',interior:null,x:1,y:13,zaRoyaleRank:'E',zaZone12PondLower:true,teamIds:['kept'],zaZone12Spent:{delibird:true}};const map=zone12Map(base);
- assert.ok(fieldPath(map,base,{x:5,y:7}).length);assert.equal(map[8][7],'~');assert.equal(stepField({...base,x:5,y:8},'right').blocked,true);assert.equal(reachable(base,{x:9,y:13}),false);
- const saved=restoreAdventurePosition(storeAdventurePosition({...base,x:5,y:7},83),83);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower,saved.zaZone12Spent.delibird],[5,7,true,true]);
+ assert.ok(fieldPath(map,base,{x:5,y:7}).length);assert.ok(fieldPath(map,base,{x:5,y:4}).length);assert.equal(map[4][6],'~');assert.equal(map[8][7],'~');assert.equal(stepField({...base,x:5,y:4},'right').blocked,true);assert.equal(stepField({...base,x:5,y:8},'right').blocked,true);assert.equal(reachable(base,{x:9,y:13}),false);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...base,x:5,y:4},83),83);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower,saved.zaZone12Spent.delibird],[5,4,true,true]);
  const open={...saved,zaZone12IceBridge:true};assert.equal(reachable(open,{x:9,y:13}),true);assert.equal(zone12Visible(open,'v').species,713);
 });
 

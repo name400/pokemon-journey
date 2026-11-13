@@ -1854,6 +1854,7 @@ test('Zone 12 waterside route persists across reload and returns to Bleu 5',asyn
   await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector5',interior:null,x:21,y:14,facing:'right',zaRoyaleRank:'E'},state.revision+1));await get();
   await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone12PondLower],['lumiose-zone12',1,13,true]);
+  await walkTo({x:5,y:4});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone12PondLower],['lumiose-zone12',5,4,true]);assert.equal(state.world.map[4][6],'~');await call('move',{direction:'right'},409);await walkTo({x:1,y:13});
   await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector5',21,14]);assert.notEqual(state.world.zaZone12PondLower,true);
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
