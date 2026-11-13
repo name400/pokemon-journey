@@ -8,7 +8,7 @@ import {ZONE20_VISIBLE,zone20Visible} from '@/lib/cloud-adventure/adventure-miss
 import {ZONE19_VISIBLE,zone19Visible,ZONE19_TRELLIS} from '@/lib/cloud-adventure/adventure-zone19.mjs';
 import {ZONE18_VISIBLE,zone18Visible} from '@/lib/cloud-adventure/adventure-zone18.mjs';
 import {ZONE17_VISIBLE,zone17Visible} from '@/lib/cloud-adventure/adventure-zone17.mjs';
-import {ZONE16_VISIBLE,zone16Visible} from '@/lib/cloud-adventure/adventure-zone16.mjs';
+import {ZONE16_VISIBLE,zone16Visible,zone16BlueRingAt} from '@/lib/cloud-adventure/adventure-zone16.mjs';
 import {ZONE15_VISIBLE,zone15Visible,ZONE15_TREES,ZONE15_BENCHES} from '@/lib/cloud-adventure/adventure-zone15.mjs';
 import {ZONE14_VISIBLE,zone14Visible} from '@/lib/cloud-adventure/adventure-zone14.mjs';
 import {ZONE13_VISIBLE,zone13Visible,ZONE13_STUMPS} from '@/lib/cloud-adventure/adventure-zone13.mjs';
@@ -583,8 +583,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      // Bleu Plaza's island, monument and northern Florges fountain follow
      // the existing provisional tile map, not surveyed source coordinates.
      const fountain=x===19&&y===4;
-     const pool=c==='~';
-     ctx.fillStyle=fountain?'#94a8a5':c==='#'?'#839590':pool?'#72b2c1':c==='g'?'#9dbd88':c===','?'#c4bcaa':(x+y)%2?'#d5ded8':'#e4eae0';ctx.fillRect(px,py,tile,tile);
+     const pool=c==='~',blueRing=c===','&&zone16BlueRingAt(x,y);
+     ctx.fillStyle=fountain?'#94a8a5':c==='#'?'#839590':pool?'#72b2c1':blueRing?'#7da8bd':c==='g'?'#9dbd88':c===','?'#c4bcaa':(x+y)%2?'#d5ded8':'#e4eae0';ctx.fillRect(px,py,tile,tile);
      if(pool){
       ctx.fillStyle='#8cc9d1';ctx.fillRect(px+3+(x*7+y*3)%9,py+8,10,2);ctx.fillRect(px+11,py+tile-9,12,2);
       // A stone coping marks the shore without changing which tiles are water.
@@ -598,7 +598,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       ctx.fillStyle='#f7f4e7';ctx.fillRect(px+13,py+3,6,5);ctx.fillRect(px+7,py+6,5,4);ctx.fillRect(px+20,py+6,5,4);
       ctx.fillStyle='#8bd0d1';ctx.fillRect(px+3,py+16,3,7);ctx.fillRect(px+tile-6,py+16,3,7);
      }
-     if(c===','){ctx.fillStyle='#e7e2d3';ctx.fillRect(px,py+3,tile,2);ctx.fillStyle='#aaac9e';ctx.fillRect(px+(y%2?tile/2:1),py+5,2,tile-7);}
+     if(c===','){ctx.fillStyle=blueRing?'#b8d0d6':'#e7e2d3';ctx.fillRect(px,py+3,tile,2);ctx.fillStyle=blueRing?'#608c9d':'#aaac9e';ctx.fillRect(px+(y%2?tile/2:1),py+5,2,tile-7);}
      if(c==='^'){ctx.fillStyle='#8c7561';ctx.fillRect(px+3,py+9,tile-6,tile-12);ctx.fillStyle='#d0ad82';ctx.fillRect(px+2,py+5,tile-4,7);ctx.fillStyle='#f2debb';ctx.fillRect(px+6,py+5,5,7);ctx.fillRect(px+17,py+5,5,7);}
      if(x===11&&y===8){ctx.fillStyle='#879b95';ctx.fillRect(px+3,py+21,tile-6,7);ctx.fillStyle='#e6e7d9';ctx.fillRect(px+5,py+19,tile-10,5);ctx.fillStyle='#a4b2aa';ctx.beginPath();ctx.moveTo(px+tile/2,py+2);ctx.lineTo(px+tile/2+6,py+19);ctx.lineTo(px+tile/2-6,py+19);ctx.closePath();ctx.fill();ctx.fillStyle='#f4f3e7';ctx.beginPath();ctx.moveTo(px+tile/2,py+3);ctx.lineTo(px+tile/2,py+18);ctx.lineTo(px+tile/2-5,py+18);ctx.closePath();ctx.fill();}
      if(c==='g'){ctx.fillStyle='#6b9862';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}

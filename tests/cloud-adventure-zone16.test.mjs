@@ -7,7 +7,7 @@ import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restor
 test('Bleu Plaza approaches connect the three entrances to the existing crossings',()=>{
  const s={area:3,district:'lumiose-zone16',interior:null,zaRoyaleRank:'C',teamIds:['kept']},map=zone16Map(s);
  for(const [x,y] of [[11,1],[11,2],[11,3],[8,3],[8,4],[8,5],[16,8],[17,8],[21,8],[1,12],[8,12],[8,11]])assert.equal(map[y][x],',',`${x},${y}`);
- assert.equal(map[4][11],'~');assert.equal(map[6][11],'g');assert.equal(map[8][11],'f');
+ assert.equal(map[4][11],',');assert.equal(map[6][11],'g');assert.equal(map[8][11],'f');
  for(const [x,y] of [[11,1],[21,8],[1,12]]){
   assert.ok(fieldPath(map,{x,y},{x:11,y:7}).length);
   const restored=restoreAdventurePosition(storeAdventurePosition({...s,x,y},105),105);
@@ -39,10 +39,10 @@ test('Froakie is on the central monument and a spent encounter restores safely',
  assert.equal(saved.zaZone16Spent.froakie,true);assert.equal(restoreAdventurePosition(stored,57).district,null);
 });
 
-test('rounded Bleu Plaza water safely restores older positions',()=>{
+test('rounded Bleu Plaza paving preserves older positions',()=>{
  const map=zone16Map();
  for(const [x,y] of [[15,5],[7,11],[15,11]]){
-  assert.equal(map[y][x],'~');
+  assert.equal(map[y][x],',');
   const state={area:3,district:'lumiose-zone16',interior:null,x,y,regionId:6,districtReturnRegion:1,zaRoyaleRank:'C',teamIds:['kept']};
   const old=storeAdventurePosition(state,9);delete old.districtPosition.zone16Layout;
   const restored=restoreAdventurePosition(structuredClone(old),9);assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
@@ -51,10 +51,10 @@ test('rounded Bleu Plaza water safely restores older positions',()=>{
 });
 
 
-test('Bleu Plaza island has three draft crossings and safely restores earlier paths',()=>{
+test('Bleu Plaza paved ring keeps earlier paths and positions',()=>{
  const map=zone16Map();for(const [x,y] of [[8,5],[16,8],[8,11]])assert.equal(map[y][x],',');
  for(const [x,y] of [[11,4],[11,12],[6,8],[14,5],[14,11]]){
-  assert.equal(map[y][x],'~');const state={area:3,district:'lumiose-zone16',interior:null,x,y,zaRoyaleRank:'C',teamIds:['kept']};
+  assert.equal(map[y][x],',');const state={area:3,district:'lumiose-zone16',interior:null,x,y,zaRoyaleRank:'C',teamIds:['kept']};
   const old=storeAdventurePosition(state,19);old.districtPosition.zone16Layout=1;const restored=restoreAdventurePosition(structuredClone(old),19);
   assert.equal(restored.district,state.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.equal(restoreAdventurePosition(structuredClone(old),20).district,null);
  }
@@ -110,12 +110,12 @@ test('raised garden fountain keeps stair, TM, alpha and legacy positions accessi
  for(const [x,y] of ZONE16_GARDEN_FOUNTAIN){const old=storeAdventurePosition({...s,x,y},71);delete old.districtPosition.zone16GardenFountainLayout;const restored=restoreAdventurePosition(old,71);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone16Items,['battle-ultra']);assert.equal(restored.zaZone16Spent['ampharos-alpha'],true);}
 });
 
-test('western moat closes the island bypass while each of three crossings remains usable',()=>{
- const s={area:3,district:'lumiose-zone16',interior:null,x:7,y:5,zaRoyaleRank:'C',teamIds:['kept'],zaZone16Spent:{'ampharos-alpha':true},zaZone16Items:['battle-ultra']},map=zone16Map(s),bridges=[[8,5],[16,8],[8,11]];
- assert.equal(map[6][7],'~');assert.equal(stepField(s,'down').blocked,true);
- const close=(keep)=>map.map((row,y)=>[...row].map((v,x)=>bridges.some(([bx,by],i)=>i!==keep&&x===bx&&y===by)?'~':v).join(''));
- assert.equal(fieldPath(close(-1),{x:8,y:1},{x:11,y:7}).length,0);
- for(let i=0;i<bridges.length;i++)assert.ok(fieldPath(close(i),{x:8,y:1},{x:11,y:7}).length,`crossing ${i}`);
+test('blue plaza ring is walkable and preserves old saves and all entrances',()=>{
+ const s={area:3,district:'lumiose-zone16',interior:null,x:7,y:5,zaRoyaleRank:'C',teamIds:['kept'],zaZone16Spent:{'ampharos-alpha':true},zaZone16Items:['battle-ultra']},map=zone16Map(s);
+ assert.equal(map[6][7],',');assert.deepEqual([stepField(s,'down').x,stepField(s,'down').y],[7,6]);
+ // The perimeter remains connected even with the central grass blocked.
+ const ringOnly=map.map(row=>[...row].map(v=>v==='g'?'#':v).join(''));
+ for(const target of [{x:11,y:4},{x:16,y:8},{x:11,y:12},{x:6,y:8}])assert.ok(fieldPath(ringOnly,{x:8,y:5},target).length);
  for(const start of [{x:8,y:1},{x:21,y:8},{x:1,y:12}])assert.ok(fieldPath(map,start,{x:11,y:7}).length);
- const old=storeAdventurePosition({...s,x:7,y:6},400);delete old.districtPosition.zone16MoatLayout;const restored=restoreAdventurePosition(old,400);assert.notDeepEqual([restored.x,restored.y],[7,6]);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual([restored.teamIds,restored.zaZone16Items,restored.zaZone16Spent],[['kept'],['battle-ultra'],{'ampharos-alpha':true}]);assert.equal(restoreAdventurePosition(old,401).district,null);
+ const old=storeAdventurePosition({...s,x:7,y:6},400);delete old.districtPosition.zone16MoatLayout;const restored=restoreAdventurePosition(old,400);assert.deepEqual([restored.x,restored.y],[7,6]);assert.deepEqual([restored.teamIds,restored.zaZone16Items,restored.zaZone16Spent],[['kept'],['battle-ultra'],{'ampharos-alpha':true}]);assert.equal(restoreAdventurePosition(old,401).district,null);
 });
