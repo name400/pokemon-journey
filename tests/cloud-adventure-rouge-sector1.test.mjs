@@ -63,3 +63,11 @@ test('Rouge Sector 3 upper ladder and beam preserve roof saves',()=>{
  const legacy=restoreAdventurePosition(storeAdventurePosition({...lower,x:20,y:6},71),71);
  assert.deepEqual([legacy.district,legacy.x,legacy.y],['lumiose-rouge-sector3-roof',20,6]);
 });
+
+test('Zone 3 south holovator joins a distinct rooftop and preserves old ground saves',()=>{
+ const ground={area:3,district:'lumiose-zone3',interior:null,x:19,y:15,facing:'up',teamIds:['kept'],zaBunnelbyQuest:2,zaZone3StatueAntidote:true};
+ const oldOnLift=restoreAdventurePosition(storeAdventurePosition({...ground,x:19,y:14},220),220);assert.deepEqual([oldOnLift.x,oldOnLift.y,oldOnLift.teamIds],[19,14,['kept']]);assert.equal(stepField(oldOnLift,'down').blocked,undefined);
+ assert.equal(fieldDialogue(ground).action,'zone3SouthHolovator');const saved=restoreAdventurePosition(storeAdventurePosition(ground,221),221);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaBunnelbyQuest,saved.zaZone3StatueAntidote],['lumiose-zone3',19,15,['kept'],2,true]);
+ const roof={...ground,district:'lumiose-zone3-south-roof',x:6,y:11,facing:'down'},map=fieldMap(roof);assert.equal(fieldDialogue(roof).action,'zone3SouthHolovator');assert.ok(fieldPath(map,roof,{x:14,y:8}).length);assert.equal(map[4][15],'g');assert.equal(map[5][11],'#');assert.equal(map[8][11],',');
+ const reloaded=restoreAdventurePosition(storeAdventurePosition(roof,222),222);assert.deepEqual([reloaded.district,reloaded.x,reloaded.y,reloaded.teamIds,reloaded.zaBunnelbyQuest],['lumiose-zone3-south-roof',6,11,['kept'],2]);
+});

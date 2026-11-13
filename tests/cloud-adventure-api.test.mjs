@@ -6064,3 +6064,13 @@ test('Zone 12 north and west gates retain old exits and progress across reloads'
   }
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('Zone 3 southern holovator preserves saved party and reaches its Espurr roof',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone3-south-roof-qa',displayName:'남쪽 옥상 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,{...makeMon(1,20),boxId:id,moves:['몸통박치기']});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:19,y:15,facing:'up',zaBunnelbyQuest:2,zaZone3StatueAntidote:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone3SouthHolovator');await call('zone3SouthHolovator');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone3-south-roof',6,11]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaBunnelbyQuest,2);assert.equal(state.world.zaZone3StatueAntidote,true);
+  await call('zone3SouthHolovator');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone3',19,15]);await call('zone3SouthHolovator');await get();
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone3-south-roof',x:14,y:4,facing:'right'},state.revision+1));await get();globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});assert.equal(state.battle.teams[1][0].speciesId,677);await call('flee');await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaBunnelbyQuest,2);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
+});
