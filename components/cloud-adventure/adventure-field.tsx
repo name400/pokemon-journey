@@ -164,6 +164,14 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(c==='t'&&y===4&&(x===5||x===17)){ctx.fillStyle='#745b43';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle=second?'#aebcb5':'#9ab3a1';ctx.fillRect(px+6,py+7,tile-12,tile-14);ctx.fillStyle=second?'#ece0ba':'#e9cc85';ctx.fillRect(px+10,py+11,tile-20,4);}
      if(c==='t'&&museumSide21Requester(w,{tile:c,x,y})){ctx.fillStyle='#b98b72';ctx.fillRect(px+11,py+5,10,7);ctx.fillStyle='#5d7182';ctx.fillRect(px+8,py+12,16,13);}
      const spewpa=museumSide21Spot(w,{tile:c,x,y});if(spewpa&&w.zaSide21Started&&!w.zaSide21Complete&&!w.zaSide21Found?.includes(spewpa)){ctx.fillStyle='#f6f5e9';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,7,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#373d40';ctx.fillRect(px+tile/2-4,py+tile/2-1,2,2);ctx.fillRect(px+tile/2+2,py+tile/2-1,2,2);}
+     if(second&&c==='v'){
+      // Sketches, ball replica, and crafting bench are separate exhibits;
+      // the miniature visuals and tile positions are 2D approximations.
+      ctx.fillStyle='#b59b7d';ctx.fillRect(px+3,py+tile-8,tile-6,6);
+      if(x===5){ctx.fillStyle='#6a5040';ctx.fillRect(px+5,py+4,tile-10,tile-12);ctx.fillStyle='#e5d6aa';ctx.fillRect(px+8,py+7,tile-16,tile-18);ctx.fillStyle='#93a88c';ctx.fillRect(px+10,py+11,tile-20,5);}
+      else if(x===11){ctx.fillStyle='#e8dfc4';ctx.fillRect(px+6,py+4,tile-12,tile-13);ctx.fillStyle='#a8473c';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2-1,7,Math.PI,0);ctx.fill();ctx.fillStyle='#c6a579';ctx.fillRect(px+tile/2-7,py+tile/2-1,14,5);ctx.fillStyle='#503d33';ctx.fillRect(px+tile/2-2,py+tile/2-3,4,4);}
+      else{ctx.fillStyle='#755139';ctx.fillRect(px+4,py+12,tile-8,5);ctx.fillRect(px+7,py+17,3,7);ctx.fillRect(px+tile-10,py+17,3,7);ctx.fillStyle='#d9bf92';ctx.fillRect(px+6,py+10,tile-12,3);}
+     }
      if(c==='l'){ctx.fillStyle='#806b55';for(let n=0;n<4;n++)ctx.fillRect(px+4,py+5+n*6,tile-8,3);}
      if(c==='X'){ctx.fillStyle='#637e86';ctx.fillRect(px+6,py+5,tile-12,tile-10);}return;
     }

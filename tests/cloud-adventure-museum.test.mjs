@@ -15,3 +15,16 @@ test('marine gift retains the marine evolution target', async()=>{
  const {makeMon}=await import('../lib/game.mjs');const {evolutionOptions}=await import('../lib/evolution.mjs');
  const spewpa=makeMon(30297,12);assert.equal(spewpa.formName,'marine');assert.ok(evolutionOptions(spewpa,{},[],{}).some(o=>o.id===30093&&o.ready));
 });
+
+test('Hisui exhibition cases keep old positions and Spewpa routes accessible',async()=>{
+ const {MUSEUM_HISUI_EXHIBITS,MUSEUM_SPEWPA_SPOTS}=await import('../lib/cloud-adventure/adventure-museum.mjs');
+ const world={area:3,district:'lumiose-museum-front',interior:'museum2',x:18,y:6,facing:'up',teamIds:['kept'],zaSide21Started:true,zaSide21Found:['museum1-0']},map=fieldMap(world);
+ for(const exhibit of MUSEUM_HISUI_EXHIBITS){
+  assert.equal(map[exhibit.y][exhibit.x],'v');
+  const front={...world,x:exhibit.x,y:exhibit.y+1,facing:'up'};
+  assert.ok(fieldPath(map,world,front).length);assert.match(fieldDialogue(front).name,new RegExp(exhibit.name));
+  const old=restoreAdventurePosition(storeAdventurePosition({...world,x:exhibit.x,y:exhibit.y},44),44);
+  assert.deepEqual([old.x,old.y,old.interior,old.teamIds,old.zaSide21Found],[exhibit.x,exhibit.y,'museum2',['kept'],['museum1-0']]);
+ }
+ for(const [x,y] of MUSEUM_SPEWPA_SPOTS.museum2){assert.equal(map[y][x],'t');assert.ok(fieldPath(map,world,{x,y}).length);}
+});
