@@ -45,6 +45,15 @@ test('Centrico taxis and landmark registration preserve gates and existing walka
  const lab={...plaza,district:'lumiose-floral',x:5,y:6};assert.equal(recordLandmarks(lab),true);assert.equal(recordLandmarks(lab),false);assert.deepEqual(registeredLandmarks(lab).map(p=>p.id),['research-lab']);assert.ok(mapTravelDestinations(lab).some(p=>p.id==='research-lab'));
 });
 
+test('Café Bataille destination uses its ground entrance and the mission gate',async()=>{
+ const {recordLandmarks,taxiDestinations,mapTravelDestinations,groundDestinationFlags}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const s={area:3,district:'lumiose-zone6',interior:null,x:19,y:3,facing:'left',zaRoyaleRank:'Y',zaMission06Started:true,zaZone6Layer:'ground',teamIds:['kept']};
+ assert.equal(fieldMap(s)[3][19],',');assert.equal(fieldMap(s)[3][18],'q');assert.ok(fieldDialogue(s).actions.some(a=>a.action==='batailleBlend'));
+ assert.equal(recordLandmarks({...s,zaZone6Layer:'roof'}),false);assert.equal(recordLandmarks({...s,zaZone6Layer:'canal'}),false);assert.equal(recordLandmarks(s),true);assert.ok(mapTravelDestinations(s).some(p=>p.id==='cafe-bataille'));
+ assert.ok(taxiDestinations(s).some(p=>p.id==='cafe-bataille'));assert.ok(!taxiDestinations({...s,zaMission06Started:false,zaRoyaleRank:'Y'}).some(p=>p.id==='cafe-bataille'));assert.deepEqual(groundDestinationFlags('lumiose-zone6'),{zaZone6Layer:'ground'});
+ const restored=restoreAdventurePosition(storeAdventurePosition(s,66),66);assert.ok(mapTravelDestinations(restored).some(p=>p.id==='cafe-bataille'));assert.deepEqual(restored.teamIds,['kept']);
+});
+
 test('taxi landmarks land on walkable tiles facing their existing entrances',async()=>{
  const {FAST_TRAVEL_LANDMARKS}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');const expected={'museum':'enterMuseum','gare':'stationLeave','hotel-z':'enterHotel','research-lab':'enterLumioseLab','richissime':'enterRichissime','le-wow':'enterLeWow','le-nah':'enterLeNah','sushi':'enterSushi','quasartico':'enterQuasarticoOffice','cafe-woof':'woofNatural','cafe-gallant':'enterCafeGallant','cafe-nouveau2':'cafe2Water'};
  for(const p of FAST_TRAVEL_LANDMARKS){const s={area:3,...p,interior:null,zaMission10Stage:6,zaRoyaleRank:'V',zaRougeStreetSouth:false};assert.ok(['.',',',';','g','H'].includes(fieldMap(s)[s.y][s.x]),p.id);const d=fieldDialogue(s),actions=d?.actions||(d?.action?[d]:[]);if(expected[p.id])assert.ok(actions.some(a=>a.action===expected[p.id]),`${p.id}: ${d?.name}`);if(p.id==='richissime')assert.match(d.name,/리시심/);}

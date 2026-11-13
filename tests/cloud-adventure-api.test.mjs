@@ -1894,6 +1894,16 @@ test('Zone 10 roof above canal preserves floor and saved progress',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Café Bataille registers on ground and supports map and taxi arrival',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'bataille-travel-qa',displayName:'카페 이동'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone6',interior:null,x:14,y:1,facing:'right',zaMission06Started:true,zaMission04Complete:true,zaRoyaleRank:'Y',zaZone6Layer:'ground',zaZone6Items:['south-potion'],zaFastTravelCenters:['hotel']},state.revision+1));await get();for(const direction of ['right','right','down','down','right','down','down','right','right','up'])await call('move',{direction});await get();assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='cafe-bataille'));assert.deepEqual(state.world.zaZone6Items,['south-potion']);
+  const wallet=structuredClone(state.wallet);await call('mapFastTravel',{destination:'hotel'});await get();seedWorld(storeAdventurePosition({...rawWorld(),zaZone6Layer:'roof'},state.revision+1));await get();await call('mapFastTravel',{destination:'cafe-bataille'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone6Layer],['lumiose-zone6',19,3,'ground']);assert.ok(state.world.interaction.actions.some(p=>p.action==='batailleBlend'));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone6Items,['south-potion']);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-south-boulevard',interior:null,x:14,y:7,facing:'up'},state.revision+1));sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(710,globalThis.__adventureUser.userId);await get();const revision=state.revision;await call('taxi-cafe-bataille');await call('taxi-cafe-bataille',{revision},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone6Layer],['lumiose-zone6',19,3,'ground']);assert.equal(state.wallet.coins,0);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.world.zaZone6Items,['south-potion']);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Zone 6 old café footprint save preserves progress and wallet',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone6-cafe-qa',displayName:'카페저장테스트'};
  try{
