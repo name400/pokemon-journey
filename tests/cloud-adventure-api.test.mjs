@@ -347,6 +347,19 @@ test('field obstacles accept stored English move IDs while preserving type and s
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
+test('documented bramble moves work across zones and persist without duplicate actions',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bramble-moves-qa',displayName:'가시덤불 검사'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),mon=makeMon(150,50);
+  for(const c of [
+   {district:'lumiose-zone3',x:10,y:8,facing:'up',action:'zone3CentralBramble',flag:'zaZone3CentralBrambleCleared',move:'X-Scissor'},
+   {district:'lumiose-zone7',x:10,y:10,facing:'right',action:'zone7SouthBrambles',flag:'zaZone7SouthBramblesCleared',move:'Psycho Cut'},
+   {district:'lumiose-zone19',x:11,y:4,facing:'down',action:'zone19Brambles',flag:'zaZone19BramblesCleared',move:'Razor Leaf'},
+  ]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:c.district,interior:null,x:c.x,y:c.y,facing:c.facing,zaRoyaleRank:'B',[c.flag]:false},state.revision+1));seedMon(id,{...mon,moves:[c.move],pp:{}});await get();assert.equal(state.world.interaction.action,c.action);const before=state.revision;await call(c.action);assert.equal(rawWorld()[c.flag],true);assert.deepEqual(rawMon(id).moves,[c.move]);assert.equal(rawMon(id).hp,mon.hp);await call(c.action,{revision:before},409);await get();assert.equal(rawWorld()[c.flag],true);await call(c.action,{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Mission 37 final Nihil Light battle preserves party, retry and old saves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-nihil-qa',displayName:'니힐라이트 검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),before=JSON.stringify(rawMon(id));
