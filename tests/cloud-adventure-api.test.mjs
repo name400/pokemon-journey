@@ -2932,6 +2932,21 @@ test('Hibernal Pokemon Center heals and sells supplies on the Mission 33 route',
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Café Bataille serves its menu atomically and preserves progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'cafe-bataille-qa',displayName:'카페 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,other='bataille-reserve',reserve={...makeMon(25,10),boxId:other,hp:0,status:'독',pp:{thundershock:1}};
+  sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);
+  const damaged={...rawMon(id),hp:1,status:'독',pp:{tackle:1},friendship:70};seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(1000,globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),teamIds:[id,other],area:3,district:'lumiose-zone6',interior:null,x:19,y:3,facing:'left',zaMission10Stage:9,zaZone6Layer:'ground'},state.revision+1));await get();
+  assert.equal(state.world.interaction.actions.length,11);const rev=state.revision;await call('batailleWater');assert.equal(state.wallet.coins,700);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(rawMon(id).friendship,71);assert.equal(rawMon(other).hp,rawMon(other).maxHp);assert.equal(rawMon(other).status,null);
+  await call('batailleWater',{revision:rev},409);await get();assert.equal(state.wallet.coins,700);assert.equal(state.world.zaMission10Stage,9);assert.equal(rawMon(id).friendship,71);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(1000,globalThis.__adventureUser.userId);await get();await call('batailleKomala');assert.equal(state.wallet.coins,170);assert.equal(rawMon(id).friendship,72);
+  seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(299,globalThis.__adventureUser.userId);await get();const before=rawMon(id);await call('batailleWater',{},409);assert.deepEqual(rawMon(id),before);assert.equal(state.wallet.coins,299);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:10,y:4,facing:'up'},state.revision+1));await get();await call('batailleWater',{},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Nouveau Cafe 2 sells restorative drinks without changing mission progress',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'nouveau-cafe2-qa',displayName:'누보카페 2호'};
  try{

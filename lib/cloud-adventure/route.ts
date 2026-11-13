@@ -69,7 +69,7 @@ import {MISSION19_CANARI,MISSION19_GWYNN,MISSION19_IVOR,sewerInspected,sewerBran
 import {RANK_E_TRAINERS,RANK_E_EXTRA_POSITIONS,rankEPoints,rankEWins} from '@/lib/cloud-adventure/adventure-rank-d.mjs';
 import {MISSION15_CASES,mission15Case,mission15Complete} from '@/lib/cloud-adventure/adventure-mission15.mjs';
 import {RANK_F_TRAINERS,RANK_F_EXTRA_POSITIONS,rankFPoints,rankFWins,RANK_E_MANI,RANK_E_TARRAGON,RANK_E_CANARI} from '@/lib/cloud-adventure/adventure-rank-e.mjs';
-import {cafeWoofDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
+import {cafeWoofDrink,cafeBatailleDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
 import {sushiCourseTeam,SUSHI_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-sushi.mjs';
 import {leWowAvailable,leWowCourseTeam,LE_WOW_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-wow.mjs';
 import {side88Available,side88Origin,side88Destination,side88Team} from '@/lib/cloud-adventure/adventure-side88.mjs';
@@ -823,6 +823,11 @@ else if(b.action==='useFreshWater'){if(s.combat)throw Error('전투 후 도구�
 else if(b.action==='enterHotel'){if(s.combat||s.interior||s.district!=='lumiose'||cell()!=='J')throw Error('미르시티 호텔 입구에서 들어가세요.');s.interior='hotel';s.x=11;s.y=13;s.facing='up';s.log=['호텔 로비에 들어왔다. 남쪽 출구로 광장에 돌아갈 수 있다.'];}
 else if(['hotelLiftUp','hotelLiftDown','hotelLiftRoof'].includes(b.action)){if(s.zaIntroStage==='reception')throw Error('먼저 접수처에서 202호 열쇠를 받으세요.');if(['room','door'].includes(s.zaIntroStage)&&b.action==='hotelLiftRoof')throw Error('먼저 202호에서 쉬고 동료를 만나세요.');const destination=b.action==='hotelLiftUp'?'hotel2f':b.action==='hotelLiftDown'?'hotel':'hotelRoof';if(s.combat||s.district!=='lumiose'||cell()!=='i'||!['hotel','hotel2f','hotelRoof'].includes(s.interior)||s.interior===destination)throw Error('호텔 엘리베이터 앞에서 다른 층을 선택하세요.');s.interior=destination;s.x=destination==='hotel'?14:11;s.y=destination==='hotel'?6:12;s.facing='down';s.log=[destination==='hotel2f'?'엘리베이터를 타고 호텔 2층에 왔다. 왼쪽 문은 202호다.':destination==='hotelRoof'?'엘리베이터를 타고 호텔 옥상에 왔다. 가구 배치는 초안이다.':'엘리베이터를 타고 호텔 로비로 돌아왔다.'];}
 else if(b.action==='enterHotel202'){if(s.zaIntroStage==='reception')throw Error('먼저 202호 열쇠를 받으세요.');if(s.combat||s.district!=='lumiose'||s.interior!=='hotel2f'||cell()!=='o')throw Error('호텔 2층의 202호 앞에서 들어가세요.');s.interior='hotel202';s.x=11;s.y=13;s.facing='up';s.log=['호텔 202호에 들어왔다. 남쪽 문으로 복도에 돌아갈 수 있다.'];}
+else if(cafeBatailleDrink(b.action)){
+ const drink=cafeBatailleDrink(b.action)!,spot=interactionAt(s);if(s.combat||s.adventureCatchWindow||s.interior||s.district!=='lumiose-zone6'||zone6Layer(s)!=='ground'||spot?.tile!=='q'||spot.x!==18||spot.y!==3)throw Error('Café Bataille의 주문대를 확인하세요.');
+ const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
+ reward=-drink.price;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,1);mons.set(id,rested);changed.set(id,rested);}s.log=[`${drink.name}을(를) 주문해 파티가 회복했다.`,`${drink.price}코인을 지불했다.`];
+}
 else if(cafeWoofDrink(b.action)){
  const drink=cafeWoofDrink(b.action)!;if(s.combat||s.interior||s.district!=='lumiose-vernal'||cell()!=='q')throw Error('뚜뚜 카페에서 음료를 주문하세요.');
  const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
