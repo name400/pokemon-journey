@@ -4,6 +4,7 @@ import {COLORFUL_SCREW_SITES,colorfulScrewAvailable} from '../lib/cloud-adventur
 import {fieldMap,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {adventureCaptureAttempt} from '../lib/cloud-adventure/adventure-balls.mjs';
 import {canariLevel,canariBattleExperience,canariPrizeMoney,canariCrystalShards} from '../lib/cloud-adventure/adventure-canari.mjs';
+import {SCREW_ROOFS} from '../lib/cloud-adventure/adventure-screw-roofs.mjs';
 
 test('three initial screws are accessible once and preserve unknown save records',()=>{
  const starts=[[11,14],[6,11],[4,7]];
@@ -33,5 +34,11 @@ test('each staged plush applies its documented level and old red saves retain 5%
 });
 
 test('all additional mapped screws render and remain independently collectible',()=>{
- for(const p of COLORFUL_SCREW_SITES.slice(3)){const s={area:3,...p,zaRedCanariPlush:true,zaRoyaleRank:'A'},map=fieldMap(s);assert.equal(map[p.y]?.[p.x],'!',p.id);const starts=[];for(let y=0;y<map.length;y++)for(let x=0;x<map[y].length;x++)if('XWEljho'.includes(map[y][x]))starts.push({x,y});assert.ok(starts.some(start=>fieldPath(map,start,p).length>0),`${p.id}: entry path`);assert.notEqual(fieldMap({...s,zaColorfulScrewsFound:[p.id]})[p.y]?.[p.x],'!',p.id);}
+ assert.equal(new Set(COLORFUL_SCREW_SITES.map(p=>p.id)).size,COLORFUL_SCREW_SITES.length);
+ for(const p of COLORFUL_SCREW_SITES.slice(3)){const s={area:3,...p,zaRedCanariPlush:true,zaRoyaleRank:'A',zaMission15Stage:2},map=fieldMap(s);assert.equal(map[p.y]?.[p.x],'!',p.id);const starts=[];for(let y=0;y<map.length;y++)for(let x=0;x<map[y].length;x++)if('XWEljho'.includes(map[y][x]))starts.push({x,y});assert.ok(starts.some(start=>fieldPath(map,start,p).length>0),`${p.id}: entry path`);assert.notEqual(fieldMap({...s,zaColorfulScrewsFound:[p.id]})[p.y]?.[p.x],'!',p.id);}
+ for(const p of COLORFUL_SCREW_SITES.filter(p=>p.requiresGlide)){const s={area:3,...p,zaRedCanariPlush:true,zaRoyaleRank:'A',zaMission15Stage:1};assert.notEqual(fieldMap(s)[p.y]?.[p.x],'!',p.id);assert.equal(fieldMap({...s,zaMission15Stage:2})[p.y]?.[p.x],'!',p.id);}
+});
+
+test('old saves on new street entrances retain their position',()=>{
+ for(const p of SCREW_ROOFS){const old={area:3,district:p.district,interior:null,x:p.x,y:p.y,facing:'up',teamIds:['kept'],zaColorfulScrewsFound:['old-future-id']};const restored=restoreAdventurePosition(storeAdventurePosition(old,42),42);assert.deepEqual([restored.district,restored.x,restored.y],[p.district,p.x,p.y]);assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaColorfulScrewsFound,['old-future-id']);}
 });
