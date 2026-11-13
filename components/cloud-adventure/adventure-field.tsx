@@ -85,6 +85,42 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
     const royaleEntry=royaleFieldEntry(w);if(c==='T'&&royaleEntry&&x===royaleEntry.x&&y===royaleEntry.y){ctx.fillStyle='#ddd3c6';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#a84c54';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('로열',px+tile/2,py+20);return;}
     // Museum and laboratory maps have their own structures, not outdoor trees.
     // The 2D outlines and fixtures remain draft interpretations of the sources.
+    if(w.district==='lumiose-rust'&&w.interior==='rustOffice'){
+     // The office has black marble, a desk, bamboo and a black-and-white
+     // court. Their positions and the compressed room outline are 2D drafts.
+     // https://www.pokepedia.fr/Agence_D%C3%A9rouillard
+     if(c==='#'){
+      ctx.fillStyle='#25292c';ctx.fillRect(px,py,tile,tile);
+      if(w.map[y+1]?.[x]&&w.map[y+1][x]!=='#'){
+       ctx.fillStyle='#72383e';ctx.fillRect(px,py+4,tile,tile-8);ctx.fillStyle='#b49464';ctx.fillRect(px,py+3,tile,2);ctx.fillRect(px,py+tile-5,tile,2);
+       ctx.fillStyle='#292d2f';ctx.fillRect(px+tile/2-2,py+5,4,tile-10);
+      }else{ctx.fillStyle='#394043';ctx.fillRect(px+2,py+tile-4,tile-4,2);}
+      return;
+     }
+     const court=x>=7&&x<=15&&y>=7&&y<=12;
+     ctx.fillStyle=court?(x<=10?((x+y)%2?'#555957':'#626662'):((x+y)%2?'#d4d3c8':'#e4e1d4')):(x+y)%2?'#34383a':'#3d4141';ctx.fillRect(px,py,tile,tile);
+     if(court){
+      // Fine gravel and dark inlaid boundary are visual, not obstacles.
+      ctx.fillStyle=x<=10?'#89908a':'#b4b4ac';ctx.fillRect(px+5+(x*5+y)%11,py+8,2,2);ctx.fillRect(px+tile-9,py+tile-10,2,2);
+      ctx.fillStyle='#474c4c';if(x===7)ctx.fillRect(px+2,py,2,tile);if(x===15)ctx.fillRect(px+tile-4,py,2,tile);if(y===7)ctx.fillRect(px,py+2,tile,2);if(y===12)ctx.fillRect(px,py+tile-4,tile,2);
+      if(x===11){ctx.fillStyle='#8c8b83';ctx.fillRect(px+tile/2-1,py,2,tile);}
+     }else{
+      ctx.fillStyle='#666a65';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py+2,1,tile-4);
+      if(x>=10&&x<=12&&y>=13){ctx.fillStyle='#1f2426';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#8e938c';ctx.fillRect(px+4,py+tile-5,tile-8,1);}
+     }
+     if(c==='k'){
+      ctx.fillStyle='#241e1c';ctx.fillRect(px,py+5,tile,tile-9);ctx.fillStyle='#624940';ctx.fillRect(px,py+4,tile,6);ctx.fillStyle='#bc9c6b';ctx.fillRect(px,py+10,tile,2);ctx.fillStyle='#3e302b';ctx.fillRect(px+2,py+14,tile-4,tile-20);
+     }
+     if(c==='^'){
+      ctx.fillStyle='#6c6252';ctx.fillRect(px+5,py+tile-7,tile-10,4);ctx.fillStyle='#729167';for(let j=0;j<3;j++){ctx.fillRect(px+8+j*7,py+5+(j%2)*2,3,tile-12);ctx.fillRect(px+5+j*7,py+10,8,2);}
+     }
+     if(c==='d'||c==='z'){
+      // People mark the existing interaction tiles; their costumes are illustrative.
+      ctx.fillStyle='#ddbc9b';ctx.beginPath();ctx.arc(px+tile/2,py+tile*.32,tile*.11,0,Math.PI*2);ctx.fill();ctx.fillStyle=c==='d'?'#682d38':'#525d56';ctx.fillRect(px+tile*.34,py+tile*.45,tile*.32,tile*.37);ctx.fillStyle='#d8bd8b';ctx.fillRect(px+tile*.44,py+tile*.47,tile*.12,tile*.07);
+     }
+     if(c==='X'){ctx.fillStyle='#655f52';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#c6b38d';ctx.fillRect(px+8,py+6,tile-16,tile-12);ctx.fillStyle='#4b5250';ctx.fillRect(px+tile/2-1,py+6,2,tile-12);}
+     return;
+    }
     if(w.district==='lumiose-museum-front'){
      const inside=w.interior==='museum1'||w.interior==='museum2',second=w.interior==='museum2';
      if(!inside){
