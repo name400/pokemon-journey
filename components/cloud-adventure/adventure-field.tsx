@@ -549,7 +549,46 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='g'){ctx.fillStyle='#5e8f58';for(let j=0;j<4;j++){const h=5+(x+y+j)%5;ctx.fillRect(px+4+j*7,py+tile-5-h,2,h);}ctx.fillStyle='#b4d393';ctx.fillRect(px+7+(x*3+y)%12,py+8,3,2);}
      if(c==='X'){ctx.fillStyle='#d3dec7';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#4a8272';ctx.fillRect(px+3,py+4,4,tile-8);ctx.fillRect(px+tile-7,py+4,4,tile-8);ctx.fillStyle='#a8ded0';ctx.fillRect(px+8,py+8,tile-16,tile-16);}return;
     }
-    if(w.district==='lumiose-galerie-lune'&&!w.interior){ctx.fillStyle=c==='#'?'#8e8291':c===','?'#d6d2ca':(x+y)%2?'#e4dce0':'#f1e9eb';ctx.fillRect(px,py,tile,tile);if(c==='.'&&x>=8&&x<=14&&y>=4&&y<=9){ctx.fillStyle='rgba(166,200,211,.24)';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,tile*.3,0,Math.PI*2);ctx.fill();}if('abcdefghs'.includes(c)){ctx.fillStyle=c==='s'?'#6f9b9a':'#a66b82';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='s'?'미용실':'상점',px+tile/2,py+20);}if('WEX'.includes(c)){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(w.district==='lumiose-galerie-lune'&&!w.interior){
+     // Galerie de la Lune has a glass-domed central hall and three access
+     // corridors. The 2D footprint, boutique order and details are drafts.
+     // https://www.pokepedia.fr/Galerie_Clair_de_Lune
+     const boutique='abcdefgh'.includes(c),salon=c==='s',hall=x>=6&&x<=16&&y>=3&&y<=10;
+     if(c==='#'){
+      ctx.fillStyle='#9e9195';ctx.fillRect(px,py,tile,tile);
+      const nearby=[w.map[y-1]?.[x],w.map[y+1]?.[x],w.map[y]?.[x-1],w.map[y]?.[x+1]].some(t=>t&&t!=='#');
+      if(nearby){ctx.fillStyle='#d1bfb3';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e8dbcc';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#a68c7d';ctx.fillRect(px,py+tile-4,tile,4);ctx.fillStyle='#f3e7d7';ctx.fillRect(px+3,py+4,tile-6,3);}
+      return;
+     }
+     // A tiled stone floor and curved glass reflection make the central hall
+     // distinct from the adjoining passages without changing any map tiles.
+     ctx.fillStyle=hall?((x+y)%2?'#d8d2c9':'#e8e1d6'):((x+y)%2?'#c7bcb1':'#d7cdc0');ctx.fillRect(px,py,tile,tile);
+     ctx.fillStyle=hall?'#bcb2a8':'#ae9f92';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py+2,2,tile-4);
+     if(hall&&!boutique&&!salon){
+      ctx.save();ctx.beginPath();ctx.rect(px,py,tile,tile);ctx.clip();
+      const cx=11.5*tile,cy=7*tile,rx=4.35*tile,ry=3.1*tile;
+      ctx.fillStyle='rgba(176,216,218,.22)';ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='rgba(240,250,244,.65)';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.clip();
+      ctx.strokeStyle='rgba(115,155,159,.42)';ctx.lineWidth=2;for(const dx of [-.65,-.3,0,.3,.65]){ctx.beginPath();ctx.moveTo(cx+dx*rx,cy-ry);ctx.lineTo(cx+dx*rx,cy+ry);ctx.stroke();}
+      ctx.beginPath();ctx.ellipse(cx,cy,rx*.78,ry*.55,0,0,Math.PI*2);ctx.stroke();ctx.restore();
+     }
+     if(boutique||salon){
+      // Stylised shopfronts stand on their existing interaction cells; these
+      // are not a survey of individual original boutique facades.
+      const palette=['#a64f64','#668890','#a37559','#8f6a94','#bc785c','#527c87','#8a7564','#7d6685'];
+      ctx.fillStyle='#a89686';ctx.fillRect(px+1,py+3,tile-2,tile-5);ctx.fillStyle='#ead8c6';ctx.fillRect(px+3,py+5,tile-6,tile-7);
+      ctx.fillStyle=salon?'#537f81':palette['abcdefgh'.indexOf(c)];ctx.fillRect(px+3,py+5,tile-6,6);
+      ctx.fillStyle='#f8e5c5';for(let j=5;j<tile-4;j+=8)ctx.fillRect(px+j,py+5,3,6);
+      ctx.fillStyle='#54757b';ctx.fillRect(px+6,py+13,tile-12,tile-17);ctx.fillStyle='#d7ebdf';ctx.fillRect(px+8,py+15,tile-16,tile-21);
+      ctx.fillStyle='#eed6aa';ctx.fillRect(px+5,py+tile-4,tile-10,2);
+      if(salon){ctx.fillStyle='#f2ece4';ctx.fillRect(px+tile/2-2,py+15,4,8);ctx.fillStyle='#a64b57';ctx.fillRect(px+tile/2-2,py+17,4,2);}
+      else{ctx.fillStyle='#e8b9a6';ctx.fillRect(px+tile/2-3,py+16,6,7);ctx.fillRect(px+tile/2-5,py+18,10,2);}
+     }
+     if(c==='z'){ctx.fillStyle='#806e76';ctx.beginPath();ctx.arc(px+tile/2,py+tile*.38,tile*.11,0,Math.PI*2);ctx.fill();ctx.fillStyle='#534f5a';ctx.fillRect(px+tile*.37,py+tile*.5,tile*.26,tile*.3);}
+     if(c==='W'||c==='E'||c==='X'){ctx.fillStyle='#7c9693';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#dbe7d8';ctx.fillRect(px+6,py+6,tile-12,tile-12);ctx.fillStyle='#93b5ad';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
+     return;
+    }
     if(w.district==='lumiose-ombrage-arcade'&&!w.interior){ctx.fillStyle=c==='#'?'#80747c':c===','?'#d9d4ce':'#eee3e0';ctx.fillRect(px,py,tile,tile);if(c===','&&x>=9&&x<=13){ctx.fillStyle='rgba(129,190,197,.20)';ctx.fillRect(px+2,py+1,tile-4,4);}if(c==='u'){ctx.fillStyle='#d6b857';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();}if('abcdefghijkl mns'.replace(/ /g,'').includes(c)){ctx.fillStyle=c==='s'?'#66999d':'#a66b82';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='s'?'미용실':'상점',px+tile/2,py+20);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-rouge-sector4'&&!w.interior){ctx.fillStyle=c==='#'?'#8a7472':c==='g'?'#a8c7cb':c===','?'#b8b2aa':(x+y)%2?'#e2d8ca':'#eee5d7';ctx.fillRect(px,py,tile,tile);if(c==='q'||c==='W'||c==='E'){ctx.fillStyle=c==='q'?'#715c73':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'상점가':'출구',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-north-rouge-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#827d7a':c==='b'?'#a68060':c==='n'?'#b59d78':(x+y)%2?'#ddd4c5':'#eee6d7';ctx.fillRect(px,py,tile,tile);if(c==='j'||c==='q'||c==='l'){ctx.fillStyle=c==='j'||c==='l'?'#936e40':'#759a77';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='j'?'승강기':c==='l'?'사다리':'옥상',px+tile/2,py+20);}return;}
