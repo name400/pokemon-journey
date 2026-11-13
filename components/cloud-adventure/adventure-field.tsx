@@ -764,15 +764,17 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(c==='X'||c==='W'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#a5cfb8';ctx.fillRect(px+8,py+7,tile-16,tile-14);}
      if(c==='j'){ctx.fillStyle='#6c7d78';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#dfc678';ctx.fillRect(px+7,py+5,tile-14,tile-10);ctx.fillStyle='#a1d5ca';ctx.fillRect(px+10,py+7,tile-20,tile-14);}return;}
     if(w.district==='lumiose-zone11'&&!w.interior){
-     // The Saison Canal separates the banks. Beach and path details are a
-     // visual approximation; the underlying collision and encounter tiles stay intact.
-     const aquatic=zone11WaterAt(w.map,x,y),shore=c!=='g'&&c!=='#'&&!aquatic&&(zone11WaterAt(w.map,x,y-1)||zone11WaterAt(w.map,x,y+1));
-     ctx.fillStyle=c==='#'?'#597573':c==='g'?'#87af76':c===','?'#b9ad95':shore?'#c6b996':y<7?'#a9c99a':'#c9c2a6';ctx.fillRect(px,py,tile,tile);
+     // The high bank and the sand by the canal are visual approximations;
+     // the existing stairs, collision and encounter tiles stay unchanged.
+     const high=w.zaZone11Upper===true,aquatic=zone11WaterAt(w.map,x,y);
+     const shore=!high&&(c==='.'||c===',')&&[[x,y-1],[x,y+1],[x-1,y],[x+1,y]].some(([sx,sy])=>zone11WaterAt(w.map,sx,sy));
+     ctx.fillStyle=c==='#'?(high?'#657867':'#597573'):c==='g'?(high?'#91ba7d':'#87af76'):shore?'#d1bf96':c===','?'#b9ad95':high?'#bdcaa4':y<7?'#a9c99a':'#c9c2a6';ctx.fillRect(px,py,tile,tile);
      if(c==='#'){
       // Existing blocked boundary reads as an embankment, not a walkable bank.
-      ctx.fillStyle='#718d81';ctx.fillRect(px+1,py+1,tile-2,tile-4);ctx.fillStyle='#a4b6a4';ctx.fillRect(px+1,py+1,tile-2,3);ctx.fillStyle='#526e68';ctx.fillRect(px,py+tile-4,tile,4);
+      ctx.fillStyle=high?'#84917c':'#718d81';ctx.fillRect(px+1,py+1,tile-2,tile-4);ctx.fillStyle=high?'#b7c3a5':'#a4b6a4';ctx.fillRect(px+1,py+1,tile-2,3);ctx.fillStyle=high?'#596f60':'#526e68';ctx.fillRect(px,py+tile-4,tile,4);
+      if(high){ctx.fillStyle='#a1ae92';ctx.fillRect(px+3,py+9,11,3);ctx.fillRect(px+16,py+18,12,3);}
      }
-     if(c===','){ctx.fillStyle='#a39680';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+4,2,tile-6);}
+     if(c===','&&!shore){ctx.fillStyle='#a39680';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+4,2,tile-6);}
      if(aquatic){
       canalWater(px,py,x,y);ctx.fillStyle='#548d9c';ctx.fillRect(px,py+tile/2,tile,2);
       ctx.fillStyle='#506f70';if(!zone11WaterAt(w.map,x,y-1))ctx.fillRect(px,py,tile,3);if(!zone11WaterAt(w.map,x,y+1))ctx.fillRect(px,py+tile-3,tile,3);
@@ -780,7 +782,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(c==='h'){ctx.fillStyle='#867b68';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#e6d9bc';for(let n=7;n<tile-5;n+=6)ctx.fillRect(px+6,py+n,tile-12,3);}
      if(c==='u'&&w.zaSide72Stage===1){ctx.fillStyle='#f8f4e9';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ad514b';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,4);ctx.fillStyle='#353638';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}
      if(c==='z'){ctx.fillStyle='#c9b994';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#f6e5b2';ctx.fillRect(px+tile/2-2,py+5,4,tile-10);ctx.fillRect(px+5,py+tile/2-2,tile-10,4);}
-     if(shore){ctx.fillStyle='#a99f7e';ctx.fillRect(px+4+(x%3)*4,py+6,5,2);ctx.fillRect(px+18,py+22,4,2);}
+     if(shore){ctx.fillStyle='#a99f7e';ctx.fillRect(px+4+(x%3)*4,py+6,5,2);ctx.fillRect(px+18,py+22,4,2);ctx.fillStyle='#e1d1aa';if(zone11WaterAt(w.map,x,y-1))ctx.fillRect(px,py+1,tile,2);if(zone11WaterAt(w.map,x,y+1))ctx.fillRect(px,py+tile-3,tile,2);}
      if(c==='g'){ctx.fillStyle='#5e8f58';for(let j=0;j<4;j++){const h=5+(x+y+j)%5;ctx.fillRect(px+4+j*7,py+tile-5-h,2,h);}ctx.fillStyle='#b4d393';ctx.fillRect(px+7+(x*3+y)%12,py+8,3,2);}
      if(c==='X'){ctx.fillStyle='#d3dec7';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#4a8272';ctx.fillRect(px+3,py+4,4,tile-8);ctx.fillRect(px+tile-7,py+4,4,tile-8);ctx.fillStyle='#a8ded0';ctx.fillRect(px+8,py+8,tile-16,tile-16);}return;
     }
