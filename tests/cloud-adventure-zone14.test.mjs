@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone14Map,zone14Encounter,zone14Visible,zone14Item,ZONE14_EQUIPMENT} from '../lib/cloud-adventure/adventure-zone14.mjs';
+import {zone14Map,zone14Encounter,zone14Visible,zone14Item,ZONE14_EQUIPMENT,ZONE14_CENTRAL_CONVERTERS} from '../lib/cloud-adventure/adventure-zone14.mjs';
 import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone fourteen substation gate and saved position',()=>{
  const base={area:3,district:'lumiose-magenta-canal-route',interior:null,x:10,y:1,facing:'up',zaRoyaleRank:'E'};assert.equal(stepField(base,'up').blocked,true);
@@ -70,4 +70,25 @@ test('draft substation equipment preserves routes and migrates old occupied posi
  }
  const current=storeAdventurePosition({...state,x:6,y:10},64);assert.equal(current.districtPosition.zone14Layout,2);
  const restored=restoreAdventurePosition(current,64);assert.deepEqual([restored.x,restored.y],[6,10]);
+});
+
+
+test('central converters preserve gate access and migrate old positions',()=>{
+ const s={area:3,district:'lumiose-zone14',interior:null,zaRoyaleRank:'D',teamIds:['kept'],money:731,zaZone14Items:['south-ultra'],zaZone14RocksCleared:['16,10']};
+ const map=zone14Map(s);
+ for(const [x,y] of ZONE14_CENTRAL_CONVERTERS){
+  assert.equal(map[y][x],'^');
+  const old=storeAdventurePosition({...s,x,y},81);delete old.districtPosition.zone14ConvertersLayout;
+  const restored=restoreAdventurePosition(old,81);
+  assert.notDeepEqual([restored.x,restored.y],[x,y]);
+  assert.deepEqual([restored.district,restored.teamIds,restored.money,restored.zaZone14Items,restored.zaZone14RocksCleared],['lumiose-zone14',['kept'],731,['south-ultra'],['16,10']]);
+  assert.ok(fieldPath(map,restored,{x:12,y:10}).length);
+  assert.equal(restoreAdventurePosition(old,82).district,null);
+ }
+ for(const [x,y] of [[11,1],[1,8],[11,15],[17,15]]){
+  assert.ok(fieldPath(map,{x,y},{x:12,y:10}).length,`yard from ${x},${y}`);
+  assert.ok(fieldPath(map,{x,y},{x:15,y:10}).length,`rocks from ${x},${y}`);
+ }
+ const current=restoreAdventurePosition(storeAdventurePosition({...s,x:11,y:5},83),83);
+ assert.deepEqual([current.x,current.y,current.zaZone14Items],[11,5,['south-ultra']]);
 });
