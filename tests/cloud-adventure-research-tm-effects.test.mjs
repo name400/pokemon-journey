@@ -30,7 +30,11 @@ test('verified regional forms use their own TM lists and require matching specie
 });
 
 test('field TMs distinguish base and verified regional compatibility',()=>{
- assert.equal(STORY_TMS.length,21);
+ assert.equal(STORY_TMS.length,22);
+ for(const id of [7,158,656,693])assert.equal(canLearnStoryTm({'za-tm076':1},{id,speciesId:id,moves:[]},'za-tm076'),true);
+ for(const id of [1,25,498])assert.equal(canLearnStoryTm({'za-tm076':1},{id,speciesId:id,moves:[]},'za-tm076'),false);
+ assert.equal(canLearnStoryTm({'za-tm076':1},{id:10165,speciesId:80,moves:[]},'za-tm076'),true);
+ assert.equal(canLearnStoryTm({'za-tm076':1},{id:10100,speciesId:26,moves:[]},'za-tm076'),false);
  assert.ok(STORY_TMS.some(tm=>tm.id==='za-tm090'&&tm.move==='악의파동'));
  for(const id of [15,42,123,127,167,168,212,253,254,359,475,529,530,545,701,709,900])assert.equal(canLearnStoryTm({'za-tm081':1},{id,speciesId:id,moves:[]},'za-tm081'),true);
  for(const id of [1,52,53,214])assert.equal(canLearnStoryTm({'za-tm081':1},{id,speciesId:id,moves:[]},'za-tm081'),false);
@@ -69,4 +73,12 @@ test('late research TMs apply stat boosts and healing restrictions',()=>{
  let b=Battle.fromJSON(combat.snapshot);assert.equal(b.p1.active[0].boosts.spa,1);assert.equal(b.p1.active[0].boosts.spd,1);
  combat=playDuel(combat,[{type:'move',move:'회복봉인'},{type:'move',move:'튀어오르기'}]);
  b=Battle.fromJSON(combat.snapshot);assert.ok(b.p2.active[0].volatiles.healblock);
+});
+
+test('TM 076 uses the existing turn-based Liquidation move',()=>{
+ const player={...makeMon(158,30),boxId:'player',moves:['아쿠아브레이크']};
+ const foe={...makeMon(95,30),boxId:'foe',moves:['튀어오르기']};
+ let combat=createCombat([player],[foe]);
+ combat=playDuel(combat,[{type:'move',move:'아쿠아브레이크'},{type:'move',move:'튀어오르기'}]);
+ assert.ok(combat.teams[1][0].hp<foe.hp);
 });

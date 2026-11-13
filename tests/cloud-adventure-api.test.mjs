@@ -5598,3 +5598,17 @@ test('ZA intro retry does not let an old battle save acquire a random Ghost tera
   assert.equal(state.world.zaIntroStage,'escape');assert.ok(rawMon(id).experience>0||rawMon(id).level>5);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+
+test('Zone 16 garden TM 076 preserves old saves and teaches compatible Pokemon once',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone16-tm076-qa',displayName:'정원 기술머신 검사'};
+ try{
+  await get();await call('start',{species:158});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone16-garden',interior:null,x:6,y:5,facing:'right',zaRoyaleRank:'C',zaZone16Items:['battle-ultra']},state.revision+1);seedWorld(old);await get();
+  assert.deepEqual([state.world.x,state.world.y],[6,5]);assert.equal(state.world.interaction.action,'zone16Item-garden-tm076');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm076']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm076');await get();await call('zone16Item-garden-tm076',{},409);assert.deepEqual(rawWorld().zaZone16Items,['battle-ultra']);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;await call('zone16Item-garden-tm076');await get();assert.equal(state.inventory['za-tm076'],1);assert.ok(state.world.zaZone16Items.includes('garden-tm076'));await call('zone16Item-garden-tm076',{revision:rev},409);await get();assert.equal(state.inventory['za-tm076'],1);
+  seedMon(id,{...makeMon(158,20),moves:['몸통박치기','울음소리'],pp:{tackle:3,growl:7}});await get();await call('teachStoryTm',{item:'za-tm076',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'아쿠아브레이크');assert.equal(rawMon(id).moves[1],'울음소리');assert.equal(rawMon(id).pp.growl,7);assert.equal(state.inventory['za-tm076'],1);await call('teachStoryTm',{item:'za-tm076',boxId:id,slot:1},409);
+  seedMon(id,{...makeMon(1,20),moves:['몸통박치기'],pp:{tackle:3}});await get();await call('teachStoryTm',{item:'za-tm076',boxId:id,slot:0},409);assert.deepEqual(rawMon(id).moves,['몸통박치기']);await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.inventory['za-tm076'],1);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
