@@ -452,7 +452,7 @@ else if(b.action==='switch'&&!s.combat){if(!mons.has(b.id))throw Error('보유�
 else if(b.action==='rotoGlide'){if(s.combat)throw Error('배틀 후 로토글라이드를 사용하세요.');const landing=rotoGlideLanding(s);if(!landing)throw Error('로토글라이드의 옥상 출발 지점을 확인하세요.');if(s.district==='lumiose-lune-roof'&&s.zaMission41DomeReturnRequired===true&&s.x===17&&s.y===2&&landing.x===17&&landing.y===4)s.zaMission41DomeReturnRequired=false;Object.assign(s,landing);s.log=['로토글라이드로 건너편 옥상에 도착했다. 옥상 경로는 초안이다.'];}
 else if(b.action==='move'||b.action==='dodge'){
  if(s.combat)throw Error('전투를 먼저 마치세요.');
- const dodging=b.action==='dodge',now=Date.now();if(dodging&&Number.isFinite(s.zaDodgeReadyAt)&&s.zaDodgeReadyAt>now)throw Error('잠시 후 다시 회피하세요.');
+ const dodging=b.action==='dodge',now=Date.now();if(dodging&&Number.isFinite(s.zaDodgeReadyAt)&&s.zaDodgeReadyAt>now)throw new MovementPrecheckConflict('잠시 후 다시 회피하세요.');
  const path=validateAdventurePath(dodging?[b.direction,b.direction]:(b.path||[b.direction]));
  for(const direction of path){
   const step=stepField(s,direction);if(step.blocked){if(!s.movedSteps)throw Error(step.reason);s.log=[step.reason];break;}if(s.zaLeWowRun&&s.interior==='leWow'&&step.transitioned)throw Error('연속 배틀을 중단한 뒤 식당을 나가세요.');if(s.zaSushiRun&&s.interior==='sushi'&&step.transitioned)throw Error('연속 배틀을중단한 뒤 식당을 나가세요.');
