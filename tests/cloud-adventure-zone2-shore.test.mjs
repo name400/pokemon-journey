@@ -76,3 +76,16 @@ test('Zone 2 west connections preserve earlier walkability and saved roaming-wat
  for(const [x,y] of [[7,6],[9,10],[8,8]]){const state={...base,zaZone2FieldPositions:{staryu:{x,y,custom:'kept'}}},saved=storeAdventurePosition(state,99),restored=restoreAdventurePosition(saved,99),staryu=zone2FieldMonsters(restored,'night',map).find(p=>p.id==='staryu');assert.deepEqual([staryu.x,staryu.y],[x,y]);assert.equal(restored.zaZone2FieldPositions.staryu.custom,'kept');}
  for(const target of [{x:4,y:1},{x:7,y:5},{x:10,y:5},{x:10,y:10},{x:8,y:11},{x:11,y:14},{x:15,y:3},{x:21,y:5}])assert.ok(fieldPath(map,base,target).length,JSON.stringify(target));
 });
+
+test('Zone 2 southeast dry rim no longer traps saved positions and preserves both gates',async()=>{
+ const {stepField,zone2FieldMonsters}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const {zone2BankTint}=await import('../lib/cloud-adventure/adventure-zone2-visual.mjs');
+ for(const cleared of [false,true]){
+  const base={area:3,district:'lumiose-zone2',interior:null,x:19,y:15,facing:'left',teamIds:['kept'],zaZone2RockCleared:cleared,zaZone2FieldPositions:{staryu:{x:9,y:10,custom:'kept'}}},map=lumioseZone2Map(base);
+  assert.equal(map[15][18],'.');assert.equal(zone2BankTint(19,15),false);assert.equal(zone2BankTint(18,15),false);
+  for(const [x,y] of [[19,14],[20,14],[21,14],[19,15],[20,15],[21,15]]){assert.equal(map[y][x],'.');assert.ok(fieldPath(map,{x,y},{x:11,y:15}).length);if(x!==base.x||y!==base.y)assert.ok(fieldPath(map,base,{x,y}).length);}
+  assert.deepEqual([stepField(base,'left').x,stepField(base,'left').y],[18,15]);assert.equal(stepField({...base,x:19,y:14},'left').blocked,true);assert.equal(stepField({...base,x:21,y:15},'right').blocked,true);
+  assert.equal(stepField({...base,x:4,y:1},'up').district,'lumiose-vert2');assert.equal(stepField({...base,x:11,y:15},'down').district,'lumiose-vert-plaza');
+  const old=storeAdventurePosition(base,77);old.districtPosition.zone2Layout=9;const restored=restoreAdventurePosition(old,77);assert.deepEqual([restored.x,restored.y,restored.teamIds],[19,15,['kept']]);const star=zone2FieldMonsters(restored,'night',map).find(p=>p.id==='staryu');assert.deepEqual([star.x,star.y],[9,10]);assert.equal(restored.zaZone2FieldPositions.staryu.custom,'kept');
+ }
+});
