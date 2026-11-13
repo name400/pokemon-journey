@@ -6015,3 +6015,18 @@ test('Zone 12 wider pond recovers an older upper-park save and keeps its progres
   await walkTo({x:9,y:13});await call('face',{direction:'left'});await get();assert.deepEqual([state.world.x,state.world.y],[9,13]);assert.equal(state.world.interaction?.action,'zone12PondSteps');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('Zone 12 eastern and southeastern entries keep legacy exits and saves',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone12-gates-qa',displayName:'눈 공원 출입'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedMon(id,{...makeMon(1,10),boxId:id,moves:['몸통박치기']});
+  for(const [from,x,y,dir,toX,toY] of [['lumiose-vernal',1,3,'left',21,4],['lumiose-bleu-sector7',16,1,'up',20,15]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:from,interior:null,x,y,facing:dir,zaRoyaleRank:'E',zaZone12Items:['south-super'],zaZone12Spent:{gogoat:true}},state.revision+1));await get();await call('move',{direction:dir});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone12',toX,toY]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone12Items,['south-super']);assert.equal(state.world.zaZone12Spent.gogoat,true);
+   await call('move',{direction:dir==='left'?'right':'down'});await get();assert.equal(state.world.district,from);
+  }
+  for(const [x,y,dir,to] of [[21,8,'right','lumiose-vernal'],[12,15,'down','lumiose-bleu-sector7']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone12',interior:null,x,y,zaRoyaleRank:'E'},state.revision+1));await get();assert.deepEqual([state.world.x,state.world.y],[x,y]);await call('move',{direction:dir});await get();assert.equal(state.world.district,to);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=prior;}
+});

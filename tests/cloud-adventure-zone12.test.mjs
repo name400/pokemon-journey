@@ -128,3 +128,15 @@ test('expanded southwest pond restores old shore positions and preserves park ro
  assert.equal(stepField({...base,x:7,y:9},'left').blocked,true);
  const lower={...base,zaZone12PondLower:true,x:5,y:9},saved=restoreAdventurePosition(storeAdventurePosition(lower,141),141);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower],[5,9,true]);
 });
+
+test('eastern and southeastern approaches retain older exits and saved positions',()=>{
+ const base={area:3,district:'lumiose-zone12',interior:null,zaRoyaleRank:'E',teamIds:['kept'],zaZone12Items:['south-super'],zaZone12Spent:{gogoat:true}};
+ const map=zone12Map(base);assert.equal(map[4][22],'E');assert.equal(map[16][20],'X');assert.equal(map[8][22],'E');assert.equal(map[16][12],'X');
+ for(const [x,y,dir,to] of [[21,4,'right','lumiose-vernal'],[21,8,'right','lumiose-vernal'],[20,15,'down','lumiose-bleu-sector7'],[12,15,'down','lumiose-bleu-sector7']]){
+  assert.ok(fieldPath(map,{x,y},{x:9,y:13}).length);assert.equal(stepField({...base,x,y},dir).district,to);
+  const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},201),201);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaZone12Items],['lumiose-zone12',x,y,['kept'],['south-super']]);
+ }
+ const eastern=stepField({...base,district:'lumiose-vernal',x:1,y:3},'left');assert.deepEqual([eastern.district,eastern.x,eastern.y],['lumiose-zone12',21,4]);
+ const south=stepField({...base,district:'lumiose-bleu-sector7',x:16,y:1},'up');assert.deepEqual([south.district,south.x,south.y],['lumiose-zone12',20,15]);
+ assert.equal(stepField({...base,district:'lumiose-vernal',zaRoyaleRank:'F',x:1,y:3},'left').blocked,true);assert.equal(stepField({...base,district:'lumiose-bleu-sector7',zaRoyaleRank:'F',x:16,y:1},'up').blocked,true);
+});
