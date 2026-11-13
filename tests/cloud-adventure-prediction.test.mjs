@@ -89,6 +89,27 @@ test('queued directions preview in order and stop at blocked tiles',async()=>{
  assert.deepEqual(predictCloudPath(boundary,['right','up']),{x:2,y:1,facing:'right'});
 });
 
+test('ordered prediction retains distinct intermediate tiles and stops at transitions',async()=>{
+ const {predictCloudPath,predictCloudPathSteps}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const world={area:3,district:'lumiose',interior:null,x:4,y:8,facing:'right'},before=structuredClone(world);
+ const rightUp=predictCloudPathSteps(world,['right','up']),upRight=predictCloudPathSteps(world,['up','right']);
+ assert.deepEqual(rightUp.map(p=>[p.x,p.y]),[[5,8],[5,7]]);assert.deepEqual(upRight.map(p=>[p.x,p.y]),[[4,7],[5,7]]);
+ assert.deepEqual(predictCloudPath(world,['right','up']),rightUp.at(-1));assert.deepEqual(world,before);
+ const blocked={...world,x:1,y:1};assert.deepEqual(predictCloudPathSteps(blocked,['up','right']),[]);assert.deepEqual(predictCloudPathSteps(blocked,['right','up']).map(p=>[p.x,p.y]),[[2,1]]);
+ const gate={area:3,district:'lumiose-vernal',interior:null,x:21,y:4,facing:'right'};const steps=predictCloudPathSteps(gate,['right','right'],{allowTransition:true});assert.equal(steps.length,1);assert.equal(steps[0].predictedTransition,true);assert.equal(steps[0].district,'lumiose-vert-sector4');
+});
+
+test('confirmed prefix requires the exact request and rejects interruptions or stale responses',async()=>{
+ const {predictCloudPathSteps,confirmedCloudPathPrefix}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ const world={area:3,district:'lumiose',interior:null,x:4,y:8,facing:'right',steps:20,activeId:'kept'},steps=predictCloudPathSteps(world,['right','left','up']);
+ const result={revision:8,battle:null,world:{...world,...steps[1],steps:22}};
+ assert.deepEqual(confirmedCloudPathPrefix(world,steps,2,7,result),{confirmed:steps.slice(0,2),pending:steps.slice(2)});
+ for(const bad of [{...result,revision:7},{...result,revision:9},{...result,battle:{}},{...result,world:{...result.world,steps:21}},{...result,world:{...result.world,x:5}},{...result,world:{...result.world,adventureCatchWindow:{}}},{...result,world:{...result.world,adventurePendingMoves:[1]}},{...result,world:{...result.world,district:'elsewhere'}}])assert.equal(confirmedCloudPathPrefix(world,steps,2,7,bad),null);
+ assert.equal(confirmedCloudPathPrefix(world,steps,2,8,result),null,'a duplicate acknowledgement is not accepted');
+ assert.equal(confirmedCloudPathPrefix(world,[{...steps[0],predictedHazard:true},...steps.slice(1)],2,7,result),null);
+ assert.equal(confirmedCloudPathPrefix(world,steps,0,7,result),null);
+});
+
 test('buffer retains held turns in order and requires the earlier server position',async()=>{
  const {createCloudMoveBuffer}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
  const world={area:3,district:'lumiose',interior:null,x:5,y:8,facing:'right'},first=predictCloudStep(world,'right');
