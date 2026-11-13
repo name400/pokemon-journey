@@ -15,3 +15,5 @@
 - [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Plus_Move)와 [Serebii](https://www.serebii.net/legendsz-a/plusmoves.shtml)에 따라 새 전투에서 공격 기술플러스는 방어·판별을 관통해 플러스 피해의 25%를 준다. 해당 대상의 타입 면역과 다른 보호 기술은 유지한다. 턴제에서 실시간 보호 지속시간은 구현하지 않으며, 공격 부가효과가 방어를 통과하는 원작 규칙은 미확인이다. 이미 시작된 전투는 이전 차단 규칙을 유지한다.
 
 - 새 전투 V3에서 텍스처 플러스는 타입 변경과 방어 상승을 함께 적용한다. [Serebii](https://advent.serebii.net/attackdex-sv/conversion.shtml)는 방어 상승을 명시하지만 상승 폭은 제시하지 않아, 턴제에서는 1랭크로 근사했다. 기존 엔진의 타입 변경이 실패하면 상승도 일어나지 않으며 이 실패 조건의 원작 일치는 미확인이다. [폴리곤](https://www.dittobase.com/legends-za/pokedex/porygon)과 그 진화형·켈리몬은 레벨 10에 텍스처를 자연 숙달한다. 이전 V1·V2 및 구형 배틀은 변경하지 않는다.
+
+- 새 전투의 공격 기술플러스 추가 효과로 차지빔은 특수공격 상승 확률 100%, 열탕은 화상 확률 50%, 원시의힘·괴상한바람·은빛바람은 능력 상승 확률 60%를 적용한다. [Serebii](https://www.serebii.net/legendsz-a/plusmoves.shtml)와 [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Plus_Move)의 플러스 수치에 근거한다. 명중·면역과 부가효과는 기존 턴제 시뮬레이터에 따르며, 일반 원시의힘 등의 확률은 시뮬레이터의 기존 값(10%)을 유지하므로 원작 일반 기술 수치(30%)와 다르다. 이미 시작한 구형 전투는 이전 효과를 유지한다.
