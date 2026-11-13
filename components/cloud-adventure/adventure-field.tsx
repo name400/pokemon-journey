@@ -640,7 +640,14 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       else{ctx.fillStyle='#e7dac0';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#897b6c';ctx.fillRect(px+7,py+7,tile-14,tile-11);ctx.fillStyle='#9bb2ae';ctx.fillRect(px+9,py+9,tile-18,tile-16);ctx.fillStyle='#f4ead7';ctx.fillRect(px+tile/2-1,py+9,2,tile-16);}
      }
      if(c===','){ctx.fillStyle='#d6c7ad';ctx.fillRect(px,py,tile,2);ctx.fillStyle='#a18f78';ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);}
-     if(c==='g'){ctx.fillStyle='#648e5c';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);}
+     if(c==='g'){
+      // Low park edging follows the existing grass/sidewalk boundary; it is
+      // only drawn on grass and never changes passability or encounter tiles.
+      const north=w.map[y-1]?.[x]===',',south=w.map[y+1]?.[x]===',',west=w.map[y]?.[x-1]===',',east=w.map[y]?.[x+1]===',';
+      ctx.strokeStyle='#d4c9ac';ctx.lineWidth=3;ctx.lineCap='round';ctx.beginPath();
+      if(north){ctx.moveTo(px+3,py+3);ctx.lineTo(px+tile-3,py+3);}if(south){ctx.moveTo(px+3,py+tile-3);ctx.lineTo(px+tile-3,py+tile-3);}if(west){ctx.moveTo(px+3,py+3);ctx.lineTo(px+3,py+tile-3);}if(east){ctx.moveTo(px+tile-3,py+3);ctx.lineTo(px+tile-3,py+tile-3);}ctx.stroke();ctx.lineCap='butt';
+      ctx.fillStyle='#648e5c';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-10-(j%2)*4,3,7);
+     }
      if(c==='^'&&ZONE15_TREES.some(([tx,ty])=>x===tx&&y===ty)){ctx.fillStyle='#6b4b34';ctx.fillRect(px+tile/2-3,py+tile/2,6,tile/2-2);ctx.fillStyle='#47724d';ctx.beginPath();ctx.arc(px+tile/2,py+11,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#79a469';ctx.beginPath();ctx.arc(px+tile/2-4,py+8,7,0,Math.PI*2);ctx.fill();}
      if(c==='^'&&ZONE15_BENCHES.some(([bx,by])=>x===bx&&y===by)){ctx.fillStyle='#604b39';ctx.fillRect(px+6,py+11,tile-12,10);ctx.fillStyle='#bc966d';ctx.fillRect(px+5,py+9,tile-10,5);ctx.fillRect(px+6,py+17,tile-12,4);ctx.fillStyle='#574638';ctx.fillRect(px+7,py+21,3,5);ctx.fillRect(px+tile-10,py+21,3,5);}
      if('ijk'.includes(c)){ctx.fillStyle='#d8b64f';ctx.fillRect(px+8,py+8,tile-16,tile-16);}

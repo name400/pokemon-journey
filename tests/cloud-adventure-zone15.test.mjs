@@ -127,3 +127,11 @@ test('Hibernal lift offers Side Mission 80 after Lebanne and preserves the legac
  const saved=restoreAdventurePosition(storeAdventurePosition(complete,88),88);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-hibernal-approach',14,6,['kept']]);assert.equal(fieldDialogue(saved).action,'zone15Side80');
  const old={area:3,district:'lumiose-zone15',interior:null,x:3,y:13,facing:'left',zaMission26Stage:1};assert.equal(fieldDialogue(old).action,'zone15Side80');
 });
+
+test('Zone 15 park walks connect the northwest approach and southeast bend without replacing grass',()=>{
+ const state={area:3,district:'lumiose-zone15',interior:null,x:16,y:11,zaRoyaleRank:'D',teamIds:['kept'],zaZone15Items:['cafe-ultra'],zaZone15Spent:{pumpkaboo:true}},map=zone15Map(state);
+ for(const [x,y] of [[4,1],[4,2],[4,3],[5,4],[6,5],[16,10],[16,11],[16,12],[17,13],[17,14]])assert.equal(map[y][x],',',`${x},${y}`);
+ for(const [x,y] of [[9,5],[9,6],[15,6],[14,10]])assert.equal(map[y][x],'g',`${x},${y}`);
+ for(const target of [{x:11,y:1},{x:1,y:6},{x:1,y:13},{x:17,y:15}])assert.ok(fieldPath(map,state,target).length);
+ const restored=restoreAdventurePosition(storeAdventurePosition(state,112),112);assert.deepEqual([restored.x,restored.y,restored.teamIds,restored.zaZone15Items,restored.zaZone15Spent],[16,11,['kept'],['cafe-ultra'],{pumpkaboo:true}]);
+});
