@@ -2389,6 +2389,12 @@ test('Zone 11 old western bank position recovers from fork water on reload',asyn
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 11 old western bend saves recover without losing party or encounters',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-bend-save-qa',displayName:'수로굽이저장검증'};
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x:4,y:6,zaRoyaleRank:'E',zaZone11Spent:{furfrou:true}},state.revision+1);delete old.districtPosition.zone11BendLayout;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone11');assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.equal(state.world.zaZone11Spent.furfrou,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);await get();assert.deepEqual(state.wallet,wallet);await walkTo({x:5,y:1});assert.equal(state.world.zaZone11Spent.furfrou,true);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 1 far rooftop drop reaches the courtyard and preserves progress',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone1-far-drop-qa',displayName:'옥상낙하저장테스트'};
  try{
@@ -3709,7 +3715,7 @@ test('Zone 11 river Pokémon can be encountered from shore without walking on wa
  try{
   await get();await call('start',{species:1});const id=state.world.activeId;
   const {LATER_ZONE_SPECIES,laterZoneResearch}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');seedWorld({adventureDexSpecies:LATER_ZONE_SPECIES[11].filter(id=>id!==692)});await get();assert.equal(laterZoneResearch(rawWorld()).find(x=>x.zone===11).points,0);
-  for(const [x,y,direction,species,name] of [[4,6,'down',686,'inkay'],[18,10,'up',130,'gyarados'],[8,6,'down',692,'clauncher']]){
+  for(const [x,y,direction,species,name] of [[4,8,'up',686,'inkay'],[18,10,'up',130,'gyarados'],[8,6,'down',692,'clauncher']]){
    seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x,y,facing:direction,activeId:id,zaRoyaleRank:'E',adventureBalls:{...rawWorld().adventureBalls,masterball:2}},state.revision+1));await get();
    assert.equal(state.world.interaction.action,`zone11Wild-${name}`);await call('move',{direction},409);await call(`zone11Wild-${name}`);assert.equal(state.battle.teams[1][0].speciesId,species);await call('flee');assert.notEqual(state.world.zaZone11Spent?.[name],true);await call(`zone11Wild-${name}`);await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaZone11Spent[name],true);
   }
