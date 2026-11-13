@@ -22,7 +22,7 @@ import {megaResearchEntries,recordResearchMegaStones} from '@/lib/cloud-adventur
 import {applyAdventureBattleEffort} from '@/lib/cloud-adventure/adventure-effort.mjs';
 import {adventureEvResetUnlocked,resetAdventureEvs} from '@/lib/cloud-adventure/adventure-ev-reset.mjs';
 import {rogueRetryPercent,saveRogueRetry,clearRogueRetry} from '@/lib/cloud-adventure/adventure-rogue-retry.mjs';
-import {takeRoyaleBonus,recordRoyaleBonus,ROYALE_BONUS_CARDS,royaleMedalSettlement,recordRoyaleMedalBattle} from '@/lib/cloud-adventure/adventure-royale-bonus.mjs';
+import {takeRoyaleBonus,recordRoyaleBonus,ROYALE_BONUS_CARDS,ROYALE_FIELD_MEDALS,takeRoyaleFieldMedal,royaleMedalSettlement,recordRoyaleMedalBattle} from '@/lib/cloud-adventure/adventure-royale-bonus.mjs';
 import {rogueRematch,rogueRematchUnlocked,rogueRematchPending} from '@/lib/cloud-adventure/adventure-rogue-rematches.mjs';
 import {LYSANDRE_WINGS,lysandrePower,lysandreWild,lysandreVisibleWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
 import {side27Available,side27Reg,side27Shop,FOSSILS,stoneShopStock,megaStoneShopStock,reviveFossilPokemon} from '@/lib/cloud-adventure/adventure-side27.mjs';
@@ -1106,6 +1106,7 @@ else if(b.action==='battleLida'){
  s.combat=createAdventureCombat(s,mons,team,{heals:0,strategy:'balanced'});s.trainer={id:trainer.id,name:trainer.name,title:'팀 MZ 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=['Lida에게 물건을 전하고 배틀을 시작했다!'];
 }
 else if(b.action==='claimRoyaleMedals'){if(s.adventureCatchWindow)throw Error('상금 정산 전에 포획 기회를 마쳐 주세요.');reward=royaleMedalSettlement(s,gameTime(undefined,adventureClockOffset(s)).period,Date.now(),canariLevel(s,'gold'));if(!reward)throw Error('정산할 상금 메달을 확인하세요.');}
+else if(b.action==='takeRoyaleFieldMedal'){const spot=interactionAt(s),medal=ROYALE_FIELD_MEDALS.find((m:any)=>m.x===spot?.x&&m.y===spot?.y);if(s.combat||s.adventureCatchWindow||s.interior||s.district!=='lumiose-royale'||spot?.tile!=='?'||!medal||gameTime(undefined,adventureClockOffset(s)).period!=='night')throw Error('밤의 상금 메달 위치를 확인하세요.');const added=takeRoyaleFieldMedal(s,medal.id);if(!added)throw Error('이미 주웠거나 상금 메달이 가득 찼습니다.');s.log=[`상금 메달 ${added}개를 주웠다. (위치 초안)`];}
 else if(b.action==='takeRoyaleBonus'){const spot=interactionAt(s),card=ROYALE_BONUS_CARDS.find((c:any)=>c.x===spot?.x&&c.y===spot?.y);if(s.combat||s.interior||s.district!=='lumiose-royale'||spot?.tile!=='!'||!card||gameTime(undefined,adventureClockOffset(s)).period!=='night'||!takeRoyaleBonus(s,Date.now(),card.id))throw Error('오늘 밤의 보너스 카드를 확인하세요.');s.log=[`보너스 카드를 주웠다. ${card.label}을 ${card.goal}회 맞혀 보자.`];}
 else if(b.action==='enterRoyaleZone'&&royaleFieldEntryAt(s,interactionAt(s))&&!activeRoyaleZones(s).some((z:any)=>z.id===royaleFieldEntryAt(s,interactionAt(s))?.zone))throw Error('오늘 밤 이곳은 활성 배틀존이 아닙니다. 광장의 임시 접수처를 이용하세요.');
 else if(b.action==='enterRoyaleZone'&&s.district==='lumiose-magenta6-court-alley'&&!activeRoyaleZones(s).some((z:any)=>z.id==='magenta6'))throw Error('오늘 밤 마젠타 6번지는 활성 배틀존이 아닙니다. 광장의 임시 접수처를 이용하세요.');

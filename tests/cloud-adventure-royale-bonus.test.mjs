@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {royaleBonusPickable,takeRoyaleBonus,recordRoyaleBonus,royaleMedalSettlement,recordRoyaleMedalBattle} from '../lib/cloud-adventure/adventure-royale-bonus.mjs';
+import {royaleBonusPickable,takeRoyaleBonus,recordRoyaleBonus,royaleMedalSettlement,recordRoyaleMedalBattle,ROYALE_FIELD_MEDALS,royaleFieldMedalPickable,takeRoyaleFieldMedal,royaleFieldMedalAmount} from '../lib/cloud-adventure/adventure-royale-bonus.mjs';
 import {lumioseRoyaleMap,fieldDialogue,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 const now=20*50000,hit=[{kind:'move',side:0,actorBoxId:'p'},{kind:'effect',targetSide:1,targetBoxId:'e',text:'효과가 굉장했다!'},{kind:'damage',targetSide:1,targetBoxId:'e',actorBoxId:'p',hit:true,amount:10}];
@@ -37,10 +37,25 @@ test('medal settlement uses nightly wins, gold plush, and preserves old pending 
  const battle={zaRoyalePrizeMedals:80,zaRoyaleMedalNight:0,zaRoyaleMedalWins:5,combat:{}};assert.equal(royaleMedalSettlement(battle,'day',now),0);delete battle.combat;battle.adventureCatchWindow={revision:1};assert.equal(royaleMedalSettlement(battle,'day',now),0);
 });
 test('only ended Royale trainer battles count wins or halve medals on defeat',()=>{
- const s={district:'lumiose-royale',zaRoyalePrizeMedals:71},trainer={title:'Z-A 로열 배틀'};
+ const s={district:'lumiose-royale',zaRoyalePrizeMedals:71},trainer={id:'royale-test',title:'Z-A 로열 배틀'};
  recordRoyaleMedalBattle(s,{ended:false,winner:0},trainer,now);assert.equal(s.zaRoyaleMedalWins,undefined);
- recordRoyaleMedalBattle(s,{ended:true,winner:0},trainer,now);assert.equal(s.zaRoyaleMedalWins,1);
- recordRoyaleMedalBattle(s,{ended:true,winner:1},trainer,now);assert.equal(s.zaRoyalePrizeMedals,35);
- recordRoyaleMedalBattle(s,{ended:true,winner:1},{title:'야생'},now);assert.equal(s.zaRoyalePrizeMedals,35);
+ recordRoyaleMedalBattle(s,{ended:true,winner:0,teams:[[],[{},{}]],log:[]},trainer,now);assert.equal(s.zaRoyaleMedalWins,1);assert.equal(s.zaRoyalePrizeMedals,121);recordRoyaleMedalBattle(s,{ended:true,winner:0,teams:[[],[{},{}]],log:[]},trainer,now);assert.equal(s.zaRoyalePrizeMedals,121);assert.equal(s.zaRoyaleMedalWins,1);
+ recordRoyaleMedalBattle(s,{ended:true,winner:1},trainer,now);assert.equal(s.zaRoyalePrizeMedals,60);
+ recordRoyaleMedalBattle(s,{ended:true,winner:1},{title:'야생'},now);assert.equal(s.zaRoyalePrizeMedals,60);
  const empty={district:'lumiose-royale',zaRoyalePrizeMedals:0,zaRoyaleMedalNight:0,zaRoyaleMedalWins:4};recordRoyaleMedalBattle(empty,{ended:true,winner:0},trainer,now+1200000);assert.equal(empty.zaRoyaleMedalNight,1);assert.equal(empty.zaRoyaleMedalWins,1);
+});
+
+test('field medals use rank bands, protect caps and respawn on a new night',()=>{
+ for(const [rank,amount] of [['Z',10],['Y',10],['F',15],['B',15],['A',20]]){
+  const s={district:'lumiose-royale',zaRoyaleRank:rank,zaMission39Started:true,zaRoyaleReturn:'vert12'};
+  assert.equal(royaleFieldMedalAmount(s),amount);assert.equal(royaleFieldMedalPickable(s,'northwest',now),true);assert.equal(takeRoyaleFieldMedal(s,'northwest',now),amount);assert.equal(takeRoyaleFieldMedal(s,'northwest',now),0);assert.equal(s.zaRoyalePrizeMedals,amount);
+  s.zaRoyaleReturn='vert58';assert.equal(takeRoyaleFieldMedal(s,'northwest',now),amount);assert.equal(royaleFieldMedalPickable(s,'northwest',now+1200000),true);
+ }
+ const full={district:'lumiose-royale',zaRoyaleRank:'Y',zaRoyalePrizeMedals:9999};assert.equal(takeRoyaleFieldMedal(full,'northwest',now),0);assert.equal(royaleFieldMedalPickable(full,'northwest',now),true);const nearFull={district:'lumiose-royale',zaRoyaleRank:'Y',zaRoyalePrizeMedals:9994};assert.equal(takeRoyaleFieldMedal(nearFull,'northwest',now),5);assert.equal(nearFull.zaRoyalePrizeMedals,9999);
+});
+test('draft field medals preserve walkable positions and interactability across Royale ranks',()=>{
+ for(const rank of ['Z','Y','V','F','E','D','C','B','A']){
+  const s={district:'lumiose-royale',zaRoyaleRank:rank,zaMission39Started:true,zaMission35Started:true,zaMission30Started:true,zaMission20Complete:true,zaMission19Stage:1,zaMission14Stage:1,zaMission10Stage:4};const map=lumioseRoyaleMap(s);
+  for(const m of ROYALE_FIELD_MEDALS){assert.equal(map[m.y][m.x],'?');assert.ok(walkable(map[m.y][m.x]));assert.equal(fieldDialogue({...s,x:m.x+1,y:m.y,facing:'left'}).action,'takeRoyaleFieldMedal');}
+ }
 });
