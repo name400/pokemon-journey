@@ -373,6 +373,19 @@ test('documented sludge moves open field routes while preserving saves and rejec
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('documented boulder moves open routes without changing saved progress or duplicating requests',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'boulder-moves-qa',displayName:'바위 기술 검사'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const c of [
+   {district:'lumiose-zone1',x:1,y:3,facing:'left',action:'zone1RoofRock',move:'Bullet Punch',flag:'zaZone1RoofRockCleared',value:true},
+   {district:'lumiose-zone12',x:9,y:3,facing:'right',action:'zone12CourtRock',move:'Solar Beam',flag:'zaZone12CourtRocks',value:['5,4']},
+   {district:'lumiose-zone14',x:15,y:1,facing:'right',action:'smashZone14Rock',move:'Iron Head',flag:'zaZone14RocksCleared',value:['16,1']},
+  ]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:c.district,interior:null,x:c.x,y:c.y,facing:c.facing,zaRoyaleRank:'B',zaZone1RoofRockCleared:false,zaZone12CourtRocks:[],zaZone14RocksCleared:[],zaZone14RockCleared:false,zaZone14Items:['south-ultra'],zaMission40Stage:2},state.revision+1));seedMon(id,{...makeMon(150,50),boxId:id,moves:['Tackle'],pp:{}});await get();await call(c.action,{},409);seedMon(id,{...rawMon(id),moves:[c.move]});await get();assert.equal(state.world.interaction.action,c.action);const rev=state.revision;await call(c.action);assert.deepEqual(rawWorld()[c.flag],c.value);assert.deepEqual(rawMon(id).moves,[c.move]);await call(c.action,{revision:rev},409);await get();assert.deepEqual(rawWorld()[c.flag],c.value);await call(c.action,{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone14Items,['south-ultra']);assert.equal(state.world.zaMission40Stage,2);
+  }
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Mission 37 final Nihil Light battle preserves party, retry and old saves',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-nihil-qa',displayName:'니힐라이트 검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),before=JSON.stringify(rawMon(id));
