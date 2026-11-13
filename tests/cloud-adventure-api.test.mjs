@@ -5884,3 +5884,15 @@ test('Litwick can be caught in the main sewer and remains registered after reent
   await walkTo({x:11,y:15});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-bleu3-sewer-approach');await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-sewer');await walkTo({x:7,y:2});await call('face',{direction:'right'});await get();assert.ok(rawWorld().adventureDexSpecies.includes(607));assert.equal(state.world.interaction.action,'cityResearchBattle');assert.equal(rawWorld().adventureBalls.masterball,0);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('Goomy rain encounter and capture survive reconnect and reject duplicate requests',async()=>{
+ const previous=globalThis.__adventureUser,time=globalThis.__adventureTime;globalThis.__adventureUser={userId:'goomy-rain-qa',displayName:'미끄메라 검사'};
+ try{
+  globalThis.__adventureTime={hour:7,period:'day'};await get();await call('start',{species:152});const first=state.world.teamIds[0];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector10',interior:null,x:8,y:4,facing:'left',adventureBalls:{masterball:1}},state.revision+1));await get();assert.equal(state.world.weather,'');await call('cityResearchBattle',{},409);
+  globalThis.__adventureTime={hour:8,period:'day'};await get();assert.equal(state.world.weather,'rain');assert.equal(state.world.interaction.action,'cityResearchBattle');await call('cityResearchBattle');assert.equal(rawWorld().encounter.speciesId,704);await get();assert.equal(rawWorld().encounter.speciesId,704);const rev=state.revision;await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision:rev},409);await get();assert.ok(rawWorld().adventureDexSpecies.includes(704));assert.ok(state.box.some(p=>p.speciesId===704));assert.ok(state.world.teamIds.includes(first));
+  const captured=state.box.find(p=>p.speciesId===704).boxId;seedMon(captured,{...makeMon(705,50),boxId:captured,shiny:true});
+  globalThis.__adventureTime={hour:7,period:'day'};await get();await call('evolve',{boxId:captured,target:706},409);assert.equal(rawMon(captured).id,705);
+  globalThis.__adventureTime={hour:8,period:'day'};await get();const evolveRevision=state.revision;await call('evolve',{boxId:captured,target:706});assert.equal(rawMon(captured).id,706);assert.equal(rawMon(captured).shiny,true);await call('evolve',{boxId:captured,target:706,revision:evolveRevision},409);await get();assert.equal(rawMon(captured).id,706);assert.ok(state.world.teamIds.includes(first));
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=time;}
+});
