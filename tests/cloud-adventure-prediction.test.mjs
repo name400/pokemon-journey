@@ -124,3 +124,13 @@ test('buffer retains held turns in order and requires the earlier server positio
  assert.equal(buffer.matches({world:{...world,...first,adventureCatchWindow:{}},battle:null}),false);
  assert.equal(buffer.matches({world:{...world,x:5,y:8},battle:null}),false);
 });
+
+test('the two boulevards extend only paved steps and retain group and boundary limits',async()=>{
+ const {createCloudMoveBuffer,predictCloudStep}=await import('../lib/cloud-adventure/adventure-prediction.mjs');
+ for(const district of ['lumiose-north-boulevard','lumiose-south-boulevard']){
+  const w={area:3,district,interior:null,x:2,y:8,facing:'right',steps:0,zaRoyaleRank:'A'},first=predictCloudStep(w,'right'),buffer=createCloudMoveBuffer(w,first,'right');
+  for(let i=0;i<12;i++)assert.ok(buffer.push(),`${district} pavement ${i}`);assert.equal(buffer.push(),null);assert.equal(buffer.path.length,12);
+  const group={...w,inUnion:true},groupBuffer=createCloudMoveBuffer(group,predictCloudStep(group,'right'),'right');for(let i=0;i<4;i++)assert.ok(groupBuffer.push());assert.equal(groupBuffer.push(),null);
+  const edge={...w,x:17},edgeBuffer=createCloudMoveBuffer(edge,predictCloudStep(edge,'right'),'right');let count=0;while(edgeBuffer.push())count++;assert.ok(count<4);assert.equal(edgeBuffer.position.x,21);
+ }
+});

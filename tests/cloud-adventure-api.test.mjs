@@ -7303,3 +7303,13 @@ test('Zone 6 court battle prizes respect plush bonuses and in-progress legacy sa
   if(legacy){const old=rawWorld();delete old.trainer[p.flag];seedWorld(old);await get();}await battle();assert.equal(state.wallet.coins,coins+p.quest+(legacy?0:canariPrizeMoney(p.prize,1)));await get();assert.equal(state.wallet.coins,coins+p.quest+(legacy?0:canariPrizeMoney(p.prize,1)));await call(p.action,{},409);
  }}finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('boulevard twelve-step movement retains saves, friendship and stale-request protection',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'boulevard-buffer-qa',displayName:'대로 이동 검사'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId;
+  for(const district of ['lumiose-north-boulevard','lumiose-south-boulevard']){
+   const mon={...rawMon(id),boxId:id,walkSteps:0,friendship:50};seedMon(id,mon);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x:2,y:8,facing:'right',steps:120,zaRoyaleRank:'A',combat:null,encounter:null},state.revision+1));await get();const revision=state.revision,wallet=structuredClone(state.wallet);await call('move',{path:Array(12).fill('right'),compact:true});assert.deepEqual([state.world.x,state.world.y,state.world.steps],[14,8,132]);assert.equal(rawMon(id).walkSteps,12);assert.equal(rawMon(id).friendship,51);assert.deepEqual(state.wallet,wallet);await call('move',{path:['right'],revision,compact:true},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.steps],[district,14,8,132]);assert.equal(rawMon(id).walkSteps,12);
+   seedWorld(storeAdventurePosition({...rawWorld(),district,interior:null,x:19,y:8,facing:'right',steps:120},state.revision+1));await get();await call('move',{path:Array(5).fill('right'),compact:true});assert.equal(state.world.district,district==='lumiose-north-boulevard'?'lumiose-rouge-north':'lumiose-floral');assert.equal(state.world.steps,123);await get();assert.equal(state.world.steps,123);
+  }
+ }finally{globalThis.__adventureUser=previous;}
+});
