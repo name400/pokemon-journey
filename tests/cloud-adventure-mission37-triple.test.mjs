@@ -21,16 +21,16 @@ test('prototype chooses two ally turns and refuses cross-owner switches without 
  const [{team:first},{team:second}]=mission37CompanionGroups(2),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`foe-${i}`,moves:['튀어오르기'],pp:{}}));
  const initial=createMission37TripleSnapshot(owned,first,second,foes),original=JSON.stringify(initial),allySlot=initial.teams[0].findIndex(mon=>mon.boxId===first[1].boxId)+1;
  assert.throws(()=>playMission37TriplePrototype(initial,{type:'switch',slot:allySlot}),/소유자|동료/);assert.throws(()=>playMission37TriplePrototype(initial,null),/플레이어/);assert.throws(()=>playMission37TriplePrototype(initial,{type:'move',move:'splash',special:'mega'}),/플레이어/);assert.equal(JSON.stringify(initial),original);
- const turn=playMission37TriplePrototype(initial,{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(turn).turn,2);for(const side of ['p1a:','p1b:','p1c:'])assert.ok(turn.log.some(line=>line.startsWith(`|move|${side}`)),side);assert.deepEqual(turn.owners,initial.owners);assert.deepEqual(playMission37TriplePrototype(JSON.parse(JSON.stringify(turn)),{type:'move',move:'splash'}).owners,initial.owners);
+ const turn=playMission37TriplePrototype(initial,{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(turn).turn,2);for(const id of [owned[0].boxId,first[0].boxId,second[0].boxId])assert.ok(turn.events.some(event=>event.kind==='move'&&event.actorBoxId===id),id);assert.deepEqual(turn.owners,initial.owners);assert.deepEqual(playMission37TriplePrototype(JSON.parse(JSON.stringify(turn)),{type:'move',move:'splash'}).owners,initial.owners);
  const switched=playMission37TriplePrototype(initial,{type:'switch',slot:4});assert.equal(restoreMission37TripleSnapshot(switched).p1.active[0].set.trainerToken,'player-1');assert.deepEqual(switched.owners.player,['player-0','player-1']);
 });
 
 test('prototype forced switches stay with the fainted owner, including an exhausted owner',()=>{
  const owned=[{...makeMon(25,60),boxId:'owned',moves:['튀어오르기'],pp:{}}],groups=mission37CompanionGroups(2),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`foe-${i}`,moves:['튀어오르기'],pp:{}}));
  const checkpoint=first=>{const c=createMission37TripleSnapshot(owned,first,groups[1].team,foes),b=restoreMission37TripleSnapshot(c),fainted=b.p1.active[1];fainted.hp=0;fainted.fainted=true;fainted.status='fnt';b.p1.pokemonLeft--;b.checkFainted();b.makeRequest('switch');const snap=b.toJSON();snap.formatid=c.snapshot.formatid;return {...c,snapshot:snap};};
- const pending=checkpoint(groups[0].team),next=playMission37TriplePrototype(pending,null),battle=restoreMission37TripleSnapshot(next);assert.equal(battle.p1.active[1].set.trainerToken,groups[0].team[1].boxId);assert.equal(battle.p1.active[2].set.trainerToken,groups[1].team[0].boxId);
+ const pending=checkpoint(groups[0].team);assert.equal(mission37TripleView(pending).adventureMultiContinueV1,true);const next=playMission37TriplePrototype(pending,null),battle=restoreMission37TripleSnapshot(next);assert.equal(battle.p1.active[1].set.trainerToken,groups[0].team[1].boxId);assert.equal(battle.p1.active[2].set.trainerToken,groups[1].team[0].boxId);
  const exhausted=checkpoint([groups[0].team[0]]),before=JSON.stringify(exhausted),continued=playMission37TriplePrototype(exhausted,null),restored=restoreMission37TripleSnapshot(continued);assert.equal(JSON.stringify(exhausted),before);assert.equal(restored.p1.active[1].set.trainerToken,groups[0].team[0].boxId);assert.equal(restored.p1.active[1].fainted,true);assert.equal(restored.p1.active[2].set.trainerToken,groups[1].team[0].boxId);
- const afterTurn=playMission37TriplePrototype(JSON.parse(JSON.stringify(continued)),{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(afterTurn).p1.active[1].fainted,true);assert.ok(afterTurn.log.some(line=>line.startsWith('|move|p1c:')));
+ const afterTurn=playMission37TriplePrototype(JSON.parse(JSON.stringify(continued)),{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(afterTurn).p1.active[1].fainted,true);assert.ok(afterTurn.events.some(event=>event.kind==='move'&&event.actorBoxId===groups[1].team[0].boxId));
 });
 
 test('prototype resolves victory and preserves owner parties after restoring the finished battle',()=>{
@@ -47,4 +47,11 @@ test('triple view exposes three active slots but only player-owned switches and 
  for(let i=0;i<3;i++)assert.equal(view.teams[0][view.activeBySide[0][i]].boxId,[player[0],groups[0].team[0],groups[1].team[0]][i].boxId);
  const move=view.requests[0].moves[0];assert.ok(move.targets.some(target=>target.side===1));assert.ok(move.targets.every(target=>target.index===view.activeBySide[target.side][target.slot]));
  assert.throws(()=>mission37PlayerTeam({...combat,owners:{...combat.owners,player:['missing']}}),/포켓몬/);
+});
+
+test('triple events retain each spread target, previous HP and the outgoing slot on switch',()=>{
+ const player=Array.from({length:2},(_,i)=>({...makeMon(150,80),boxId:`visual-player-${i}`,moves:['스피드스타'],pp:{}})),groups=mission37CompanionGroups(2),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`visual-foe-${i}`,moves:['튀어오르기'],pp:{}}));
+ const combat=createMission37TripleSnapshot(player,groups[0].team,groups[1].team,foes),turn=playMission37TriplePrototype(combat,{type:'move',move:'swift'}),view=mission37TripleView(turn);
+ assert.deepEqual(view.beforeActiveBySide.map(side=>side.length),[3,3]);assert.equal(view.before[0][view.beforeActiveBySide[0][2]].battleOwner,'ally2');for(let slot=0;slot<3;slot++){const event=turn.events.find(event=>event.kind==='damage'&&event.targetBoxId===foes[slot].boxId);assert.ok(event,`foe ${slot}`);assert.equal(event.activeSlot,slot);assert.equal(event.beforeHp,combat.teams[1][slot].hp);assert.ok(event.hp<event.beforeHp);}
+ const switched=playMission37TriplePrototype(combat,{type:'switch',slot:4});assert.equal(switched.before[0][switched.beforeActiveBySide[0][0]].boxId,player[0].boxId);assert.ok(switched.events.some(event=>event.kind==='switch'&&event.targetBoxId===player[1].boxId&&event.activeSlot===0));
 });

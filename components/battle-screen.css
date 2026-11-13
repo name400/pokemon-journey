@@ -205,3 +205,8 @@
 .battle-screen .bs-form-unavailable{display:block;color:#8c4b34;font-size:9px;font-weight:800;line-height:1.15;margin-top:2px}
 .battle-screen .bs-pixel-fx{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none}
 .battle-screen .bs-projectile .bs-pixel-fx{left:-50%;top:-50%}
+
+/* Three independent combatants share each side in the experimental mission. */
+.battle-screen .bs-multi-vitals[data-three=true]{grid-template-columns:repeat(3,minmax(0,1fr))}
+.battle-screen .bs-multi-vitals[data-three=true] .bs-hud{padding:8px;min-width:0}
+.battle-screen .bs-multi-vitals[data-three=true] .bs-name b{font-size:clamp(11px,2.5vw,15px);overflow-wrap:anywhere}
