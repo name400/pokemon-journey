@@ -6197,6 +6197,14 @@ test('Zone 12 eastern and southeastern entries keep legacy exits and saves',asyn
  }finally{globalThis.__adventureUser=prior;}
 });
 
+test('Zone 12 fenced court restores old save and preserves court and pond travel',async()=>{
+ const prior=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone12-court-fence-qa',displayName:'코트 철망'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,{...makeMon(1,50),boxId:id,moves:['파동탄']});
+ const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:7,y:3,facing:'right',zaRoyaleRank:'E',zaZone12CourtRocks:['5,4'],zaZone12Items:['south-super'],zaZone12Spent:{gogoat:true}},state.revision+1);delete old.districtPosition.zone12FenceLayout;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone12');assert.notDeepEqual([state.world.x,state.world.y],[7,3]);assert.notEqual(state.world.map[state.world.y][state.world.x],'#');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone12Items,['south-super']);assert.equal(state.world.zaZone12Spent.gogoat,true);
+ await walkTo({x:11,y:7});await call('move',{direction:'up'});assert.deepEqual([state.world.x,state.world.y],[11,6]);await call('move',{direction:'up'});assert.deepEqual([state.world.x,state.world.y],[11,5]);await get();assert.equal(state.world.map[4][10],'t');await walkTo({x:10,y:3});await call('face',{direction:'down'});await call('zone12Item-court-tm013');await get();assert.ok(state.world.zaZone12Items.includes('court-tm013'));await call('zone12Item-court-tm013',{},409);await walkTo({x:9,y:13});assert.equal(state.world.district,'lumiose-zone12');assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=priorRandom;}
+});
+
 test('Zone 12 relocated court preserves old rock and TM progress, save recovery and alpha access',async()=>{
  const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone12-court-move-qa',displayName:'눈 공원 코트'};
  try{

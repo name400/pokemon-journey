@@ -156,3 +156,13 @@ test('six principal park gates and older north/west exits preserve routes and sa
  const cases=[['lumiose-bleu-sector3',6,15,'down',8,1],['lumiose-bleu-sector3',16,15,'down',16,1],['lumiose-bleu-sector5',21,5,'right',1,4],['lumiose-bleu-sector5',21,12,'right',1,9]];
  for(const [district,x,y,dir,px,py] of cases){const r=stepField({...base,district,x,y},dir);assert.deepEqual([r.district,r.x,r.y],['lumiose-zone12',px,py]);assert.equal(stepField({...base,district,x,y,zaRoyaleRank:'F'},dir).blocked,true);}
 });
+
+
+test('fenced court preserves the south entrance and safely restores old positions',async()=>{
+ const {ZONE12_COURT_FENCE}=await import('../lib/cloud-adventure/adventure-zone12.mjs');
+ const base={area:3,district:'lumiose-zone12',interior:null,x:11,y:7,zaRoyaleRank:'E',teamIds:['kept'],zaZone12Items:['south-super'],zaZone12Spent:{gogoat:true}},map=zone12Map(base);
+ assert.equal(map[6][11],'.');assert.ok(fieldPath(map,base,{x:11,y:5}).length);assert.ok(fieldPath(map,base,{x:8,y:2}).length);
+ for(const [x,y] of ZONE12_COURT_FENCE){assert.equal(map[y][x],'#');const old=storeAdventurePosition({...base,x,y},270);delete old.districtPosition.zone12FenceLayout;const restored=restoreAdventurePosition(old,270);assert.notDeepEqual([restored.x,restored.y],[x,y]);assert.notEqual(map[restored.y][restored.x],'#');assert.ok(fieldPath(map,restored,{x:9,y:13}).length);assert.deepEqual([restored.teamIds,restored.zaZone12Items,restored.zaZone12Spent],[['kept'],['south-super'],{gogoat:true}]);}
+ const old=storeAdventurePosition({...base,x:7,y:3},271);delete old.districtPosition.zone12FenceLayout;assert.equal(restoreAdventurePosition(old,272).district,null);
+ const lower=zone12Map({...base,zaZone12PondLower:true});assert.equal(lower[13][8],'l');
+});
