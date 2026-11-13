@@ -5624,3 +5624,13 @@ test('Zone 10 rooftop link crosses canal and survives reload without changing pr
   for(let i=0;i<6;i++)await call('move',{direction:'left'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone10Upper],[8,9,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone10Items,['canal-quick']);assert.equal(rawWorld().zaZone10SludgeCleared,true);
  }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=random;}
 });
+
+test('Zone 6 source-based lift and high ladder round trip across saved layers',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone6-alt-layers-qa',displayName:'옥상 경로 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const ground={...rawWorld(),area:3,district:'lumiose-zone6',interior:null,x:15,y:7,facing:'right',zaZone6Layer:'ground',zaZone6Items:['south-potion'],zaZone6Spent:{'pikachu-alpha':true}};
+  seedWorld(storeAdventurePosition(ground,state.revision+1));await get();assert.equal(state.world.interaction.action,'zone6FlaaffyLift');await call('zone6FlaaffyLift');await get();assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y],['roof',15,7]);assert.equal(state.world.interaction.action,'zone6FlaaffyLift');await call('zone6FlaaffyLift');await get();assert.equal(state.world.zaZone6Layer,'ground');
+  seedWorld(storeAdventurePosition({...rawWorld(),x:18,y:7,facing:'right'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone6PikachuLadder');await call('zone6PikachuLadder');await get();assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y],['high',15,7]);assert.equal(state.world.zaZone6Spent['pikachu-alpha'],true);await call('zone6PikachuLadder');await get();assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y],['ground',18,7]);assert.deepEqual(state.world.zaZone6Items,['south-potion']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

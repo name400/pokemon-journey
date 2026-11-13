@@ -8,7 +8,7 @@ test('Zone 6 market stalls preserve older positions and the cafe approach',()=>{
  assert.ok(fieldPath(map,{x:11,y:15},{x:18,y:3}).length);assert.equal(map[3][8],'e');assert.equal(map[4][7],'g');
  assert.equal(storeAdventurePosition({...base,x:11,y:15},140).districtPosition.zone6MarketLayout,1);
 });
-import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
+import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Zone 6 ground approaches connect the bridge to gates without altering grass or saves',()=>{
  const s={area:3,district:'lumiose-zone6',interior:null,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone6Map(s);
@@ -129,4 +129,16 @@ test('Zone 6 ground court shows Meditite only by day',()=>{
  assert.equal(zone6Visible(day,'b').species,307);assert.equal(zone6Map(day)[5][15],'b');assert.equal(zone6Visible(night,'b'),null);assert.equal(zone6Map(night)[5][15],'g');
  for(const r of [0,.1,.3,.5,.7,.9,.999])assert.notEqual(zone6Encounter(()=>r,'night').speciesId,307);
  assert.equal(zone6Encounter(()=>.5,'day').speciesId,307);
+});
+
+test('source-based lift and ladder keep both roof layers and old saved positions',()=>{
+ const ground={area:3,district:'lumiose-zone6',interior:null,x:15,y:7,facing:'right',teamIds:['kept']};
+ const roof={...ground,zaZone6Layer:'roof'},high={...ground,zaZone6Layer:'high'};
+ assert.equal(fieldDialogue(ground).action,'zone6FlaaffyLift');assert.equal(fieldDialogue(roof).action,'zone6FlaaffyLift');
+ assert.equal(fieldDialogue({...ground,x:18}).action,'zone6PikachuLadder');assert.equal(fieldDialogue(high).action,'zone6PikachuLadder');
+ assert.ok(fieldPath(fieldMap(roof),roof,{x:7,y:6}).length);assert.ok(fieldPath(fieldMap(high),high,{x:10,y:6}).length);
+ for(const state of [{...ground,x:16},{...ground,x:19},{...roof,x:16},{...high,x:16}]){
+  const restored=restoreAdventurePosition(storeAdventurePosition(state,151),151);
+  assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone6Layer,restored.teamIds],[state.district,state.x,state.y,state.zaZone6Layer,['kept']]);
+ }
 });
