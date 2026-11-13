@@ -23,6 +23,14 @@ test('new Spinarak alpha knows its documented special move without changing inpu
  assert.equal(alpha.adventureAlphaMove,'구멍파기');assert.equal(alpha.moves[0],'구멍파기');assert.deepEqual(base.moves,before);assert.equal(alpha.evs.hp,252);
 });
 
+test('new wild alphas receive the confirmed move for their species and form',()=>{
+ for(const [id,name,key] of [[69,'맹독','toxic'],[80,'냉동빔','icebeam'],[530,'기합구슬','focusblast'],[688,'시저크로스','xscissor'],[678,'10만볼트','thunderbolt'],[10025,'대지의힘','earthpower']]){
+  const base=makeMon(id,35),before=JSON.stringify(base),alpha=makeCloudAdventureAlpha(base);
+  assert.equal(alpha.adventureAlphaMove,name);assert.equal(alpha.moves[0],name);assert.equal(alpha.moves.filter(m=>m===name).length,1);assert.ok(alpha.adventurePlusMastered.includes(key));assert.equal(JSON.stringify(base),before);
+ }
+ const unknown=makeCloudAdventureAlpha(makeMon(10165,35));assert.equal(unknown.adventureAlphaMove,undefined);
+});
+
 test('captured alpha can use an initially mastered Plus move after reload',async()=>{
  const {createCombat,combatView,playCpu}=await import('../lib/party-battle.mjs');
  const caught=JSON.parse(JSON.stringify({...makeCloudAdventureAlpha(makeMon(16,24)),boxId:'caught'}));
