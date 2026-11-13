@@ -26,3 +26,17 @@ test('north entrance item is present until collected and does not disturb shop s
  assert.notEqual(fieldMap(saved)[3][14],'u');
  assert.equal(fieldDialogue({...saved,x:7,y:2,facing:'left'}).name,'Glammor Pretti');
 });
+
+test('both entrances reach every existing boutique and salon without moving saved positions',()=>{
+ const s={area:3,district:'lumiose-ombrage-arcade',interior:null,x:11,y:1,teamIds:['kept'],zaEmmaMet:true},map=fieldMap(s),seen=[];
+ for(let y=0;y<map.length;y++)for(let x=0;x<map[y].length;x++){
+  const tile=map[y][x];if(!Object.hasOwn(OMBRAGE_SHOPS,tile))continue;
+  const approach={x:x===6?7:15,y},facing=x===6?'left':'right';
+  assert.ok(fieldPath(map,{x:11,y:1},approach).length,`${tile} from north`);
+  assert.ok(fieldPath(map,{x:11,y:15},approach).length,`${tile} from south`);
+  assert.equal(fieldDialogue({...s,...approach,facing}).name,OMBRAGE_SHOPS[tile]);
+  const restored=restoreAdventurePosition(storeAdventurePosition({...s,...approach,facing},88),88);
+  assert.deepEqual([restored.x,restored.y,restored.facing,restored.teamIds],[approach.x,approach.y,facing,['kept']]);seen.push(tile);
+ }
+ assert.deepEqual(seen.sort(),Object.keys(OMBRAGE_SHOPS).sort());
+});

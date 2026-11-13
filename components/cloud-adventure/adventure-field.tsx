@@ -625,7 +625,43 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
      if(c==='W'||c==='E'||c==='X'){ctx.fillStyle='#7c9693';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#dbe7d8';ctx.fillRect(px+6,py+6,tile-12,tile-12);ctx.fillStyle='#93b5ad';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
      return;
     }
-    if(w.district==='lumiose-ombrage-arcade'&&!w.interior){ctx.fillStyle=c==='#'?'#80747c':c===','?'#d9d4ce':'#eee3e0';ctx.fillRect(px,py,tile,tile);if(c===','&&x>=9&&x<=13){ctx.fillStyle='rgba(129,190,197,.20)';ctx.fillRect(px+2,py+1,tile-4,4);}if(c==='u'){ctx.fillStyle='#d6b857';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();}if('abcdefghijkl mns'.replace(/ /g,'').includes(c)){ctx.fillStyle=c==='s'?'#66999d':'#a66b82';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='s'?'미용실':'상점',px+tile/2,py+20);}if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(w.district==='lumiose-ombrage-arcade'&&!w.interior){
+     // Passage Ombragé is a long glazed arcade with shops and north/south
+     // entrances. Facade colours and the 2D footprint remain approximations.
+     // https://www.pokepedia.fr/Passage_de_l%27Ombre
+     const shop='abcdefghijklmn'.includes(c),salon=c==='s';
+     if(c==='#'){
+      ctx.fillStyle='#716a73';ctx.fillRect(px,py,tile,tile);
+      const adjoining=[w.map[y-1]?.[x],w.map[y+1]?.[x],w.map[y]?.[x-1],w.map[y]?.[x+1]].some(t=>t&&t!=='#');
+      if(adjoining){ctx.fillStyle='#9a8583';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#bdaaa2';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#6c5b5e';ctx.fillRect(px,py+tile-4,tile,4);ctx.fillStyle='#d9c9b7';ctx.fillRect(px+3,py+3,tile-6,2);}
+      return;
+     }
+     // Rectangular glass-roof reflections distinguish this north–south
+     // arcade from the domed Galerie de la Lune, without changing movement.
+     ctx.fillStyle=(x+y)%2?'#d5cbc2':'#e5dcd0';ctx.fillRect(px,py,tile,tile);
+     ctx.fillStyle='#b8aaa1';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py+2,2,tile-4);
+     if(x>=9&&x<=13&&y>=1&&y<=15){
+      ctx.fillStyle=(x+y)%2?'rgba(147,188,188,.25)':'rgba(188,216,208,.32)';ctx.fillRect(px+1,py+1,tile-2,tile-2);
+      ctx.fillStyle='#8ca2a0';ctx.fillRect(px,py+tile-3,tile,2);if(x===9)ctx.fillRect(px+2,py,2,tile);if(x===13)ctx.fillRect(px+tile-4,py,2,tile);
+      ctx.fillStyle='rgba(247,250,231,.5)';ctx.fillRect(px+5,py+5,tile-10,2);
+     }
+     if(shop||salon){
+      // Existing shop tiles carry the interactions. Storefront artwork is
+      // illustrative; exact real-world colour and individual order are unknown.
+      const colors=['#a05e6d','#718b88','#5c596f','#bb8d8a','#857451','#54838a','#9c796b','#665e78','#a1767d','#594c61','#8e765c','#786d77','#b77b85','#756b78'];
+      const color=salon?'#548887':colors['abcdefghijklmn'.indexOf(c)];
+      ctx.fillStyle='#544750';ctx.fillRect(px+1,py+1,tile-2,tile-2);ctx.fillStyle='#d7c0ac';ctx.fillRect(px+3,py+3,tile-6,tile-6);
+      ctx.fillStyle=color;ctx.fillRect(px+3,py+3,tile-6,7);ctx.fillStyle='#f0dbc1';for(let j=5;j<tile-4;j+=8)ctx.fillRect(px+j,py+3,3,7);
+      ctx.fillStyle='#4f6f76';ctx.fillRect(px+6,py+12,tile-12,tile-17);ctx.fillStyle='#cde2da';ctx.fillRect(px+8,py+14,tile-16,tile-21);
+      ctx.fillStyle=salon?'#f8f4e7':'#e7b6a4';ctx.fillRect(px+tile/2-3,py+15,6,7);ctx.fillRect(px+tile/2-5,py+17,10,2);
+      if(salon){ctx.fillStyle='#bd5559';ctx.fillRect(px+tile/2-3,py+17,6,2);}ctx.fillStyle='#dcc59d';ctx.fillRect(px+5,py+tile-4,tile-10,2);
+     }
+     if(c==='u'){
+      ctx.fillStyle='#eee4d5';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#76557f';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#394344';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);ctx.fillStyle='#fff';ctx.fillRect(px+tile/2-1,py+tile/2-1,2,3);
+     }
+     if(c==='X'){ctx.fillStyle='#6f807e';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d8e5d9';ctx.fillRect(px+6,py+6,tile-12,tile-12);ctx.fillStyle='#87aaa1';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
+     return;
+    }
     if(w.district==='lumiose-rouge-sector4'&&!w.interior){ctx.fillStyle=c==='#'?'#8a7472':c==='g'?'#a8c7cb':c===','?'#b8b2aa':(x+y)%2?'#e2d8ca':'#eee5d7';ctx.fillRect(px,py,tile,tile);if(c==='q'||c==='W'||c==='E'){ctx.fillStyle=c==='q'?'#715c73':'#537b85';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'상점가':'출구',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-north-rouge-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#827d7a':c==='b'?'#a68060':c==='n'?'#b59d78':(x+y)%2?'#ddd4c5':'#eee6d7';ctx.fillRect(px,py,tile,tile);if(c==='j'||c==='q'||c==='l'){ctx.fillStyle=c==='j'||c==='l'?'#936e40':'#759a77';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='j'?'승강기':c==='l'?'사다리':'옥상',px+tile/2,py+20);}return;}
     if(['lumiose-rouge-sector1','lumiose-rouge-sector1-roof','lumiose-rouge-sector3-roof'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#91857d':c==='g'?'#a7bc83':c==='w'?'#ded6cf':c==='b'?'#9b7658':c==='v'?'#7c9c61':c===';'?'#c89575':c===','?'#b9b1a3':(x+y)%2?'#e1dacb':'#ebe5d8';ctx.fillRect(px,py,tile,tile);if(c==='g')sprite('grassDetail',px,py);if(c==='j'||c==='E'||c==='X'||c==='t'||c==='o'||c==='d'||(c==='l'&&w.district==='lumiose-rouge-sector3-roof')||(c==='q'&&w.district==='lumiose-rouge-sector3-roof')){ctx.fillStyle=c==='o'||c==='d'?'#716589':c==='t'?'#d8b64f':c==='j'?(w.zaSide04Won?'#c7a75f':'#9d6e55'):'#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'르 예':c==='l'?'사다리':c==='j'?'승강기':c==='t'?'TM':c==='o'?'SBC':c==='d'?'은행':'출구',px+tile/2,py+20);}return;}
