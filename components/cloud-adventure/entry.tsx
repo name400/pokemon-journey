@@ -1,4 +1,5 @@
 'use client';
+import {mergeAdventureBox} from '@/lib/cloud-adventure/adventure-box-merge.mjs';
 import {ROYALE_BONUS_CARDS,royaleBonusRankApplies} from '@/lib/cloud-adventure/adventure-royale-bonus.mjs';
 import {adventureMoveMastered} from '@/lib/cloud-adventure/adventure-plus-mastery.mjs';
 import {adventurePlusEligible} from '@/lib/cloud-adventure/adventure-plus-status.mjs';
@@ -94,7 +95,7 @@ export default function Adventure(){
   if(!mounted.current||d.revision<revision.current)return false;revision.current=d.revision;
   if(visual?.kind==='confirmed'&&visualPath.current){const last=visual.pending.at(-1)||d.world;setPrediction({revision:d.revision,x:last.x,y:last.y,facing:last.facing,visualPath:visualPath.current});}
   else resetVisual();
-  setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()].filter((p:any)=>p.boxId!==d.world?.zaTradedPikachuId)};});
+  setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:mergeAdventureBox(old.box,d.box,d.world?.zaTradedPikachuId)};});
   setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();return true;
  },[stop,resetVisual,setPrediction]);
  const load=useCallback(async(light=false,recovery=false)=>{try{if(recovery&&pendingMovement.current){await api({action:'movementFence',...pendingMovement.current},false,true);pendingMovement.current=null;}const result=await api(undefined,light,recovery);if(syncRequired.current&&!recovery)return false;if(recovery&&result.revision<revision.current)throw Error('서버의 최신 진행 상태를 확인하지 못했습니다.');
