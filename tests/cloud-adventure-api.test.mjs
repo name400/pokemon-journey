@@ -6052,6 +6052,18 @@ test('Odette gives the Skiddo quest rewards once, preserving party and rejecting
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('Nouveau cafe story, drinks and travel preserve legacy hotel and party',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'nouveau-service-qa',displayName:'누보 카페 검사'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,reserve={...makeMon(4,30),boxId:'nouveau-reserve',hp:0,status:'독',pp:{tackle:0}},outside={...makeMon(25,30),boxId:'nouveau-outside',hp:1,status:'마비'};for(const mon of [reserve,outside])sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(mon.boxId,globalThis.__adventureUser.userId,mon.id,JSON.stringify(mon),'qa',1);const first={...rawMon(lead),hp:1,status:'독',pp:{tackle:0}};seedMon(lead,first);
+  sql.prepare('UPDATE wallets SET coins=249 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:7,y:7,facing:'up',zaMission04Complete:true,zaMission05Stage:5,zaMission05CafePending:true,zaRoyaleRank:'Y',teamIds:[lead,reserve.boxId]},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission05Cafe');await call('nouveauEmber',{},409);await call('enterRichissime',{},409);assert.equal(state.wallet.coins,249);await call('mission05Cafe');await get();assert.equal(state.world.zaMission05CafeSeen,true);assert.equal(state.world.interaction.actions.filter(a=>a.action.startsWith('nouveau')).length,7);await call('nouveauEmber',{},409);assert.equal(state.wallet.coins,249);assert.equal(rawMon(lead).hp,1);
+  sql.prepare('UPDATE wallets SET coins=250 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const rev=state.revision;await call('nouveauEmber');await call('nouveauEmber',{revision:rev},409);await get();assert.equal(state.wallet.coins,0);assert.equal(rawMon(lead).hp,rawMon(lead).maxHp);assert.equal(rawMon(lead).status,null);assert.deepEqual(rawMon(lead).pp,{});assert.equal(rawMon(lead).friendship,first.friendship+1);assert.equal(rawMon(reserve.boxId).hp,reserve.maxHp);assert.equal(rawMon(reserve.boxId).status,null);assert.deepEqual(rawMon(outside.boxId),outside);assert.deepEqual(state.world.teamIds,[lead,reserve.boxId]);
+  await call('move',{direction:'left'});await get();assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='cafe-nouveau'));await call('mapFastTravel',{destination:'cafe-nouveau'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.facing],[7,7,'up']);assert.equal(state.world.interaction.name,'누보 카페 (위치 초안)');
+  sql.prepare('UPDATE wallets SET coins=710 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),x:1,y:7,facing:'left'},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='taxi-cafe-nouveau'));await call('taxi-cafe-nouveau');await get();assert.equal(state.wallet.coins,0);assert.deepEqual([state.world.x,state.world.y],[7,7]);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:16,y:5,facing:'left'},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='enterRichissime'));await call('enterRichissime');await get();assert.equal(state.world.interior,'richissimeLobby');assert.deepEqual(state.world.teamIds,[lead,reserve.boxId]);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('taxi and registered cafe map points support side mission 14 without duplicate rewards',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side14-cafe-travel-qa',displayName:'카페 이동 검사'};
  try{
