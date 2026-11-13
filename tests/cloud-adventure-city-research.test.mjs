@@ -47,3 +47,11 @@ test('Scraggy appears in the main sewer without altering branch maps or saved pa
  for(const other of [{...s,zaSewerIceBranch:true},{...s,zaMission19Inner:true},{...s,interior:'shop'}])assert.equal(cityResearchEncounter(other,spot),null);
  const restored=restoreAdventurePosition(storeAdventurePosition(s,21),21);assert.deepEqual([restored.x,restored.y,restored.teamIds],[3,4,['kept']]);assert.equal(evolutionOptions(makeMon(559,39),{adventureEngine:'cloud'},[],{}).find(o=>o.id===560).ready,true);
 });
+
+test('consumed city spawns wait for area exit or a new cycle without removing other shinies',async()=>{
+ const {consumeCityResearch,refreshCityResearchSpawns,refreshCityResearchOnExit,visibleCityResearchEncounters}=await import('../lib/cloud-adventure/adventure-city-research.mjs');
+ const lit={x:8,y:2,tile:'^'},scr={x:2,y:4,tile:'^'},s={area:3,district:'lumiose-sewer',zaCityResearchPeriod:'day',zaCityResearchCycles:{'lumiose-sewer':{period:'day',interval:12}},zaWildShinyRolls:{'cityResearch:scraggy:559':true,'cityResearch:dratini:147':true},zaCityResearchSpent:{dratini:true}};
+ assert.ok(cityResearchEncounter(s,lit));assert.ok(consumeCityResearch(s,'litwick'));assert.equal(cityResearchEncounter(s,lit),null);assert.ok(cityResearchEncounter(s,scr));assert.ok(!visibleCityResearchEncounters(s,fieldMap(s)).some(p=>p.id==='litwick'));assert.equal(refreshCityResearchSpawns(s,'day',12),false);assert.equal(s.zaCityResearchSpent.litwick,true);
+ s.combat={};assert.equal(refreshCityResearchSpawns(s,'night',22),false);delete s.combat;assert.equal(refreshCityResearchSpawns(s,'night',22),true);assert.ok(cityResearchEncounter(s,lit));assert.equal(s.zaCityResearchSpent.dratini,true);assert.equal(s.zaWildShinyRolls['cityResearch:scraggy:559'],true);
+ consumeCityResearch(s,'litwick');s.district='lumiose-bleu3-sewer-approach';assert.equal(refreshCityResearchOnExit(s,'lumiose-sewer:'),true);assert.equal(s.zaCityResearchSpent.litwick,undefined);assert.equal(s.zaCityResearchSpent.dratini,true);assert.equal(s.zaWildShinyRolls['cityResearch:scraggy:559'],true);s.district='lumiose-sewer';assert.ok(cityResearchEncounter(s,lit));
+});
