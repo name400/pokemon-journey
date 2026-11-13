@@ -387,6 +387,7 @@ const pending=Array.isArray(s.adventurePendingMoves)?s.adventurePendingMoves:[];
 if(['andi','escape','brigitte','barrierRoute','barrier','tunnel','hotel'].includes(s.zaIntroStage)&&!(s.combat?['battle','attack','forfeit'].includes(b.action):['introBattle','introEscapeMove','introBarrier','introHotel','resolveAdventureMove'].includes(b.action)))throw Error('먼저 배틀 존을 벗어나 호텔로 가세요.');
 if(s.zaMission42Stage===2&&!s.combat&&!['mission42Battle','mission42Cancel','face','interact','resolveAdventureMove'].includes(b.action))throw Error('지가르데 연속 배틀을 계속하거나 중단하세요.');
 if(s.zaMission20SBCSeries==='vivica'&&!s.combat&&!['mission20SBCNext','mission20SBCCancel','resolveAdventureMove','face','interact'].includes(b.action))throw Error('SBC 연전을 계속하거나 중단하세요. 사이에는 회복할 수 없습니다.');
+if(s.combat&&(s.zaLeWowRun||s.zaSushiRun)&&['use','battleRevive'].includes(b.action))throw Error('식당 연속 배틀에서는 회복 도구를 사용할 수 없습니다.');
 if(s.zaLeWowRun&&!s.combat&&!['move','face','interact','resolveAdventureMove','leWowNext','leWowCancel'].includes(b.action))throw Error('연속 배틀 중에는 회복하거나 파티를 변경할 수 없습니다.');
 if(s.zaSushiRun&&!s.combat&&!['move','face','interact','resolveAdventureMove','sushiNext','sushiCancel'].includes(b.action))throw Error('연속 배틀 중에는 회복하거나 파티를 변경할 수 없습니다.');
 if(s.adventureCatchWindow&&!['catchWindowBall','skipCatchWindow','mission42SupplyBall'].includes(b.action))throw Error('포획 기회를 사용하거나 넘어가세요.');

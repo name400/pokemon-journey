@@ -6969,3 +6969,15 @@ test('Ultra Balls become available at Lumiose centers after the E promotion and 
   seedWorld(storeAdventurePosition({...state.world,x:10,y:8},state.revision+1));await get();await call('buyBall',{ball:'ultraball'},409);assert.equal(state.wallet.coins,13400);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('restaurant battles reject recovery items without consuming them',async()=>{
+ const prior=globalThis.__adventureUser;try{for(const c of [
+  {id:'sushi-item-ban',district:'lumiose-rouge-north',interior:'sushi',x:16,y:5,facing:'down',start:'sushiStart',zaMission24Started:true},
+  {id:'lewow-item-ban',district:'lumiose-rouge-sector2',interior:'leWow',x:11,y:6,facing:'up',start:'leWowStart',zaMission31Started:true},
+ ]){
+  globalThis.__adventureUser={userId:c.id,displayName:'식당 배틀 도구 검사'};await get();await call('start',{species:152});const id=state.world.activeId,mon=makeMon(150,70);seedMon(id,{...mon,hp:Math.floor(mon.maxHp/2)});sql.prepare('UPDATE wallets SET potions=5 WHERE user_id=?').run(c.id);
+  seedWorld(storeAdventurePosition({...rawWorld(),...c,area:3,teamIds:[id],activeId:id},state.revision+1));await get();await call(c.start);await get();const rev=state.revision,hp=state.battle.teams[0][0].hp;
+  await call('use',{item:'potion'},409);await call('use',{item:'potion',boxId:id},409);await call('use',{item:'freshwater'},409);await call('battleRevive',{item:'revive',boxId:id},409);await call('battle',{command:{type:'item',item:'potion'}},409);await get();assert.equal(state.revision,rev);assert.equal(state.wallet.potions,5);assert.equal(state.battle.teams[0][0].hp,hp);
+  await call('forfeit');await get();assert.ok(!state.world.zaLeWowRun&&!state.world.zaSushiRun);
+ }}finally{globalThis.__adventureUser=prior;}
+});
