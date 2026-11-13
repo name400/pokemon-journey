@@ -130,3 +130,12 @@ test('south scaffold connects both rooftops on its own saved level',()=>{
  const scaffold={...roof,district:'lumiose-zone9-scaffold',x:4,y:7,facing:'left'},platform=fieldMap(scaffold);assert.equal(fieldDialogue(scaffold).action,'zone9SouthScaffold');assert.ok(fieldPath(platform,scaffold,{x:18,y:7}).length);assert.equal(fieldDialogue({...scaffold,x:18,facing:'right'}).action,'zone9SouthScaffold');
  const restored=restoreAdventurePosition(storeAdventurePosition({...scaffold,zaZone9Spent:{'manectric-alpha':true},zaZone9Items:['north-heal']},140),140);assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone9Upper,restored.teamIds],['lumiose-zone9-scaffold',4,7,true,['kept']]);assert.deepEqual(restored.zaZone9Items,['north-heal']);assert.equal(restored.zaZone9Spent['manectric-alpha'],true);
 });
+
+test('Zone 9 southern scaffold decks retain crossing and saved items',async()=>{
+ const {ZONE9_SOUTH_ITEMS,zone9SouthScaffoldMap,zone9SouthScaffoldItem}=await import('../lib/cloud-adventure/adventure-zone9.mjs');
+ const s={area:3,district:'lumiose-zone9-scaffold',interior:null,x:4,y:7,zaRoyaleRank:'F',zaZone9Upper:true,zaZone9Items:['north-heal'],teamIds:['kept']},map=zone9SouthScaffoldMap(s);
+ for(const p of ZONE9_SOUTH_ITEMS){assert.equal(map[p.y][p.x],p.tile);assert.ok(fieldPath(map,s,{x:p.x,y:p.y}).length);assert.equal(zone9SouthScaffoldItem(s,p.tile).id,p.id);}
+ assert.ok(fieldPath(map,s,{x:18,y:7}).length);
+ for(const [x,y] of [[4,7],[11,6],[11,7],[11,8],[18,7]]){const saved=restoreAdventurePosition(storeAdventurePosition({...s,x,y},61),61);assert.deepEqual([saved.x,saved.y,saved.zaZone9Items,saved.teamIds],[x,y,['north-heal'],['kept']]);}
+ assert.equal(zone9SouthScaffoldItem({...s,zaZone9Items:['south-scaffold-carbos']},'i'),null);assert.equal(zone9SouthScaffoldMap({...s,zaZone9Items:['south-scaffold-carbos']})[4][8],',');
+});
