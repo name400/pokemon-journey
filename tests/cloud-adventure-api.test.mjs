@@ -3549,6 +3549,13 @@ test('Zone 14 north entrance returns to Rose Avenue and preserves progress',asyn
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Zone 16 western moat restores old saves and keeps island crossing',async()=>{
+ const prior=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone16-west-moat-qa',displayName:'광장 물길'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone16',interior:null,x:7,y:6,facing:'down',zaRoyaleRank:'C',zaZone16Items:['battle-ultra'],zaZone16Spent:{'ampharos-alpha':true}},state.revision+1);delete old.districtPosition.zone16MoatLayout;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone16');assert.notDeepEqual([state.world.x,state.world.y],[7,6]);assert.notEqual(state.world.map[state.world.y][state.world.x],'~');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone16Items,['battle-ultra']);assert.equal(state.world.zaZone16Spent['ampharos-alpha'],true);
+ seedWorld(storeAdventurePosition({...rawWorld(),x:7,y:5},state.revision+1));await get();await call('move',{direction:'down'},409);assert.deepEqual([state.world.x,state.world.y],[7,5]);await walkTo({x:8,y:4});await call('move',{direction:'down'});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.x,state.world.y],[8,6]);assert.ok(fieldPath(state.world.map,state.world,{x:11,y:7}).length);assert.equal(state.world.zaZone16Spent['ampharos-alpha'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);await walkTo({x:11,y:9});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone16Wild-froakie');await call('zone16Wild-froakie');assert.equal(state.battle.teams[1][0].speciesId,656);await call('flee');await get();assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=priorRandom;}
+});
+
 test('Zone 16 raised garden stairs preserve shared encounter and saved progress',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone16-garden-qa',displayName:'높은정원테스트'};
  try{

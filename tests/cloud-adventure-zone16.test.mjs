@@ -109,3 +109,13 @@ test('raised garden fountain keeps stair, TM, alpha and legacy positions accessi
  assert.equal(map[4][9],'^');assert.ok(ZONE16_GARDEN_FOUNTAIN.every(([x,y])=>!walkable(map[y][x])));assert.ok(fieldPath(map,s,{x:6,y:5}).length);assert.ok(fieldPath(map,s,{x:18,y:3}).length);assert.equal(map[12][17],'j');
  for(const [x,y] of ZONE16_GARDEN_FOUNTAIN){const old=storeAdventurePosition({...s,x,y},71);delete old.districtPosition.zone16GardenFountainLayout;const restored=restoreAdventurePosition(old,71);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone16Items,['battle-ultra']);assert.equal(restored.zaZone16Spent['ampharos-alpha'],true);}
 });
+
+test('western moat closes the island bypass while each of three crossings remains usable',()=>{
+ const s={area:3,district:'lumiose-zone16',interior:null,x:7,y:5,zaRoyaleRank:'C',teamIds:['kept'],zaZone16Spent:{'ampharos-alpha':true},zaZone16Items:['battle-ultra']},map=zone16Map(s),bridges=[[8,5],[16,8],[8,11]];
+ assert.equal(map[6][7],'~');assert.equal(stepField(s,'down').blocked,true);
+ const close=(keep)=>map.map((row,y)=>[...row].map((v,x)=>bridges.some(([bx,by],i)=>i!==keep&&x===bx&&y===by)?'~':v).join(''));
+ assert.equal(fieldPath(close(-1),{x:8,y:1},{x:11,y:7}).length,0);
+ for(let i=0;i<bridges.length;i++)assert.ok(fieldPath(close(i),{x:8,y:1},{x:11,y:7}).length,`crossing ${i}`);
+ for(const start of [{x:8,y:1},{x:21,y:8},{x:1,y:12}])assert.ok(fieldPath(map,start,{x:11,y:7}).length);
+ const old=storeAdventurePosition({...s,x:7,y:6},400);delete old.districtPosition.zone16MoatLayout;const restored=restoreAdventurePosition(old,400);assert.notDeepEqual([restored.x,restored.y],[7,6]);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual([restored.teamIds,restored.zaZone16Items,restored.zaZone16Spent],[['kept'],['battle-ultra'],{'ampharos-alpha':true}]);assert.equal(restoreAdventurePosition(old,401).district,null);
+});
