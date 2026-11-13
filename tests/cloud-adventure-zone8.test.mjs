@@ -60,3 +60,10 @@ test('time refresh and fast travel reroll ordinary burrows but keep unspent shin
   reset(s);assert.deepEqual(s.zaZone8Burrows,{gible:443});assert.equal(s.zaWildShinyRolls['zone8:gible:443'],true);assert.equal(s.zaWildShinyRolls['zone8:drilbur:529'],undefined);assert.equal(s.zaZone8Spent,undefined);
  }
 });
+
+test('central Jaune market connects both stalls to the plaza and restores older saves',()=>{
+ const s={area:3,district:'lumiose-zone8',interior:null,zaRoyaleRank:'F',teamIds:['kept'],zaMission40Stage:2,coins:300},map=zone8Map(s);
+ for(const [x,y] of [[7,5],[15,11]]){assert.equal(map[y][x],'^');const old=storeAdventurePosition({...s,x,y},81);delete old.districtPosition.zone8MarketLayout;assert.equal(old.districtPosition.zone8Layout,1);const restored=restoreAdventurePosition(structuredClone(old),81);assert.equal(restored.district,s.district);assert.notEqual(map[restored.y][restored.x],'^');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.zaMission40Stage,2);assert.equal(restored.coins,300);assert.equal(restoreAdventurePosition(structuredClone(old),82).district,null);}
+ for(const start of [{x:9,y:15},{x:19,y:1},{x:21,y:10}])for(const end of [{x:7,y:6},{x:15,y:10}])assert.ok(fieldPath(map,start,end).length);
+ assert.equal(map[6][10],'g');assert.equal(map[7][10],'b');assert.equal(map[9][11],'f');assert.equal(storeAdventurePosition({...s,x:9,y:15},81).districtPosition.zone8MarketLayout,1);
+});

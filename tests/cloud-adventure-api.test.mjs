@@ -5476,3 +5476,12 @@ test('Mission 41 simulator uses sourced boss moves and preserves retry and reent
   }
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 8 central market sells both stocks and preserves saved progress',async()=>{
+ const previousUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone8-central-market-qa',displayName:'광장 시장 검증'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:9,y:15,facing:'up',zaRoyaleRank:'F',zaMission40Stage:2},state.revision+1));await get();await walkTo({x:7,y:6});await call('face',{direction:'up'});assert.ok(state.world.interaction.actions.some(a=>a.action==='zone8BuyBerry-pomegberry'));const rev=state.revision;await call('zone8BuyBerry-pomegberry');assert.equal(state.wallet.coins,800);assert.equal(state.inventory.pomegberry,1);await call('zone8BuyBerry-pomegberry',{revision:rev},409);
+  await get();await walkTo({x:15,y:10});await call('face',{direction:'down'});assert.ok(state.world.interaction.actions.some(a=>a.action==='zone8BuyBerry-occaberry'));await call('zone8BuyBerry-pomegberry',{},409);await call('zone8BuyBerry-occaberry');await get();assert.equal(state.wallet.coins,600);assert.equal(state.inventory.occaberry,1);assert.equal(state.world.zaMission40Stage,2);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.activeId,id);
+ }finally{globalThis.__adventureRandom=oldRandom;globalThis.__adventureUser=previousUser;}
+});
