@@ -1,3 +1,4 @@
+import {visibleCityResearchEncounters} from '@/lib/cloud-adventure/adventure-city-research.mjs';
 import {isScrewGlideRoof,screwGlideAt} from '@/lib/cloud-adventure/adventure-screw-roofs.mjs';
 import {royaleFieldEntry} from '@/lib/cloud-adventure/adventure-royale-zones.mjs';
 import {LYSANDRE_WILD,lysandreWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
@@ -1379,6 +1380,12 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     const px=8*tile,py=5*tile,img=shinyFieldImages[179];
     if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);
     else{ctx.fillStyle='#ebadc6';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,10,8,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#465375';ctx.fillRect(px+20,py+13,6,7);ctx.fillRect(px+8,py+22,3,5);ctx.fillRect(px+18,py+22,3,5);}
+   }
+   for(const m of visibleCityResearchEncounters(w,w.map)){
+    const shiny=w.zaWildShinyRolls?.[`cityResearch:${m.id}:${m.species}`];if(typeof shiny!=='boolean')continue;
+    const px=m.x*tile,py=m.y*tile,img=shiny?shinyFieldImages[m.species]:fieldImages[m.species];
+    if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);
+    else{ctx.fillStyle=shiny?'#e5c45c':'#8b9e8c';ctx.fillRect(px+8,py+8,tile-16,tile-12);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}
    }
    const budew=zone2BudewPosition(w);if(budew){const px=budew.x*tile,py=budew.y*tile;const img=w.zaWildShinyRolls?.['field2:budew:406']===true?shinyFieldImages[406]:budewImage;if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-13,tile+16,tile+16);else{ctx.fillStyle='#79a85d';ctx.fillRect(px+8,py+8,tile-16,tile-12);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('꼬몽울',px+tile/2,py+20);}}
    const kakuna=zone2KakunaPosition(w);if(kakuna){const px=kakuna.x*tile,py=kakuna.y*tile;const img=w.zaWildShinyRolls?.['field2:kakuna:14']===true?shinyFieldImages[14]:kakunaImage;if(img.complete&&img.naturalWidth)ctx.drawImage(img,px,py-8,tile,tile);else{ctx.fillStyle='#e0bc46';ctx.fillRect(px+10,py+3,12,23);}}
