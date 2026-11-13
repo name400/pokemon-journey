@@ -6536,3 +6536,15 @@ test('Josée masters a party attack once with a seed and retains it after reload
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaRoyaleRank:'D',zaMission19Complete:true},state.revision+1));await get();await call('zone14Wild-aron');assert.equal(state.battle.adventurePlusGauge.charge,1);assert.equal(state.battle.requests[0].moves.find(m=>m.id==='tackle').plusReady,true);await get();assert.equal(state.battle.adventurePlusGauge.charge,1);await call('battle',{command:{type:'move',move:'몸통박치기',plus:true}});assert.equal(state.battle.adventurePlusGauge.charge,0);await get();assert.equal(state.battle.adventurePlusGauge.charge,0);await call('battle',{command:{type:'move',move:'몸통박치기',plus:true}},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('new mission 10 multi battle enables player natural Plus and restores the gauge',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-multi-qa',displayName:'다수 플러스'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedMon(id,{...makeMon(152,60),boxId:id,moves:['몸통박치기'],pp:{}});
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'seedofmasteryza']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'seedofmasteryza');seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',zaMission19JoseeWon:true},state.revision+1));await get();await call('masterAdventureMove',{boxId:id,move:'몸통박치기'},409);assert.equal(state.inventory.seedofmasteryza,1);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:null,x:11,y:7,facing:'up',regionId:6,districtReturnRegion:1,zaMission10Stage:2,zaMission10Starter:'grass',zaMegaRing:true},state.revision+1));await get();await call('battleQuasarticoGuard');
+  assert.equal(state.battle.adventurePlusGauge.charge,1);assert.equal(state.battle.requests[0].actors[0].moves[0].plusReady,true);const revision=state.revision;
+  await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'tackle',target:2,plus:true}]}});assert.equal(state.battle.adventurePlusGauge.charge,0,JSON.stringify({events:state.battle.events,log:state.battle.log}));await get();assert.equal(state.battle.adventurePlusGauge.charge,0);
+  await call('battle',{revision,command:{type:'turn',actions:[{actor:0,type:'move',move:'tackle',target:1,plus:true}]}},409);assert.equal(state.battle.adventurePlusGauge.charge,0);
+ }finally{globalThis.__adventureUser=previous;}
+});
