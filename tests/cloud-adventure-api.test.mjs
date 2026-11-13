@@ -5738,3 +5738,16 @@ test('Zone 9 north-west scaffold connects roofs and preserves item limits across
   await call('zone9NWScaffold');await get();assert.equal(state.world.district,'lumiose-zone9-nw-scaffold');await walkTo({x:4,y:9});await call('face',{direction:'left'});await call('zone9NWScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone9',3,8]);assert.ok(state.world.zaZone9Items.includes('west-scaffold-nugget'));
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 9 rare candy levels once, preserves choices and rejects duplicates and level 100',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone9-rare-candy-qa',displayName:'이상한사탕 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9-nw-scaffold',interior:null,x:7,y:12,facing:'right',zaZone9Upper:true,zaZone9Items:['north-heal']},state.revision+1));await get();
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'rarecandy');await get();await call('zone9NWItem-west-scaffold-rare-candy',{},409);assert.ok(!rawWorld().zaZone9Items.includes('west-scaffold-rare-candy'));
+  sql.prepare('UPDATE inventory SET quantity=2 WHERE key=?').run(key);await get();const takeRevision=state.revision;await call('zone9NWItem-west-scaffold-rare-candy');assert.equal(state.inventory.rarecandy,3);await call('zone9NWItem-west-scaffold-rare-candy',{revision:takeRevision},409);await get();assert.equal(state.inventory.rarecandy,3);assert.ok(state.world.zaZone9Items.includes('north-heal'));
+  const mon={...makeMon(1,8),boxId:id,moves:['몸통박치기','울음소리','덩굴채찍','성장'],experience:1};seedMon(id,mon);await get();const revision=state.revision;await call('useAdventureRareCandy');assert.equal(rawMon(id).level,9);assert.equal(rawMon(id).experience,0);assert.equal(state.inventory.rarecandy,2);assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='씨뿌리기'));await get();assert.equal(state.world.adventurePendingMoves[0].move,'씨뿌리기');await call('useAdventureRareCandy',{revision},409);await call('resolveAdventureMove',{slot:null});
+  seedMon(id,{...makeMon(1,15),boxId:id,experience:2});await get();await call('useAdventureRareCandy');assert.equal(rawMon(id).level,16);await get();assert.ok(state.box.find(p=>p.boxId===id).evolutions.some(e=>e.id===2&&e.ready));
+  seedMon(id,{...makeMon(1,99),boxId:id,experience:0,moves:['몸통박치기','울음소리','덩굴채찍','성장']});await get();await call('useAdventureRareCandy');assert.equal(rawMon(id).level,100);assert.equal(rawMon(id).experience,0);await get();sql.prepare('UPDATE inventory SET quantity=1 WHERE key=?').run(key);await get();const maxMon=rawMon(id);await call('useAdventureRareCandy',{},409);await get();assert.equal(state.inventory.rarecandy,1);assert.deepEqual(rawMon(id),maxMon);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
