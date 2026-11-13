@@ -20,3 +20,8 @@ test('a moving individual prevents another from respawning on its position',()=>
  assert.equal(refreshRoamingWildSpawns(s,'night',2),false);assert.equal(s.zaZone2FieldSpent.patrat,true);
  delete s.zaZone2FieldPositions.patrat2;assert.equal(refreshRoamingWildSpawns(s,'night',2),true);assert.equal(s.zaZone2FieldSpent.patrat,undefined);
 });
+
+test('respawn clears alpha identity only for consumed roaming individuals',()=>{
+ const s={district:'lumiose-zone2',x:3,y:3,zaWildSpawnCycles:{2:{period:'day',interval:1}},zaZone2FieldSpent:{patrat:true},zaWildShinyRolls:{'field2:patrat:504':true,'field2:patrat2:504':true},zaWildVisibleAlphaLevels:{'field2:patrat:504':17,'field2:patrat2:504':18}};
+ assert.equal(refreshRoamingWildSpawns(s,'night',2),true);assert.equal(s.zaWildVisibleAlphaLevels['field2:patrat:504'],undefined);assert.equal(s.zaWildVisibleAlphaLevels['field2:patrat2:504'],18);assert.equal(s.zaWildShinyRolls['field2:patrat2:504'],true);
+});
