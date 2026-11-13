@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone12Map,zone12Encounter,zone12WildMoves,zone12Visible,zone12Item} from '../lib/cloud-adventure/adventure-zone12.mjs';
+import {zone12Map,zone12Encounter,zone12WildMoves,zone12Visible,zone12Item,ZONE12_PARK_TREES} from '../lib/cloud-adventure/adventure-zone12.mjs';
 import {stepField,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 function reachable(s,target){const q=[s],seen=new Set([`${s.x},${s.y}`]);for(let i=0;i<q.length;i++){const p=q[i];if(p.x===target.x&&p.y===target.y)return true;for(const dir of ['up','down','left','right']){const n=stepField(p,dir),key=`${n.x},${n.y}`;if(!n.blocked&&!n.transitioned&&!seen.has(key)){seen.add(key);q.push({...p,...n});}}}return false;}
 test('Zone 12 pond-side grass can yield Vanillite while preserving its route and save',()=>{
@@ -85,4 +85,27 @@ test('draft icicle becomes a traversable bridge while water encounters remain bl
  assert.equal(stepField({...open,x:3,y:13},'right').x,4);
  const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:5,y:13},71),71);assert.deepEqual([saved.x,saved.y,saved.zaZone12PondLower,saved.zaZone12IceBridge,saved.teamIds],[5,13,true,true,['kept']]);
  const landing=restoreAdventurePosition(storeAdventurePosition({...open,x:3,y:13},72),72);assert.deepEqual([landing.x,landing.y,landing.zaZone12PondLower,landing.zaZone12IceBridge,landing.teamIds],[3,13,true,true,['kept']]);
+});
+
+
+test('snow park gates remain connected and old saves on new trees recover safely',()=>{
+ const base={area:3,district:'lumiose-zone12',interior:null,zaRoyaleRank:'E',teamIds:['kept'],money:713,zaZone12Items:['south-super']};
+ const map=zone12Map(base);
+ for(const [x,y] of ZONE12_PARK_TREES){
+  assert.equal(map[y][x],'^');
+  assert.equal(stepField({...base,x:x-1,y},'right').blocked,true);
+  const old=storeAdventurePosition({...base,x,y},117);delete old.districtPosition.zone12ParkLayout;
+  const restored=restoreAdventurePosition(old,117);
+  assert.notDeepEqual([restored.x,restored.y],[x,y]);
+  assert.deepEqual([restored.district,restored.teamIds,restored.money,restored.zaZone12Items],['lumiose-zone12',['kept'],713,['south-super']]);
+  assert.ok(fieldPath(map,restored,{x:9,y:13}).length);
+  assert.equal(restoreAdventurePosition(old,118).district,null);
+ }
+ for(const [x,y] of [[6,1],[16,1],[1,5],[1,12],[21,8],[12,15]]){
+  assert.ok(fieldPath(map,{x,y},{x:7,y:6}).length,`court from ${x},${y}`);
+  assert.ok(fieldPath(map,{x,y},{x:9,y:13}).length,`pond from ${x},${y}`);
+ }
+ const lower={...base,x:9,y:13,zaZone12PondLower:true,zaZone12IceBridge:true};
+ const restored=restoreAdventurePosition(storeAdventurePosition(lower,119),119);
+ assert.deepEqual([restored.x,restored.y,restored.zaZone12PondLower,restored.zaZone12IceBridge],[9,13,true,true]);
 });
