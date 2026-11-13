@@ -5415,3 +5415,16 @@ test('salon changes persist atomically, reject duplicate requests and preserve t
   seedWorld(place('lumiose',3,5,'down'));await get();await call('salonChange',{style:'short',color:'brown'},409);assert.deepEqual(rawMon(id),original);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Zone 6 roof link round trips onto paved ground and persists',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone6-roof-paved-qa',displayName:'구역6 옥상 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',x:18,y:5,facing:'up',teamIds:[id]},state.revision+1));
+  await get();const wallet=structuredClone(state.wallet);await call('zone6RoofLink');
+  assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y],['roof',17,4]);
+  await get();assert.equal(state.world.zaZone6Layer,'roof');await call('zone6RoofLink');
+  assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y],['ground',18,5]);
+  await get();assert.deepEqual([state.world.zaZone6Layer,state.world.x,state.world.y,state.world.teamIds[0]],['ground',18,5,id]);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
