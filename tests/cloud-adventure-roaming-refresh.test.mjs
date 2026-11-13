@@ -25,3 +25,10 @@ test('respawn clears alpha identity only for consumed roaming individuals',()=>{
  const s={district:'lumiose-zone2',x:3,y:3,zaWildSpawnCycles:{2:{period:'day',interval:1}},zaZone2FieldSpent:{patrat:true},zaWildShinyRolls:{'field2:patrat:504':true,'field2:patrat2:504':true},zaWildVisibleAlphaLevels:{'field2:patrat:504':17,'field2:patrat2:504':18}};
  assert.equal(refreshRoamingWildSpawns(s,'night',2),true);assert.equal(s.zaWildVisibleAlphaLevels['field2:patrat:504'],undefined);assert.equal(s.zaWildVisibleAlphaLevels['field2:patrat2:504'],18);assert.equal(s.zaWildShinyRolls['field2:patrat2:504'],true);
 });
+
+test('time changes reroll normal roaming individuals but retain shiny alphas and legacy first reads',()=>{
+ const s={district:'lumiose-zone3',x:3,y:3,zaZone3FieldPositions:{espurr:{x:14,y:5,alert:1}},zaWildShinyRolls:{'field3:espurr:677':false,'field3:flabebe:669':true,'field2:patrat:504':false},zaWildVisibleAlphaLevels:{'field3:espurr:677':19,'field3:flabebe:669':17,'field2:patrat:504':18}};
+ assert.equal(refreshRoamingWildSpawns(s,'day',1),true);assert.equal(s.zaWildShinyRolls['field3:espurr:677'],false);assert.equal(s.zaWildVisibleAlphaLevels['field3:espurr:677'],19);
+ assert.equal(refreshRoamingWildSpawns(s,'night',2),true);assert.equal(s.zaWildShinyRolls['field3:espurr:677'],undefined);assert.equal(s.zaWildVisibleAlphaLevels['field3:espurr:677'],undefined);assert.deepEqual(s.zaZone3FieldPositions.espurr,{x:14,y:5,alert:0});assert.equal(s.zaWildShinyRolls['field3:flabebe:669'],true);assert.equal(s.zaWildVisibleAlphaLevels['field3:flabebe:669'],17);assert.equal(s.zaWildShinyRolls['field2:patrat:504'],false);assert.equal(s.zaWildVisibleAlphaLevels['field2:patrat:504'],18);
+ const combat={district:'lumiose-zone2',zaWildSpawnCycles:{2:{period:'day',interval:1}},combat:{},zaWildShinyRolls:{'field2:patrat:504':false},zaWildVisibleAlphaLevels:{'field2:patrat:504':17}};assert.equal(refreshRoamingWildSpawns(combat,'night',2),false);assert.equal(combat.zaWildVisibleAlphaLevels['field2:patrat:504'],17);
+});
