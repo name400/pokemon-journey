@@ -1008,7 +1008,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(c==='X'){ctx.fillStyle='#a95850';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+21);}
      return;
     }
-    if(w.district==='lumiose-zone4'&&['#','.','g',',','%','|','^'].includes(c)){
+    if(w.district==='lumiose-zone4'&&['#','.','g',',','%','|','^','r','t'].includes(c)){
      // Dormez Bien cemetery: use the existing enclosure, graves and southern
      // crypt footprints. The exact path and architectural shapes are drafts.
      ctx.fillStyle=c==='#'?'#73847d':c==='g'?'#91ae82':c===','?'#c9c3b0':c==='|'?'#95a292':c==='%'?'#8ba880':c==='^'?'#adb6ab':(x+y)%2?'#d6d5c4':'#e1dfce';ctx.fillRect(px,py,tile,tile);
@@ -1024,6 +1024,10 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       if(vertical||horizontal){ctx.fillStyle='#bcbba1';if(vertical)ctx.fillRect(px+tile*.35,py,tile*.30,tile);if(horizontal)ctx.fillRect(px,py+tile*.35,tile,tile*.30);}
       ctx.fillStyle='#5d885b';for(const [dx,dy] of [[5,6],[19,8],[9,20],[24,23],[15,14]]){ctx.fillRect(px+dx,py+dy,2,5);ctx.fillRect(px+dx-2,py+dy+2,3,2);}
      }
+     // Central circle and flanking paths are an approximate 2D interpretation.
+     if((c==='g'||c===',')&&Math.abs(x-11)<=3&&Math.abs(y-8)<=3){ctx.save();ctx.beginPath();ctx.rect(px,py,tile,tile);ctx.clip();ctx.strokeStyle='#e4dfcb';ctx.lineWidth=3;ctx.beginPath();ctx.arc(11.5*tile,8.5*tile,2.15*tile,0,Math.PI*2);ctx.stroke();ctx.restore();}
+     if(c==='r'){ctx.fillStyle='#507749';ctx.fillRect(px+3,py+9,tile-6,tile-12);ctx.fillStyle='#80a35e';ctx.fillRect(px+5,py+5,8,12);ctx.fillRect(px+17,py+4,9,15);ctx.fillStyle='#d6cf9a';ctx.fillRect(px+10,py+16,3,3);ctx.fillRect(px+20,py+12,3,3);}
+     if(c==='t'){ctx.fillStyle='#d0ae50';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.fillRect(px+9,py+tile/2,14,3);}
      if(c==='%'){
       ctx.fillStyle='#667c70';ctx.fillRect(px+3,py+23,tile-6,5);ctx.fillStyle='#c2c9ba';ctx.fillRect(px+5,py+20,tile-10,5);ctx.fillStyle='#aab7aa';ctx.fillRect(px+7,py+7,tile-14,14);ctx.fillRect(px+10,py+4,tile-20,4);ctx.fillStyle='#e2e2d1';ctx.fillRect(px+9,py+9,tile-18,2);ctx.fillRect(px+tile/2-1,py+8,2,9);
      }

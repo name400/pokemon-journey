@@ -5660,3 +5660,16 @@ test('Zone 7 southern brambles and TM092 keep rewards and party on reload',async
   await call('teachStoryTm',{item:'za-tm092',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'매지컬샤인');assert.equal(state.inventory['za-tm092'],1);await call('teachStoryTm',{item:'za-tm092',boxId:id,slot:1},409);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 4 cemetery rear path and TM072 preserve legacy saves and rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone4-rear-tm-qa',displayName:'묘지 검증'};
+ try{
+  await get();await call('start',{species:498});const id=state.world.activeId,team=[...state.world.teamIds];
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone4',interior:null,x:16,y:11,zaSableyeQuest:1},state.revision+1);delete old.districtPosition.zone4RearLayout;seedWorld(old);await get();assert.notDeepEqual([state.world.x,state.world.y],[16,11]);assert.equal(state.world.zaSableyeQuest,1);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:16,y:10,facing:'down'},state.revision+1));seedMon(id,{...makeMon(498,20),moves:['몸통박치기']});await get();await call('zone4RearBrambles',{},409);
+  seedMon(id,{...makeMon(498,20),moves:['불꽃세례','몸통박치기']});await get();await call('zone4RearBrambles');await get();assert.equal(state.world.interaction.action,'zone4RearTm');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm072']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm072');await get();await call('zone4RearTm',{},409);assert.notEqual(rawWorld().zaZone4RearTmClaimed,true);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const revision=state.revision;await call('zone4RearTm');await get();assert.equal(state.inventory['za-tm072'],1);await call('zone4RearTm',{revision},409);
+  await call('teachStoryTm',{item:'za-tm072',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'회오리불꽃');assert.equal(state.inventory['za-tm072'],1);await call('teachStoryTm',{item:'za-tm072',boxId:id,slot:1},409);assert.equal(state.world.zaSableyeQuest,1);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
