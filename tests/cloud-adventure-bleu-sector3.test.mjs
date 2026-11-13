@@ -82,3 +82,10 @@ test('Vernal cafe and rear passage preserve services, approaches and legacy posi
  assert.equal(fieldDialogue({...base,x:12,y:3,facing:'down'}).action,'cafeWoofRoofLadder');
  const roof={...base,zaVernalEastRoof:true,x:11,y:3};const roofSaved=restoreAdventurePosition(storeAdventurePosition(roof,123),123);assert.deepEqual([roofSaved.x,roofSaved.y,roofSaved.zaVernalEastRoof],[11,3,true]);
 });
+
+test('Bleu Sector 3 stair interaction reaches the lower junction without bypassing sludge',()=>{
+ const city={area:3,district:'lumiose-bleu-sector3',interior:null,x:21,y:6,facing:'up',teamIds:['kept']};assert.equal(fieldDialogue(city).action,'bleu3UndergroundStairs');
+ const tunnel={...city,district:'lumiose-bleu3-sewer-approach',x:1,y:8,facing:'right'},map=fieldMap(tunnel);assert.equal(map[6][4],'~');assert.equal(map[10][4],'~');assert.equal(stepField({...tunnel,x:8,y:8},'right').blocked,true);
+ const old=restoreAdventurePosition(storeAdventurePosition(city,55),55);assert.deepEqual([old.district,old.x,old.y,old.teamIds],['lumiose-bleu-sector3',21,6,['kept']]);
+ const returnCity=stepField(tunnel,'left');assert.deepEqual([returnCity.district,returnCity.x,returnCity.y],['lumiose-bleu-sector3',21,3]);
+});

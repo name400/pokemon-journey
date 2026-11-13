@@ -5780,3 +5780,11 @@ test('Zone 11 northern upper bank preserves encounters and old saves',async()=>{
   await walkTo({x:19,y:11});await call('face',{direction:'down'});await call('zone11NorthernStairs');await get();assert.equal(state.world.zaZone11Upper,false);assert.deepEqual([state.world.x,state.world.y],[19,2]);assert.equal(state.world.zaMission40Stage,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('Bleu Sector 3 actual stairs enter the underground junction and preserve progress',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu3-underground-stairs-qa',displayName:'지하 계단 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const city=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector3',interior:null,x:21,y:6,facing:'up',zaMission19Complete:true,zaBleuSewerOpened:false},state.revision+1);seedWorld(city);await get();assert.equal(state.world.interaction.action,'bleu3UndergroundStairs');const revision=state.revision;await call('bleu3UndergroundStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu3-sewer-approach',1,8]);assert.equal(state.world.zaBleuSewerOpened,false);await call('bleu3UndergroundStairs',{revision},409);
+  await walkTo({x:8,y:8});await call('move',{direction:'right'},409);assert.deepEqual([state.world.x,state.world.y],[8,8]);assert.equal(state.world.zaBleuSewerSludgeCleared,undefined);seedMon(id,{...makeMon(7,10),boxId:id,moves:['물대포']});await get();await call('face',{direction:'right'});await call('clearBleuSludge');await walkTo({x:17,y:3});await call('face',{direction:'up'});await call('openBleuSewer');await get();assert.equal(state.world.zaBleuSewerOpened,true);await walkTo({x:17,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-zone5-drain');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=prior;}
+});
