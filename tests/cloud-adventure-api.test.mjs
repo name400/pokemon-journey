@@ -59,6 +59,15 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('defense special defense and speed mints can be bought and used after reconnect',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'remaining-mints-qa',displayName:'민트 검증'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(1,40),boxId:id,nature:'hardy',hp:1});sql.prepare('UPDATE wallets SET coins=60000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  for(const [district,x,y,facing,item,nature] of [['lumiose-rouge-sector1',3,6,'up','boldmint','bold'],['lumiose-rouge-sector1',7,6,'up','calmmint','calm'],['lumiose-vert-sector6',14,9,'right','jollymint','jolly']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action===`buyAdventureMint-${item}`));const revision=state.revision;await call(`buyAdventureMint-${item}`);await call(`buyAdventureMint-${item}`,{revision},409);await get();assert.equal(state.inventory[item],1);await call('useAdventureMint',{item,boxId:id});await get();assert.equal(rawMon(id).nature,'hardy');assert.equal(rawMon(id).rogueNatureOverride,nature);assert.deepEqual(rawMon(id).stats,configure({...rawMon(id),nature,rogueNatureOverride:undefined},{hp:1}).stats);assert.equal(rawMon(id).hp,1);assert.equal(state.inventory[item],undefined);assert.deepEqual(state.world.teamIds,team);
+  }assert.equal(state.wallet.coins,0);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Zone 10 bank benches preserve old saves and Staryu encounter identity',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-bank-staryu-qa',displayName:'강변 검증'};
  try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
