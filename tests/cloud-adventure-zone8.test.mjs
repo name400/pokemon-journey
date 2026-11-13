@@ -67,3 +67,13 @@ test('central Jaune market connects both stalls to the plaza and restores older 
  for(const start of [{x:9,y:15},{x:19,y:1},{x:21,y:10}])for(const end of [{x:7,y:6},{x:15,y:10}])assert.ok(fieldPath(map,start,end).length);
  assert.equal(map[6][10],'g');assert.equal(map[7][10],'b');assert.equal(map[9][11],'f');assert.equal(storeAdventurePosition({...s,x:9,y:15},81).districtPosition.zone8MarketLayout,1);
 });
+
+test('plaza gate approaches retain sand encounters and old positions',()=>{
+ const s={area:3,district:'lumiose-zone8',interior:null,zaRoyaleRank:'F',teamIds:['kept'],zaZone8Burrows:{gible:443,drilbur:529}},map=zone8Map(s);
+ for(const [x,y] of [[9,15],[11,15],[19,1],[21,10]]){
+  assert.equal(map[y][x],',');assert.ok(fieldPath(map,{x,y},{x:11,y:8}).length);
+  const old=restoreAdventurePosition(storeAdventurePosition({...s,x,y},87),87);
+  assert.deepEqual([old.x,old.y,old.teamIds,old.zaZone8Burrows],[x,y,['kept'],s.zaZone8Burrows]);
+ }
+ assert.equal(map[6][10],'g');assert.equal(map[9][11],'f');assert.equal(map[8][14],'c');
+});
