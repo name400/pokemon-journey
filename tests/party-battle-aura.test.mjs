@@ -22,3 +22,14 @@ test('classic AI aura damage estimates do not poison shared simulator move data'
  const foe=makeReferenceMon(717,72,{boxId:'enemy',ability:'darkaura',moves:['Dark Pulse']});run.combat=createClassicCombat(run,[foe],{trainer:true});
  run.combat=playClassicCombat(run,{type:'move',move:'protect'});assert.equal(Dex.moves.get('darkpulse').auraBooster,undefined);assert.doesNotThrow(()=>JSON.stringify(run.combat));
 });
+
+test('CPU tera suppression is opt-in and does not change other battles',()=>{
+ const player={...makeMon(498,5),boxId:'player',moves:['몸통박치기'],pp:{}};
+ const foe={...makeMon(674,4),boxId:'foe',teraType:'Ghost',moves:['몸통박치기'],pp:{}};
+ const original=createCombat([player],[foe]);
+ const normal=playCpu(JSON.parse(JSON.stringify(original)),{type:'move',move:'몸통박치기'});
+ assert.equal(normal.teams[1][0].terastallized,'Ghost');
+ const intro=playCpu({...JSON.parse(JSON.stringify(original)),disableCpuTera:true},{type:'move',move:'몸통박치기'});
+ assert.notEqual(intro.teams[1][0].terastallized,'Ghost');
+ assert.ok(intro.teams[1][0].hp<original.teams[1][0].hp);
+});

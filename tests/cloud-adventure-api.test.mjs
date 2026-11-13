@@ -5586,3 +5586,15 @@ test('research lab street restores legacy position and preserves lab and zone ac
   await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-zone1');await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-floral');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaResearchRewards,[2]);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('ZA intro retry does not let an old battle save acquire a random Ghost tera',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'intro-ghost-regression-qa',displayName:'도입 경험치 검사'};
+ try{
+  await get();await call('startIntro');for(let i=0;i<6;i++)await call('introMove',{direction:'right'});await call('introMove',{direction:'up'});await call('introTalk',{species:498});await call('introConfirm',{species:498,confirmed:true});const id=state.world.activeId;
+  await call('introBattle');await call('forfeit');await call('introBattle');
+  let c=rawWorld().combat,sim=Battle.fromJSON(c.snapshot);const foe=sim.p2.active[0];foe.teraType='Ghost';foe.set.teraType='Ghost';foe.setStatus('slp');foe.statusState.time=99;sim.makeRequest('move');delete c.disableCpuTera;seedWorld({combat:{...c,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  const hp=state.battle.teams[1][0].hp;await call('battle',{command:{type:'move',move:'몸통박치기'}});await get();assert.notEqual(state.battle.teams[1][0].terastallized,'Ghost');assert.ok(state.battle.teams[1][0].hp<hp);
+  c=rawWorld().combat;sim=Battle.fromJSON(c.snapshot);sim.p2.active[0].hp=1;sim.makeRequest('move');seedWorld({combat:{...c,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('battle',{command:{type:'move',move:'몸통박치기'}});await get();
+  assert.equal(state.world.zaIntroStage,'escape');assert.ok(rawMon(id).experience>0||rawMon(id).level>5);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
