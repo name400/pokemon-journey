@@ -2952,6 +2952,21 @@ test('Hibernal Pokemon Center heals and sells supplies on the Mission 33 route',
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Café Ultimo requires confirmation and sells its restorative coffee atomically',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'cafe-ultimo-qa',displayName:'울티모 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,other='ultimo-reserve',reserve={...makeMon(25,10),boxId:other,hp:0,status:'독',pp:{thundershock:1}};
+  sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);
+  const damaged={...rawMon(id),hp:1,status:'독',pp:{tackle:1},friendship:70};seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(99999,globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),teamIds:[id,other],area:3,district:'lumiose-zone15',interior:null,x:17,y:7,facing:'up',zaMission19Complete:true,zaRoyaleRank:'D',zaZone15Upper:false,zaZone15Items:['cafe-ultra']},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'ultimoCoffee');assert.match(state.world.interaction.label,/100,000/);const before=structuredClone(rawMon(id));await call('ultimoCoffee',{},409);await call('ultimoCoffee',{confirmed:true},409);await get();assert.equal(state.wallet.coins,99999);assert.deepEqual(rawMon(id),before);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(100000,globalThis.__adventureUser.userId);await get();const revision=state.revision;await call('ultimoCoffee',{confirmed:true});assert.equal(state.wallet.coins,0);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(rawMon(id).friendship,71);assert.equal(rawMon(other).hp,rawMon(other).maxHp);assert.equal(rawMon(other).status,null);assert.equal(state.world.zaResearchActivities.cafe,1);
+  await call('ultimoCoffee',{confirmed:true,revision},409);await get();assert.equal(state.wallet.coins,0);assert.equal(rawMon(id).friendship,71);assert.deepEqual(state.world.zaZone15Items,['cafe-ultra']);assert.equal(state.world.zaMission19Complete,true);assert.deepEqual(state.world.teamIds,[id,other]);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:10,y:4,facing:'up'},state.revision+1));await get();await call('ultimoCoffee',{confirmed:true},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:17,y:7,facing:'up',zaZone15Upper:true},state.revision+1));await get();await call('ultimoCoffee',{confirmed:true},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Café Bataille serves its menu atomically and preserves progress',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'cafe-bataille-qa',displayName:'카페 검증'};
  try{
