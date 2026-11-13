@@ -2952,6 +2952,20 @@ test('Hibernal Pokemon Center heals and sells supplies on the Mission 33 route',
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('colorful screws unlock a one-time blue plush without losing older progress',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'colorful-screws-qa',displayName:'나사 교환'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),inventory=structuredClone(state.inventory),id=state.world.activeId,mon=structuredClone(rawMon(id));
+  const base={...rawWorld(),area:3,zaRedCanariPlush:true,zaRoyaleRank:'F',zaMission19Complete:true,zaColorfulScrewsFound:['future-screw']};
+  seedWorld(storeAdventurePosition({...base,district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up'},state.revision+1));await get();await call('exchangeBlueCanari',{},409);assert.deepEqual(state.wallet,wallet);
+  for(const [district,interior,x,y] of [['lumiose-vert-sector6','racineGarage',9,13],['lumiose-magenta6-scaffold',null,12,5],['lumiose-zone9-scaffold',null,10,7]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),...base,district,interior,x,y,facing:'up',zaColorfulScrewsFound:rawWorld().zaColorfulScrewsFound||base.zaColorfulScrewsFound},state.revision+1));await get();assert.equal(state.world.interaction.action,'collectColorfulScrew');const revision=state.revision;await call('collectColorfulScrew');await call('collectColorfulScrew',{revision},409);await get();assert.notEqual(state.world.map[y][x],'!');
+  }
+  assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw','racine-garage','magenta6-scaffold','zone9-south-scaffold']);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'exchangeBlueCanari');const revision=state.revision;await call('exchangeBlueCanari');await call('exchangeBlueCanari',{revision},409);await get();assert.equal(state.world.zaBlueCanariLevel,1);assert.equal(rawWorld().zaColorfulScrewsSpent,3);assert.equal(state.world.interaction.action,undefined);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,inventory);assert.deepEqual(rawMon(id),mon);assert.equal(state.world.zaMission19Complete,true);await call('exchangeBlueCanari',{},409);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Café Ultimo requires confirmation and sells its restorative coffee atomically',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'cafe-ultimo-qa',displayName:'울티모 검증'};
  try{
