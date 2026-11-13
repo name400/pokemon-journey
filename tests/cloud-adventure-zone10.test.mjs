@@ -108,3 +108,15 @@ test('east entrance shallow water reaches Tynamo and preserves its water tile af
  assert.equal(map[8][20],'v');assert.equal(zone10Visible(s,'v').species,602);assert.equal(fieldDialogue(s).action,'zone10Wild-tynamo');assert.equal(map[9][20],'w');assert.ok(fieldPath(map,s,{x:21,y:10}).length);assert.equal(walkable(map[10][18]),false);
  const spent={...s,x:20,y:8,zaZone10Spent:{tynamo:true}},cleared=zone10Map(spent);assert.equal(cleared[8][20],'w');const restored=restoreAdventurePosition(storeAdventurePosition(spent,88),88);assert.deepEqual([restored.x,restored.y,restored.teamIds],[20,8,['kept']]);assert.equal(zone10Visible(spent,'v'),null);
 });
+
+test('roof link crosses above canal and preserves ground and rooftop saves',()=>{
+ const s={area:3,district:'lumiose-zone10',interior:null,zaRoyaleRank:'F',teamIds:['kept'],zaZone10Items:['canal-quick']},ground=zone10Map(s),roof=zone10Map({...s,zaZone10Upper:true});
+ for(let x=9;x<=13;x++){
+  assert.equal(ground[9][x],'~');assert.equal(roof[9][x],',');
+  const restored=restoreAdventurePosition(storeAdventurePosition({...s,zaZone10Upper:true,x,y:9},71),71);
+  assert.deepEqual([restored.x,restored.y,restored.zaZone10Upper,restored.teamIds,restored.zaZone10Items],[x,9,true,['kept'],['canal-quick']]);
+ }
+ assert.equal(fieldPath(roof,{x:8,y:9},{x:14,y:9}).length,6);
+ assert.equal(stepField({...s,zaZone10Upper:true,x:8,y:9},'right').blocked,undefined);
+ assert.equal(stepField({...s,zaZone10Upper:false,x:8,y:7},'down').blocked,true);
+});

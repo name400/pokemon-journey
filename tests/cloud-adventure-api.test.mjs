@@ -5612,3 +5612,13 @@ test('Zone 16 garden TM 076 preserves old saves and teaches compatible Pokemon o
   seedMon(id,{...makeMon(1,20),moves:['몸통박치기'],pp:{tackle:3}});await get();await call('teachStoryTm',{item:'za-tm076',boxId:id,slot:0},409);assert.deepEqual(rawMon(id).moves,['몸통박치기']);await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.inventory['za-tm076'],1);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 10 rooftop link crosses canal and survives reload without changing progress',async()=>{
+ const prior=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone10-roof-link-qa',displayName:'옥상 연결 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:8,y:9,facing:'right',zaRoyaleRank:'F',zaZone10Upper:true,zaZone10Items:['canal-quick'],zaZone10SludgeCleared:true},state.revision+1));await get();
+  for(let i=0;i<6;i++)await call('move',{direction:'right'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone10Upper],[14,9,true]);
+  for(let i=0;i<6;i++)await call('move',{direction:'left'});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone10Upper],[8,9,true]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone10Items,['canal-quick']);assert.equal(rawWorld().zaZone10SludgeCleared,true);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=random;}
+});
