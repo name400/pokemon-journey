@@ -34,26 +34,26 @@ test('zone twelve snow park gate and saved position',()=>{
 });
 
 test('the court Machop remains reachable and its encounter state survives saves',()=>{
- const s={area:3,district:'lumiose-zone12',interior:null,x:7,y:6,facing:'up',teamIds:['kept']};
- assert.equal(zone12Map(s)[5][7],'m');assert.equal(zone12Visible(s,'m').species,66);
+ const s={area:3,district:'lumiose-zone12',interior:null,x:12,y:5,facing:'up',teamIds:['kept']};
+ assert.equal(zone12Map(s)[4][12],'m');assert.equal(zone12Visible(s,'m').species,66);
  assert.equal(fieldDialogue(s).action,'zone12Wild-machop');
  assert.ok(fieldPath(zone12Map(s),s,{x:1,y:5}).length);
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,zaZone12Spent:{machop:true}},91),91);
- assert.equal(zone12Visible(saved,'m'),null);assert.equal(zone12Map(saved)[5][7],',');
+ assert.equal(zone12Visible(saved,'m'),null);assert.equal(zone12Map(saved)[4][12],',');
  assert.deepEqual(saved.teamIds,['kept']);
 });
 
-test('court rocks gate Ice Beam and old court positions migrate safely',()=>{
- const s={area:3,district:'lumiose-zone12',interior:null,x:4,y:4,facing:'right',teamIds:['kept']};
- const map=zone12Map(s);assert.equal(map[5][6],'r');assert.equal(map[5][5],'t');
- assert.equal(fieldDialogue(s).action,'zone12CourtRock');assert.equal(fieldPath(map,s,{x:5,y:5}).length,0);
- const opened={...s,zaZone12CourtRocks:['5,4']};assert.ok(fieldPath(zone12Map(opened),opened,{x:5,y:5}).length);
+test('court rocks gate Ice Beam and old court progress survives relocation',()=>{
+ const s={area:3,district:'lumiose-zone12',interior:null,x:9,y:3,facing:'right',teamIds:['kept']};
+ const map=zone12Map(s);assert.equal(map[4][11],'r');assert.equal(map[4][10],'t');
+ assert.equal(fieldDialogue(s).action,'zone12CourtRock');assert.equal(fieldPath(map,s,{x:10,y:4}).length,0);
+ const opened={...s,zaZone12CourtRocks:['5,4']};assert.ok(fieldPath(zone12Map(opened),opened,{x:10,y:4}).length);
  assert.equal(zone12Item(opened,'t').kind,'za-tm013');
- const old=storeAdventurePosition({...s,x:5,y:5},93);old.districtPosition.zone12Layout=1;
- const migrated=restoreAdventurePosition(old,93);assert.deepEqual([migrated.district,migrated.x,migrated.y,migrated.teamIds],['lumiose-zone12',7,6,['kept']]);
+ const old=storeAdventurePosition({...s,x:10,y:3},93);delete old.districtPosition.zone12CourtLayout;
+ const migrated=restoreAdventurePosition(old,93);assert.notDeepEqual([migrated.x,migrated.y],[10,3]);assert.deepEqual(migrated.teamIds,['kept']);
  assert.equal(restoreAdventurePosition(old,94).district,null);
- const saved=restoreAdventurePosition(storeAdventurePosition({...opened,x:5,y:5},94),94);
- assert.deepEqual([saved.x,saved.y,saved.zaZone12CourtRocks],[5,5,['5,4']]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...opened,x:10,y:3},94),94);
+ assert.deepEqual([saved.x,saved.y,saved.zaZone12CourtRocks],[10,3,['5,4']]);
 });
 
 test('southwest pond steps keep the existing southern access',()=>{
@@ -119,7 +119,7 @@ test('lower pond north bank remains separated from the staircase until the ice b
 
 test('expanded southwest pond restores old shore positions and preserves park routes',()=>{
  const base={area:3,district:'lumiose-zone12',interior:null,zaRoyaleRank:'E',teamIds:['kept'],zaZone12Items:['south-super'],zaZone12Spent:{gogoat:true}};
- const map=zone12Map(base),water=[[4,9],[5,9],[6,9],[5,10],[6,10],[5,11],[6,11]];
+ const map=zone12Map(base),water=[[4,9],[5,9],[6,9],[5,10],[6,10],[5,11]];
  for(const [x,y] of water){
   assert.equal(map[y][x],'~');const previous=storeAdventurePosition({...base,x,y},140);delete previous.districtPosition.zone12ShoreLayout;
   const loaded=restoreAdventurePosition(previous,140);assert.notDeepEqual([loaded.x,loaded.y],[x,y]);assert.notEqual(map[loaded.y][loaded.x],'~');assert.deepEqual([loaded.teamIds,loaded.zaZone12Items,loaded.zaZone12Spent],[['kept'],['south-super'],{gogoat:true}]);assert.ok(fieldPath(map,loaded,{x:9,y:13}).length);assert.equal(restoreAdventurePosition(previous,141).district,null);
@@ -139,4 +139,11 @@ test('eastern and southeastern approaches retain older exits and saved positions
  const eastern=stepField({...base,district:'lumiose-vernal',x:1,y:3},'left');assert.deepEqual([eastern.district,eastern.x,eastern.y],['lumiose-zone12',21,4]);
  const south=stepField({...base,district:'lumiose-bleu-sector7',x:16,y:1},'up');assert.deepEqual([south.district,south.x,south.y],['lumiose-zone12',20,15]);
  assert.equal(stepField({...base,district:'lumiose-vernal',zaRoyaleRank:'F',x:1,y:3},'left').blocked,true);assert.equal(stepField({...base,district:'lumiose-bleu-sector7',zaRoyaleRank:'F',x:16,y:1},'up').blocked,true);
+});
+
+test('relocated court keeps every prior rock key and pond alpha approach',()=>{
+ const base={area:3,district:'lumiose-zone12',interior:null,x:6,y:11,facing:'down',zaZone12CourtRocks:['4,5','6,5','5,4','5,6'],zaZone12Items:['court-tm013'],teamIds:['kept']};
+ const map=zone12Map(base);for(const [x,y] of [[9,4],[11,4],[10,3],[10,5]])assert.notEqual(map[y][x],'r');assert.notEqual(map[4][10],'t');
+ assert.equal(map[11][6],'.');assert.equal(fieldDialogue(base).action,'zone12Wild-avalugg-alpha');
+ for(const [x,y] of [[8,2],[11,3],[12,4],[10,4],[9,4],[11,4],[10,3],[10,5]]){const old=storeAdventurePosition({...base,zaZone12CourtRocks:[],x,y},210);delete old.districtPosition.zone12CourtLayout;const restored=restoreAdventurePosition(old,210);assert.notDeepEqual([restored.x,restored.y],[x,y]);assert.deepEqual([restored.teamIds,restored.zaZone12Items],[['kept'],['court-tm013']]);assert.ok(fieldPath(zone12Map({...base,zaZone12CourtRocks:[]}),restored,{x:9,y:13}).length);}
 });
