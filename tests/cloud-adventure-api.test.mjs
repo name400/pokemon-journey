@@ -5485,3 +5485,13 @@ test('Zone 8 central market sells both stocks and preserves saved progress',asyn
   await get();await walkTo({x:15,y:10});await call('face',{direction:'down'});assert.ok(state.world.interaction.actions.some(a=>a.action==='zone8BuyBerry-occaberry'));await call('zone8BuyBerry-pomegberry',{},409);await call('zone8BuyBerry-occaberry');await get();assert.equal(state.wallet.coins,600);assert.equal(state.inventory.occaberry,1);assert.equal(state.world.zaMission40Stage,2);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.activeId,id);
  }finally{globalThis.__adventureRandom=oldRandom;globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 3 statue antidote preserves old position, wallet limits and progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone3-statue-qa',displayName:'광장 조각상 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,zaZone3TowerUpper:false,x:17,y:12,facing:'down',zaRoyaleRank:'A',zaMission40Stage:1},state.revision+1);delete old.districtPosition.zone3StatueLayout;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone3');assert.notDeepEqual([state.world.x,state.world.y],[17,12]);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaMission40Stage,1);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone3',interior:null,x:16,y:13,facing:'up'},state.revision+1));sql.prepare('UPDATE wallets SET antidotes=99 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();assert.equal(state.world.interaction.action,'zone3StatueAntidote');await call('zone3StatueAntidote',{},409);assert.notEqual(rawWorld().zaZone3StatueAntidote,true);
+  sql.prepare('UPDATE wallets SET antidotes=98 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const rev=state.revision;await call('zone3StatueAntidote');assert.equal(state.wallet.antidotes,99);assert.equal(state.world.zaZone3StatueAntidote,true);await call('zone3StatueAntidote',{revision:rev},409);await get();assert.equal(state.wallet.antidotes,99);assert.equal(rawWorld().zaMission40Stage,1);assert.equal(rawWorld().activeId,id);assert.deepEqual(state.world.teamIds,team);assert.notEqual(state.world.map[12][16],'o');
+ }finally{globalThis.__adventureUser=previousUser;}
+});

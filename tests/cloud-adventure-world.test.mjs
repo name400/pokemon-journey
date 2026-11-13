@@ -566,3 +566,11 @@ test('dialogue uses the current response map without retaining a stale interacti
  assert.equal(interactionAt(s,changed),null);assert.equal(fieldDialogue(s,changed),null);
  assert.equal(fieldDialogue(s)?.action,'zone3TowerUp','later requests construct their own map');
 });
+
+test('Zone 3 southeast statue and paths retain old positions and garden access',()=>{
+ const s={area:3,district:'lumiose-zone3',interior:null,zaZone3TowerUpper:false,teamIds:['kept'],zaMission40Stage:1},map=fieldMap(s);
+ assert.equal(map[12][17],'^');assert.equal(map[12][16],'o');assert.equal(stepField({...s,x:17,y:13},'up').blocked,true);
+ for(const start of [{x:11,y:15},{x:21,y:12},{x:1,y:8}])assert.ok(fieldPath(map,start,{x:16,y:13}).length);
+ const saved=storeAdventurePosition({...s,x:17,y:12},181);delete saved.districtPosition.zone3StatueLayout;const old=restoreAdventurePosition(structuredClone(saved),181);assert.equal(old.district,s.district);assert.ok(walkable(map[old.y][old.x]));assert.deepEqual(old.teamIds,['kept']);assert.equal(old.zaMission40Stage,1);assert.equal(restoreAdventurePosition(structuredClone(saved),182).district,null);
+ const claimed=fieldMap({...s,zaZone3StatueAntidote:true});assert.notEqual(claimed[12][16],'o');assert.equal(claimed[12][17],'^');assert.equal(storeAdventurePosition({...s,x:16,y:13},181).districtPosition.zone3StatueLayout,1);
+});

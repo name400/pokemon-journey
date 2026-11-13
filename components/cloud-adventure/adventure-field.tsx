@@ -1015,6 +1015,12 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(w.district==='lumiose-zone1'&&c==='%'){ctx.fillStyle=y===5?'#8e8275':'#d3c1a8';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===5?'#b4a08a':'#77918a';ctx.fillRect(px+4,py+5,tile-8,tile-10);if(y===6){ctx.fillStyle=x%2?'#e7d8ba':'#b16c5e';ctx.fillRect(px+2,py+2,tile-4,5);}}
      if(w.district==='lumiose-vert-plaza'&&c===','){ctx.fillStyle=(x+y)%2?'#d0c4af':'#dbd0bc';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#eee4d2';ctx.fillRect(px+2,py+tile-3,tile-4,1);}
      if(w.district==='lumiose-vert-plaza'&&c==='%'){ctx.fillStyle=y===2||y===12?'#917f71':'#c4b5a1';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2||y===12?'#b2a08c':'#79918a';ctx.fillRect(px+5,py+6,tile-10,tile-12);}
+     if(w.district==='lumiose-zone3'&&!w.zaZone3TowerUpper&&c==='^'&&x===17&&y===12){
+      // Roserade-like stone figure and pedestal; exact sculpture is provisional.
+      ctx.fillStyle='#b6b7a7';ctx.fillRect(px+4,py+tile-7,tile-8,5);ctx.fillStyle='#73877a';ctx.fillRect(px+11,py+12,10,14);ctx.fillRect(px+7,py+13,18,4);
+      ctx.fillStyle='#c9d2c4';ctx.fillRect(px+9,py+6,14,9);ctx.fillRect(px+12,py+2,8,5);ctx.fillStyle='#809b87';ctx.fillRect(px+5,py+10,5,5);ctx.fillRect(px+22,py+10,5,5);
+     }
+     if(w.district==='lumiose-zone3'&&!w.zaZone3TowerUpper&&c==='o'&&x===16&&y===12){ctx.fillStyle='#f7ede1';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c95757';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#52605c';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}
      if(w.district==='lumiose-zone3'&&c==='.'){
       ctx.fillStyle='#cfc2aa';if((x+y)%2===0)ctx.fillRect(px+3,py+tile/2,tile-6,1);
       ctx.fillRect(px+tile/2,py+3,1,5);ctx.fillRect(px+tile/2,py+tile-8,1,5);
