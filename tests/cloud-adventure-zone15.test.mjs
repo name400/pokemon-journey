@@ -77,8 +77,9 @@ test('Zone 15 connects Jaune Sector 7 and its city street with rank gate',()=>{
 test('Hibernal Avenue connects Centrico to the north ground gate of Zone 15',()=>{
  const road={area:3,district:'lumiose-hibernal-approach',interior:null,x:11,y:1,zaRoyaleRank:'E',teamIds:['kept']};
  assert.equal(stepField(road,'up').blocked,true);
- const open={...road,zaRoyaleRank:'D'},zone=stepField(open,'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone15',11,1]);
+ const open={...road,zaRoyaleRank:'D'},zone=stepField(open,'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone15',2,1]);
  assert.equal(stepField({...open,...zone},'up').district,'lumiose-hibernal-approach');
+ assert.equal(stepField({...open,...zone,x:11,y:1},'up').district,'lumiose-hibernal-approach');
  const centrico=stepField({...open,x:11,y:15},'down');assert.equal(centrico.district,'lumiose-centrico-route');
  assert.equal(stepField({...open,...centrico},'up').district,'lumiose-hibernal-approach');
  const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:11,y:8},27),27);
@@ -134,4 +135,13 @@ test('Zone 15 park walks connect the northwest approach and southeast bend witho
  for(const [x,y] of [[9,5],[9,6],[15,6],[14,10]])assert.equal(map[y][x],'g',`${x},${y}`);
  for(const target of [{x:11,y:1},{x:1,y:6},{x:1,y:13},{x:17,y:15}])assert.ok(fieldPath(map,state,target).length);
  const restored=restoreAdventurePosition(storeAdventurePosition(state,112),112);assert.deepEqual([restored.x,restored.y,restored.teamIds,restored.zaZone15Items,restored.zaZone15Spent],[16,11,['kept'],['cafe-ultra'],{pumpkaboo:true}]);
+});
+
+
+test('Zone 15 northwest ground approach keeps legacy northern exit and roof separate',()=>{
+ const road={area:3,district:'lumiose-hibernal-approach',interior:null,x:11,y:1,zaRoyaleRank:'D',teamIds:['kept'],zaZone15Items:['cafe-ultra'],zaZone15Spent:{pumpkaboo:true}},entry=stepField(road,'up'),s={...road,...entry};
+ assert.deepEqual([entry.district,entry.x,entry.y,entry.zaZone15Upper],['lumiose-zone15',2,1,false]);
+ const map=fieldMap(s);assert.equal(map[0][2],'X');assert.equal(map[0][11],'X');for(const target of [{x:1,y:6},{x:1,y:13},{x:17,y:15},{x:11,y:1}])assert.ok(fieldPath(map,s,target).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,113),113);assert.deepEqual([saved.x,saved.y,saved.teamIds,saved.zaZone15Items,saved.zaZone15Spent],[2,1,['kept'],['cafe-ultra'],{pumpkaboo:true}]);assert.equal(stepField(saved,'up').district,'lumiose-hibernal-approach');
+ const roof=zone15Map({...s,zaZone15Upper:true});assert.equal(roof[0][2],'#');assert.equal(roof[0][15],'X');
 });

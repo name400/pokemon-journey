@@ -183,6 +183,14 @@ test('adventure Toxel uses original nature for evolution after mint and reload',
  finally{globalThis.__adventureUser=previous;}
 });
 
+test('Zone 15 northwest entrance resumes and keeps old exit and rooftop access',async()=>{
+ const prior=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone15-northwest-gate-qa',displayName:'북서 진입'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+ seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-hibernal-approach',interior:null,x:11,y:1,facing:'up',zaRoyaleRank:'D',zaZone15Items:['cafe-ultra'],zaZone15Spent:{pumpkaboo:true},zaMission19Complete:true},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone15Upper],['lumiose-zone15',2,1,false]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone15Items,['cafe-ultra']);assert.equal(state.world.zaZone15Spent.pumpkaboo,true);await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-hibernal-approach');
+ seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone15',interior:null,x:11,y:1,zaZone15Upper:false},state.revision+1));await get();await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-hibernal-approach');
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=priorRandom;}
+});
+
 test('Zone 15 expanded park restores an older position and retains travel and progress',async()=>{
  const prior=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone15-park-expansion-qa',displayName:'공원 검증'};globalThis.__adventureRandom=()=>.999;
  try{await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
