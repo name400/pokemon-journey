@@ -14,6 +14,7 @@ import {Battle} from '@pkmn/sim';
 import {expToNext,gainExperience,victoryExperience} from '../lib/growth.mjs';
 import {activeRoyaleZones} from '../lib/cloud-adventure/adventure-royale-zones.mjs';
 import {canariBattleExperience} from '../lib/cloud-adventure/adventure-canari.mjs';
+import {COLORFUL_SCREW_SITES} from '../lib/cloud-adventure/adventure-colorful-screws.mjs';
 import {fieldPath,fieldMap,findTile,storeAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {TRAINERS} from '../lib/campaign.mjs';
 import {ZONE20_ALPHA} from '../lib/cloud-adventure/adventure-mission42.mjs';
@@ -2962,8 +2963,31 @@ test('colorful screws unlock a one-time blue plush without losing older progress
    seedWorld(storeAdventurePosition({...rawWorld(),...base,district,interior,x,y,facing:'up',zaColorfulScrewsFound:rawWorld().zaColorfulScrewsFound||base.zaColorfulScrewsFound},state.revision+1));await get();assert.equal(state.world.interaction.action,'collectColorfulScrew');const revision=state.revision;await call('collectColorfulScrew');await call('collectColorfulScrew',{revision},409);await get();assert.notEqual(state.world.map[y][x],'!');
   }
   assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw','racine-garage','magenta6-scaffold','zone9-south-scaffold']);
-  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'exchangeBlueCanari');const revision=state.revision;await call('exchangeBlueCanari');await call('exchangeBlueCanari',{revision},409);await get();assert.equal(state.world.zaBlueCanariLevel,1);assert.equal(rawWorld().zaColorfulScrewsSpent,3);assert.equal(state.world.interaction.action,undefined);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,inventory);assert.deepEqual(rawMon(id),mon);assert.equal(state.world.zaMission19Complete,true);await call('exchangeBlueCanari',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up'},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(x=>x.action==='exchangeCanari-blue'));const revision=state.revision;await call('exchangeBlueCanari');await call('exchangeBlueCanari',{revision},409);await get();assert.equal(state.world.zaBlueCanariLevel,1);assert.equal(rawWorld().zaColorfulScrewsSpent,3);assert.ok(state.world.interaction.actions.some(x=>x.action==='exchangeCanari-blue'&&x.label.includes('2단계')));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,inventory);assert.deepEqual(rawMon(id),mon);assert.equal(state.world.zaMission19Complete,true);await call('exchangeBlueCanari',{},409);
  }finally{globalThis.__adventureUser=oldUser;}
+});
+
+test('colorful screws support sequential plush upgrades and preserve spent progress',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'canari-upgrades-qa',displayName:'인형 단계'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const p of COLORFUL_SCREW_SITES){seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:p.district,interior:p.interior,x:p.x,y:p.y,facing:'up',zaRedCanariPlush:true,zaRoyaleRank:'A'},state.revision+1));await get();assert.equal(state.world.interaction.action,'collectColorfulScrew',p.id);await call('collectColorfulScrew');}
+  await get();assert.equal(rawWorld().zaColorfulScrewsFound.length,16);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up'},state.revision+1));await get();
+  for(const [level,spent] of [[1,3],[2,8],[3,16]]){const revision=state.revision;await call('exchangeCanari-blue');assert.equal(state.world.zaBlueCanariLevel,level);assert.equal(rawWorld().zaColorfulScrewsSpent,spent);await call('exchangeCanari-blue',{revision},409);await get();}
+  await call('exchangeCanari-blue',{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  // Test the other choices on a separate constructed 16-screw save.
+  seedWorld(storeAdventurePosition({...rawWorld(),x:15,y:14,facing:'up',zaBlueCanariLevel:1,zaColorfulScrewsSpent:3},state.revision+1));await get();await call('exchangeCanari-red');assert.equal(state.world.zaRedCanariLevel,2);await call('exchangeCanari-pink');assert.equal(state.world.zaPinkCanariLevel,1);await call('exchangeCanari-gold');assert.equal(state.world.zaGoldCanariLevel,1);assert.equal(rawWorld().zaColorfulScrewsSpent,14);await call('exchangeCanari-pink',{},409);await call('exchangeCanari-green',{},409);await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
+test('plush levels affect actual battle prizes and mega crystal drops',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'canari-effects-qa',displayName:'인형 효과'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,80),boxId:id,moves:['사이코브레이크'],pp:{}});
+  const place=async(extra)=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,zaRoyaleRank:'F',zaZone9Upper:true,zaRooftopCrystalCleared:true,x:4,y:3,facing:'down',...extra},state.revision+1));await get();};
+  await place({zaPinkCanariLevel:3,zaMegaShards:0,zaZone9CrystalTimes:{}});await call('smashZone9Crystal');assert.equal(rawWorld().zaMegaShards,5);await place({x:6,y:3});await call('smashZone9Crystal');assert.equal(rawWorld().zaMegaShards,19);await get();assert.equal(state.world.zaPinkCanariLevel,3);
+  const startCoins=state.wallet.coins;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:16,y:6,facing:'up',zaMission25Complete:true,zaMission26Stage:0,zaGoldCanariLevel:2,zaRedCanariLevel:3},state.revision+1));await get();await call('mission26Asami');const combat=rawWorld().combat,base=victoryExperience(combat.teams[1],true),before=rawMon(id),expected=gainExperience(before,canariBattleExperience(base,true,false,3)).mon,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.equal(state.wallet.coins,startCoins+259);assert.deepEqual([rawMon(id).level,rawMon(id).experience],[expected.level,expected.experience]);assert.equal(state.world.zaMission26Stage||0,0);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
 
 test('Café Ultimo requires confirmation and sells its restorative coffee atomically',async()=>{
