@@ -5495,3 +5495,18 @@ test('Zone 3 statue antidote preserves old position, wallet limits and progress'
   sql.prepare('UPDATE wallets SET antidotes=98 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const rev=state.revision;await call('zone3StatueAntidote');assert.equal(state.wallet.antidotes,99);assert.equal(state.world.zaZone3StatueAntidote,true);await call('zone3StatueAntidote',{revision:rev},409);await get();assert.equal(state.wallet.antidotes,99);assert.equal(rawWorld().zaMission40Stage,1);assert.equal(rawWorld().activeId,id);assert.deepEqual(state.world.teamIds,team);assert.notEqual(state.world.map[12][16],'o');
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 13 brambles and TM persist without duplicate rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone13-bramble-qa',displayName:'가시덤불테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone13',interior:null,x:14,y:13,facing:'right',zaRoyaleRank:'E'},state.revision+1);delete old.districtPosition.zone13BrambleLayout;seedWorld(old);await get();
+  assert.deepEqual([state.world.x,state.world.y],[12,13]);assert.equal(state.world.interaction.action,'zone13Brambles');
+  seedMon(id,{...makeMon(123,20),moves:['몸통박치기']});await get();await call('zone13Brambles',{},409);
+  seedMon(id,{...makeMon(123,20),moves:['불꽃세례','몸통박치기']});await get();await call('zone13Brambles');await get();assert.equal(state.world.zaZone13BramblesCleared,true);await call('zone13Brambles',{},409);
+  await call('move',{direction:'right'});await get();assert.equal(state.world.interaction.action,'zone13Item-bramble-tm081');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm081']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm081');await get();await call('zone13Item-bramble-tm081',{},409);assert.ok(!state.world.zaZone13Items?.includes('bramble-tm081'));
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();await call('zone13Item-bramble-tm081');await get();assert.equal(state.inventory['za-tm081'],1);await call('zone13Item-bramble-tm081',{},409);
+  await call('teachStoryTm',{item:'za-tm081',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'시저크로스');assert.equal(state.inventory['za-tm081'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

@@ -87,3 +87,18 @@ test('interior groves preserve both Boulevard gates, south approach and old save
  const current=restoreAdventurePosition(storeAdventurePosition({...s,x:11,y:8},114),114);
  assert.deepEqual([current.x,current.y,current.zaZone13Items],[11,8,['west-ultra']]);
 });
+
+test('thorn pocket protects TM and restores older players without losing progress',()=>{
+ const s={area:3,district:'lumiose-zone13',interior:null,x:12,y:13,facing:'right',zaRoyaleRank:'E',teamIds:['kept'],zaZone13Items:['west-ultra']};
+ assert.equal(fieldDialogue(s)?.action,'zone13Brambles');
+ assert.equal(fieldPath(zone13Map(s),s,{x:14,y:13}).length,0);
+ for(const [x,y] of [[13,13],[14,12],[15,13],[14,13]]){
+  const old=storeAdventurePosition({...s,x,y},201);delete old.districtPosition.zone13BrambleLayout;
+  const restored=restoreAdventurePosition(old,201);assert.deepEqual([restored.x,restored.y,restored.teamIds,restored.zaZone13Items],[12,13,['kept'],['west-ultra']]);
+  assert.equal(restoreAdventurePosition(old,202).district,null);
+ }
+ const open={...s,zaZone13BramblesCleared:true};assert.ok(fieldPath(zone13Map(open),open,{x:14,y:13}).length);
+ assert.equal(zone13Item(open,'t').kind,'za-tm081');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...open,x:13,y:13,zaZone13Items:['bramble-tm081']},203),203);
+ assert.equal(zone13Item(saved,'t'),null);assert.equal(saved.zaZone13BramblesCleared,true);assert.deepEqual([saved.x,saved.y],[13,13]);
+});
