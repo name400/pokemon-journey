@@ -3704,6 +3704,17 @@ test('map travel registers wild zones and taxi charges only on successful travel
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('revisiting a zone repairs a blocked saved map destination without changing progress',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone-map-repair-qa',displayName:'지도 복구'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector9',interior:null,x:11,y:15,facing:'down',zaMission04Complete:true,zaRoyaleRank:'Y',zaEmmaMet:true,zaFastTravelZones:{1:{x:3,y:2},2:{x:11,y:1}},zaFastTravelCenters:['hotel']},state.revision+1));await get();
+  await call('mapFastTravel',{destination:'zone1'},409);assert.deepEqual(rawWorld().zaFastTravelZones[1],{x:3,y:2});
+  const stale=state.revision;await call('move',{direction:'down'});await call('move',{direction:'down',revision:stale},409);await get();assert.equal(state.world.district,'lumiose-zone1');assert.deepEqual(state.world.zaFastTravelZones[1],{x:11,y:1});assert.deepEqual(state.world.zaFastTravelZones[2],{x:11,y:1});
+  await call('mapFastTravel',{destination:'hotel'});await get();await call('mapFastTravel',{destination:'zone1'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone1',11,1]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaEmmaMet,true);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('rooftop entry registers a wild zone only after walking on the ground',async()=>{
  const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone17-roof-map-qa',displayName:'옥상 진입 지도 등록'};globalThis.__adventureRandom=()=>.999;
  try{await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,x:6,y:9,facing:'down',zaMission04Complete:true,zaRoyaleRank:'C',zaZone17Upper:true,zaZone17Promenade:false,zaFastTravelZones:{1:{x:11,y:1}}},state.revision+1));await get();await call('move',{direction:'right'});await get();assert.ok(!state.world.zaFastTravelZones['17']);await call('move',{direction:'left'});await call('face',{direction:'down'});await call('zone17Ladder');assert.equal(state.world.zaZone17Upper,false);assert.ok(!state.world.zaFastTravelZones['17']);await call('move',{direction:'left'});await get();assert.deepEqual(state.world.zaFastTravelZones['17'],{x:12,y:7});assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='zone17'));assert.deepEqual(state.world.zaFastTravelZones['1'],{x:11,y:1});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);

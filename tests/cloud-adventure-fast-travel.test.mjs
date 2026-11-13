@@ -28,6 +28,14 @@ test('wild zone registration follows actual ground entry and existing progressio
  assert.equal(taxiAvailable({...s,district:'lumiose-south-boulevard'},{tile:'n',x:14,y:6}),true);assert.equal(taxiAvailable({...s,district:'lumiose-south-boulevard'},{tile:'n',x:13,y:6}),false);
 });
 
+test('zone re-entry repairs only a saved destination on definite wall or water',async()=>{
+ const {recordZoneEntry}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const s={area:3,district:'lumiose-zone1',interior:null,x:11,y:1,zaMission04Complete:true,zaRoyaleRank:'Y',zaFastTravelZones:{1:{x:3,y:2},2:{x:11,y:1}},teamIds:['kept']};
+ assert.equal(fieldMap(s)[2][3],'~');assert.equal(recordZoneEntry(s,'lumiose-vert-sector9','.',()=>fieldMap(s)),true);assert.deepEqual(s.zaFastTravelZones,{1:{x:11,y:1},2:{x:11,y:1}});assert.deepEqual(s.teamIds,['kept']);
+ const dynamic={...s,zaFastTravelZones:{1:{x:4,y:4}}};assert.equal(recordZoneEntry(dynamic,'lumiose-vert-sector9','.',()=>{const m=fieldMap(dynamic).slice();m[4]=m[4].slice(0,4)+'a'+m[4].slice(5);return m;}),false);assert.deepEqual(dynamic.zaFastTravelZones[1],{x:4,y:4});
+ const old={...s,zaFastTravelZones:{1:{x:3,y:2}}};assert.equal(recordZoneEntry(old,null,'.',()=>fieldMap(old)),false);assert.equal(recordZoneEntry({...old,interior:'hotel'},'lumiose','.',()=>fieldMap(old)),false);assert.equal(recordZoneEntry(old,'lumiose','g'),false);
+});
+
 test('Centrico taxis and landmark registration preserve gates and existing walkable tiles',async()=>{
  const {taxiAvailable,taxiDestinations,recordLandmarks,registeredLandmarks,mapTravelDestinations}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
  const plaza={area:3,district:'lumiose-centrico-route',interior:null,zaMission04Complete:true,zaRoyaleRank:'Y',x:1,y:7,facing:'left',teamIds:['kept']};const map=fieldMap(plaza);
