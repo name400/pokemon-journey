@@ -5539,3 +5539,14 @@ test('Vernal cafe legacy building saves and back route survive reentry',async()=
   await walkTo({x:1,y:5});await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-bleu-sector3');await walkTo({x:21,y:3});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-bleu3-sewer-approach');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vernal promenade façades preserve old positions and cafe-to-sewer access',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vernal-shop-layout-qa',displayName:'상점거리테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:5,y:5,facing:'right',zaRoyaleRank:'E'},state.revision+1);delete old.districtPosition.vernalShopsLayout;seedWorld(old);await get();
+  assert.notEqual(state.world.map[state.world.y][state.world.x],'%');await walkTo({x:8,y:5});await call('face',{direction:'left'});assert.equal(state.world.interaction.name,'BRAVELY');
+  await walkTo({x:12,y:6});await call('face',{direction:'up'});assert.ok(state.world.interaction.actions.some(a=>a.action==='woofNatural'));
+  await walkTo({x:1,y:5});await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-bleu-sector3');await walkTo({x:21,y:3});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-bleu3-sewer-approach');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
