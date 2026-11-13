@@ -5696,3 +5696,16 @@ test('Zone 13 grass battle blocks pickup only until the wild encounter ends',asy
   globalThis.__adventureRandom=()=>.999;await call('flee');await get();assert.equal(state.battle,null);assert.equal(state.world.interaction.action,'zone13Item-bramble-tm081');await call('zone13Item-bramble-tm081');await get();assert.equal(state.inventory['za-tm081'],1);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
+
+test('Zone 17 roof rewards and day-night encounters survive reload and limits',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone17-roof-items-qa',displayName:'옥상 검증'};
+ try{
+  await get();await call('start',{species:498});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  globalThis.__adventureTime={period:'day',hour:12};seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,x:8,y:7,facing:'up',zaRoyaleRank:'C',zaZone17Upper:true,zaZone17Promenade:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone17Wild-klefki');await get();assert.equal(state.world.map[6][8],'f');
+  globalThis.__adventureTime={period:'night',hour:22};await get();assert.equal(state.world.interaction.action,'zone17Wild-lampent');await get();assert.equal(state.world.map[6][8],'f');
+  seedWorld(storeAdventurePosition({...rawWorld(),x:15,y:5,facing:'right'},state.revision+1));seedMon(id,{...makeMon(498,20),moves:['몸통박치기']});await get();assert.equal(state.world.interaction.action,'zone17Item-roof-flamethrower');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm062']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm062');await get();await call('zone17Item-roof-flamethrower',{},409);assert.ok(!rawWorld().zaZone17Items?.includes('roof-flamethrower'));
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const revision=state.revision;await call('zone17Item-roof-flamethrower');await get();assert.equal(state.inventory['za-tm062'],1);await call('zone17Item-roof-flamethrower',{revision},409);await call('teachStoryTm',{item:'za-tm062',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'화염방사');assert.equal(state.inventory['za-tm062'],1);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:15,y:6,facing:'right'},state.revision+1));await get();await call('zone17Item-roof-nugget');await get();assert.equal(state.inventory.bignugget,1);await call('zone17Item-roof-nugget',{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});

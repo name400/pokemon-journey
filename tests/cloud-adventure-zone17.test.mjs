@@ -67,3 +67,19 @@ test('north promenade and south approach use walkable paving without replacing g
  for(const gate of [{x:6,y:1},{x:11,y:1},{x:16,y:1}])assert.ok(fieldPath(map,{x:11,y:14},gate).length);
  const state={...s,regionId:6,districtReturnRegion:1,teamIds:['kept'],x:10,y:14};const restored=restoreAdventurePosition(storeAdventurePosition(state,99),99);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[state.district,10,14,['kept']]);
 });
+
+test('Zone 17 roof landing supports both time periods and source-confirmed rewards',async()=>{
+ const {zone17Map,zone17Visible,zone17Item}=await import('../lib/cloud-adventure/adventure-zone17.mjs');
+ const {fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const roof={area:3,district:'lumiose-zone17',interior:null,x:6,y:9,facing:'down',zaRoyaleRank:'C',zaZone17Upper:true,teamIds:['kept']};
+ for(const [period,species] of [['day',707],['night',608]]){const s={...roof,zaZone17Period:period},map=zone17Map(s);assert.equal(zone17Visible(s,'f').species,species);assert.equal(map[6][8],'f');assert.equal(zone17Visible(s,'e').species,303);assert.ok(fieldPath(map,s,{x:15,y:6}).length);assert.equal(zone17Item(s,'t').kind,'za-tm062');assert.equal(zone17Item(s,'j').kind,'bignugget');assert.equal(fieldDialogue({...s,x:15,y:5,facing:'right'}).action,'zone17Item-roof-flamethrower');}
+ const old=restoreAdventurePosition(storeAdventurePosition({...roof,x:16,y:5,zaZone17Items:['stairs-timer']},32),32);assert.deepEqual([old.x,old.y,old.zaZone17Items,old.teamIds],[16,5,['stairs-timer'],['kept']]);
+ assert.equal(zone17Item({...roof,zaZone17Items:['roof-flamethrower']},'t'),null);assert.equal(zone17Item({...roof,zaZone17Upper:false},'t'),null);
+});
+
+test('TM062 supports checked base and regional forms without arbitrary learning',async()=>{
+ const {canLearnStoryTm}=await import('../lib/cloud-adventure/adventure-story-tm.mjs');const bag={'za-tm062':1};
+ for(const [id,speciesId] of [[498,498],[303,303],[10115,105],[10164,79],[10242,706]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm062'),true,`${id}`);
+ for(const [id,speciesId] of [[1,1],[152,152],[10100,26]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm062'),false,`${id}`);
+ assert.equal(canLearnStoryTm(bag,{id:498,speciesId:498,moves:['화염방사']},'za-tm062'),false);
+});
