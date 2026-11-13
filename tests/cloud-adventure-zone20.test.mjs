@@ -175,3 +175,13 @@ test('Zone 20 wooded park keeps promenade, gates and pond while restoring old sa
  const legacy=storeAdventurePosition({...s,x:15,y:2,zaMission42Underground:true,zaMission42ChamberV1:false},313);delete legacy.districtPosition.zone20ParkLayout;const restoredLegacy=restoreAdventurePosition(legacy,313);assert.notDeepEqual([restoredLegacy.x,restoredLegacy.y],[15,2]);
  const old=storeAdventurePosition({...s,x:15,y:2},311);delete old.districtPosition.zone20ParkLayout;assert.equal(restoreAdventurePosition(old,312).district,null);
 });
+
+test('Zone 20 east park walk and pond crossing connect to ruins while older shore saves recover',async()=>{
+ const {ZONE20_POND_SOUTH_EXTENSION,zone20ChamberMap}=await import('../lib/cloud-adventure/adventure-mission42.mjs');
+ const s={area:3,district:'lumiose-zone20',interior:null,zaMission38Complete:true,zaMission42Stage:3,teamIds:['kept'],zaZone20Items:['south-seed'],zaZone20Spent:{bulbasaur:true}},map=zone20Map(s);
+ for(const [x,y] of ZONE20_POND_SOUTH_EXTENSION){assert.equal(map[y][x],'~');const old=storeAdventurePosition({...s,x,y},320);delete old.districtPosition.zone20PondSouthLayout;const r=restoreAdventurePosition(old,320);assert.notDeepEqual([r.x,r.y],[x,y]);assert.notEqual(map[r.y][r.x],'~');assert.ok(fieldPath(map,r,{x:11,y:14}).length);assert.deepEqual([r.teamIds,r.zaZone20Items,r.zaZone20Spent,r.zaMission42Stage],[['kept'],['south-seed'],{bulbasaur:true},3]);}
+ for(let y=9;y<=14;y++)assert.equal(map[y][21],',');for(let x=18;x<=20;x++)assert.equal(map[11][x],',');
+ for(const target of [{x:11,y:1},{x:21,y:8},{x:1,y:8},{x:12,y:15},{x:11,y:7},{x:17,y:2}])assert.ok(fieldPath(map,{x:21,y:11},target).length,JSON.stringify(target));
+ let v={...s,x:17,y:11};for(let i=0;i<4;i++)v={...v,...stepField(v,'right')};assert.deepEqual([v.x,v.y],[21,11]);assert.equal(stepField({...s,x:19,y:15},'up').blocked,true);
+ const underground={...s,zaMission42ChamberV1:true,zaMission42Underground:true};assert.deepEqual(zone20Map(underground),zone20ChamberMap());const legacy=storeAdventurePosition({...s,x:19,y:14,zaMission42ChamberV1:false,zaMission42Underground:true},323);delete legacy.districtPosition.zone20PondSouthLayout;const legacyRestored=restoreAdventurePosition(legacy,323);assert.notDeepEqual([legacyRestored.x,legacyRestored.y],[19,14]);const old=storeAdventurePosition({...s,x:19,y:14},321);delete old.districtPosition.zone20PondSouthLayout;assert.equal(restoreAdventurePosition(old,322).district,null);
+});
