@@ -343,6 +343,18 @@ test('Mission 19 Canari rematch works in Racine garage and the legacy site',asyn
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 19 meets Ivor outside city hall before the fountain clue on new progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-ivor-city-qa',displayName:'시청 만남'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bureau',interior:null,x:11,y:6,facing:'up',zaMission19Stage:3,zaRoyaleRank:'E'},state.revision+1));await get();await call('mission19Bureau');await get();assert.equal(state.world.zaMission19Stage,4);assert.equal(state.world.zaMission19CityIvorPending,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-sector10',interior:null,x:11,y:1,facing:'up'},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-jaune-sector9');assert.equal(state.world.map[6][7],'I');
+  await walkTo({x:7,y:12});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,undefined);await call('mission19CityClue',{},409);await get();assert.equal(state.world.zaMission19Stage,4);
+  await walkTo({x:7,y:7});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'mission19CityIvor');const rev=state.revision;await call('mission19CityIvor');await call('mission19CityIvor',{revision:rev},409);await get();assert.equal(state.world.zaMission19CityIvorSeen,true);assert.notEqual(state.world.map[6][7],'I');
+  await walkTo({x:7,y:12});await call('face',{direction:'up'});await call('mission19CityClue');await get();assert.equal(state.world.zaMission19Stage,5);assert.equal(state.world.zaMission19CityIvorPending,undefined);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 19 city hall clue connects through Jaune Sector 9 and keeps the legacy clue',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-city-hall-qa',displayName:'시청단서테스트'};
  try{
