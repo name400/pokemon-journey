@@ -77,3 +77,17 @@ test('plaza gate approaches retain sand encounters and old positions',()=>{
  }
  assert.equal(map[6][10],'g');assert.equal(map[9][11],'f');assert.equal(map[8][14],'c');
 });
+test('opposed Jaune Street entrances preserve legacy gates, routes and saved state',()=>{
+ for(const [district,x,y,dir,zx,zy,returnDir] of [['lumiose-jaune-street',1,11,'left',1,11,'left'],['lumiose-jaune-street-north',21,5,'right',21,5,'right']]){
+  const base={area:3,district,interior:null,x,y,zaRoyaleRank:'V',teamIds:['kept'],coins:321};
+  assert.equal(stepField(base,dir).blocked,true);
+  const open={...base,zaRoyaleRank:'F'},entered=stepField(open,dir);
+  assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone8',zx,zy]);
+  const zone={...open,...entered,zaZone8Spent:{machop:true},zaZone8Items:['north-great'],zaZone8Burrows:{gible:443}};
+  assert.ok(fieldPath(zone8Map(zone),zone,{x:11,y:8}).length);
+  const restored=restoreAdventurePosition(storeAdventurePosition(zone,77),77);
+  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds,restored.coins,restored.zaZone8Spent,restored.zaZone8Items,restored.zaZone8Burrows],['lumiose-zone8',zx,zy,['kept'],321,{machop:true},['north-great'],{gible:443}]);
+  const exit=stepField(restored,returnDir);assert.equal(exit.district,district);
+ }
+ const old={area:3,district:'lumiose-zone8',interior:null,x:9,y:15,zaRoyaleRank:'V'};assert.equal(stepField(old,'down').district,'lumiose-jaune-street');
+});

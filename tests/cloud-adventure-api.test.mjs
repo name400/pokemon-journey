@@ -59,6 +59,16 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('Zone 8 opposed street gates keep encounters and saves',async()=>{
+ const previous=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone8-opposed-gates-qa',displayName:'광장 출입 검증'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+ for(const [district,x,y,direction,zx,zy] of [['lumiose-jaune-street',1,11,'left',1,11],['lumiose-jaune-street-north',21,5,'right',21,5]]){
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,zaRoyaleRank:'V',zaZone8Burrows:{gible:443},zaZone8Items:['north-great']},state.revision+1));await get();await call('move',{direction},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,zaRoyaleRank:'F'},state.revision+1));await get();await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone8',zx,zy]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone8Items,['north-great']);assert.equal(state.world.zaZone8Burrows.gible,443);await call('move',{direction});await get();assert.equal(state.world.district,district);
+ }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('Zone 10 canal item remains accessible while standing on stairs',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-stairs-item-qa',displayName:'계단 도구 검증'};
  try{await get();await call('start',{species:1});const before=structuredClone(state.wallet),team=[...state.world.teamIds];seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:6,y:7,facing:'up',zaRoyaleRank:'F'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone10Item-canal-quick');const rev=state.revision;await call('zone10Item-canal-quick');await call('zone10Item-canal-quick',{revision:rev},409);await get();assert.equal(state.world.adventureBalls.quickball,1);assert.deepEqual(state.world.zaZone10Items,['canal-quick']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,before);assert.equal(state.world.interaction.action,'zone10BankStairs');await call('zone10BankStairs');assert.equal(state.world.zaZone10LowerBank,true);
