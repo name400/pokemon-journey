@@ -59,3 +59,15 @@ test('draft field medals preserve walkable positions and interactability across 
   for(const m of ROYALE_FIELD_MEDALS){assert.equal(map[m.y][m.x],'?');assert.ok(walkable(map[m.y][m.x]));assert.equal(fieldDialogue({...s,x:m.x+1,y:m.y,facing:'left'}).action,'takeRoyaleFieldMedal');}
  }
 });
+test('Infinite Royale cards require the unlocked field and credit its own capped ticket balance',()=>{
+ const base={district:'lumiose-royale',zaRoyaleRank:'A',zaInfinitePoints:49500,zaRoyaleYPoints:900,trainer:{id:'infinite-katrina',title:'무한 로열 배틀존'}};
+ assert.equal(royaleBonusPickable(base,now),false);base.zaMission39Started=true;assert.equal(takeRoyaleBonus(base,now),true);base.zaRoyaleBonusCard.progress=2;
+ assert.equal(recordRoyaleBonus({...base,trainer:{title:'무한 로열 보상 배틀'}},{events:hit,log:[]},'night',now),false);
+ assert.equal(recordRoyaleBonus(base,{events:hit,log:[]},'night',now),true);assert.equal(base.zaInfinitePoints,50000);assert.equal(base.zaRoyaleYPoints,900);assert.equal(base.zaRoyalePrizeMedals,50);assert.equal(recordRoyaleBonus(base,{events:hit,log:[]},'night',now),false);
+ const locked={district:'lumiose-royale',zaRoyaleRank:'A',zaInfinitePoints:0,zaRoyaleBonusCard:{night:0,rank:'A',progress:2},trainer:{title:'무한 로열 배틀존'}};assert.equal(recordRoyaleBonus(locked,{events:hit,log:[]},'night',now),false);
+});
+
+test('an unexpired card retains progress across rank promotion without rewarding an old rank',()=>{
+ const s={district:'lumiose-royale',zaRoyaleRank:'B',zaRoyaleBPoints:2000,trainer:{title:'Z-A 로열 배틀'}};assert.equal(takeRoyaleBonus(s,now),true);s.zaRoyaleBonusCard.progress=2;s.zaRoyaleRank='A';s.zaMission39Started=true;s.zaInfinitePoints=0;s.trainer={title:'무한 로열 배틀존'};
+ assert.equal(royaleBonusPickable(s,now),false);assert.equal(recordRoyaleBonus(s,{events:hit,log:[]},'night',now),true);assert.equal(s.zaInfinitePoints,1000);assert.equal(s.zaRoyaleBPoints,2000);assert.equal(s.zaRoyaleBonusCard.completed,true);
+});
