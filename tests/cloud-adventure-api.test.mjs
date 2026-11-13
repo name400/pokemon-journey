@@ -6590,3 +6590,12 @@ test('new recovery Plus moves support natural mastery and seed mastery without d
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaRoyaleRank:'D',zaMission19Complete:true},state.revision+1));await get();await call('zone14Wild-aron');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='synthesis').plusReady,true);assert.equal(state.battle.requests[0].moves.find(m=>m.id==='moonlight').plusReady,true);const before=state.battle.teams[0][0].hp;await call('battle',{command:{type:'move',move:'광합성',plus:true}});assert.equal(state.battle.adventurePlusGauge.charge,0);assert.ok(state.battle.events.some(e=>e.kind==='heal'&&e.targetBoxId===id&&e.hp>before));await get();assert.equal(state.battle.adventurePlusGauge.charge,0);await call('battle',{command:{type:'move',move:'달빛',plus:true}},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('new adventure protects against stale requests while Plus attacks pierce Protect',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-protect-qa',displayName:'방어 관통 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(25,50),boxId:id,moves:['몸통박치기'],adventurePlusMastered:['tackle'],pp:{}};seedMon(id,player);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaRoyaleRank:'D',zaMission19Complete:true,zaMegaRing:true},state.revision+1));await get();await call('zone14Wild-aron');assert.equal(state.battle.adventurePlusProtectV1,true);
+  const foe={...makeMon(143,80),boxId:'protected-foe',moves:['방어'],pp:{}},combat={...createCombat([player],[foe]),adventurePlusGaugeV1:{charge:1,max:3},adventurePlusProtectV1:true,disableCpuTera:true};seedWorld({combat,encounter:null,trainer:{id:'plus-protect-qa',name:'테스트'}});await get();const revision=state.revision,hp=state.battle.teams[1][0].hp;await call('battle',{command:{type:'move',move:'몸통박치기',plus:true}});assert.ok(state.battle.teams[1][0].hp<hp);assert.equal(state.battle.adventurePlusGauge.charge,0);await get();const saved=state.battle.teams[1][0].hp;await call('battle',{revision,command:{type:'move',move:'몸통박치기',plus:true}},409);await get();assert.equal(state.battle.teams[1][0].hp,saved);assert.equal(state.battle.adventurePlusGauge.charge,0);
+ }finally{globalThis.__adventureUser=previous;}
+});
