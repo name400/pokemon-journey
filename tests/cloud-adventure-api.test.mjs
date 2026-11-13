@@ -6992,3 +6992,13 @@ test('Bleu and Magenta centers provide supplies while preserving recovery and sa
   }
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('registered Lumiose centers offer a shop beside healing and preserve purchases',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'shared-center-shop-qa',displayName:'센터 공통 상점 검사'};
+ try{await get();await call('start',{species:152});const lead=state.world.activeId;sql.prepare('UPDATE wallets SET coins=10000,balls=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  for(const [district,x,y,flags] of [['lumiose-rouge-north',15,11,{zaRougeStreetSouth:true}],['lumiose-aymlis-park',20,3,{}],['lumiose-magenta-sector1',4,5,{}],['lumiose-vert-street-route',10,13,{}],['lumiose-zone3',11,2,{}]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'down',zaRoyaleRank:'E',zaFastTravelCenters:['hotel','bleu'],...flags},state.revision+1));await get();assert.ok(state.world.interaction.actions?.some(a=>a.action==='shop'),district);assert.ok(state.world.interaction.actions?.some(a=>a.action==='fastTravel-hotel'),district);assert.equal(state.world.interaction.action,'heal');const coins=state.wallet.coins,rev=state.revision;await call('buyBall',{ball:'ultraball'});await call('buyBall',{ball:'ultraball',revision:rev},409);await get();assert.equal(state.wallet.coins,coins-600);assert.equal(state.world.activeId,lead);if(district==='lumiose-vert-street-route'){await call('buyAdventureMedicine',{item:'fullheal'});await get();assert.equal(state.inventory.fullheal,1);await call('buy',{item:'ball'});await call('sellAdventureSupply',{item:'ball'});await get();assert.equal(state.wallet.balls,0);}await call('heal');await get();assert.equal(state.world.district,district);
+  }
+  seedWorld(storeAdventurePosition({...state.world,area:0,district:null,x:3,y:5},state.revision+1));await get();await call('buyBall',{ball:'ultraball'},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
