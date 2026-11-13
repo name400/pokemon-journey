@@ -1,5 +1,19 @@
 # 배포 검증 실패 기록
 
+## 2026-11-13 — GitHub `63f8a1a9` 배포 검사 실패
+
+- 대상 브랜치: `cloud/pokerogue-continue-20261105`; GitHub 커밋 `63f8a1a97e25eaf1a2cf51c04472cadaf4ba6aeb`. 브랜치에 이후 커밋이 있었으나 요청된 커밋까지만 병합했다.
+- 검증 소스: 기존 Sites 소스와 병합한 로컬 커밋 `30e9ebe6224910eab42ae0fba822412e142acedb`; Node.js v24.22.1.
+- 순차 검사: `npm run typecheck` 통과, `npm test` 3,658개 중 3,657개 통과·1개 실패 (211.6초), `npm run build` 통과.
+- 검증 실패로 배포하지 않았다. 검사 당시 운영본은 Sites v86.
+
+### 탐험 모험 — 도입 배틀 후 경험치 검증
+
+- 테스트: `tests/cloud-adventure-api.test.mjs:3623`, `ZA opening battles and escape survive retry and reload`; 실패 단언: 3629행.
+- 조건: 뚜꾸리를 스타터로 선택하고 첫 Andi 배틀을 포기한 뒤 재도전하여 상대 HP를 1로 낮춰 승리한다. 승리 후 스타터의 레벨이 5보다 크거나 경험치가 0보다 커야 한다는 단언을 확인한다.
+- 실제: 저장된 스타터는 레벨 `5`, 경험치 `0`이었다. 전투 로그에는 발버둥으로 상대와 스타터가 모두 쓰러진 뒤 동료가 기절한 파티를 회복했고 Andi에게 승리했다고 표시됐다. `assert.ok(rawMon(id).level>5 || rawMon(id).experience>0)`가 거짓이었다.
+- 상대와 아군이 동시에 쓰러진 턴에 경험치 지급 자격이 어떻게 처리되는지, 그 상황이 이 테스트에서 의도된 것인지 확인해야 한다. 이 결과만으로 게임 로직 오류인지 테스트 조건의 불안정성인지 단정할 수 없다.
+
 ## 2026-11-13 — GitHub `7200505e` 배포 검사 실패
 
 - 대상 브랜치: `cloud/pokerogue-continue-20261105`; 검증한 GitHub 커밋 `7200505e445edc62bbeb30f372eba31e7c88f1a8`. 브랜치에 이후 커밋이 하나 있었으나 지정된 커밋까지만 병합했다.
