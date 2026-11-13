@@ -99,3 +99,8 @@ test('northeastern rock area gates two items and protects previous saves',async(
  for(const rock of ZONE14_NORTHEAST_ROCKS){const old=storeAdventurePosition({...base,...rock},84);delete old.districtPosition.zone14NortheastRocksLayout;const restored=restoreAdventurePosition(old,84);assert.notEqual(zone14Map(restored)[restored.y][restored.x],'r');assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone14Items,['south-ultra']);}
  const legacy={...base,zaZone14RockCleared:true};assert.ok(fieldPath(zone14Map(legacy),legacy,{x:18,y:1}).length);
 });
+
+test('expanded substation yard preserves every prior obstacle, encounter and exit',async()=>{
+ const {readFile}=await import('node:fs/promises');const before=JSON.parse(await readFile(new URL('./zone14-before-yard.json',import.meta.url),'utf8')),after=zone14Map({});let paved=0;
+ assert.equal(after.length,before.length);for(let y=0;y<before.length;y++){assert.equal(after[y].length,before[y].length);for(let x=0;x<before[y].length;x++){if(before[y][x]!==after[y][x]){assert.equal(before[y][x],'.',`previous ${x},${y}`);assert.equal(after[y][x],',',`current ${x},${y}`);paved++;}}}assert.ok(paved>=20);
+});

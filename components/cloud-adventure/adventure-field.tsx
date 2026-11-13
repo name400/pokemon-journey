@@ -660,7 +660,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      // cells. Their exact shapes and coordinates remain provisional.
      const westRoof=x>=3&&x<=6&&y>=6&&y<=7&&c==='#',eastRoof=x>=16&&x<=19&&y>=4&&y<=6&&c==='#',roof=westRoof||eastRoof;
      const perimeter=c==='#'&&(x===0||x===22||y===0||y===16);
-     ctx.fillStyle=roof?'#66777c':c==='#'?'#6d7880':c==='g'?'#c3aa7c':c===','?'#aeb8b8':(x+y)%2?'#d2d0c3':'#deddd0';ctx.fillRect(px,py,tile,tile);
+     const edgeSoil=(y>=8&&(x<Math.floor((y-6)/3)+1||x>21-Math.floor((y-6)/3)))||(y>=13&&(x<=4||x>=19));
+     ctx.fillStyle=roof?'#66777c':c==='#'?'#6d7880':c==='g'?'#c3aa7c':c===','?'#899597':edgeSoil?'#b4a985':(x+y)%2?'#b8bdb3':'#c2c8bd';ctx.fillRect(px,py,tile,tile);
      if(roof){
       // Repeated roof panels and edge caps make each blocked footprint a
       // single large building rather than a field of separate boxes.
@@ -671,7 +672,14 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       // Chain-link boundary: background only; X exits remain existing tiles.
       ctx.fillStyle='#879894';ctx.fillRect(px,py,tile,tile);ctx.save();ctx.beginPath();ctx.rect(px,py,tile,tile);ctx.clip();ctx.strokeStyle='#c2cac0';ctx.lineWidth=1;ctx.beginPath();for(let k=-tile;k<tile*2;k+=8){ctx.moveTo(px+k,py);ctx.lineTo(px+k+tile,py+tile);ctx.moveTo(px+k,py+tile);ctx.lineTo(px+k+tile,py);}ctx.stroke();ctx.restore();ctx.fillStyle='#566d70';ctx.fillRect(px,py,tile,3);ctx.fillRect(px,py+tile-3,tile,3);
      }
-     if(c===','){ctx.fillStyle='#cbd2c9';ctx.fillRect(px,py+3,tile,2);ctx.fillStyle='#8b9b98';ctx.fillRect(px+(y%2?tile/2:2),py+5,2,tile-7);}
+     if(c===','){
+      // Safety paint follows the broad yard without introducing collision.
+      ctx.fillStyle='#d9bc68';if((x===7||x===15)&&y>=2&&y<=14)ctx.fillRect(px+(x===7?4:tile-6),py,2,tile);
+      if(y===5&&x>=8&&x<=14&&x%2===0)ctx.fillRect(px+4,py+tile-6,tile-8,2);
+      ctx.fillStyle='#758184';ctx.fillRect(px+((x*7+y*11)%20)+3,py+((x*5+y*3)%19)+4,3,1);
+     }
+     if(edgeSoil&&c==='.') {ctx.fillStyle='#8b8c70';ctx.fillRect(px+4+(x*3+y)%11,py+tile-9,7,2);ctx.fillStyle='#d2c39c';ctx.fillRect(px+7,py+7,5,2);}
+     if(perimeter&&((x===0&&(y===4||y===12))||(x===22&&y===8))){ctx.fillStyle='#4e6264';ctx.fillRect(px+tile/2-2,py+5,4,tile-8);ctx.fillStyle='#dde0c5';ctx.fillRect(px+tile/2-5,py+3,10,5);}
      if(c==='g'){ctx.fillStyle='#9a8764';for(let j=0;j<3;j++)ctx.fillRect(px+5+j*9,py+tile-9-(j%2)*3,4,2);ctx.fillStyle='#dec99b';ctx.fillRect(px+4+(x*5+y*3)%9,py+6,5,2);}
      if('ijklmn'.includes(c)){ctx.fillStyle='#f4ead9';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c45b50';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#445356';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);}
      if(c==='^'){
@@ -681,6 +689,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       ctx.fillStyle='#d8bd70';ctx.fillRect(px+7,py+3,4,6);ctx.fillRect(px+tile-11,py+3,4,6);
       ctx.fillStyle='#e0d6a7';ctx.fillRect(px+8,py+2,2,4);ctx.fillRect(px+tile-10,py+2,2,4);
       ctx.fillStyle='#4b6065';ctx.fillRect(px,py+tile-4,tile,3);
+      if(rack){ctx.strokeStyle='#d1d2b9';ctx.lineWidth=1;ctx.strokeRect(px+3,py+4,tile-6,tile-8);ctx.beginPath();ctx.moveTo(px+4,py+tile/2);ctx.lineTo(px+tile-4,py+tile/2);ctx.moveTo(px+tile/2,py+5);ctx.lineTo(px+tile/2,py+tile-6);ctx.stroke();}
      }
      if(c==='^'&&y===6&&x>=9&&x<=13){ctx.fillStyle='#627778';ctx.fillRect(px+2,py+4,tile-4,tile-8);ctx.fillStyle='#c1d0c1';ctx.fillRect(px+6,py+8,tile-12,tile-16);ctx.fillStyle='#dbbb67';for(let n=0;n<3;n++){ctx.fillRect(px+7+n*7,py+3,3,6);ctx.fillRect(px+7+n*7,py+tile-8,3,5);}ctx.fillStyle='#4d6468';ctx.fillRect(px+7,py+tile/2-1,tile-14,2);}
      if(c==='r'){ctx.fillStyle='#827769';ctx.beginPath();ctx.moveTo(px+3,py+tile-6);ctx.lineTo(px+7,py+8);ctx.lineTo(px+20,py+4);ctx.lineTo(px+tile-3,py+15);ctx.lineTo(px+tile-5,py+tile-5);ctx.closePath();ctx.fill();ctx.fillStyle='#b3a38b';ctx.fillRect(px+8,py+9,10,3);ctx.fillRect(px+6,py+12,4,6);}
