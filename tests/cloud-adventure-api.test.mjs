@@ -2034,6 +2034,15 @@ test('Zone 20 directional gates preserve story locks, exits and saved party',asy
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Rouge 5 bureau forecourt preserves entry, street connections and legacy saves',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge5-bureau-front-qa',displayName:'탐정사무소 거리'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector5',interior:null,x:5,y:7,facing:'up',zaRoyaleRank:'Y',zaJoseeRequired:true,zaJoseeComplete:true,zaEmmaMet:true},state.revision+1));await get();assert.deepEqual([state.world.x,state.world.y],[5,7]);assert.equal(state.world.interaction.action,'enterBureau');await call('enterBureau');await get();assert.equal(state.world.district,'lumiose-bureau');await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector5',5,7]);
+  await walkTo({x:1,y:8});await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-rouge-sector4');await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-rouge-sector5',1,8]);await walkTo({x:11,y:1});await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-rouge-sector7');await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-rouge-sector5');assert.equal(state.world.zaEmmaMet,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Bleu Sector 5 courtyard and park approaches survive reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu5-park-access-qa',displayName:'블루 공원 접근'};
  try{
