@@ -6981,3 +6981,14 @@ test('restaurant battles reject recovery items without consuming them',async()=>
   await call('forfeit');await get();assert.ok(!state.world.zaLeWowRun&&!state.world.zaSushiRun);
  }}finally{globalThis.__adventureUser=prior;}
 });
+
+test('Bleu and Magenta centers provide supplies while preserving recovery and saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'two-center-shops-qa',displayName:'센터 상점 검사'};
+ try{await get();await call('start',{species:152});const lead=state.world.activeId;sql.prepare('UPDATE wallets SET coins=10000,balls=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  for(const c of [{district:'lumiose-bleu-sector7',x:9,y:13,facing:'left',hx:11,hy:13},{district:'lumiose-magenta-sector8-route',x:14,y:13,facing:'right',hx:12,hy:14}]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:c.district,interior:null,x:c.x,y:c.y,facing:c.facing,zaRoyaleRank:'E'},state.revision+1));await get();assert.equal(state.world.interaction.action,'shop');const coins=state.wallet.coins,revision=state.revision,ultras=state.world.adventureBalls?.ultraball||0;
+   await call('buyBall',{ball:'ultraball',quantity:2});await call('buyBall',{ball:'ultraball',quantity:2,revision},409);await get();assert.equal(state.wallet.coins,coins-1200);assert.equal(state.world.adventureBalls.ultraball,ultras+2);assert.equal(state.world.activeId,lead);await call('buy',{item:'ball'});await get();assert.equal(state.wallet.balls,c.district==='lumiose-bleu-sector7'?1:2);
+   seedWorld(storeAdventurePosition({...state.world,x:c.hx,y:c.hy,facing:'down'},state.revision+1));await get();assert.equal(state.world.interaction.action,'heal');await call('heal');await get();assert.equal(state.world.activeId,lead);assert.equal(state.world.district,c.district);await walkTo({x:c.x,y:c.y});await call('face',{direction:c.facing});await get();assert.equal(state.world.interaction.action,'shop');
+  }
+ }finally{globalThis.__adventureUser=previous;}
+});
