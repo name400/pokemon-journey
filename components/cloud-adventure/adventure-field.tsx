@@ -1,4 +1,4 @@
-import {isScrewGlideRoof} from '@/lib/cloud-adventure/adventure-screw-roofs.mjs';
+import {isScrewGlideRoof,screwGlideAt} from '@/lib/cloud-adventure/adventure-screw-roofs.mjs';
 import {royaleFieldEntry} from '@/lib/cloud-adventure/adventure-royale-zones.mjs';
 import {LYSANDRE_WILD,lysandreWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
 import {museumSide21Spot,museumSide21Requester} from '@/lib/cloud-adventure/adventure-museum.mjs';
@@ -432,10 +432,10 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     }
     if(isScrewGlideRoof(w.district)&&!w.interior){
      // Draft scaffold platforms and the street below their glide gap.
-     const shade=w.district==='lumiose-screw-jaune9'?['#596679','#a49f96','#c5beb1']:w.district==='lumiose-screw-jaune11'?['#637d7f','#b2ac87','#d4cba4']:w.district==='lumiose-screw-vert3'?['#61766e','#aa987d','#c9bca0']:['#536b7a','#b89b78','#c9ad89'];ctx.fillStyle=c==='#'?shade[0]:(x+y)%2?shade[1]:shade[2];ctx.fillRect(px,py,tile,tile);
+     const shade=w.district==='lumiose-screw-palais'?['#606a82','#ae9f9c','#cebfbb']:w.district==='lumiose-screw-jaune3'?['#78849a','#b7a68c','#dbcbb0']:w.district==='lumiose-screw-rouge1-court'?['#6c6978','#ab8f7e','#ccb39e']:w.district==='lumiose-screw-jaune9'?['#596679','#a49f96','#c5beb1']:w.district==='lumiose-screw-jaune11'?['#637d7f','#b2ac87','#d4cba4']:w.district==='lumiose-screw-vert3'?['#61766e','#aa987d','#c9bca0']:['#536b7a','#b89b78','#c9ad89'];ctx.fillStyle=c==='#'?shade[0]:(x+y)%2?shade[1]:shade[2];ctx.fillRect(px,py,tile,tile);
      if(c==='#'){ctx.fillStyle='#6d8490';ctx.fillRect(px,py+tile-3,tile,2);}
      else{ctx.fillStyle='#8c765f';ctx.fillRect(px,py+tile-3,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py,2,tile);}
-     if((x===10||x===14)&&y===6){ctx.fillStyle='#f4d069';ctx.beginPath();ctx.moveTo(px+tile/2,py+tile/4);ctx.lineTo(px+tile*3/4,py+tile/2);ctx.lineTo(px+tile/2,py+tile*3/4);ctx.lineTo(px+tile/4,py+tile/2);ctx.fill();}
+     if(screwGlideAt(w.district,x,y)){ctx.fillStyle='#f4d069';ctx.beginPath();ctx.moveTo(px+tile/2,py+tile/4);ctx.lineTo(px+tile*3/4,py+tile/2);ctx.lineTo(px+tile/2,py+tile*3/4);ctx.lineTo(px+tile/4,py+tile/2);ctx.fill();}
      if(c==='j'||c==='v'){ctx.fillStyle='#65584d';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e7d8b6';for(let n=0;n<3;n++)ctx.fillRect(px+6,py+7+n*7,tile-12,2);}
      return;
     }
@@ -695,6 +695,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(c==='u'){
       ctx.fillStyle='#eee4d5';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#76557f';ctx.fillRect(px+tile/2-6,py+tile/2-5,12,5);ctx.fillStyle='#394344';ctx.fillRect(px+tile/2-6,py+tile/2,12,2);ctx.fillStyle='#fff';ctx.fillRect(px+tile/2-1,py+tile/2-1,2,3);
      }
+     if(c==='$'){ctx.fillStyle='#65584d';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e7d8b6';for(let n=0;n<3;n++)ctx.fillRect(px+6,py+7+n*7,tile-12,2);}
      if(c==='X'){ctx.fillStyle='#6f807e';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#d8e5d9';ctx.fillRect(px+6,py+6,tile-12,tile-12);ctx.fillStyle='#87aaa1';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
      return;
     }

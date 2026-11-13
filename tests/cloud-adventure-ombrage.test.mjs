@@ -39,4 +39,6 @@ test('both entrances reach every existing boutique and salon without moving save
   assert.deepEqual([restored.x,restored.y,restored.facing,restored.teamIds],[approach.x,approach.y,facing,['kept']]);seen.push(tile);
  }
  assert.deepEqual(seen.sort(),Object.keys(OMBRAGE_SHOPS).sort());
+ // The roof access must not shadow any boutique approach or add a fake shop tile.
+ assert.equal(fieldDialogue({...s,x:11,y:14,facing:'up'}).action,'screwRoofAccess');
 });
