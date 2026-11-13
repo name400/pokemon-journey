@@ -5034,6 +5034,23 @@ test('supply sales atomically handle wallet, world balls and bag across reloads'
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('verified bag item sales preserve equipped items and protect key items',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bag-sales-qa',displayName:'가방 도구 판매'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],equipped={...rawMon(id),item:'leftovers'};seedMon(id,equipped);
+  const items=[...['hpup','protein','iron','calcium','zinc','carbos'].map(id=>[id,1250]),...['pomegberry','kelpsyberry','qualotberry','hondewberry','grepaberry','tamatoberry','occaberry','passhoberry','wacanberry','rindoberry','yacheberry','chopleberry'].map(id=>[id,20]),...Object.entries({'za-exp-candy-xs':5,'za-exp-candy-s':60,'za-exp-candy-m':250,'za-exp-candy-l':750,'za-exp-candy-xl':2500,bottlecap:5000,goldbottlecap:15000}),...['metalcoat','whippeddream','sachet','kingsrock','powerweight','powerbracer','powerbelt','powerlens','powerband','poweranklet','leftovers','charcoal','hardstone','expertbelt','rockyhelmet'].map(id=>[id,750])];
+  for(const [item] of items)sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item,2);
+  for(const item of ['za-zygarde-cube','za-tm011','zygardite','shinycharm'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item,1);
+  sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up',zaMission29Complete:true},state.revision+1));await get();
+  const revision=state.revision;await call('sellAdventureTreasure',{item:'hpup',quantity:2});assert.equal(state.wallet.coins,3500);assert.equal(state.inventory.hpup||0,0);await call('sellAdventureTreasure',{item:'protein',revision},409);await get();assert.equal(state.inventory.protein,2);
+  await call('sellAdventureTreasure',{item:'protein',quantity:3},409);await call('sellAdventureTreasure',{item:'protein',quantity:0},409);for(const item of ['za-zygarde-cube','za-tm011','zygardite','shinycharm','__proto__'])await call('sellAdventureTreasure',{item},409);
+  for(const [item,price] of items.slice(1)){const before=state.wallet.coins;await call('sellAdventureTreasure',{item});assert.equal(state.wallet.coins,before+price);assert.equal(state.inventory[item],1);}
+  await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaMission29Complete,true);assert.deepEqual(rawMon(id),equipped);assert.equal(rawMon(id).item,'leftovers');assert.equal(state.inventory['za-zygarde-cube'],1);assert.equal(state.inventory['za-tm011'],1);assert.equal(state.inventory.zygardite,1);assert.equal(state.inventory.shinycharm,1);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER,globalThis.__adventureUser.userId);await get();await call('sellAdventureTreasure',{item:'protein'},409);await get();assert.equal(state.inventory.protein,1);assert.equal(state.wallet.coins,Number.MAX_SAFE_INTEGER);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:8,facing:'down'},state.revision+1));await get();await call('sellAdventureTreasure',{item:'protein'},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('evolution stone sales preserve inventory and reject stale or invalid requests',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'stone-sales-qa',displayName:'진화석 판매'};
  try{
@@ -5055,7 +5072,7 @@ test('treasure sales use the shop and atomically preserve stock, wallet and save
   await get();await call('start',{species:152});const team=[...state.world.teamIds],id=state.world.activeId,mon=structuredClone(rawMon(id));
   for(const item of ['pearl','bigpearl','pearlstring','nugget','bignugget','bottlecap'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item,2);
   sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(1000,globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:5,y:8,facing:'down',zaMission29Complete:true},state.revision+1));await get();await call('sellAdventureTreasure',{item:'pearlstring',quantity:1},409);
-  seedWorld(storeAdventurePosition({...rawWorld(),x:7,y:7,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'shop');await call('sellAdventureTreasure',{item:'bottlecap',quantity:1},409);await call('sellAdventureTreasure',{item:'__proto__',quantity:1},409);await call('sellAdventureTreasure',{item:'nugget',quantity:0},409);await call('sellAdventureTreasure',{item:'nugget',quantity:3},409);assert.equal(state.wallet.coins,1000);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:7,y:7,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'shop');await call('sellAdventureTreasure',{item:'za-zygarde-cube',quantity:1},409);await call('sellAdventureTreasure',{item:'__proto__',quantity:1},409);await call('sellAdventureTreasure',{item:'nugget',quantity:0},409);await call('sellAdventureTreasure',{item:'nugget',quantity:3},409);assert.equal(state.wallet.coins,1000);
   const stale=state.revision;await call('sellAdventureTreasure',{item:'pearlstring',quantity:2});assert.equal(state.wallet.coins,21000);assert.equal(state.inventory.pearlstring||0,0);await call('sellAdventureTreasure',{item:'nugget',quantity:1,revision:stale},409);await get();assert.equal(state.wallet.coins,21000);assert.equal(state.inventory.nugget,2);
   for(const [item,price] of [['pearl',1000],['bigpearl',4000],['nugget',5000],['bignugget',20000]]){const before=state.wallet.coins;await call('sellAdventureTreasure',{item,quantity:1});assert.equal(state.wallet.coins,before+price);assert.equal(state.inventory[item],1);}
   await get();assert.equal(state.inventory.bottlecap,2);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);assert.equal(state.world.zaMission29Complete,true);
