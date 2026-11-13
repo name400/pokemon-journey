@@ -6548,3 +6548,15 @@ test('new mission 10 multi battle enables player natural Plus and restores the g
   await call('battle',{revision,command:{type:'turn',actions:[{actor:0,type:'move',move:'tackle',target:1,plus:true}]}},409);assert.equal(state.battle.adventurePlusGauge.charge,0);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('mission 37 triple Plus is available to the player and restores without duplicate actions',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-triple-qa',displayName:'세 아군 플러스'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedMon(id,{...makeMon(152,90),boxId:id,moves:['전광석화'],adventurePlusMastered:['quickattack'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x:11,y:5,facing:'up',zaMission36Complete:true,zaMission37Started:true,zaMission37Stage:2,zaMission37MultiV1:true,zaMission37TripleV1:true,zaProtectLayout:5,zaProtectCanal:false,zaProtectBuilding:false,zaProtectRoof:false,zaMegaRing:true},state.revision+1));await get();await call('mission37Wave');
+  assert.equal(state.battle.adventurePlusGauge.charge,1);assert.equal(state.battle.requests[0].actors[0].moves[0].plusReady,true);const revision=state.revision;
+  await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'quickattack',target:2,plus:true}]}});assert.equal(state.battle.adventurePlusGauge.charge,0,JSON.stringify(state.battle.log));await get();assert.equal(state.battle.adventurePlusGauge.charge,0);
+  await call('battle',{revision,command:{type:'turn',actions:[{actor:0,type:'move',move:'quickattack',target:1,plus:true}]}},409);assert.deepEqual(state.world.teamIds,[id]);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
+  seedMon(id,{...makeMon(152,90),boxId:id,moves:['전광석화'],adventurePlusMastered:['quickattack'],pp:{}});seedWorld(storeAdventurePosition({...rawWorld(),combat:null,trainer:null,area:3,district:'lumiose-protect',interior:null,x:3,y:5,facing:'up',zaMission36Stage:3,zaMission36DescentPending:true,zaMission36DoubleV1:true,zaMission37TripleV1:true,zaMission37MultiV1:true,zaMission37Started:true,zaMission37Stage:1,zaProtectLayout:5,zaMegaRing:true},state.revision+1));await get();await call('mission37Wave');assert.equal(state.battle.adventurePlusGauge.charge,1);await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'quickattack',target:1,plus:true}]}});assert.equal(state.battle.adventurePlusGauge.charge,0);await get();assert.equal(state.battle.adventurePlusGauge.charge,0);assert.deepEqual(state.world.teamIds,[id]);
+ }finally{globalThis.__adventureUser=previous;}
+});

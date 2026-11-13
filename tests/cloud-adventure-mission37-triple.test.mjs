@@ -83,7 +83,7 @@ test('each trainer can reach the last opposing edge slot in the story battle',()
 
 test('a companion can recharge after hyper beam without blocking the next turn',()=>{
  const mon=(id,move)=>({...makeMon(143,80),boxId:id,moves:[move],pp:{}}),initial=createMission37TripleSnapshot([mon('recharge-player','튀어오르기')],[mon('recharge-ally','파괴광선')],[mon('recharge-ally2','튀어오르기')],[mon('recharge-foe1','튀어오르기'),mon('recharge-foe2','튀어오르기'),mon('recharge-foe3','튀어오르기')]);
- const first=playMission37TriplePrototype(initial,{type:'move',move:'splash'}),sim=restoreMission37TripleSnapshot(first);assert.equal(sim.p1.activeRequest.active[1].moves[0].id,'recharge');const second=playMission37TriplePrototype(first,{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(second).turn,3);
+ initial.snapshot.prng='1,2,3,4';const first=playMission37TriplePrototype(initial,{type:'move',move:'splash'}),sim=restoreMission37TripleSnapshot(first);assert.equal(sim.p1.activeRequest.active[1].moves[0].id,'recharge');const second=playMission37TriplePrototype(first,{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(second).turn,3);
 });
 
 test('reserve medicine is confined to the player owner and survives restore',()=>{
@@ -106,12 +106,12 @@ test('mission 36 two full partners mega evolve against two real foes and restore
 });
 
 test('opt-in mega plus boosts damage through reload without altering legacy snapshots',()=>{
- const mon=(species,id,level=100)=>({...makeMon(species,level),boxId:id,moves:['튀어오르기'],pp:{}}),player={...makeMon(6,50),boxId:'plus-player',item:'charizarditex',moves:['화염방사'],pp:{}},first=mon(25,'plus-ally1'),second=mon(25,'plus-ally2');
+ const mon=(species,id,level=100)=>({...makeMon(species,level),boxId:id,moves:['튀어오르기'],pp:{}}),player={...makeMon(6,30),boxId:'plus-player',item:'charizarditex',moves:['화염방사'],pp:{}},first=mon(25,'plus-ally1'),second=mon(25,'plus-ally2');
  for(const enemy of [143,208]){
-  const foes=[mon(enemy,'plus-target'),mon(143,'plus-foe2'),mon(143,'plus-foe3')],base=createMission37TripleSnapshot([player],[first],[second],foes),plus={...structuredClone(base),adventureMegaPlusDamageV1:true};
+  const foes=[mon(enemy,'plus-target'),mon(143,'plus-foe2'),mon(143,'plus-foe3')],base=createMission37TripleSnapshot([player],[first],[second],foes),plus={...structuredClone(base),adventureMegaPlusDamageV1:true};base.snapshot.prng='1,2,3,4';plus.snapshot.prng='1,2,3,4';
   const ordinary={type:'move',move:'flamethrower',target:1},normalWithoutMega=playMission37TriplePrototype(base,ordinary),plusWithoutMega=playMission37TriplePrototype(plus,ordinary);assert.equal(normalWithoutMega.teams[1][0].hp,plusWithoutMega.teams[1][0].hp);
   const action={type:'move',move:'flamethrower',target:1,special:'mega'},old=playMission37TriplePrototype(base,action),next=playMission37TriplePrototype(plus,action),before=foes[0].hp,normal=before-old.teams[1][0].hp,boosted=before-next.teams[1][0].hp;
-  assert.ok(normal>0);assert.ok(boosted>normal,`${enemy}: ${normal} -> ${boosted}`);assert.ok(Math.abs(boosted/normal-(enemy===208?1.3:1.2))<0.12,`${enemy}: ${normal} -> ${boosted}`);assert.equal(base.adventureMegaPlusDamageV1,undefined);assert.equal(mission37TripleView(old).adventureMegaPlusDamageV1,false);assert.equal(mission37TripleView(JSON.parse(JSON.stringify(next))).adventureMegaPlusDamageV1,true);assert.equal(restoreMission37TripleSnapshot(next).turn,2);const again=playMission37TriplePrototype(JSON.parse(JSON.stringify(next)),{type:'move',move:'flamethrower',target:1}),againLegacy=playMission37TriplePrototype({...JSON.parse(JSON.stringify(next)),adventureMegaPlusDamageV1:false},{type:'move',move:'flamethrower',target:1});assert.ok(again.teams[1][0].hp<againLegacy.teams[1][0].hp);
+  assert.ok(normal>0);assert.ok(boosted>normal,`${enemy}: ${normal} -> ${boosted}`);assert.ok(Math.abs(boosted/normal-(enemy===208?1.3:1.2))<0.12,`${enemy}: ${normal} -> ${boosted}`);assert.equal(base.adventureMegaPlusDamageV1,undefined);assert.equal(mission37TripleView(old).adventureMegaPlusDamageV1,false);assert.equal(mission37TripleView(JSON.parse(JSON.stringify(next))).adventureMegaPlusDamageV1,true);assert.equal(restoreMission37TripleSnapshot(next).turn,2);const again=playMission37TriplePrototype(JSON.parse(JSON.stringify(next)),{type:'move',move:'flamethrower',target:1}),againLegacy=playMission37TriplePrototype({...JSON.parse(JSON.stringify(next)),adventureMegaPlusDamageV1:false},{type:'move',move:'flamethrower',target:1});assert.ok(again.teams[1][0].hp<againLegacy.teams[1][0].hp,JSON.stringify({enemy,before:next.teams[1][0].hp,plus:again.teams[1][0].hp,base:againLegacy.teams[1][0].hp,log:again.log,baseLog:againLegacy.log}));
  }
 });
 
