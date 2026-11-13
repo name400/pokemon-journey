@@ -31,3 +31,16 @@ test('Zones 5–8 require their own complete survey before rolling a documented 
  }
  const state={zaMission05Complete:true,adventureDexSpecies:LATER_ZONE_SPECIES[7]};assert.equal(randomWildAlphaLevel(state,7,406,()=>0),null);
 });
+
+test('Zones 9–20 use their own survey and documented alpha level ranges',async()=>{
+ const {LATER_ZONE_SPECIES}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+ for(const [zone,id,min,max] of [[9,302,39,41],[10,79,41,43],[11,618,41,42],[12,225,42,45],[13,123,47,49],[14,304,38,40],[15,710,52,53],[16,870,51,52],[17,650,30,35],[18,371,54,55],[19,133,58,59],[20,1,62,63]]){
+  const dex=LATER_ZONE_SPECIES[zone],state={zaMission05Complete:true,adventureDexSpecies:dex};
+  let calls=0;assert.equal(randomWildAlphaLevel({...state,adventureDexSpecies:dex.slice(1)},zone,id,()=>{calls++;return 0}),null);assert.equal(calls,0);
+  assert.equal(randomWildAlphaLevel({...state,zaMission05Complete:false},zone,id,()=>0),null);
+  assert.equal(randomWildAlphaLevel(state,zone,id,()=>.05),null);
+  assert.equal(randomWildAlphaLevel(state,zone,id,()=>0),min);
+  calls=0;assert.equal(randomWildAlphaLevel(state,zone,id,()=>calls++===0?.049:.999),max);
+ }
+ const state={zaMission05Complete:true,adventureDexSpecies:LATER_ZONE_SPECIES[20]};assert.equal(randomWildAlphaLevel(state,20,718,()=>0),null);
+});

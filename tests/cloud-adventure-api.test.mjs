@@ -7098,3 +7098,17 @@ test('surveyed Zones 5–8 create new grass alphas without replacing saved encou
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:`lumiose-zone${p.n}`,interior:null,x:p.x,y:p.y,facing:'right',zaMission05Complete:true,adventureDexSpecies:p.dex,adventureBalls:{masterball:1}},state.revision+1));await get();globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});await get();const foe=state.battle.teams[1][0];assert.equal(foe.speciesId,p.species);assert.equal(foe.level,p.level);assert.equal(foe.adventureAlpha,true);const encounter=structuredClone(rawWorld().encounter);await get();assert.deepEqual(rawWorld().encounter,encounter);assert.equal(state.battle.teams[1][0].adventureAlpha,true);const revision=state.revision;await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision},409);await get();assert.ok(state.box.some(mon=>mon.speciesId===p.species&&mon.origin==='capture'&&mon.adventureAlpha));assert.equal(state.world.adventureBalls.masterball,0);assert.equal(state.world.activeId,lead);
  }}finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
+
+test('later surveyed zone grass alphas survive reload and capture without duplicating rewards',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;
+ try{for(const p of [
+  {n:9,x:7,y:5,species:703,level:39,dex:[302,64,703,662,303,677],zaZone9Upper:true},
+  {n:12,x:6,y:8,species:225,level:42,dex:[673,361,66,67,459,582,712,225]},
+  {n:14,x:7,y:8,species:304,level:38,dex:[304,305,529,587,530,95,694]},
+  {n:17,x:2,y:5,species:650,level:30,dex:[660,650,668,227,707,608]},
+  {n:20,x:4,y:3,species:448,level:63,dex:[282,448,407,687,691,1,4,7,152,498,158,306,569,560,450]},
+ ]){
+  globalThis.__adventureUser={userId:`last-zone-alpha-${p.n}`,displayName:'후반 구역 조사 검증'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={hour:12,period:'day',absoluteHour:12};await get();await call('start',{species:152});const lead=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:`lumiose-zone${p.n}`,interior:null,x:p.x,y:p.y,facing:'right',zaRoyaleRank:'Z',zaZone9Upper:p.zaZone9Upper===true,zaMission05Complete:true,adventureDexSpecies:p.dex,adventureBalls:{masterball:1}},state.revision+1));await get();globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});await get();const foe=state.battle.teams[1][0];assert.equal(foe.speciesId,p.species);assert.equal(foe.level,p.level);assert.equal(foe.adventureAlpha,true);const saved=structuredClone(rawWorld().encounter);await get();assert.deepEqual(rawWorld().encounter,saved);assert.equal(state.battle.teams[1][0].adventureAlpha,true);const revision=state.revision;await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision},409);await get();assert.ok(state.box.some(mon=>mon.speciesId===p.species&&mon.origin==='capture'&&mon.adventureAlpha));assert.equal(state.world.adventureBalls.masterball,0);assert.equal(state.world.activeId,lead);
+ }}finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
