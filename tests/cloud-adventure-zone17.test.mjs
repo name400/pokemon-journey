@@ -90,3 +90,12 @@ test('promenade ladder building keeps all branches and recovers legacy positions
  for(const [x,y] of ZONE17_PROMENADE_BUILDING){assert.equal(map[y][x],'#');const old=storeAdventurePosition({...base,x,y},78);delete old.districtPosition.zone17PromenadeBuildingLayout;const restored=restoreAdventurePosition(old,78);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.zaZone17Spent['pyroar-alpha'],true);assert.deepEqual(restored.zaZone17Items,['stairs-timer']);}
  for(const target of [{x:6,y:1},{x:11,y:1},{x:16,y:1},{x:13,y:7}])assert.ok(fieldPath(map,base,target).length);assert.equal(map[6][13],'l');assert.equal(map[5][9],'^');
 });
+
+test('diagonal promenade approach connects its three northern gates and legacy stair',async()=>{
+ const {fieldMap,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const s={area:3,district:'lumiose-zone17',interior:null,x:8,y:13,facing:'down',zaZone17Upper:false,zaZone17Promenade:true,zaRoyaleRank:'C',teamIds:['kept'],coins:250,zaZone17Spent:{'pyroar-alpha':true},zaZone17Items:['stairs-timer']},map=fieldMap(s);
+ assert.equal(map[14][8],'h');assert.equal(map[14][11],'h');assert.equal(fieldDialogue(s,map).action,'zone17PromenadeStairs');
+ for(const target of [{x:6,y:1},{x:11,y:1},{x:16,y:1},{x:13,y:7},{x:11,y:13}])assert.ok(fieldPath(map,s,target).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,35),35);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone17Promenade,saved.coins,saved.teamIds,saved.zaZone17Spent,saved.zaZone17Items],['lumiose-zone17',8,13,true,250,['kept'],{'pyroar-alpha':true},['stairs-timer']]);assert.equal(fieldDialogue(saved,fieldMap(saved)).action,'zone17PromenadeStairs');
+ const legacy={...s,x:11,y:13};assert.equal(fieldDialogue(legacy,fieldMap(legacy)).action,'zone17PromenadeStairs');
+});
