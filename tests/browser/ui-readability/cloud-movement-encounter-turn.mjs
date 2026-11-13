@@ -12,7 +12,7 @@ await page.route('**/api/world**',async r=>{
  if(r.request().method()==='POST'){
   const b=r.request().postDataJSON();if(b.action==='movementFence'){if((b.revision===null||b.revision===revision)&&(b.activeId==null||b.activeId===world.activeId))revision++;return r.fulfill({json:{settled:true}});}assert.equal(b.revision,revision);posts++;inflight++;maxInflight=Math.max(maxInflight,inflight);paths.push(b.path);
   if(posts===1)await gate;
-  for(const direction of b.path){const step=stepField(world,direction);if(step.blocked)break;world={...world,...step,steps:world.steps+1};if(direction==='up'){battle=fixtureBattle;break;}if(step.transitioned)break;}
+  for(const direction of b.path){const step=stepField(world,direction);if(step.blocked)break;world={...world,...step,facing:direction,steps:world.steps+1};if(direction==='up'){battle=fixtureBattle;break;}if(step.transitioned)break;}
   revision++;inflight--;
  }
  await r.fulfill({json:state()});

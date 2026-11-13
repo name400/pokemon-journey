@@ -29,12 +29,13 @@ import {zone3GardenPattern,zone3ExitLabel} from '@/lib/cloud-adventure/adventure
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 
-type Props={world:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;onAimSewer:(id:string)=>void;period:string};
+type VisualPath={generation:number;origin:{x:number;y:number};steps:Array<{id:number;x:number;y:number;facing:string}>};
+type Props={visualPath?:VisualPath;world:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;onAimSewer:(id:string)=>void;period:string};
 const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 
-export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,startX:w.x,startY:w.y,moveStart:0,moveDuration:1,walkUntil:0}),[assetError,setAssetError]=useState(false);
- props.current={w,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period};
+export default function AdventureField({world:w,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}:Props){
+ const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,startX:w.x,startY:w.y,moveStart:0,moveDuration:1,walkUntil:0,visualGeneration:-1,visualStep:-1,facing:w.facing||'down'}),[assetError,setAssetError]=useState(false);
+ props.current={w,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,width=736,height=544;
@@ -51,19 +52,41 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
   const observer=new ResizeObserver(([entry])=>{const nextWidth=Math.max(280,Math.round(entry.contentRect.width)),nextHeight=Math.round(nextWidth*(nextWidth<560?.87:17/23));if(width!==nextWidth||height!==nextHeight||el.width!==nextWidth*2||el.height!==nextHeight*2){width=nextWidth;height=nextHeight;el.width=width*2;el.height=height*2;scheduler.invalidate();}});observer.observe(el);
   const motion=window.matchMedia('(prefers-reduced-motion: reduce)');motion.addEventListener('change',scheduler.invalidate);
   function draw(time:number){
-   if(disposed||!ctx||!el)return;const {w}=props.current,s=scene.current;
+   if(disposed||!ctx||!el)return;const {w,visualPath}=props.current,s=scene.current;
    const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0)||s.interior!==(w.interior||null)||s.district!==(w.district||null);
    if(movedArea){s.x=w.x;s.y=w.y;s.targetX=w.x;s.targetY=w.y;s.startX=w.x;s.startY=w.y;s.moveStart=time;s.walkUntil=0;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;s.district=w.district||null;}
-   if(!movedArea&&(s.targetX!==w.x||s.targetY!==w.y)){
-    s.startX=s.x;s.startY=s.y;s.targetX=w.x;s.targetY=w.y;s.moveStart=time;
-    // Large corrections are authoritative and should not animate across tiles.
-    s.moveDuration=Math.abs(s.x-w.x)+Math.abs(s.y-w.y)>1.25?1:adventureMovementInterval(w)*.85;
-    s.walkUntil=time+140;
-   }
    const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-   const progress=reduce?1:Math.min(1,Math.max(0,(time-s.moveStart)/s.moveDuration));
-   s.x=s.startX+(s.targetX-s.startX)*progress;s.y=s.startY+(s.targetY-s.startY)*progress;
-   const moving=progress<1;
+   let moving=false;
+   if(visualPath&&!movedArea){
+    if(s.visualGeneration!==visualPath.generation){
+     s.visualGeneration=visualPath.generation;s.visualStep=-1;s.x=visualPath.origin.x;s.y=visualPath.origin.y;s.targetX=s.x;s.targetY=s.y;s.startX=s.x;s.startY=s.y;s.moveStart=time;s.moveDuration=0;
+    }
+    // Complete the current segment before taking the next point. The ordered
+    // list survives React batching and successful acknowledgements.
+    for(;;){
+     const progress=reduce||!s.moveDuration?1:Math.min(1,Math.max(0,(time-s.moveStart)/s.moveDuration));
+     s.x=s.startX+(s.targetX-s.startX)*progress;s.y=s.startY+(s.targetY-s.startY)*progress;
+     if(progress<1){moving=true;break;}
+     const next=visualPath.steps.find(point=>point.id>s.visualStep);if(!next)break;
+     if(Math.abs(next.x-s.targetX)+Math.abs(next.y-s.targetY)!==1||(s.visualStep!==-1&&next.id!==s.visualStep+1)){
+      // An interrupted render or discarded prefix must never draw a shortcut.
+      s.x=w.x;s.y=w.y;s.startX=w.x;s.startY=w.y;s.targetX=w.x;s.targetY=w.y;s.moveDuration=0;s.visualStep=visualPath.steps.at(-1)?.id??-1;s.facing=w.facing||'down';break;
+     }
+     const continuous=s.moveDuration>0&&time-s.moveStart-s.moveDuration<adventureMovementInterval(w);
+     s.startX=s.targetX;s.startY=s.targetY;s.targetX=next.x;s.targetY=next.y;s.facing=next.facing;s.visualStep=next.id;
+     s.moveStart=continuous?s.moveStart+s.moveDuration:time;s.moveDuration=adventureMovementInterval(w);s.walkUntil=time+140;
+    }
+   }else{
+    const cancelled=s.visualGeneration!==-1;s.visualGeneration=-1;s.visualStep=-1;s.facing=w.facing||'down';
+    if(cancelled||(!movedArea&&(s.targetX!==w.x||s.targetY!==w.y))){
+     s.startX=s.x;s.startY=s.y;s.targetX=w.x;s.targetY=w.y;s.moveStart=time;
+     // Corrections discard speculative waypoints immediately.
+     s.moveDuration=cancelled||Math.abs(s.x-w.x)+Math.abs(s.y-w.y)>1.25?0:adventureMovementInterval(w)*.85;
+     s.walkUntil=time+140;
+    }
+    const progress=reduce||!s.moveDuration?1:Math.min(1,Math.max(0,(time-s.moveStart)/s.moveDuration));
+    s.x=s.startX+(s.targetX-s.startX)*progress;s.y=s.startY+(s.targetY-s.startY)*progress;moving=progress<1;
+   }
    const walking=moving||time<s.walkUntil;
    const tile=width>=900?40:32;s.tile=tile;
    s.cameraX=Math.max(0,Math.min(w.map[0].length*tile-width,(s.x+.5)*tile-width/2));s.cameraY=Math.max(0,Math.min(w.map.length*tile-height,(s.y+.5)*tile-height/2));
@@ -1160,7 +1183,7 @@ export default function AdventureField({world:w,disabled,onInteract,onAimAlpha,o
    if(['lumiose-zone5','lumiose-zone5-drain'].includes(w.district)&&!w.interior)for(const m of ZONE5_VISIBLE.filter(p=>(w.district==='lumiose-zone5-drain'?p.drain===true:!p.drain&&p.upper===(w.zaZone5Upper===true))&&!w.zaZone5Spent?.[p.id])){const px=m.x*tile,py=m.y*tile,img=(w.zaWildShinyRolls?.[`zone5:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]);if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle=m.alpha?'#af5462':'#d6b57d';ctx.fillRect(px+6,py+6,tile-12,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}}
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
-   trainer(s.x,s.y,'#d95250',w.facing||'down',walking,salonAppearance(w));
+   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w));
    ctx.restore();
    // Soft border is part of the camera, never a fullscreen tint over sprites.
    ctx.strokeStyle='#284d3b55';ctx.lineWidth=4;ctx.strokeRect(2,2,width-4,height-4);

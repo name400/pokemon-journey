@@ -16,7 +16,8 @@ import {TRAINERS} from '@/lib/campaign.mjs';
 import {stepField,wildAlphaTarget,zone2BudewTarget,zone2KakunaTarget,zone2FieldMonsters,zone2FieldTarget,zone2IslandAlphaTarget,zone3FieldMonsters,zone3FieldTarget,magentaSewerMonsters,magentaSewerTarget} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {ADVENTURE_BALLS,RARE_ADVENTURE_BALL_IDS} from '@/lib/cloud-adventure/adventure-balls.mjs';
 import './cloud-adventure.css';
-import {predictCloudStep,predictCloudPath,createCloudMoveBuffer,adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
+import {predictCloudStep,predictCloudPath,predictCloudPathSteps,createCloudMoveBuffer,adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
+import {createVisualMovementRequests} from '@/lib/cloud-adventure/adventure-visual-request.mjs';
 import {adventureJson} from '@/lib/adventure-network.mjs';
 
 function SalonPreview({style,color}:{style:string;color:string}){
@@ -40,19 +41,34 @@ function Sheet({title,close,children,dismissible=true,story=false}:{title:string
  return <dialog ref={ref} className={`adv-sheet${story?' adv-story-sheet':''}`} aria-labelledby="adv-sheet-title" onCancel={e=>{if(dismissible)close();else e.preventDefault();}} onClick={e=>{if(dismissible&&e.target===e.currentTarget){const r=e.currentTarget.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close();}}}><header><h2 id="adv-sheet-title">{title}</h2>{dismissible&&<button autoFocus aria-label="닫기" onClick={close}><X size={22}/></button>}</header><div className="adv-sheet-body">{children}</div></dialog>;
 }
 
-type FieldPrediction={revision:number;x:number;y:number;facing:string;predictedTransition?:boolean}|null;
+type VisualPath={generation:number;origin:{x:number;y:number};steps:Array<{id:number;x:number;y:number;facing:string}>};
+type FieldPrediction={revision:number;x:number;y:number;facing:string;predictedTransition?:boolean;visualPath?:VisualPath}|null;
 type FieldPredictionHandle={setPrediction:(value:FieldPrediction)=>void};
 // Preview updates should redraw the field, not rerender the entire adventure UI.
 const PredictedAdventureField=forwardRef<FieldPredictionHandle,ComponentProps<typeof AdventureField>&{revision:number}>(function PredictedAdventureField({revision,world,...props},ref){
  const [prediction,setPrediction]=useState<FieldPrediction>(null);
  useImperativeHandle(ref,()=>({setPrediction}),[]);
- return <AdventureField {...props} world={prediction&&prediction.revision===revision?{...world,...prediction}:world}/>;
+ return <AdventureField {...props} world={prediction&&prediction.revision===revision?{...world,...prediction}:world} visualPath={prediction&&prediction.revision===revision?prediction.visualPath:undefined}/>;
 });
 
 export default function Adventure(){
  const fieldPrediction=useRef<FieldPredictionHandle|null>(null);
  const displayedPrediction=useRef<FieldPrediction>(null);
  const setPrediction=useCallback((value:FieldPrediction)=>{displayedPrediction.current=value;fieldPrediction.current?.setPrediction(value);},[]);
+ const visualRequests=useRef(createVisualMovementRequests()),visualGeneration=useRef(0),visualPath=useRef<VisualPath|null>(null);
+ const resetVisual=useCallback(()=>{visualRequests.current.reset();visualGeneration.current++;visualPath.current=null;setPrediction(null);},[setPrediction]);
+ const previewPath=useCallback((world:any,directions:string[],atRevision:number,allowTransition=true)=>{
+  const steps=predictCloudPathSteps(world,directions,{allowTransition}),last=steps.at(-1);if(!last)return;
+  if(!Number.isSafeInteger(world.steps)||steps.length!==directions.length||steps.some((step:any)=>step.predictedHazard||step.predictedTransition)){
+   visualPath.current=null;visualGeneration.current++;setPrediction({revision:atRevision,...last});return;
+  }
+  const old=visualPath.current,points=steps.map((step:any,index:number)=>({...step,id:world.steps+index+1}));
+  // Step identities survive successful ACKs, including turns to a previously
+  // visited coordinate. Keep preceding points until the canvas consumes them.
+  const preceding=old?.steps.filter(step=>step.id<=world.steps)||[];
+  const next={generation:visualGeneration.current,origin:old?.origin||{x:world.x,y:world.y},steps:[...preceding,...points].slice(-64)};
+  visualPath.current=next;setPrediction({revision:atRevision,...last,visualPath:next});
+ },[setPrediction]);
  const [berryQuantity,setBerryQuantity]=useState(1);
  const [salonStyle,setSalonStyle]=useState('classic'),[salonColor,setSalonColor]=useState('brown');
  const [data,setData]=useState<any>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false);
@@ -66,12 +82,14 @@ export default function Adventure(){
  const deferredInteraction=useRef<any>(null);
  snapshot.current=data;screenRef.current=screen;dialogueRef.current=dialogue;
  useEffect(()=>{if(dialogue?.hairSalon){const current=salonAppearance(snapshot.current?.world);setSalonStyle(current.style);setSalonColor(current.color);}},[dialogue?.hairSalon]);
- const stop=useCallback(()=>{heldDirection.current='';pathQueue.current=[];deferredInteraction.current=null;movementEpoch.current++;},[]);
- const accept=useCallback((d:any)=>{
-  if(!mounted.current||d.revision<revision.current)return;revision.current=d.revision;setPrediction(null);
+ const stop=useCallback(()=>{heldDirection.current='';pathQueue.current=[];deferredInteraction.current=null;movementEpoch.current++;resetVisual();},[resetVisual]);
+ const accept=useCallback((d:any,visual:any=null)=>{
+  if(!mounted.current||d.revision<revision.current)return false;revision.current=d.revision;
+  if(visual?.kind==='confirmed'&&visualPath.current){const last=visual.pending.at(-1)||d.world;setPrediction({revision:d.revision,x:last.x,y:last.y,facing:last.facing,visualPath:visualPath.current});}
+  else resetVisual();
   setData((old:any)=>{if(d.boxMode!=='patch'||!old)return d;const merged=new Map(old.box.map((p:any)=>[p.boxId,p]));for(const p of d.box)merged.set(p.boxId,{...(merged.get(p.boxId) as any),...p});return {...d,fieldShop:d.fieldShop??old.fieldShop,expeditions:d.expeditions??old.expeditions,box:[...merged.values()].filter((p:any)=>p.boxId!==d.world?.zaTradedPikachuId)};});
-  setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();
- },[stop]);
+  setTeam(d.world?.teamIds||[]);if(d.battle||d.world?.adventureCatchWindow||d.world?.adventurePendingMoves?.length)stop();return true;
+ },[stop,resetVisual,setPrediction]);
  const load=useCallback(async(light=false,recovery=false)=>{try{if(recovery&&pendingMovement.current){await api({action:'movementFence',...pendingMovement.current},false,true);pendingMovement.current=null;}const result=await api(undefined,light,recovery);if(syncRequired.current&&!recovery)return false;if(recovery&&result.revision<revision.current)throw Error('서버의 최신 진행 상태를 확인하지 못했습니다.');
   // A group poll that started before a move can return the same old state
   // while its preview is visible. Leave newer or event-bearing state alone.
@@ -80,16 +98,16 @@ export default function Adventure(){
   // A GET restores the authoritative turn; it is not a new action response.
   // Do not replay an already saved multi-battle turn after reload or recovery.
   if(result.battle?.adventureMultiEventsV1)result.battle={...result.battle,events:[]};
-  accept(result);if(recovery)syncRequired.current=false;if(mounted.current)setError('');return true;}catch(e){if(mounted.current){setError(recovery?(e instanceof Error&&e.message.includes('계정이나 파트너가 변경')?e.message:'연결을 복구하지 못했습니다. 다시 불러와 주세요.'):e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept]);
- const act=useCallback(async(action:string,extra:any={})=>{
+  if(inflightMove.current&&result.revision>=revision.current)stop();accept(result);if(recovery)syncRequired.current=false;if(mounted.current)setError('');return true;}catch(e){if(mounted.current){setError(recovery?(e instanceof Error&&e.message.includes('계정이나 파트너가 변경')?e.message:'연결을 복구하지 못했습니다. 다시 불러와 주세요.'):e instanceof Error?e.message:'불러오기 실패');if(recovery)setData(null);}return false;}},[accept,stop]);
+ const act=useCallback(async(action:string,extra:any={},visualToken:number|null=null)=>{
   if(lock.current||syncRequired.current)return null;lock.current=true;setBusy(true);setError('');const issuedRevision=revision.current,isMovement=['move','face','dodge'].includes(action),marker:PendingMovement={revision:issuedRevision,activeId:typeof snapshot.current?.world?.activeId==='string'?snapshot.current.world.activeId:null};
-  try{const result=await api({action,revision:issuedRevision,...extra,...(['move','face'].includes(action)?{compact:true}:{})});if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result);
+  try{const result=await api({action,revision:issuedRevision,...extra,...(['move','face'].includes(action)?{compact:true}:{})});if(!mounted.current)return null;if(action==='move'&&result.revision<=issuedRevision)throw Error('이동 응답이 오래되어 최신 진행을 확인합니다.');if(result.revision<revision.current||(action==='move'&&result.revision===revision.current))return null;const visual=visualToken===null?null:visualRequests.current.settle(visualToken,result);if(visual?.kind==='reset')stop();if(result.battleResult){const terminal={battle:result.battleResult,trainer:snapshot.current?.world?.trainer,biome:snapshot.current?.world?.areaInfo?.biome};resultRef.current=terminal;setBattleResult(terminal);stop();}accept(result,visual);
    const requested=action==='move'?deferredInteraction.current:null;
    if(requested){deferredInteraction.current=null;const w=result.world,same=result.revision===revision.current&&w&&['area','district','interior','x','y','facing','activeId'].every(key=>(w[key]??null)===(requested[key]??null));
     if(same&&!result.battle&&!w.adventureCatchWindow&&!w.adventurePendingMoves?.length&&!resultRef.current&&!screenRef.current&&!dialogueRef.current){if(w.interaction)setDialogue(w.interaction);else setHint('NPC나 건물 입구로 다가가 바라본 뒤 대화하세요.');}
     else if(!result.battle&&!w?.adventureCatchWindow)setHint('위치가 확정된 뒤 다시 대화해 주세요.');
-   }return result;}
-  catch(e){if(!mounted.current)return null;stop();setPrediction(null);syncRequired.current=true;if(isMovement&&!(e instanceof SettledMovementConflict))pendingMovement.current=marker;if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load(false,true);return null;}
+   }return action==='move'?{...result,visualStatus:visual?.kind||'unavailable'}:result;}
+  catch(e){if(!mounted.current)return null;stop();syncRequired.current=true;if(isMovement&&!(e instanceof SettledMovementConflict))pendingMovement.current=marker;if(mounted.current)setError(e instanceof Error?e.message:'요청 실패');await load(false,true);return null;}
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  },[accept,load,stop]);
  useEffect(()=>{mounted.current=true;pendingMovement.current={revision:null,activeId:null};syncRequired.current=true;void load(false,true);return()=>{mounted.current=false;stop();};},[load,stop]);
@@ -106,8 +124,9 @@ export default function Adventure(){
   const pending=lock.current?inflightMove.current:null;
   if(lock.current&&(!pending||pending.revision!==d.revision||pending.position?.predictedTransition))return;
   const base=pending?{...d.world,...(pending.bufferedPosition||pending.position)}:d.world;
-  const projected=predictCloudPath(base,pathQueue.current,{allowTransition:!pending});if(projected)setPrediction({revision:d.revision,...projected});
- },[]);
+  if(pending?.token){if(!visualRequests.current.preview(pending.token,[...pending.bufferedDirections,...pathQueue.current])){resetVisual();pending.token=null;}}
+  previewPath(pending?.origin||base,pending?[...pending.path,...pending.bufferedDirections,...pathQueue.current]:pathQueue.current,d.revision,!pending);
+ },[previewPath,resetVisual]);
  const interact=useCallback(()=>{const world=snapshot.current?.world,pending=lock.current?inflightMove.current:null,position=displayedPrediction.current;stop();
   if(lock.current){if(pending&&world&&position&&position.revision===pending.revision&&!position.predictedTransition&&!syncRequired.current)deferredInteraction.current={...world,...position};return;}
   const spot=world?.interaction;if(!spot){setHint('NPC나 건물 입구로 다가가 바라본 뒤 대화하세요.');return;}setDialogue(spot);},[stop]);
@@ -133,26 +152,28 @@ export default function Adventure(){
      const path=pathQueue.current.length?pathQueue.current.splice(0,4):[direction];
      const bufferDirection=path.at(-1)||direction;lastFacing.current=bufferDirection;
      const projected=path.length>1?predictCloudPath(d.world,path,{allowTransition:true}):predictCloudStep(d.world,path[0],{allowGrass:true,allowTransition:true,allowHazard:true}),epoch=movementEpoch.current;let buffer=createCloudMoveBuffer(d.world,projected,bufferDirection);
-     const queuedPreview=projected&&!('predictedTransition' in projected&&projected.predictedTransition)&&pathQueue.current.length?predictCloudPath({...d.world,...projected},pathQueue.current):null;
-     if(projected)setPrediction({revision:d.revision,...(queuedPreview||projected)});
+     let token=visualRequests.current.begin(d.world,path,d.revision);
+     if(token!==null&&!visualRequests.current.preview(token,pathQueue.current)){visualRequests.current.reset();token=null;}
+     if(projected)previewPath(d.world,[...path,...pathQueue.current],d.revision);
      // Accumulate only displayed steps; transitions wait for server confirmation.
-     const previewTimer=projected&&!('predictedTransition' in projected&&projected.predictedTransition)?setInterval(()=>{if(!alive||movementEpoch.current!==epoch)return;const queued=pathQueue.current[0],nextDirection=queued||heldDirection.current;if(!nextDirection)return;const next=buffer.push(nextDirection);if(next){if(queued)pathQueue.current.shift();if(inflightMove.current)inflightMove.current.bufferedPosition=next;const remaining=pathQueue.current.length?predictCloudPath({...d.world,...next},pathQueue.current):null;setPrediction({revision:revision.current,...(remaining||next)});}},adventureMovementInterval(d.world)):null;
-     moved=true;inflightMove.current=projected?{revision:d.revision,position:projected}:null;let r=await act('move',{path});inflightMove.current=null;
-     while(alive&&mounted.current&&movementEpoch.current===epoch&&buffer.path.length&&buffer.matches(r)&&(r.world?.steps||0)-(d.world.steps||0)>=path.length){
+     const previewTimer=projected&&!('predictedTransition' in projected&&projected.predictedTransition)?setInterval(()=>{if(!alive||movementEpoch.current!==epoch)return;const queued=pathQueue.current[0],nextDirection=queued||heldDirection.current;if(!nextDirection)return;const next=buffer.push(nextDirection);if(next){if(queued)pathQueue.current.shift();const pending=inflightMove.current;if(pending){pending.bufferedPosition=next;pending.bufferedDirections=buffer.path;if(pending.token!==null&&!visualRequests.current.preview(pending.token,[...buffer.path,...pathQueue.current])){resetVisual();pending.token=null;}previewPath(pending.origin,[...pending.path,...buffer.path,...pathQueue.current],pending.revision,false);}}},adventureMovementInterval(d.world)):null;
+     moved=true;inflightMove.current=projected?{revision:d.revision,position:projected,origin:d.world,path,bufferedDirections:[],token}:null;let r=await act('move',{path},token);inflightMove.current=null;
+     while(alive&&mounted.current&&movementEpoch.current===epoch&&buffer.path.length&&r?.visualStatus!=='reset'&&buffer.matches(r)&&(r.world?.steps||0)-(d.world.steps||0)>=path.length){
       const pending=buffer.path,before=r,nextBuffer=createCloudMoveBuffer(before.world,buffer.position,bufferDirection);
       // A turn made while waiting follows the already displayed straight steps.
-      const turnPreview=pathQueue.current.length?predictCloudPath({...before.world,...buffer.position},pathQueue.current):null;
-      setPrediction({revision:before.revision,...(turnPreview||buffer.position)});
+      token=visualRequests.current.begin(before.world,pending,before.revision);
+      if(token!==null&&!visualRequests.current.preview(token,pathQueue.current)){visualRequests.current.reset();token=null;}
+      previewPath(before.world,[...pending,...pathQueue.current],before.revision,false);
       // Keep one cadence across requests; restarting a timer after every
       // response adds a visible pause between otherwise continuous batches.
       buffer=nextBuffer;
-      inflightMove.current={revision:before.revision,position:buffer.position};
-      r=await act('move',{path:pending});inflightMove.current=null;
+      inflightMove.current={revision:before.revision,position:buffer.position,origin:before.world,path:pending,bufferedDirections:[],token};
+      r=await act('move',{path:pending},token);inflightMove.current=null;
       if(!r||r.battle||r.world?.area!==before.world.area||r.world?.interior!==before.world.interior||r.world?.district!==before.world.district||(r.world?.steps||0)-(before.world.steps||0)<pending.length){stop();break;}
      }
      if(previewTimer)clearInterval(previewTimer);
      // Keep a queued turn visible after the previous batch is confirmed.
-     if(r?.world&&!r.battle&&!r.world.adventureCatchWindow&&!r.world.adventurePendingMoves?.length&&movementEpoch.current===epoch&&pathQueue.current.length){const next=predictCloudPath(r.world,pathQueue.current,{allowTransition:true});if(next)setPrediction({revision:r.revision,...next});}
+     if(r?.world&&!r.battle&&!r.world.adventureCatchWindow&&!r.world.adventurePendingMoves?.length&&movementEpoch.current===epoch&&pathQueue.current.length){previewPath(r.world,pathQueue.current,r.revision);}
      // A confirmed area transition ends the old route, but held input can
      // continue on the new map after its authoritative state has arrived.
      const changedArea=r&&(r.world?.area!==d.world.area||r.world?.interior!==d.world.interior||r.world?.district!==d.world.district);
@@ -165,7 +186,7 @@ export default function Adventure(){
    running=false;if(alive&&(heldDirection.current||pathQueue.current.length))timer=setTimeout(tick,moved?Math.max(0,adventureMovementInterval(d.world)-(performance.now()-started)):16);
   };wakeMovement.current=()=>{if(alive&&!running){clearTimeout(timer);timer=setTimeout(tick,0);}};timer=setTimeout(tick,0);
   return()=>{alive=false;wakeMovement.current=()=>{};clearTimeout(timer);window.removeEventListener('keydown',keydown);window.removeEventListener('keyup',keyup);window.removeEventListener('blur',stop);document.removeEventListener('visibilitychange',hide);};
- },[act,interact,stop,previewInput]);
+ },[act,interact,stop,previewInput,previewPath,resetVisual]);
  useEffect(()=>{if(!data?.world?.inUnion||screen||dialogue||data.battle||battleResult||data.world.adventurePendingMoves?.length)return;const timer=setInterval(()=>{if(!lock.current)load(true);},4000);return()=>clearInterval(timer);},[data?.world?.inUnion,screen,dialogue,!!data?.battle,battleResult,data?.world?.adventurePendingMoves?.length,load]);
  const roster=useMemo(()=>{const q=query.trim().toLowerCase();return (data?.box||[]).filter((p:any)=>!q||`${p.name} ${p.id} ${p.types?.join(' ')}`.toLowerCase().includes(q));},[data?.box,query]);
  const close=()=>{setScreen(null);setTeamEdit(false);setQuery('');setPage(0);};

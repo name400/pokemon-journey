@@ -5,7 +5,7 @@ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'
 const base=process.env.UI_TEST_URL||'http://127.0.0.1:5222';
 const mon={boxId:'fixture',id:1,speciesId:1,name:'이상해씨',types:['풀','독'],level:5,hp:18,maxHp:20,experience:0,expToNext:20,evolutions:[]};
 const district=process.env.CLOUD_TEST_DISTRICT||'lumiose',simulateBlock=process.env.CLOUD_TEST_BLOCK==='1',startX=Number(process.env.CLOUD_TEST_X||2),startY=Number(process.env.CLOUD_TEST_Y||8);
-let world={area:3,district,interior:null,areaInfo:{name:'시험 구역',biome:'city'},x:startX,y:startY,facing:'right',teamIds:['fixture'],activeId:'fixture',badges:[],objective:'여행',log:[],adventureBalls:{},steps:0};world.map=fieldMap(world);
+let world={area:3,district,interior:null,areaInfo:{name:'시험 구역',biome:'city'},x:startX,y:startY,facing:'right',teamIds:['fixture'],activeId:'fixture',badges:[],objective:'여행',log:[],adventureBalls:{},steps:0};if(process.env.CLOUD_TEST_OLD_STEPS==='1')delete world.steps;if(process.env.CLOUD_TEST_HAZARD==='1')world.zaWildAlphaAlert=true;world.map=fieldMap(world);
 let revision=1,posts=0,inflight=0,maxInflight=0;const paths=[],state=()=>({engine:'cloud',revision,box:[mon],wallet:{coins:100,balls:5},inventory:{},fieldShop:[],expeditions:[],gameTime:{period:'day'},battle:null,world});
 let releaseFirst,firstStarted;const gate=new Promise(r=>{releaseFirst=r;}),started=new Promise(r=>{firstStarted=r;});
 try{
@@ -15,7 +15,7 @@ try{
   if(r.request().method()==='POST'){
    const body=r.request().postDataJSON();if(body.action==='movementFence'){if((body.revision===null||body.revision===revision)&&(body.activeId==null||body.activeId===world.activeId))revision++;return r.fulfill({json:{settled:true}});}posts++;inflight++;maxInflight=Math.max(maxInflight,inflight);assert.equal(body.revision,revision);assert.ok(body.path.length<=12);paths.push(body.path);
    if(posts===1){firstStarted();await gate;if(simulateBlock){inflight--;return r.fulfill({status:409,json:{error:'진행이 변경됐습니다.'}});}}
-   for(const direction of body.path){const step=stepField(world,direction);if(step.blocked)break;world={...world,...step,steps:world.steps+1};if(step.transitioned)break;}
+   for(const direction of body.path){const step=stepField(world,direction);if(step.blocked)break;world={...world,...step,facing:direction,steps:(world.steps||0)+1};if(step.transitioned)break;}
    revision++;inflight--;
   }
   await r.fulfill({json:state()});
