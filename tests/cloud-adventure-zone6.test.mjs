@@ -143,3 +143,10 @@ test('source-based lift and ladder keep both roof layers and old saved positions
   assert.deepEqual([restored.district,restored.x,restored.y,restored.zaZone6Layer,restored.teamIds],[state.district,state.x,state.y,state.zaZone6Layer,['kept']]);
  }
 });
+
+test('Faye appears after the meeting without blocking old positions or roof routes',()=>{
+ const base={area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',x:10,y:4,facing:'down',zaRoyaleRank:'E',zaMission15Stage:0,teamIds:['kept']};
+ assert.notEqual(fieldMap(base)[4][10],'F');const s={...base,zaMission15Stage:1},map=fieldMap(s);assert.equal(map[4][10],'F');assert.ok(fieldPath(map,{x:11,y:1},{x:11,y:15}).length);
+ const saved=storeAdventurePosition(s,47),restored=restoreAdventurePosition(saved,47);assert.equal(restored.x,10);assert.equal(restored.y,4);assert.deepEqual(restored.teamIds,['kept']);assert.equal(fieldDialogue({...s,x:10,y:5,facing:'up'},map).action,'side42Battle');
+ assert.notEqual(zone6Map({...s,zaZone6Layer:'roof'})[4][10],'F');assert.notEqual(zone6Map({...s,zaZone6Layer:'canal'})[4][10],'F');
+});
