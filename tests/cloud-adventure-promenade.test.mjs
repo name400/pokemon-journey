@@ -6,7 +6,7 @@ test('Vernal promenade places boutiques on both sides and preserves mission loca
  const street={area:3,district:'lumiose-vernal',interior:null,x:11,y:8,facing:'up',teamIds:['kept'],zaMission25Complete:true};
  const map=fieldMap(street);
  for(const [x,y,name] of [[7,3,'Fresh Fits'],[7,5,'BRAVELY'],[7,7,'Dessert du Moment'],[16,3,'Changing Gears'],[16,7,'미용실']]){
-  assert.ok(fieldPath(map,street,{x,y}).length);assert.equal(fieldDialogue({...street,x,y}).name,name);
+  assert.ok(fieldPath(map,street,{x,y}).length);assert.equal(fieldDialogue({...street,x,y}).name,name);if(name==='미용실')assert.equal(fieldDialogue({...street,x,y}).hairSalon,true);
  }
  assert.equal(fieldDialogue({...street,x:16,y:6,facing:'up'}).action,'mission26Asami');
  assert.equal(fieldDialogue({...street,x:12,y:6,facing:'up'}).action,'mission26Asami');
@@ -27,4 +27,14 @@ test('Vernal façades preserve shop approaches, cafe, stairs and old saves',asyn
  for(const start of [{x:1,y:5},{x:21,y:4},{x:11,y:14}])for(const target of [{x:7,y:3},{x:7,y:5},{x:7,y:7},{x:16,y:3},{x:16,y:5},{x:16,y:7},{x:12,y:6},{x:12,y:3},{x:20,y:10}])assert.ok(fieldPath(map,start,target).length);
  assert.equal(fieldDialogue({...base,x:8,y:5,facing:'left'}).name,'BRAVELY');assert.ok(fieldDialogue({...base,x:12,y:6,facing:'up'}).actions.some(a=>a.action==='woofNatural'));
  const roof={...base,zaVernalEastRoof:true,x:5,y:5};const saved=restoreAdventurePosition(storeAdventurePosition(roof,213),213);assert.deepEqual([saved.x,saved.y,saved.zaVernalEastRoof],[5,5,true]);
+});
+
+test('BRAVELY unlock and wardrobe validate verified stock and legacy values',async()=>{
+ const {VERNAL_TOPS,clothingShopUnlocked,ownedVernalTops,equippedVernalTop}=await import('../lib/cloud-adventure/adventure-clothing.mjs');
+ const base={area:3,district:'lumiose-vernal',interior:null,x:8,y:5,facing:'left',zaRoyaleRank:'Z'};
+ assert.equal(clothingShopUnlocked(base),false);assert.match(fieldDialogue(base).text,/탐정사무소/);
+ const open={...base,zaEmmaMet:true};assert.equal(VERNAL_TOPS.length,5);assert.ok(VERNAL_TOPS.every(top=>top.price===8000));assert.equal(fieldDialogue(open).actions.length,5);
+ const owned={...open,zaClothingOwned:['unknown-future','bravely-vest-blue'],zaClothingTop:'bravely-vest-blue'};
+ assert.deepEqual(ownedVernalTops(owned),['bravely-vest-blue']);assert.equal(equippedVernalTop(owned).id,'bravely-vest-blue');assert.equal(fieldDialogue(owned).actions.length,4);
+ assert.equal(equippedVernalTop({...open,zaClothingTop:'bravely-vest-blue'}),null);assert.equal(clothingShopUnlocked({...base,zaRoyaleRank:'X'}),true);
 });

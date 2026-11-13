@@ -20,6 +20,7 @@ import manifest from '@/data/cloud-town-tiles.json';
 import {wildAlphaPosition,zone2BudewPosition,zone2KakunaPosition,zone2FieldMonsters,zone3FieldMonsters,magentaSewerMonsters,cloudNpcTile,walkable} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {adventureAvatarRows} from '@/lib/cloud-adventure/adventure-avatar.mjs';
 import {salonAppearance,SALON_COLORS} from '@/lib/cloud-adventure/adventure-salon.mjs';
+import {equippedVernalTop} from '@/lib/cloud-adventure/adventure-clothing.mjs';
 import {zygardeGuideTarget} from '@/lib/cloud-adventure/adventure-zygarde-guide.mjs';
 import {descentGuideTargets} from '@/lib/cloud-adventure/adventure-descent-guides.mjs';
 import {ZONE5_VISIBLE,ZONE5_WEST_STALL} from '@/lib/cloud-adventure/adventure-zone5.mjs';
@@ -1220,10 +1221,10 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillStyle='#253e3c';ctx.fillRect(b.x*tile-24,(b.y+1)*tile-2,80,19);ctx.fillStyle='#ffffff';ctx.fillText(label,b.x*tile+16,(b.y+1)*tile+11);
    }
    if(w.area===9&&!w.expedition){for(let y=1;y<=4;y++)for(let x=7;x<=21;x++)sprite(y===1?'castleBattlement':y===3?'castleWindow':'castleWall',x*tile,y*tile);[8,11,14,17,20].forEach((x,i)=>{sprite('castleDoor',x*tile,4*tile);ctx.fillStyle='#fff4bc';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText(i===4?'챔피언':`${i+1} 사천왕`,x*tile+16,6*tile-8);});}
-   function trainer(x:number,y:number,color:string,face:string,walk=false,appearance?:{style:string;color:string}){
+   function trainer(x:number,y:number,color:string,face:string,walk=false,appearance?:{style:string;color:string},topColor?:string){
     const px=Math.round(x*tile+tile/2-12),py=Math.round(y*tile+tile-29),step=walk&&!reduce?(Math.floor(time/95)%2===0?3:-3):0;
     ctx!.fillStyle='#28473155';ctx!.beginPath();ctx!.ellipse(px+12,py+28,12,4,0,0,Math.PI*2);ctx!.fill();
-    const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',Y:'#f4cf64',D:'#4b3741',H:(SALON_COLORS as any)[appearance?.color||'brown']?.value||'#79503b'};
+    const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:topColor||'#3d79aa',Y:'#f4cf64',D:'#4b3741',H:(SALON_COLORS as any)[appearance?.color||'brown']?.value||'#79503b'};
     adventureAvatarRows(face,appearance?.style).forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+ry*2+(ry>10?(rx<6?step:-step):0),2,2);}));
    }
    // Naveen and Lida lead across the draft rooftop; positions are visual only.
@@ -1291,7 +1292,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    if(['lumiose-zone5','lumiose-zone5-drain'].includes(w.district)&&!w.interior)for(const m of ZONE5_VISIBLE.filter(p=>(w.district==='lumiose-zone5-drain'?p.drain===true:!p.drain&&p.upper===(w.zaZone5Upper===true))&&!w.zaZone5Spent?.[p.id])){const px=m.x*tile,py=m.y*tile,img=(w.zaWildShinyRolls?.[`zone5:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]);if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle=m.alpha?'#af5462':'#d6b57d';ctx.fillRect(px+6,py+6,tile-12,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}}
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
-   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w));
+   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)?.color);
    ctx.restore();
    // Soft border is part of the camera, never a fullscreen tint over sprites.
    ctx.strokeStyle='#284d3b55';ctx.lineWidth=4;ctx.strokeRect(2,2,width-4,height-4);

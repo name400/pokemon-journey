@@ -5550,3 +5550,27 @@ test('Vernal promenade façades preserve old positions and cafe-to-sewer access'
   await walkTo({x:1,y:5});await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-bleu-sector3');await walkTo({x:21,y:3});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-bleu3-sewer-approach');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vernal promenade salon charges once and preserves appearance on reconnect',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vernal-salon-qa',displayName:'미용검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],original=rawMon(id);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(3000,globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:16,y:8,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.hairSalon,true);
+  const revision=state.revision;await call('salonChange',{style:'bob',color:'black'});await get();assert.equal(state.wallet.coins,0);assert.deepEqual(state.world.zaSalonAppearance,{style:'bob',color:'black'});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),original);
+  const duplicate=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'salonChange',style:'bob',color:'black',revision})}));assert.equal(duplicate.status,409);await call('salonChange',{style:'long',color:'gold'},409);assert.equal(state.wallet.coins,0);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
+test('BRAVELY purchases and wardrobe preserve money, party and saves atomically',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vernal-clothing-qa',displayName:'의상검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],original=rawMon(id);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:8,y:5,facing:'left',zaRoyaleRank:'Z',zaBureauVisited:false,zaEmmaMet:false,zaMission05Complete:false,zaMission05Stage:0,zaMission06Started:false,zaClothingOwned:['future-garment']},state.revision+1);seedWorld(old);await get();
+  await call('buyVernalTop',{item:'bravely-vest-blue'},409);assert.equal(state.world.zaClothingTop,undefined);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:8,y:5,facing:'left',zaEmmaMet:true},state.revision+1));await get();sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(7999,globalThis.__adventureUser.userId);await get();await call('buyVernalTop',{item:'bravely-vest-blue'},409);assert.equal(state.wallet.coins,7999);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(16000,globalThis.__adventureUser.userId);await get();await call('buyVernalTop',{item:'__proto__'},409);const revision=state.revision;await call('buyVernalTop',{item:'bravely-vest-blue'});await get();assert.equal(state.wallet.coins,8000);assert.deepEqual(state.world.zaClothingOwned,['future-garment','bravely-vest-blue']);assert.equal(state.world.zaClothingTop,'bravely-vest-blue');
+  const dup=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'buyVernalTop',item:'bravely-vest-blue',revision})}));assert.equal(dup.status,409);await get();await call('buyVernalTop',{item:'bravely-vest-blue'},409);assert.equal(state.wallet.coins,8000);
+  await call('buyVernalTop',{item:'bravely-vest-green'});await get();assert.equal(state.wallet.coins,0);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:5,y:8,facing:'down'},state.revision+1));await get();await call('wearVernalTop',{item:'default'});await get();assert.equal(state.world.zaClothingTop,null);await call('wearVernalTop',{item:'bravely-vest-blue'});await get();assert.equal(state.world.zaClothingTop,'bravely-vest-blue');await call('wearVernalTop',{item:'bravely-vest-black'},409);await call('wearVernalTop',{item:'bravely-vest-blue'},409);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),original);assert.equal(state.wallet.coins,0);assert.deepEqual(state.world.zaClothingOwned,['future-garment','bravely-vest-blue','bravely-vest-green']);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
