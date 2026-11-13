@@ -11,6 +11,7 @@ import {SHARD_MEGA_STONES} from '../lib/cloud-adventure/adventure-mega-exchange.
 import {researchSummary,RESEARCH_TYPES} from '../lib/cloud-adventure/adventure-research.mjs';
 import lumiose from '../data/lumiose-dex.json' with {type:'json'};
 import pokedex from '../data/pokedex.json' with {type:'json'};
+import {species as gameSpecies} from '../lib/game.mjs';
 import rules from '../data/evolution-rules.json' with {type:'json'};
 
 const dex=lumiose.nationalSpeciesIds.slice(0,230),names=new Map(pokedex.map(p=>[p.id,p.name]));
@@ -36,4 +37,6 @@ while(changed){changed=false;for(const r of rules){const from=Number(r.from),to=
 const missing=dex.filter(id=>!closure.has(id));
 const mega=[...new Set([...SHARD_MEGA_STONES.map(p=>p.id),...megaStoneShopStock({zaMission37Complete:true,zaIntroStarterSpecies:152}).map(p=>p[0]),'absolite','slowbronite','cameruptite','victreebelite'])];
 const fixture={adventureDexSpecies:dex,zaResearchCaptures:Object.fromEntries(RESEARCH_TYPES.map(t=>[t,50])),zaResearchTrainerWins:1000,zaResearchEvolutions:50,zaResearchItemEvolutions:10,zaResearchTradeEvolutions:5,zaResearchMegaStones:mega,zaResearchCrystalBreaks:1000,zaMission40Anomalies:['steelix','gallade','pangoro'],zaResearchActivities:{fossil:3,cafe:3,bench:3}};
-console.log(JSON.stringify({warning:'Candidate data only; not a playable-route proof. Special paths are manually listed; all evolution versions and conditions are ignored.',zoneCandidateGaps:missingByZone,dexDirectCandidateCount:dex.filter(id=>direct.has(id)).length,dexEvolutionGraphCandidateCount:dex.length-missing.length,dexCandidateGaps:missing.map(id=>({id,name:names.get(id)})),megaCandidates:mega.length,fullySeededFixture:researchSummary(fixture)},null,2));
+const directSpeciesTypeCandidates=Object.fromEntries(RESEARCH_TYPES.map(type=>[type,dex.filter(id=>direct.has(id)&&gameSpecies.some(p=>p.speciesId===id&&p.types?.includes(type))).length]));
+const scenarios={};for(const [label,patch] of Object.entries({allCandidateMaximum:{},noTrade:{zaResearchTradeEvolutions:0},threeTradeEvolutions:{zaResearchTradeEvolutions:3},crystals250:{zaResearchCrystalBreaks:250},crystals249:{zaResearchCrystalBreaks:249},only44Mega:{zaResearchMegaStones:mega.slice(0,44)},only100TrainerWins:{zaResearchTrainerWins:100}}))scenarios[label]=researchSummary({...fixture,...patch});
+console.log(JSON.stringify({warning:'Candidate data only; not a playable-route proof. Special paths are manually listed, include non-wild gifts/fossils, and all evolution versions and conditions are ignored.',zoneCandidateGaps:missingByZone,dexDirectCandidateCount:dex.filter(id=>direct.has(id)).length,dexEvolutionGraphCandidateCount:dex.length-missing.length,dexCandidateGaps:missing.map(id=>({id,name:names.get(id)})),megaCandidates:mega.length,directSpeciesTypeCandidates,fullySeededFixture:researchSummary(fixture),scenarios},null,2));
