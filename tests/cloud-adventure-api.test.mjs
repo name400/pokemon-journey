@@ -6329,3 +6329,19 @@ test('mission 37 triple items protect stock and player ownership',async()=>{
  await call('battleRevive',{item:'revive',boxId:reserve.boxId});assert.equal(state.world.zaRevives,0);assert.ok(rawMon(reserve.boxId).hp>0);await get();assert.equal(state.world.zaRevives,0);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,2);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('battle healing targets owned reserves without duplicating items',async()=>{
+ const previous=globalThis.__adventureUser;
+ try{for(const format of ['single','solo','companion']){
+  globalThis.__adventureUser={userId:`bench-heal-${format}`,displayName:'대기 회복 검사'};await get();await call('start',{species:1});
+  const id=state.world.activeId,lead={...makeMon(1,80),boxId:id,moves:['튀어오르기'],pp:{}},reserveBase=makeMon(4,30),reserve={...reserveBase,boxId:`bench-${format}`,hp:10,status:'독',custom:'kept'},boxed={...makeMon(7,20),boxId:`boxed-${format}`,hp:5},fainted={...makeMon(7,20),boxId:`fainted-${format}`,hp:0};seedMon(id,lead);
+  for(const m of [reserve,boxed,fainted])sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(m.boxId,globalThis.__adventureUser.userId,m.id,JSON.stringify(m),'qa',1);
+  sql.prepare('UPDATE wallets SET potions=2,antidotes=1 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const foes=[0,1].map(i=>({...makeMon(129,5),boxId:`bench-foe-${i}`,moves:['튀어오르기'],pp:{}})),ally=[{...makeMon(25,80),boxId:'bench-ally',moves:['튀어오르기'],pp:{}}];
+  const combat=format==='single'?createCombat([lead,reserve],foes.slice(0,1)):format==='solo'?createSoloMultiFoeSnapshot([lead,reserve],foes):createMission10DoubleSnapshot([lead,reserve],ally,foes);
+  seedWorld({...storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,teamIds:[id,reserve.boxId,fainted.boxId],activeId:id},state.revision+1),combat,trainer:{id:'bench-heal-test',name:'검증'},encounter:null});await get();
+  await call('use',{item:'potion',boxId:boxed.boxId},409);await call('use',{item:'potion',boxId:fainted.boxId},409);await call('use',{item:'potion',boxId:id},409);await call('use',{item:'potion',boxId:'bench-ally'},409);assert.equal(state.wallet.potions,2);
+  const rev=state.revision;await call('use',{item:'potion',boxId:reserve.boxId});await call('use',{item:'potion',boxId:reserve.boxId,revision:rev},409);await get();assert.equal(state.wallet.potions,1);assert.equal(rawMon(reserve.boxId).hp,30);assert.equal(rawMon(reserve.boxId).custom,'kept');assert.equal(rawMon(boxed.boxId).hp,5);assert.equal(state.battle.teams[0].find(m=>m.boxId===reserve.boxId).hp,30);await call('use',{item:'antidote',boxId:reserve.boxId});await get();assert.equal(rawMon(reserve.boxId).status,null);assert.equal(state.wallet.antidotes,0);
+  const switches=format==='single'?state.battle.requests[0].switches:state.battle.requests[0].actors[0].switches;const slot=switches.find(p=>p.index===1).slot;await call('switch',{slot});await get();assert.equal(state.battle.teams[0][state.battle.active[0]].boxId,reserve.boxId);
+ }}finally{globalThis.__adventureUser=previous;}
+});

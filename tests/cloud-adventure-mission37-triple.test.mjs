@@ -85,3 +85,10 @@ test('a companion can recharge after hyper beam without blocking the next turn',
  const mon=(id,move)=>({...makeMon(143,80),boxId:id,moves:[move],pp:{}}),initial=createMission37TripleSnapshot([mon('recharge-player','튀어오르기')],[mon('recharge-ally','파괴광선')],[mon('recharge-ally2','튀어오르기')],[mon('recharge-foe1','튀어오르기'),mon('recharge-foe2','튀어오르기'),mon('recharge-foe3','튀어오르기')]);
  const first=playMission37TriplePrototype(initial,{type:'move',move:'splash'}),sim=restoreMission37TripleSnapshot(first);assert.equal(sim.p1.activeRequest.active[1].moves[0].id,'recharge');const second=playMission37TriplePrototype(first,{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(second).turn,3);
 });
+
+test('reserve medicine is confined to the player owner and survives restore',()=>{
+ const lead={...makeMon(25,80),boxId:'medicine-player',moves:['튀어오르기'],pp:{}},reserve={...makeMon(4,30),boxId:'medicine-reserve',hp:10},groups=mission37CompanionGroups(6),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`medicine-foe-${i}`,moves:['튀어오르기'],pp:{}}));
+ const initial=createMission37TripleSnapshot([lead,reserve],groups[0].team,groups[1].team,foes),before=JSON.stringify(initial);
+ assert.throws(()=>playMission37TriplePrototype(initial,{type:'item',item:'potion',boxId:groups[0].team[1].boxId}),/플레이어/);assert.equal(JSON.stringify(initial),before);
+ const next=playMission37TriplePrototype(initial,{type:'item',item:'potion',boxId:reserve.boxId});assert.equal(mission37PlayerTeam(next).find(m=>m.boxId===reserve.boxId).hp,30);assert.equal(restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(next))).turn,2);
+});
