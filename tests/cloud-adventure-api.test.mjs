@@ -5770,3 +5770,13 @@ test('Zone 19 trellis restores old saves and allows movement and reload',async()
   await walkTo({x:11,y:9});await get();assert.deepEqual([state.world.x,state.world.y],[11,9]);assert.deepEqual(state.world.zaZone19Items,['tree-luxury']);assert.equal(state.world.zaZone19Spent.furfrou,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('Zone 11 northern upper bank preserves encounters and old saves',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-north-upper-qa',displayName:'북쪽 강변 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x:17,y:3,facing:'down',zaRoyaleRank:'E',zaZone11Spent:{furfrou:true},zaWildShinyRolls:{'zone11:slowpoke:79':true},zaMission40Stage:1},state.revision+1);seedWorld(old);await get();assert.deepEqual([state.world.x,state.world.y],[17,3]);assert.notEqual(state.world.map[3][17],'p');assert.equal(state.world.zaZone11Spent.furfrou,true);
+  await walkTo({x:19,y:2});await call('face',{direction:'right'});assert.equal(state.world.interaction.action,'zone11NorthernStairs');await call('zone11NorthernStairs');await get();assert.equal(state.world.zaZone11Upper,true);assert.deepEqual([state.world.x,state.world.y],[19,11]);assert.equal(state.world.map[3][17],'p');assert.equal(state.world.zaWildShinyRolls['zone11:slowpoke:79'],true);
+  await walkTo({x:17,y:4});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone11Wild-slowpoke');await call('zone11Wild-slowpoke');assert.equal(state.battle.teams[1][0].speciesId,79);assert.equal(rawWorld().encounter.shiny,true);await get();assert.equal(state.world.zaZone11Upper,true);await call('flee');await get();assert.equal(state.world.zaZone11Upper,true);assert.equal(state.world.zaZone11Spent.furfrou,true);
+  await walkTo({x:19,y:11});await call('face',{direction:'down'});await call('zone11NorthernStairs');await get();assert.equal(state.world.zaZone11Upper,false);assert.deepEqual([state.world.x,state.world.y],[19,2]);assert.equal(state.world.zaMission40Stage,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=prior;}
+});
