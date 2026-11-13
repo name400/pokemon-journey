@@ -4860,6 +4860,13 @@ test('Zone 19 missing species can be caught and complete research after reload',
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;globalThis.__adventureTime=oldTime;}
 });
 
+test('Zone 20 northeast wooded park restores old position and preserves access',async()=>{
+ const prior=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-wooded-park-qa',displayName:'북동 공원'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:15,y:2,facing:'right',zaRoyaleRank:'A',zaMission38Complete:true,zaMission42Stage:3,zaZone20Items:['south-seed'],zaZone20Spent:{bulbasaur:true}},state.revision+1);delete old.districtPosition.zone20ParkLayout;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone20');assert.notDeepEqual([state.world.x,state.world.y],[15,2]);assert.notEqual(state.world.map[state.world.y][state.world.x],'^');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.equal(state.world.zaZone20Spent.bulbasaur,true);assert.equal(state.world.zaMission42Stage,3);
+ await walkTo({x:17,y:2});await get();assert.deepEqual([state.world.x,state.world.y],[17,2]);await walkTo({x:21,y:8});assert.equal(state.world.map[8][22],'E');await get();assert.deepEqual([state.world.x,state.world.y],[21,8]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone20Items,['south-seed']);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=priorRandom;}
+});
+
 test('Zone 20 earlier stream position migrates safely through API and reload',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-stream-migration-qa',displayName:'구역20 저장 검증'};
  try{

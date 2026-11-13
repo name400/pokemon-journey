@@ -165,3 +165,13 @@ test('Floral Avenue connects to the south of Zone 20 without replacing legacy ga
  }
  const old={area:3,district:'lumiose-zone20',interior:null,x:11,y:14,zaMission38Complete:true};assert.equal(stepField(old,'down').district,'lumiose-centrico-route');
 });
+
+test('Zone 20 wooded park keeps promenade, gates and pond while restoring old saves',async()=>{
+ const {ZONE20_NORTHEAST_TREES,zone20ChamberMap}=await import('../lib/cloud-adventure/adventure-mission42.mjs');
+ const s={area:3,district:'lumiose-zone20',interior:null,zaMission38Complete:true,zaMission42Stage:3,teamIds:['kept'],zaZone20Items:['south-seed'],zaZone20Spent:{bulbasaur:true}},map=zone20Map(s);
+ for(const [x,y] of ZONE20_NORTHEAST_TREES){assert.equal(map[y][x],'^');const old=storeAdventurePosition({...s,x,y},310);delete old.districtPosition.zone20ParkLayout;const restored=restoreAdventurePosition(old,310);assert.notDeepEqual([restored.x,restored.y],[x,y]);assert.notEqual(map[restored.y][restored.x],'^');assert.ok(fieldPath(map,restored,{x:11,y:14}).length);assert.deepEqual([restored.teamIds,restored.zaZone20Items,restored.zaZone20Spent,restored.zaMission42Stage],[['kept'],['south-seed'],{bulbasaur:true},3]);}
+ for(const target of [{x:11,y:1},{x:21,y:8},{x:1,y:8},{x:12,y:15},{x:20,y:11}])assert.ok(fieldPath(map,{x:17,y:2},target).length,JSON.stringify(target));
+ assert.equal(map[3][18],'~');assert.equal(map[11][19],',');const underground={...s,zaMission42Underground:true,zaMission42ChamberV1:true};assert.deepEqual(zone20Map(underground),zone20ChamberMap());
+ const legacy=storeAdventurePosition({...s,x:15,y:2,zaMission42Underground:true,zaMission42ChamberV1:false},313);delete legacy.districtPosition.zone20ParkLayout;const restoredLegacy=restoreAdventurePosition(legacy,313);assert.notDeepEqual([restoredLegacy.x,restoredLegacy.y],[15,2]);
+ const old=storeAdventurePosition({...s,x:15,y:2},311);delete old.districtPosition.zone20ParkLayout;assert.equal(restoreAdventurePosition(old,312).district,null);
+});
