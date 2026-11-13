@@ -19,3 +19,11 @@ test('only direct super-effective hits by the player count once per move',()=>{
  assert.equal(recordRoyaleBonus(s,{events:[{kind:'move',side:0,actorBoxId:'p'},{kind:'effect',targetSide:1,targetBoxId:'e',text:'효과가 굉장했다!'},{...hit[2],hit:false}],log:[]},'night',now),false);
  assert.equal(recordRoyaleBonus(s,{events:hit,log:[]},'night',now),true);const last={events:hit,log:[]};assert.equal(recordRoyaleBonus(s,last,'night',now),true);assert.equal(s.zaRoyaleBonusCard.completed,true);assert.equal(s.zaRoyaleYPoints,3000);assert.match(last.log[0],/1000/);assert.equal(recordRoyaleBonus(s,{events:hit,log:[]},'night',now),false);
 });
+test('concurrent cards count only matching hits, pay medals once, and preserve legacy completed cards',()=>{
+ const s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'},zaRoyaleBonusCard:{night:0,rank:'Y',progress:3,completed:true},zaRoyalePrizeMedals:7};
+ assert.equal(takeRoyaleBonus(s,now,'fire'),true);assert.equal(takeRoyaleBonus(s,now,'fire'),false);assert.equal(takeRoyaleBonus(s,now,'water'),true);
+ const fire=hit.map(e=>e.kind==='move'?{...e,type:'fire'}:e),water=hit.map(e=>e.kind==='move'?{...e,type:'water'}:e);
+ assert.equal(recordRoyaleBonus(s,{events:fire,log:[]},'night',now),true);assert.equal(s.zaRoyaleBonusExtraCards.fire.progress,1);assert.equal(s.zaRoyaleBonusExtraCards.water.progress,0);assert.equal(s.zaRoyalePrizeMedals,7);
+ assert.equal(recordRoyaleBonus(s,{events:[...fire,...water,...water],log:[]},'night',now),true);assert.equal(s.zaRoyalePrizeMedals,47);assert.equal(s.zaRoyaleYPoints,400);assert.equal(s.zaRoyaleBonusCard.completed,true);assert.equal(recordRoyaleBonus(s,{events:fire,log:[]},'night',now),false);
+ assert.equal(royaleBonusPickable(s,now+1200000,'fire'),true);assert.equal(takeRoyaleBonus(s,now+1200000,'fire'),true);assert.equal(s.zaRoyaleBonusExtraCards.fire.progress,0);assert.equal(s.zaRoyalePrizeMedals,47);
+});
