@@ -94,3 +94,10 @@ test('zone 20 never registers an underground tile as a ground destination',async
  assert.equal(recordZoneEntry(s,'lumiose', '.'),false);assert.deepEqual(s.zaFastTravelZones,{1:{x:11,y:1}});assert.ok(!mapTravelDestinations(s).some(p=>p.id==='zone20'));
  s.zaMission42Underground=false;assert.equal(recordZoneEntry(s,null,fieldMap(s)[s.y][s.x]),true);assert.deepEqual(s.zaFastTravelZones[20],{x:11,y:13});s.x=10;assert.equal(recordZoneEntry(s,null,fieldMap(s)[s.y][s.x]),false);assert.deepEqual(s.zaFastTravelZones[20],{x:11,y:13});
 });
+
+test('zone 11 elevated bank is not recorded or used as a ground travel origin',async()=>{
+ const {recordZoneEntry,canMapTravel,groundDestinationFlags,clearMapTravelTransient}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const upper={area:3,district:'lumiose-zone11',interior:null,x:19,y:11,zaZone11Upper:true,zaMission04Complete:true,zaRoyaleRank:'D',zaFastTravelZones:{11:{x:19,y:2}},teamIds:['kept']};
+ assert.equal(canMapTravel(upper),false);const unregistered={...upper,zaFastTravelZones:{}};assert.equal(recordZoneEntry(unregistered,'lumiose-zone11-sw-top','.'),false);assert.deepEqual(unregistered.zaFastTravelZones,{});assert.equal(recordZoneEntry(upper,'lumiose-zone11-sw-top','.'),false);assert.deepEqual(upper.zaFastTravelZones[11],{x:19,y:2});assert.deepEqual(groundDestinationFlags('lumiose-zone11'),{zaZone11Upper:false});
+ const ground={...upper,zaZone11Upper:false,zaFastTravelZones:{},x:19,y:2};assert.equal(canMapTravel(ground),true);assert.equal(recordZoneEntry(ground,'lumiose-test','.'),true);assert.deepEqual(ground.zaFastTravelZones[11],{x:19,y:2});clearMapTravelTransient(upper);assert.equal(upper.zaZone11Upper,undefined);assert.deepEqual(upper.teamIds,['kept']);assert.deepEqual(upper.zaFastTravelZones[11],{x:19,y:2});
+});

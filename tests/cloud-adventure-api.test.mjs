@@ -6488,6 +6488,16 @@ test('visible alpha direct throw preserves mastery and identity through failure,
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
 
+test('zone 11 upper bank cannot register or travel as a ground destination',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone11-upper-travel-qa',displayName:'구역 11 이동 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),marker={x:19,y:2};
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone11',interior:null,x:19,y:11,facing:'down',zaZone11Upper:true,zaMission04Complete:true,zaRoyaleRank:'D',zaMission40Stage:1,zaFastTravelZones:{11:marker},zaZone11Spent:{furfrou:true}},state.revision+1));await get();assert.equal(state.world.zaZone11Upper,true);assert.equal(state.world.zaMapTravelAllowed,false);assert.deepEqual(state.world.zaFastTravelZones[11],marker);
+  const rev=state.revision;await call('mapFastTravel',{destination:'zone11'},409);await get();assert.equal(state.revision,rev);assert.equal(state.world.zaZone11Upper,true);assert.deepEqual([state.world.x,state.world.y],[19,11]);assert.equal(state.world.zaZone11Spent.furfrou,true);
+  await call('zone11NorthernStairs');assert.equal(state.world.zaZone11Upper,false);assert.equal(state.world.zaMapTravelAllowed,true);await call('mapFastTravel',{destination:'zone11'});await get();assert.equal(state.world.zaZone11Upper,false);assert.deepEqual([state.world.x,state.world.y],[marker.x,marker.y]);assert.deepEqual(state.world.zaFastTravelZones[11],marker);assert.equal(state.world.zaMission40Stage,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('hyper training exposes reserve IV details at the trainer after reload and conversation',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'hyper-reserve-details-qa',displayName:'특훈 상세 검사'};
  try{
