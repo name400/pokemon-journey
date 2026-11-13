@@ -20,9 +20,29 @@ test('prototype chooses two ally turns and refuses cross-owner switches without 
  const owned=Array.from({length:2},(_,i)=>({...makeMon(25,60),boxId:`player-${i}`,moves:['튀어오르기'],pp:{}}));
  const [{team:first},{team:second}]=mission37CompanionGroups(2),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`foe-${i}`,moves:['튀어오르기'],pp:{}}));
  const initial=createMission37TripleSnapshot(owned,first,second,foes),original=JSON.stringify(initial),allySlot=initial.teams[0].findIndex(mon=>mon.boxId===first[1].boxId)+1;
- assert.throws(()=>playMission37TriplePrototype(initial,{type:'switch',slot:allySlot}),/소유자|동료/);assert.throws(()=>playMission37TriplePrototype(initial,null),/플레이어/);assert.throws(()=>playMission37TriplePrototype(initial,{type:'move',move:'splash',special:'mega'}),/플레이어/);assert.equal(JSON.stringify(initial),original);
+ assert.throws(()=>playMission37TriplePrototype(initial,{type:'switch',slot:allySlot}),/소유자|동료/);assert.throws(()=>playMission37TriplePrototype(initial,null),/플레이어/);assert.throws(()=>playMission37TriplePrototype(initial,{type:'move',move:'splash',special:'mega'}),/메가진화/);assert.equal(JSON.stringify(initial),original);
  const turn=playMission37TriplePrototype(initial,{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(turn).turn,2);for(const id of [owned[0].boxId,first[0].boxId,second[0].boxId])assert.ok(turn.events.some(event=>event.kind==='move'&&event.actorBoxId===id),id);assert.deepEqual(turn.owners,initial.owners);assert.deepEqual(playMission37TriplePrototype(JSON.parse(JSON.stringify(turn)),{type:'move',move:'splash'}).owners,initial.owners);
  const switched=playMission37TriplePrototype(initial,{type:'switch',slot:4});assert.equal(restoreMission37TripleSnapshot(switched).p1.active[0].set.trainerToken,'player-1');assert.deepEqual(switched.owners.player,['player-0','player-1']);
+});
+
+test('each trainer can mega evolve independently and the usage survives reload',()=>{
+ const player=[{...makeMon(6,100),boxId:'mega-player',item:'charizarditex',moves:['튀어오르기'],pp:{}}],groups=mission37CompanionGroups(6),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`mega-foe-${i}`,moves:['튀어오르기'],pp:{}}));
+ const combat=createMission37TripleSnapshot(player,groups[0].team,groups[1].team,foes);assert.ok(mission37TripleView(combat).requests[0].specials.some(s=>s.key==='mega'));
+ const turn=playMission37TriplePrototype(combat,{type:'move',move:'splash',special:'mega'}),battle=restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(turn)));assert.deepEqual(turn.megaUsed,[true,true,true]);assert.ok(battle.p1.active.every(mon=>mon.species.isMega));assert.deepEqual(mission37TripleView(turn).requests[0].specials,[]);
+});
+
+test('items consume the player action and revival cannot target a companion',()=>{
+ const lead={...makeMon(25,80),boxId:'item-player',moves:['튀어오르기'],pp:{}},fainted={...makeMon(4,30),boxId:'item-reserve',hp:0},groups=mission37CompanionGroups(6),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`item-foe-${i}`,moves:['튀어오르기'],pp:{}}));lead.hp=Math.floor(lead.maxHp/2);groups[0].team[1].hp=0;
+ const initial=createMission37TripleSnapshot([lead,fainted],groups[0].team,groups[1].team,foes);assert.throws(()=>playMission37TriplePrototype(initial,{type:'item',item:'adventure-revive',boxId:groups[0].team[1].boxId}),/플레이어/);
+ const revived=playMission37TriplePrototype(initial,{type:'item',item:'adventure-revive',boxId:fainted.boxId});assert.ok(mission37PlayerTeam(revived).find(m=>m.boxId===fainted.boxId).hp>0);assert.ok(revived.events.some(e=>e.kind==='heal'&&e.targetBoxId===fainted.boxId));assert.equal(restoreMission37TripleSnapshot(revived).turn,2);
+ const healed=playMission37TriplePrototype(initial,{type:'item',item:'potion'});assert.ok(mission37PlayerTeam(healed).find(m=>m.boxId===lead.boxId).hp>lead.hp);assert.equal(restoreMission37TripleSnapshot(healed).turn,2);
+});
+
+test('companion-only turns persist one request at a time beyond the old 128-turn limit',()=>{
+ const mon=(id)=>({...makeMon(143,50),boxId:id,moves:['튀어오르기'],pp:{}}),initial=createMission37TripleSnapshot([mon('long-player')],[mon('long-ally-1')],[mon('long-ally-2')],[mon('long-foe-1'),mon('long-foe-2'),mon('long-foe-3')]);
+ const battle=restoreMission37TripleSnapshot(initial),player=battle.p1.active[0];player.hp=0;player.fainted=true;player.status='fnt';battle.p1.pokemonLeft--;for(const side of battle.sides)for(const pokemon of side.pokemon)for(const move of pokemon.moveSlots){move.pp=200;move.maxpp=200;}battle.makeRequest('move');const snapshot=battle.toJSON();snapshot.formatid=initial.snapshot.formatid;let combat={...initial,snapshot};
+ for(let i=0;i<130;i++){assert.equal(mission37TripleView(combat).adventureMultiContinueV1,true);combat=playMission37TriplePrototype(combat,null);if(i===64)combat=JSON.parse(JSON.stringify(combat));assert.equal(combat.ended,false);}
+ assert.equal(restoreMission37TripleSnapshot(combat).turn,131);assert.equal(combat.owners.player[0],'long-player');assert.equal(combat.events.some(event=>event.kind==='move'&&event.actorBoxId==='long-player'),false);
 });
 
 test('prototype forced switches stay with the fainted owner, including an exhausted owner',()=>{
