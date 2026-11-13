@@ -6527,7 +6527,7 @@ test('Josée masters a party attack once with a seed and retains it after reload
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-mastery-qa',displayName:'숙달 검사'};
  try{
   await get();await call('start',{species:1});const id=state.world.activeId;
-  seedMon(id,{...makeMon(1,30),boxId:id,moves:['몸통박치기','울음소리']});
+  seedMon(id,{...makeMon(25,30),boxId:id,moves:['몸통박치기','울음소리']});
   const key=JSON.stringify([globalThis.__adventureUser.userId,'seedofmasteryza']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,2)').run(key,globalThis.__adventureUser.userId,'seedofmasteryza');
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',zaMission19JoseeWon:true,zaMegaRing:true},state.revision+1));await get();
   await call('talk');assert.equal(state.world.dialogue.plusMastery,true,JSON.stringify({dialogue:state.world.dialogue,position:[state.world.district,state.world.interior,state.world.x,state.world.y,state.world.facing],win:rawWorld().zaMission19JoseeWon}));await call('masterAdventureMove',{boxId:id,move:'울음소리'},409);const revision=state.revision;
@@ -6568,5 +6568,15 @@ test('mission 35 Plus survives reconnect and stale commands without exposing emp
   const location={area:3,district:'lumiose-lysandre-lab',interior:null,x:19,y:5,facing:'up',zaLysandreMazeV2:false,zaLysandreFloor:1,zaLysandreCards:['a','b','e'],zaMission35Stage:4,zaLysandreAegislashWon:false,zaMegaRing:true,combat:null,encounter:null,trainer:null};seedWorld(storeAdventurePosition({...rawWorld(),...location},state.revision+1));await get();await call('mission35Aegislash');
   assert.equal(state.battle.adventurePlusGauge.charge,1);assert.equal(state.battle.requests[0].actors[0].moves[0].plusReady,true);assert.deepEqual(state.battle.activeBySide[0],[0,-1,-1]);const revision=state.revision;
   await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'quickattack',target:2,plus:true}]}});assert.equal(state.battle.adventurePlusGauge.charge,0);await get();assert.equal(state.battle.adventurePlusGauge.charge,0);await call('battle',{revision,command:{type:'turn',actions:[{actor:0,type:'move',move:'quickattack',target:1,plus:true}]}},409);assert.deepEqual(state.world.teamIds,[id]);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('Josée masters Recover once and the Plus healing survives an adventure reload',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'recover-plus-qa',displayName:'회복 플러스'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(137,50),boxId:id,moves:['HP회복','울음소리'],pp:{}};player.hp=Math.floor(player.maxHp/3);seedMon(id,player);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'seedofmasteryza']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,2)').run(key,globalThis.__adventureUser.userId,'seedofmasteryza');seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',zaMission19JoseeWon:true,zaMegaRing:true},state.revision+1));await get();
+  await call('masterAdventureMove',{boxId:id,move:'울음소리'},409);const revision=state.revision;await call('masterAdventureMove',{boxId:id,move:'HP회복'});assert.equal(state.inventory.seedofmasteryza,1);await call('masterAdventureMove',{boxId:id,move:'HP회복'},409);await call('masterAdventureMove',{boxId:id,move:'HP회복',revision},409);await get();assert.deepEqual(rawMon(id).adventurePlusMastered,['recover']);assert.equal(state.inventory.seedofmasteryza,1);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaRoyaleRank:'D',zaMission19Complete:true},state.revision+1));await get();await call('zone14Wild-aron');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='recover').plusReady,true);const before=state.battle.teams[0][0].hp;await call('battle',{command:{type:'move',move:'HP회복',plus:true}});assert.equal(state.battle.adventurePlusGauge.charge,0);assert.ok(state.battle.events.some(e=>e.kind==='heal'&&e.targetBoxId===id&&e.hp>before));await get();assert.equal(state.battle.adventurePlusGauge.charge,0);await call('battle',{command:{type:'move',move:'HP회복',plus:true}},409);
  }finally{globalThis.__adventureUser=previous;}
 });
