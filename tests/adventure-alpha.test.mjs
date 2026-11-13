@@ -60,5 +60,5 @@ test('new surveyed wild alphas receive documented exclusive moves without changi
   const base=makeMon(id,45),before=JSON.stringify(base),alpha=makeCloudAdventureAlpha(base);
   assert.equal(alpha.adventureAlphaMove,name);assert.equal(alpha.moves[0],name);assert.equal(alpha.moves.filter(move=>move===name).length,1);assert.ok(alpha.adventurePlusMastered.includes(key));assert.equal(JSON.stringify(base),before);
  }
- const pumpkin=makeCloudAdventureAlpha(makeMon(710,45));assert.equal(pumpkin.adventureAlphaMove,undefined);
+ for(const [id,key,name] of [[710,'flamethrower','화염방사'],[10027,'psychic','사이코키네시스'],[10028,'darkpulse','악의파동'],[10029,'rockslide','스톤샤워']]){const base=makeMon(id,45),before=JSON.stringify(base),alpha=makeCloudAdventureAlpha(base);assert.equal(alpha.adventureAlphaMove,name);assert.equal(alpha.moves[0],name);assert.ok(alpha.adventurePlusMastered.includes(key));assert.equal(JSON.stringify(base),before);}
 });

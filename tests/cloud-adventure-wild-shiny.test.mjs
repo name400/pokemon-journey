@@ -25,3 +25,9 @@ test('unordered legacy shinies are protected until their identities are cleared'
  clearWildShiny(s,'legacy:rare');assignWildShiny(s,{},()=>0,'new:12');assert.equal(s.zaWildShinyOrder.length,10);assert.equal(s.zaWildShinyRolls['new:0'],undefined);assert.equal(s.zaWildShinyRolls['new:3'],true);
  const before=JSON.stringify(s);assignWildShiny(s,{},()=>0);assert.equal(JSON.stringify(s),before);
 });
+
+test('clearing or evicting a visible shiny also clears its alpha identity',()=>{
+ const s={zaWildShinyRolls:{},zaWildShinyOrder:[],zaWildVisibleAlphaLevels:{}};
+ for(let i=0;i<11;i++){const key=`zone14:slot${i}:304`;s.zaWildVisibleAlphaLevels[key]=38;assignWildShiny(s,{},()=>0,key);}
+ assert.equal(s.zaWildVisibleAlphaLevels['zone14:slot0:304'],undefined);assert.equal(s.zaWildVisibleAlphaLevels['zone14:slot1:304'],38);clearWildShiny(s,'zone14:slot1:304');assert.equal(s.zaWildVisibleAlphaLevels['zone14:slot1:304'],undefined);
+});

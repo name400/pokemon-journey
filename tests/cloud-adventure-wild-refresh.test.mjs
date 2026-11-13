@@ -35,3 +35,8 @@ test('blocked respawns retain their previous cycle and retry after movement',()=
  assert.equal(refreshOrdinaryWildSpawns(s,'day',2,()=>false),false);assert.equal(s.zaZone8Spent.gible,true);assert.equal(s.zaWildSpawnCycles[8].interval,0);
  assert.equal(refreshOrdinaryWildSpawns(s,'day',2,()=>true),true);assert.equal(s.zaZone8Spent,undefined);assert.equal(s.zaWildSpawnCycles[8].interval,2);
 });
+
+test('zone refresh preserves the alpha identity only with the retained unspent shiny',()=>{
+ const s={district:'lumiose-zone14',zaWildSpawnCycles:{14:{period:'day',interval:4}},zaWildShinyRolls:{'zone14:aron:304':true,'zone14:drilbur:529':false,'zone14:onix:95':true,'zone5:a:16':false},zaWildVisibleAlphaLevels:{'zone14:aron:304':38,'zone14:drilbur:529':38,'zone14:onix:95':47,'zone5:a:16':23},zaZone14Spent:{onix:true}};
+ assert.equal(refreshOrdinaryWildSpawns(s,'night',5),true);assert.equal(s.zaWildVisibleAlphaLevels['zone14:aron:304'],38);assert.equal(s.zaWildVisibleAlphaLevels['zone14:drilbur:529'],undefined);assert.equal(s.zaWildVisibleAlphaLevels['zone14:onix:95'],undefined);assert.equal(s.zaWildVisibleAlphaLevels['zone5:a:16'],23);
+});

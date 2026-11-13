@@ -161,7 +161,9 @@ function prepareVisibleWild(s:any){
  if(s.district==='lumiose-zone20'&&s.zaMission42Underground===true)return false;
  const match=/^lumiose-zone(5|6|8|9|10|11|12|13|14|15|16|17|18|19|20)(?:-garden|-drain)?$/.exec(s.district||'');if(!match)return changed;
  const n=Number(match[1]),view=n===6?{...s,zaZone6Period:time.period}:n===19?{...s,zaZone19Period:time.period}:n===18?{...s,zaZone18Period:time.period}:n===17?{...s,zaZone17Period:time.period}:n===15?{...s,zaZone15Period:time.period}:n===13?{...s,zaZone13Period:time.period}:n===14?{...s,zaZone14Period:time.period,weather:adventureFieldWeather(s,time,AREAS[s.area]?.biome)}:s,map=fieldMap(view),find=fieldWildResolvers[n];
- for(const tile of new Set(map.join(''))){const p=find(view,tile);if(!p||typeof p.id!=='string'||!Number.isInteger(p.species))continue;const key=`zone${n}:${p.id}:${p.species}`;if(typeof s.zaWildShinyRolls?.[key]==='boolean')continue;assignWildShiny(s,{},random,key);changed=true;}
+ for(const tile of new Set(map.join(''))){const p=find(view,tile);if(!p||typeof p.id!=='string'||!Number.isInteger(p.species))continue;const key=`zone${n}:${p.id}:${p.species}`;if(typeof s.zaWildShinyRolls?.[key]==='boolean')continue;
+  if(n===14&&!p.alpha){const level=randomWildAlphaLevel(s,n,p.species,random);if(level!==null)s.zaWildVisibleAlphaLevels={...(s.zaWildVisibleAlphaLevels||{}),[key]:level};}
+  assignWildShiny(s,{},random,key);changed=true;}
  return changed;
 }
 async function initializeVisibleWildForRead(id:string){
