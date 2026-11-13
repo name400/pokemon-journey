@@ -6845,3 +6845,22 @@ test('Side Mission 74 can be completed by capturing the Garbodor',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'side74-catch-qa',displayName:'딜리버드 포획 검사'};
  try{globalThis.__adventureRandom=()=>0;await get();await call('start',{species:152});const id=state.world.activeId;seedMon(id,{...makeMon(150,95),boxId:id,moves:['사이코브레이크'],pp:{}});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector9',interior:null,x:5,y:7,facing:'up',zaMission26Started:true,adventureBalls:{masterball:1}},state.revision+1));await get();await call('side74Battle');await call('ball',{ball:'masterball'});assert.equal(rawWorld().zaSide74Stage,2);await get();assert.equal(state.world.interaction.action,'side74Reward');await call('side74Reward');assert.equal(state.inventory.seedofmasteryza,5);assert.equal(state.inventory.aspearberry,1);assert.ok(state.box.some(m=>m.speciesId===569));}finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Café Action entry, orders, stale requests and save restoration',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'cafe-action-qa',displayName:'카페 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,lead={...makeMon(1,30),boxId:id,hp:1,friendship:80};seedMon(id,lead);
+  sql.prepare('UPDATE wallets SET coins=489 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:18,y:7,facing:'up',zaFastTravelLandmarks:['legacy-unknown']},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'enterCafeAction');const entryRevision=state.revision;
+  await call('enterCafeAction');await call('enterCafeAction',{revision:entryRevision},409);await get();
+  assert.equal(state.world.interior,'cafeAction');assert.ok(state.world.zaFastTravelLandmarks.includes('legacy-unknown'));assert.ok(state.world.zaFastTravelLandmarks.includes('cafe-action'));
+  await walkTo('n');assert.equal(state.world.interaction.actions.length,9);assert.ok(state.world.interaction.actions.some(a=>a.action==='actionTeaBlend'&&a.label.includes('490')));
+  await call('actionTeaBlend',{},409);assert.equal(rawMon(id).hp,1);assert.equal(state.wallet.coins,489);
+  sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const orderRevision=state.revision;
+  await call('actionTeaBlend');await call('actionTeaBlend',{revision:orderRevision},409);await get();
+  assert.equal(state.wallet.coins,510);assert.equal(rawMon(id).hp,lead.maxHp);assert.equal(rawMon(id).friendship,81);assert.equal(state.world.interior,'cafeAction');assert.deepEqual(state.world.teamIds,[id]);
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-jaune-sector8',null,18,7]);
+  await call('actionTeaBlend',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});

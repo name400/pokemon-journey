@@ -109,3 +109,11 @@ test('two side mission cafe landmarks register only from the boulevard ground',a
  state.zaVert7RoofUpper=false;assert.equal(recordLandmarks(state),true);assert.deepEqual(registeredLandmarks(state).map(p=>p.id),['cafe-shutterbug']);state.x=17;assert.equal(recordLandmarks(state),true);assert.deepEqual(registeredLandmarks(state).map(p=>p.id),['cafe-shutterbug','cafe-soleil']);
  assert.ok(taxiDestinations(state).some(p=>p.id==='cafe-shutterbug'));assert.ok(taxiDestinations(state).some(p=>p.id==='cafe-soleil'));assert.deepEqual(state.teamIds,['kept']);
 });
+
+test('Café Action registers its outdoor entrance and preserves interior saves',async()=>{
+ const {recordLandmarks,taxiDestinations,mapTravelDestinations}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const s={area:3,district:'lumiose-jaune-sector8',interior:null,x:18,y:7,facing:'up',zaMission04Complete:true,zaRoyaleRank:'Y',zaFastTravelLandmarks:['future-landmark'],teamIds:['kept']};
+ assert.equal(fieldMap(s)[6][18],'q');assert.equal(fieldDialogue(s).action,'enterCafeAction');assert.equal(recordLandmarks(s),true);assert.equal(recordLandmarks(s),false);assert.deepEqual(s.zaFastTravelLandmarks,['future-landmark','cafe-action']);
+ assert.ok(taxiDestinations(s).some(p=>p.id==='cafe-action'));assert.ok(mapTravelDestinations(s).some(p=>p.id==='cafe-action'));
+ const inside={...s,interior:'cafeAction',x:11,y:6};assert.equal(recordLandmarks({...inside,zaFastTravelLandmarks:[]}),false);const restored=restoreAdventurePosition(storeAdventurePosition(inside,66),66);assert.deepEqual([restored.district,restored.interior,restored.x,restored.y,restored.teamIds],['lumiose-jaune-sector8','cafeAction',11,6,['kept']]);assert.equal(fieldDialogue(restored).actions.length,9);
+});
