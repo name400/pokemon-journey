@@ -26,7 +26,7 @@ import {descentGuideTargets} from '@/lib/cloud-adventure/adventure-descent-guide
 import {ZONE5_VISIBLE,ZONE5_WEST_STALL} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {ZONE11_VISIBLE,zone11WaterAt,zone11Visible} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {ZONE6_VISIBLE,zone6Layer,zone6Visible,ZONE6_MARKET_STALLS} from '@/lib/cloud-adventure/adventure-zone6.mjs';
-import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
+import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails,zone2BankTint} from '@/lib/cloud-adventure/adventure-zone2-visual.mjs';
 import {zone3GardenPattern,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-zone3-garden.mjs';
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
@@ -1055,6 +1055,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      }return;}
     if(w.district==='lumiose-rust'||w.district==='lumiose'||w.district==='lumiose-floral'||w.district==='lumiose-vernal'||w.district==='lumiose-vert-plaza'||w.district==='lumiose-vert2'||w.district==='lumiose-centrico-route'||w.district==='lumiose-rouge-north'||w.district==='lumiose-north-boulevard'||w.district==='lumiose-quasartico'||w.district==='lumiose-rooftop'||w.district==='lumiose-zone1'||w.district==='lumiose-zone2'||w.district==='lumiose-zone3'||w.district==='lumiose-zone4'||w.district==='lumiose-bureau'||w.district==='lumiose-garden'||w.district==='lumiose-site'||w.district==='lumiose-wild'||w.district==='lumiose-observation'||w.district==='lumiose-royale'){
      ctx.fillStyle=w.district==='lumiose-zone3'?((x+y)%2?'#ddd2ba':'#e8dec9'):((x+y)%2?'#e7dfce':'#ded7c5');ctx.fillRect(px,py,tile,tile);
+     if(w.district==='lumiose-zone2'&&c==='.'&&zone2BankTint(x,y)){ctx.fillStyle=(x+y)%2?'#b5cba2':'#c2d5af';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#94b28c';ctx.fillRect(px+5+(x*3+y)%9,py+tile-8,5,2);}
      // Southern Street crosses Zone 1 from west to east. Only ordinary floor
      // and existing road tiles are paved: grass and event tiles retain their
      // appearance and behaviour. Exact width and pavement are provisional.
@@ -1133,7 +1134,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       ctx.fillStyle=w.district==='lumiose-zone2'?(c==='w'?'#91c7bf':'#68a8af'):(c==='w'?'#a0ccd0':'#76abc1');ctx.fillRect(px,py,tile,tile);
       if(w.district==='lumiose-zone2'){
        const e=zone2WaterEdges(w.map,x,y),edge=Math.max(3,Math.floor(tile/8));
-       ctx.fillStyle='#9bc6b7';if(e.north)ctx.fillRect(px,py,tile,edge);if(e.south)ctx.fillRect(px,py+tile-edge,tile,edge);if(e.west)ctx.fillRect(px,py,edge,tile);if(e.east)ctx.fillRect(px+tile-edge,py,edge,tile);
+       ctx.fillStyle='#9bc6b7';if(e.north)ctx.fillRect(px,py,tile,edge);if(e.south)ctx.fillRect(px,py+tile-edge,tile,edge);if(e.west)ctx.fillRect(px,py,edge,tile);if(e.east)ctx.fillRect(px+tile-edge,py,edge,tile);if((x*3+y)%4===0&&(e.north||e.east||e.south||e.west)){ctx.fillStyle='#899f94';if(e.north)ctx.fillRect(px+5,py,8,edge);else if(e.south)ctx.fillRect(px+5,py+tile-edge,8,edge);else if(e.west)ctx.fillRect(px,py+6,edge,8);else ctx.fillRect(px+tile-edge,py+6,edge,8);}
        ctx.fillStyle='#bedbd0';const ripple=(x*13+y*7)%11;ctx.fillRect(px+7+ripple,py+Math.floor(tile*.58),7,2);if((x+y)%3===0)ctx.fillRect(px+4,py+Math.floor(tile*.33),5,2);
       }else if(c==='w'){ctx.fillStyle='#d8eeee';ctx.fillRect(px+5,py+15,tile-10,2);}
      }

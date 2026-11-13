@@ -5868,3 +5868,11 @@ test('city research habitats provide Trubbish and courtyard Ralts without losing
   await walkTo({x:5,y:9});await call('face',{direction:'down'});await call('vert4CourtyardLadder');await get();assert.equal(rawWorld().zaVert4Layer,'roof');
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('Zone 2 expanded island keeps existing bridge routes and save state',async()=>{
+ const prior=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone2-expanded-island-qa',displayName:'중앙 섬 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const spent={patrat:true,patrat2:true,binacle:true,magikarp:true,staryu:true};seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:8,y:10,facing:'up',zaZone2FieldSpent:spent,zaZone2Budew:{escaped:true},zaZone2RockCleared:true},state.revision+1));await get();
+  await walkTo({x:10,y:6});await get();assert.deepEqual([state.world.x,state.world.y],[10,6]);assert.equal(state.world.map[6][10],'g');assert.deepEqual(state.world.zaZone2FieldSpent,spent);assert.equal(state.world.zaZone2RockCleared,true);await walkTo({x:15,y:6});await get();assert.deepEqual([state.world.x,state.world.y],[15,6]);await walkTo({x:8,y:10});await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=random;}
+});

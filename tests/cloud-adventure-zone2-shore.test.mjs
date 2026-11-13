@@ -40,3 +40,16 @@ test('Zone 2 bank trees keep bridges, lookout and old player and Budew saves saf
  for(const target of [{x:4,y:1},{x:3,y:4},{x:8,y:10},{x:11,y:8},{x:15,y:6},{x:20,y:11},{x:21,y:5}])assert.ok(fieldPath(map,base,target).length,JSON.stringify(target));
  assert.equal(fieldDialogue({...base,x:3,y:4,facing:'up'}).action,'zone2Overlook');assert.equal(stepField({...base,x:8,y:11},'up').x,8);
 });
+
+test('irregular island expands only water and preserves existing paths, spawns and old saved positions',async()=>{
+ const {zone2FieldMonsters}=await import('../lib/cloud-adventure/adventure-world.mjs');const {zone2BankTint}=await import('../lib/cloud-adventure/adventure-zone2-visual.mjs');
+ const old=['####W##################','#...:..........~......#','#...:g......^..~......#','#..h:g.........~..^...#','#...,,g;;;ggggg~g.....#','#.^..,gg=~~~~~=~g.....X','#....,g~=~~g~~==g,,,,,#','#..^.,g~=ggggg=~g...^.#','#....,g~~ggggg~~~.....#','#...^,g~==gggg~~~.....#','#.....g~=~~g~~~~~..~~~#','#.....gg=~~~~~~g~..~g~#','#....^gg=ggggggg~..rw~#','#......,,gg.....~~.~~~#','#........gg,.....~~...#','#..........,......~...#','###########E###########'];
+ const s={area:3,district:'lumiose-zone2',interior:null,x:11,y:15,teamIds:['kept'],zaZone2RockCleared:false,zaZone2FieldPositions:{staryu:{x:8,y:8}}},map=lumioseZone2Map(s);
+ for(let y=0;y<old.length;y++)for(let x=0;x<old[y].length;x++)if(walkable(old[y][x]))assert.ok(walkable(map[y][x]),`${x},${y}`);
+ for(const [x,y] of [[10,6],[12,6],[13,6],[10,10],[12,10],[13,10]])assert.equal(map[y][x],'g');
+ for(const [x,y] of [[8,5],[8,6],[8,7],[14,5],[14,6],[14,7],[15,6],[8,9],[8,10],[8,11],[8,12],[9,9]])assert.equal(map[y][x],'=');
+ for(const target of [{x:4,y:1},{x:8,y:10},{x:11,y:8},{x:15,y:6},{x:21,y:5}])assert.ok(fieldPath(map,s,target).length);
+ assert.equal(zone2FieldMonsters(s,'night',map).find(p=>p.id==='staryu').x,8);assert.equal(zone2FieldMonsters(s,'night',map).find(p=>p.id==='staryu').y,8);
+ const saved=storeAdventurePosition({...s,x:12,y:8},128),restored=restoreAdventurePosition(saved,128);assert.deepEqual([restored.x,restored.y],[12,8]);assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone2FieldPositions,s.zaZone2FieldPositions);
+ assert.equal(zone2BankTint(11,8),true);assert.equal(zone2BankTint(0,0),false);
+});
