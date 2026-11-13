@@ -69,6 +69,7 @@ test('Zone 6 southern canal approach crosses into the lower layer and preserves 
  assert.deepEqual([saved.district,saved.zaZone6Layer,saved.x,saved.y,saved.teamIds,saved.zaZone6Items],['lumiose-zone6','canal',3,15,['kept'],['canal-potion']]);
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-saison-canalside',17,1]);
  assert.ok(fieldPath(fieldMap({...saved,...back}),back,{x:5,y:1}).length);
+ const second=stepField({...road,x:18},'up');assert.deepEqual([second.district,second.zaZone6Layer,second.x,second.y],['lumiose-zone6','canal',5,15]);assert.ok(fieldPath(zone6Map({...road,...second}),second,{x:11,y:8}).length);const secondSaved=restoreAdventurePosition(storeAdventurePosition({...road,...second,zaZone6Items:['canal-potion']},64),64);assert.deepEqual([secondSaved.x,secondSaved.y,secondSaved.zaZone6Layer,secondSaved.zaZone6Items],[5,15,'canal',['canal-potion']]);const secondBack=stepField(secondSaved,'down');assert.deepEqual([secondBack.district,secondBack.x,secondBack.y],['lumiose-saison-canalside',18,1]);assert.notEqual(zone6Map({...state,zaZone6Layer:'ground'})[16][5],'X');
 });
 
 test('North Boulevard and Zone 6 connect both ways without invalidating old saves',()=>{
