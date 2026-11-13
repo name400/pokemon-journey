@@ -6360,3 +6360,17 @@ test('status medicine cures owned party in field and battle once',async()=>{
 
  }}finally{globalThis.__adventureUser=previous;}
 });
+
+test('medicine shop purchases preserve old revive stock and enforce atomic limits',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'medicine-shop-qa',displayName:'회복 도구 상점'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];sql.prepare('UPDATE wallets SET coins=5000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up',zaRevives:2},state.revision+1));await get();assert.equal(state.world.interaction.action,'shop');assert.deepEqual(state.fieldShop.filter(p=>p.category==='medicine').map(p=>[p.id,p.price]),[['revive',800],['fullheal',200]]);
+  const rev=state.revision;await call('buyAdventureMedicine',{item:'revive',quantity:2});await call('buyAdventureMedicine',{item:'revive',quantity:2,revision:rev},409);await get();assert.equal(state.inventory.revive,2);assert.equal(state.world.zaRevives,2);assert.equal(state.wallet.coins,3400);
+  await call('buyAdventureMedicine',{item:'fullheal',quantity:3});await get();assert.equal(state.inventory.fullheal,3);assert.equal(state.wallet.coins,2800);assert.deepEqual(state.world.teamIds,team);
+  for(const item of ['maxrevive','lumiosegalette','__proto__'])await call('buyAdventureMedicine',{item},409);for(const quantity of [0,-1,100,1.5])await call('buyAdventureMedicine',{item:'revive',quantity},409);
+  sql.prepare('UPDATE wallets SET coins=100 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('buyAdventureMedicine',{item:'fullheal'},409);assert.equal(state.inventory.fullheal,3);assert.equal(state.wallet.coins,100);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'fullheal']);sql.prepare('UPDATE inventory SET quantity=999 WHERE key=?').run(key);sql.prepare('UPDATE wallets SET coins=5000 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('buyAdventureMedicine',{item:'fullheal'},409);assert.equal(state.inventory.fullheal,999);assert.equal(state.wallet.coins,5000);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:8,facing:'down'},state.revision+1));await get();await call('buyAdventureMedicine',{item:'revive'},409);assert.equal(state.wallet.coins,5000);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).speciesId,152);
+ }finally{globalThis.__adventureUser=previous;}
+});

@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {makeMon} from '../../../lib/game.mjs';
+import {fieldDialogue,fieldMap} from '../../../lib/cloud-adventure/adventure-world.mjs';
+import {ADVENTURE_MEDICINES,adventureMedicine} from '../../../lib/cloud-adventure/adventure-medicine-shop.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});
+try{for(const viewport of [{width:390,height:844},{width:1280,height:850}]){
+ const mon={...makeMon(25,40),boxId:'player',evolutions:[]};let coins=3000,revision=1,changes=0;const inventory={};
+ const world={area:3,district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up',badges:[],activeId:'player',teamIds:['player'],areaInfo:{name:'격리 테스트',biome:'grass'},objective:'격리 상점',log:[]};
+ const response=()=>({revision,world:{...world,map:fieldMap(world),interaction:fieldDialogue(world)},box:[mon],wallet:{coins,balls:5},inventory,fieldShop:ADVENTURE_MEDICINES,gameTime:{period:'day'}});
+ const context=await browser.newContext({viewport,isMobile:viewport.width<500,hasTouch:viewport.width<500,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('https://**/*',r=>r.fulfill({status:200,body:'',contentType:'image/png'}));await page.route('**/api/world**',async route=>{const body=route.request().postDataJSON();if(body?.action==='buyAdventureMedicine'){const p=adventureMedicine(body.item);assert.ok(p);assert.equal(body.revision,revision);coins-=p.price*body.quantity;inventory[p.id]=(inventory[p.id]||0)+body.quantity;revision++;changes++;}await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(response())});});
+ await page.goto(process.env.TEST_URL||'http://127.0.0.1:5227/');await page.getByRole('button',{name:/대화/}).click();await page.getByRole('dialog').getByRole('button',{name:'상품 보기'}).click();const dialog=page.getByRole('dialog');await dialog.getByText('기력의조각',{exact:true}).waitFor();const item=dialog.locator('article').filter({hasText:'기력의조각'});await item.getByRole('button',{name:/800코인/}).click();assert.equal(inventory.revive,1);assert.equal(coins,2200);await page.reload();await page.locator('canvas.adv-field').waitFor();assert.equal(changes,1);assert.deepEqual(errors,[]);console.log(JSON.stringify({viewport,coins,inventory,reloaded:true}));await context.close();
+}}finally{await browser.close();}
