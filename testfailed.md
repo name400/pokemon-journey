@@ -1,5 +1,26 @@
 # 배포 검증 실패 기록
 
+## 2026-11-13 — GitHub `7200505e` 배포 검사 실패
+
+- 대상 브랜치: `cloud/pokerogue-continue-20261105`; 검증한 GitHub 커밋 `7200505e445edc62bbeb30f372eba31e7c88f1a8`. 브랜치에 이후 커밋이 하나 있었으나 지정된 커밋까지만 병합했다.
+- 실제 검증 소스: 기존 Sites 소스와 병합한 로컬 커밋 `6d2457786a9166bb818024be2c4fa415173b5499`; Node.js v24.22.1.
+- 순차 검사: `npm run typecheck` 통과, `npm test` 3,632개 중 3,625개 통과·7개 실패 (209.2초), `npm run build` 통과.
+- 검증 실패로 배포하지 않았다. 검사 당시 운영본은 Sites v85.
+
+### 실패 항목 — 이전 `5bca41d4` 검증의 재발
+
+아래 7개는 이 파일의 `5bca41d4` 기록에 상세 조건과 결과가 있는 동일 실패다.
+
+1. `tests/cloud-adventure-api.test.mjs:866` — `dodge` 응답이 200 대신 409, `그곳으로 갈 수 없습니다.` (871행).
+2. 같은 파일 1313행 — `zone6RoofLink` 응답이 200 대신 409, `이동 지점을 확인하세요.` (1418행).
+3. `tests/cloud-adventure-bleu-sector8.test.mjs:8` — 기대 `살롱 드 로주 (위치 초안)`, 실제 `미용실`.
+4. `tests/cloud-adventure-terrain.test.mjs:2` — 인접 안내자 타일 조회 중 `Cannot read properties of null (reading 'tile')`.
+5. `tests/cloud-adventure-world.test.mjs:39` — 필드 서비스·출구 접근 경로의 `assert.ok(!p.blocked)` 실패.
+6. 같은 파일 46행 — 이전 저장 위치 복구 기대 `[3,5]`, 실제 `[3,8]`.
+7. 같은 파일 52행 — 물·구조물 이동 차단 기대 `true`, 실제 `undefined`.
+
+앞선 8개 실패 중 `cloud-adventure-ombrage.test.mjs`의 부티크 입구 테스트는 이번에 통과했다. 나머지 실패가 실제 맵 회귀인지 테스트의 좌표·명칭 기대값 문제인지는 이 결과만으로 확정할 수 없다.
+
 ## 2026-11-13 — GitHub `5bca41d4` 배포 검사 실패
 
 - 대상 브랜치: `cloud/pokerogue-continue-20261105`; GitHub 커밋 `5bca41d45d0c2c2afe7c98127f85b9f5b8979de8`.
