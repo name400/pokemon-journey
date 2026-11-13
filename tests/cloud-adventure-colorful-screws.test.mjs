@@ -33,5 +33,5 @@ test('each staged plush applies its documented level and old red saves retain 5%
 });
 
 test('all additional mapped screws render and remain independently collectible',()=>{
- for(const p of COLORFUL_SCREW_SITES.slice(3)){const s={area:3,...p,zaRedCanariPlush:true,zaRoyaleRank:'A'},map=fieldMap(s);assert.equal(map[p.y]?.[p.x],'!',p.id);const starts=[];for(let y=0;y<map.length;y++)for(let x=0;x<map[y].length;x++)if('XWEljh'.includes(map[y][x]))starts.push({x,y});assert.ok(starts.some(start=>fieldPath(map,start,p).length>0),`${p.id}: entry path`);assert.notEqual(fieldMap({...s,zaColorfulScrewsFound:[p.id]})[p.y]?.[p.x],'!',p.id);}
+ for(const p of COLORFUL_SCREW_SITES.slice(3)){const s={area:3,...p,zaRedCanariPlush:true,zaRoyaleRank:'A'},map=fieldMap(s);assert.equal(map[p.y]?.[p.x],'!',p.id);const starts=[];for(let y=0;y<map.length;y++)for(let x=0;x<map[y].length;x++)if('XWEljho'.includes(map[y][x]))starts.push({x,y});assert.ok(starts.some(start=>fieldPath(map,start,p).length>0),`${p.id}: entry path`);assert.notEqual(fieldMap({...s,zaColorfulScrewsFound:[p.id]})[p.y]?.[p.x],'!',p.id);}
 });

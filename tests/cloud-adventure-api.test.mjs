@@ -2991,6 +2991,20 @@ test('new street screws can be walked to once and survive reentry',async()=>{
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
+test('new rooftop and scaffold screws use existing approaches and preserve save progress',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'screw-roof-qa',displayName:'옥상 나사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const approaches=[
+   {from:{district:'lumiose-zone9',x:7,y:10,facing:'down',zaZone9Upper:true},action:'zone9SouthScaffold',district:'lumiose-zone9-scaffold',target:{x:16,y:8},id:'zone9-south-scaffold-second'},
+   {from:{district:'lumiose-south-boulevard',x:4,y:7,facing:'up',zaSide92Won:true},action:'side92Holovator',district:'lumiose-mission34-roof',target:{x:5,y:6},id:'bleu9-plaza-scaffold'},
+   {from:{district:'lumiose-rouge-sector6',x:17,y:9,facing:'up',zaMission23GwynnWon:true},action:'mission23Holovator',district:'lumiose-mission23-roof',target:{x:5,y:14},id:'rouge6-west-roof'},
+  ];
+  for(const p of approaches){seedWorld(storeAdventurePosition({...rawWorld(),...p.from,area:3,interior:null,zaRedCanariPlush:true,zaRoyaleRank:'A',zaColorfulScrewsFound:[...(rawWorld().zaColorfulScrewsFound||[]),'old-future-id']},state.revision+1));await get();await call(p.action);assert.equal(state.world.district,p.district);await walkTo(p.target);assert.equal(state.world.interaction.action,'collectColorfulScrew');const rev=state.revision;await call('collectColorfulScrew');await call('collectColorfulScrew',{revision:rev},409);await get();assert.equal(rawWorld().zaColorfulScrewsFound.filter(id=>id===p.id).length,1);assert.notEqual(state.world.map[p.target.y][p.target.x],'!');}
+  assert.ok(rawWorld().zaColorfulScrewsFound.includes('old-future-id'));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('plush levels affect actual battle prizes and mega crystal drops',async()=>{
  const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'canari-effects-qa',displayName:'인형 효과'};globalThis.__adventureRandom=()=>0;
  try{
