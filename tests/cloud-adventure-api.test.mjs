@@ -5797,3 +5797,11 @@ test('Zone 16 raised fountain restores legacy saves and keeps garden routes',asy
   await walkTo({x:17,y:11});await call('face',{direction:'down'});await call('zone16GardenStairs');await get();assert.equal(state.world.district,'lumiose-zone16');assert.equal(state.world.zaZone16Spent['ampharos-alpha'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=prior;}
 });
+
+test('Zone 12 expanded pond bank keeps water blocked and restores exploration progress',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone12-pond-bank-qa',displayName:'연못 물가 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,{...makeMon(1,10),boxId:id,moves:['몸통박치기']});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:1,y:13,facing:'right',zaRoyaleRank:'E',zaZone12PondLower:true,zaZone12Spent:{delibird:true},zaZone12Items:['south-super']},state.revision+1));await get();await walkTo({x:5,y:8});await call('move',{direction:'right'},409);assert.deepEqual([state.world.x,state.world.y],[5,8]);await walkTo({x:5,y:7});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone12PondLower],[5,7,true]);assert.equal(state.world.zaZone12Spent.delibird,true);assert.deepEqual(state.world.zaZone12Items,['south-super']);
+  await walkTo({x:1,y:13});await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-bleu-sector5');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=prior;}
+});
