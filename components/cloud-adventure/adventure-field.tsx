@@ -1002,6 +1002,15 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
        ctx.fillStyle='#afa998';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+3,2,tile-5);
       }
      }
+     if(w.district==='lumiose-floral'&&!w.interior&&c===','){
+      const road=y>=7&&y<=9;ctx.fillStyle=road?'#77847f':'#cdbfa9';ctx.fillRect(px,py,tile,tile);
+      if(road&&y===8&&x%3===0){ctx.fillStyle='#eee8d7';ctx.fillRect(px+5,py+tile/2-1,tile-10,2);}
+      if(!road){ctx.fillStyle='#e9dfcb';ctx.fillRect(px+2,py+tile-3,tile-4,2);}
+     }
+     if(w.district==='lumiose-floral'&&!w.interior&&c==='%'){
+      ctx.fillStyle='#958c7d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2||y===12?'#9a776c':'#d8cab4';ctx.fillRect(px+2,py+2,tile-4,tile-4);
+      ctx.fillStyle=y===2||y===12?'#b99584':'#829d99';ctx.fillRect(px+5,py+6,tile-10,tile-12);ctx.fillStyle='#e6dfd0';ctx.fillRect(px+tile/2-1,py+7,2,tile-14);
+     }
      // Hotel Z's paved forecourt, drawn on existing walkable tiles only.
      if(w.district==='lumiose'&&c==='.') {ctx.fillStyle=(x+y)%2?'#ded7c7':'#e7e0d0';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#cfc7b7';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:1),py+2,1,tile-4);if(x>=10&&x<=12&&y>=6&&y<=14){ctx.fillStyle='#c7bca9';ctx.fillRect(px,py,tile,2);ctx.fillStyle='#f0e9d9';ctx.fillRect(px+2,py+3,tile-4,tile-5);}}
 
@@ -1184,6 +1193,15 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    }
    for(const b of buildings){
     ctx.fillStyle=palette[2];ctx.fillRect((b.x-1)*tile,(b.y-3)*tile,3*tile,4*tile);
+    if(w.district==='lumiose-floral'&&!w.interior&&b.kind==='P'){
+     // The research lab façade is original pixel art; its exact design is draft.
+     const bx=(b.x-1)*tile,by=(b.y-3)*tile;
+     ctx.fillStyle='#d7d5c8';ctx.fillRect(bx,by,3*tile,4*tile);ctx.fillStyle='#657f80';ctx.fillRect(bx,by,3*tile,tile-4);ctx.fillStyle='#94ada7';ctx.fillRect(bx+5,by+5,3*tile-10,tile-12);
+     ctx.fillStyle='#edf0e5';ctx.fillRect(bx+3,by+tile-4,3*tile-6,2*tile+5);ctx.fillStyle='#719595';
+     for(let j=0;j<3;j++){ctx.fillRect(bx+7+j*tile,by+tile+5,tile-14,tile-11);ctx.fillRect(bx+7+j*tile,by+2*tile+5,tile-14,tile-11);}
+     ctx.fillStyle='#eef1e6';ctx.fillRect(bx,by+3*tile,3*tile,tile);ctx.fillStyle='#526f72';ctx.fillRect(bx+tile+5,by+3*tile+5,tile-10,tile-7);ctx.fillStyle='#b5d4d0';ctx.fillRect(bx+tile+8,by+3*tile+8,tile-16,tile-13);
+     ctx.fillStyle='#f3eee2';ctx.beginPath();ctx.arc(bx+tile*1.5,by+tile-5,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75351';ctx.fillRect(bx+tile*1.5-6,by+tile-10,12,5);ctx.fillStyle='#46585c';ctx.fillRect(bx+tile*1.5-6,by+tile-5,12,2);continue;
+    }
     if(w.district==='lumiose'&&b.kind==='J'){
      // Hotel Z's cream facade, dark mansard roof and ivy are stylized from the
      // original exterior; its 3x4 footprint remains the existing draft.

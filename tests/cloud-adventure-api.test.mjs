@@ -5574,3 +5574,15 @@ test('BRAVELY purchases and wardrobe preserve money, party and saves atomically'
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),original);assert.equal(state.wallet.coins,0);assert.deepEqual(state.world.zaClothingOwned,['future-garment','bravely-vest-blue','bravely-vest-green']);assert.deepEqual(state.world.zaSalonAppearance,{style:'long',color:'black'});
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('research lab street restores legacy position and preserves lab and zone access',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'floral-street-qa',displayName:'연구소거리검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-floral',interior:null,x:16,y:3,facing:'down',zaMission03Stage:8,zaResearchRewards:[2]},state.revision+1);delete old.districtPosition.floralStreetsLayout;seedWorld(old);await get();
+  assert.notEqual(state.world.map[state.world.y][state.world.x],'%');assert.deepEqual(state.world.zaResearchRewards,[2]);
+  await walkTo({x:5,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'enterLumioseLab');await call('enterLumioseLab');await get();assert.equal(state.world.interior,'lumioseLab');
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-floral',null,5,6]);
+  await walkTo({x:21,y:8});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-zone1');await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-floral');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaResearchRewards,[2]);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
