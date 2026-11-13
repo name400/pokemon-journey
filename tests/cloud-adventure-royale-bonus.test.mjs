@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {royaleBonusPickable,takeRoyaleBonus,recordRoyaleBonus,royaleMedalSettlement,recordRoyaleMedalBattle,ROYALE_FIELD_MEDALS,royaleFieldMedalPickable,takeRoyaleFieldMedal,royaleFieldMedalAmount} from '../lib/cloud-adventure/adventure-royale-bonus.mjs';
+import {royaleBonusPickable,royaleBonusCards,takeRoyaleBonus,recordRoyaleBonus,royaleMedalSettlement,recordRoyaleMedalBattle,ROYALE_FIELD_MEDALS,royaleFieldMedalPickable,takeRoyaleFieldMedal,royaleFieldMedalAmount} from '../lib/cloud-adventure/adventure-royale-bonus.mjs';
 import {lumioseRoyaleMap,fieldDialogue,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
 const now=20*50000,hit=[{kind:'move',side:0,actorBoxId:'p'},{kind:'effect',targetSide:1,targetBoxId:'e',text:'효과가 굉장했다!'},{kind:'damage',targetSide:1,targetBoxId:'e',actorBoxId:'p',hit:true,amount:10}];
@@ -25,7 +25,7 @@ test('concurrent cards count only matching hits, pay medals once, and preserve l
  const fire=hit.map(e=>e.kind==='move'?{...e,type:'fire'}:e),water=hit.map(e=>e.kind==='move'?{...e,type:'water'}:e);
  assert.equal(recordRoyaleBonus(s,{events:fire,log:[]},'night',now),true);assert.equal(s.zaRoyaleBonusExtraCards.fire.progress,1);assert.equal(s.zaRoyaleBonusExtraCards.water.progress,0);assert.equal(s.zaRoyalePrizeMedals,7);
  assert.equal(recordRoyaleBonus(s,{events:[...fire,...water,...water],log:[]},'night',now),true);assert.equal(s.zaRoyalePrizeMedals,47);assert.equal(s.zaRoyaleYPoints,400);assert.equal(s.zaRoyaleBonusCard.completed,true);assert.equal(recordRoyaleBonus(s,{events:fire,log:[]},'night',now),false);
- assert.equal(royaleBonusPickable(s,now+1200000,'fire'),true);assert.equal(takeRoyaleBonus(s,now+1200000,'fire'),true);assert.equal(s.zaRoyaleBonusExtraCards.fire.progress,0);assert.equal(s.zaRoyalePrizeMedals,47);
+ assert.equal(royaleBonusPickable(s,now+1200000,'fire'),false);assert.equal(takeRoyaleBonus(s,now+1200000,'grass'),true);assert.equal(s.zaRoyaleBonusExtraCards.grass.progress,0);assert.equal(s.zaRoyalePrizeMedals,47);
 });
 
 test('medal settlement uses nightly wins, gold plush, and preserves old pending balances',()=>{
@@ -70,4 +70,18 @@ test('Infinite Royale cards require the unlocked field and credit its own capped
 test('an unexpired card retains progress across rank promotion without rewarding an old rank',()=>{
  const s={district:'lumiose-royale',zaRoyaleRank:'B',zaRoyaleBPoints:2000,trainer:{title:'Z-A 로열 배틀'}};assert.equal(takeRoyaleBonus(s,now),true);s.zaRoyaleBonusCard.progress=2;s.zaRoyaleRank='A';s.zaMission39Started=true;s.zaInfinitePoints=0;s.trainer={title:'무한 로열 배틀존'};
  assert.equal(royaleBonusPickable(s,now),false);assert.equal(recordRoyaleBonus(s,{events:hit,log:[]},'night',now),true);assert.equal(s.zaInfinitePoints,1000);assert.equal(s.zaRoyaleBPoints,2000);assert.equal(s.zaRoyaleBonusCard.completed,true);
+});
+
+test('all 18 type cards rotate across nights and match the actual move type',()=>{
+ const seen=new Set();
+ for(let night=0;night<9;night++){
+  const t=now+night*1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'}};const offered=royaleBonusCards(s,t);assert.equal(offered.length,3);
+  for(const def of offered.slice(1)){seen.add(def.id);assert.equal(takeRoyaleBonus(s,t,def.id),true);const wrong=hit.map(e=>e.kind==='move'?{...e,type:'not-a-type'}:e),correct=hit.map(e=>e.kind==='move'?{...e,type:def.id}:e);assert.equal(recordRoyaleBonus(s,{events:wrong,log:[]},'night',t),false);assert.equal(recordRoyaleBonus(s,{events:[...correct,...correct],log:[]},'night',t),true);assert.equal(s.zaRoyaleBonusExtraCards[def.id].completed,true);}
+  assert.equal(s.zaRoyaleYPoints,400);assert.equal(s.zaRoyalePrizeMedals,40);
+ }
+ assert.equal(seen.size,18);
+});
+test('old saved cards remain active through rotation and the three-card limit is enforced',()=>{
+ const t=now+1200000,s={district:'lumiose-royale',zaRoyaleRank:'Y',trainer:{title:'Z-A 로열 배틀'},zaRoyaleBonusCard:{night:1,rank:'Y',progress:0,completed:false},zaRoyaleBonusExtraCards:{fire:{night:1,rank:'Y',progress:1,completed:false},water:{night:1,rank:'Y',progress:0,completed:false}}};
+ assert.equal(royaleBonusPickable(s,t,'grass'),false);const fire=hit.map(e=>e.kind==='move'?{...e,type:'fire'}:e);assert.equal(recordRoyaleBonus(s,{events:fire,log:[]},'night',t),true);assert.equal(s.zaRoyaleBonusExtraCards.fire.completed,true);assert.equal(takeRoyaleBonus(s,t,'grass'),true);assert.equal(takeRoyaleBonus(s,t,'electric'),false);assert.equal(s.zaRoyaleBonusExtraCards.water.progress,0);
 });
