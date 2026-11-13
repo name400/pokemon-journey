@@ -24,7 +24,7 @@ test('draft Bleu 5 waterside entrance preserves ground gates and lower-layer sav
  assert.equal(reachable(lower,{x:9,y:13}),false);
  const saved=restoreAdventurePosition(storeAdventurePosition(lower,77),77);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone12PondLower,saved.teamIds],['lumiose-zone12',1,13,true,['kept']]);
  const exit=stepField(saved,'left');assert.deepEqual([exit.district,exit.x,exit.y],['lumiose-bleu-sector5',21,14]);
- assert.deepEqual([stepField({...city,y:12},'right').district,stepField({...city,y:12},'right').y],['lumiose-zone12',12]);
+ assert.deepEqual([stepField({...city,y:12},'right').district,stepField({...city,y:12},'right').y],['lumiose-zone12',9]);
 });
 test('zone twelve snow park gate and saved position',()=>{
  const base={area:3,district:'lumiose-centrico-route',interior:null,x:14,y:15,facing:'down',zaRoyaleRank:'F'};assert.equal(stepField(base,'down').blocked,true);
@@ -146,4 +146,13 @@ test('relocated court keeps every prior rock key and pond alpha approach',()=>{
  const map=zone12Map(base);for(const [x,y] of [[9,4],[11,4],[10,3],[10,5]])assert.notEqual(map[y][x],'r');assert.notEqual(map[4][10],'t');
  assert.equal(map[11][6],'.');assert.equal(fieldDialogue(base).action,'zone12Wild-avalugg-alpha');
  for(const [x,y] of [[8,2],[11,3],[12,4],[10,4],[9,4],[11,4],[10,3],[10,5]]){const old=storeAdventurePosition({...base,zaZone12CourtRocks:[],x,y},210);delete old.districtPosition.zone12CourtLayout;const restored=restoreAdventurePosition(old,210);assert.notDeepEqual([restored.x,restored.y],[x,y]);assert.deepEqual([restored.teamIds,restored.zaZone12Items],[['kept'],['court-tm013']]);assert.ok(fieldPath(zone12Map({...base,zaZone12CourtRocks:[]}),restored,{x:9,y:13}).length);}
+});
+
+test('six principal park gates and older north/west exits preserve routes and saves',()=>{
+ const base={area:3,district:'lumiose-zone12',interior:null,zaRoyaleRank:'E',teamIds:['kept'],zaZone12CourtRocks:['5,4'],zaZone12Items:['court-tm013'],zaZone12IceBridge:true};const map=zone12Map(base);
+ for(const [x,y,dir,district] of [[8,1,'up','lumiose-bleu-sector3'],[16,1,'up','lumiose-bleu-sector3'],[1,4,'left','lumiose-bleu-sector5'],[1,9,'left','lumiose-bleu-sector5'],[21,4,'right','lumiose-vernal'],[20,15,'down','lumiose-bleu-sector7'],[6,1,'up','lumiose-bleu-sector3'],[1,5,'left','lumiose-bleu-sector5'],[1,12,'left','lumiose-bleu-sector5']]){
+  assert.ok(fieldPath(map,{x,y},{x:9,y:13}).length,`pond from ${x},${y}`);const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},220),220);assert.deepEqual([saved.x,saved.y,saved.teamIds,saved.zaZone12CourtRocks,saved.zaZone12Items,saved.zaZone12IceBridge],[x,y,['kept'],['5,4'],['court-tm013'],true]);assert.equal(stepField(saved,dir).district,district);
+ }
+ const cases=[['lumiose-bleu-sector3',6,15,'down',8,1],['lumiose-bleu-sector3',16,15,'down',16,1],['lumiose-bleu-sector5',21,5,'right',1,4],['lumiose-bleu-sector5',21,12,'right',1,9]];
+ for(const [district,x,y,dir,px,py] of cases){const r=stepField({...base,district,x,y},dir);assert.deepEqual([r.district,r.x,r.y],['lumiose-zone12',px,py]);assert.equal(stepField({...base,district,x,y,zaRoyaleRank:'F'},dir).blocked,true);}
 });

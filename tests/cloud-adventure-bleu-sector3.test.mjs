@@ -7,7 +7,7 @@ test('both Aymlis north gates connect to Bleu Sector 3 and preserve save positio
  assert.equal(stepField(city,'down').blocked,true);
  for(const x of [6,16]){
   const state={...city,x,zaRoyaleRank:'E'};const park=stepField(state,'down');
-  assert.deepEqual([park.district,park.x,park.y],['lumiose-zone12',x,1]);
+  assert.deepEqual([park.district,park.x,park.y],['lumiose-zone12',x===6?8:x,1]);
   const back=stepField({...state,...park},'up');
   assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-sector3',x,15]);
  }

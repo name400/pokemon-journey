@@ -2060,7 +2060,7 @@ test('Bleu Sector 5 courtyard and park approaches survive reload',async()=>{
  try{
   await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector5',interior:null,x:4,y:4,facing:'right',zaRoyaleRank:'E',zaMission20Stage:7},state.revision+1));await get();assert.deepEqual([state.world.x,state.world.y],[4,4]);
-  for(const y of [5,12]){await walkTo({x:21,y});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone12',1,y]);await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector5',21,y]);}
+  for(const y of [5,12]){await walkTo({x:21,y});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone12',1,y===5?4:9]);await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector5',21,y]);}
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaMission20Stage,7);
  }finally{globalThis.__adventureUser=previousUser;}
 });
@@ -6050,4 +6050,17 @@ test('Zone 19 tree luxury ball remains reachable beside trellis and is awarded o
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:19,y:9,facing:'down',zaRoyaleRank:'B'},state.revision+1));await get();assert.equal(state.world.district,'lumiose-zone19');assert.equal(state.battle,null);assert.equal(state.world.map[10][18],'#');assert.equal(state.world.map[10][19],'i');assert.equal(state.world.interaction.action,'zone19Item-tree-luxury');const before=state.world.adventureBalls?.luxuryball||0,rev=state.revision;
   await call('zone19Item-tree-luxury');assert.equal(state.world.adventureBalls.luxuryball,before+1);assert.ok(state.world.zaZone19Items.includes('tree-luxury'));await call('zone19Item-tree-luxury',{revision:rev},409);await get();assert.equal(state.world.adventureBalls.luxuryball,before+1);assert.ok(state.world.zaZone19Items.includes('tree-luxury'));assert.deepEqual(state.world.teamIds,team);await call('zone19Item-tree-luxury',{},409);
  }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('Zone 12 north and west gates retain old exits and progress across reloads',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone12-nw-gates-qa',displayName:'눈 공원 북서 출입'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);seedMon(id,{...makeMon(1,10),boxId:id,moves:['몸통박치기']});
+  for(const [from,x,y,dir,toX,toY] of [['lumiose-bleu-sector3',6,15,'down',8,1],['lumiose-bleu-sector3',16,15,'down',16,1],['lumiose-bleu-sector5',21,5,'right',1,4],['lumiose-bleu-sector5',21,12,'right',1,9]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:from,interior:null,x,y,facing:dir,zaRoyaleRank:'E',zaZone12Items:['court-tm013'],zaZone12CourtRocks:['5,4'],zaZone12IceBridge:true},state.revision+1));await get();await call('move',{direction:dir});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone12',toX,toY]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone12Items,['court-tm013']);assert.deepEqual(state.world.zaZone12CourtRocks,['5,4']);assert.equal(state.world.zaZone12IceBridge,true);await call('move',{direction:dir==='down'?'up':'left'});await get();assert.equal(state.world.district,from);
+  }
+  for(const [x,y,dir,to] of [[6,1,'up','lumiose-bleu-sector3'],[1,5,'left','lumiose-bleu-sector5'],[1,12,'left','lumiose-bleu-sector5']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone12',interior:null,x,y,zaRoyaleRank:'E'},state.revision+1));await get();assert.deepEqual([state.world.x,state.world.y],[x,y]);await call('move',{direction:dir});await get();assert.equal(state.world.district,to);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=prior;}
 });

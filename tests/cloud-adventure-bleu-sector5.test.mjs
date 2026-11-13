@@ -7,7 +7,7 @@ test('both Aymlis west gates connect to Bleu Sector 5 without replacing legacy e
  assert.equal(stepField(city,'right').blocked,true);
  for(const y of [5,12]){
   const state={...city,y,zaRoyaleRank:'E'};const park=stepField(state,'right');
-  assert.deepEqual([park.district,park.x,park.y],['lumiose-zone12',1,y]);
+  assert.deepEqual([park.district,park.x,park.y],['lumiose-zone12',1,y===5?4:9]);
   const back=stepField({...state,...park},'left');
   assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-sector5',21,y]);
  }
