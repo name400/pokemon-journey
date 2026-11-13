@@ -127,6 +127,14 @@ test('Zone 20 Floral Avenue south access preserves progress and alpha encounters
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('Zone 8 rounded boundary restores old corner and preserves the plaza exits',async()=>{
+ const prior=globalThis.__adventureUser,priorRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone8-rounded-qa',displayName:'광장 경계'};globalThis.__adventureRandom=()=>.999;
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+ const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:1,y:1,facing:'down',zaRoyaleRank:'F',zaZone8Items:['north-great'],zaZone8Spent:{machop:true},zaZone8Burrows:{gible:443,drilbur:529}},state.revision+1);delete old.districtPosition.zone8RoundedLayout;seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone8');assert.notDeepEqual([state.world.x,state.world.y],[1,1]);assert.notEqual(state.world.map[state.world.y][state.world.x],'#');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone8Items,['north-great']);assert.equal(state.world.zaZone8Burrows.gible,443);
+ await walkTo({x:1,y:11});await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-jaune-street');await get();await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-zone8');await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone8Items,['north-great']);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=priorRandom;}
+});
+
 test('Zone 8 opposed street gates keep encounters and saves',async()=>{
  const previous=globalThis.__adventureUser,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone8-opposed-gates-qa',displayName:'광장 출입 검증'};globalThis.__adventureRandom=()=>.999;
  try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);

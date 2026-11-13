@@ -91,3 +91,11 @@ test('opposed Jaune Street entrances preserve legacy gates, routes and saved sta
  }
  const old={area:3,district:'lumiose-zone8',interior:null,x:9,y:15,zaRoyaleRank:'V'};assert.equal(stepField(old,'down').district,'lumiose-jaune-street');
 });
+
+test('rounded plaza corners recover legacy positions and preserve all gate routes',async()=>{
+ const {ZONE8_ROUNDED_CORNERS}=await import('../lib/cloud-adventure/adventure-zone8.mjs');
+ const s={area:3,district:'lumiose-zone8',interior:null,zaRoyaleRank:'F',teamIds:['kept'],coins:321,zaZone8Items:['north-great'],zaZone8Spent:{machop:true},zaZone8Burrows:{gible:443,drilbur:529}},map=zone8Map(s);
+ for(const [x,y] of ZONE8_ROUNDED_CORNERS){assert.equal(map[y][x],'#',`${x},${y}`);const old=storeAdventurePosition({...s,x,y},300);delete old.districtPosition.zone8RoundedLayout;const restored=restoreAdventurePosition(old,300);assert.equal(restored.district,s.district);assert.notEqual(map[restored.y][restored.x],'#');assert.ok(fieldPath(map,restored,{x:11,y:8}).length,`${x},${y}`);assert.deepEqual([restored.teamIds,restored.coins,restored.zaZone8Items,restored.zaZone8Spent,restored.zaZone8Burrows],[['kept'],321,['north-great'],{machop:true},{gible:443,drilbur:529}]);}
+ for(const start of [{x:1,y:11},{x:21,y:5},{x:9,y:15},{x:11,y:15},{x:19,y:1},{x:11,y:1},{x:21,y:10}])assert.ok(fieldPath(map,start,{x:11,y:8}).length,JSON.stringify(start));
+ const old=storeAdventurePosition({...s,x:1,y:1},301);delete old.districtPosition.zone8RoundedLayout;assert.equal(restoreAdventurePosition(old,302).district,null);
+});
