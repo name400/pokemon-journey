@@ -106,3 +106,9 @@ test('TM092 learns only verified base species and reviewed forms',async()=>{
  assert.equal(canLearnStoryTm(bag,{id:99999,speciesId:26,moves:[]},'za-tm092'),false);
  assert.equal(canLearnStoryTm(bag,{id:152,speciesId:152,moves:['매지컬샤인']},'za-tm092'),false);
 });
+
+test('Zone 7 visible encounters keep former walking positions and preserve collected state',async()=>{
+ const {ZONE7_VISIBLE,zone7Visible}=await import('../lib/cloud-adventure/adventure-zone7.mjs');const s={area:3,district:'lumiose-zone7',interior:null,x:8,y:8,facing:'right',teamIds:['kept']},map=zone7Map(s);
+ assert.deepEqual(ZONE7_VISIBLE.map(p=>[p.id,p.species]),[['audino',531],['vanillite',582]]);for(const p of ZONE7_VISIBLE){assert.equal(map[p.y][p.x],p.tile);assert.equal(walkable(map[p.y][p.x]),true);assert.ok(fieldPath(map,{x:11,y:15},{x:p.x,y:p.y}).length);const old=storeAdventurePosition({...s,x:p.x,y:p.y},33);assert.deepEqual([restoreAdventurePosition(old,33).x,restoreAdventurePosition(old,33).y],[p.x,p.y]);}
+ assert.equal(fieldDialogue(s,map).actions[0].action,'zone7Wild-audino');assert.ok(fieldDialogue(s,map).actions.some(a=>a.action==='throwZoneVisible'));assert.equal(zone7Visible({...s,zaZone7Spent:{audino:true}},'b'),null);assert.equal(zone7Map({...s,zaZone7Spent:{audino:true}})[8][9],',');
+});
