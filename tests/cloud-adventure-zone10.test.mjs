@@ -1,7 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone10Map,zone10Encounter,zone10Visible,zone10Item} from '../lib/cloud-adventure/adventure-zone10.mjs';
+import {zone10Map,zone10Encounter,zone10Visible,zone10Item,ZONE10_GROUND_BENCHES} from '../lib/cloud-adventure/adventure-zone10.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
+
+test('canal bench approach places Staryu on land and restores old saves safely',()=>{
+ const base={area:3,district:'lumiose-zone10',interior:null,zaRoyaleRank:'F',teamIds:['kept'],zaZone10Items:['canal-quick']},map=zone10Map(base);
+ for(const [x,y] of ZONE10_GROUND_BENCHES){assert.equal(map[y][x],'^');const old=storeAdventurePosition({...base,x,y},173),restored=restoreAdventurePosition(old,173);assert.equal(restored.district,base.district);assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaZone10Items,['canal-quick']);assert.equal(restoreAdventurePosition(old,174).district,null);}
+ assert.equal(map[8][14],'~');assert.equal(map[3][14],'d');assert.equal(zone10Visible(base,'d').water,undefined);assert.equal(fieldDialogue({...base,x:14,y:4,facing:'up'}).action,'zone10Wild-staryu');
+ assert.ok(fieldPath(map,{x:1,y:6},{x:14,y:4}).length);assert.ok(fieldPath(map,{x:21,y:6},{x:17,y:5}).length);assert.equal(map[4][17],'l');assert.equal(zone10Map({...base,zaZone10Spent:{staryu:true}})[3][14],',');assert.notEqual(zone10Map({...base,zaZone10Upper:true})[2][13],'^');
+});
 
 test('Zone 10 canal path reaches both entrances and preserves floor saves',()=>{
  const s={area:3,district:'lumiose-zone10',interior:null,regionId:6,districtReturnRegion:1,teamIds:['kept']},map=zone10Map(s);

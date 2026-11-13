@@ -59,6 +59,15 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('Zone 10 bank benches preserve old saves and Staryu encounter identity',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-bank-staryu-qa',displayName:'강변 검증'};
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:13,y:2,zaRoyaleRank:'F',zaZone10Upper:false,zaZone10Items:['canal-quick'],zaZone10Spent:{'arbok-alpha':true},zaWildShinyRolls:{'zone10:staryu:120':true}},state.revision+1);seedWorld(old);await get();assert.equal(state.world.district,'lumiose-zone10');assert.notDeepEqual([state.world.x,state.world.y],[13,2]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone10Items,['canal-quick']);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:14,y:4,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone10Wild-staryu');await call('zone10Wild-staryu');assert.equal(state.battle.teams[1][0].speciesId,120);assert.equal(state.battle.teams[1][0].shiny,true);await call('flee');await get();assert.notEqual(state.world.zaZone10Spent?.staryu,true);assert.equal(state.world.interaction.action,'zone10Wild-staryu');
+  seedWorld(storeAdventurePosition({...rawWorld(),zaZone10Spent:{...rawWorld().zaZone10Spent,staryu:true}},state.revision+1));await get();assert.notEqual(state.world.map[3][14],'d');assert.equal(state.world.zaZone10Spent.staryu,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('adventure Toxel uses original nature for evolution after mint and reload',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-mint-toxel-qa',displayName:'폼 검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(848,30),boxId:id,nature:'hardy'});sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'modestmint']),globalThis.__adventureUser.userId,'modestmint');await get();await call('useAdventureMint',{item:'modestmint',boxId:id});await get();assert.equal(rawMon(id).nature,'hardy');assert.equal(rawMon(id).rogueNatureOverride,'modest');await call('evolve',{boxId:id,target:849});await get();assert.equal(rawMon(id).id,849);assert.equal(rawMon(id).nature,'hardy');assert.equal(rawMon(id).rogueNatureOverride,'modest');assert.equal(state.inventory.modestmint,undefined);assert.deepEqual(state.world.teamIds,[id]);}
