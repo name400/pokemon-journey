@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone13Map,zone13Encounter,zone13Visible,zone13Item,ZONE13_STUMPS} from '../lib/cloud-adventure/adventure-zone13.mjs';
+import {zone13Map,zone13Encounter,zone13Visible,zone13Item,ZONE13_STUMPS,ZONE13_GROVE_TREES} from '../lib/cloud-adventure/adventure-zone13.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,rotoGlideLanding,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone thirteen woodland gate and saved position',()=>{
  const base={area:3,district:'lumiose-north-boulevard',interior:null,x:5,y:1,facing:'up',zaRoyaleRank:'F'};assert.equal(stepField(base,'up').blocked,true);
@@ -66,4 +66,24 @@ test('Rouge Sector 7 separate rooftop glide requires unlocking and restores its 
  const landed={...open,...rotoGlideLanding(open)},saved=restoreAdventurePosition(storeAdventurePosition(landed,107),107);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[s.district,16,14,['kept']]);assert.deepEqual(rotoGlideLanding(saved),{x:16,y:12,facing:'up'});
  assert.ok(fieldPath(map,{x:5,y:9},{x:16,y:12}).length);assert.equal(rotoGlideLanding({...open,x:15}),null);
+});
+
+
+test('interior groves preserve both Boulevard gates, south approach and old saves',()=>{
+ const s={area:3,district:'lumiose-zone13',interior:null,zaRoyaleRank:'E',teamIds:['kept'],money:731,zaZone13Items:['west-ultra'],zaZone13Spent:{heracross:true}};
+ const map=zone13Map(s);
+ for(const [x,y] of ZONE13_GROVE_TREES){
+  assert.equal(map[y][x],'^');
+  const old=storeAdventurePosition({...s,x,y},112);delete old.districtPosition.zone13GroveLayout;
+  const restored=restoreAdventurePosition(old,112);
+  assert.notDeepEqual([restored.x,restored.y],[x,y]);
+  assert.deepEqual([restored.district,restored.teamIds,restored.money,restored.zaZone13Items,restored.zaZone13Spent],['lumiose-zone13',['kept'],731,['west-ultra'],{heracross:true}]);
+  assert.ok(fieldPath(map,restored,{x:11,y:8}).length);
+  assert.equal(restoreAdventurePosition(old,113).district,null);
+ }
+ for(const start of [{x:1,y:8},{x:21,y:8},{x:11,y:15}]){
+  for(const target of [{x:11,y:8},{x:11,y:3},{x:12,y:12}])assert.ok(fieldPath(map,start,target).length);
+ }
+ const current=restoreAdventurePosition(storeAdventurePosition({...s,x:11,y:8},114),114);
+ assert.deepEqual([current.x,current.y,current.zaZone13Items],[11,8,['west-ultra']]);
 });
