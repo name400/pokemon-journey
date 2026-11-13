@@ -5013,6 +5013,27 @@ test('Side Mission 92 Beldum battle does not count as a trainer win',async()=>{
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
+test('supply sales atomically handle wallet, world balls and bag across reloads',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'supply-sale-qa',displayName:'소모품 판매'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon=structuredClone(rawMon(id)),team=[...state.world.teamIds],balls={greatball:2,ultraball:2,quickball:2,timerball:2,netball:2,duskball:2,healball:2,luxuryball:2,masterball:2,fastball:2};
+  for(const item of ['revive','maxrevive','fullheal','lumiosegalette'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item,2);
+  sql.prepare('UPDATE wallets SET coins=1000,balls=2,potions=2,super_potions=2,hyper_potions=2,max_potions=2,full_restores=2,antidotes=2 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up',zaMission29Complete:true,zaFreshWater:2,adventureBalls:balls},state.revision+1));await get();
+  const stale=state.revision;await call('sellAdventureSupply',{item:'potion',quantity:2});assert.equal(state.wallet.coins,1074);assert.equal(state.wallet.potions,0);await call('sellAdventureSupply',{item:'ball',revision:stale},409);await get();assert.equal(state.wallet.balls,2);assert.equal(state.wallet.coins,1074);
+  for(const [item,column,price] of [['ball','balls',25],['super','super_potions',100],['hyper','hyper_potions',150],['max','max_potions',300],['fullrestore','full_restores',375],['antidote','antidotes',25]]){const before=state.wallet.coins;await call('sellAdventureSupply',{item,quantity:1});assert.equal(state.wallet[column],1);assert.equal(state.wallet.coins,before+price);}
+  for(const [item,price] of [['greatball',75],['ultraball',150],['quickball',250],['timerball',250],['netball',250],['duskball',250],['healball',75],['luxuryball',750]]){const before=state.wallet.coins;await call('sellAdventureSupply',{item,quantity:1});assert.equal(state.world.adventureBalls[item],1);assert.equal(state.wallet.coins,before+price);}
+  for(const [item,price] of [['revive',200],['maxrevive',500],['fullheal',50],['lumiosegalette',87]]){const before=state.wallet.coins;await call('sellAdventureSupply',{item,quantity:1});assert.equal(state.inventory[item],1);assert.equal(state.wallet.coins,before+price);}
+  const beforeWater=state.wallet.coins;await call('sellAdventureSupply',{item:'freshwater'});assert.equal(state.world.zaFreshWater,1);assert.equal(state.wallet.coins,beforeWater+50);
+  for(const item of ['masterball','fastball','bottlecap','__proto__'])await call('sellAdventureSupply',{item},409);await call('sellAdventureSupply',{item:'ball',quantity:2},409);await call('sellAdventureSupply',{item:'greatball',quantity:2},409);await call('sellAdventureSupply',{item:'revive',quantity:2},409);await call('sellAdventureSupply',{item:'ball',quantity:0},409);
+  await get();assert.equal(state.world.adventureBalls.masterball,2);assert.equal(state.world.adventureBalls.fastball,2);assert.equal(state.world.zaMission29Complete,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);
+  const beforeBuy=state.wallet.coins;await call('buy',{item:'potion',quantity:2});assert.equal(state.wallet.potions,2);assert.equal(state.wallet.coins,beforeBuy-240);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER,globalThis.__adventureUser.userId);await get();await call('sellAdventureSupply',{item:'ball'},409);await call('sellAdventureSupply',{item:'greatball'},409);await call('sellAdventureSupply',{item:'freshwater'},409);await call('sellAdventureSupply',{item:'revive'},409);await get();assert.equal(state.wallet.balls,1);assert.equal(state.world.adventureBalls.greatball,1);assert.equal(state.world.zaFreshWater,1);assert.equal(state.inventory.revive,1);assert.equal(state.wallet.coins,Number.MAX_SAFE_INTEGER);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:8,facing:'down'},state.revision+1));await get();await call('sellAdventureSupply',{item:'ball'},409);
+  const oldSave={...rawWorld(),x:7,y:7,facing:'up'};oldSave.adventureBalls=undefined;sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition(oldSave,state.revision+1));await get();await call('sellAdventureSupply',{item:'greatball'},409);await call('sellAdventureSupply',{item:'ball'});await get();assert.equal(state.wallet.coins,1025);assert.equal(state.wallet.balls,0);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('evolution stone sales preserve inventory and reject stale or invalid requests',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'stone-sales-qa',displayName:'진화석 판매'};
  try{
