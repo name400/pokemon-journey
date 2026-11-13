@@ -217,10 +217,10 @@ test('zone two south entrance has a western crossing to the central island',()=>
  assert.deepEqual([restored.x,restored.y],[10,9]);assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.steps,42);
 });
 
-test('zone two northeastern crossing joins the outer bank to the island without invalidating old positions',()=>{
- const map=lumioseZone2Map();assert.equal(map[5][14],'=');assert.equal(map[6][14],'=');let s={area:3,district:'lumiose-zone2',x:14,y:4};
- for(const direction of ['down','down','down','left']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}assert.deepEqual([s.x,s.y],[13,7]);
- const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x:14,y:4,regionId:6,districtReturnRegion:1,teamIds:['keep'],steps:42},7);old.districtPosition.zone2Layout=3;const restored=restoreAdventurePosition(old,7);assert.deepEqual([restored.x,restored.y],[14,4]);assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);
+test('zone two northeastern crossing joins the outer bank to the island and relocates old water positions',()=>{
+ const map=lumioseZone2Map();assert.equal(map[5][14],'=');assert.equal(map[6][14],'=');let s={area:3,district:'lumiose-zone2',x:15,y:3};
+ for(const direction of ['down','down','down','left','left']){const step=stepField(s,direction);assert.equal(step.blocked,undefined);s={...s,...step};}assert.deepEqual([s.x,s.y],[13,6]);
+ const old=storeAdventurePosition({area:3,district:'lumiose-zone2',x:14,y:4,regionId:6,districtReturnRegion:1,teamIds:['keep'],steps:42},7);old.districtPosition.zone2Layout=3;delete old.districtPosition.zone2NorthIslandLayout;const restored=restoreAdventurePosition(old,7);assert.equal(restored.district,'lumiose-zone2');assert.ok(walkable(map[restored.y][restored.x]));assert.ok(fieldPath(map,restored,{x:15,y:3}).length);assert.deepEqual(restored.teamIds,['keep']);assert.equal(restored.steps,42);
 });
 
 test('zone two eastern island is gated by a rock and old locations return to the accessible bank',()=>{
@@ -232,7 +232,7 @@ test('zone two eastern island is gated by a rock and old locations return to the
 });
 
 test('zone two eastern bank connects through the northeast side and old shore saves remain safe',()=>{
- const map=lumioseZone2Map(),shore=[...[8,9,10,11,12,13].map(y=>[16,y]),[17,13],[17,14],[18,14],[18,15]];for(const [x,y] of shore)assert.equal(map[y][x],'~');
+ const map=lumioseZone2Map(),shore=[...[8,9,10,11,12,13].map(y=>[16,y]),[17,13],[17,14],[18,14]];for(const [x,y] of shore)assert.equal(map[y][x],'~');assert.ok(walkable(map[15][18]));
  const route=fieldPath(map,{x:11,y:8},{x:18,y:12});assert.ok(route.length);
  let s={area:3,district:'lumiose-zone2',x:11,y:8};let crossed=false;
  for(const d of route){const step=stepField(s,d);assert.equal(step.blocked,undefined);s={...s,...step};if(s.x===14&&s.y>=5&&s.y<=7)crossed=true;}
@@ -456,8 +456,8 @@ test('extended Centrico water keeps bridges and restores version one positions',
 
 test('Zone 2 northern shoreline keeps the northeastern bank and bridge accessible',()=>{
  const map=lumioseZone2Map();
- for(const y of [1,2,3])assert.equal(map[y][15],'~');
- assert.equal(map[4][15],'~');assert.equal(map[6][15],'=');
+ for(const y of [1,2])assert.equal(map[y][15],'~');
+ for(const y of [3,4,5,6])assert.equal(map[y][15],'=');
  const saved=storeAdventurePosition({area:3,district:'lumiose-zone2',x:15,y:2,regionId:6,districtReturnRegion:1,teamIds:['kept']},7);
  saved.districtPosition.zone2Layout=7;
  const restored=restoreAdventurePosition(saved,7);assert.equal(restored.district,'lumiose-zone2');assert.ok(walkable(map[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
