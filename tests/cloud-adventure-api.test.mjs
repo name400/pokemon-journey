@@ -5673,3 +5673,14 @@ test('Zone 4 cemetery rear path and TM072 preserve legacy saves and rewards',asy
   await call('teachStoryTm',{item:'za-tm072',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'회오리불꽃');assert.equal(state.inventory['za-tm072'],1);await call('teachStoryTm',{item:'za-tm072',boxId:id,slot:1},409);assert.equal(state.world.zaSableyeQuest,1);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 18 Lopunny alley scaffold ladder round trips through reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-alley-roof-qa',displayName:'이어롭 비계 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:15,y:6,zaRoyaleRank:'B',zaZone18Upper:true,zaZone18Construction:false},state.revision+1);delete old.districtPosition.zone18RoofLayout;seedWorld(old);await get();assert.notDeepEqual([state.world.x,state.world.y],[15,6]);assert.equal(state.world.zaZone18Upper,true);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:18,y:7,facing:'up',zaRoyaleRank:'B',zaZone18Upper:false,zaZone18Construction:true,zaZone18Spent:{'lopunny-alpha':true}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone18ConstructionLadder');
+  await call('zone18ConstructionLadder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone18Upper,state.world.zaZone18Construction],[6,9,true,false]);assert.equal(rawWorld().zaZone18LadderReturn,'construction');
+  await get();assert.equal(state.world.interaction.action,'zone18Ladder');await call('zone18Ladder');await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone18Upper,state.world.zaZone18Construction],[18,7,false,true]);assert.equal(state.world.zaZone18Spent['lopunny-alpha'],true);assert.equal(state.world.map[5][17],'.');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawWorld().zaZone18LadderReturn,undefined);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

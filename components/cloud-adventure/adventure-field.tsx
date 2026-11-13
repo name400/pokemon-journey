@@ -483,6 +483,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       else roofPaving(px,py,x,y);
      }
      if(!alley&&!upper&&c===','){ctx.fillStyle='#d7ccbc';ctx.fillRect(px,py+2,tile,2);ctx.fillStyle='#a89a8c';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+4,2,tile-6);}
+     if(upper&&c==='%'){ctx.fillStyle='#af9d88';ctx.fillRect(px+5,py+6,tile-10,tile-6);ctx.fillStyle='#e0d1b7';ctx.fillRect(px+3,py+4,tile-6,6);ctx.fillStyle='#716860';ctx.fillRect(px+7,py+6,tile-14,3);ctx.fillStyle='#8b7a6b';ctx.fillRect(px+7,py+17,tile-14,3);}
      if(c==='^'){
       ctx.fillStyle='#968e82';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#586a6c';ctx.fillRect(px+3,py,4,tile);ctx.fillRect(px+tile-7,py,4,tile);ctx.fillRect(px,py+6,tile,3);ctx.fillRect(px,py+tile-9,tile,3);
       ctx.strokeStyle='#b6c2b6';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+5,py+8);ctx.lineTo(px+tile-5,py+tile-8);ctx.moveTo(px+tile-5,py+8);ctx.lineTo(px+5,py+tile-8);ctx.stroke();ctx.fillStyle='#d6c5a7';ctx.fillRect(px+6,py+10,tile-12,3);

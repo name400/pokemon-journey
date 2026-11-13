@@ -157,3 +157,12 @@ test('draft scaffold courtyard preserves access and older ground saves',()=>{
  const saved=storeAdventurePosition({...s,x:10,y:2},99);assert.equal(saved.districtPosition.zone18ScaffoldLayout,1);const restored=restoreAdventurePosition(saved,99);assert.deepEqual([restored.x,restored.y],[10,2]);
  assert.notEqual(zone18Map({...s,zaZone18Upper:true})[2][8],'^');
 });
+
+test('Zone 18 Lopunny alley reaches the rooftop ladder and old chimney saves restore safely',async()=>{
+ const {walkable}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const alley={area:3,district:'lumiose-zone18',interior:null,x:18,y:7,facing:'up',zaRoyaleRank:'B',zaZone18Construction:true,zaZone18Upper:false,teamIds:['kept']};
+ const map=zone18Map(alley);assert.equal(map[6][18],'l');assert.equal(map[5][17],'c');assert.equal(fieldDialogue(alley).action,'zone18ConstructionLadder');assert.ok(fieldPath(map,{x:3,y:13},alley).length);
+ const oldAlley=restoreAdventurePosition(storeAdventurePosition({...alley,x:18,y:6},81),81);assert.deepEqual([oldAlley.x,oldAlley.y,oldAlley.zaZone18Construction],[18,6,true]);
+ const roof={...alley,zaZone18Construction:false,zaZone18Upper:true,zaZone18LadderReturn:'construction',x:15,y:6};const old=storeAdventurePosition(roof,82);delete old.districtPosition.zone18RoofLayout;const restored=restoreAdventurePosition(old,82);assert.ok(walkable(zone18Map(restored)[restored.y][restored.x]));assert.equal(restored.zaZone18LadderReturn,'construction');assert.deepEqual(restored.teamIds,['kept']);
+ assert.ok(fieldPath(zone18Map(restored),restored,{x:6,y:9}).length);assert.ok(fieldPath(zone18Map(restored),restored,{x:16,y:8}).length);
+});
