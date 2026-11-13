@@ -5013,6 +5013,21 @@ test('Side Mission 92 Beldum battle does not count as a trainer win',async()=>{
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
+test('evolution stone sales preserve inventory and reject stale or invalid requests',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'stone-sales-qa',displayName:'진화석 판매'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],id=state.world.activeId,mon=structuredClone(rawMon(id)),stones=['firestone','waterstone','thunderstone','leafstone','sunstone','moonstone','shinystone','duskstone','dawnstone','icestone'];
+  for(const item of stones)sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item,2);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(1000,globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up',zaMission29Complete:true},state.revision+1));await get();
+  const stale=state.revision;await call('sellAdventureTreasure',{item:'firestone',quantity:2});assert.equal(state.wallet.coins,2500);assert.equal(state.inventory.firestone||0,0);await call('sellAdventureTreasure',{item:'waterstone',quantity:1,revision:stale},409);await get();assert.equal(state.inventory.waterstone,2);assert.equal(state.wallet.coins,2500);
+  await call('sellAdventureTreasure',{item:'waterstone',quantity:3},409);await call('sellAdventureTreasure',{item:'waterstone',quantity:-1},409);
+  for(const item of stones.slice(1)){const before=state.wallet.coins;await call('sellAdventureTreasure',{item,quantity:1});assert.equal(state.wallet.coins,before+750);assert.equal(state.inventory[item],1);}
+  await get();assert.equal(state.world.zaMission29Complete,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER,globalThis.__adventureUser.userId);await get();await call('sellAdventureTreasure',{item:'waterstone',quantity:1},409);await get();assert.equal(state.inventory.waterstone,1);assert.equal(state.wallet.coins,Number.MAX_SAFE_INTEGER);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:8,facing:'down'},state.revision+1));await get();await call('sellAdventureTreasure',{item:'waterstone',quantity:1},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('treasure sales use the shop and atomically preserve stock, wallet and saved progress',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'treasure-sale-qa',displayName:'귀중품 판매'};
  try{
