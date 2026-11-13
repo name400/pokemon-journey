@@ -8,3 +8,5 @@ PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/browser/clou
 ```
 
 The browser uses an in-memory mocked `/api/world`; it does not access player accounts or a database. A real multi-battle engine generates the saved turn. At mobile and desktop sizes, the check submits one turn, reloads while that turn's events remain in the saved response, and checks final HP, the next command and action count. Remote Pokémon images are replaced by empty test responses. This does not verify production D1 or real-device performance.
+
+Run `PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/browser/cloud-multi-reconnect/continuation.mjs` against the same fixture to check a saved long companion-only battle, reload and continuation. The mock transport does not replace the route-level SQLite/revision test.

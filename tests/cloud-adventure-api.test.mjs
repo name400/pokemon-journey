@@ -5065,3 +5065,22 @@ test('Mission 26 SBC opponents, optional between-round healing and saved progres
   seedMon(id,strong);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:'hotel',x:11,y:6,facing:'up'},state.revision+1));await get();await call('mission26SBC');await battle();assert.equal(rawWorld().zaMission26Complete,true);assert.equal(rawWorld().zaMission30Started,true);assert.equal(state.wallet.coins,coins+10528);assert.deepEqual(state.world.teamIds,team);await get();await call('mission26SBC',{},409);assert.equal(state.wallet.coins,coins+10528);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('long companion battle persists its checkpoint and rejects duplicate continuation',async()=>{
+ const {createMission10DoubleSnapshot}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'companion-checkpoint-qa',displayName:'동료 이어가기'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,originalTeam=[...state.world.teamIds];
+  const m=(species,boxId)=>({...makeMon(species,30),boxId,moves:['튀어오르기','축하','고속이동','신비의부적'],pp:{}});
+  const player={...m(25,id),hp:1,moves:['몸통박치기']},ally=m(129,'ally'),foes=[{...m(597,'foe-1'),ability:'ironbarbs'},m(129,'foe-2')];seedMon(id,player);
+  const combat=createMission10DoubleSnapshot([player],[ally],foes);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:'hotel',x:11,y:6,facing:'up',zaMission10Stage:2,combat,trainer:{id:'mission10-guard',name:'경비'},encounter:null},state.revision+1));await get();const coins=state.wallet.coins;
+  await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'tackle',target:1}]}});
+  assert.equal(rawWorld().combat.adventureMultiContinueV1,true);assert.equal(state.battle.adventureMultiContinueV1,true);assert.equal(rawMon(id).hp,0);assert.equal(state.wallet.coins,coins);
+  const snapshot=structuredClone(rawWorld().combat.snapshot);await get();assert.deepEqual(rawWorld().combat.snapshot,snapshot);const priorRevision=state.revision;
+  await call('continueCompanionBattle');const saved=structuredClone(rawWorld());
+  const duplicate=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'continueCompanionBattle',revision:priorRevision})}));assert.equal(duplicate.status,409);assert.deepEqual(rawWorld(),saved);
+  for(let n=0;state.battle&&n<8;n++){assert.equal(state.battle.adventureMultiContinueV1,true);await get();await call('continueCompanionBattle');}
+  assert.equal(state.battle,null);assert.equal(state.battleResult?.ended,true);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,originalTeam);await get();await call('continueCompanionBattle',{},409);assert.equal(state.wallet.coins,coins);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
