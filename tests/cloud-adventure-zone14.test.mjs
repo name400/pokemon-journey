@@ -104,3 +104,10 @@ test('expanded substation yard preserves every prior obstacle, encounter and exi
  const {readFile}=await import('node:fs/promises');const before=JSON.parse(await readFile(new URL('./zone14-before-yard.json',import.meta.url),'utf8')),after=zone14Map({});let paved=0;
  assert.equal(after.length,before.length);for(let y=0;y<before.length;y++){assert.equal(after[y].length,before[y].length);for(let x=0;x<before[y].length;x++){if(before[y][x]!==after[y][x]){assert.equal(before[y][x],'.',`previous ${x},${y}`);assert.equal(after[y][x],',',`current ${x},${y}`);paved++;}}}assert.ok(paved>=20);
 });
+
+test('Zone 14 timed boulders recover outside without trapping players or changing legacy clears',async()=>{
+ const {refreshZone14Rocks,zone14RockClock}=await import('../lib/cloud-adventure/adventure-zone14.mjs');
+ const s={district:'lumiose-zone14',zaZone14RocksCleared:['16,1','16,2','16,3'],zaZone14RockCleared:true,zaZone14RockClearedAt:{'16,1':zone14RockClock({},100000),'16,2':zone14RockClock({},104000)},zaZone14Items:['northeast-calcium']};
+ assert.equal(refreshZone14Rocks(s,110000),false);assert.deepEqual(s.zaZone14RocksCleared,['16,1','16,2','16,3']);s.district='lumiose-vernal';assert.equal(refreshZone14Rocks(s,108333),false);assert.equal(refreshZone14Rocks(s,108334),true);assert.deepEqual(s.zaZone14RocksCleared,['16,2','16,3']);assert.deepEqual(s.zaZone14RockClearedAt,{'16,2':104000});assert.deepEqual(s.zaZone14Items,['northeast-calcium']);assert.equal(refreshZone14Rocks(s,112334),true);assert.deepEqual(s.zaZone14RocksCleared,['16,3']);assert.equal(refreshZone14Rocks({district:'lumiose-vernal',zaZone14RockCleared:true},999999),false);
+ const paused={district:'lumiose-vernal',combat:{},zaZone14RocksCleared:['16,1'],zaZone14RockClearedAt:{'16,1':100000}};assert.equal(refreshZone14Rocks(paused,120000),false);delete paused.combat;paused.zaClockPausedMs=15000;assert.equal(refreshZone14Rocks(paused,120000),false);paused.zaClockOffsetHours=1;assert.equal(refreshZone14Rocks(paused,120000),true);
+});
