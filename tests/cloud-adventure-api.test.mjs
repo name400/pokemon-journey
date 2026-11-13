@@ -59,6 +59,14 @@ async function battle({resolve=true}={}){let turns=0;while(state.battle||state.w
 
 test('battle fixture avoids moves blocked by current Tera type',()=>{const q={moves:[{name:'사이코브레이크',pp:10},{name:'파동탄',pp:10}]},p={types:['에스퍼']},foe={types:['고스트'],currentTypes:['악']};assert.equal(testBattleMove(q,p,foe),'파동탄');assert.equal(testBattleMove(q,p,{types:['고스트'],currentTypes:['고스트']}),'사이코브레이크');});
 
+test('Zone 10 central building safely restores older ground saves and keeps route to ladder',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-building-qa',displayName:'구역 10 검증'};
+ try{await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:11,y:4,zaRoyaleRank:'F',zaZone10Upper:false,zaZone10Items:['canal-quick'],zaZone10Spent:{staryu:true}},state.revision+1));await get();assert.equal(state.world.district,'lumiose-zone10');assert.notDeepEqual([state.world.x,state.world.y],[11,4]);assert.notEqual(state.world.map[state.world.y][state.world.x],'#');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.world.zaZone10Items,['canal-quick']);assert.equal(state.world.zaZone10Spent.staryu,true);
+  await walkTo({x:17,y:5});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone10Ladder');await call('zone10Ladder');await get();assert.equal(state.world.zaZone10Upper,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('defense special defense and speed mints can be bought and used after reconnect',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'remaining-mints-qa',displayName:'민트 검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(1,40),boxId:id,nature:'hardy',hp:1});sql.prepare('UPDATE wallets SET coins=60000 WHERE user_id=?').run(globalThis.__adventureUser.userId);

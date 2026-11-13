@@ -1,7 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zone10Map,zone10Encounter,zone10Visible,zone10Item,ZONE10_GROUND_BENCHES} from '../lib/cloud-adventure/adventure-zone10.mjs';
+import {zone10Map,zone10Encounter,zone10Visible,zone10Item,ZONE10_GROUND_BENCHES,ZONE10_CENTRAL_BUILDING,ZONE10_BANK_STAIRS} from '../lib/cloud-adventure/adventure-zone10.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
+
+test('central building and bank steps preserve saved positions and both entrances',()=>{
+ const base={area:3,district:'lumiose-zone10',interior:null,zaRoyaleRank:'F',teamIds:['kept'],zaZone10Items:['canal-quick'],zaZone10Spent:{staryu:true}},map=zone10Map(base);
+ for(const [x,y] of ZONE10_CENTRAL_BUILDING){assert.equal(map[y][x],'#');const old=storeAdventurePosition({...base,x,y},202),saved=restoreAdventurePosition(old,202);assert.equal(saved.district,base.district);assert.ok(walkable(map[saved.y][saved.x]));assert.deepEqual(saved.teamIds,['kept']);assert.deepEqual(saved.zaZone10Items,['canal-quick']);assert.equal(saved.zaZone10Spent.staryu,true);assert.equal(restoreAdventurePosition(old,203).district,null);}
+ for(const [x,y] of ZONE10_BANK_STAIRS){assert.equal(map[y][x],':');assert.equal(walkable(map[y][x]),true);const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},204),204);assert.deepEqual([saved.x,saved.y],[x,y]);}
+ assert.ok(fieldPath(map,{x:1,y:6},{x:21,y:6}).length);assert.ok(fieldPath(map,{x:11,y:1},{x:17,y:5}).length);assert.equal(map[8][10],'~');assert.equal(map[4][17],'l');
+ const roof=restoreAdventurePosition(storeAdventurePosition({...base,zaZone10Upper:true,x:11,y:3},205),205);assert.deepEqual([roof.x,roof.y,roof.zaZone10Upper],[11,3,true]);
+});
 
 test('canal bench approach places Staryu on land and restores old saves safely',()=>{
  const base={area:3,district:'lumiose-zone10',interior:null,zaRoyaleRank:'F',teamIds:['kept'],zaZone10Items:['canal-quick']},map=zone10Map(base);
