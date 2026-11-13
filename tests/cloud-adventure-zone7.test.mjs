@@ -85,3 +85,24 @@ test('monument brambles preserve legacy saves and expose the candy after clearin
  assert.equal(zone7Map({...cleared,zaZone7NorthCandyClaimed:true})[6][11],',');
  assert.ok(fieldPath(zone7Map(cleared),{x:1,y:8},{x:17,y:15}).length);
 });
+
+test('Zone 7 eastern trees and southern brambles keep old saves and approaches safe',()=>{
+ const base={area:3,district:'lumiose-zone7',interior:null,zaRoyaleRank:'F',teamIds:['kept']};
+ for(const [x,y] of [[18,3],[19,4],[19,6],[19,10],[19,12],[18,13],[11,10]]){
+  const old=storeAdventurePosition({...base,x,y},91);delete old.districtPosition.zone7PlazaLayout;
+  const restored=restoreAdventurePosition(old,91);assert.ok(walkable(zone7Map(restored)[restored.y][restored.x]));assert.deepEqual(restored.teamIds,['kept']);
+ }
+ const map=zone7Map(base);for(const target of [{x:5,y:1},{x:1,y:8},{x:21,y:8},{x:11,y:15},{x:17,y:15},{x:10,y:10},{x:10,y:6}])assert.ok(fieldPath(map,{x:6,y:8},target).length,JSON.stringify(target));
+ assert.equal(fieldDialogue({...base,x:10,y:10,facing:'right'}).action,'zone7SouthBrambles');
+ assert.equal(fieldDialogue({...base,x:10,y:10,facing:'right',zaZone7SouthBramblesCleared:true}).action,'zone7SouthTm');
+ assert.equal(zone7Map({...base,zaZone7SouthBramblesCleared:true,zaZone7SouthTmClaimed:true})[10][11],',');
+});
+
+test('TM092 learns only verified base species and reviewed forms',async()=>{
+ const {canLearnStoryTm}=await import('../lib/cloud-adventure/adventure-story-tm.mjs');const bag={'za-tm092':1};
+ assert.equal(canLearnStoryTm(bag,{id:152,speciesId:152,moves:[]},'za-tm092'),true);
+ assert.equal(canLearnStoryTm(bag,{id:10100,speciesId:26,moves:[]},'za-tm092'),true);
+ assert.equal(canLearnStoryTm(bag,{id:4,speciesId:4,moves:[]},'za-tm092'),false);
+ assert.equal(canLearnStoryTm(bag,{id:99999,speciesId:26,moves:[]},'za-tm092'),false);
+ assert.equal(canLearnStoryTm(bag,{id:152,speciesId:152,moves:['매지컬샤인']},'za-tm092'),false);
+});

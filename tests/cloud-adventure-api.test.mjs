@@ -5647,3 +5647,16 @@ test('Zone 7 monument brambles preserve saves and award candy once',async()=>{
   sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const revision=state.revision;await call('zone7NorthCandy');await get();assert.equal(state.inventory['za-exp-candy-m'],1);await call('zone7NorthCandy',{revision},409);await get();assert.equal(state.inventory['za-exp-candy-m'],1);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 7 southern brambles and TM092 keep rewards and party on reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone7-south-tm-qa',displayName:'광장 남쪽 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone7',interior:null,x:11,y:10,zaRoyaleRank:'F'},state.revision+1);delete old.districtPosition.zone7PlazaLayout;seedWorld(old);await get();assert.notDeepEqual([state.world.x,state.world.y],[11,10]);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:10,y:10,facing:'right'},state.revision+1));seedMon(id,{...makeMon(152,20),moves:['몸통박치기']});await get();await call('zone7SouthBrambles',{},409);
+  seedMon(id,{...makeMon(152,20),moves:['불꽃세례','몸통박치기']});await get();await call('zone7SouthBrambles');await get();assert.equal(state.world.interaction.action,'zone7SouthTm');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm092']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm092');await get();await call('zone7SouthTm',{},409);assert.notEqual(rawWorld().zaZone7SouthTmClaimed,true);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const revision=state.revision;await call('zone7SouthTm');await get();assert.equal(state.inventory['za-tm092'],1);await call('zone7SouthTm',{revision},409);
+  await call('teachStoryTm',{item:'za-tm092',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'매지컬샤인');assert.equal(state.inventory['za-tm092'],1);await call('teachStoryTm',{item:'za-tm092',boxId:id,slot:1},409);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
