@@ -5528,3 +5528,14 @@ test('X-Scissor TM supports verified species and Galarian form without duplicate
   await get();assert.equal(state.inventory['za-tm081'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Vernal cafe legacy building saves and back route survive reentry',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vernal-cafe-layout-qa',displayName:'베르날테스트'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const old=storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:10,y:2,facing:'down',zaRoyaleRank:'E'},state.revision+1);delete old.districtPosition.vernalCafeLayout;seedWorld(old);await get();
+  assert.notEqual(state.world.map[state.world.y][state.world.x],'%');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await walkTo({x:12,y:3});await call('face',{direction:'down'});assert.equal(state.world.interaction.action,'cafeWoofRoofLadder');await call('cafeWoofRoofLadder');await get();assert.equal(state.world.district,'lumiose-cafe-woof-roof');await call('cafeWoofRoofLadder');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vernal',12,3]);
+  await walkTo({x:1,y:5});await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-bleu-sector3');await walkTo({x:21,y:3});await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-bleu3-sewer-approach');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

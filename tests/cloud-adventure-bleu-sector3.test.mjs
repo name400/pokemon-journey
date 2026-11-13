@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldPath,fieldMap,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldPath,fieldMap,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition,VERNAL_CAFE_WINGS} from '../lib/cloud-adventure/adventure-world.mjs';
 test('both Aymlis north gates connect to Bleu Sector 3 and preserve save positions',()=>{
  const city={area:3,district:'lumiose-bleu-sector3',interior:null,x:6,y:15,facing:'down',zaRoyaleRank:'F',teamIds:['kept']};
  assert.ok(fieldPath(fieldMap(city),city,{x:16,y:15}).length);
@@ -65,4 +65,20 @@ test('the provisional stairs connect the avenue to the sewer approach and keep s
  assert.deepEqual([restored.district,restored.x,restored.y,restored.steps,restored.teamIds],['lumiose-bleu-sector3',21,5,42,['kept']]);
  const tunnel=stepField(s,'right');assert.equal(tunnel.district,'lumiose-bleu3-sewer-approach');
  assert.equal(stepField({...s,...tunnel},'left').district,'lumiose-bleu-sector3');
+});
+
+
+test('Vernal cafe and rear passage preserve services, approaches and legacy positions',()=>{
+ const base={area:3,district:'lumiose-vernal',interior:null,zaRoyaleRank:'E',teamIds:['kept'],money:731,zaCafeWoofBrambleCleared:true},map=fieldMap(base);
+ for(const [x,y] of VERNAL_CAFE_WINGS){
+  assert.equal(map[y][x],'%');
+  const old=storeAdventurePosition({...base,x,y},121);delete old.districtPosition.vernalCafeLayout;
+  const restored=restoreAdventurePosition(old,121);assert.notDeepEqual([restored.x,restored.y],[x,y]);
+  assert.deepEqual([restored.district,restored.teamIds,restored.money,restored.zaCafeWoofBrambleCleared],['lumiose-vernal',['kept'],731,true]);
+  assert.ok(fieldPath(map,restored,{x:12,y:6}).length);assert.equal(restoreAdventurePosition(old,122).district,null);
+ }
+ for(const start of [{x:1,y:5},{x:21,y:4},{x:11,y:14},{x:20,y:15}])for(const target of [{x:12,y:6},{x:12,y:3},{x:1,y:5}]){if(start.x!==target.x||start.y!==target.y)assert.ok(fieldPath(map,start,target).length);}
+ assert.ok(fieldDialogue({...base,x:12,y:6,facing:'up'}).actions.some(a=>a.action==='woofNatural'));
+ assert.equal(fieldDialogue({...base,x:12,y:3,facing:'down'}).action,'cafeWoofRoofLadder');
+ const roof={...base,zaVernalEastRoof:true,x:11,y:3};const roofSaved=restoreAdventurePosition(storeAdventurePosition(roof,123),123);assert.deepEqual([roofSaved.x,roofSaved.y,roofSaved.zaVernalEastRoof],[11,3,true]);
 });
