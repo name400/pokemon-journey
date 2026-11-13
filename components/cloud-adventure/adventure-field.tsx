@@ -550,7 +550,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      if(c==='j'||c==='v'){ctx.fillStyle='#65584d';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e7d8b6';for(let n=0;n<3;n++)ctx.fillRect(px+6,py+7+n*7,tile-12,2);}
      return;
     }
-    if(w.district==='lumiose-zone9-scaffold'&&!w.interior){ctx.fillStyle=c==='#'?'#68787d':'#ac9475';ctx.fillRect(px,py,tile,tile);if(c===','){ctx.fillStyle='#d4b995';for(let n=5;n<tile;n+=8)ctx.fillRect(px+n,py+3,2,tile-6);ctx.fillStyle='#756b5d';if(w.map[y-1]?.[x]==='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]==='#')ctx.fillRect(px,py+tile-3,tile,3);}if('ijkt'.includes(c)){ctx.fillStyle='#f1da88';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff7e0';ctx.fillRect(px+10,py+tile/2,12,3);}if(c==='o'){ctx.fillStyle='#846742';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(['lumiose-zone9-scaffold','lumiose-zone9-nw-scaffold'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#68787d':'#ac9475';ctx.fillRect(px,py,tile,tile);if(c===','){ctx.fillStyle='#d4b995';for(let n=5;n<tile;n+=8)ctx.fillRect(px+n,py+3,2,tile-6);ctx.fillStyle='#756b5d';if(w.map[y-1]?.[x]==='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]==='#')ctx.fillRect(px,py+tile-3,tile,3);}if('ijktv'.includes(c)){ctx.fillStyle='#f1da88';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff7e0';ctx.fillRect(px+10,py+tile/2,12,3);}if(c==='o'){ctx.fillStyle='#846742';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-zone16-garden'&&!w.interior){
      // Raised garden perimeter, lawns and paving. Exact planting and terrace
      // shape are draft; collision remains defined by the existing map.

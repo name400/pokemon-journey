@@ -139,3 +139,13 @@ test('Zone 9 southern scaffold decks retain crossing and saved items',async()=>{
  for(const [x,y] of [[4,7],[11,6],[11,7],[11,8],[18,7]]){const saved=restoreAdventurePosition(storeAdventurePosition({...s,x,y},61),61);assert.deepEqual([saved.x,saved.y,saved.zaZone9Items,saved.teamIds],[x,y,['north-heal'],['kept']]);}
  assert.equal(zone9SouthScaffoldItem({...s,zaZone9Items:['south-scaffold-carbos']},'i'),null);assert.equal(zone9SouthScaffoldMap({...s,zaZone9Items:['south-scaffold-carbos']})[4][8],',');
 });
+
+test('Zone 9 north-west scaffold has two roof returns and preserves historical rewards',async()=>{
+ const {zone9NWScaffoldMap,zone9NWScaffoldItem,ZONE9_NW_ITEMS}=await import('../lib/cloud-adventure/adventure-zone9.mjs');
+ const roof={area:3,district:'lumiose-zone9',interior:null,zaZone9Upper:true,zaRoyaleRank:'F',teamIds:['kept'],zaZone9Items:['north-heal','south-scaffold-carbos'],zaZone9Spent:{'manectric-alpha':true}};
+ const map=zone9Map(roof);assert.equal(map[8][2],'o');assert.equal(map[4][11],'o');assert.equal(fieldDialogue({...roof,x:3,y:8,facing:'left'}).action,'zone9NWScaffold');assert.equal(fieldDialogue({...roof,x:11,y:5,facing:'up'}).action,'zone9NWScaffold');
+ const scaffold={...roof,district:'lumiose-zone9-nw-scaffold',x:4,y:9,facing:'left'},deck=zone9NWScaffoldMap(scaffold);assert.equal(fieldDialogue(scaffold).action,'zone9NWScaffold');assert.equal(fieldDialogue({...scaffold,x:14,y:5,facing:'up'}).action,'zone9NWScaffold');assert.ok(fieldPath(deck,scaffold,{x:14,y:5}).length);
+ for(const p of ZONE9_NW_ITEMS){assert.ok(fieldPath(deck,scaffold,{x:p.x,y:p.y}).length,p.id);assert.equal(zone9NWScaffoldItem(scaffold,p.tile).id,p.id);}
+ const saved=restoreAdventurePosition(storeAdventurePosition(scaffold,85),85);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone9Items,saved.zaZone9Spent,saved.teamIds],[scaffold.district,4,9,roof.zaZone9Items,roof.zaZone9Spent,['kept']]);
+ assert.equal(zone9NWScaffoldItem({...scaffold,zaZone9Items:['west-scaffold-nugget']},'j'),null);assert.equal(zone9NWScaffoldMap({...scaffold,zaZone9Items:['west-scaffold-nugget']})[11][5],',');
+});

@@ -5725,3 +5725,16 @@ test('Zone 9 southern scaffold decks keep roofs, item limits and old saves',asyn
   await walkTo({x:18,y:7});await call('face',{direction:'right'});await call('zone9SouthScaffold');await get();assert.equal(state.world.district,'lumiose-zone9');assert.equal(state.world.zaZone9Upper,true);assert.ok(state.world.zaZone9Items.includes('south-scaffold-carbos'));
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Zone 9 north-west scaffold connects roofs and preserves item limits across reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone9-nw-deck-qa',displayName:'북서 비계 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:3,y:8,facing:'left',zaRoyaleRank:'F',zaZone9Upper:true,zaZone9Spent:{'manectric-alpha':true},zaZone9Items:['north-heal','south-scaffold-carbos']},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone9NWScaffold');await call('zone9NWScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone9-nw-scaffold',4,9]);
+  await walkTo({x:6,y:11});await call('face',{direction:'left'});assert.equal(state.world.interaction.action,'zone9NWItem-west-scaffold-nugget');const key=JSON.stringify([globalThis.__adventureUser.userId,'nugget']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'nugget');await get();await call('zone9NWItem-west-scaffold-nugget',{},409);assert.ok(!rawWorld().zaZone9Items.includes('west-scaffold-nugget'));
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const revision=state.revision;await call('zone9NWItem-west-scaffold-nugget');await get();assert.equal(state.inventory.nugget,1);await call('zone9NWItem-west-scaffold-nugget',{revision},409);
+  await walkTo({x:15,y:4});await call('face',{direction:'up'});await call('zone9NWItem-north-scaffold-ultra');await get();assert.equal(state.world.adventureBalls.ultraball,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await walkTo({x:14,y:5});await call('face',{direction:'up'});await call('zone9NWScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone9Upper],['lumiose-zone9',11,5,true]);assert.equal(state.world.zaZone9Spent['manectric-alpha'],true);assert.ok(state.world.zaZone9Items.includes('south-scaffold-carbos'));
+  await call('zone9NWScaffold');await get();assert.equal(state.world.district,'lumiose-zone9-nw-scaffold');await walkTo({x:4,y:9});await call('face',{direction:'left'});await call('zone9NWScaffold');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone9',3,8]);assert.ok(state.world.zaZone9Items.includes('west-scaffold-nugget'));
+ }finally{globalThis.__adventureUser=previousUser;}
+});
