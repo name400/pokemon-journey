@@ -160,3 +160,14 @@ test('Zone 5 drain ladder connects the alpha clearing to the rooftop without ope
  assert.ok(fieldPath(fieldMap(roof),{x:18,y:5},{x:7,y:4}).length);
  for(const old of [drain,roof]){const restored=restoreAdventurePosition(storeAdventurePosition(old,120),120);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[old.district,old.x,old.y,['kept']]);}
 });
+
+test('Zone 5 western stall preserves investigation paths and older saved positions',()=>{
+ const base={area:3,district:'lumiose-zone5',interior:null,zaZone5Upper:false,zaRoyaleRank:'A',zaMission40Stage:1,teamIds:['kept'],coins:300},map=fieldMap(base);
+ for(const [x,y] of [[2,6],[3,6]]){
+  assert.equal(map[y][x],'#');const stored=storeAdventurePosition({...base,x,y},101);delete stored.districtPosition.zone5MarketLayout;
+  const restored=restoreAdventurePosition(structuredClone(stored),101);assert.equal(restored.district,base.district);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.coins,300);
+  assert.equal(restoreAdventurePosition(structuredClone(stored),102).district,null);
+ }
+ assert.ok(fieldPath(map,{x:1,y:10},{x:5,y:7}).length);assert.ok(fieldPath(map,{x:11,y:1},{x:5,y:7}).length);assert.equal(fieldDialogue({...base,x:5,y:7,facing:'up'}).action,'mission40OtherAlpha');
+ assert.equal(storeAdventurePosition({...base,x:1,y:10},101).districtPosition.zone5MarketLayout,1);assert.equal(stepField({...base,x:1,y:6},'right').blocked,true);
+});
