@@ -29,3 +29,20 @@ test('Recover requires mastery and an opted-in snapshot; Mega applies its Plus e
  assert.throws(()=>playCpu(fresh,{type:'move',move:'HP회복',plus:true}));assert.throws(()=>playCpu({...legacy,adventurePlusGaugeV1:{charge:1,max:3},teams:[[ {...legacy.teams[0][0],adventurePlusMastered:['recover']} ],legacy.teams[1]]},{type:'move',move:'HP회복',plus:true}));
  const result=playCpu(fresh,{type:'move',move:'HP회복',special:'mega'}),max=result.teams[0][0].maxHp;assert.equal(result.teams[0][0].mega,true);assert.equal(result.teams[0][0].hp-20,Math.floor(max*2/5));assert.equal(result.adventurePlusGaugeV1.charge,0);
 });
+
+test('new weather recovery Plus moves use verified healing percentages and preserve older snapshots',()=>{
+ const foes=mon(143,'foe','튀어오르기');for(const [name,id,base,boost] of [['광합성','synthesis',3,4],['아침햇살','morningsun',3,4],['달빛','moonlight',3,4],['모래모으기','shoreup',4,6]])for(const weather of [undefined,'sunnyday','raindance','sandstorm']){
+  const player={...mon(208,'player',name),adventurePlusMastered:[id],hp:20},old={...withFlags(createCombat([player],[foes],{weather})),disableCpuTera:true},fresh={...old,adventurePlusStatusV2:true};
+  const req=combatView(fresh).requests[0].moves[0];assert.equal(req.plusReady,true);assert.match(req.description,new RegExp(`${base*10}%.*${boost*10}%`));
+  const normal=playCpu(fresh,{type:'move',move:name}),plus=playCpu(fresh,{type:'move',move:name,plus:true}),max=plus.teams[0][0].maxHp;assert.equal(normal.teams[0][0].hp-20,Math.floor(max*base/10),`${name} ${weather}`);assert.equal(plus.teams[0][0].hp-20,Math.floor(max*boost/10),`${name} ${weather}`);assert.equal(plus.adventurePlusGaugeV1.charge,0);
+  assert.equal(combatView(old).requests[0].moves[0].plusReady,false);assert.throws(()=>playCpu(old,{type:'move',move:name,plus:true}));const oldResult=playCpu(old,{type:'move',move:name}),oldBaseline=playCpu({...old,adventurePlusStatusV1:false},{type:'move',move:name});assert.equal(oldResult.teams[0][0].hp,oldBaseline.teams[0][0].hp,`legacy ${name} ${weather}`);
+ }
+});
+
+test('Synthesis Plus works for owned players in multi and triple battles',async()=>{
+ const {adventureMoveMastered}=await import('../lib/cloud-adventure/adventure-plus-mastery.mjs');assert.equal(adventureMoveMastered({...makeMon(152,42)},'synthesis'),false);assert.equal(adventureMoveMastered({...makeMon(152,43)},'synthesis'),true);
+ const player={...mon(152,'player','광합성'),hp:20},ally=mon(25,'ally','튀어오르기'),ally2=mon(25,'ally2','튀어오르기'),foes=[mon(143,'foe1','튀어오르기'),mon(143,'foe2','튀어오르기'),mon(143,'foe3','튀어오르기')];
+ for(const [snapshot,view,play] of [[{...withFlags(createMission10DoubleSnapshot([player],[ally],foes.slice(0,2))),adventurePlusStatusV2:true},mission10MultiView,playMission10MultiTurn],[{...withFlags(createMission37TripleSnapshot([player],[ally],[ally2],foes)),adventurePlusStatusV2:true},mission37TripleView,playMission37TriplePrototype]]){
+  assert.equal(view(snapshot).requests[0].actors[0].moves[0].plusReady,true);const next=play(snapshot,{type:'move',move:'synthesis',plus:true}),own=next.teams[0].find(m=>m.boxId==='player');assert.equal(own.hp-20,Math.floor(own.maxHp*4/10));assert.equal(next.adventurePlusGaugeV1.charge,0);assert.deepEqual(next.owners,snapshot.owners);assert.equal(view(JSON.parse(JSON.stringify(next))).adventurePlusGauge.charge,0);
+ }
+});

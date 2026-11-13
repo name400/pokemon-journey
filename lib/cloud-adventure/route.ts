@@ -181,7 +181,7 @@ function adventureObjective(s:any){if(s.zaMission24HotelStage===1)return '호텔
 function createAdventureCombat(s:any,mons:Map<string,any>,foes:any[],options:any={}){
  const ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)];
  const team=ids.map((id:string)=>mons.get(id));
- const combat=createCombat(team,foes,options);if(s.zaMegaRing===true){combat.adventurePlusGaugeV1={charge:1,max:3};combat.adventurePlusStatusV1=true;}combat.adventureEffortVersion=1;combat.adventureEffortFoes=[];combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
+ const combat=createCombat(team,foes,options);if(s.zaMegaRing===true){combat.adventurePlusGaugeV1={charge:1,max:3};combat.adventurePlusStatusV1=true;combat.adventurePlusStatusV2=true;}combat.adventureEffortVersion=1;combat.adventureEffortFoes=[];combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
  const lead=combat.teams[0][combat.requests[0].active];if(lead)s.activeId=lead.boxId;
  return combat;
 }
@@ -353,7 +353,7 @@ else if(b.action==='hyperTrainAdventure'){if(s.combat||s.adventureCatchWindow||!
 else if(b.action==='masterAdventureMove'){
  if(s.combat||s.adventureCatchWindow||s.unionHost||!s.zaMission19JoseeWon||!atJusticeDojo('j'))throw Error('Josée와의 배틀 후 정의단 도장에서 기술을 숙달하세요.');
  const id=b.boxId===undefined?s.activeId:b.boxId;if(typeof id!=='string'||!s.teamIds.includes(id))throw Error('파티 포켓몬을 선택하세요.');const mon=mons.get(id),name=b.move,move=typeof name==='string'?moves[name]:null,known=Array.isArray(mon?.adventurePlusMastered)?mon.adventurePlusMastered:[];
- if(!mon||!Array.isArray(mon.moves)||!mon.moves.includes(name)||!move||!move.key||!adventurePlusEligible({id:move.key,category:move.category,power:move.power},true)||adventureMoveMastered(mon,move.key)||!Number.isSafeInteger(bag.seedofmasteryza)||bag.seedofmasteryza<1)throw Error('숙달할 수 있는 기술과 숙달의씨를 확인하세요.');
+ if(!mon||!Array.isArray(mon.moves)||!mon.moves.includes(name)||!move||!move.key||!adventurePlusEligible({id:move.key,category:move.category,power:move.power},true,true)||adventureMoveMastered(mon,move.key)||!Number.isSafeInteger(bag.seedofmasteryza)||bag.seedofmasteryza<1)throw Error('숙달할 수 있는 기술과 숙달의씨를 확인하세요.');
  mon.adventurePlusMastered=[...known,move.key];changed.set(id,mon);bagChanges.seedofmasteryza=-1;s.log=[`${mon.name}이(가) ${name}의 기술플러스를 숙달했다.`];
 }
 else if(b.action==='resetAdventureEvs'){
@@ -1303,7 +1303,7 @@ else if(b.action==='upsideDown'){if(s.combat)throw Error('전투 후에 가능�
 else if(b.action==='evolve'){if(s.combat)throw Error('전투 후 직접 진화를 선택하세요.');const m=mons.get(b.boxId||s.activeId);if(!m)throw Error('보유 포켓몬이 아닙니다.');const option=evolutionOptions(m,{...s,adventureEngine:'cloud'},s.teamIds.map((id:string)=>mons.get(id)),bag).find(e=>e.id===b.target&&e.ready);if(!option)throw Error('진화 조건을 충족하지 않았습니다.');if(option.consume)bagChanges[option.consume.item]=-option.consume.quantity;const result=applyAdventureEvolutionMoves(evolveAdventurePokemon(m,option.id,{consumeHeld:!!option.held})),next=result.mon;changed.set(m.boxId,next);registerAdventureDex(s,m.speciesId,next.speciesId);recordResearchEvolution(s,option.trigger==='use-item');if(option.trigger==='trade'){recordResearchTradeEvolution(s,m,u.userId);if(next.adventureTradeV1===true)next.adventureTradeConsumed=true;}delete next.adventureResearchTradeRecipient;s.events=[{kind:'evolve',side:0,type:'fairy',category:'status',hit:false}];s.log=[`축하합니다! ${m.name}이(가) ${next.name}(으)로 진화했다!`];for(const move of result.learned)s.log.push(`${next.name}이(가) ${move}을(를) 배웠다!`);if(result.pending.length){queueAdventureMoves(s,m.boxId,result.pending);s.log.push(`${next.name}: 진화하며 배울 기술을 선택하세요.`);}if(m.speciesId===290&&next.speciesId===291&&s.teamIds.includes(m.boxId)&&s.teamIds.length<6){const wallet=await db().prepare('SELECT balls FROM wallets WHERE user_id=?').bind(u.userId).first<any>();if((wallet?.balls||0)>0){consume='balls';captured=createAdventureShedinja(m,crypto.randomUUID());registerAdventureDex(s,captured.speciesId);s.teamIds.push(captured.boxId);s.log.push('껍질몬이 파티에 나타났다!');}}}
 
 else throw Error('알 수 없는 행동입니다.');
-if(s.zaMegaRing===true&&!s.zaSushiRun&&!s.zaLoanBattle&&!s.combat?.adventurePlusGaugeV1&&(s.combat?.format==='mission10-multi-v1'||s.combat?.format==='mission37-triples-prototype-v1'&&(s.combat.adventureMegaPlusDamageV1===true||s.combat.adventureSoloTripleFoeV1===true))&&!JSON.parse(row.state).combat){s.combat.adventurePlusGaugeV1={charge:1,max:3};s.combat.adventurePlusStatusV1=true;}
+if(s.zaMegaRing===true&&!s.zaSushiRun&&!s.zaLoanBattle&&!s.combat?.adventurePlusGaugeV1&&(s.combat?.format==='mission10-multi-v1'||s.combat?.format==='mission37-triples-prototype-v1'&&(s.combat.adventureMegaPlusDamageV1===true||s.combat.adventureSoloTripleFoeV1===true))&&!JSON.parse(row.state).combat){s.combat.adventurePlusGaugeV1={charge:1,max:3};s.combat.adventurePlusStatusV1=true;s.combat.adventurePlusStatusV2=true;}
 if(oldCityResearchArea)refreshCityResearchOnExit(s,oldCityResearchArea);
 prepareVisibleWild(s);
 const obtainedMegaStones=[...Object.entries(bagChanges).filter(([,count])=>count>0).map(([item])=>item),captured?.item].filter(Boolean);if(obtainedMegaStones.length)recordResearchMegaStones(s,obtainedMegaStones);
