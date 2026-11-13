@@ -2971,12 +2971,23 @@ test('colorful screws support sequential plush upgrades and preserve spent progr
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'canari-upgrades-qa',displayName:'인형 단계'};
  try{
   await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
-  for(const p of COLORFUL_SCREW_SITES){seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:p.district,interior:p.interior,x:p.x,y:p.y,facing:'up',zaRedCanariPlush:true,zaRoyaleRank:'A'},state.revision+1));await get();assert.equal(state.world.interaction.action,'collectColorfulScrew',p.id);await call('collectColorfulScrew');}
+  for(const p of COLORFUL_SCREW_SITES.slice(0,16)){seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:p.district,interior:p.interior,x:p.x,y:p.y,facing:'up',zaRedCanariPlush:true,zaRoyaleRank:'A'},state.revision+1));await get();assert.equal(state.world.interaction.action,'collectColorfulScrew',p.id);await call('collectColorfulScrew');}
   await get();assert.equal(rawWorld().zaColorfulScrewsFound.length,16);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up'},state.revision+1));await get();
   for(const [level,spent] of [[1,3],[2,8],[3,16]]){const revision=state.revision;await call('exchangeCanari-blue');assert.equal(state.world.zaBlueCanariLevel,level);assert.equal(rawWorld().zaColorfulScrewsSpent,spent);await call('exchangeCanari-blue',{revision},409);await get();}
   await call('exchangeCanari-blue',{},409);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
   // Test the other choices on a separate constructed 16-screw save.
   seedWorld(storeAdventurePosition({...rawWorld(),x:15,y:14,facing:'up',zaBlueCanariLevel:1,zaColorfulScrewsSpent:3},state.revision+1));await get();await call('exchangeCanari-red');assert.equal(state.world.zaRedCanariLevel,2);await call('exchangeCanari-pink');assert.equal(state.world.zaPinkCanariLevel,1);await call('exchangeCanari-gold');assert.equal(state.world.zaGoldCanariLevel,1);assert.equal(rawWorld().zaColorfulScrewsSpent,14);await call('exchangeCanari-pink',{},409);await call('exchangeCanari-green',{},409);await get();assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
+test('new street screws can be walked to once and survive reentry',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'screw-street-qa',displayName:'거리 나사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const [district,id,start,target] of [['lumiose-magenta-sector3','magenta3-north-ground',{x:10,y:1},{x:11,y:1}],['lumiose-jaune-sector2','jaune2-north-ground',{x:13,y:1},{x:12,y:1}]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,...start,zaRedCanariPlush:true,zaRoyaleRank:'A',zaColorfulScrewsFound:[...(rawWorld().zaColorfulScrewsFound||[]),'future-screw']},state.revision+1));await get();await walkTo(target);assert.equal(state.world.interaction.action,'collectColorfulScrew');const revision=state.revision;await call('collectColorfulScrew');await call('collectColorfulScrew',{revision},409);await get();assert.equal(rawWorld().zaColorfulScrewsFound.filter(x=>x===id).length,1);assert.notEqual(state.world.map[target.y][target.x],'!');
+  }
+  assert.ok(rawWorld().zaColorfulScrewsFound.includes('future-screw'));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
