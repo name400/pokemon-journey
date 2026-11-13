@@ -6345,3 +6345,18 @@ test('battle healing targets owned reserves without duplicating items',async()=>
   const switches=format==='single'?state.battle.requests[0].switches:state.battle.requests[0].actors[0].switches;const slot=switches.find(p=>p.index===1).slot;await call('switch',{slot});await get();assert.equal(state.battle.teams[0][state.battle.active[0]].boxId,reserve.boxId);
  }}finally{globalThis.__adventureUser=previous;}
 });
+
+test('status medicine cures owned party in field and battle once',async()=>{
+ const previous=globalThis.__adventureUser;
+ try{for(const format of ['field','single','solo','companion'])for(const chosen of ['fullheal','lumiosegalette']){
+  globalThis.__adventureUser={userId:`status-medicine-${format}-${chosen}`,displayName:'상태 회복 검사'};await get();await call('start',{species:1});
+  const id=state.world.activeId,lead={...makeMon(1,80),boxId:id,moves:['튀어오르기'],pp:{}},reserve={...makeMon(4,30),boxId:`status-reserve-${format}-${chosen}`,hp:30,status:'화상',custom:'kept'},boxed={...makeMon(7,20),boxId:`status-boxed-${format}-${chosen}`,status:'마비'};seedMon(id,lead);
+  for(const m of [reserve,boxed])sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(m.boxId,globalThis.__adventureUser.userId,m.id,JSON.stringify(m),'qa',1);
+  for(const item of ['fullheal','lumiosegalette'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item);
+  const foes=[0,1].map(i=>({...makeMon(129,5),boxId:`status-foe-${i}`,moves:['튀어오르기'],pp:{}})),ally=[{...makeMon(25,80),boxId:'status-ally',moves:['튀어오르기'],pp:{}}],combat=format==='field'?null:format==='single'?createCombat([lead,reserve],foes.slice(0,1)):format==='solo'?createSoloMultiFoeSnapshot([lead,reserve],foes):createMission10DoubleSnapshot([lead,reserve],ally,foes);
+  seedWorld({...storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,teamIds:[id,reserve.boxId],activeId:id},state.revision+1),combat,trainer:combat?{id:'status-test',name:'검증'}:null,encounter:null});await get();
+  const action=format==='field'?'useAdventureStatusHeal':'use';if(format==='single'&&chosen==='fullheal'){seedWorld({zaLoanBattle:true});await get();await call(action,{item:chosen,boxId:reserve.boxId},409);seedWorld({zaLoanBattle:false,zaSushiRun:{course:0}});await get();await call(action,{item:chosen,boxId:reserve.boxId},409);seedWorld({zaSushiRun:null});await get();}await call(action,{item:chosen,boxId:boxed.boxId},409);await call(action,{item:chosen,boxId:'status-ally'},409);await call(action,{item:chosen,boxId:id},409);assert.equal(state.inventory[chosen],1);
+  const rev=state.revision;await call(action,{item:chosen,boxId:reserve.boxId});await call(action,{item:chosen,boxId:reserve.boxId,revision:rev},409);await get();assert.equal(rawMon(reserve.boxId).status,null);assert.equal(rawMon(reserve.boxId).custom,'kept');assert.equal(rawMon(boxed.boxId).status,'마비');assert.equal(state.inventory[chosen],undefined);assert.equal(state.inventory[chosen==='fullheal'?'lumiosegalette':'fullheal'],1);
+
+ }}finally{globalThis.__adventureUser=previous;}
+});

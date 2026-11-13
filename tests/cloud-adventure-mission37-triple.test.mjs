@@ -92,3 +92,11 @@ test('reserve medicine is confined to the player owner and survives restore',()=
  assert.throws(()=>playMission37TriplePrototype(initial,{type:'item',item:'potion',boxId:groups[0].team[1].boxId}),/플레이어/);assert.equal(JSON.stringify(initial),before);
  const next=playMission37TriplePrototype(initial,{type:'item',item:'potion',boxId:reserve.boxId});assert.equal(mission37PlayerTeam(next).find(m=>m.boxId===reserve.boxId).hp,30);assert.equal(restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(next))).turn,2);
 });
+
+test('status medicine in triple battle respects ownership and restores state',()=>{
+ const lead={...makeMon(25,80),boxId:'status-player',moves:['튀어오르기'],pp:{}},reserve={...makeMon(4,30),boxId:'status-reserve',status:'마비'},groups=mission37CompanionGroups(6),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`status-foe-${i}`,moves:['튀어오르기'],pp:{}}));
+ const initial=createMission37TripleSnapshot([lead,reserve],groups[0].team,groups[1].team,foes);
+ assert.throws(()=>playMission37TriplePrototype(initial,{type:'item',item:'fullheal',boxId:groups[0].team[1].boxId}),/플레이어/);
+ for(const item of ['fullheal','lumiosegalette']){const next=playMission37TriplePrototype(initial,{type:'item',item,boxId:reserve.boxId});assert.equal(mission37PlayerTeam(next).find(m=>m.boxId===reserve.boxId).status,null);assert.equal(restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(next))).turn,2);}
+ const sim=restoreMission37TripleSnapshot(initial);sim.p1.active[0].addVolatile('confusion');const snapshot=sim.toJSON();snapshot.formatid=initial.snapshot.formatid;const confused={...initial,snapshot};assert.ok(restoreMission37TripleSnapshot(confused).p1.active[0].volatiles.confusion);const cured=playMission37TriplePrototype(confused,{type:'item',item:'fullheal'});assert.equal(restoreMission37TripleSnapshot(cured).p1.active[0].volatiles.confusion,undefined);
+});

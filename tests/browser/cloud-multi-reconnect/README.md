@@ -16,3 +16,5 @@ Run `PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/browser
 For the isolated local-D1 Worker route and browser path, run `node --test tests/cloud-adventure-mission37-d1.test.mjs` and `UI_TEST_URL=http://127.0.0.1:5218/ PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/cloud-adventure-mission37-browser-d1.mjs`. The latter uses the Vite fixture above for the UI and an in-memory Miniflare D1 Worker for the real game route, replacing authentication and seeding deterministic enemy HP. Neither command accesses production data.
 
 `PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/browser/cloud-multi-reconnect/bench-medicine.mjs` checks selecting and healing an owned reserve and reloading at both viewport sizes. The route and inventory are mocked; `UI_TEST_URL` overrides the default fixture URL.
+
+`PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/browser/cloud-multi-reconnect/status-medicine.mjs` checks status medicine selection and reconnect for an owned reserve using a mocked route at both viewport sizes.
