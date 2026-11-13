@@ -122,7 +122,7 @@ import {applyAdventureLevelMoves,applyAdventureEvolutionMoves,teachAdventureMove
 import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from '@/lib/cloud-adventure/adventure-battle.mjs';
 import {evolveAdventurePokemon,createAdventureShedinja} from '@/lib/cloud-adventure/adventure-evolution.mjs';
 import {afterCapture,friendshipGain} from '@/lib/capture.mjs';
-import {ADVENTURE_BALLS,ADVENTURE_BOUTIQUE_BALLS,adventureBall,adventureCaptureAttempt,adventureCaptureRate} from '@/lib/cloud-adventure/adventure-balls.mjs';
+import {ADVENTURE_BALLS,ADVENTURE_BOUTIQUE_BALLS,adventureUltraBallUnlocked,adventureBall,adventureCaptureAttempt,adventureCaptureRate} from '@/lib/cloud-adventure/adventure-balls.mjs';
 import {ROYALE_V_TRAINERS,royaleVPoints,royaleVWins,royaleVReady,ROYALE_Z_TRAINERS,ROYALE_Z_PROMOTION,ROYALE_Y_TRAINERS,ROYALE_Y_PROMOTION,ROYALE_X_TRAINERS,ROYALE_X_PROMOTION,ROYALE_NAVEEN,ROYALE_JOSEE,joseeAction,joseeRequired,mission05Pending,ROYALE_LIDA,ROYALE_W_PROMOTION,ROYALE_W_TRAINERS,royaleWPoints,royaleWWins,royaleWReady,lidaStage,lidaRequired,lidaBagAction,lidaBattleAction,naveenRequired,naveenAction,royaleXPoints,royaleXWins,royaleXReady,royaleZWins,royaleZReady,royaleZPoints,royaleYPoints,royaleYWins,royaleYReady} from '@/lib/cloud-adventure/adventure-royale.mjs';
 import {CANARI_COLORS,CANARI_COSTS,canariLevel,canariBattleExperience,canariPrizeMoney,canariCrystalShards} from '@/lib/cloud-adventure/adventure-canari.mjs';
 import {colorfulScrewSite,isColorfulExchange,colorfulScrewAvailable} from '@/lib/cloud-adventure/adventure-colorful-screws.mjs';
@@ -1116,7 +1116,8 @@ else if(b.action==='buyBall'){
  if(s.combat||cell()!=='M')throw Error('프렌들리숍 입구에서 구매하세요.');
  const ball=adventureBall(String(b.ball||'')),quantity=b.quantity??1;
  if(!ball||!ball.sale||['pokeball','nestball','diveball','repeatball','premierball'].includes(ball.id))throw Error('판매하지 않는 볼입니다.');
- if(ball.id!=='greatball'&&(s.area!==3||s.district!=='lumiose'||s.interior))throw Error('미르시티의 볼 코너에서 구매하세요.');
+ if(ball.id==='ultraball'&&(s.unionHost||s.adventureCatchWindow||s.area!==3||typeof s.district!=='string'||!s.district.startsWith('lumiose')||s.interior||!adventureUltraBallUnlocked(s)))throw Error('랭크 E 이후 미르시티 포켓몬센터에서 구매하세요.');
+ if(ball.id!=='greatball'&&ball.id!=='ultraball'&&(s.area!==3||s.district!=='lumiose'||s.interior))throw Error('미르시티의 볼 코너에서 구매하세요.');
  if(!Number.isInteger(quantity)||quantity<1||quantity>99)throw Error('수량은 1–99개입니다.');
  const stock=s.adventureBalls?.[ball.id]||0;if(!Number.isInteger(stock)||stock<0||stock+quantity>99)throw Error('볼은 종류별 99개까지 보관할 수 있습니다.');
  s.adventureBalls={...(s.adventureBalls||{}),[ball.id]:stock+quantity};reward=-ball.price*quantity;s.log=[`${ball.name} ${quantity}개를 샀다.`];if(s.area===3&&typeof s.district==='string'&&s.district.startsWith('lumiose'))awardPremierPurchase(s,quantity);
