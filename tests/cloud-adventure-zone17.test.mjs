@@ -83,3 +83,9 @@ test('TM062 supports checked base and regional forms without arbitrary learning'
  for(const [id,speciesId] of [[1,1],[152,152],[10100,26]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm062'),false,`${id}`);
  assert.equal(canLearnStoryTm(bag,{id:498,speciesId:498,moves:['화염방사']},'za-tm062'),false);
 });
+
+test('promenade ladder building keeps all branches and recovers legacy positions',async()=>{
+ const {ZONE17_PROMENADE_BUILDING}=await import('../lib/cloud-adventure/adventure-zone17.mjs');const base={area:3,district:'lumiose-zone17',interior:null,zaZone17Promenade:true,zaZone17Upper:false,zaRoyaleRank:'C',x:11,y:13,teamIds:['kept'],zaZone17Spent:{'pyroar-alpha':true},zaZone17Items:['stairs-timer']};const map=zone17Map(base);
+ for(const [x,y] of ZONE17_PROMENADE_BUILDING){assert.equal(map[y][x],'#');const old=storeAdventurePosition({...base,x,y},78);delete old.districtPosition.zone17PromenadeBuildingLayout;const restored=restoreAdventurePosition(old,78);assert.notEqual(map[restored.y][restored.x],'#');assert.deepEqual(restored.teamIds,['kept']);assert.equal(restored.zaZone17Spent['pyroar-alpha'],true);assert.deepEqual(restored.zaZone17Items,['stairs-timer']);}
+ for(const target of [{x:6,y:1},{x:11,y:1},{x:16,y:1},{x:13,y:7}])assert.ok(fieldPath(map,base,target).length);assert.equal(map[6][13],'l');assert.equal(map[5][9],'^');
+});
