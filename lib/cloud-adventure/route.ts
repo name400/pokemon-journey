@@ -179,7 +179,7 @@ function adventureObjective(s:any){if(s.zaMission24HotelStage===1)return '호텔
 function createAdventureCombat(s:any,mons:Map<string,any>,foes:any[],options:any={}){
  const ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)];
  const team=ids.map((id:string)=>mons.get(id));
- const combat=createCombat(team,foes,options);combat.adventureEffortVersion=1;combat.adventureEffortFoes=[];combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
+ const combat=createCombat(team,foes,options);if(s.zaMegaRing===true)combat.adventurePlusGaugeV1={charge:1,max:3};combat.adventureEffortVersion=1;combat.adventureEffortFoes=[];combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
  const lead=combat.teams[0][combat.requests[0].active];if(lead)s.activeId=lead.boxId;
  return combat;
 }
@@ -348,6 +348,12 @@ else if(b.action==='resolveAdventureMove'){
 }
 else if(b.action==='syncAdventureDex'){if(s.combat)throw Error('배틀 후 도감 기록을 확인하세요.');const rows=await db().prepare('SELECT id,data FROM pokemon_box WHERE user_id=?').bind(u.userId).all<any>();const ids=new Set<number>();for(const r of rows.results){if(r.id===s.zaTradedPikachuId)continue;try{const mon=JSON.parse(r.data),id=mon.speciesId??species.find(p=>p.id===mon.id)?.speciesId;if(Number.isSafeInteger(id)&&id>0&&id<=1025)ids.add(id);}catch{}}const added=registerAdventureDex(s,...ids);s.log=[`현재 보유함에서 ${added}종을 도감에 추가했다.`];}
 else if(b.action==='hyperTrainAdventure'){if(s.combat||s.adventureCatchWindow||!s.zaMission37Complete||!(atJusticeDojo('h')||(!s.interior&&s.district==='lumiose-site'&&cell()==='d')))throw Error('미션 37 완료 후 정의단 도장 특훈 담당자를 찾아가세요.');const id=typeof b.boxId==='string'?b.boxId:s.activeId;if(!s.teamIds.includes(id))throw Error('파티 포켓몬을 선택하세요.');const mon=mons.get(id),item=String(b.item||'');if(!mon||!(bag[item]>0))throw Error('보유한 병뚜껑을 확인하세요.');const result=hyperTrainAdventure(mon,item,String(b.stat||''));changed.set(id,result.mon);mons.set(id,result.mon);bagChanges[item]=-1;s.log=[`${mon.name}의 ${result.stats.length}개 능력치를 대단히 단련했다!`];}
+else if(b.action==='masterAdventureMove'){
+ if(s.combat||s.adventureCatchWindow||s.unionHost||!s.zaMission19JoseeWon||!atJusticeDojo('j'))throw Error('Josée와의 배틀 후 정의단 도장에서 기술을 숙달하세요.');
+ const id=b.boxId===undefined?s.activeId:b.boxId;if(typeof id!=='string'||!s.teamIds.includes(id))throw Error('파티 포켓몬을 선택하세요.');const mon=mons.get(id),name=b.move,move=typeof name==='string'?moves[name]:null,known=Array.isArray(mon?.adventurePlusMastered)?mon.adventurePlusMastered:[];
+ if(!mon||!Array.isArray(mon.moves)||!mon.moves.includes(name)||!move||!move.key||move.category==='Status'||!(move.power>0)||known.includes(move.key)||!Number.isSafeInteger(bag.seedofmasteryza)||bag.seedofmasteryza<1)throw Error('숙달하지 않은 공격 기술과 숙달의씨를 확인하세요.');
+ mon.adventurePlusMastered=[...known,move.key];changed.set(id,mon);bagChanges.seedofmasteryza=-1;s.log=[`${mon.name}이(가) ${name}의 기술플러스를 숙달했다.`];
+}
 else if(b.action==='resetAdventureEvs'){
  const spot=interactionAt(s),id=typeof b.boxId==='string'?b.boxId:'';
  if(s.combat||s.adventureCatchWindow||s.adventurePendingMoves?.length||s.unionHost||s.district!=='lumiose-rust'||s.interior!=='rustOffice'||spot?.tile!=='z'||spot.x!==14||spot.y!==6||!adventureEvResetUnlocked(s))throw Error('미션 20을 마치고 사무소의 Lady Clear에게 가세요.');
