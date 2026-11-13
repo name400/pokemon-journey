@@ -28,3 +28,9 @@ test('Rouge Sector 3 and the west of Rouge Plaza connect and restore saves',()=>
  const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-rouge-sector3',21,8]);
  assert.equal(stepField({...saved,x:7,y:5,zaRoyaleRank:'Y',zaJoseeRequired:true},'down').blocked,true);
 });
+
+test('ball boutique offers supported original prices without altering the city path',()=>{
+ const s={area:3,district:'lumiose-rouge-sector3',interior:null,x:16,y:14,facing:'down',teamIds:['kept']},d=fieldDialogue(s);
+ assert.equal(d.ballBoutique,true);assert.deepEqual(Object.fromEntries(d.actions.map(a=>[a.ballId,a.price])),{quickball:1000,timerball:1000,netball:1000,duskball:1000,healball:300,luxuryball:3000});
+ assert.ok(!d.actions.some(a=>['pokeball','greatball','masterball'].includes(a.ballId)));assert.equal(fieldMap(s)[14][16],'m');assert.deepEqual(restoreAdventurePosition(storeAdventurePosition(s,77),77).teamIds,['kept']);
+});

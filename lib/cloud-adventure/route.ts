@@ -122,7 +122,7 @@ import {applyAdventureLevelMoves,applyAdventureEvolutionMoves,teachAdventureMove
 import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from '@/lib/cloud-adventure/adventure-battle.mjs';
 import {evolveAdventurePokemon,createAdventureShedinja} from '@/lib/cloud-adventure/adventure-evolution.mjs';
 import {afterCapture,friendshipGain} from '@/lib/capture.mjs';
-import {ADVENTURE_BALLS,adventureBall,adventureCaptureAttempt,adventureCaptureRate} from '@/lib/cloud-adventure/adventure-balls.mjs';
+import {ADVENTURE_BALLS,ADVENTURE_BOUTIQUE_BALLS,adventureBall,adventureCaptureAttempt,adventureCaptureRate} from '@/lib/cloud-adventure/adventure-balls.mjs';
 import {ROYALE_V_TRAINERS,royaleVPoints,royaleVWins,royaleVReady,ROYALE_Z_TRAINERS,ROYALE_Z_PROMOTION,ROYALE_Y_TRAINERS,ROYALE_Y_PROMOTION,ROYALE_X_TRAINERS,ROYALE_X_PROMOTION,ROYALE_NAVEEN,ROYALE_JOSEE,joseeAction,joseeRequired,mission05Pending,ROYALE_LIDA,ROYALE_W_PROMOTION,ROYALE_W_TRAINERS,royaleWPoints,royaleWWins,royaleWReady,lidaStage,lidaRequired,lidaBagAction,lidaBattleAction,naveenRequired,naveenAction,royaleXPoints,royaleXWins,royaleXReady,royaleZWins,royaleZReady,royaleZPoints,royaleYPoints,royaleYWins,royaleYReady} from '@/lib/cloud-adventure/adventure-royale.mjs';
 import {CANARI_COLORS,CANARI_COSTS,canariLevel,canariBattleExperience,canariPrizeMoney,canariCrystalShards} from '@/lib/cloud-adventure/adventure-canari.mjs';
 import {colorfulScrewSite,isColorfulExchange,colorfulScrewAvailable} from '@/lib/cloud-adventure/adventure-colorful-screws.mjs';
@@ -1095,6 +1095,13 @@ else if(b.action==='buy'){
  s.log=[`${product.name} ${quantity}개를 샀다.`];
 }
 else if(b.action==='buyAdventureMedicine'){const medicine=adventureMedicine(b.item),quantity=b.quantity??1;if(s.combat||s.unionHost||s.adventureCatchWindow||cell()!=='M'||!medicine)throw Error('프렌들리숍의 회복 도구를 확인하세요.');if(!Number.isInteger(quantity)||quantity<1||quantity>99)throw Error('수량은 1–99개입니다.');const stock=bag[medicine.id]??0;if(!Number.isSafeInteger(stock)||stock<0||stock+quantity>999)throw Error('도구를 받을 가방 공간을 확인하세요.');bagChanges[medicine.id]=quantity;reward=-medicine.price*quantity;s.log=[`${medicine.name} ${quantity}개를 샀다.`];}
+else if(typeof b.action==='string'&&b.action.startsWith('buyBoutiqueBall-')){
+ const spot=interactionAt(s),ball=ADVENTURE_BOUTIQUE_BALLS.find((p:any)=>b.action===`buyBoutiqueBall-${p.id}`),quantity=b.quantity??1;
+ if(s.combat||s.unionHost||s.adventureCatchWindow||s.interior||s.district!=='lumiose-rouge-sector3'||spot?.tile!=='m'||spot.x!==16||spot.y!==14||!ball)throw Error('볼 부티크의 상품을 확인하세요.');
+ if(!Number.isSafeInteger(quantity)||quantity<1||quantity>99)throw Error('수량은 1–99개입니다.');
+ const stock=s.adventureBalls?.[ball.id]??0;if(!Number.isSafeInteger(stock)||stock<0||stock+quantity>99)throw Error('볼은 종류별 99개까지 보관할 수 있습니다.');
+ s.adventureBalls={...(s.adventureBalls||{}),[ball.id]:stock+quantity};reward=-ball.price*quantity;s.log=[`${ball.name} ${quantity}개를 샀다.`];
+}
 else if(b.action==='buyBall'){
  if(s.combat||cell()!=='M')throw Error('프렌들리숍 입구에서 구매하세요.');
  const ball=adventureBall(String(b.ball||'')),quantity=b.quantity??1;

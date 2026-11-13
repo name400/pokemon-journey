@@ -6908,3 +6908,14 @@ test('zone 3 tower alphas can be caught directly without losing shiny or duplica
   const claimRev=state.revision;await call('throwEarlyAlpha',{ball:'masterball'});await call('throwEarlyAlpha',{ball:'masterball',revision:claimRev},409);await get();assert.equal(rawWorld()[c.spent],true);assert.equal(rawWorld().zaWildShinyRolls[c.key],undefined);assert.ok(state.box.some(m=>m.speciesId===c.species&&m.shiny===true));assert.equal(state.world.adventureBalls.masterball,0);assert.equal(state.world.activeId,lead);await call('throwEarlyAlpha',{ball:'masterball'},409);
  }}finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Rouge ball boutique purchases preserve wallet, capacity, saves and stale-request safety',async()=>{
+ const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge-ball-boutique-qa',displayName:'볼 부티크 검사'};
+ try{await get();await call('start',{species:1});const lead=state.world.activeId;sql.prepare('UPDATE wallets SET coins=5000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector3',interior:null,x:16,y:14,facing:'down',adventureBalls:{quickball:1}},state.revision+1));await get();assert.equal(state.world.interaction.ballBoutique,true);assert.ok(state.world.interaction.actions.some(a=>a.action==='buyBoutiqueBall-healball'&&a.label.includes('300')));assert.ok(!state.world.interaction.actions.some(a=>a.action==='buyBoutiqueBall-masterball'));
+  await call('buyBoutiqueBall-masterball',{},409);await call('buyBoutiqueBall-quickball',{quantity:0},409);await call('buyBoutiqueBall-quickball',{quantity:1.5},409);await call('buyBoutiqueBall-luxuryball',{quantity:2},409);assert.equal(state.wallet.coins,5000);assert.equal(state.world.adventureBalls.quickball,1);
+  const rev=state.revision;await call('buyBoutiqueBall-healball',{quantity:5});await call('buyBoutiqueBall-healball',{quantity:5,revision:rev},409);await get();assert.equal(state.wallet.coins,3500);assert.equal(state.world.adventureBalls.healball,5);assert.equal(state.world.adventureBalls.quickball,1);assert.equal(state.world.activeId,lead);
+  seedWorld(storeAdventurePosition({...state.world,adventureBalls:{...state.world.adventureBalls,quickball:98}},state.revision+1));await get();await call('buyBoutiqueBall-quickball',{quantity:2},409);assert.equal(state.wallet.coins,3500);await call('buyBoutiqueBall-quickball');assert.equal(state.world.adventureBalls.quickball,99);assert.equal(state.wallet.coins,2500);
+  seedWorld(storeAdventurePosition({...state.world,x:10,y:8,facing:'up'},state.revision+1));await get();await call('buyBoutiqueBall-healball',{},409);assert.equal(state.wallet.coins,2500);assert.deepEqual(state.world.teamIds,[lead]);
+ }finally{globalThis.__adventureUser=prior;}
+});
