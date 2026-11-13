@@ -1,3 +1,4 @@
+import {isScrewGlideRoof} from '@/lib/cloud-adventure/adventure-screw-roofs.mjs';
 import {royaleFieldEntry} from '@/lib/cloud-adventure/adventure-royale-zones.mjs';
 import {LYSANDRE_WILD,lysandreWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
 import {museumSide21Spot,museumSide21Requester} from '@/lib/cloud-adventure/adventure-museum.mjs';
@@ -429,9 +430,9 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      }
      if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
-    if(w.district==='lumiose-screw-rouge8'&&!w.interior){
+    if(isScrewGlideRoof(w.district)&&!w.interior){
      // Draft scaffold platforms and the street below their glide gap.
-     ctx.fillStyle=c==='#'?'#536b7a':(x+y)%2?'#b89b78':'#c9ad89';ctx.fillRect(px,py,tile,tile);
+     const shade=w.district==='lumiose-screw-jaune9'?['#596679','#a49f96','#c5beb1']:w.district==='lumiose-screw-jaune11'?['#637d7f','#b2ac87','#d4cba4']:w.district==='lumiose-screw-vert3'?['#61766e','#aa987d','#c9bca0']:['#536b7a','#b89b78','#c9ad89'];ctx.fillStyle=c==='#'?shade[0]:(x+y)%2?shade[1]:shade[2];ctx.fillRect(px,py,tile,tile);
      if(c==='#'){ctx.fillStyle='#6d8490';ctx.fillRect(px,py+tile-3,tile,2);}
      else{ctx.fillStyle='#8c765f';ctx.fillRect(px,py+tile-3,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py,2,tile);}
      if((x===10||x===14)&&y===6){ctx.fillStyle='#f4d069';ctx.beginPath();ctx.moveTo(px+tile/2,py+tile/4);ctx.lineTo(px+tile*3/4,py+tile/2);ctx.lineTo(px+tile/2,py+tile*3/4);ctx.lineTo(px+tile/4,py+tile/2);ctx.fill();}
