@@ -2,7 +2,7 @@ import {mission20GhostTap} from '@/lib/cloud-adventure/adventure-mission20.mjs';
 import {side39Eligible} from '@/lib/cloud-adventure/adventure-side39.mjs';
 'use client';
 import {trackedAdventureObjective} from '@/lib/cloud-adventure/adventure-pending-quests.mjs';
-import {projectPlayerVitals,playerRecoverySafe} from '@/lib/cloud-adventure/adventure-player-vitals.mjs';
+import {projectPlayerVitals,playerRecoverySafe,playerMaxHp} from '@/lib/cloud-adventure/adventure-player-vitals.mjs';
 import {mergeAdventureBox} from '@/lib/cloud-adventure/adventure-box-merge.mjs';
 import {ROYALE_BONUS_CARDS,royaleBonusRankApplies} from '@/lib/cloud-adventure/adventure-royale-bonus.mjs';
 import {adventureMoveMastered} from '@/lib/cloud-adventure/adventure-plus-mastery.mjs';
@@ -65,10 +65,10 @@ const PredictedAdventureField=forwardRef<FieldPredictionHandle,ComponentProps<ty
 
 function PlayerHealth({world,battle}:{world:any,battle:any}){
  const [now,setNow]=useState(()=>Date.now()),v=world.zaPlayerVitalsV1,safe=playerRecoverySafe({...world,combat:battle});
- const health=projectPlayerVitals({...world,combat:battle},now);
+ const health=projectPlayerVitals({...world,combat:battle},now),maxHp=playerMaxHp(world);
  useEffect(()=>{setNow(Date.now());},[safe,v?.version,v?.hp,v?.recoveryAt]);
- useEffect(()=>{if(!safe||health?.version!==1||health.hp>=100||!Number.isSafeInteger(v?.recoveryAt))return;const timer=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer);},[safe,health?.version,health?.hp,v?.recoveryAt]);
- return health?.version===1&&Number.isInteger(health.hp)&&health.hp>=1&&health.hp<=100?<p className="adv-player-health">플레이어 체력: {health.hp}/100</p>:null;
+ useEffect(()=>{if(!safe||health?.version!==1||(maxHp===null||health.hp>=maxHp)||!Number.isSafeInteger(v?.recoveryAt))return;const timer=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer);},[safe,health?.version,health?.hp,v?.recoveryAt,maxHp]);
+ return health?.version===1&&Number.isInteger(health.hp)&&health.hp>=1&&maxHp!==null&&health.hp<=maxHp?<p className="adv-player-health">플레이어 체력: {health.hp}/{maxHp}</p>:null;
 }
 export default function Adventure(){
  const fieldPrediction=useRef<FieldPredictionHandle|null>(null);

@@ -41,3 +41,15 @@ test('damage immunity and exact fractional recovery protect timing and future sc
  w.combat=null;syncPlayerVitals(w,50000);assert.equal(projectPlayerVitals(w,51000).hp,35);
  const future={zaPlayerVitalsV1:{version:2,hp:2,recoveryAt:0}};assert.equal(syncPlayerVitals(future,50000),false);assert.deepEqual(projectPlayerVitals(future,50000),future.zaPlayerVitalsV1);
 });
+
+test('green plush raises the health cap without rewriting injuries or corrupt legacy state',async()=>{
+ const {playerMaxHp,syncPlayerVitals,projectPlayerVitals,applyPlayerAlphaRoar}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ for(const [level,max] of [[0,100],[1,150],[2,200],[3,250]]){
+  const w={zaGreenCanariLevel:level,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}};assert.equal(playerMaxHp(w),max);
+  recordPlayerCenterVisit(w,{id:'jaune'});assert.equal(w.zaPlayerVitalsV1.hp,max);assert.equal(w.zaPlayerVitalsV1.lastCenterId,'jaune');
+  w.zaPlayerVitalsV1.hp=1;assert.deepEqual(applyPlayerAlphaRoar(w,5000),{blackout:true,damage:1});assert.equal(w.zaPlayerVitalsV1.hp,max);
+ }
+ const w={zaGreenCanariLevel:3,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}};syncPlayerVitals(w,1000);assert.equal(projectPlayerVitals(w,61000).hp,250);assert.equal(w.zaPlayerVitalsV1.hp,100);
+ const damaged={zaGreenCanariLevel:2,zaPlayerVitalsV1:{version:1,hp:175,lastCenterId:'hotel'}};assert.deepEqual(applyPlayerAlphaRoar(damaged,5000),{blackout:false,damage:10});assert.equal(damaged.zaPlayerVitalsV1.hp,165);
+ const future={zaGreenCanariLevel:9,zaPlayerVitalsV1:{version:1,hp:150,lastCenterId:'hotel'}},before=structuredClone(future);assert.equal(playerMaxHp(future),null);assert.equal(syncPlayerVitals(future,5000),false);assert.equal(recordPlayerCenterVisit(future,{id:'jaune'}),false);assert.equal(applyPlayerAlphaRoar(future,5000),null);assert.deepEqual(future,before);
+});

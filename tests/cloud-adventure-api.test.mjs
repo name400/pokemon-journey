@@ -3466,7 +3466,7 @@ test('Bleu 3, Vert 5 and 8, and Jaune 6 glide crossings preserve progress and ol
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
-test('61 distinct collected screws buy all implemented plush upgrades exactly once',async()=>{
+test('61 distinct collected screws buy the four original plush upgrades exactly once',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'all-plush-upgrades-qa',displayName:'인형 전체 단계'};
  try{
   await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);assert.equal(COLORFUL_SCREW_SITES.length,61);
@@ -7891,4 +7891,29 @@ test('player immunity and safe recovery survive reload without GET writes or dup
   clock+=1000;await get();assert.equal(state.world.zaPlayerVitalsV1.hp,44);assert.equal(rawWorld().zaPlayerVitalsV1.hp,40);assert.equal(state.revision,safeRevision);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,44);assert.equal(state.revision,safeRevision);
   clock+=4000;await get();assert.equal(state.world.zaPlayerVitalsV1.hp,61);await call('move',{direction:'left'});await get();assert.equal(rawWorld().zaPlayerVitalsV1.hp,61);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{Date.now=oldNow;globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('green plush upgrades preserve screws and health through reload, damage and blackout',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'green-plush-qa',displayName:'초록 인형 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],id=team[0],mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet),inventory=structuredClone(state.inventory);
+  const base={area:3,district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up',zaRedCanariPlush:true,zaRoyaleRank:'A',zaColorfulScrewsFound:COLORFUL_SCREW_SITES.slice(0,16).map(p=>p.id),zaColorfulScrewsSpent:0,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}};
+  seedWorld(storeAdventurePosition({...rawWorld(),...base},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='exchangeCanari-green'&&a.label.includes('초록')));
+  for(const [level,spent,max] of [[1,3,150],[2,8,200],[3,16,250]]){const revision=state.revision;await call('exchangeCanari-green');await call('exchangeCanari-green',{revision},409);await get();assert.equal(state.world.zaGreenCanariLevel,level);assert.equal(rawWorld().zaColorfulScrewsSpent,spent);assert.equal(state.world.zaPlayerVitalsV1.hp,100);const {playerMaxHp}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');assert.equal(playerMaxHp(state.world),max);}
+  await call('exchangeCanari-green',{},409);clock+=40000;await get();assert.equal(state.world.zaPlayerVitalsV1.hp,250);assert.equal(rawWorld().zaPlayerVitalsV1.hp,100);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-wild',interior:null,x:3,y:7,facing:'up',zaWildAlphaPosition:{x:3,y:5,facing:'down'},zaWildAlphaAlert:false,zaWildAlphaSpent:false,zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'hotel',lastDamageAt:0}},state.revision+1));await get();const rev=state.revision;await call('move',{direction:'up'});await call('move',{direction:'up',revision:rev},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaPlayerVitalsV1.hp,250);assert.equal(rawWorld().zaGreenCanariLevel,3);assert.equal(rawWorld().zaColorfulScrewsSpent,16);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,inventory);assert.deepEqual(rawMon(id).ivs,mon.ivs);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up',zaGreenCanariLevel:undefined,zaColorfulScrewsSpent:14},state.revision+1));await get();const old=structuredClone(rawWorld());await call('exchangeCanari-green',{},409);assert.equal(rawWorld().zaColorfulScrewsSpent,old.zaColorfulScrewsSpent);assert.equal(rawWorld().zaGreenCanariLevel,undefined);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('green plush purchase preserves legacy and future player-vitals saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'green-plush-legacy-qa',displayName:'초록 인형 구형 저장'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const exchange=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up',zaRedCanariPlush:true,zaRoyaleRank:'A',zaColorfulScrewsFound:COLORFUL_SCREW_SITES.slice(0,3).map(p=>p.id),zaColorfulScrewsSpent:0,zaGreenCanariLevel:undefined,...extra},state.revision+1);
+  seedWorld(exchange({zaPlayerVitalsV1:undefined}));await get();await call('exchangeCanari-green');await get();assert.equal(state.world.zaGreenCanariLevel,1);assert.equal(rawWorld().zaPlayerVitalsV1,undefined);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',x:3,y:6,facing:'up'},state.revision+1));await get();await call('heal');await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,{version:1,hp:150,lastCenterId:'hotel'});
+  const invalid={version:1,hp:140,lastCenterId:'hotel'};seedWorld(exchange({zaPlayerVitalsV1:invalid}));await get();await call('exchangeCanari-green',{},409);await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,invalid);assert.equal(rawWorld().zaColorfulScrewsSpent,0);
+  const future={version:2,hp:333,opaque:'keep'};seedWorld(exchange({zaPlayerVitalsV1:future}));await get();await call('exchangeCanari-green');await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);assert.equal(state.world.zaGreenCanariLevel,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
 });
