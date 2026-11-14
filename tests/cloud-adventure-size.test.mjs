@@ -48,3 +48,14 @@ test('managed ordinary field slots share size handling without confusing forms o
  }
  assert.equal(assignVisibleAdventureSize(world,'zone20:story:718',()=>0),false);assert.equal(assignVisibleAdventureSize(world,'zone6:__proto__:129:extra',()=>0),false);assert.equal(attachVisibleAdventureSize(world,makeMon(25,40),'zone6:magikarp:129').adventureScaleV1,undefined);
 });
+
+test('zone 20 surface sizes follow the stored visible identity only',async()=>{
+ const {assignVisibleAdventureSize,visibleAdventureSize,adventureFieldSizeFactor}=await import('../lib/cloud-adventure/adventure-size.mjs');
+ const {assignWildShiny,clearWildShiny}=await import('../lib/cloud-adventure/adventure-wild-shiny.mjs');
+ const world={zaWildShinyRolls:{'zone20:bulbasaur:1':true}};
+ for(const [key,species] of [['zone20:bulbasaur:1',1],['zone20:charmander:4',4],['zone20:lucario:448',448]]){
+  assert.equal(assignVisibleAdventureSize(world,key,()=>.999),true);const mon=makeMon(species,55);assignWildShiny(world,mon,()=>.999,key);assert.equal(adventurePokemonSize(mon),'XL');assert.equal(adventureFieldSizeFactor(world,key),1.18);assert.equal(adventureFieldSizeFactor(world,key,true),1.25);
+ }
+ for(const key of ['zone20:alpha:448','zone20:story:718','zone20:bulbasaur:4'])assert.equal(assignVisibleAdventureSize(world,key,()=>0),false);
+ clearWildShiny(world,'zone20:bulbasaur:1');assert.equal(visibleAdventureSize(world,'zone20:bulbasaur:1'),null);assert.equal(visibleAdventureSize(world,'zone20:charmander:4').scale,255);
+});

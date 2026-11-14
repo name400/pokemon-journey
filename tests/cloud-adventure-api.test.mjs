@@ -10223,3 +10223,22 @@ test('growth candy rejects incompatible shared growth records without consuming 
   const legacy={...original,level:5};delete legacy.experience;seedMon(id,legacy);await get();const revision=state.revision;await call('useAdventureRareCandy',{boxId:id});await call('useAdventureRareCandy',{boxId:id,revision},409);await get();assert.equal(rawMon(id).level,6);assert.equal(state.inventory.rarecandy||0,0);assert.equal(state.inventory['za-exp-candy-xs']||0,0);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('zone 20 ordinary visible size survives reconnect and field capture',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-size-qa',displayName:'구역 20 크기 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,key='zone20:bulbasaur:1',before=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:6,y:10,facing:'right',zaMission42Underground:false,zaZone20Spent:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));
+  await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);
+  globalThis.__adventureRandom=()=>0;const revision=state.revision;await call('throwZoneVisible',{ball:'masterball'});await call('throwZoneVisible',{ball:'masterball',revision},409);await get();
+  const caught=state.box.find(m=>m.speciesId===1&&m.boxId!==lead);assert.ok(caught);assert.equal(rawMon(caught.boxId).adventureScaleV1.scale,255);assert.equal(rawWorld().zaWildSizeRollsV1.entries[key],undefined);assert.equal(rawMon(lead).id,before.id);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('zone 20 older shiny encounter does not invent a size',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-old-size-qa',displayName:'구역 20 구형 개체'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:1});const key='zone20:bulbasaur:1';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:6,y:10,facing:'right',zaMission42Underground:false,zaZone20Spent:{},zaWildShinyRolls:{[key]:true},combat:null,encounter:null},state.revision+1));
+  await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaWildSizeRollsV1?.entries?.[key],undefined);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
