@@ -539,8 +539,9 @@ test('Zone 17 promenade retains legacy ground saves and shares northern encounte
  const base={area:3,district:'lumiose-zone17',interior:null,zaZone17Upper:false,zaRoyaleRank:'C',teamIds:['kept']};
  const old=restoreAdventurePosition(storeAdventurePosition({...base,x:17,y:6},512),512);
  assert.deepEqual([old.x,old.y,old.zaZone17Promenade,old.teamIds],[17,6,undefined,['kept']]);
- assert.equal(fieldMap(old)[6][17],'e');assert.equal(fieldMap({...old,zaZone17Promenade:true})[6][17],'e');
- for(const zaZone17Promenade of [false,true])assert.notEqual(fieldMap({...old,zaZone17Promenade,zaZone17Spent:{'pyroar-alpha':true}})[6][17],'e');
+ assert.notEqual(fieldMap(old)[6][17],'e');assert.notEqual(fieldMap({...old,zaZone17Promenade:true})[6][17],'e');
+ const nearby={...old,x:16};assert.equal(fieldMap(nearby)[6][17],'e');assert.equal(fieldMap({...nearby,zaZone17Promenade:true})[6][17],'e');
+ for(const zaZone17Promenade of [false,true])assert.notEqual(fieldMap({...nearby,zaZone17Promenade,zaZone17Spent:{'pyroar-alpha':true}})[6][17],'e');
 });
 
 test('Zone 2 draft overlook preserves the old stairs and saves its separate height layer',()=>{
