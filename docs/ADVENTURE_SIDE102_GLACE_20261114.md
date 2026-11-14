@@ -7,3 +7,5 @@
 [Bulbapedia의 공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Side_Missions_101-119)은 플레이어 파티를 얼음 타입으로 제한한다고 적지만, Serebii와 Thonky에는 명시되지 않는다. 실기에서 확인되지 않아 현재 게임은 이 제한을 적용하지 않는다. NPC 정확한 칸과 외형, 실시간 전투는 2D·턴제 근사다.
 
 격리 API에서 해금 경계·수락·수첩 추적·상대 편성·기권 후 재도전·승리·가방 한도·재접속·중복 요청을 검사했다. 상대 HP는 시험용으로 조정했으며 자연 난이도·원작 기기·운영 D1·Sites 병합본은 확인하지 않았다.
+
+후속 원작 확인 대기: [Bulbapedia 공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Side_Missions_101-119)은 파티 전원이 얼음 타입이어야 한다고 설명하지만 다른 공략은 이 제한을 명시하지 않는다. 원작 영상이나 게임 데이터로 확인하기 전에는 기존 규칙을 변경하거나 제한을 확정하지 않는다.

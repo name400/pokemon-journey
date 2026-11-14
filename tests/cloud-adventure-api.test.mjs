@@ -9729,3 +9729,16 @@ test('Reflect TM teaches reviewed Rotom form without consuming TM or changing sh
   await call('teachStoryTm',{item:'za-tm031',boxId:id,slot:1},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('side 106 lost key supports safe retry, save restoration and one-time reward',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side106-key-qa',displayName:'열쇠'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedMon(id,{...rawMon(id),shiny:true,otherModeNote:'preserve'});const team=[...state.world.teamIds];
+  const at=(district,x,y,facing,extra={})=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing,combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(at('lumiose-hibernal-approach',16,7,'right',{zaMission35Stage:6}));await get();await call('side106Start',{},409);
+  seedWorld(at('lumiose-hibernal-approach',16,7,'right',{zaMission35Stage:7}));await get();assert.equal(state.world.interaction.action,'side106Start');const rev=state.revision;await call('side106Start');await call('side106Start',{revision:rev},409);await get();assert.equal(rawWorld().zaSide106Stage,1);assert.ok(pendingAdventureQuests(rawWorld()).some(q=>q.id==='106'));
+  seedWorld(at('lumiose-vert-sector9',16,9,'right'));await get();assert.equal(state.world.interaction.action,'side106Find');const before=state.wallet.coins;await call('side106Find');await get();assert.equal(rawWorld().zaSide106Stage,2);assert.equal(state.world.zaSide106Stage,2);assert.equal(state.wallet.coins,before);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'nugget']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'nugget');await get();await call('side106Reward',{},409);assert.equal(rawWorld().zaSide106Stage,2);
+  sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();const rewardRev=state.revision;await call('side106Reward');await call('side106Reward',{revision:rewardRev},409);await get();assert.equal(state.inventory.nugget,999);assert.equal(state.wallet.coins,before+5000);assert.equal(rawWorld().zaSide106Stage,3);assert.ok(!pendingAdventureQuests(rawWorld()).some(q=>q.id==='106'));assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).shiny,true);assert.equal(rawMon(id).otherModeNote,'preserve');
+ }finally{globalThis.__adventureUser=previous;}
+});

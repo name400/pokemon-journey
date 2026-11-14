@@ -1419,6 +1419,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     if(p?.district===w.district&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&!(p.x===w.x&&p.y===w.y)&&walkable(w.map[p.y]?.[p.x]))trainer(p.x,p.y,'#a17d72',p.facing||'down',walking);
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w,x,y))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
+   if(!w.interior&&w.district==='lumiose-vert-sector9'&&[1,2].includes(w.zaSide106Stage)&&w.map?.[9]?.[17]===','){ctx.save();ctx.fillStyle='#e44c4c';ctx.strokeStyle='#fff0b0';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(17.5*tile,9.20*tile);ctx.lineTo(17.61*tile,9.5*tile);ctx.lineTo(17.5*tile,9.8*tile);ctx.lineTo(17.39*tile,9.5*tile);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
    // Draw only at the active interaction tiles; these figures do not affect movement.
    for(const p of adventureQuestVisuals(w)){
     const px=p.x*tile,py=p.y*tile;
