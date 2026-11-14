@@ -10426,6 +10426,17 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('early wild Pichu and Pikachu use consistent reviewed moves in battle and field capture',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'early-pichu-wild-moves-qa',displayName:'초반 야생 기술'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,team=[...state.world.teamIds],key='field3:pikachu:25',expected=['전광석화','꼬리흔들기','전기쇼크','전기자석파'];
+  const place=()=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:14,y:10,facing:'right',zaMission05Complete:true,zaRoyaleRank:'F',zaZone3FieldSpent:{},zaZone3FieldPositions:{},zaWildShinyRolls:{[key]:true},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1);
+  seedWorld(place());await get();await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,25);assert.deepEqual(rawWorld().encounter.moves,expected);await get();assert.deepEqual(rawWorld().encounter.moves,expected);await call('flee');
+  seedWorld(place());await get();globalThis.__adventureRandom=()=>0;const rev=state.revision;await call('throwZone3Field',{targetId:'pikachu',ball:'masterball'});await call('throwZone3Field',{targetId:'pikachu',ball:'masterball',revision:rev},409);await get();const caught=state.box.find(p=>p.speciesId===25);assert.ok(caught);assert.deepEqual(rawMon(caught.boxId).moves,expected);assert.equal(rawMon(caught.boxId).shiny,true);assert.equal(rawMon(caught.boxId).adventurePichuMovesV1,true);assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.equal(rawMon(lead).speciesId,152);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone1-courtyard',interior:null,x:4,y:6,facing:'right',combat:null,encounter:null},state.revision+1));await get();await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,172);assert.deepEqual(rawWorld().encounter.moves,expected);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('caught Pichu uses Z-A level growth after reload without changing its partner',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-pichu-growth-qa',displayName:'피츄 성장 검사'};globalThis.__adventureRandom=()=>0;
  try{

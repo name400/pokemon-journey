@@ -116,7 +116,7 @@ test('new ordinary wild starter-family base stages use verified latest level mov
 });
 
 test('new Pichu family captures use Z-A levels while legacy and unknown forms stay unchanged',async()=>{
- const {markAdventureVerifiedGrowth}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const id of [172,25,26]){
   const old={...makeMon(id,11),moves:['울음소리','전광석화','꼬리흔들기','전기쇼크'],pp:{thundershock:3}},fresh=markAdventureVerifiedGrowth(old);
   const result=applyAdventureLevelMoves(fresh,{...fresh,level:12,moves:[...fresh.moves],pp:{...fresh.pp}},{});assert.deepEqual(result.pending,['볼부비부비']);assert.equal(result.mon.pp.thundershock,3);assert.equal(old.adventurePichuMovesV1,undefined);
@@ -126,6 +126,8 @@ test('new Pichu family captures use Z-A levels while legacy and unknown forms st
  const future={...makeMon(172,11),adventurePichuMovesV1:{version:2}};assert.deepEqual(markAdventureVerifiedGrowth(future),future);
  const alola=markAdventureVerifiedGrowth({...makeMon(10100,25),moves:['울음소리','전광석화','꼬리흔들기','전기쇼크']});assert.equal(alola.adventurePichuMovesV1,true);assert.deepEqual(applyAdventureEvolutionMoves(alola,{}).pending,['사이코키네시스']);assert.ok(adventureLearnableMoves(alola,{}).includes('사이코키네시스'));assert.ok(!adventureLearnableMoves(alola,{}).includes('번개펀치'));
  const invalid={...makeMon(10100,25),formId:999};assert.equal(markAdventureVerifiedGrowth(invalid).adventurePichuMovesV1,undefined);
+ for(const id of [172,25]){const mon=makeMon(id,7),result=prepareVerifiedWildMoves(mon);assert.deepEqual(result.moves,['전광석화','꼬리흔들기','전기쇼크','전기자석파']);assert.notEqual(result,mon);const alpha={...mon,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);}
+ assert.equal(prepareVerifiedWildMoves(alola),alola);
 });
 
 test('new Kanto-family captures use verified growth and evolution while old records remain unchanged',async()=>{
