@@ -90,3 +90,10 @@ test('a spent wild alpha cannot keep player recovery blocked',async()=>{
  const w={district:'lumiose-wild',zaWildAlphaAlert:true,zaWildAlphaSpent:false,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}};
  assert.equal(syncPlayerVitals(w,1000),false);w.zaWildAlphaSpent=true;assert.equal(syncPlayerVitals(w,2000),true);assert.equal(projectPlayerVitals(w,3000).hp,34);
 });
+
+test('Litleo only prevents recovery while awake, alerted and present',async()=>{
+ const {playerRecoverySafe}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ const w={district:'lumiose-rouge-tower-interior',interior:null,zaZone3LitleoAwakeV1:true,zaZone3LitleoRoarAlertV1:true};
+ assert.equal(playerRecoverySafe(w),false);
+ for(const change of [{zaZone3LitleoAwakeV1:false},{zaZone3LitleoRoarAlertV1:false},{zaZone3LitleoSpent:true},{district:'lumiose-zone3'}])assert.equal(playerRecoverySafe({...w,...change}),true);
+});

@@ -8082,3 +8082,19 @@ test('green plush purchase preserves legacy and future player-vitals saves',asyn
   const future={version:2,hp:333,opaque:'keep'};seedWorld(exchange({zaPlayerVitalsV1:future}));await get();await call('exchangeCanari-green');await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);assert.equal(state.world.zaGreenCanariLevel,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('awakened zone 3 Litleo threatens the player without changing saved encounters',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now,oldTime=globalThis.__adventureTime;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone3-litleo-player-qa',displayName:'깨어난 레오꼬'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='alpha:zone3-tower-litleo:667';
+  const tower=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-tower-interior',interior:null,x:8,y:8,facing:'right',zaBunnelbyQuest:3,zaRoyaleRank:'A',zaZone3LitleoSpent:false,zaZone3LitleoAwakeV1:undefined,zaZone3LitleoRoarAlertV1:undefined,zaWildShinyRolls:{[key]:true},zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(tower({}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(state.world.zaZone3LitleoAwakeV1,true);assert.equal(state.world.zaZone3LitleoRoarAlertV1,undefined);
+  const rev=state.revision;await call('move',{direction:'left'});await call('move',{direction:'left',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(state.world.zaZone3LitleoRoarAlertV1,true);assert.match(state.world.log.join(' '),/레오꼬/);
+  clock+=3000;await call('move',{path:['right','left']});await get();assert.deepEqual([state.world.x,state.world.y],[9,8]);assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  seedWorld(tower({zaZone3LitleoAwakeV1:true,zaZone3LitleoRoarAlertV1:true,zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(tower({zaZone3LitleoAwakeV1:true,zaZone3LitleoRoarAlertV1:true,zaDodgeReadyAt:0}));await get();await call('dodge',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  seedWorld(tower({x:8,y:8,zaZone3LitleoAwakeV1:true,zaZone3LitleoRoarAlertV1:true}));await get();await call('move',{direction:'left'});await get();assert.equal(state.world.zaZone3LitleoRoarAlertV1,undefined);assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  const future={version:2,opaque:true};seedWorld(tower({zaZone3LitleoAwakeV1:true,zaZone3LitleoRoarAlertV1:future}));await get();await call('move',{direction:'right'});await get();assert.deepEqual(rawWorld().zaZone3LitleoRoarAlertV1,future);assert.equal(rawWorld().zaPlayerVitalsV1.hp,100);
+  seedWorld(tower({zaZone3LitleoAwakeV1:true,zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;Date.now=oldNow;}
+});
