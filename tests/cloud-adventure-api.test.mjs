@@ -8185,3 +8185,19 @@ test('Budew show charges once, preserves party and safely awards a full bag',asy
   sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();const rev=state.revision;await call('side16Reward');await call('side16Reward',{revision:rev},409);await get();assert.equal(state.inventory.miracleseed,999);assert.equal(state.wallet.coins,10000);assert.equal(state.world.zaSide16SeedPending,false);assert.deepEqual(state.world.teamIds,[lead,budew.boxId]);await call('side16Reward',{},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Bond Abra trade preserves shared ownership and safely replaces the adventure lead',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side24-abra-qa',displayName:'캐이시 교환 검사'};
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId;const abra={...makeMon(63,20),boxId:lead,item:'leftovers',shiny:true};seedMon(lead,abra);
+  const place={area:3,district:'lumiose-rouge-sector6',zaAcademyCourtyard:true,interior:null,x:16,y:5,facing:'up',regionId:6,zaMission10Stage:1};
+  seedWorld(storeAdventurePosition({...rawWorld(),...place},state.revision+1));await get();await call('side24Start',{},409);
+  seedWorld(storeAdventurePosition({...state.world,...place,zaMission10Stage:2},state.revision+1));await get();assert.equal(state.world.interaction.action,'side24Start');await call('side24Start');await get();assert.equal(state.world.interaction.side24,true);
+  await call('side24Trade',{boxId:lead},409);await call('side24Trade',{boxId:'not-owned',confirmed:true},409);await call('side24Trade',{boxId:lead,confirmed:true},409);assert.equal(rawMon(lead).item,'leftovers');seedMon(lead,{...abra,item:''});
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-xs']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,995)').run(key,globalThis.__adventureUser.userId,'za-exp-candy-xs');await get();await call('side24Trade',{boxId:lead,confirmed:true},409);sql.prepare('DELETE FROM inventory WHERE key=?').run(key);
+  sql.prepare('INSERT INTO trades(id,requester,recipient,offered_id,status,created_at,expires_at) VALUES(?,?,?,?,?,?,?)').run('side24-pending',globalThis.__adventureUser.userId,'other',lead,'pending',Date.now(),Date.now()+60000);await get();await call('side24Trade',{boxId:lead,confirmed:true},409);sql.prepare("UPDATE trades SET status='cancelled' WHERE id='side24-pending'").run();
+  await get();const originalBatch=globalThis.__adventureEnv.DB.batch;globalThis.__adventureEnv.DB.batch=async statements=>{globalThis.__adventureEnv.DB.batch=originalBatch;seedMon(lead,{...rawMon(lead),item:'leftovers'});return originalBatch(statements);};try{await call('side24Trade',{boxId:lead,confirmed:true},409);}finally{globalThis.__adventureEnv.DB.batch=originalBatch;}assert.equal(rawMon(lead).item,'leftovers');assert.notEqual(rawWorld().zaSide24Complete,true);seedMon(lead,{...abra,item:''});
+  await get();const revision=state.revision,coins=state.wallet.coins;await call('side24Trade',{boxId:lead,confirmed:true});await call('side24Trade',{boxId:lead,confirmed:true,revision},409);await get();const id=state.world.zaSide24ReceivedId;assert.equal(state.world.zaSide24Complete,true);assert.deepEqual(state.world.teamIds,[id]);assert.equal(rawMon(lead).id,63);assert.equal(rawMon(lead).shiny,true);assert.ok(!state.box.some(p=>p.boxId===lead));assert.equal(rawMon(id).id,447);assert.equal(rawMon(id).level,25);assert.equal(state.wallet.coins,coins+300);assert.equal(state.inventory['za-exp-candy-xs'],5);
+  const saved=rawWorld();seedWorld({...saved,teamIds:[lead],activeId:lead,districtPosition:{...saved.districtPosition,revision:state.revision+1}});await get();assert.deepEqual(state.world.teamIds,[id]);assert.equal(state.world.activeId,id);await call('side24Trade',{boxId:lead,confirmed:true},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
