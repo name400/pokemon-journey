@@ -9231,3 +9231,13 @@ test('sleeping Zone 19 alpha receives unaware field capture bonus and wakes on f
   }
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('unknown Zone 8 burrow save is not rerolled or consumed on exit',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone8-future-burrow-qa',displayName:'흙더미 저장 보존'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],future={version:2,gible:999,opaque:'kept'},key='zone8:gible:443';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:13,y:8,facing:'right',zaRoyaleRank:'F',zaWildClockV2:true,zaZone8Spent:{drilbur:true},zaZone8Burrows:future,zaWildShinyRolls:{[key]:true},zaWildVisibleAlphaLevels:{[key]:35},combat:null,encounter:null},state.revision+1));
+  await get();assert.deepEqual(rawWorld().zaZone8Burrows,future);await call('zone8Wild-gible',{},409);await call('throwZoneVisible',{},409);assert.deepEqual(rawWorld().zaZone8Burrows,future);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:1,y:11,facing:'left'},state.revision+1));await get();await call('move',{direction:'left'});await get();assert.notEqual(state.world.district,'lumiose-zone8');assert.deepEqual(rawWorld().zaZone8Burrows,future);assert.equal(rawWorld().zaZone8Spent.drilbur,true);assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaWildVisibleAlphaLevels[key],35);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});

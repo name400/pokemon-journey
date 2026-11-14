@@ -107,3 +107,11 @@ test('burrow emergence follows proximity and preserves the current spawn identit
  const unknown={...s,zaZone8EmergedV1:{version:2,opaque:true}};assert.equal(emergeZone8Burrows(unknown),false);resetZone8Burrows(unknown);assert.deepEqual(unknown.zaZone8EmergedV1,{version:2,opaque:true});
  resetZone8Burrows(s);assert.equal(zone8BurrowEmerged(s,p),false);assert.equal(s.zaWildShinyRolls[key],true);assert.equal(s.zaWildVisibleAlphaLevels[key],35);
 });
+
+test('unknown burrow populations survive initialization, refresh, and fast travel',async()=>{
+ const {initializeZone8Burrows,resetZone8Burrows,zone8BurrowSpecies}=await import('../lib/cloud-adventure/adventure-zone8.mjs');const {refreshOrdinaryWildSpawns}=await import('../lib/cloud-adventure/adventure-wild-refresh.mjs');const {clearMapTravelTransient}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ for(const future of [{zaZone8Burrows:{version:2,gible:999}}, {zaZone8Burrows:{gible:999}}, {zaWildShinyRolls:{version:2,'zone8:gible:443':true}}, {zaWildShinyRolls:{'zone8:gible:443':'future'}}, {zaWildVisibleAlphaLevels:{version:2,'zone8:gible:443':35}}, {zaWildVisibleAlphaLevels:{'zone8:gible:443':{version:2}}}, {zaWildSpawnCycles:{version:2,8:{period:'day',interval:1}}}, {zaZone8EmergedV1:{version:2,opaque:true}}]){
+  const s={district:'lumiose-zone8',zaZone8Spent:{gible:true},zaZone8Burrows:{gible:443},zaWildShinyRolls:{'zone8:gible:443':true},zaWildSpawnCycles:{8:{period:'day',interval:1}},...future},before=structuredClone(s);
+  assert.equal(initializeZone8Burrows(s,()=>{throw Error('must not reroll');}),false);assert.equal(zone8BurrowSpecies(s,'gible'),null);assert.equal(resetZone8Burrows(s),false);assert.equal(refreshOrdinaryWildSpawns(s,'night',2),false);clearMapTravelTransient(s);assert.deepEqual(s,before);
+ }
+});
