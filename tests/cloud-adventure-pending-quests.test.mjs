@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {pendingAdventureQuests,trackedAdventureLocalTarget} from '../lib/cloud-adventure/adventure-pending-quests.mjs';
+import {pendingAdventureQuests,trackedAdventureLocalTarget,trackedAdventureObjective} from '../lib/cloud-adventure/adventure-pending-quests.mjs';
 import {fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
 test('quest journal derives active objectives and only explicit unclaimed rewards',()=>{
  assert.deepEqual(pendingAdventureQuests({}),[]);assert.deepEqual(pendingAdventureQuests({zaEmmaMet:true}),[]);assert.deepEqual(pendingAdventureQuests({zaEmmaMet:true,zaEmmaMegaSeen:true,zaMission05Stage:7}),[]);assert.deepEqual(pendingAdventureQuests({zaEmmaMet:true,zaMission05Stage:7}).map(q=>q.id),['1','2','3']);
@@ -8,6 +8,12 @@ test('quest journal derives active objectives and only explicit unclaimed reward
  const completed={zaEmmaMet:true,zaEmmaBattleComplete:true,zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3,zaSide14Started:true,zaSide14Complete:true,zaSide21Started:true,zaSide21Complete:true,zaSide27Started:true,zaSide27Complete:true,zaSide72Stage:1,zaSide72Complete:true,zaSide74Stage:2,zaSide74Complete:true,zaSide88Stage:2,zaSide88Complete:true,zaSide119Started:true,zaSide119Complete:true};assert.deepEqual(pendingAdventureQuests(completed),[]);
  completed.zaTradePotionPending=true;completed.zaSableyeRevivePending=true;completed.zaSide119LuxuryPending=2;assert.deepEqual(pendingAdventureQuests(JSON.parse(JSON.stringify(completed))).map(q=>q.id),['2-reward','3-reward','119-reward']);
  const twelve={zaSide21Started:true,zaSide21Found:Array.from({length:12},(_,i)=>`museum1-${i}`)};assert.match(pendingAdventureQuests(twelve)[0].goal,/보고/);
+});
+
+test('late side quests show their saved stage and stop tracking after completion',()=>{
+ for(const [stage,goal] of [[1,/부란다/],[2,/보상/]]){const s={zaSide117Stage:stage,zaTrackedQuestId:'117',objective:'메인 목표'};assert.match(trackedAdventureObjective(s),goal);assert.equal(trackedAdventureObjective({...s,zaSide117Complete:true}),'메인 목표');}
+ for(const [stage,goal] of [[1,/도장/],[2,/호텔/],[3,/수로/],[4,/찾으세요/],[5,/보상/]]){const s={zaSide118Stage:stage,zaTrackedQuestId:'118',objective:'메인 목표'};assert.match(trackedAdventureObjective(s),goal);assert.equal(trackedAdventureObjective({...s,zaSide118Complete:true}),'메인 목표');}
+ assert.deepEqual(pendingAdventureQuests({zaSide117Stage:0,zaSide118Stage:6}),[]);
 });
 
 test('tracked local markers follow real interaction tiles and disappear for other floors or completed quests',()=>{

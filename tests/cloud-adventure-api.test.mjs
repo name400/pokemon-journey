@@ -3007,6 +3007,17 @@ test('Side Mission 117 saves Josée training, protects alpha duo and pays once',
  }finally{globalThis.__adventureUser=priorUser;}
 });
 
+test('Side Mission 117 resumes saved stages without the original mission unlock flag',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side117-legacy-resume-qa',displayName:'도장 진행 복원'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const dojo=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',zaMission19Stage:0,zaMission39Started:false,zaSide117Complete:false,zaSide118Stage:0,...extra},state.revision+1);
+  seedWorld(dojo({zaSide117Stage:0}));await get();assert.notEqual(state.world.interaction?.action,'side117Josee');await call('side117Josee',{},409);
+  seedWorld(dojo({zaSide117Stage:1}));await get();assert.equal(state.world.interaction?.action,'side117Pangoro');await call('setAdventureTrackedQuest',{questId:'117'});await get();assert.equal(state.world.zaTrackedQuestId,'117');assert.match(trackedAdventureObjective(state.world),/부란다/);await call('side117Pangoro');await get();assert.equal(state.battle.teams[1].length,2);await call('forfeit');assert.equal(state.world.zaSide117Stage,1);await get();assert.equal(state.world.interaction?.action,'side117Pangoro');
+  seedWorld(dojo({zaSide117Stage:2}));await get();assert.equal(state.world.interaction?.action,'side117Reward');assert.match(trackedAdventureObjective(state.world),/보상/);const rev=state.revision;await call('side117Reward');await get();assert.equal(state.world.zaSide117Complete,true);assert.equal(trackedAdventureObjective(state.world),state.world.objective);assert.equal(state.inventory.expertbelt,1);assert.equal(state.inventory.seedofmasteryza,10);assert.equal(state.wallet.coins,wallet.coins+1500);assert.deepEqual(state.world.teamIds,team);await call('side117Reward',{},409);await call('side117Reward',{revision:rev},409);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
+
 test('Side Mission 118 follows Gengar search, preserves stages and pays usable candy',async()=>{
  const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side118-qa',displayName:'팬텀수색테스트'};
  try{
