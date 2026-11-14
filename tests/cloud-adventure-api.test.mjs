@@ -7853,3 +7853,15 @@ test('academy Mega Evolution lesson saves answers and pays once even with mistak
   sql.prepare('UPDATE wallets SET coins=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const revision=state.revision;await call('side76Reward');await call('side76Reward',{revision},409);await get();assert.equal(state.world.zaMegaShards,112);assert.equal(state.wallet.coins,500);assert.equal(rawWorld().zaSide76Complete,true);assert.equal(pendingAdventureQuests(state.world).some(q=>q.id==='76'),false);assert.deepEqual(state.world.teamIds,[lead]);assert.deepEqual(rawMon(lead),original);await call('side76Reward',{},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('player health foundation records only actual center healing and preserves old and future saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'player-vitals-center-qa',displayName:'플레이어 체력 센터 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],id=team[0],pokemon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet);
+  const atHotel=()=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:6,facing:'up'},state.revision+1);
+  seedWorld(atHotel());await get();assert.equal(state.world.zaPlayerVitalsV1,undefined);assert.equal(state.world.interaction.action,'heal');
+  const rev=state.revision;await call('heal');await call('heal',{revision:rev},409);await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,{version:1,hp:100,lastCenterId:'hotel'});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-sector8',x:5,y:7,facing:'up',zaPlayerVitalsV1:{version:1,hp:32,lastCenterId:'hotel',extra:'keep'}},state.revision+1));await get();assert.equal(state.world.interaction.action,'heal');await call('heal');await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,{version:1,hp:100,lastCenterId:'jaune',extra:'keep'});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  const future={version:2,hp:17,opaque:'keep'};seedWorld({...atHotel(),zaPlayerVitalsV1:future});await get();await call('heal');await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);assert.equal(rawMon(id).speciesId,pokemon.speciesId);assert.deepEqual(rawMon(id).ivs,pokemon.ivs);
+ }finally{globalThis.__adventureUser=previous;}
+});
