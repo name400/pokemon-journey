@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone15Map,zone15Encounter,zone15Visible,zone15Item,ZONE15_TREES,ZONE15_BENCHES} from '../lib/cloud-adventure/adventure-zone15.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
+
+test('Zone 15 rooftop TM preserves a previous position and checks reviewed compatibility',()=>{
+ const old={area:3,district:'lumiose-zone15',interior:null,zaZone15Upper:true,x:17,y:9,teamIds:['kept']};
+ const restored=restoreAdventurePosition(storeAdventurePosition(old,112),112);
+ assert.deepEqual([restored.x,restored.y,restored.teamIds],[17,9,['kept']]);
+ assert.equal(zone15Map(restored)[9][17],'t');assert.equal(zone15Item({...restored,zaZone15Items:['roof-earth-power']},'t'),null);
+ assert.equal(zone15Item({...restored,zaZone15Upper:false},'t'),null);
+ const bag={'za-tm052':1};assert.equal(canLearnStoryTm(bag,{id:152,speciesId:152,moves:[]},'za-tm052'),true);
+ assert.equal(canLearnStoryTm(bag,{id:25,speciesId:25,moves:[]},'za-tm052'),false);
+});
 
 test('Zone 15 roof Larvitar slots are independent and do not occupy an old saved position',()=>{
  const state={area:3,district:'lumiose-zone15',interior:null,zaZone15Upper:true,zaZone15WebOpen:true,x:17,y:5,facing:'right',zaZone15Spent:{larvitar:true},teamIds:['kept']};

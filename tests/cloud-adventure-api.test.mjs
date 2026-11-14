@@ -6221,6 +6221,21 @@ test('Zone 13 grass battle blocks pickup only until the wild encounter ends',asy
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('Zone 15 roof Earth Power TM is saved, reusable and protected against duplicate pickup',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone15-earth-power-qa',displayName:'옥상 기술머신'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedMon(id,{...makeMon(152,20),moves:['몸통박치기']});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone15',interior:null,x:16,y:9,facing:'right',zaRoyaleRank:'D',zaZone15Upper:true,zaZone15Items:['cafe-ultra']},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'zone15Item-roof-earth-power');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm052']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm052');await get();await call('zone15Item-roof-earth-power',{},409);assert.ok(!rawWorld().zaZone15Items.includes('roof-earth-power'));
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;
+  await call('zone15Item-roof-earth-power');await get();assert.equal(state.inventory['za-tm052'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  await call('zone15Item-roof-earth-power',{revision:rev},409);await call('zone15Item-roof-earth-power',{},409);
+  await call('teachStoryTm',{item:'za-tm052',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'대지의힘');assert.equal(state.inventory['za-tm052'],1);assert.ok(rawWorld().zaZone15Items.includes('cafe-ultra'));
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 17 roof rewards and day-night encounters survive reload and limits',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone17-roof-items-qa',displayName:'옥상 검증'};
  try{
