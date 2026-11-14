@@ -8786,3 +8786,14 @@ test('outdoor Floette multi battle inherits rain without rewriting ongoing battl
   seedWorld(place());await get();assert.notEqual(state.world.weather,'rain');await call('side51Battle');assert.equal(state.battle.weather,'');await call('forfeit');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.equal(rawMon(id).id,152);assert.equal(rawWorld().zaSide51Stage,1);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
+
+test('Cielestine rain battle and rewards preserve saves and reject duplicates',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'side64-cielestine-qa',displayName:'빗속 의뢰 검사'};globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,coins=state.wallet.coins,team=[...state.world.teamIds],strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{},shiny:true};seedMon(id,strong);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector7',interior:null,x:19,y:10,facing:'down',...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('side64Start',{},409);seedWorld(place({zaMission20Stage:5,zaSide06Won:true}));await get();assert.equal(state.world.interaction.action,'side64Start');await call('side64Start');await call('side64Battle');assert.equal(state.battle.weather,'raindance');assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level]),[[690,45],[693,45],[199,46]]);await get();assert.equal(state.battle.weather,'raindance');await call('forfeit');assert.equal(rawWorld().zaSide64Stage,1);
+  seedMon(id,strong);seedWorld(place({}));await get();await call('side64Battle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const p of sim.p2.pokemon){p.hp=1;p.setStatus('slp');p.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.equal(rawWorld().zaSide64Stage,2);assert.equal(state.wallet.coins,coins+2208);
+  seedWorld(place({zaFreshWater:997}));await get();await call('side64Reward',{},409);assert.equal(rawWorld().zaSide64Stage,2);seedWorld(place({zaFreshWater:996}));await get();const rev=state.revision;await call('side64Reward');await call('side64Reward',{revision:rev},409);await get();assert.equal(rawWorld().zaFreshWater,999);assert.equal(state.inventory.mysticwater,1);assert.equal(state.wallet.coins,coins+4208);assert.equal(rawWorld().zaSide64Stage,3);assert.equal(rawWorld().zaSide06Won,true);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).shiny,true);await call('side64Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});
