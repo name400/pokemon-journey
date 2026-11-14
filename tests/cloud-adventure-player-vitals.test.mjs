@@ -59,3 +59,12 @@ test('roof alpha alert stops recovery only while that alpha remains present',asy
  const w={district:'lumiose-zone1-roof',zaZone1RoofRoarAlert:true,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}};
  assert.equal(syncPlayerVitals(w,1000),false);w.zaZone1RoofAlphaSpent=true;assert.equal(syncPlayerVitals(w,2000),true);assert.equal(projectPlayerVitals(w,3000).hp,34);
 });
+
+test('wild attack damage shares the roar protection and rejects invalid amounts',async()=>{
+ const {applyPlayerWildDamage,applyPlayerAlphaRoar}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ const w={zaPlayerVitalsV1:{version:1,hp:60,lastCenterId:'hotel'}};
+ for(const damage of [0,-1,1.5,Infinity])assert.equal(applyPlayerWildDamage(w,damage,1000),null);
+ assert.deepEqual(applyPlayerWildDamage(w,30,1000),{blackout:false,damage:30});
+ assert.equal(applyPlayerAlphaRoar(w,2999).immune,true);assert.deepEqual(applyPlayerWildDamage(w,30,3000),{blackout:false,damage:29});
+ assert.deepEqual(applyPlayerWildDamage(w,30,5000),{blackout:true,damage:1});assert.equal(w.zaPlayerVitalsV1.hp,100);
+});

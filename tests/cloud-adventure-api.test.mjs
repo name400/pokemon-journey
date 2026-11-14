@@ -7914,6 +7914,22 @@ test('noticed wild alpha roar damages the player and safely returns them to thei
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('pursuing wild alpha attacks the player without duplicating damage or changing old saves',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'wild-alpha-attack-qa',displayName:'야생 공격'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const wild=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-wild',interior:null,x:3,y:7,facing:'up',zaWildAlphaPosition:{x:3,y:5,facing:'down'},zaWildAlphaAlert:true,zaWildAlphaSpent:false,...extra},state.revision+1);
+  seedWorld(wild({zaPlayerVitalsV1:{version:1,hp:50,lastCenterId:'hotel',extra:'kept'},zaWildShinyRolls:{'keep:shiny':true}}));await get();const revision=state.revision;await call('move',{path:['up','right']});await call('move',{direction:'up',revision},409);await get();assert.deepEqual([state.world.x,state.world.y],[3,6]);assert.equal(state.world.zaPlayerVitalsV1.hp,20);assert.equal(rawWorld().zaWildShinyRolls['keep:shiny'],true);
+  seedWorld(wild({zaPlayerVitalsV1:{version:1,hp:20,lastCenterId:'hotel',lastDamageAt:clock-1000}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,20);
+  seedWorld(wild({zaPlayerVitalsV1:{version:1,hp:20,lastCenterId:'hotel'}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);
+  clock+=3000;seedWorld(wild({zaPlayerVitalsV1:state.world.zaPlayerVitalsV1}));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  const future={version:2,hp:1,lastCenterId:'hotel',opaque:true};seedWorld(wild({zaPlayerVitalsV1:future}));await get();await call('move',{direction:'up'});await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);
+  seedWorld(wild({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'up'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);
+  seedWorld(wild({zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'unknown'}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);assert.equal(state.world.district,'lumiose-wild');
+  seedWorld(wild({x:3,y:8,zaDodgeReadyAt:0,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('dodge',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
+});
+
 test('zone 1 rooftop alpha roar protects old saves and returns the player after a later hit',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'roof-alpha-roar-qa',displayName:'옥상 포효'};globalThis.__adventureRandom=()=>.999;
  try{
