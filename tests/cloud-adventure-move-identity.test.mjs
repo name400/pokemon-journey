@@ -124,7 +124,8 @@ test('new Pichu family captures use Z-A levels while legacy and unknown forms st
  }
  const raichu={...makeMon(26,25),adventurePichuMovesV1:true,moves:['울음소리','전광석화','꼬리흔들기','전기쇼크']};assert.deepEqual(applyAdventureEvolutionMoves(raichu,{}).pending,['번개펀치']);
  const future={...makeMon(172,11),adventurePichuMovesV1:{version:2}};assert.deepEqual(markAdventureVerifiedGrowth(future),future);
- const alola=makeMon(10100,25);assert.equal(markAdventureVerifiedGrowth(alola).adventurePichuMovesV1,undefined);
+ const alola=markAdventureVerifiedGrowth({...makeMon(10100,25),moves:['울음소리','전광석화','꼬리흔들기','전기쇼크']});assert.equal(alola.adventurePichuMovesV1,true);assert.deepEqual(applyAdventureEvolutionMoves(alola,{}).pending,['사이코키네시스']);assert.ok(adventureLearnableMoves(alola,{}).includes('사이코키네시스'));assert.ok(!adventureLearnableMoves(alola,{}).includes('번개펀치'));
+ const invalid={...makeMon(10100,25),formId:999};assert.equal(markAdventureVerifiedGrowth(invalid).adventurePichuMovesV1,undefined);
 });
 
 test('new Kanto-family captures use verified growth and evolution while old records remain unchanged',async()=>{
