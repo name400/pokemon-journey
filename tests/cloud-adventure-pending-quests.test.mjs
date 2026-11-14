@@ -177,3 +177,19 @@ test('Cyclone quest and explicit remaining reward point to the same café withou
  const pending={...s,zaTrackedQuestId:'18-reward',zaSide18Stage:2,zaSide18RewardPending:{hpup:2,whiteherb:0}};assert.match(trackedAdventureObjective(pending),/보상/);assert.deepEqual(trackedAdventureLocalTarget({...pending,map:fieldMap(pending)}),{x:15,y:2});
  assert.deepEqual(pendingAdventureQuests({...pending,zaSide18RewardPending:{hpup:4,whiteherb:0}}),[]);assert.equal(trackedAdventureLocalTarget({...pending,interior:'other',map:fieldMap({...pending,interior:'other'})}),null);
 });
+
+test('recent investigations track saved objectives and their actual current-floor targets',()=>{
+ const cases=[
+  ['65','zaSide65Stage',1,'lumiose-rouge7-roof',3,3],['65','zaSide65Stage',2,'lumiose-rouge7-roof',9,3],['65','zaSide65Stage',4,'lumiose-rouge7-roof',19,2],['65','zaSide65Stage',5,'lumiose-rouge-sector7',15,11],
+  ['81','zaSide81Stage',1,'lumiose-south-boulevard',15,11],['81','zaSide81Stage',2,'lumiose-south-boulevard',15,11],
+  ['82','zaSide82Stage',1,'lumiose-screw-jaune8',18,3],['82','zaSide82Stage',2,'lumiose-screw-jaune8',15,3],
+  ['83','zaSide83Stage',1,'lumiose-rouge-north',18,2],['84','zaSide84Stage',2,'lumiose-quasartico',14,4],
+  ['85','zaSide85Stage',1,'lumiose-magenta-sector9',4,3],['85','zaSide85Stage',2,'lumiose-magenta-sector9',7,4],['85','zaSide85Stage',3,'lumiose-magenta-sector9',15,10],['85','zaSide85Stage',4,'lumiose-sewer',14,2],
+  ['86','zaSide86Stage',1,'lumiose-bleu-sector4',14,11],['86','zaSide86Stage',2,'lumiose-south-boulevard',12,2],['86','zaSide86Stage',3,'lumiose-rust',6,7],
+ ];
+ for(const [id,key,stage,district,x,y] of cases){const s={area:3,district,interior:null,[key]:stage,zaTrackedQuestId:id,objective:'메인 목표'},before=structuredClone(s),map=fieldMap(s),world={...s,map};assert.ok(pendingAdventureQuests(s).some(q=>q.id===id),`${id}:${stage}`);assert.notEqual(trackedAdventureObjective(s),'메인 목표');assert.deepEqual(trackedAdventureLocalTarget(world),{x,y},`${id}:${stage}`);assert.deepEqual(trackedAdventureLocalTarget({...world,map:[]}),null);assert.deepEqual(trackedAdventureLocalTarget({...world,interior:'other'}),null);assert.deepEqual(s,before);assert.deepEqual(trackedAdventureLocalTarget(JSON.parse(JSON.stringify(world))),{x,y});}
+ const sewerEntry={area:3,district:'lumiose-vernal',zaMission20Stage:5,zaSide85Stage:4,zaTrackedQuestId:'85'};assert.deepEqual(trackedAdventureLocalTarget({...sewerEntry,map:fieldMap(sewerEntry)}),{x:19,y:12});
+ const branch={area:3,district:'lumiose-sewer',zaSewerIceBranch:true,zaSide85Stage:4,zaTrackedQuestId:'85'};assert.equal(trackedAdventureLocalTarget({...branch,map:fieldMap(branch)}),null);
+ for(const [id,key,finished] of [['65','zaSide65Stage',6],['81','zaSide81Stage',3],['82','zaSide82Stage',3],['83','zaSide83Stage',3],['84','zaSide84Stage',3],['85','zaSide85Stage',5],['86','zaSide86Stage',4]]){const done={[key]:finished,zaTrackedQuestId:id,objective:'메인 목표'};assert.equal(trackedAdventureObjective(done),'메인 목표');assert.equal(pendingAdventureQuests(done).some(q=>q.id===id),false);}
+ for(const bad of [null,0,99,'1',{},[]])assert.equal(pendingAdventureQuests({zaSide85Stage:bad}).some(q=>q.id==='85'),false);
+});
