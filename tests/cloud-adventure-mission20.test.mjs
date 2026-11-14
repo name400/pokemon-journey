@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat,playCpu} from '../lib/party-battle.mjs';
-import {mission20GhostsCaught,mission20Complete} from '../lib/cloud-adventure/adventure-mission20.mjs';
+import {mission20GhostsCaught,mission20Complete,advanceMission20Ghosts} from '../lib/cloud-adventure/adventure-mission20.mjs';
 import {lumioseGhostHouseMap,lumioseRustMap,fieldPath,findTile,storeAdventurePosition,restoreAdventurePosition,walkable,stepField,fieldDialogue,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Rust office courtyard preserves access and restores older positions on new walls',()=>{
@@ -34,6 +34,14 @@ test('ghost house hides only resolved slots and retains old saved positions',()=
  const partly={...base,zaMission20GhostCaught:[92,93,93]};assert.deepEqual([at(partly,6),at(partly,11),at(partly,16)],['.','.','b']);
  const saved=storeAdventurePosition(partly,7),restored=restoreAdventurePosition(structuredClone(saved),7);assert.deepEqual([restored.x,restored.y],[11,5]);assert.deepEqual(restored.teamIds,['owned']);assert.deepEqual(restored.zaMission20GhostCaught,[92,93,93]);assert.ok(walkable(at(restored,11)));assert.equal(at(restored,16),'b');
  assert.deepEqual([at({...base,zaMission20Stage:8},6),at({...base,zaMission20Stage:8},11),at({...base,zaMission20Stage:8},16)],['.','.','.']);assert.equal(fieldMap({...base,zaMission20Stage:8})[9][17],'n');
+});
+
+test('ghost movement is bounded, pauses near players and preserves legacy saves',async()=>{
+ const {predictCloudStep}=await import('../lib/cloud-adventure/adventure-prediction.mjs'),base={area:3,district:'lumiose-ghost-house',interior:null,zaMission20Stage:7,x:11,y:13,facing:'up',zaMission20GhostMotionV1:{phase:0,tick:0}};
+ assert.equal(predictCloudStep(base,'up'),null);assert.equal(predictCloudStep(base,'up',{allowHazard:true}).predictedHazard,true);
+ for(let phase=1;phase<=4;phase++){assert.equal(advanceMission20Ghosts(base),false);assert.equal(advanceMission20Ghosts(base),false);assert.equal(advanceMission20Ghosts(base),true);assert.equal(base.zaMission20GhostMotionV1.phase,phase%4);const map=fieldMap(base),positions=[...map.join('')].filter(tile=>'qab'.includes(tile));assert.equal(positions.length,3);}
+ const near={...base,x:6,y:6,zaMission20GhostMotionV1:{phase:0,tick:2}},before=structuredClone(near.zaMission20GhostMotionV1);assert.equal(advanceMission20Ghosts(near),false);assert.deepEqual(near.zaMission20GhostMotionV1,before);
+ const legacy={...base,zaMission20GhostMotionV1:undefined};assert.equal(advanceMission20Ghosts(legacy),false);assert.equal(fieldMap(legacy)[5][6],'q');assert.ok(predictCloudStep(legacy,'up'));
 });
 
 test('Philippe and Gwynn can mega evolve, and the three rogue forms start mega evolved',()=>{
