@@ -145,3 +145,12 @@ test('Jaune 11, Jaune 12 and Floral extend paved roads without crossing gates or
   const hazard={...w,zaWildAlphaAlert:true},h=createCloudMoveBuffer(hazard,predictCloudStep(hazard,'right',{allowHazard:true}),'right');for(let i=0;i<4;i++)assert.ok(h.push());assert.equal(h.push(),null);
  }
 });
+
+
+test('Zone 5 alpha approaches are marked hazardous without affecting other tiles',()=>{
+ const ground={area:3,district:'lumiose-zone5',x:4,y:12,facing:'up'};
+ assert.equal(predictCloudStep(ground,'up',{allowGrass:true}),null);assert.equal(predictCloudStep(ground,'up',{allowGrass:true,allowHazard:true}).predictedHazard,true);
+ const sewer={area:3,district:'lumiose-zone5-drain',x:18,y:7,facing:'up',zaZone5DrainSecondCleared:true};assert.equal(predictCloudStep(sewer,'up'),null);assert.equal(predictCloudStep(sewer,'up',{allowHazard:true}).predictedHazard,true);
+ const spent={...ground,zaZone5Spent:{'bellsprout-alpha':true}};assert.ok(predictCloudStep(spent,'up',{allowGrass:true}));
+ const unrelated={area:3,district:'lumiose-zone5',x:12,y:12,facing:'up'};assert.ok(predictCloudStep(unrelated,'up'));
+});

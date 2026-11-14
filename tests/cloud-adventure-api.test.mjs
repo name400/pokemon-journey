@@ -8348,3 +8348,19 @@ test('Montée Kakuna mission preserves battle retries and deferred items',async(
   const future={version:2,opaque:true};seedWorld(storeAdventurePosition({...rawWorld(),...base,zaSide11RewardsV1:future},state.revision+1));await get();assert.equal(state.world.district,'lumiose-rouge-sector1');await call('side11Reward',{},409);assert.deepEqual(rawWorld().zaSide11RewardsV1,future);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Zone 5 ground and sewer alphas threaten the player while preserving saves and captured spawns',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone5-alpha-player-qa',displayName:'구역 5 우두머리 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='zone5:bellsprout-alpha:69';
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone5',interior:null,x:4,y:12,facing:'up',zaZone5Upper:false,zaZone5DrainLanding:false,zaZone5Spent:{},zaZone5AlphaRoarAlertV1:undefined,zaWildShinyRolls:{[key]:true},zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(place({}));await get();const revision=state.revision;await call('move',{direction:'up'});await call('move',{direction:'up',revision},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(state.world.zaZone5AlphaRoarAlertV1,'bellsprout-alpha');assert.match(state.world.log.join(' '),/모다피/);
+  clock+=3000;await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  seedWorld(place({x:4,y:12,zaZone5Spent:{'bellsprout-alpha':true},zaZone5AlphaRoarAlertV1:'bellsprout-alpha'}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaZone5AlphaRoarAlertV1,undefined);
+  seedWorld(place({district:'lumiose-zone5-drain',x:18,y:7,zaZone5DrainSecondCleared:true}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(state.world.zaZone5AlphaRoarAlertV1,'whirlipede-alpha');assert.match(state.world.log.join(' '),/휠구/);clock+=3000;await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);
+  seedWorld(place({zaZone5AlphaRoarAlertV1:'bellsprout-alpha',zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'hotel'}}));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  seedWorld(place({zaDodgeReadyAt:0}));await get();await call('dodge',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  seedWorld(place({zaZone5AlphaRoarAlertV1:{version:2,opaque:true}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.deepEqual(rawWorld().zaZone5AlphaRoarAlertV1,{version:2,opaque:true});
+  seedWorld(place({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'up'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});

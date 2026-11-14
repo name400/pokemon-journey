@@ -97,3 +97,9 @@ test('Litleo only prevents recovery while awake, alerted and present',async()=>{
  assert.equal(playerRecoverySafe(w),false);
  for(const change of [{zaZone3LitleoAwakeV1:false},{zaZone3LitleoRoarAlertV1:false},{zaZone3LitleoSpent:true},{district:'lumiose-zone3'}])assert.equal(playerRecoverySafe({...w,...change}),true);
 });
+
+test('Zone 5 alert blocks recovery only near the still-present alpha on the correct layer',async()=>{
+ const {playerRecoverySafe}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');const s={area:3,district:'lumiose-zone5',x:4,y:11,zaZone5AlphaRoarAlertV1:'bellsprout-alpha'};
+ assert.equal(playerRecoverySafe(s),false);assert.equal(playerRecoverySafe({...s,x:8}),true);assert.equal(playerRecoverySafe({...s,zaZone5Upper:true}),true);assert.equal(playerRecoverySafe({...s,zaZone5Spent:{'bellsprout-alpha':true}}),true);assert.equal(playerRecoverySafe({...s,zaFieldCrouched:true}),true);
+ const drain={area:3,district:'lumiose-zone5-drain',x:18,y:6,zaZone5AlphaRoarAlertV1:'whirlipede-alpha'};assert.equal(playerRecoverySafe(drain),false);assert.equal(playerRecoverySafe({...drain,zaZone5DrainLanding:true}),true);assert.equal(playerRecoverySafe({...drain,zaZone5Spent:{'whirlipede-alpha':true}}),true);
+});
