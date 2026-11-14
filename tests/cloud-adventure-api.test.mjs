@@ -4032,6 +4032,9 @@ test('ZA introduction saves the chase and confirms one nearby starter',async()=>
    for(let i=0;i<5;i++)await call('introMove',{direction:'right'});await get();assert.equal(state.world.zaIntroStage,'choose');assert.equal(sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,0);
    for(let i=0;i<Math.abs(x-4);i++)await call('introMove',{direction:x<4?'left':'right'});await call('introMove',{direction:'up'});await call('introTalk',{species});await get();assert.equal(state.world.zaIntroChoice,species);
    await call('introCancel');await get();assert.equal(state.world.zaIntroChoice,null);await call('introTalk',{species});await call('introConfirm',{species,confirmed:false},409);await call('introConfirm',{species,confirmed:true});const id=state.world.activeId,mon=structuredClone(rawMon(id));assert.equal(mon.speciesId,species);assert.equal(mon.level,5);assert.equal(state.world.zaIntroStage,'andi');assert.equal(state.world.district,'lumiose');await get();assert.deepEqual(rawMon(id),mon);await call('introConfirm',{species,confirmed:true},409);assert.equal(sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
+   assert.deepEqual(mon.moves,['몸통박치기',species===158?'째려보기':'꼬리흔들기']);
+   await call('introBattle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({...rawWorld(),combat:{...combat,snapshot:sim.toJSON()}});await get();await battle();await get();
+   const after=structuredClone(rawMon(id));assert.equal(after.level,6);assert.deepEqual(after.moves,['몸통박치기',species===158?'째려보기':'꼬리흔들기',species===152?'나뭇잎':species===158?'물대포':'불꽃세례']);await call('introBattle',{},409);await get();assert.deepEqual(rawMon(id),after);
   }
  }finally{globalThis.__adventureUser=previousUser;}
 });
