@@ -93,6 +93,17 @@ test('a companion can recharge after hyper beam without blocking the next turn',
  initial.snapshot.prng='1,2,3,4';const first=playMission37TriplePrototype(initial,{type:'move',move:'splash'}),sim=restoreMission37TripleSnapshot(first);assert.equal(sim.p1.activeRequest.active[1].moves[0].id,'recharge');const second=playMission37TriplePrototype(first,{type:'move',move:'splash'});assert.equal(restoreMission37TripleSnapshot(second).turn,3);
 });
 
+test('locked Thrash resumes for player, companion and enemy after reload',()=>{
+ const mon=(id,move)=>({...makeMon(143,80),boxId:id,moves:[move],pp:{}});
+ for(const holder of ['player','ally','foe']){
+  const move=id=>id===holder?'난동부리기':'튀어오르기';
+  const initial=createMission37TripleSnapshot([mon('player',move('player'))],[mon('ally',move('ally'))],[mon('ally2','튀어오르기')],[mon('foe',move('foe')),mon('foe2','튀어오르기'),mon('foe3','튀어오르기')]);initial.snapshot.prng='1,2,3,4';
+  const command=holder==='player'?{type:'move',move:'thrash'}:{type:'move',move:'splash'},first=playMission37TriplePrototype(initial,command),saved=JSON.parse(JSON.stringify(first));
+  const sim=restoreMission37TripleSnapshot(saved),req=holder==='player'?sim.p1.activeRequest.active[0]:holder==='ally'?sim.p1.activeRequest.active[1]:sim.p2.activeRequest.active[0];assert.equal(req.moves[0].id,'thrash');assert.equal(req.moves[0].target,undefined);
+  const second=playMission37TriplePrototype(saved,command);assert.equal(restoreMission37TripleSnapshot(second).turn,3);assert.deepEqual(mission37PlayerTeam(second).map(p=>p.boxId),['player']);
+ }
+});
+
 test('reserve medicine is confined to the player owner and survives restore',()=>{
  const lead={...makeMon(25,80),boxId:'medicine-player',moves:['튀어오르기'],pp:{}},reserve={...makeMon(4,30),boxId:'medicine-reserve',hp:10},groups=mission37CompanionGroups(6),foes=Array.from({length:3},(_,i)=>({...makeMon(143,100),boxId:`medicine-foe-${i}`,moves:['튀어오르기'],pp:{}}));
  const initial=createMission37TripleSnapshot([lead,reserve],groups[0].team,groups[1].team,foes),before=JSON.stringify(initial);
