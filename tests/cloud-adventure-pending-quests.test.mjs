@@ -58,3 +58,25 @@ test('Emma investigation markers follow quest stage and both existing quest loca
   {...base,district:'lumiose-zone4',zaTrackedQuestId:'3',zaSableyeQuest:3},
  ])assert.equal(trackedAdventureLocalTarget({...save,map:fieldMap(save)}),null);
 });
+
+test('unclaimed restaurant rewards remain trackable across locations and reloads',()=>{
+ const cases=[
+  {id:'29-reward',flag:'zaLeNahRewardPending',district:'lumiose-vert-sector6',interior:'leNah',door:[15,12],host:[11,5]},
+  {id:'94-reward',flag:'zaLeWowRewardPending',district:'lumiose-rouge-sector2',interior:'leWow',door:[5,5],host:[11,5]},
+  {id:'sushi-reward',flag:'zaSushiRewardPending',district:'lumiose-rouge-north',interior:'sushi',door:[19,4],host:[16,5]},
+ ];
+ for(const c of cases){
+  for(const mode of ['mission','repeat']){
+   const save={area:3,district:c.district,[c.flag]:mode,zaTrackedQuestId:c.id,objective:'메인 목표'},copy=structuredClone(save);
+   assert.equal(pendingAdventureQuests(save).some(q=>q.id===c.id),true);
+   assert.deepEqual(trackedAdventureLocalTarget({...save,map:fieldMap(save)}),{x:c.door[0],y:c.door[1]});
+   const indoor={...save,interior:c.interior};assert.deepEqual(trackedAdventureLocalTarget({...indoor,map:fieldMap(indoor)}),{x:c.host[0],y:c.host[1]});
+   assert.equal(trackedAdventureLocalTarget({...save,interior:'hotel',map:fieldMap({...save,interior:'hotel'})}),null);
+   assert.equal(trackedAdventureLocalTarget({...save,district:'elsewhere',map:fieldMap(save)}),null);
+   assert.deepEqual(save,copy);
+  }
+  assert.equal(pendingAdventureQuests({[c.flag]:'invalid'}).some(q=>q.id===c.id),false);
+  assert.equal(pendingAdventureQuests({[c.flag]:true}).some(q=>q.id===c.id),false);
+ }
+ assert.equal(trackedAdventureLocalTarget({area:3,district:'lumiose-rouge-north',zaRougeStreetSouth:true,zaTrackedQuestId:'sushi-reward',zaSushiRewardPending:'mission',map:[]}),null);
+});
