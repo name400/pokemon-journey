@@ -10521,3 +10521,12 @@ test('Zone 5 encounter stays consumed across the Sector 1 seam until leaving the
   const future={version:2,entry:'future'};seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-bleu-sector1',x:1,y:12,interior:null,zaZone5Spent:future},state.revision+1));await get();await call('move',{direction:'left'});await get();assert.deepEqual(rawWorld().zaZone5Spent,future);assert.equal(rawWorld().zaWildShinyRolls[key],true);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Mission 19 illusory wall supports walking through and restoring the corridor',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-wall-walk-qa',displayName:'환상 벽 이동 검사'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,mon=rawMon(id),coins=state.wallet.coins;
+  const position={...rawWorld(),area:3,district:'lumiose-sewer',interior:null,x:11,y:3,facing:'up',zaMission19Stage:12,zaMission19Inspected:['a','b','e','d'],zaRoyaleRank:'E',zaSewerReturn:'bleu7'};
+  seedWorld(storeAdventurePosition(position,state.revision+1));await get();const revision=state.revision;await call('move',{direction:'up'});await call('move',{direction:'up',revision},409);await get();assert.deepEqual([state.world.zaMission19Stage,state.world.zaMission19Inner,state.world.x,state.world.y],[13,true,11,14]);assert.deepEqual(state.world.zaMission19Inspected,['a','b','e','d']);
+  await call('move',{direction:'down'});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.zaMission19Inner,state.world.x,state.world.y],[false,11,4]);await call('face',{direction:'up'});await call('mission19Wall');await get();assert.equal(state.world.zaMission19Inner,true);assert.equal(state.wallet.coins,coins);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
+ }finally{globalThis.__adventureUser=previous;}
+});

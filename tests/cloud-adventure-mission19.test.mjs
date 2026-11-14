@@ -3,7 +3,16 @@ import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat,playCpu} from '../lib/party-battle.mjs';
 import {sewerInspected,SEWER_SOUTH_ITEMS} from '../lib/cloud-adventure/adventure-mission19.mjs';
-import {lumioseSewerMap,findTile,fieldPath,storeAdventurePosition,restoreAdventurePosition,fieldDialogue} from '../lib/cloud-adventure/adventure-world.mjs';
+import {lumioseSewerMap,findTile,fieldPath,storeAdventurePosition,restoreAdventurePosition,fieldDialogue,stepField} from '../lib/cloud-adventure/adventure-world.mjs';
+import {predictCloudStep} from '../lib/cloud-adventure/adventure-prediction.mjs';
+
+test('the investigated illusory wall can be crossed on foot without changing old encounters',()=>{
+ const base={area:3,district:'lumiose-sewer',interior:null,x:11,y:3,facing:'up',zaMission19Stage:12,zaMission19Inspected:['a','b','e','d'],teamIds:['owned']};
+ const next=stepField(base,'up');assert.deepEqual([next.x,next.y,next.zaMission19Stage,next.zaMission19Inner,next.zaMission19InnerEnabled],[11,14,13,true,true]);assert.ok(fieldPath(lumioseSewerMap({...base,...next}),next,{x:18,y:4}).length);
+ assert.equal(predictCloudStep(base,'up'),null);assert.equal(predictCloudStep(base,'up',{allowTransition:true})?.zaMission19Inner,true);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...base,...next},123),123);assert.deepEqual([saved.x,saved.y,saved.zaMission19Inner,saved.teamIds],[11,14,true,['owned']]);
+ assert.notEqual(stepField({...base,zaMission19Inspected:['a','b','e']},'up').transitioned,true);assert.notEqual(stepField({...base,zaMission19Stage:13,zaMission19InnerEnabled:undefined},'up').transitioned,true);assert.equal(stepField({...base,zaSewerIceBranch:true},'up').zaMission19Inner,undefined);
+});
 
 test('sewer markers are reachable and saved locations restore safely',()=>{
  const map=lumioseSewerMap();for(const marker of ['t','q','a','b','e','d','i','u']){const target=findTile(map,marker);assert.ok(target);assert.ok(fieldPath(map,{x:11,y:14},target).length,marker);}
