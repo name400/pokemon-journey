@@ -9345,3 +9345,18 @@ test('dex sync excludes NPC-traded individuals without erasing history or shared
   const second=put('dex-owned-abra',63);await get();await call('syncAdventureDex');await get();assert.ok(state.world.adventureDexSpecies.includes(63));assert.ok(state.box.some(p=>p.boxId===second.boxId));assert.deepEqual(rawMon(abra.boxId),abra);assert.deepEqual(state.world.teamIds,[lead]);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('new quests and dex sync preserve concurrent shared edits and wallet bounds',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'quest-shared-race-qa',displayName:'공유 보유함 경합'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;const fish={...makeMon(129,30),boxId:id,adventureAlpha:true,moves:['튀어오르기'],pp:{}};seedMon(id,fish);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector4',interior:null,zaVert4Layer:'ground',x:13,y:11,facing:'right',zaMission14Stage:1,zaRoyaleRank:'F'},state.revision+1));await get();
+  const originalBatch=globalThis.__adventureEnv.DB.batch;const changeBeforeCommit=(patch)=>{globalThis.__adventureEnv.DB.batch=async statements=>{globalThis.__adventureEnv.DB.batch=originalBatch;seedMon(id,{...rawMon(id),...patch});return originalBatch(statements);};};
+  try{changeBeforeCommit({otherModeNote:'start'});await call('side33Start');}finally{globalThis.__adventureEnv.DB.batch=originalBatch;}assert.equal(rawMon(id).otherModeNote,'start');await get();
+  try{changeBeforeCommit({adventureAlpha:false});await call('side33Show',{},409);}finally{globalThis.__adventureEnv.DB.batch=originalBatch;}assert.equal(rawWorld().zaSide33Stage,1);assert.equal(rawMon(id).adventureAlpha,false);
+  seedMon(id,{...rawMon(id),adventureAlpha:true});await get();await call('side33Show');await get();const rewardBefore=structuredClone(rawWorld().zaSide33RewardsV1);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER-1499,globalThis.__adventureUser.userId);await get();await call('side33Reward',{},409);assert.deepEqual(rawWorld().zaSide33RewardsV1,rewardBefore);
+  sql.prepare('UPDATE wallets SET coins=300 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();try{changeBeforeCommit({otherModeNote:'reward'});await call('side33Reward');}finally{globalThis.__adventureEnv.DB.batch=originalBatch;}assert.equal(rawMon(id).otherModeNote,'reward');await get();assert.equal(state.wallet.coins,1800);
+  try{changeBeforeCommit({otherModeNote:'sync'});await call('syncAdventureDex');}finally{globalThis.__adventureEnv.DB.batch=originalBatch;}assert.equal(rawMon(id).otherModeNote,'sync');
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-sector8',x:17,y:6,facing:'up',zaSide34Won:true,zaSide34RewardsV1:{coins:1100,lemonade:1,'za-tm031':1}},state.revision+1));sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER-1099,globalThis.__adventureUser.userId);await get();const before=structuredClone(rawWorld().zaSide34RewardsV1);await call('side34Reward',{},409);assert.deepEqual(rawWorld().zaSide34RewardsV1,before);assert.equal(rawMon(id).otherModeNote,'sync');
+ }finally{globalThis.__adventureUser=previous;}
+});
