@@ -10209,3 +10209,17 @@ test('TM085 teaches reviewed common families without consuming or overwriting sh
   const blocked={...makeMon(129,30),boxId:id,moves:['튀어오르기']};seedMon(id,blocked);await get();await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0},409);assert.deepEqual(rawMon(id),blocked);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('growth candy rejects incompatible shared growth records without consuming inventory',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'growth-candy-record-qa',displayName:'사탕 저장 보호'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,original=rawMon(id);
+  for(const item of ['rarecandy','za-exp-candy-xs'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item);
+  for(const patch of [{level:'future'},{level:0},{experience:'future'},{experience:-1},{evs:0}]){
+   const saved={...original,...patch,custom:{preserved:true}};seedMon(id,saved);await get();const revision=state.revision;
+   await call('useAdventureRareCandy',{boxId:id},409);await call('useAdventureExpCandyXS',{boxId:id},409);await get();assert.deepEqual(rawMon(id),saved);assert.equal(state.revision,revision);assert.equal(state.inventory.rarecandy,1);assert.equal(state.inventory['za-exp-candy-xs'],1);
+  }
+  seedMon(id,{...original,level:20,experience:0});await get();const expRevision=state.revision;await call('useAdventureExpCandyXS',{boxId:id});await call('useAdventureExpCandyXS',{boxId:id,revision:expRevision},409);await get();assert.equal(rawMon(id).experience,100);assert.equal(state.inventory['za-exp-candy-xs']||0,0);
+  const legacy={...original,level:5};delete legacy.experience;seedMon(id,legacy);await get();const revision=state.revision;await call('useAdventureRareCandy',{boxId:id});await call('useAdventureRareCandy',{boxId:id,revision},409);await get();assert.equal(rawMon(id).level,6);assert.equal(state.inventory.rarecandy||0,0);assert.equal(state.inventory['za-exp-candy-xs']||0,0);
+ }finally{globalThis.__adventureUser=previous;}
+});
