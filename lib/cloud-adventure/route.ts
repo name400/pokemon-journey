@@ -294,8 +294,17 @@ async function claimMission37Zygardite(s:any,bag:Record<string,number>,userId:st
 }
 function finish(s:any,mons:Map<string,any>,changed:Map<string,any>,bagChanges:Record<string,number>,bag:Record<string,number>){const c=s.combat;if(!c)return 0;if(s.zaMission39Started&&isInfiniteFieldTrainer(s.trainer?.id)&&!(Number.isInteger(s.zaInfiniteFieldTier)&&s.zaInfiniteFieldTier>=0&&s.zaInfiniteFieldTier<=3))s.zaInfiniteFieldTier=0;if(s.trainer?.id==='mission37-flowers'&&s.zaMission37Stage===7&&!c.adventureForfeited){const flowers=mission37RecordFlowers(s,c.adventureSoloMultiFoeV1===true?[...(c.teams?.[1]||[]),...(c.teams?.[3]||[])]:c.teams?.[1]);if(flowers.length)c.log.push(`앙주 체력 (턴제 환산): ${mission37AngeProgress(s).hp}/100`);}
  if(c.format==='mission37-triples-prototype-v1'&&c.adventureSoloTripleFoeV1===true){
-  const leYeah=s.trainer?.id==='le-yeah-course'&&s.zaLeYeahRun?.tripleV1===true;if(s.trainer?.id!=='mission35-aegislash'&&!leYeah)throw Error('다수 상대 배틀을 확인하세요.');const team=mission37PlayerTeam(c);if(team.length!==s.teamIds.length||team.some((m:any)=>!s.teamIds.includes(m.boxId)))throw Error('배틀 소유권을 확인하세요.');
+  const leYeah=s.trainer?.id==='le-yeah-course'&&s.zaLeYeahRun?.tripleV1===true,sushi=s.trainer?.id==='sushi-course'&&s.zaSushiRun?.tripleV2===true;if(s.trainer?.id!=='mission35-aegislash'&&!leYeah&&!sushi)throw Error('다수 상대 배틀을 확인하세요.');const team=mission37PlayerTeam(c);if(team.length!==s.teamIds.length||team.some((m:any)=>!s.teamIds.includes(m.boxId)))throw Error('배틀 소유권을 확인하세요.');
   for(const m of team){const normal=restoreAdventurePokemon(m,adventureBattleBaseFor(c,0,m));mons.set(normal.boxId,normal);changed.set(normal.boxId,normal);}const view=mission35TripleView(c),lead=view.teams[0][view.active[0]];if(lead&&s.teamIds.includes(lead.boxId))s.activeId=lead.boxId;s.events=view.events||[];s.log=c.log||[];if(!c.ended)return 0;
+  if(sushi){
+   const run=s.zaSushiRun;if(!Number.isInteger(run.course)||run.course<0||run.course>=SUSHI_COURSE_COUNT||typeof run.repeat!=='boolean')throw Error('식당 코스 상태를 확인하세요.');
+   if(c.winner===0){
+    if(recordResearchTrainerWin(s,s.trainer.id))s.log.push('모미지 리서치: 트레이너 배틀 승리 목표를 달성했다.');
+    const xp=victoryExperience(c.teams[1],true);for(const id of s.teamIds){const mon=mons.get(id);if(mon&&mon.hp>0){const leveled=gainExperience(mon,canariBattleExperience(xp,id===s.activeId,s.zaRedCanariPlush,s.zaRedCanariLevel)).mon,g=applyAdventureLevelMoves(mon,leveled);mons.set(id,g.mon);changed.set(id,g.mon);if(g.mon.level>mon.level)s.log.push(`${mon.name}의 레벨이 ${g.mon.level}이 되었다!`);for(const move of g.learned)s.log.push(`${mon.name}이(가) ${move}을(를) 배웠다!`);if(g.pending.length){queueAdventureMoves(s,id,g.pending);s.log.push(`${mon.name}: 배울 기술을 선택하세요.`);}}}
+    if(run.course+1===SUSHI_COURSE_COUNT){s.zaSushiRewardPending=run.repeat?'repeat':'mission';if(!run.repeat)s.zaSushiCompleted=true;delete s.zaSushiRun;s.log.push('5코스를 모두 마쳤다. 안내원에게 보상을 받자.');}else{s.zaSushiRun={...run,course:run.course+1};s.log.push('다음 코스를 준비한다. 배틀 사이에는 회복할 수 없다.');}
+   }else{delete s.zaSushiRun;for(const id of s.teamIds){const mon=mons.get(id);if(mon){const rested=heal(mon);mons.set(id,rested);changed.set(id,rested);}}s.district='lumiose';s.interior=null;s.x=3;s.y=5;s.log.push('연속 배틀에 실패해 포켓몬 센터에서 회복했다.');}
+   s.combat=null;s.encounter=null;s.trainer=null;return 0;
+  }
   if(leYeah){
    const run=s.zaLeYeahRun;if(!Number.isInteger(run.course)||run.course<0||run.course>=LE_YEAH_COURSE_COUNT||typeof run.repeat!=='boolean')throw Error('식당 코스 상태를 확인하세요.');
    if(c.winner===0){
@@ -525,10 +534,10 @@ else if(['sushiStart','sushiRepeat','sushiNext'].includes(b.action)){
  if(s.combat||s.district!=='lumiose-rouge-north'||s.interior!=='sushi'||cell()!=='R'||s.unionHost)throw Error('식당 안내원에게 배틀을 신청하세요.');
  if(b.action!=='sushiNext'){
   if(!sushiAvailable(s)||s.zaSushiRun||s.zaSushiRewardPending||(b.action==='sushiStart'&&s.zaSushiCompleted)||(b.action==='sushiRepeat'&&!s.zaSushiCompleted))throw Error('식당 배틀의 진행 조건을 확인하세요.');
-  if(b.action==='sushiRepeat')reward=-30000;s.zaSushiRun={course:0,repeat:b.action==='sushiRepeat',multiV1:true};
+  if(b.action==='sushiRepeat')reward=-30000;s.zaSushiRun={course:0,repeat:b.action==='sushiRepeat',tripleV2:true};
  }
  const run=s.zaSushiRun;if(!run||!Number.isInteger(run.course)||run.course<0||run.course>=SUSHI_COURSE_COUNT||typeof run.repeat!=='boolean')throw Error('식당 코스 상태를 확인하세요.');
- const foes=sushiCourseTeam(run.course);if(run.multiV1===true){const ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)],player=ids.map((id:string)=>mons.get(id));s.combat=createSoloMultiFoeSnapshot(player,foes);s.combat.adventureBattleBase=adventureBattleBase([player]);s.activeId=s.combat.teams[0][0].boxId;}else s.combat=createAdventureCombat(s,mons,foes,{heals:0,strategy:'balanced'});s.trainer={id:'sushi-course',name:`식당 ${run.course+1}코스`,title:'연속 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=[`${run.course+1}코스의 배틀이 시작됐다!`];
+ const foes=sushiCourseTeam(run.course);if(run.tripleV2===true||run.multiV1===true){const ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)],player=ids.map((id:string)=>mons.get(id));s.combat=run.tripleV2===true?createMission35TripleSnapshot(player,foes):createSoloMultiFoeSnapshot(player,foes);s.combat.adventureBattleBase=adventureBattleBase([player]);s.activeId=s.combat.teams[0][0].boxId;}else s.combat=createAdventureCombat(s,mons,foes,{heals:0,strategy:'balanced'});s.trainer={id:'sushi-course',name:`식당 ${run.course+1}코스`,title:'연속 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=[`${run.course+1}코스의 배틀이 시작됐다!`];
 }
 else if(b.action==='enterLeYeah'){const spot=interactionAt(s);if(s.combat||s.interior||s.unionHost||s.district!=='lumiose-rouge-sector3'||spot?.tile!=='u'||spot.x!==16||spot.y!==11)throw Error('레스토랑 르 예 입구를 확인하세요.');s.interior='leYeah';s.x=11;s.y=14;s.facing='up';s.log=['레스토랑 르 예에 들어왔다. 내부 배치는 초안이다.'];}
 else if(['leYeahStart','leYeahRepeat','leYeahNext'].includes(b.action)){
