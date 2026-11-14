@@ -7377,6 +7377,19 @@ test('Zone 6 Ticien berry battle survives retry and partial reward collection',a
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 6 court deferred rewards remain reachable in legacy saves',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureRandom=()=>.999;
+ try{for(const c of [
+  {id:'side020',x:12,won:'zaSide020Won',pending:'zaSide020RewardPending',value:{oranberry:3,'za-exp-candy-xs':1},action:'side020Reward',item:'oranberry',count:3},
+  {id:'side42',x:10,won:'zaSide42Won',pending:'zaSide42RewardPending',value:true,action:'side42Reward',item:'fairyfeather',count:1},
+ ]){
+  globalThis.__adventureUser={userId:`zone6-legacy-reward-${c.id}`,displayName:'구형 의뢰 보상'};await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const base={...rawWorld(),area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',x:c.x,y:5,facing:'up',zaRoyaleRank:'W',zaLidaStage:0,zaMission08Complete:false,zaMission15Stage:0,zaMission20Stage:0,[c.won]:true,[c.pending]:c.value};
+  seedWorld(storeAdventurePosition(base,state.revision+1));await get();assert.equal(state.world.interaction?.action,c.action);const revision=state.revision;await call(c.action);await get();assert.equal(state.inventory[c.item],c.count);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);await call(c.action,{},409);await call(c.action,{revision},409);
+  seedWorld(storeAdventurePosition({...base,[c.won]:false},state.revision+1));await get();assert.notEqual(state.world.interaction?.action,c.action);await call(c.action,{},409);assert.equal(state.inventory[c.item],c.count);
+ }}finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Zone 6 court battle prizes respect plush bonuses and in-progress legacy saves',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureRandom=()=>.999;
  try{for(const p of [{name:'faye',action:'side42Battle',x:10,flag:'side42PayoutV1',quest:2400,prize:1728},{name:'ticien',action:'side020Battle',x:12,flag:'side020PayoutV1',quest:900,prize:1056}])for(const legacy of [false,true]){
