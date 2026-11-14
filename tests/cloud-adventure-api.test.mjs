@@ -3650,11 +3650,11 @@ test('Zone 18 courtyard west exit reaches the outside scaffold and returns after
 test('Zone 18 construction alley connects to the shared Lopunny encounter',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone18-construction-qa',displayName:'공사 골목'};
  try{
-  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),lead=team[0];seedMon(lead,{...rawMon(lead),moves:['울음소리','몸통박치기','덩굴채찍','성장'],pp:{}});
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:20,y:13,facing:'down',zaRoyaleRank:'B',zaZone18Upper:false,adventureBalls:{masterball:1}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone18Construction');
   await call('zone18Construction');await get();assert.deepEqual([state.world.zaZone18Construction,state.world.x,state.world.y],[true,3,13]);assert.equal(state.world.map[5][17],'c');
   await call('zone18Construction');assert.equal(state.world.zaZone18Construction,false);await call('zone18Construction');await walkTo({x:17,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone18Wild-lopunny-alpha');await call('zone18Wild-lopunny-alpha');assert.deepEqual([state.battle.teams[1][0].speciesId,state.battle.teams[1][0].level],[428,56]);await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaZone18Spent['lopunny-alpha'],true);assert.equal(state.world.map[5][17],'.');
-  while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});
+  assert.ok(state.world.adventurePendingMoves?.length>0);await call('move',{direction:'down'},409);await get();assert.ok(state.world.adventurePendingMoves?.length>0);while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});await get();assert.equal(state.world.zaZone18Spent['lopunny-alpha'],true);assert.ok(state.box.some(mon=>mon.speciesId===428&&mon.adventureAlpha));
   await walkTo({x:3,y:13});await call('face',{direction:'left'});await call('zone18Construction');await get();assert.equal(state.world.zaZone18Construction,false);assert.notEqual(state.world.map[5][12],'c');assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
