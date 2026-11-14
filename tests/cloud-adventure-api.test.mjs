@@ -8268,3 +8268,15 @@ test('Croquis bramble waves use a field move and preserve deferred Nest Balls',a
   const future={version:2,opaque:true};seedWorld({...rawWorld(),zaSide13PendingV1:future});await get();await call('side13ClaimBalls',{},409);assert.deepEqual(rawWorld().zaSide13PendingV1,future);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Distan long-range battle retries and preserves deferred mission rewards',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side06-distan-qa',displayName:'장거리 기술 검사'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,strong={...makeMon(150,100),boxId:lead,moves:['사이코키네시스'],pp:{}};seedMon(lead,strong);const base={area:3,district:'lumiose-bleu-sector4',interior:null,x:6,y:3,facing:'right',regionId:6};seedWorld(storeAdventurePosition({...rawWorld(),...base},state.revision+1));await get();await call('side06Start',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),...base,zaMission06Started:true},state.revision+1));await get();await call('side06Start');await get();assert.equal(state.world.interaction.action,'side06Battle');assert.ok(pendingAdventureQuests(state.world).some(q=>q.id==='06'));await call('side06Battle');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[688,16],[661,16],[672,16]]);await call('forfeit');await get();assert.notEqual(rawWorld().zaSide06Won,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),...base},state.revision+1));seedMon(lead,strong);await get();const before=state.wallet.coins;await call('side06Battle');await battle();await get();assert.equal(rawWorld().zaSide06Won,true);assert.equal(state.wallet.coins,before+1088);assert.deepEqual(rawWorld().zaSide06RewardsV1,{nugget:1,coins:1000});
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'nugget']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'nugget');await get();const revision=state.revision;await call('side06Reward');await call('side06Reward',{revision},409);await get();assert.equal(state.wallet.coins,before+2088);assert.deepEqual(rawWorld().zaSide06RewardsV1,{nugget:1,coins:0});await call('side06Reward',{},409);
+  sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();await call('side06Reward');await get();assert.equal(state.inventory.nugget,999);assert.deepEqual(rawWorld().zaSide06RewardsV1,{nugget:0,coins:0});assert.equal(state.wallet.coins,before+2088);assert.equal(rawMon(lead).id,150);await call('side06Reward',{},409);await call('side06Battle',{},409);
+  const future={version:2,opaque:true};seedWorld({...rawWorld(),zaSide06RewardsV1:future});await get();await call('side06Reward',{},409);assert.deepEqual(rawWorld().zaSide06RewardsV1,future);
+ }finally{globalThis.__adventureUser=previous;}
+});
