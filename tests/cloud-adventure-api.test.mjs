@@ -7900,6 +7900,32 @@ test('player health foundation records only actual center healing and preserves 
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('walking onto a verified center records the return point without healing the player',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'player-center-visit-qa',displayName:'센터 방문'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const place=(district,x,y,extra={})=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'up',...extra},state.revision+1);
+  seedWorld(place('lumiose',3,6,{zaPlayerVitalsV1:undefined}));await get();const before=state.revision;await get();assert.equal(state.revision,before);assert.equal(rawWorld().zaPlayerVitalsV1,undefined);
+  await call('move',{direction:'up'});await call('move',{direction:'up',revision:before},409);await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,{version:1,hp:100,lastCenterId:'hotel'});
+  seedWorld(place('lumiose-vert-street-route',10,14,{zaPlayerVitalsV1:{version:1,hp:12,lastCenterId:'hotel',extra:'kept'}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,12);assert.equal(state.world.zaPlayerVitalsV1.lastCenterId,'vert');assert.equal(state.world.zaPlayerVitalsV1.extra,'kept');
+  const future={version:2,hp:1,opaque:true};seedWorld(place('lumiose',3,6,{zaPlayerVitalsV1:future}));await get();await call('move',{direction:'up'});await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);
+  const damaged={version:1,hp:-1,lastCenterId:'hotel'};seedWorld(place('lumiose',3,6,{zaPlayerVitalsV1:damaged}));await get();await call('move',{direction:'up'});await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,damaged);
+  seedWorld(place('lumiose-wild',3,7,{zaWildAlphaPosition:{x:3,y:5,facing:'down'},zaWildAlphaAlert:false,zaWildAlphaSpent:false,zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'vert',extra:'kept'}}));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-street-route',10,13]);assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
+});
+
+test('center travel updates player return point but other destinations do not',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;Date.now=()=>2000000000000;globalThis.__adventureUser={userId:'player-center-travel-qa',displayName:'센터 이동'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:14,y:7,facing:'up',zaMission04Complete:true,zaRoyaleRank:'Y',zaFastTravelCenters:['hotel'],zaFastTravelZones:{1:{x:11,y:1}},zaPlayerVitalsV1:{version:1,hp:70,lastCenterId:'hotel',extra:'kept'}},state.revision+1));sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(710,globalThis.__adventureUser.userId);await get();
+  await call('taxi-bleu');await get();assert.equal(state.world.zaPlayerVitalsV1.hp,70);assert.equal(state.world.zaPlayerVitalsV1.lastCenterId,'bleu');assert.equal(state.wallet.coins,0);
+  await call('mapFastTravel',{destination:'zone1'});await get();assert.equal(state.world.zaPlayerVitalsV1.lastCenterId,'bleu');await call('mapFastTravel',{destination:'hotel'});await get();assert.equal(state.world.zaPlayerVitalsV1.lastCenterId,'hotel');assert.equal(state.world.zaPlayerVitalsV1.hp,70);
+  await call('fastTravel-bleu');await get();assert.equal(state.world.zaPlayerVitalsV1.lastCenterId,'bleu');assert.equal(state.world.zaPlayerVitalsV1.hp,70);assert.equal(state.world.zaPlayerVitalsV1.extra,'kept');assert.deepEqual(state.world.teamIds,team);
+  const future={version:2,hp:1,opaque:true};seedWorld(storeAdventurePosition({...rawWorld(),zaPlayerVitalsV1:future},state.revision+1));await get();await call('mapFastTravel',{destination:'hotel'});await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
+});
+
 test('noticed wild alpha roar damages the player and safely returns them to their saved center',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'player-alpha-roar-qa',displayName:'플레이어 포효 검사'};globalThis.__adventureRandom=()=>.999;
  try{

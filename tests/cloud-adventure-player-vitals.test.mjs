@@ -76,3 +76,11 @@ test('zone 2 island alpha alert blocks recovery only while the encounter remains
   assert.equal(syncPlayerVitals(w,1000),false);w.zaZone2AlphaSpent=true;assert.equal(syncPlayerVitals(w,2000),true);assert.equal(projectPlayerVitals(w,3000).hp,34);
  }
 });
+
+test('a verified center passage records a return point without healing or rewriting unknown health',async()=>{
+ const {recordPlayerCenterPassage}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ const old={teamIds:['kept'],zaGreenCanariLevel:2};assert.equal(recordPlayerCenterPassage(old,{id:'jaune'}),true);assert.deepEqual(old.zaPlayerVitalsV1,{version:1,hp:200,lastCenterId:'jaune'});assert.deepEqual(old.teamIds,['kept']);
+ const injured={zaPlayerVitalsV1:{version:1,hp:12,lastCenterId:'hotel',lastDamageAt:500,recoveryAt:700,recoveryRemainder:10,extra:'keep'}};assert.equal(recordPlayerCenterPassage(injured,{id:'vert'}),true);assert.deepEqual(injured.zaPlayerVitalsV1,{version:1,hp:12,lastCenterId:'vert',lastDamageAt:500,recoveryAt:700,recoveryRemainder:10,extra:'keep'});assert.equal(recordPlayerCenterPassage(injured,{id:'vert'}),false);
+ for(const v of [{version:2,hp:1,opaque:true},{version:1,hp:-1,lastCenterId:'hotel'},null]){const w={zaPlayerVitalsV1:v},before=structuredClone(w);assert.equal(recordPlayerCenterPassage(w,{id:'jaune'}),false);assert.deepEqual(w,before);}
+ assert.equal(recordPlayerCenterPassage({},null),false);
+});
