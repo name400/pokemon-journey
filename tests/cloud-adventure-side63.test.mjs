@@ -21,3 +21,10 @@ test('Lugo accepts verified alpha Gogoat without inferring ordinary XL sizes',()
  const restored=restoreAdventurePosition(storeAdventurePosition(begun,12),12);
  assert.equal(restored.zaSide63Stage,1);assert.deepEqual(restored.teamIds,['kept']);
 });
+
+test('deferred rewards track only a valid explicitly saved remainder',()=>{
+ const s={area:3,district:'lumiose-magenta-sector8-route',interior:null,x:4,y:6,facing:'up',zaSide63Stage:2,zaTrackedQuestId:'63-reward',zaSide63RewardPendingV1:{carbos:7}};
+ assert.equal(fieldDialogue(s).action,'side63Claim');assert.ok(pendingAdventureQuests(s).some(q=>q.id==='63-reward'));
+ assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),{x:4,y:5});
+ for(const value of [undefined,{carbos:11},{carbos:1,future:true}]){const old={...s,zaSide63RewardPendingV1:value};assert.equal(pendingAdventureQuests(old).some(q=>q.id==='63-reward'),false);assert.equal(trackedAdventureLocalTarget({...old,map:fieldMap(old)}),null);}
+});
