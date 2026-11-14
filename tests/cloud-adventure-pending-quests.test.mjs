@@ -211,3 +211,8 @@ test('Fina court stays reachable without changing the ground map',()=>{
 test('side 66 tracking points to the current investigation stage only',()=>{
  for(const [district,stage,expected] of [['lumiose-bleu-plaza-route',1,{x:4,y:6}],['lumiose-vert-sector3',2,{x:19,y:5}],['lumiose-vert-sector3',1,null],['lumiose-bleu-plaza-route',3,null]]){const s={area:3,district,interior:null,zaTrackedQuestId:'66',zaSide66Stage:stage};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),expected);}
 });
+
+
+test('side 78 tracking points to Odette only while its current stage is pending',()=>{
+ for(const [id,stage,expected] of [['78',1,{x:3,y:0}],['78-reward',2,{x:3,y:0}],['78',3,null]]){const s={area:3,district:'lumiose-vernal',interior:null,zaTrackedQuestId:id,zaSide78Stage:stage};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),expected);}
+});
