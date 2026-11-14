@@ -145,3 +145,11 @@ test('zone 19 ordinary random alpha Furfrou is distinct from the sleeping fixed 
  assert.equal(randomAlphaPlayerThreat({...s,zaWildVisibleAlphaLevels:{version:2}}),null);
  assert.notEqual(fixedAlphaPlayerThreat({...s,x:10,y:8})?.id,'furfrou-alpha');
 });
+
+test('zone 19 sleeping fixed Furfrou only threatens after its own wake state',async()=>{
+ const {wakeZone19Furfrou,clearZone19FurfrouAwake,refreshZone19Spawns}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
+ const s={area:3,district:'lumiose-zone19',x:11,y:8,zaZone19Period:'day',zaZone19Spent:{},zaWildShinyRolls:{'zone19:furfrou-alpha:676':true},zaZone19SpawnCycle:{period:'day',interval:3}};
+ assert.equal(fixedAlphaPlayerThreat({...s,x:10}),null);assert.equal(predictCloudStep({...s,x:10},'right'),null);assert.equal(wakeZone19Furfrou({...s,zaFieldCrouched:true}),false);assert.equal(wakeZone19Furfrou(s),true);assert.equal(wakeZone19Furfrou(s),false);assert.equal(fixedAlphaPlayerThreat({...s,x:10})?.id,'furfrou-alpha');
+ const future={...s,zaZone19FurfrouAwakeV1:{version:2}};assert.equal(wakeZone19Furfrou(future),false);assert.equal(fixedAlphaPlayerThreat({...future,x:10}),null);clearZone19FurfrouAwake(future);assert.deepEqual(future.zaZone19FurfrouAwakeV1,{version:2});
+ assert.equal(refreshZone19Spawns(s,'night',4),true);assert.equal(s.zaZone19FurfrouAwakeV1,undefined);assert.equal(s.zaWildShinyRolls['zone19:furfrou-alpha:676'],true);
+});

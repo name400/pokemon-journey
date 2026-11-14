@@ -9207,3 +9207,14 @@ test('emerged Zone 8 burrow alpha supports direct capture without rerolls',async
   const rev=state.revision;await call('throwZoneVisible',{ball:'masterball'});await call('throwZoneVisible',{ball:'masterball',revision:rev},409);await get();const caught=state.box.filter(m=>m.speciesId===443&&m.shiny===true);assert.equal(caught.length,1);assert.equal(rawMon(caught[0].boxId).adventureAlpha,true);assert.equal(rawWorld().zaZone8Spent.gible,true);assert.equal(rawWorld().adventureBalls.masterball,0);assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('Zone 19 sleeping alpha wakes then threatens without changing its shiny or party',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone19-waking-furfrou-qa',displayName:'잠든 트리미앙 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='zone19:furfrou-alpha:676';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:10,y:8,zaRoyaleRank:'B',zaMission05Complete:true,zaZone19Spent:{},zaZone19Period:'day',zaZone19FurfrouAwakeV1:undefined,zaWildShinyRolls:{[key]:true},zaFixedAlphaAlertV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null},state.revision+1));
+  await get();const rev=state.revision;await call('move',{direction:'right'});await call('move',{direction:'right',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaZone19FurfrouAwakeV1,true);assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  await call('move',{direction:'down'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone19:furfrou-alpha');clock+=3000;await call('move',{direction:'down'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:10,y:8,facing:'right',zaZone19Spent:{},zaZone19Period:'day',zaZone19FurfrouAwakeV1:undefined,zaWildShinyRolls:{[key]:true},combat:null,encounter:null},state.revision+1));await get();assert.match(state.world.interaction.text,/잠들어/);await call('zone19Wild-furfrou-alpha');await get();assert.equal(rawWorld().zaZone19FurfrouAwakeV1,true);assert.equal(rawWorld().encounter.shiny,true);await call('flee');await get();assert.equal(rawWorld().zaZone19FurfrouAwakeV1,true);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});
