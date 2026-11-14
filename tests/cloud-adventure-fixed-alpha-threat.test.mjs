@@ -113,3 +113,13 @@ test('early visible random alphas respect layer and avoid burrow species',async(
  const roof={area:3,district:'lumiose-zone5',x:5,y:3,zaZone5Upper:true,zaWildVisibleAlphaLevels:{'zone5:abra:63':25},zaWildShinyRolls:{'zone5:abra:63':true}};assert.equal(randomAlphaPlayerThreat(roof)?.id,'abra');assert.equal(randomAlphaPlayerThreat({...roof,zaZone5Upper:false}),null);
  const pit={area:3,district:'lumiose-zone10',x:10,y:8,zaZone10LowerBank:true,zaWildVisibleAlphaLevels:{'zone10:carvanha:318':42},zaWildShinyRolls:{'zone10:carvanha:318':true}};assert.equal(randomAlphaPlayerThreat(pit)?.id,'carvanha');assert.equal(randomAlphaPlayerThreat({...pit,zaZone10Upper:true}),null);
 });
+
+test('zone 20 ordinary slots participate only when their alpha identity is known',async()=>{
+ const {randomAlphaPlayerThreat,randomAlphaPlayerNear}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const key='zone20:bulbasaur:1',s={area:3,district:'lumiose-zone20',x:8,y:10,zaMission42Underground:false,zaZone20AlphaSpecies:448,zaZone20AlphaSpecies2:26,zaWildVisibleAlphaLevels:{[key]:63},zaWildShinyRolls:{[key]:true}};
+ assert.equal(randomAlphaPlayerThreat(s)?.id,'bulbasaur');assert.equal(randomAlphaPlayerNear(s),true);
+ assert.equal(randomAlphaPlayerThreat({...s,zaMission42Underground:true}),null);
+ assert.equal(randomAlphaPlayerThreat({...s,zaZone20Spent:{bulbasaur:true}}),null);
+ assert.equal(randomAlphaPlayerThreat({...s,zaWildVisibleAlphaLevels:{version:2}}),null);
+ assert.equal(randomAlphaPlayerThreat({...s,x:7,y:10}),null);
+});
