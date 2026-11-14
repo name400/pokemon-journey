@@ -70,3 +70,18 @@ test('zone 20 tracks the visible alpha species and each slot independently',asyn
  assert.equal(unknownZone20AlphaNear({...s,x:9,y:7,zaZone20AlphaSpecies2:undefined}),false);
  assert.equal(predictCloudStep({...s,x:10,y:7,zaZone20AlphaSpecies2:undefined},'left'),null);
 });
+
+test('early cemetery and monument alphas respect unlocks and legacy spent flags',()=>{
+ const cemetery={area:3,district:'lumiose-zone4',x:3,y:10};
+ assert.equal(fixedAlphaPlayerThreat(cemetery),null);
+ assert.equal(fixedAlphaPlayerThreat({...cemetery,zaMission05Complete:true})?.id,'spinarak-alpha');
+ assert.equal(predictCloudStep({...cemetery,zaMission05Complete:true},'left'),null);
+ assert.equal(fixedAlphaPlayerThreat({...cemetery,zaMission05Complete:true,zaZone4AlphaSpent:true}),null);
+ assert.equal(fixedAlphaAlertKnown({...cemetery,zaZone4AlphaSpent:{version:2}}),false);
+ const monument={area:3,district:'lumiose-zone7',x:10,y:8};
+ assert.equal(fixedAlphaPlayerThreat(monument)?.id,'fletchinder-alpha');
+ assert.equal(predictCloudStep(monument,'down'),null);
+ assert.equal(fixedAlphaPlayerThreat({...monument,zaZone7AlphaSpent:true}),null);
+ assert.equal(fixedAlphaPlayerThreat({...monument,x:11,y:8}),null);
+ assert.equal(fixedAlphaAlertKnown({...monument,zaZone7Spent:{version:2}}),false);
+});
