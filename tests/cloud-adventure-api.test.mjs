@@ -7956,6 +7956,27 @@ test('pursuing wild alpha attacks the player without duplicating damage or chang
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
 });
 
+test('dodging can break wild alpha pursuit and allow player health recovery',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'wild-alpha-escape-qa',displayName:'우두머리 추격 탈출'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-wild',interior:null,x:3,y:6,facing:'right',zaWildAlphaPosition:{x:3,y:5,facing:'down'},zaWildAlphaAlert:true,zaWildAlphaSpent:false,zaDodgeReadyAt:0,zaPlayerVitalsV1:{version:1,hp:70,lastCenterId:'hotel'},zaWildShinyRolls:{'keep:shiny':true}},state.revision+1));await get();
+  for(let i=0;i<4;i++){const rev=state.revision;await call('dodge',{direction:'right'});await call('dodge',{direction:'right',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,70);if(i<3)assert.equal(state.world.zaWildAlphaAlert,true);clock+=901;}
+  assert.equal(state.world.zaWildAlphaAlert,false);assert.match(state.world.log.at(-1),/추격에서 벗어났다/);assert.deepEqual([state.world.x,state.world.y],[11,6]);assert.equal(rawWorld().zaPlayerVitalsV1.recoveryAt,clock-901);assert.equal(rawWorld().zaWildShinyRolls['keep:shiny'],true);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,73);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  const p=rawWorld().zaWildAlphaPosition;seedWorld(storeAdventurePosition({...rawWorld(),x:p.x,y:p.y+2,zaWildAlphaPosition:{...p,facing:'down'},zaPlayerVitalsV1:{version:1,hp:60,lastCenterId:'hotel'}},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaWildAlphaAlert,true);assert.equal(state.world.zaPlayerVitalsV1.hp,50);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
+});
+
+test('catching an alerted wild alpha allows player recovery without leaving',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'wild-alpha-caught-recovery-qa',displayName:'포획 후 회복'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],lead=structuredClone(rawMon(team[0]));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-wild',interior:null,x:3,y:6,facing:'up',zaRoyaleRank:'A',adventureBalls:{...(rawWorld().adventureBalls||{}),masterball:1},zaWildAlphaPosition:{x:3,y:5,facing:'down'},zaWildAlphaAlert:true,zaWildAlphaSpent:false,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}},state.revision+1));await get();
+  const rev=state.revision;await call('throwWildAlpha',{ball:'masterball'});await call('throwWildAlpha',{ball:'masterball',revision:rev},409);await get();assert.equal(state.world.zaWildAlphaSpent,true);assert.equal(state.world.zaPlayerVitalsV1.hp,30);assert.equal(rawWorld().zaPlayerVitalsV1.recoveryAt,clock);assert.equal(rawMon(team[0]).speciesId,lead.speciesId);assert.deepEqual(rawMon(team[0]).ivs,lead.ivs);assert.ok(rawMon(team[0]).level>=lead.level);assert.ok(state.world.teamIds.includes(team[0]));
+  const savedRevision=state.revision;clock+=1000;await get();assert.equal(state.world.zaPlayerVitalsV1.hp,34);assert.equal(state.revision,savedRevision);assert.equal(rawWorld().zaPlayerVitalsV1.hp,30);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
+});
+
 test('zone 1 rooftop alpha roar protects old saves and returns the player after a later hit',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'roof-alpha-roar-qa',displayName:'옥상 포효'};globalThis.__adventureRandom=()=>.999;
  try{

@@ -84,3 +84,9 @@ test('a verified center passage records a return point without healing or rewrit
  for(const v of [{version:2,hp:1,opaque:true},{version:1,hp:-1,lastCenterId:'hotel'},null]){const w={zaPlayerVitalsV1:v},before=structuredClone(w);assert.equal(recordPlayerCenterPassage(w,{id:'jaune'}),false);assert.deepEqual(w,before);}
  assert.equal(recordPlayerCenterPassage({},null),false);
 });
+
+test('a spent wild alpha cannot keep player recovery blocked',async()=>{
+ const {syncPlayerVitals,projectPlayerVitals}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ const w={district:'lumiose-wild',zaWildAlphaAlert:true,zaWildAlphaSpent:false,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}};
+ assert.equal(syncPlayerVitals(w,1000),false);w.zaWildAlphaSpent=true;assert.equal(syncPlayerVitals(w,2000),true);assert.equal(projectPlayerVitals(w,3000).hp,34);
+});

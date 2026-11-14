@@ -155,6 +155,13 @@ test('alert alpha pursues over saved tiles and aiming follows its new direction'
  assert.deepEqual(target,{x:2,y:5,distance:2,back:true});
 });
 
+test('wild alpha pursuit releases only after a safe distance',async()=>{
+ const {releaseWildAlphaPursuit}=await import('../lib/cloud-adventure/adventure-world.mjs');
+ const s={area:3,district:'lumiose-wild',x:7,y:5,zaWildAlphaAlert:true,zaWildAlphaPosition:{x:3,y:5,facing:'right'},zaWildShinyRolls:{kept:true}};
+ assert.equal(releaseWildAlphaPursuit(s),false);s.x=8;assert.equal(releaseWildAlphaPursuit(s),true);assert.equal(s.zaWildAlphaAlert,false);assert.deepEqual(s.zaWildAlphaPosition,{x:3,y:5,facing:'right'});assert.deepEqual(s.zaWildShinyRolls,{kept:true});
+ for(const extra of [{district:'lumiose-zone1'},{interior:'hotel'},{zaWildAlphaSpent:true},{x:'8'}])assert.equal(releaseWildAlphaPursuit({...s,zaWildAlphaAlert:true,...extra}),false);
+});
+
 test('provisional Wild Zone 1 connects to plaza and preserves safe stored location',()=>{
  const map=lumioseZone1Map();assert.ok(fieldPath(map,{x:21,y:8},findTile(map,'g')).length);
  const west=stepField({area:3,district:'lumiose',x:1,y:8},'left');assert.equal(west.district,'lumiose-vernal');const enter=stepField({area:3,district:'lumiose',x:8,y:14},'down');assert.deepEqual([enter.district,enter.x,enter.y],['lumiose-zone1',21,8]);
