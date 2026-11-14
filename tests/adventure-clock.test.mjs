@@ -51,3 +51,13 @@ test('city weather stays consistent across districts, changes with the hour and 
  const saved={zaClockOffsetHours:0};restUntilHour(saved,16,20);assert.deepEqual(saved,{zaClockOffsetHours:4});assert.deepEqual(adventureGameTime(16*50000,saved.zaClockOffsetHours),adventureGameTime(20*50000));
  assert.equal(adventureFieldWeather({area:2},rain,'water'),'rain');
 });
+
+test('enclosed city maps do not report rain or enable rain-dependent evolution',async()=>{
+ const {adventureGameTime,adventureFieldWeather}=await import('../lib/cloud-adventure/adventure-clock.mjs');
+ const time=adventureGameTime(16*50000),surface={area:3,district:'lumiose-zone20',zaMission42Underground:false};
+ const mon=makeMon(705,50),ready=weather=>evolutionOptions(mon,{adventureEngine:'cloud',weather}).find(x=>x.id===706).ready;
+ assert.equal(adventureFieldWeather(surface,time,'water'),'rain');assert.equal(ready('rain'),true);
+ for(const s of [{...surface,zaMission42Underground:true},{area:3,district:'lumiose-lysandre-lab'},{area:3,district:'lumiose-rouge-tower-interior'}]){
+  const saved=structuredClone(s),weather=adventureFieldWeather(s,time,'water');assert.equal(weather,'');assert.equal(ready(weather),false);assert.deepEqual(s,saved);
+ }
+});

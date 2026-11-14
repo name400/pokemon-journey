@@ -56,6 +56,18 @@ function rawWorld(){return JSON.parse(sql.prepare('SELECT state FROM worlds WHER
 function seedWorld(patch){const w={...rawWorld(),...patch};sql.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').run(JSON.stringify(w),globalThis.__adventureUser.userId);}
 function rawMon(id){return JSON.parse(sql.prepare('SELECT data FROM pokemon_box WHERE id=?').get(id).data);}
 function seedMon(id,p){sql.prepare('UPDATE pokemon_box SET species_id=?,data=? WHERE id=?').run(p.id,JSON.stringify(p),id);}
+test('underground weather stays dry across reload and rain evolution works on return to surface',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;
+ globalThis.__adventureUser={userId:'underground-weather-qa',displayName:'지하 날씨 검사'};globalThis.__adventureTime={hour:16,period:'day'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon={...makeMon(705,50),boxId:id,shiny:true,item:'leftovers',custom:{kept:true}};seedMon(id,mon);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:11,y:14,zaMission42ChamberV1:true,zaMission42Underground:true},state.revision+1));
+  await get();assert.equal(state.world.weather,'');assert.equal(state.box.find(m=>m.boxId===id).evolutions.find(e=>e.id===706).ready,false);
+  await call('evolve',{boxId:id,target:706},409);assert.equal(rawMon(id).id,705);await get();assert.equal(state.world.weather,'');
+  seedWorld(storeAdventurePosition({...rawWorld(),zaMission42Underground:false,x:11,y:9},state.revision+1));await get();assert.equal(state.world.weather,'rain');assert.equal(state.box.find(m=>m.boxId===id).evolutions.find(e=>e.id===706).ready,true);
+  const revision=state.revision;await call('evolve',{boxId:id,target:706});await call('evolve',{boxId:id,target:706,revision},409);await get();const evolved=rawMon(id);assert.equal(evolved.id,706);assert.equal(evolved.shiny,true);assert.equal(evolved.item,'leftovers');assert.deepEqual(evolved.custom,mon.custom);assert.deepEqual(state.world.teamIds,[id]);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});
 async function walkTo(tileOrTarget){if(tileOrTarget==='W'&&state.world.district==='lumiose'&&!state.world.interior){await walkTo({x:8,y:14});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-zone1');return;}const target=typeof tileOrTarget==='string'?findTile(state.world.map,tileOrTarget):tileOrTarget;assert.ok(target);const gate=['E','W'].includes(typeof tileOrTarget==='string'?tileOrTarget:'');const origin=[state.world.area,state.world.district,state.world.interior,!!state.world.expedition];for(let n=0;n<100;n++){if(gate&&[state.world.area,state.world.district,state.world.interior,!!state.world.expedition].some((v,i)=>v!==origin[i]))return;if(!gate&&state.world.x===target.x&&state.world.y===target.y)return;const path=fieldPath(state.world.map,state.world,target);assert.ok(path.length,'target remains reachable');await call('move',{path:path.slice(0,8)});assert.equal(state.battle,null);}assert.fail('movement did not reach target');}
 async function travelToZone2(){assert.equal(state.world.district,'lumiose');await walkTo('h');await call('enterRooftop');await walkTo('W');assert.equal(state.world.district,'lumiose-zone2');}
 function testBattleMove(q,p,foe){return q.moves.filter(m=>!m.disabled&&m.pp>0).map(m=>({m,score:(moves[m.name]?.power||0)*effectiveness(moves[m.name]?.type,foe.currentTypes||foe.types)*(p.types.includes(moves[m.name]?.type)?1.5:1)})).sort((a,b)=>b.score-a.score)[0].m.name;}
