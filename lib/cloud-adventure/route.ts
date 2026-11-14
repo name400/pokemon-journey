@@ -145,12 +145,12 @@ function canRefreshWildAtPosition(s:any,zone:number,period:string){
  const spent=s[`zaZone${zone}Spent`];if(!spent||!Number.isInteger(s.x)||!Number.isInteger(s.y))return true;
  const view:any={...s,[`zaZone${zone}Spent`]:undefined};
  if([6,13,14,15,17,18,19].includes(zone))view[`zaZone${zone}Period`]=period;
- // Inspect the hypothetical next population even though Zone 17 hides an
- // encounter underneath the player until they leave that tile.
- if(zone===17){view.x=-1;view.y=-1;}
+ // Inspect the hypothetical next population even where occupied tiles hide encounters.
+ const hidesOccupied=[15,17,18,19].includes(zone);
+ if(hidesOccupied){view.x=-1;view.y=-1;}
  if(zone===14){const time=gameTime(undefined,adventureClockOffset(s));view.weather=adventureFieldWeather(s,time,AREAS[s.area]?.biome);}
  const tile=fieldMap(view)[s.y]?.[s.x],p=fieldWildResolvers[zone]?.(view,tile);
- return !(p&&p.x===s.x&&p.y===s.y&&(zone===17||spent[p.id]===true));
+ return !(p&&p.x===s.x&&p.y===s.y&&(hidesOccupied||spent[p.id]===true));
 }
 function consumeEarlyAlpha(s:any,id:string){const offset=adventureClockOffset(s),now=Date.now();markEarlyAlphaSpent(s,id,gameTime(now,offset).period,zone19SpawnInterval(now,offset));}
 function prepareVisibleWild(s:any){

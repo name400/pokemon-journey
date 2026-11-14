@@ -3620,6 +3620,7 @@ test('Zone 18 construction alley connects to the shared Lopunny encounter',async
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone18',interior:null,x:20,y:13,facing:'down',zaRoyaleRank:'B',zaZone18Upper:false,adventureBalls:{masterball:1}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone18Construction');
   await call('zone18Construction');await get();assert.deepEqual([state.world.zaZone18Construction,state.world.x,state.world.y],[true,3,13]);assert.equal(state.world.map[5][17],'c');
   await call('zone18Construction');assert.equal(state.world.zaZone18Construction,false);await call('zone18Construction');await walkTo({x:17,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'zone18Wild-lopunny-alpha');await call('zone18Wild-lopunny-alpha');assert.deepEqual([state.battle.teams[1][0].speciesId,state.battle.teams[1][0].level],[428,56]);await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaZone18Spent['lopunny-alpha'],true);assert.equal(state.world.map[5][17],'.');
+  while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});
   await walkTo({x:3,y:13});await call('face',{direction:'left'});await call('zone18Construction');await get();assert.equal(state.world.zaZone18Construction,false);assert.notEqual(state.world.map[5][12],'c');assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
@@ -5342,6 +5343,27 @@ test('Zone 17 time change does not spawn a rooftop encounter under the player',a
    now=12*50000;globalThis.__adventureUser={userId:`zone17-occupied-${p.from}-qa`,displayName:'옥상 시간 전환 검증'};globalThis.__adventureTime={period:p.from,hour:p.from==='day'?12:20};await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
    seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,x:8,y:6,facing:'down',zaRoyaleRank:'C',zaZone17Upper:true,zaZone17Period:p.from,zaZone17Spent:{[p.spent]:true},zaWildShinyRolls:{[p.shiny]:true},zaWildClockV2:true,zaWildSpawnCycles:{17:{period:p.from,interval:0}},combat:null,encounter:null},state.revision+1));await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone17',8,6]);
    now+=1200000;globalThis.__adventureTime={period:p.to,hour:p.to==='day'?12:20};await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone17',8,6]);assert.notEqual(state.world.map[6][8],'f');assert.equal(rawWorld().zaZone17Spent[p.spent],true);assert.equal(rawWorld().zaWildSpawnCycles[17].period,p.from);assert.equal(rawWorld().zaWildShinyRolls[p.shiny],true);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone17',8,6]);await call('move',{direction:'down'});await get();assert.equal(state.world.map[6][8],'f');assert.equal(rawWorld().zaWildShinyRolls[p.shiny],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
+for(const c of [
+ {zone:15,x:5,y:11,tile:'b',day:'scolipede',night:'shuppet',daySpecies:545,nightSpecies:353,extra:{zaZone15Upper:false}},
+ {zone:15,x:6,y:12,tile:'d',day:'beedrill-alpha',night:'banette-alpha',daySpecies:15,nightSpecies:354,extra:{zaZone15Upper:false}},
+ {zone:18,x:7,y:6,tile:'e',day:'swablu',night:'noibat',daySpecies:333,nightSpecies:714,extra:{zaZone18Upper:true}},
+ {zone:18,x:9,y:6,tile:'f',day:'altaria',night:'noivern',daySpecies:334,nightSpecies:715,extra:{zaZone18Upper:true}},
+ {zone:19,x:11,y:8,tile:'d',day:'furfrou-alpha',night:'clefairy-alpha',daySpecies:676,nightSpecies:35,extra:{}},
+])test(`Zone ${c.zone} occupied time-switch slot ${c.x},${c.y} stays safe`,async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;
+ try{
+  Date.now=()=>now;globalThis.__adventureRandom=()=>.999;
+  for(const from of ['day','night']){
+   now=12*50000;const to=from==='day'?'night':'day',spent=c[from],incoming=c[to],species=c[`${to}Species`],shiny=`zone${c.zone}:${incoming}:${species}`;
+   globalThis.__adventureUser={userId:`occupied-zone${c.zone}-${c.x}-${from}`,displayName:'시간 전환 안전 검증'};globalThis.__adventureTime={period:from,hour:from==='day'?12:20};await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+   const cycle=c.zone===19?{zaZone19SpawnCycle:{period:from,interval:0}}:{zaWildSpawnCycles:{[c.zone]:{period:from,interval:0}}};
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:`lumiose-zone${c.zone}`,interior:null,x:c.x,y:c.y,facing:'down',zaRoyaleRank:'B',...c.extra,[`zaZone${c.zone}Period`]:from,[`zaZone${c.zone}Spent`]:{[spent]:true},zaWildShinyRolls:{[shiny]:true},zaWildClockV2:true,...cycle,combat:null,encounter:null},state.revision+1));
+   await get();assert.deepEqual([state.world.x,state.world.y],[c.x,c.y]);now+=1200000;globalThis.__adventureTime={period:to,hour:to==='day'?12:20};await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[`lumiose-zone${c.zone}`,c.x,c.y]);assert.notEqual(state.world.map[c.y][c.x],c.tile);assert.equal(rawWorld()[`zaZone${c.zone}Spent`][spent],true);assert.equal(rawWorld().zaWildShinyRolls[shiny],true);
+   await get();assert.deepEqual([state.world.x,state.world.y],[c.x,c.y]);await call('move',{direction:'down'});await get();assert.equal(state.world.map[c.y][c.x],c.tile);assert.equal(rawWorld().zaWildShinyRolls[shiny],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
   }
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
