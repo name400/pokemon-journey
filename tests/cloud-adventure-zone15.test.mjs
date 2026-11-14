@@ -3,6 +3,14 @@ import assert from 'node:assert/strict';
 import {zone15Map,zone15Encounter,zone15Visible,zone15Item,ZONE15_TREES,ZONE15_BENCHES} from '../lib/cloud-adventure/adventure-zone15.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Zone 15 roof Larvitar slots are independent and do not occupy an old saved position',()=>{
+ const state={area:3,district:'lumiose-zone15',interior:null,zaZone15Upper:true,zaZone15WebOpen:true,x:17,y:5,facing:'right',zaZone15Spent:{larvitar:true},teamIds:['kept']};
+ assert.equal(fieldDialogue(state,fieldMap(state)).action,'zone15Wild-larvitar-roof-east');assert.equal(zone15Visible(state,'f').id,'larvitar-roof-south');
+ assert.ok(fieldPath(fieldMap(state),state,{x:15,y:1}).length);
+ const occupied={...state,x:18,y:5};const restored=restoreAdventurePosition(storeAdventurePosition(occupied,112),112);assert.deepEqual([restored.x,restored.y,restored.zaZone15Spent.larvitar,restored.teamIds],[18,5,true,['kept']]);assert.equal(zone15Map(restored)[5][18],'.');
+ const after={...state,zaZone15Spent:{larvitar:true,'larvitar-roof-east':true}};assert.equal(zone15Visible(after,'e'),null);assert.equal(zone15Visible(after,'f').id,'larvitar-roof-south');
+});
+
 test('Zone 15 southern gate connects North Boulevard while retaining the older west route',()=>{
  const zone={area:3,district:'lumiose-zone15',interior:null,x:17,y:15,zaRoyaleRank:'D',regionId:6,districtReturnRegion:1,teamIds:['kept']};
  const road=stepField(zone,'down');assert.deepEqual([road.district,road.x,road.y],['lumiose-north-boulevard',20,1]);

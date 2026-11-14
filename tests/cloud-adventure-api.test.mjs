@@ -10501,3 +10501,11 @@ test('Zone 6 upper bridge and lower canal approaches retain their layers after r
   await walkTo({x:17,y:1});await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.zaZone6Layer,state.world.x,state.world.y],['lumiose-zone6','canal',3,15]);await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-saison-canalside',17,1]);assert.equal(state.wallet.coins,coins);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Zone 15 additional rooftop Larvitar preserve independent capture and old saves',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone15-larvitar-roof-qa',displayName:'구역 15 옥상 검사'};
+ try{globalThis.__adventureRandom=()=>0;await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],key='zone15:larvitar-roof-east:246';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone15',interior:null,x:17,y:5,facing:'right',zaZone15Upper:true,zaZone15WebOpen:true,zaZone15Spent:{larvitar:true},zaWildShinyRolls:{[key]:true},adventureBalls:{masterball:1}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone15Wild-larvitar-roof-east');assert.equal(state.world.map[9][18],'f');
+  const revision=state.revision;await call('throwZoneVisible',{ball:'masterball'});await call('throwZoneVisible',{ball:'masterball',revision},409);await get();assert.equal(rawWorld().zaZone15Spent.larvitar,true);assert.equal(rawWorld().zaZone15Spent['larvitar-roof-east'],true);assert.notEqual(rawWorld().zaZone15Spent['larvitar-roof-south'],true);assert.equal(state.world.map[9][18],'f');assert.ok(state.box.some(m=>m.id===246&&m.shiny));assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.equal(rawMon(id).id,1);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
