@@ -5559,6 +5559,20 @@ test('early alpha returns after a time change without respawning under the playe
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('sleeping zone 3 alpha wakes after contact or failed capture without losing its identity',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'sleeping-litleo-qa',displayName:'잠든 레오꼬'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,key='alpha:zone3-tower-litleo:667';sql.prepare('UPDATE wallets SET balls=3 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-tower-interior',interior:null,x:8,y:8,facing:'right',zaBunnelbyQuest:3,zaRoyaleRank:'A',zaZone3LitleoSpent:false,zaWildShinyRolls:{[key]:false},...extra},state.revision+1);
+  seedWorld(place({zaZone3LitleoAwakeV1:undefined}));await get();assert.match(state.world.interaction.text,/잠들어/);globalThis.__adventureRandom=()=>.03;const rev=state.revision;await call('throwEarlyAlpha');await call('throwEarlyAlpha',{revision:rev},409);await get();assert.equal(rawWorld().zaZone3LitleoSpent,true);assert.ok(state.box.some(m=>m.speciesId===667));assert.equal(state.world.activeId,lead);
+  seedWorld(place({zaZone3LitleoAwakeV1:undefined}));await get();await call('move',{path:['right','left']});await get();assert.deepEqual([state.world.x,state.world.y],[9,8]);assert.equal(state.world.zaZone3LitleoAwakeV1,true);assert.match(state.world.log.at(-1),/깨어났다/);
+  seedWorld(place({zaZone3LitleoAwakeV1:true}));await get();assert.match(state.world.interaction.text,/깨어/);globalThis.__adventureRandom=()=>.03;await call('throwEarlyAlpha');assert.equal(state.battle.teams[1][0].speciesId,667);await call('flee');await get();assert.equal(state.world.zaZone3LitleoAwakeV1,true);assert.equal(rawWorld().zaWildShinyRolls[key],false);
+  seedWorld(place({zaZone3LitleoAwakeV1:undefined,zaWildShinyRolls:{[key]:true}}));await get();globalThis.__adventureRandom=()=>.999999;await call('throwEarlyAlpha');assert.equal(state.world.zaZone3LitleoAwakeV1,true);await call('flee');await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  seedWorld(place({x:11,y:12,facing:'down',zaWildShinyRolls:rawWorld().zaWildShinyRolls}));await get();await call('zone3TowerDown');await get();assert.equal(rawWorld().zaZone3LitleoAwakeV1,undefined);assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  const future={version:2,opaque:true};seedWorld(place({x:11,y:12,facing:'down',zaZone3LitleoAwakeV1:future,zaWildShinyRolls:rawWorld().zaWildShinyRolls}));await get();await call('zone3TowerDown');await get();assert.deepEqual(rawWorld().zaZone3LitleoAwakeV1,future);assert.equal(rawWorld().zaWildShinyRolls[key],true);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('zone 3 tower alphas preserve their shiny identity through battle and capture',async()=>{
  const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone3-tower-alpha-qa',displayName:'정원 건물 우두머리'};
  try{
