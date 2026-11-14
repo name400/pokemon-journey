@@ -17,3 +17,12 @@ test('invalid locations and unknown or damaged health schemas are never rewritte
  for(const value of [null,[],{version:2,hp:40},{version:1,hp:-1},{version:1,hp:101},{version:1,hp:'40'}]){const world={zaPlayerVitalsV1:value},before=structuredClone(world);assert.equal(recordPlayerCenterVisit(world,{id:'hotel'}),false);assert.deepEqual(world,before);}
  const world={area:3,district:'lumiose',interior:null},before=structuredClone(world);assert.equal(recordPlayerCenterVisit(world,centerAt(world,{tile:'H',x:1,y:1})),false);assert.deepEqual(world,before);
 });
+
+test('alpha roar uses 10 HP, leaves one HP before blackout, and preserves unknown state',async()=>{
+ const {applyPlayerAlphaRoar}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ const s={zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel',extra:'kept'}};
+ assert.deepEqual(applyPlayerAlphaRoar(s),{blackout:false,damage:10});assert.equal(s.zaPlayerVitalsV1.hp,90);
+ s.zaPlayerVitalsV1.hp=5;assert.deepEqual(applyPlayerAlphaRoar(s),{blackout:false,damage:4});assert.equal(s.zaPlayerVitalsV1.hp,1);
+ assert.deepEqual(applyPlayerAlphaRoar(s),{blackout:true,damage:1});assert.deepEqual(s.zaPlayerVitalsV1,{version:1,hp:100,lastCenterId:'hotel',extra:'kept'});
+ for(const value of [undefined,null,{version:2,hp:30,lastCenterId:'hotel'},{version:1,hp:0,lastCenterId:'hotel'},{version:1,hp:101,lastCenterId:'hotel'},{version:1,hp:30}]){const w={zaPlayerVitalsV1:value},before=structuredClone(w);assert.equal(applyPlayerAlphaRoar(w),null);assert.deepEqual(w,before);}
+});

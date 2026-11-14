@@ -7865,3 +7865,17 @@ test('player health foundation records only actual center healing and preserves 
   const future={version:2,hp:17,opaque:'keep'};seedWorld({...atHotel(),zaPlayerVitalsV1:future});await get();await call('heal');await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);assert.equal(rawMon(id).speciesId,pokemon.speciesId);assert.deepEqual(rawMon(id).ivs,pokemon.ivs);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('noticed wild alpha roar damages the player and safely returns them to their saved center',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'player-alpha-roar-qa',displayName:'플레이어 포효 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],id=team[0],mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet);
+  const wild=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-wild',interior:null,x:3,y:7,facing:'up',zaWildAlphaPosition:{x:3,y:5,facing:'down'},zaWildAlphaAlert:false,zaWildAlphaSpent:false,zaMission11RewardPending:true,zaWildShinyRolls:{'keep:shiny':true},...extra},state.revision+1);
+  seedWorld(wild({zaPlayerVitalsV1:{version:1,hp:11,lastCenterId:'hotel',extra:'kept'}}));await get();const rev=state.revision;await call('move',{direction:'up'});await call('move',{direction:'up',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);assert.equal(state.world.zaWildAlphaAlert,true);assert.equal(state.world.district,'lumiose-wild');await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);
+  seedWorld(wild({zaPlayerVitalsV1:state.world.zaPlayerVitalsV1}));await get();const knockoutRev=state.revision;await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.deepEqual(state.world.zaPlayerVitalsV1,{version:1,hp:100,lastCenterId:'hotel',extra:'kept'});assert.notEqual(state.world.zaWildAlphaAlert,true);assert.equal(state.world.zaMission11RewardPending,true);assert.equal(rawWorld().zaWildShinyRolls['keep:shiny'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(id).ivs,mon.ivs);await call('move',{direction:'up',revision:knockoutRev},409);
+  const future={version:2,hp:1,lastCenterId:'hotel',opaque:true};seedWorld(wild({zaPlayerVitalsV1:future}));await get();await call('move',{direction:'up'});await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);assert.equal(state.world.district,'lumiose-wild');
+  seedWorld(wild({zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'missing'}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);assert.equal(state.world.district,'lumiose-wild');
+  seedWorld(wild({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'up'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);assert.equal(state.world.district,'lumiose-wild');
+  seedWorld(wild({x:3,y:8,zaDodgeReadyAt:0,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('dodge',{direction:'up'});await get();assert.equal(state.world.zaWildAlphaAlert,true);assert.equal(state.world.zaPlayerVitalsV1.hp,30);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
