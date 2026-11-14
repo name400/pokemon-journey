@@ -273,7 +273,7 @@ function prepareVisibleWild(s:any){
  if(s.district==='lumiose-zone1-roof'&&zone1RoofAlphaReady(s)){ensure('alpha:zone1-roof-pidgey:16');return changed;}
  if(s.district==='lumiose-zone4'&&earlyAlphaUnlocked(s)&&!s.zaZone4AlphaSpent){ensure('alpha:zone4-spinarak:167');return changed;}
  if(s.district==='lumiose-zone7'&&!s.zaZone7AlphaSpent)ensure('alpha:zone7-fletchinder:662');
- const ensureRoaming=(key:string,zone:number,species:number)=>{if(typeof s.zaWildShinyRolls?.[key]==='boolean')return;const level=randomWildAlphaLevel(s,zone,species,random);if(level!==null)s.zaWildVisibleAlphaLevels={...(s.zaWildVisibleAlphaLevels||{}),[key]:level};ensure(key);};
+ const ensureRoaming=(key:string,zone:number,species:number)=>{if(typeof s.zaWildShinyRolls?.[key]==='boolean')return;const level=randomWildAlphaLevel(s,zone,species,random);if(level!==null)s.zaWildVisibleAlphaLevels={...(s.zaWildVisibleAlphaLevels||{}),[key]:level};ensure(key);if(zone===3&&species===672&&level===null&&!s.zaWildVisibleAlphaLevels?.[key])assignVisibleAdventureSize(s,key,random);};
  if(s.district==='lumiose-zone2'){if(zone2IslandAlphaReady(s))ensure(`alpha:zone2-island:${period==='night'?120:129}`);if(zone2BudewPosition(s))ensureRoaming('field2:budew:406',2,406);if(zone2KakunaPosition(s))ensureRoaming('field2:kakuna:14',2,14);for(const p of zone2FieldMonsters(s,period))ensureRoaming(`field2:${p.id}:${p.speciesId}`,2,p.speciesId);return changed;}
  if(s.district==='lumiose-zone3'){for(const p of zone3FieldMonsters(s,period))ensureRoaming(`field3:${p.id}:${p.speciesId}`,3,p.speciesId);return changed;}
  if(s.district==='lumiose-crystal-sewer'){for(const p of magentaSewerMonsters(s,period))ensure(`sewer:${p.id}:${p.speciesId}`);return changed;}

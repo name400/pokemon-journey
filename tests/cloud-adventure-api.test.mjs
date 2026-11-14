@@ -10154,3 +10154,19 @@ test('zone 12 visible size remains the same through reload, flee and capture',as
   const legacy=rawWorld();legacy.zaZone12Spent={};legacy.zaWildShinyRolls={...legacy.zaWildShinyRolls,[key]:true};seedWorld(legacy);await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaWildSizeRollsV1.entries[key],undefined);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('zone 3 Skiddo keeps visible size through field capture and reload',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone3-visible-size-qa',displayName:'메이클 크기 검사'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={hour:12,period:'day'};
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,key='field3:skiddo:672';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:7,y:10,facing:'right',zaMission05Complete:true,zaMission06Started:true,zaRoyaleRank:'A',adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);assert.equal(rawWorld().zaWildVisibleAlphaLevels?.[key],undefined);globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);
+  const rev=state.revision;await call('throwZone3Field',{targetId:'skiddo',ball:'masterball'});await call('throwZone3Field',{targetId:'skiddo',ball:'masterball',revision:rev},409);await get();const m=state.box.find(p=>p.speciesId===672);assert.ok(m);assert.equal(rawMon(m.boxId).adventureScaleV1.scale,255);assert.equal(rawWorld().zaWildSizeRollsV1.entries[key],undefined);assert.equal(rawMon(lead).adventureScaleV1,undefined);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
+test('zone 3 Skiddo contact carries visible size into battle and capture',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone3-contact-size-qa',displayName:'메이클 접촉 크기 검사'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={hour:12,period:'day'};
+ try{
+  await get();await call('start',{species:1});const key='field3:skiddo:672';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:7,y:10,facing:'right',zaMission05Complete:true,zaMission06Started:true,zaRoyaleRank:'A',adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});assert.ok(state.battle);assert.equal(rawWorld().encounter.adventureScaleV1.scale,255);await get();assert.equal(rawWorld().encounter.adventureScaleV1.scale,255);await call('ball',{ball:'masterball'});await get();const caught=state.box.find(p=>p.speciesId===672);assert.ok(caught);assert.equal(rawMon(caught.boxId).adventureScaleV1.scale,255);assert.equal(rawWorld().zaWildSizeRollsV1.entries[key],undefined);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});

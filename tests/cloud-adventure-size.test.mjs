@@ -30,3 +30,13 @@ test('visible size follows a fixed encounter and protects unknown ledgers',async
  assignVisibleAdventureSize(s,key,()=>0);s.zaWildShinyRolls[key]=true;refreshZoneShinyRolls(s,12);assert.equal(visibleAdventureSize(s,key).scale,0);clearWildShiny(s,key);assert.equal(visibleAdventureSize(s,key),null);
  const future={zaWildSizeRollsV1:{version:2,entries:{[key]:{version:1,scale:255}}}};assert.equal(assignVisibleAdventureSize(future,key,()=>0),false);clearWildShiny(future,key);assert.equal(future.zaWildSizeRollsV1.version,2);
 });
+
+test('roaming Skiddo keeps size across shiny preservation and clears it on exit',async()=>{
+ const {assignVisibleAdventureSize,visibleAdventureSize,adventureFieldSizeFactor}=await import('../lib/cloud-adventure/adventure-size.mjs');
+ const {refreshRoamingWildOnExit,refreshRoamingWildSpawns}=await import('../lib/cloud-adventure/adventure-roaming-refresh.mjs');
+ const key='field3:skiddo:672',base={area:3,district:'lumiose-rouge-north',zaWildShinyRolls:{[key]:false}};
+ assert.equal(assignVisibleAdventureSize(base,key,()=>.999),true);assert.equal(adventureFieldSizeFactor(base,key),1.18);assert.equal(adventureFieldSizeFactor(base,'field3:other:999'),1);
+ assert.equal(refreshRoamingWildOnExit(base,3),true);assert.equal(visibleAdventureSize(base,key),null);
+ base.zaWildShinyRolls[key]=true;assignVisibleAdventureSize(base,key,()=>0);assert.equal(refreshRoamingWildOnExit(base,3),false);assert.equal(visibleAdventureSize(base,key).scale,0);
+ const present={...base,district:'lumiose-zone3',x:2,y:2,zaWildSpawnCycles:{3:{period:'day',interval:10}}};assert.equal(refreshRoamingWildSpawns(present,'night',11),true);assert.equal(visibleAdventureSize(present,key).scale,0);
+});
