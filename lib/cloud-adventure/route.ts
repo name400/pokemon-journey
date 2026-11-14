@@ -1,3 +1,4 @@
+import {contactAvailable,contactAppearance,validStoredContact} from '@/lib/cloud-adventure/adventure-contacts.mjs';
 import {side30Available,side30Spot} from '@/lib/cloud-adventure/adventure-side30.mjs';
 import {adventureDrink,newsstandAt} from '@/lib/cloud-adventure/adventure-drinks.mjs';
 import {alphaCandyDrop,validAlphaCandyPending,ALPHA_CANDY_KEYS} from '@/lib/cloud-adventure/adventure-alpha-candy.mjs';
@@ -1212,6 +1213,10 @@ else if(b.action==='wearVernalTop'){
  const top=ADVENTURE_TOPS.find((item:any)=>item.id===b.item),current=equippedVernalTop(s)?.id||'default';
  if(s.combat||s.unionHost||s.adventureCatchWindow||(b.item!=='default'&&(!top||!ownedVernalTops(s).includes(top.id)))||current===b.item)throw Error('보유한 다른 의상을 선택하세요.');
  s.zaClothingTop=top?.id||null;s.log=[top?`${top.name}을(를) 착용했다.`:'기존 옷으로 갈아입었다.'];
+}
+else if(b.action==='wearAdventureContact'){
+ if(s.combat||s.unionHost||s.expedition||s.adventureCatchWindow||!validStoredContact(s)||typeof b.lens!=='string'||!contactAvailable(s,b.lens)||contactAppearance(s).id===b.lens)throw Error('선택 가능한 다른 렌즈를 확인하세요.');
+ s.zaContactLens=b.lens==='default'?null:b.lens;s.log=[b.lens==='default'?'기본 눈으로 바꿨다.':'컬러 렌즈를 착용했다.'];
 }
 else if(b.action==='salonChange'){
  if(s.combat||s.unionHost||s.adventureCatchWindow||!salonAt(s,interactionAt(s))||!validSalonStyle(b.style,b.color)||(b.style!=='classic'&&!salonColorAvailable(s,b.color)))throw Error('미용실과 머리 모양을 확인하세요.');

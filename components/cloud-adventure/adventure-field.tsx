@@ -1,4 +1,5 @@
 'use client';
+import {contactAppearance} from '@/lib/cloud-adventure/adventure-contacts.mjs';
 import {side11Available} from '@/lib/cloud-adventure/adventure-side11.mjs';
 import {side12Available} from '@/lib/cloud-adventure/adventure-side12.mjs';
 import {side05Available} from '@/lib/cloud-adventure/adventure-side05.mjs';
@@ -1380,11 +1381,11 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillStyle='#253e3c';ctx.fillRect(b.x*tile-24,(b.y+1)*tile-2,80,19);ctx.fillStyle='#ffffff';ctx.fillText(label,b.x*tile+16,(b.y+1)*tile+11);
    }
    if(w.area===9&&!w.expedition){for(let y=1;y<=4;y++)for(let x=7;x<=21;x++)sprite(y===1?'castleBattlement':y===3?'castleWindow':'castleWall',x*tile,y*tile);[8,11,14,17,20].forEach((x,i)=>{sprite('castleDoor',x*tile,4*tile);ctx.fillStyle='#fff4bc';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText(i===4?'챔피언':`${i+1} 사천왕`,x*tile+16,6*tile-8);});}
-   function trainer(x:number,y:number,color:string,face:string,walk=false,appearance?:{style:string;color:string},top?:{id:string;color:string},crouched=false){
+   function trainer(x:number,y:number,color:string,face:string,walk=false,appearance?:{style:string;color:string},top?:{id:string;color:string},crouched=false,lens='default'){
     const px=Math.round(x*tile+tile/2-12),py=Math.round(y*tile+tile-29),step=walk&&!reduce?(Math.floor(time/95)%2===0?3:-3):0;
     ctx!.fillStyle='#28473155';ctx!.beginPath();ctx!.ellipse(px+12,py+28,12,4,0,0,Math.PI*2);ctx!.fill();
-    const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',V:top?.color||'#3d79aa',L:top?.id==='bravely-vest-gray'?'#55575e':top?.id==='bravely-vest-blue'?'#d0d2d8':'#f3f2e7',C:'#503d46',Y:'#f4cf64',D:'#4b3741',H:(SALON_COLORS as any)[appearance?.color||'brown']?.value||'#79503b'};
-    adventureAvatarRows(face,appearance?.style,top?.id==='asami-formal'?'formal':top?'vest':'').forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+(crouched?6:0)+ry*(crouched?1.55:2)+(ry>10?(rx<6?step:-step):0),2,crouched?1.55:2);}));
+    const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',V:top?.color||'#3d79aa',L:top?.id==='bravely-vest-gray'?'#55575e':top?.id==='bravely-vest-blue'?'#d0d2d8':'#f3f2e7',C:'#503d46',Y:'#f4cf64',D:'#4b3741',E:lens==='fired-up'?'#e35024':lens==='lovestruck'?'#e64c94':'#263e51',H:(SALON_COLORS as any)[appearance?.color||'brown']?.value||'#79503b'};
+    adventureAvatarRows(face,appearance?.style,top?.id==='asami-formal'?'formal':top?'vest':'',lens).forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+(crouched?6:0)+ry*(crouched?1.55:2)+(ry>10?(rx<6?step:-step):0),2,crouched?1.55:2);}));
    }
    // Naveen and Lida lead across the draft rooftop; positions are visual only.
    if(w.district==='lumiose-protect'&&!w.interior&&w.zaMission36DescentPending&&w.zaMission36RooftopRoute&&w.zaMission37Stage===1){
@@ -1512,7 +1513,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    if(['lumiose-zone5','lumiose-zone5-drain'].includes(w.district)&&!w.interior&&!w.zaZone5DrainLanding)for(const m of ZONE5_VISIBLE.filter(p=>(w.district==='lumiose-zone5-drain'?p.drain===true:!p.drain&&p.upper===(w.zaZone5Upper===true))&&!w.zaZone5Spent?.[p.id])){const px=m.x*tile,py=m.y*tile,img=(w.zaWildShinyRolls?.[`zone5:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]);if(m.alpha||w.zaWildVisibleAlphaLevels?.[`zone5:${m.id}:${m.species}`]){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle=m.alpha?'#af5462':'#d6b57d';ctx.fillRect(px+6,py+6,tile-12,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}}
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
-   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,w.zaFieldCrouched===true);
+   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,w.zaFieldCrouched===true,contactAppearance(w).id);
    const {questTarget}=props.current;
    if(questTarget){const x=(questTarget.x+.5)*tile,y=Math.max(16,questTarget.y*tile);ctx.save();ctx.fillStyle='#f6cd45';ctx.strokeStyle='#59400d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-7,y-14);ctx.lineTo(x+7,y-14);ctx.lineTo(x,y-3);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
    ctx.restore();
