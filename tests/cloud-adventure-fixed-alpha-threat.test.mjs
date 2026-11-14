@@ -55,3 +55,18 @@ test('late fixed alphas use the visible floor, weather cycle and construction lo
  assert.equal(fixedAlphaPlayerThreat({...park,zaZone19Period:'night'})?.id,'clefairy-alpha');
  assert.equal(fixedAlphaAlertKnown({...park,zaZone19Spent:{version:2}}),false);
 });
+
+test('zone 20 tracks the visible alpha species and each slot independently',async()=>{
+ const {unknownZone20AlphaNear}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const s={area:3,district:'lumiose-zone20',x:12,y:7,zaZone20AlphaSpecies:448,zaZone20AlphaSpecies2:26};
+ assert.equal(fixedAlphaPlayerThreat(s)?.alertKey,'lumiose-zone20:alpha:448');
+ assert.equal(fixedAlphaPlayerThreat({...s,zaZone20Spent:{alpha:true}})?.alertKey,'lumiose-zone20:alpha2:26');
+ assert.equal(fixedAlphaPlayerThreat({...s,zaMission42Underground:true}),null);
+ assert.equal(fixedAlphaPlayerThreat({...s,zaZone20Spent:{version:2}}),null);
+ assert.equal(fixedAlphaPlayerThreat({...s,zaZone20AlphaSpecies:99999,zaZone20Spent:{alpha2:true}}),null);
+ assert.equal(fixedAlphaPlayerThreat({...s,x:13,y:7,zaZone20Spent:{alpha2:true}}),null);
+ assert.equal(unknownZone20AlphaNear({...s,x:10,y:7,zaZone20AlphaSpecies2:undefined}),true);
+ assert.equal(unknownZone20AlphaNear({...s,x:10,y:7,zaZone20AlphaSpecies2:{version:2}}),false);
+ assert.equal(unknownZone20AlphaNear({...s,x:9,y:7,zaZone20AlphaSpecies2:undefined}),false);
+ assert.equal(predictCloudStep({...s,x:10,y:7,zaZone20AlphaSpecies2:undefined},'left'),null);
+});

@@ -9094,3 +9094,18 @@ test('reviewed Zone 15, 16, 18 and 19 alphas protect player health and saves',as
   assert.equal(rawWorld().zaWildShinyRolls['zone18:salamence-alpha:373'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('Zone 20 dynamic alpha alerts preserve slot identities and legacy saves',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone20-player-alpha-qa',displayName:'구역 20 우두머리 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),rolls={'zone20:alpha:448':true,'zone20:alpha2:26':true};
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,zaMission42Underground:false,zaZone20AlphaSpecies:448,zaZone20AlphaSpecies2:26,zaZone20Spent:{},zaFixedAlphaAlertV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},zaWildShinyRolls:rolls,x:12,y:9,combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(place({}));await get();const rev=state.revision;await call('move',{direction:'up'});await call('move',{direction:'up',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone20:alpha:448');clock+=3000;await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);
+  seedWorld(place({x:10,y:9}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone20:alpha2:26');
+  seedWorld(place({zaZone20Spent:{alpha:true}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  seedWorld(place({zaZone20AlphaSpecies2:{version:2,unknown:true},zaFixedAlphaAlertV1:{version:2,unknown:true},zaPlayerVitalsV1:{version:2,unknown:true}}));await get();await call('move',{direction:'up'});await get();assert.deepEqual(rawWorld().zaZone20AlphaSpecies2,{version:2,unknown:true});assert.deepEqual(rawWorld().zaFixedAlphaAlertV1,{version:2,unknown:true});assert.deepEqual(rawWorld().zaPlayerVitalsV1,{version:2,unknown:true});
+  seedWorld(place({zaZone20AlphaSpecies2:undefined,zaZone20Spent:{alpha:true},x:10,y:8,zaPlayerVitalsV1:undefined}));await get();await call('face',{direction:'left'});await get();assert.ok(ZONE20_ALPHA.some(p=>p.species===rawWorld().zaZone20AlphaSpecies2));assert.equal(rawWorld().zaPlayerVitalsV1,undefined);assert.equal(rawWorld().zaZone20Spent.alpha,true);
+  seedWorld(place({zaZone20AlphaSpecies2:undefined,zaZone20Spent:{version:2,unknown:true}}));await get();await call('face',{direction:'left'});await get();assert.equal(rawWorld().zaZone20AlphaSpecies2,undefined);assert.deepEqual(rawWorld().zaZone20Spent,{version:2,unknown:true});
+  seedWorld(place({zaFixedAlphaAlertV1:'lumiose-zone20:alpha:448',zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'hotel'}}));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaWildShinyRolls['zone20:alpha:448'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});

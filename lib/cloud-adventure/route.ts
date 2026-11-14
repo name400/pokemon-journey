@@ -1,3 +1,4 @@
+import {knownVisibleWildLedger} from '@/lib/cloud-adventure/adventure-visible-wild.mjs';
 import {fixedAlphaAlertKnown,fixedAlphaPlayerThreat,fixedAlphaPlayerNear} from '@/lib/cloud-adventure/adventure-fixed-alpha-threat.mjs';
 import {zone10PlayerThreat,zone10PlayerAlertKnown,zone10PlayerNear} from '@/lib/cloud-adventure/adventure-zone10.mjs';
 import {zone9PlayerThreat,zone9PlayerAlertKnown,zone9PlayerNear} from '@/lib/cloud-adventure/adventure-zone9.mjs';
@@ -577,7 +578,7 @@ if(s.adventureCatchWindow&&!['catchWindowBall','skipCatchWindow','mission42Suppl
 if(pending.length&&!['resolveAdventureMove','catchWindowBall','skipCatchWindow'].includes(b.action)&&!(s.combat&&['battle','attack','switch','use','ball','flee','forfeit'].includes(b.action)))throw Error('먼저 새 기술을 배우거나 건너뛰세요.');
 // Upgrade an old visit on the next successful action without replacing its first alpha.
 // Wait until the player leaves the new draft spawn tile, preserving saved positions.
-if(s.district==='lumiose-zone20'&&!s.interior&&!Number.isInteger(s.zaZone20AlphaSpecies2)&&!(s.x===9&&s.y===7))s.zaZone20AlphaSpecies2=ZONE20_ALPHA[Math.floor(random()*ZONE20_ALPHA.length)].species;
+if(s.district==='lumiose-zone20'&&!s.interior&&s.zaZone20AlphaSpecies2==null&&knownVisibleWildLedger(s.zaZone20Spent)&&!(s.x===9&&s.y===7))s.zaZone20AlphaSpecies2=ZONE20_ALPHA[Math.floor(random()*ZONE20_ALPHA.length)].species;
 if(s.zaStationLeaveConfirm&&!['stationLeave','stationStay','talk','face','interact'].includes(b.action))delete s.zaStationLeaveConfirm;
 if(b.action==='introBattle'){if(s.combat||!['andi','brigitte'].includes(s.zaIntroStage))throw Error('현재 배틀 상대를 확인하세요.');const andi=s.zaIntroStage==='andi',t={id:andi?'intro-andi':'intro-brigitte',name:andi?'Andi':'Brigitte',team:andi?[[674,4]]:[[173,4],[659,4]],strategy:'balanced'},team=trainerTeam(t);if(andi){team[0].gender='F';team[0].moves=['몸통박치기'];team[0].pp={};}s.combat=createAdventureCombat(s,mons,team,{heals:0,strategy:'balanced'});s.trainer={id:t.id,name:t.name,title:'미르시티 첫 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=[`${t.name}와 배틀을 시작했다!`];}
 else if(b.action==='introEscapeMove'){if(s.combat)throw Error('배틀을 먼저 마치세요.');introEscapeMove(s,b.direction);}
