@@ -41,3 +41,15 @@ test('starter move relearning respects identity, level and old saves',()=>{
  assert.ok(!adventureLearnableMoves(starter,{}).includes('나뭇잎'));
  assert.ok(adventureLearnableMoves(starter,{zaIntroStarterMovesV1:true,zaIntroStarterSpecies:152}).includes('나뭇잎'));
 });
+
+test('intro starters gain confirmed early Z-A moves while preserving legacy saves and move slots',()=>{
+ for(const [speciesId,from,to,name] of [[152,8,9,'차밍보이스'],[152,13,14,'씨뿌리기'],[158,14,15,'거품광선'],[498,14,15,'화염바퀴']]){
+  const mon={...makeMon(speciesId,from),origin:'starter',boxId:'chosen',moves:['몸통박치기','꼬리흔들기','방어','빛의장막'],pp:{tackle:3}};
+  const next={...mon,level:to,moves:[...mon.moves],pp:{...mon.pp}},world={zaIntroStarterMovesV1:true,zaIntroStarterBoxId:'chosen'};
+  const result=applyAdventureLevelMoves(mon,next,world);assert.ok(result.pending.includes(name),`${speciesId}: ${name}`);assert.deepEqual(result.mon.moves,mon.moves);assert.deepEqual(result.mon.pp,mon.pp);
+  assert.ok(adventureLearnableMoves({...mon,level:to},world).includes(name));assert.ok(!adventureLearnableMoves({...mon,level:from},world).includes(name)||name==='씨뿌리기');
+  const wrong={...world,zaIntroStarterBoxId:'other'},legacy=applyAdventureLevelMoves(mon,{...mon,level:to,moves:[...mon.moves]},wrong);assert.ok(!legacy.pending.includes(name));
+ }
+ const mon={...makeMon(152,8),origin:'starter',boxId:'chosen',moves:['몸통박치기'],pp:{tackle:3}},world={zaIntroStarterMovesV1:true,zaIntroStarterBoxId:'chosen'};
+ const next=applyAdventureLevelMoves(mon,{...mon,level:9,moves:[...mon.moves]},world);assert.ok(next.learned.includes('차밍보이스'));assert.equal(next.mon.pp.tackle,3);
+});

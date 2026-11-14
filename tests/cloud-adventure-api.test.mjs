@@ -9933,3 +9933,15 @@ test('new Zygarde boss snapshots get fourfold protection without changing legacy
   const legacy={...rawWorld().combat};delete legacy.adventureRogueWeaknessV1;seedWorld({combat:legacy,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();assert.equal(rawWorld().combat.adventureRogueWeaknessV1,undefined);await call('battle',{command:{type:'move',move:'냉동빔'}});await get();assert.equal(rawWorld().combat?.adventureRogueWeaknessV1,undefined);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).shiny,true);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('intro starter early Z-A moves survive candy growth and reconnect',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'starter-early-za-qa',displayName:'스타터 기술 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;
+  seedWorld({...rawWorld(),zaIntroStarterMovesV1:true,zaIntroStarterBoxId:id});
+  const mon={...makeMon(152,8),boxId:id,origin:'starter',moves:['몸통박치기','꼬리흔들기','나뭇잎','방어'],pp:{tackle:3}};seedMon(id,mon);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'rarecandy');
+  await get();const revision=state.revision;await call('useAdventureRareCandy');assert.equal(rawMon(id).level,9);assert.equal(state.inventory.rarecandy??0,0);assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='차밍보이스'));
+  await get();assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('차밍보이스'));assert.equal(rawMon(id).pp.tackle,3);await call('useAdventureRareCandy',{revision},409);assert.equal(state.inventory.rarecandy??0,0);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
