@@ -2943,6 +2943,16 @@ test('adventure vitamins consume only on valid use and persist EVs',async()=>{
  }finally{globalThis.__adventureUser=priorUser;}
 });
 
+test('Swift Feather consumes inventory once and preserves the selected party member across reconnect',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'swift-wing-qa',displayName:'깃털테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon={...makeMon(1,50),boxId:id,friendship:99,evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:250},custom:{preserved:true}};seedMon(id,mon);
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,2)').run(JSON.stringify([globalThis.__adventureUser.userId,'swiftwing']),globalThis.__adventureUser.userId,'swiftwing');
+  await get();const revision=state.revision;await call('useAdventureVitamin',{item:'swiftwing',boxId:id});await call('useAdventureVitamin',{item:'swiftwing',boxId:id,revision},409);await get();assert.equal(state.inventory.swiftwing,1);assert.equal(rawMon(id).evs.spe,251);assert.equal(rawMon(id).friendship,101);assert.deepEqual(rawMon(id).custom,{preserved:true});
+  await call('useAdventureVitamin',{item:'swiftwing',boxId:'other'},409);const foe={...makeMon(19,5),boxId:'wild'},current=rawMon(id);seedWorld({combat:createCombat([current],[foe]),encounter:foe,trainer:null});await get();await call('useAdventureVitamin',{item:'swiftwing',boxId:id},409);assert.equal(state.inventory.swiftwing,1);seedWorld({combat:null,encounter:null,trainer:null});await get();await call('useAdventureVitamin',{item:'swiftwing',boxId:id});await get();assert.equal(rawMon(id).evs.spe,252);assert.equal(state.inventory.swiftwing||0,0);await call('useAdventureVitamin',{item:'swiftwing',boxId:id},409);
+ }finally{globalThis.__adventureUser=priorUser;}
+});
+
 test('dojo hyper training spends caps once and preserves genetic IVs across reconnect',async()=>{
  const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'hyper-training-qa',displayName:'특훈테스트'};
  try{
