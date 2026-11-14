@@ -34,3 +34,24 @@ test('reviewed park, forest and substation alphas respect layers, time and unkno
  assert.equal(fixedAlphaPlayerThreat({...substation,zaZone14Spent:{'excadrill-alpha':true}}),null);
  assert.equal(fixedAlphaAlertKnown({...substation,zaZone14Spent:{version:2}}),false);
 });
+
+test('late fixed alphas use the visible floor, weather cycle and construction location',()=>{
+ const zone15={area:3,district:'lumiose-zone15',x:7,y:12,zaZone15Period:'day'};
+ assert.equal(fixedAlphaPlayerThreat(zone15)?.id,'beedrill-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...zone15,zaZone15Period:'night'})?.id,'banette-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...zone15,zaZone15Upper:true}),null);
+ assert.equal(fixedAlphaPlayerThreat({...zone15,zaZone15Period:'unknown'}),null);
+ const plaza={area:3,district:'lumiose-zone16',x:17,y:2};
+ assert.equal(fixedAlphaPlayerThreat(plaza)?.id,'ampharos-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...plaza,district:'lumiose-zone16-garden'})?.id,'ampharos-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...plaza,zaZone16Upper:true}),null);
+ const alley={area:3,district:'lumiose-zone18',x:18,y:5,zaZone18Construction:true};
+ assert.equal(fixedAlphaPlayerThreat(alley)?.id,'lopunny-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...alley,zaZone18Scaffold:true}),null);
+ assert.equal(fixedAlphaPlayerThreat({...alley,zaZone18Upper:true}),null);
+ assert.equal(fixedAlphaPlayerThreat({...alley,zaZone18Construction:'unknown'}),null);
+ const park={area:3,district:'lumiose-zone19',x:10,y:8,zaZone19Period:'day'};
+ assert.equal(fixedAlphaPlayerThreat(park),null);
+ assert.equal(fixedAlphaPlayerThreat({...park,zaZone19Period:'night'})?.id,'clefairy-alpha');
+ assert.equal(fixedAlphaAlertKnown({...park,zaZone19Spent:{version:2}}),false);
+});

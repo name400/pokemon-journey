@@ -84,3 +84,9 @@ test('Zone 19 brambles recover only after elapsed game time and a safe exit',asy
  const old={district:'lumiose-jaune-street',zaZone19BramblesCleared:true};assert.equal(refreshZone19Brambles(old,999999),false);assert.equal(old.zaZone19BramblesCleared,true);
  const paused={district:'lumiose-jaune-street',zaZone19BramblesCleared:true,zaZone19BramblesClearedAt:100000,zaClockPausedMs:15000};assert.equal(refreshZone19Brambles(paused,120000),false);paused.zaClockOffsetHours=1;assert.equal(refreshZone19Brambles(paused,120000),true);
 });
+
+test('zone 19 time refresh leaves unknown encounter ledgers untouched',async()=>{
+ const {refreshZone19Spawns}=await import('../lib/cloud-adventure/adventure-zone19.mjs');
+ const s={district:'lumiose-zone19',zaZone19SpawnCycle:{period:'day',interval:1},zaZone19Spent:{version:2,opaque:true},zaWildShinyRolls:{'zone19:clefairy-alpha:35':true}};
+ const before=structuredClone(s);assert.equal(refreshZone19Spawns(s,'night',2),false);assert.deepEqual(s,before);
+});

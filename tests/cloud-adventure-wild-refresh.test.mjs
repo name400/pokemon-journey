@@ -47,3 +47,10 @@ test('same-zone fast travel refreshes only resolved, living ordinary encounters'
  const s={district:'lumiose-zone14',zaZone14Spent:{spent:true},zaWildShinyRolls:{'zone14:plain:1':false,'zone14:shiny:2':true,'zone14:fixed:3':false,'zone14:burrow:4':false,'zone14:spent:5':false,'zone19:other:6':false},zaWildVisibleAlphaLevels:{'zone14:plain:1':31,'zone14:shiny:2':32,'zone14:fixed:3':33,'zone14:burrow:4':34,'zone14:spent:5':35}};
  assert.equal(refreshVisibleWildOnSameZoneTravel({...s,combat:{}},14,visible),false);assert.equal(refreshVisibleWildOnSameZoneTravel({...s,district:'lumiose-zone15'},14,visible),false);assert.equal(refreshVisibleWildOnSameZoneTravel(s,14,visible),true);assert.equal(s.zaWildShinyRolls['zone14:plain:1'],undefined);assert.equal(s.zaWildVisibleAlphaLevels['zone14:plain:1'],undefined);for(const id of ['shiny:2','fixed:3','burrow:4','spent:5'])assert.equal(typeof s.zaWildShinyRolls[`zone14:${id}`],'boolean');assert.equal(s.zaWildVisibleAlphaLevels['zone14:shiny:2'],32);assert.equal(s.zaWildVisibleAlphaLevels['zone14:spent:5'],35);assert.equal(s.zaWildShinyRolls['zone19:other:6'],false);assert.equal(s.zaZone14Spent.spent,true);
 });
+
+test('ordinary refresh preserves future or invalid encounter ledgers and shiny state',()=>{
+ for(const ledger of [{version:2,opaque:'keep'},{some:'unknown'},null,[]]){
+  const s={district:'lumiose-zone18',zaZone18Spent:ledger,zaWildSpawnCycles:{18:{period:'day',interval:1}},zaWildShinyRolls:{'zone18:lopunny-alpha:428':true,'zone18:bagon:371':false}};
+  const before=structuredClone(s);assert.equal(refreshOrdinaryWildSpawns(s,'night',2),false);assert.deepEqual(s,before);
+ }
+});

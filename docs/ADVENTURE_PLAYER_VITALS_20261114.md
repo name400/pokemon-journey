@@ -109,3 +109,11 @@
 공통 경계 처리에 [구역 12](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-12-guide-all-pokemon-and-alphas)의 눈설왕·크레베이스, [구역 13](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-13-guide-all-pokemon-and-alphas)의 우츠동·대로트, [구역 14](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas)의 몰드류를 연결했다. 기존 지도의 출현 여부, 연못 층, 낮밤 및 소진 기록을 그대로 확인하며 보이지 않는 개체는 감지하지 않는다. 우츠동의 낮 한정은 기존 게임의 출현 규칙이며 인용 자료가 그 제한을 확인한다는 뜻은 아니다. 구르기·체력·복귀·이동 예측은 기존 공통 처리를 사용하고 미지의 기록 형식은 덮어쓰지 않는다.
 
 [체력 자료](https://www.serebii.net/legendsz-a/playerhealth.shtml)에 근거한 포효 피해 10을 제외한 두 칸 감지·이동 시 공격·30 피해는 2D 턴제의 잠정값이다. 개체별 원작 기술·범위·실시간 추격은 확인하지 못했다. 격리 API에서 공원과 연못 층, 숲의 낮밤, 변전소 피해·중복 요청·알 수 없는 소진 기록 및 파티·재화·이로치 보존을 대표 검사했다. 실제 기기·운영 D1·Sites 병합본은 검증하지 않았다.
+
+## 구역 15·16·18·19 고정 우두머리와 출현 기록 보호
+
+[구역 15](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-15-guide-all-pokemon-and-alphas)의 펌킨인·독침붕·다크펫, [구역 16](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-16-guide-all-pokemon-and-alphas)의 전룡, [구역 18](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-18-guide-all-pokemon-and-alphas)의 이어롭·보만다, [구역 19](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-19-guide-all-pokemon-and-alphas)의 밤 삐삐를 기존 공통 경계·플레이어 체력 처리에 연결했다. 각 층·시간·현장에 실제 표시되는 개체와 기존 소진 기록을 따른다. 구역 19 트리미앙은 자료에 잠든 것으로 기재되어 있지만 현재 기상 상태가 없으므로 공격 대상에서 보류했다. 구역 20의 동적 우두머리는 별도 수명 처리여서 이번에 포함하지 않는다.
+
+포효 피해 10은 [체력 자료](https://www.serebii.net/legendsz-a/playerhealth.shtml)를 참고했다. 두 칸 감지와 이동 시 공격·30 피해는 원작 실시간 기술과 거리를 확인하지 못한 잠정 2D 규칙이다. 격리 API에서 시간대·층·현장별 감지, 공격·중복 요청 및 파티·재화·이로치 보존을 대표 검사했다.
+
+검사 중 기존 시간 경과 갱신이 버전을 알 수 없는 구역 18 소진 기록을 삭제하는 것을 재현했다. 일반 구역과 별도 구역 19 갱신은 이제 알 수 없거나 손상된 소진 기록이면 출현 갱신을 보류한다. 해당 기록과 이로치·주기 정보를 보존하며, 정상 형식의 이전 출현 갱신은 유지한다. 구역 이탈·빠른 이동 등 다른 경로 전체에 대한 미래 저장 호환을 보장하지는 않는다. 실제 기기·운영 D1·Sites 병합본은 검증하지 않았다.

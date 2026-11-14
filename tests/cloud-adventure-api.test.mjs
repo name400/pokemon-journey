@@ -9077,3 +9077,20 @@ test('reviewed Zone 12 to 14 alphas respect layers, day and saved player health'
   assert.equal(rawWorld().zaWildShinyRolls['zone14:excadrill-alpha:530'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('reviewed Zone 15, 16, 18 and 19 alphas protect player health and saves',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'fixed-alpha-late-qa',displayName:'후반 우두머리 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),rolls={'zone18:salamence-alpha:373':true};
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,interior:null,zaFixedAlphaAlertV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},zaWildShinyRolls:rolls,combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(place({district:'lumiose-zone15',zaZone15Upper:false,zaZone15Spent:{},x:4,y:13}));await get();const rev=state.revision;await call('move',{direction:'right'});await call('move',{direction:'right',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone15:beedrill-alpha');
+  clock+=600000;seedWorld(place({district:'lumiose-zone15',zaZone15Upper:false,zaZone15Spent:{},x:4,y:13}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone15:banette-alpha');
+  seedWorld(place({district:'lumiose-zone16-garden',zaZone16Upper:false,zaZone16Spent:{},x:16,y:3}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone16-garden:ampharos-alpha');
+  seedWorld(place({district:'lumiose-zone18',zaZone18Upper:false,zaZone18Construction:false,zaZone18Scaffold:false,zaZone18Spent:{},x:12,y:9}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone18:salamence-alpha');clock+=3000;await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);
+  seedWorld(place({district:'lumiose-zone18',zaZone18Upper:false,zaZone18Construction:true,zaZone18Scaffold:false,zaZone18Spent:{},x:15,y:6}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone18:lopunny-alpha');
+  seedWorld(place({district:'lumiose-zone19',zaZone19Spent:{},x:9,y:8}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone19:clefairy-alpha');
+  clock+=600000;seedWorld(place({district:'lumiose-zone19',zaZone19Spent:{},x:9,y:8}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaFixedAlphaAlertV1,undefined);
+  seedWorld(place({district:'lumiose-zone18',zaZone18Upper:false,zaZone18Construction:false,zaZone18Scaffold:false,zaZone18Spent:{version:2},zaFixedAlphaAlertV1:'lumiose-zone18:salamence-alpha',x:12,y:9}));await get();await call('move',{direction:'right'});await get();assert.deepEqual(rawWorld().zaZone18Spent,{version:2});assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone18:salamence-alpha');assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  assert.equal(rawWorld().zaWildShinyRolls['zone18:salamence-alpha:373'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});
