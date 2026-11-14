@@ -10279,3 +10279,15 @@ test('regional evolution refuses conflicting shared identity without consuming s
   const legacy={...original};delete legacy.speciesId;delete legacy.formId;seedMon(id,legacy);await get();const revision=state.revision;await call('evolve',{target:10165});await call('evolve',{target:10165,revision},409);await get();const evolved=rawMon(id);assert.equal(evolved.id,10165);assert.equal(evolved.shiny,true);assert.equal(evolved.item,'leftovers');assert.deepEqual(evolved.custom,original.custom);assert.equal(state.inventory.galaricacuff||0,0);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('newly caught nonstarter Chikorita uses verified Z-A growth and retains its moves after reconnect',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-family-growth-qa',displayName:'포획 계열 성장 검사'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,leadBefore=rawMon(lead),foe={...makeMon(152,8),boxId:'wild',hp:0,moves:['몸통박치기','꼬리흔들기','나뭇잎','방어'],pp:{tackle:3}};
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,adventureBalls:{masterball:1},combat:null,encounter:null,adventureCatchWindow:{foe,moveCount:0,revision:state.revision+1}},state.revision+1));await get();const revision=state.revision;await call('catchWindowBall',{ball:'masterball'});await call('catchWindowBall',{ball:'masterball',revision},409);await get();
+  const id=state.world.teamIds.find(x=>x!==lead),before=rawMon(id);assert.equal(before.adventureVerifiedFamilyMovesV1,true);assert.equal(before.level,8);
+  const candyRevision=state.revision;await call('useAdventureRareCandy',{boxId:id});await call('useAdventureRareCandy',{boxId:id,revision:candyRevision},409);await get();assert.equal(rawMon(id).level,9);assert.ok(state.world.adventurePendingMoves.some(m=>m.boxId===id&&m.move==='차밍보이스'));assert.deepEqual(rawMon(id).moves,before.moves);assert.ok(state.box.find(m=>m.boxId===id).learnable.includes('차밍보이스'));assert.ok(!state.box.find(m=>m.boxId===id).learnable.includes('독가루'));
+  while(state.world.adventurePendingMoves?.length){const current=state.world.adventurePendingMoves[0];await call('resolveAdventureMove',{slot:current.move==='차밍보이스'?1:null});}await get();assert.ok(rawMon(id).moves.includes('차밍보이스'));assert.equal(rawMon(id).adventureVerifiedFamilyMovesV1,true);assert.equal(state.inventory.rarecandy||0,0);assert.equal(rawMon(lead).id,leadBefore.id);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});

@@ -94,3 +94,14 @@ test('new intro starter uses Z-A levels while old and unidentified saves keep th
  const evolving={...makeMon(153,20),boxId:'starter',origin:'starter'};assert.ok(adventureLearnableMoves(evolving,fresh).includes('기가드레인'));assert.ok(adventureLearnableMoves(evolving,fresh).includes('차밍보이스'));
  for(const [id,element] of [[152,'나뭇잎'],[158,'물대포'],[498,'불꽃세례']]){const s={...makeMon(id,5),boxId:'starter',origin:'starter',moves:['몸통박치기'],pp:{}},result=applyAdventureIntroStarterMoves(s,{...s,level:6,moves:[...s.moves]},fresh);assert.deepEqual(result.learned,[element]);}
 });
+
+test('newly caught verified starter families use Z-A growth without changing old or unknown records',async()=>{
+ const {markAdventureVerifiedGrowth}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,move] of [[152,9,'차밍보이스'],[158,15,'거품광선'],[498,15,'화염바퀴']]){
+  const saved={...makeMon(id,level-1),origin:'capture',moves:['몸통박치기','방어','울음소리','빛의장막'],pp:{tackle:3}},marked=markAdventureVerifiedGrowth(saved);assert.equal(saved.adventureVerifiedFamilyMovesV1,undefined);assert.equal(marked.adventureVerifiedFamilyMovesV1,true);
+  const result=applyAdventureLevelMoves(marked,{...marked,level,moves:[...marked.moves],pp:{...marked.pp}},{});assert.ok(result.pending.includes(move));assert.deepEqual(result.mon.moves,marked.moves);assert.equal(result.mon.pp.tackle,3);assert.ok(adventureLearnableMoves({...marked,level},{}).includes(move));
+ }
+ const mon={...makeMon(152,8),adventureVerifiedFamilyMovesV1:{version:2}};assert.deepEqual(markAdventureVerifiedGrowth(mon),mon);assert.deepEqual(adventureLearnableMoves(mon,{}),adventureLearnableMoves({...mon,adventureVerifiedFamilyMovesV1:undefined},{}));
+ const wrong={...makeMon(152,8),formId:999};assert.equal(markAdventureVerifiedGrowth(wrong).adventureVerifiedFamilyMovesV1,undefined);assert.equal(markAdventureVerifiedGrowth(makeMon(1,8)).adventureVerifiedFamilyMovesV1,undefined);
+ const evolved={...makeMon(153,20),adventureVerifiedFamilyMovesV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.ok(applyAdventureEvolutionMoves(evolved,{}).learned.includes('기가드레인'));assert.equal(evolved.pp.tackle,3);
+});
