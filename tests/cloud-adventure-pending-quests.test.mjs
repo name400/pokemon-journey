@@ -220,3 +220,7 @@ test('side 78 tracking points to Odette only while its current stage is pending'
 test('side 79 tracking follows battle and reward stages at Furiko',()=>{
  for(const [id,stage,expected] of [['79',1,{x:4,y:6}],['79-reward',2,{x:4,y:6}],['79',3,null]]){const s={area:3,district:'lumiose-hibernal-approach',interior:null,zaTrackedQuestId:id,zaSide79Stage:stage};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),expected);}
 });
+
+test('side 77 tracking points to Mawile or Réu on the north scaffold',()=>{
+ for(const [id,stage,expected] of [['77',1,{x:12,y:2}],['77-reward',2,{x:12,y:2}],['77',3,null]]){const s={area:3,district:'lumiose-zone9-nw-scaffold',interior:null,zaTrackedQuestId:id,zaSide77Stage:stage};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),expected);}
+});
