@@ -9465,3 +9465,18 @@ test('zone-specific fixed alpha idle attacks respect layer and save identity',as
   for(const extra of [{zaZone6Layer:'roof'},{zaZone6Spent:{'houndoom-alpha':true}},{zaZone6Spent:{version:2}},{zaSpecialAlphaRealtimeV1:{version:2,opaque:true}}]){seedWorld(place({x:9,y:4,zaZone6AlphaRoarAlertV1:'houndoom-alpha',...extra}));await get();const before=state.revision;await call('specialAlphaIdle');assert.equal(state.revision,before);assert.equal(state.world.zaPlayerVitalsV1.hp,100);if(extra.zaSpecialAlphaRealtimeV1)assert.deepEqual(rawWorld().zaSpecialAlphaRealtimeV1,extra.zaSpecialAlphaRealtimeV1);}
  }finally{Date.now=oldNow;globalThis.__adventureRandom=oldRandom;globalThis.__adventureUser=previous;}
 });
+
+test('early special alphas attack idle players with their own saved identity',async()=>{
+ const previous=globalThis.__adventureUser,oldNow=Date.now,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureUser={userId:'idle-early-special-alpha-qa',displayName:'초기 우두머리 정지 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),mon=structuredClone(rawMon(team[0]));
+  const place=(district,x,y,extra)=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,zaMission05Complete:true,zaBunnelbyQuest:3,zaSpecialAlphaRealtimeV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},zaWildShinyRolls:{'keep:shiny':true},combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(place('lumiose-zone2',20,12,{zaZone2RockCleared:true,zaZone2AlphaSpent:false,zaZone2IslandRoarAlert:'magikarp'}));await get();await call('specialAlphaIdle');let rev=state.revision;clock+=2500;await call('specialAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,48);await call('specialAlphaIdle',{revision:rev},409);
+  clock+=200000;globalThis.__adventureTime={period:'night',hour:22};await get();rev=state.revision;await call('specialAlphaIdle');assert.equal(state.revision,rev);assert.equal(state.world.zaPlayerVitalsV1.hp,48);
+  seedWorld(place('lumiose-zone2',20,12,{zaZone2RockCleared:true,zaZone2AlphaSpent:false,zaZone2IslandRoarAlert:'staryu',zaSpecialAlphaRealtimeV1:{version:1,at:clock-3000,key:'zone2-island:magikarp'}}));await get();await call('specialAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,100);clock+=2500;await call('specialAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,33);
+  seedWorld(place('lumiose-zone1-roof',17,5,{zaZone1RoofAlphaSpent:false,zaZone1RoofRoarAlert:true}));await get();await call('specialAlphaIdle');clock+=2500;await call('specialAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,70);
+  seedWorld(place('lumiose-rouge-tower-interior',8,8,{zaZone3LitleoAwakeV1:true,zaZone3LitleoSpent:false,zaZone3LitleoRoarAlertV1:true}));await get();await call('specialAlphaIdle');clock+=2500;await call('specialAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,70);
+  seedWorld(place('lumiose-rouge-tower-interior',8,8,{zaZone3LitleoAwakeV1:false,zaZone3LitleoRoarAlertV1:true}));await get();rev=state.revision;await call('specialAlphaIdle');assert.equal(state.revision,rev);assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(team[0]),mon);assert.equal(rawWorld().zaWildShinyRolls['keep:shiny'],true);
+ }finally{Date.now=oldNow;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;globalThis.__adventureUser=previous;}
+});
