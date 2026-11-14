@@ -133,3 +133,18 @@ test('Le Yeah ground visits register a map destination without altering unrelate
  assert.ok(taxiDestinations(world).some(p=>p.id==='le-yeah'));assert.ok(!registeredLandmarks(world).some(p=>p.id==='le-yeah'));assert.equal(recordLandmarks(world),true);assert.ok(registeredLandmarks(world).some(p=>p.id==='le-yeah'));assert.ok(world.zaFastTravelLandmarks.includes('future-landmark'));assert.equal(recordLandmarks(world),false);
  for(const other of [{...world,district:'lumiose-rouge-sector3-roof',zaFastTravelLandmarks:[]},{...world,interior:'leYeah',zaFastTravelLandmarks:[]}]){assert.equal(recordLandmarks(other),false);assert.deepEqual(other.zaFastTravelLandmarks,[]);}
 });
+
+test('Cyclone and Pokémon-Amie landmarks lead to existing café interactions',async()=>{
+ const {taxiDestinations,recordLandmarks,mapTravelDestinations}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ for(const [id,name] of [['cafe-cyclone','Café Cyclone'],['cafe-amie','카페 포켓몬아미']]){
+  const p=taxiDestinations({}).find(v=>v.id===id);assert.ok(p);const s={...p,area:3,interior:null,zaRoyaleRank:'F'},map=fieldMap(s);assert.equal(map[p.y][p.x],'.');assert.equal(recordLandmarks(s),true);assert.ok(mapTravelDestinations(s).some(v=>v.id===id));
+  if(id==='cafe-cyclone')assert.match(fieldDialogue(s,map).name,/Cyclone/);
+  else {const {fieldPath}=await import('../lib/cloud-adventure/adventure-world.mjs');assert.ok(fieldPath(map,s,{x:5,y:7}).length);assert.ok(fieldDialogue({...s,x:5,y:7,facing:'up'},map).name.startsWith(name));}
+ }
+});
+
+test('landmark visits preserve unknown saved entries and refuse incompatible containers',async()=>{
+ const {recordLandmarks}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');const future={kind:'future',payload:[1,2]},base={area:3,district:'lumiose-vert-sector3',x:14,y:2,interior:null};
+ const mixed={...base,zaFastTravelLandmarks:['legacy',future]};assert.equal(recordLandmarks(mixed),true);assert.deepEqual(mixed.zaFastTravelLandmarks,['legacy',future,'cafe-cyclone']);
+ const incompatible={...base,zaFastTravelLandmarks:{version:2,items:['future']}};const before=structuredClone(incompatible);assert.equal(recordLandmarks(incompatible),false);assert.deepEqual(incompatible,before);
+});
