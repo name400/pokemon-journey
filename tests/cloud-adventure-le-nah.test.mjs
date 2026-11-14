@@ -22,3 +22,14 @@ test('Le Nah unlock and course opponents match the documented one-star mission',
 test('existing restaurant entrance and promotion counter are preserved',()=>{
  const map=leNahMap();assert.equal(map.length,17);assert.equal(map[16][11],'X');assert.equal(map[5][11],'R');
 });
+
+test('Substitute TM requires ownership and only accepts reviewed base species',async()=>{
+ const {makeMon}=await import('../lib/game.mjs');
+ const {canLearnStoryTm}=await import('../lib/cloud-adventure/adventure-story-tm.mjs');
+ const bulbasaur=makeMon(1,30),unsupported=makeMon(129,30);
+ assert.equal(canLearnStoryTm({},bulbasaur,'za-tm085'),false);
+ assert.equal(canLearnStoryTm({'za-tm085':1},bulbasaur,'za-tm085'),true);
+ assert.equal(canLearnStoryTm({'za-tm085':1},unsupported,'za-tm085'),false);
+ assert.equal(canLearnStoryTm({'za-tm085':1},{...bulbasaur,id:10001},'za-tm085'),false);
+ assert.equal(canLearnStoryTm({'za-tm085':1},{...bulbasaur,moves:['대타출동']},'za-tm085'),false);
+});
