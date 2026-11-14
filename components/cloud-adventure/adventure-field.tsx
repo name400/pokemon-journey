@@ -1,3 +1,5 @@
+import {advanceSide67VisualTrail} from '@/lib/cloud-adventure/adventure-side67-follow.mjs';
+import {side67Found} from '@/lib/cloud-adventure/adventure-side67.mjs';
 import {SIDE67_SPOTS} from '@/lib/cloud-adventure/adventure-side67.mjs';
 import {visibleCityResearchEncounters} from '@/lib/cloud-adventure/adventure-city-research.mjs';
 import {isScrewGlideRoof,screwGlideAt} from '@/lib/cloud-adventure/adventure-screw-roofs.mjs';
@@ -47,6 +49,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,width=736,height=544;
   let guide:{key:string,x:number,y:number,startX:number,startY:number,targetX:number,targetY:number,start:number}|null=null;
+  let side67Trail:ReturnType<typeof advanceSide67VisualTrail>=null;
   let descentKey='',descentGuides:Array<{x:number,y:number,startX:number,startY:number,targetX:number,targetY:number,start:number,direction:string}>=[];
   const scheduler=createFieldScheduler(requestAnimationFrame,cancelAnimationFrame,draw);invalidate.current=scheduler.invalidate;
   // Load field sprites only when a visible map actually refers to them. This
@@ -1393,6 +1396,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    if(w.district==='lumiose-coulant-route'&&!w.interior){
     for(const p of SIDE67_SPOTS){
      if(p.lower!==(w.zaCoulantLower===true)||w.map?.[p.y]?.[p.x]!=='^')continue;
+     if(p.id==='calma'&&w.zaSide67Started&&!w.zaSide67Complete&&side67Found(w).length<5)continue;
      trainer(p.x-.16,p.y,p.id==='calma'?'#bd8aaf':'#8f7893','down');
      if(p.id==='calma'){
       const img=fieldImages[700],px=(p.x+.33)*tile,py=p.y*tile;
@@ -1401,6 +1405,15 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      }else trainer(p.x+.22,p.y,'#6e8790','down');
     }
    }
+   // Calma and Sylveon follow only as presentation; reset on a layer change
+   // or correction so they never affect collision, server requests or saves.
+   if(w.district==='lumiose-coulant-route'&&!w.interior&&w.zaSide67Started&&!w.zaSide67Complete&&side67Found(w).length<5){
+    const layer=`${w.district}:${w.zaCoulantLower===true}`;
+    side67Trail=advanceSide67VisualTrail(side67Trail,w.map,{x:s.targetX,y:s.targetY},layer,s.facing);
+    const [calma,sylveon]=side67Trail?.tail||[];
+    if(calma)trainer(calma.x,calma.y,'#bd8aaf',s.facing,walking);
+    if(sylveon){const img=fieldImages[700],px=sylveon.x*tile,py=sylveon.y*tile;if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-4,py-8,tile+8,tile+8);else{ctx.fillStyle='#f7d9e5';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();}}
+   }else side67Trail=null;
    // The rooftop discussion includes AZ and the team. Companion placement and
    // clothing are visual approximations and do not change movement or saves.
    if(w.district==='lumiose'&&w.interior==='hotelRoof'&&w.zaMission35Stage===6&&w.zaMission35RoofRequired){for(const [x,color] of [[9,'#597f9d'],[13,'#ad8175']] as const)if(!(w.x===x&&w.y===7))trainer(x,7,color,'down');}
