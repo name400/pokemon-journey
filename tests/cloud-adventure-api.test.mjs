@@ -10583,6 +10583,18 @@ test('Zone 15 additional rooftop Larvitar preserve independent capture and old s
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 5 ground and drain exits preserve unknown encounter records but renew known ones',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone5-unknown-ledger-exit-qa',displayName:'구역 5 저장 보호'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,original=rawMon(lead),team=[...state.world.teamIds],wallet=structuredClone(state.wallet),future={version:2,opaque:{encounter:'keep'}};
+  for(const entry of [{district:'lumiose-zone5',x:17,y:15,direction:'down',destination:'lumiose-bleu-plaza-route'},{district:'lumiose-zone5-drain',x:21,y:4,direction:'right',destination:'lumiose-bleu3-sewer-approach'}])for(const ledger of [future,{'bellsprout-alpha':true}]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:entry.district,interior:null,x:entry.x,y:entry.y,zaZone5Upper:false,zaZone5DrainLanding:false,zaZone5DrainSecondCleared:true,zaZone5Spent:structuredClone(ledger),combat:null,encounter:null},state.revision+1));await get();const rev=state.revision;await call('move',{direction:entry.direction});await call('move',{direction:entry.direction,revision:rev},409);await get();assert.equal(state.world.district,entry.destination);
+   if(ledger.version===2)assert.deepEqual(rawWorld().zaZone5Spent,future);else assert.equal(rawWorld().zaZone5Spent,undefined);
+   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawMon(lead).id,original.id);assert.deepEqual(rawMon(lead).ivs,original.ivs);
+  }
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Zone 5 encounter stays consumed across the Sector 1 seam until leaving the zone',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone5-sector1-lifetime-qa',displayName:'구역 5 연결 검사'};
  try{globalThis.__adventureRandom=()=>0;await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],key='zone5:abra:63';seedMon(id,makeMon(1,100));const lead=rawMon(id),coins=state.wallet.coins;
