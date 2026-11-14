@@ -9167,3 +9167,13 @@ test('Zone 20 ordinary random alpha alert respects fixed slots and clears on exi
   seedWorld(place({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'up'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('roaming random alpha threatens the player across reconnects',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'roaming-alpha-player-health-qa',displayName:'이동 우두머리 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='field3:pancham:674';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:9,y:6,zaMission05Complete:true,zaZone3FieldSpent:{},zaZone3FieldPositions:{},zaWildVisibleAlphaLevels:{[key]:19},zaWildShinyRolls:{[key]:true},zaRandomAlphaAlertV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null},state.revision+1));
+  await get();const rev=state.revision;await call('move',{direction:'left'});await call('move',{direction:'left',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaRandomAlphaAlertV1.id,'pancham');assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  clock+=3000;await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});

@@ -123,3 +123,16 @@ test('zone 20 ordinary slots participate only when their alpha identity is known
  assert.equal(randomAlphaPlayerThreat({...s,zaWildVisibleAlphaLevels:{version:2}}),null);
  assert.equal(randomAlphaPlayerThreat({...s,x:7,y:10}),null);
 });
+
+test('roaming random alphas follow saved positions and preserve their identity',async()=>{
+ const {randomAlphaPlayerThreat,randomAlphaAlertMatches}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const key='field3:pancham:674',s={area:3,district:'lumiose-zone3',x:6,y:6,zaMission05Complete:true,zaWildVisibleAlphaLevels:{[key]:19},zaWildShinyRolls:{[key]:true}};
+ const p=randomAlphaPlayerThreat(s,'day');assert.equal(p?.id,'pancham');assert.equal(p.alert.cycle,'shiny');assert.equal(randomAlphaAlertMatches({...s,zaRandomAlphaAlertV1:p.alert},p),true);
+ assert.equal(randomAlphaPlayerThreat({...s,zaZone3FieldSpent:{pancham:true}},'day'),null);
+ assert.equal(randomAlphaPlayerThreat({...s,zaZone3FieldPositions:{version:2}},'day'),null);
+ const b='field2:budew:406',lake={area:3,district:'lumiose-zone2',x:8,y:14,zaWildVisibleAlphaLevels:{[b]:17},zaWildShinyRolls:{[b]:true}};
+ assert.equal(randomAlphaPlayerThreat(lake,'day')?.id,'budew');assert.equal(randomAlphaPlayerThreat({...lake,zaZone2Budew:{escaped:true}},'day'),null);
+ const rat='field2:patrat:504',moving={...lake,x:9,y:8,zaZone2FieldPositions:{patrat:{x:10,y:8}},zaWildVisibleAlphaLevels:{[rat]:18},zaWildShinyRolls:{[rat]:true}};const movingThreat=randomAlphaPlayerThreat(moving,'day');assert.equal(movingThreat?.x,10);assert.equal(movingThreat?.y,8);assert.equal(randomAlphaAlertMatches({...moving,zaRandomAlphaAlertV1:movingThreat.alert},randomAlphaPlayerThreat({...moving,zaZone2FieldPositions:{patrat:{x:11,y:8}}},'day')),true);
+ const fish='field2:magikarp:129';assert.equal(randomAlphaPlayerThreat({...lake,zaWildVisibleAlphaLevels:{[fish]:20},zaWildShinyRolls:{[fish]:true}},'day'),null);
+ const day='field3:flabebe:669',flower={...s,zaWildVisibleAlphaLevels:{[day]:20},zaWildShinyRolls:{[day]:true}};assert.equal(randomAlphaPlayerThreat(flower,'night'),null);assert.equal(randomAlphaPlayerThreat(flower,'day')?.id,'flabebe');
+});
