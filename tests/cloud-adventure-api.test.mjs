@@ -1852,6 +1852,17 @@ test('Coulant lower bank stairs and underpass survive reload',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('later story flags preserve wild-zone access on legacy saves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'legacy-zone-gates-qa',displayName:'구형 구역 출입 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const base={area:3,district:'lumiose-vert-street-route',interior:null,x:20,y:1,facing:'up',zaRoyaleRank:'D'};
+  seedWorld(storeAdventurePosition({...rawWorld(),...base,zaMission24Complete:false},state.revision+1));await get();await call('move',{direction:'up'},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),...base,zaMission24Complete:true},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-zone17');await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-vert-street-route');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector9',interior:null,x:21,y:12,facing:'right',zaRoyaleRank:'C',zaMission31Started:true},state.revision+1));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.district,'lumiose-zone18');await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-magenta-sector9');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 17 southwest entrance respects rank and survives reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone17-southwest-qa',displayName:'출입구테스트'};
  try{
