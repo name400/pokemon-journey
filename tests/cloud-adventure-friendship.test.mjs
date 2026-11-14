@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {adventureFriendshipGain,adventureCandyFriendship} from '../lib/cloud-adventure/adventure-friendship.mjs';
+import {adventureFriendshipGain,adventureCandyFriendship,lumioseLevelFriendshipGain,isLumioseFriendshipWorld} from '../lib/cloud-adventure/adventure-friendship.mjs';
 import {friendshipGain} from '../lib/capture.mjs';
 import {gainExperience,expToNext} from '../lib/growth.mjs';
 import {makeMon} from '../lib/game.mjs';
@@ -14,4 +14,8 @@ test('soothe bell boosts adventure friendship while shared growth stays compatib
 test('experience candy friendship has size bands, caps and no effect at or above 160',()=>{
  for(const [size,low,high] of [['XS',1,1],['S',1,1],['M',2,1],['L',3,2],['XL',4,2]]){assert.equal(adventureCandyFriendship({friendship:70},size),70+low);assert.equal(adventureCandyFriendship({friendship:120},size),120+high);assert.equal(adventureCandyFriendship({friendship:160},size),160);assert.equal(adventureCandyFriendship({friendship:220},size),220);}
  assert.equal(adventureCandyFriendship({friendship:159,item:'soothebell'},'XL'),160);assert.equal(adventureCandyFriendship({friendship:70,item:'soothebell'},'M'),73);assert.throws(()=>adventureCandyFriendship({friendship:{version:2}},'XS'));assert.throws(()=>adventureCandyFriendship({friendship:70},'invalid'));
+});
+
+test('Lumiose level friendship stops at 160 without reducing older higher values',()=>{
+ assert.equal(lumioseLevelFriendshipGain({friendship:99},5),104);assert.equal(lumioseLevelFriendshipGain({friendship:159,item:'soothebell'},3),160);assert.equal(lumioseLevelFriendshipGain({friendship:160},3),160);assert.equal(lumioseLevelFriendshipGain({friendship:230},2),230);const future={version:2};assert.equal(lumioseLevelFriendshipGain({friendship:future},2),future);assert.equal(isLumioseFriendshipWorld({district:'lumiose-zone3'}),true);assert.equal(isLumioseFriendshipWorld({district:'lumiose'}),true);assert.equal(isLumioseFriendshipWorld({district:null,area:3}),false);
 });
