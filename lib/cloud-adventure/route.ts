@@ -289,8 +289,17 @@ async function claimMission37Zygardite(s:any,bag:Record<string,number>,userId:st
 }
 function finish(s:any,mons:Map<string,any>,changed:Map<string,any>,bagChanges:Record<string,number>,bag:Record<string,number>){const c=s.combat;if(!c)return 0;if(s.zaMission39Started&&isInfiniteFieldTrainer(s.trainer?.id)&&!(Number.isInteger(s.zaInfiniteFieldTier)&&s.zaInfiniteFieldTier>=0&&s.zaInfiniteFieldTier<=3))s.zaInfiniteFieldTier=0;if(s.trainer?.id==='mission37-flowers'&&s.zaMission37Stage===7&&!c.adventureForfeited){const flowers=mission37RecordFlowers(s,c.adventureSoloMultiFoeV1===true?[...(c.teams?.[1]||[]),...(c.teams?.[3]||[])]:c.teams?.[1]);if(flowers.length)c.log.push(`앙주 체력 (턴제 환산): ${mission37AngeProgress(s).hp}/100`);}
  if(c.format==='mission37-triples-prototype-v1'&&c.adventureSoloTripleFoeV1===true){
-  if(s.trainer?.id!=='mission35-aegislash')throw Error('미션 35의 배틀을 확인하세요.');const team=mission37PlayerTeam(c);if(team.length!==s.teamIds.length||team.some((m:any)=>!s.teamIds.includes(m.boxId)))throw Error('미션 35의 배틀 소유권을 확인하세요.');
+  const leYeah=s.trainer?.id==='le-yeah-course'&&s.zaLeYeahRun?.tripleV1===true;if(s.trainer?.id!=='mission35-aegislash'&&!leYeah)throw Error('다수 상대 배틀을 확인하세요.');const team=mission37PlayerTeam(c);if(team.length!==s.teamIds.length||team.some((m:any)=>!s.teamIds.includes(m.boxId)))throw Error('배틀 소유권을 확인하세요.');
   for(const m of team){const normal=restoreAdventurePokemon(m,adventureBattleBaseFor(c,0,m));mons.set(normal.boxId,normal);changed.set(normal.boxId,normal);}const view=mission35TripleView(c),lead=view.teams[0][view.active[0]];if(lead&&s.teamIds.includes(lead.boxId))s.activeId=lead.boxId;s.events=view.events||[];s.log=c.log||[];if(!c.ended)return 0;
+  if(leYeah){
+   const run=s.zaLeYeahRun;if(!Number.isInteger(run.course)||run.course<0||run.course>=LE_YEAH_COURSE_COUNT||typeof run.repeat!=='boolean')throw Error('식당 코스 상태를 확인하세요.');
+   if(c.winner===0){
+    if(recordResearchTrainerWin(s,s.trainer.id))s.log.push('모미지 리서치: 트레이너 배틀 승리 목표를 달성했다.');
+    const xp=victoryExperience(c.teams[1],true);for(const id of s.teamIds){const mon=mons.get(id);if(mon&&mon.hp>0){const leveled=gainExperience(mon,canariBattleExperience(xp,id===s.activeId,s.zaRedCanariPlush,s.zaRedCanariLevel)).mon,g=applyAdventureLevelMoves(mon,leveled);mons.set(id,g.mon);changed.set(id,g.mon);if(g.mon.level>mon.level)s.log.push(`${mon.name}의 레벨이 ${g.mon.level}이 되었다!`);for(const move of g.learned)s.log.push(`${mon.name}이(가) ${move}을(를) 배웠다!`);if(g.pending.length){queueAdventureMoves(s,id,g.pending);s.log.push(`${mon.name}: 배울 기술을 선택하세요.`);}}}
+    if(run.course+1===LE_YEAH_COURSE_COUNT){s.zaLeYeahRewardPending=run.repeat?'repeat':'mission';if(!run.repeat)s.zaLeYeahCompleted=true;delete s.zaLeYeahRun;s.log.push('5코스를 모두 마쳤다. 안내원에게 보상을 받자.');}else{s.zaLeYeahRun={...run,course:run.course+1};s.log.push('다음 코스를 준비한다. 배틀 사이에는 회복할 수 없다.');}
+   }else{delete s.zaLeYeahRun;for(const id of s.teamIds){const mon=mons.get(id);if(mon){const rested=heal(mon);mons.set(id,rested);changed.set(id,rested);}}s.district='lumiose';s.interior=null;s.x=3;s.y=5;s.log.push('연속 배틀에 실패해 포켓몬 센터에서 회복했다.');}
+   const prize=c.winner===0&&c.adventureLeYeahPrizeV1===true?2160:0;if(prize)s.log.push(`${prize}코인의 전투 상금을 받았다.`);s.combat=null;s.encounter=null;s.trainer=null;return prize;
+  }
   if(c.winner===0){const xp=victoryExperience(c.teams[1],true);for(const id of s.teamIds){const mon=mons.get(id);if(mon&&mon.hp>0){const amount=canariBattleExperience(xp,id===s.activeId,s.zaRedCanariPlush,s.zaRedCanariLevel),leveled=gainExperience(mon,amount).mon,g=applyAdventureLevelMoves(mon,leveled);mons.set(id,g.mon);changed.set(id,g.mon);for(const move of g.learned)s.log.push(`${g.mon.name}이(가) ${move}을(를) 배웠다!`);if(g.pending.length)queueAdventureMoves(s,id,g.pending);}}if(s.zaMission35Stage===4)s.zaLysandreAegislashWon=true;s.log.push('킬가르도와 단칼빙을 물리쳤다. 승강기 열쇠를 찾자.');}else{for(const id of s.teamIds){const mon=mons.get(id);if(mon){const rested=heal(mon);mons.set(id,rested);changed.set(id,rested);}}s.log.push('파티를 회복했다. 연구소에서 다시 도전하자.');}s.combat=null;s.encounter=null;s.trainer=null;return 0;
  }
  if(c.format==='mission37-triples-prototype-v1'){
@@ -521,10 +530,10 @@ else if(['leYeahStart','leYeahRepeat','leYeahNext'].includes(b.action)){
  if(s.combat||s.district!=='lumiose-rouge-sector3'||s.interior!=='leYeah'||cell()!=='R'||s.unionHost)throw Error('르 예 안내원에게 배틀을 신청하세요.');
  if(b.action!=='leYeahNext'){
   if(!leYeahAvailable(s)||s.zaLeYeahRun||s.zaLeYeahRewardPending||(b.action==='leYeahStart'&&s.zaLeYeahCompleted)||(b.action==='leYeahRepeat'&&!s.zaLeYeahCompleted))throw Error('식당 배틀의 진행 조건을 확인하세요.');
-  if(b.action==='leYeahRepeat')reward=-15000;s.zaLeYeahRun={course:0,repeat:b.action==='leYeahRepeat'};
+  if(b.action==='leYeahRepeat')reward=-15000;s.zaLeYeahRun={course:0,repeat:b.action==='leYeahRepeat',tripleV1:true};
  }
  const run=s.zaLeYeahRun;if(!run||!Number.isInteger(run.course)||run.course<0||run.course>=LE_YEAH_COURSE_COUNT||typeof run.repeat!=='boolean')throw Error('식당 코스 상태를 확인하세요.');
- const course=leYeahCourse(run.course),ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)],player=ids.map((id:string)=>mons.get(id));s.combat=createSoloMultiFoeSnapshot(player,course.team);s.combat.adventureLeYeahPrizeV1=true;s.combat.adventureBattleBase=adventureBattleBase([player]);s.activeId=s.combat.teams[0][0].boxId;s.trainer={id:'le-yeah-course',name:course.name,title:'르 예 연속 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=[`${course.name}와 배틀이 시작됐다!`];
+ const course=leYeahCourse(run.course),ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)],player=ids.map((id:string)=>mons.get(id));s.combat=run.tripleV1===true?createMission35TripleSnapshot(player,course.team):createSoloMultiFoeSnapshot(player,course.team);s.combat.adventureLeYeahPrizeV1=true;s.combat.adventureBattleBase=adventureBattleBase([player]);s.activeId=s.combat.teams[0][0].boxId;s.trainer={id:'le-yeah-course',name:course.name,title:'르 예 연속 배틀',sprite:'youngster-gen3'};s.encounter=null;s.log=[`${course.name}와 배틀이 시작됐다!`];
 }
 else if(b.action==='leYeahCancel'){if(s.combat||s.interior!=='leYeah'||!s.zaLeYeahRun)throw Error('중단할 식당 배틀이 없습니다.');delete s.zaLeYeahRun;s.log=['식사 배틀을 중단했다.'];}
 else if(b.action==='claimLeYeahReward'){
