@@ -8554,3 +8554,13 @@ test('Colis awards reusable Fly TM and Repeat Balls with compatible teaching',as
   const wrong={...makeMon(152,20),boxId:id,moves:['몸통박치기'],pp:{}};seedMon(id,wrong);await get();await call('teachStoryTm',{item:'za-tm043',slot:0},409);assert.deepEqual(rawMon(id).moves,wrong.moves);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Rouge Sector 5 rescue requires a strong move and protects its reward',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side48-rescue-qa',displayName:'거미줄 구조 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,coins=state.wallet.coins,team=[...state.world.teamIds],weak={...makeMon(150,50),boxId:id,moves:['몸통박치기'],pp:{tackle:5},shiny:true};seedMon(id,weak);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector5',interior:null,x:14,y:10,facing:'right',...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('side48Start',{},409);seedWorld(place({zaMission19Stage:1}));await get();assert.equal(state.world.interaction.action,'side48Start');await call('side48Start');await call('side48Rescue',{},409);assert.equal(rawWorld().zaSide48Stage,1);const strong={...weak,moves:['지진'],pp:{earthquake:3}};seedMon(id,strong);await get();const before=rawMon(id);await call('side48Rescue');await get();assert.equal(rawWorld().zaSide48Stage,2);assert.deepEqual(rawMon(id),before);assert.ok(pendingAdventureQuests(state.world).some(q=>q.id==='48-reward'));
+  seedWorld(place({adventureBalls:{netball:90,ultraball:7}}));await get();await call('side48Reward',{},409);assert.equal(rawWorld().zaSide48Stage,2);assert.equal(state.wallet.coins,coins);seedWorld(place({adventureBalls:{netball:89,ultraball:7}}));await get();const revision=state.revision;await call('side48Reward');await call('side48Reward',{revision},409);await get();assert.equal(rawWorld().adventureBalls.netball,99);assert.equal(rawWorld().adventureBalls.ultraball,7);assert.equal(state.wallet.coins,coins+1500);assert.equal(rawWorld().zaSide48Stage,3);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),before);await call('side48Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
