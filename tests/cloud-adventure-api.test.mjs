@@ -3124,6 +3124,16 @@ test('Mable call grants one chosen Kanto starter and candy after center and dex 
  }finally{globalThis.__adventureUser=priorUser;}
 });
 
+test('new Mable starters use verified Z-A growth and keep legacy party data',async()=>{
+ const previous=globalThis.__adventureUser;
+ try{for(const [action,speciesId] of [['side22Bulbasaur',1],['side22Charmander',4],['side22Squirtle',7]]){
+  globalThis.__adventureUser={userId:`side22-verified-${speciesId}`,displayName:'관동 선물 성장'};await get();await call('start',{species:152});const lead=state.world.activeId,leadBefore=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-floral',interior:'lumioseDirector',x:11,y:5,zaSide22Called:true},state.revision+1));await get();const rev=state.revision;await call(action);await call(action,{revision:rev},409);await get();
+  const id=state.world.teamIds.find(x=>x!==lead),gift=rawMon(id);assert.equal(gift.speciesId,speciesId);assert.equal(gift.adventureKantoMovesV1,true);assert.deepEqual(rawMon(lead),leadBefore);
+  if(speciesId===1){const grown={...gift,...makeMon(1,14),boxId:id,adventureKantoMovesV1:true,moves:['몸통박치기','덩굴채찍','성장','씨뿌리기'],custom:{kept:true}};seedMon(id,grown);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');await get();await call('useAdventureRareCandy',{boxId:id});await get();assert.equal(rawMon(id).level,15);assert.deepEqual(state.world.adventurePendingMoves.filter(m=>m.boxId===id).map(m=>m.move),['독가루','수면가루']);assert.deepEqual(rawMon(id).custom,{kept:true});assert.equal(rawMon(id).adventureKantoMovesV1,true);}
+ }}finally{globalThis.__adventureUser=previous;}
+});
+
 test('Mable gift choices go to storage when the party is full',async()=>{
  const priorUser=globalThis.__adventureUser;
  try{for(const [action,speciesId] of [['side22Bulbasaur',1],['side22Squirtle',7]]){
