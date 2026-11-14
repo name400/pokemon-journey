@@ -7499,6 +7499,25 @@ test('Sushi High Roller unlocks for later legacy progress without duplicating re
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('completed restaurant courses remain replayable when legacy progression flags are missing',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'restaurant-completion-legacy-qa',displayName:'구형 연전 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  const cases=[
+   {district:'lumiose-rouge-north',interior:'sushi',x:16,y:6,completed:'zaSushiCompleted',pending:'zaSushiRewardPending',start:'sushiStart',repeat:'sushiRepeat',price:30000},
+   {district:'lumiose-vert-sector6',interior:'leNah',x:11,y:6,completed:'zaLeNahCompleted',pending:'zaLeNahRewardPending',start:'leNahStart',repeat:'leNahRepeat',price:3000},
+   {district:'lumiose-rouge-sector3',interior:'leYeah',x:11,y:6,completed:'zaLeYeahCompleted',pending:'zaLeYeahRewardPending',start:'leYeahStart',repeat:'leYeahRepeat',price:15000},
+   {district:'lumiose-rouge-sector2',interior:'leWow',x:11,y:6,completed:'zaLeWowCompleted',pending:'zaLeWowRewardPending',start:'leWowStart',repeat:'leWowRepeat',price:100000},
+  ];
+  for(const c of cases){
+   const location={area:3,district:c.district,interior:c.interior,x:c.x,y:c.y,facing:'up',regionId:6,zaRoyaleRank:'Y',[c.completed]:true,[c.pending]:'mission'};
+   seedWorld(storeAdventurePosition({...rawWorld(),...location},state.revision+1));sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(c.price,'restaurant-completion-legacy-qa');await get();
+   await call(c.repeat,{},409);assert.equal(state.wallet.coins,c.price);assert.equal(rawWorld()[c.pending],'mission');
+   seedWorld({[c.pending]:undefined,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();assert.equal(state.world.interaction.action,c.repeat);await call(c.start,{},409);const revision=state.revision;await call(c.repeat);assert.equal(state.wallet.coins,0);await call(c.repeat,{revision},409);await get();assert.equal(state.wallet.coins,0);assert.ok(state.battle);await call('forfeit');await get();assert.equal(rawWorld()[c.completed],true);assert.equal(rawWorld()[c.pending],undefined);assert.deepEqual(state.world.teamIds,[id]);
+  }
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Vernal holovator quest preserves retries, rewards and both lift routes',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'side23-qa',displayName:'홀로베이터 검증'};
  try{
