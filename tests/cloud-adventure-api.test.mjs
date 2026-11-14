@@ -8776,3 +8776,13 @@ test('rain reaches outdoor trainer battles and remains fixed on reconnect',async
   globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.battle.weather,'raindance');await call('side53Battle',{revision:rev},409);await call('forfeit');seedWorld(place({}));await get();assert.notEqual(state.world.weather,'rain');await call('side53Battle');assert.equal(state.battle.weather,'');await call('forfeit');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.deepEqual({...rawMon(id),pp:undefined},{...lead,pp:undefined});assert.deepEqual(rawMon(id).pp,{});
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
+
+test('outdoor Floette multi battle inherits rain without rewriting ongoing battles',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'outdoor-multi-weather-qa',displayName:'다수 전투 날씨 검사'};globalThis.__adventureTime={period:'day',hour:16};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  const place=()=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector8',interior:null,x:15,y:15,facing:'up',zaSide12Complete:true,zaSide51Stage:1,zaMission19Stage:7},state.revision+1);
+  seedWorld(place());await get();assert.equal(state.world.weather,'rain');await call('side51Battle');assert.equal(state.battle.weather,'raindance');const revision=state.revision;await get();assert.equal(state.battle.weather,'raindance');globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.battle.weather,'raindance');await call('side51Battle',{revision},409);await call('forfeit');
+  seedWorld(place());await get();assert.notEqual(state.world.weather,'rain');await call('side51Battle');assert.equal(state.battle.weather,'');await call('forfeit');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.equal(rawMon(id).id,152);assert.equal(rawWorld().zaSide51Stage,1);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});
