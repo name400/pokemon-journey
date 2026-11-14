@@ -10179,3 +10179,18 @@ test('ordinary water encounters retain their visible sizes through capture',asyn
   const key='zone6:magikarp:129';seedWorld(place('lumiose-zone6',12,7,'down',{zaZone6Layer:'canal',adventureBalls:{masterball:2}}));await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);globalThis.__adventureRandom=()=>0;await call('zone6Wild-magikarp');assert.equal(rawWorld().encounter.adventureScaleV1.scale,255);await get();await call('ball',{ball:'masterball'});await get();while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});await get();const fish=state.box.find(m=>m.speciesId===129);assert.ok(fish);assert.equal(rawMon(fish.boxId).adventureScaleV1.scale,255);assert.equal(rawWorld().zaWildSizeRollsV1.entries[key],undefined);assert.equal(rawMon(lead).adventureScaleV1,undefined);assert.equal(state.wallet.coins,coins);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
+
+test('training actions preserve incompatible shared records and inventory',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'training-record-guard-qa',displayName:'육성정보보호'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,original=rawMon(id);
+  for(const item of ['hpup','pomegberry'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item);
+  for(const evs of [[], 'future', 0, false]){
+   const saved={...original,evs,custom:{preserved:true}};seedMon(id,saved);await get();const revision=state.revision;
+   await call('useAdventureVitamin',{item:'hpup',boxId:id},409);await call('useAdventureEvBerry',{item:'pomegberry',boxId:id},409);await get();
+   assert.deepEqual(rawMon(id),saved);assert.equal(state.revision,revision);assert.equal(state.inventory.hpup,1);assert.equal(state.inventory.pomegberry,1);
+  }
+  const saved={...original,friendship:'future'};seedMon(id,saved);await get();await call('useAdventureVitamin',{item:'hpup',boxId:id},409);await get();assert.deepEqual(rawMon(id),saved);assert.equal(state.inventory.hpup,1);
+  seedMon(id,{...original,evs:null,friendship:null});await get();await call('useAdventureVitamin',{item:'hpup',boxId:id});await get();assert.equal(rawMon(id).evs.hp,10);assert.equal(state.inventory.hpup||0,0);
+ }finally{globalThis.__adventureUser=priorUser;}
+});

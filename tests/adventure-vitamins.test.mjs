@@ -19,3 +19,10 @@ test('Swift Feather raises Speed by one, applies friendship tiers and respects l
  assert.equal(useAdventureVitamin({...mon,friendship:160},'swiftwing').mon.friendship,160);
  const capped={...mon,evs:{hp:252,atk:252,def:6,spa:0,spd:0,spe:0}};assert.throws(()=>useAdventureVitamin(capped,'swiftwing'),/노력치/);
 });
+
+test('training items reject incompatible effort and friendship records',()=>{
+ const mon=makeMon(1,20);
+ for(const evs of [[], 'future', 0, false])assert.throws(()=>useAdventureVitamin({...mon,evs},'hpup'),/노력치/);
+ for(const friendship of ['future',-1,256])assert.throws(()=>useAdventureVitamin({...mon,friendship},'hpup'),/친밀도/);
+ assert.equal(useAdventureVitamin({...mon,evs:null,friendship:null},'hpup').mon.evs.hp,10);
+});
