@@ -10321,6 +10321,15 @@ test('regional evolution refuses conflicting shared identity without consuming s
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('story and research TMs reject conflicting shared form identities without replacing moves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm-form-conflict-qa',displayName:'기술머신 폼 식별 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon={...makeMon(25,20),boxId:id,formId:10205,moves:['몸통박치기','울음소리'],pp:{tackle:3,growl:7},item:'leftovers',shiny:true,custom:{kept:true}};seedMon(id,mon);seedWorld({zaResearchRewards:[24]});sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'za-tm085']),globalThis.__adventureUser.userId,'za-tm085');await get();const rev=state.revision;
+  await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0},409);await call('teachResearchTm',{level:24,boxId:id,slot:0},409);await get();assert.equal(state.revision,rev);assert.deepEqual(rawMon(id),mon);assert.equal(state.inventory['za-tm085'],1);assert.deepEqual(state.world.zaResearchRewards,[24]);
+  const normal={...mon,formId:25};seedMon(id,normal);await get();const old=state.revision;await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0});await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0,revision:old},409);await get();assert.deepEqual(rawMon(id).moves,['대타출동','울음소리']);assert.equal(rawMon(id).pp.growl,7);assert.equal(rawMon(id).item,'leftovers');assert.equal(rawMon(id).shiny,true);assert.deepEqual(rawMon(id).custom,mon.custom);assert.equal(state.inventory['za-tm085'],1);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('newly caught nonstarter Chikorita uses verified Z-A growth and retains its moves after reconnect',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-family-growth-qa',displayName:'포획 계열 성장 검사'};globalThis.__adventureRandom=()=>0;
  try{
