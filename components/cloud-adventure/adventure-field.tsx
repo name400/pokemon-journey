@@ -1372,7 +1372,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     const px=Math.round(x*tile+tile/2-12),py=Math.round(y*tile+tile-29),step=walk&&!reduce?(Math.floor(time/95)%2===0?3:-3):0;
     ctx!.fillStyle='#28473155';ctx!.beginPath();ctx!.ellipse(px+12,py+28,12,4,0,0,Math.PI*2);ctx!.fill();
     const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',V:top?.color||'#3d79aa',L:top?.id==='bravely-vest-gray'?'#55575e':top?.id==='bravely-vest-blue'?'#d0d2d8':'#f3f2e7',C:'#503d46',Y:'#f4cf64',D:'#4b3741',H:(SALON_COLORS as any)[appearance?.color||'brown']?.value||'#79503b'};
-    adventureAvatarRows(face,appearance?.style,top?'vest':'').forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+(crouched?6:0)+ry*(crouched?1.55:2)+(ry>10?(rx<6?step:-step):0),2,crouched?1.55:2);}));
+    adventureAvatarRows(face,appearance?.style,top?.id==='asami-formal'?'formal':top?'vest':'').forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+(crouched?6:0)+ry*(crouched?1.55:2)+(ry>10?(rx<6?step:-step):0),2,crouched?1.55:2);}));
    }
    // Naveen and Lida lead across the draft rooftop; positions are visual only.
    if(w.district==='lumiose-protect'&&!w.interior&&w.zaMission36DescentPending&&w.zaMission36RooftopRoute&&w.zaMission37Stage===1){

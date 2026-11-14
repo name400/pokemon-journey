@@ -30,7 +30,7 @@ import {adventureJson} from '@/lib/adventure-network.mjs';
 
 function SalonPreview({style,color,top}:{style:string;color:string;top:any}){
  const colors:Record<string,string>={R:'#d95250',W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',V:top?.color||'#3d79aa',L:top?.id==='bravely-vest-gray'?'#55575e':top?.id==='bravely-vest-blue'?'#d0d2d8':'#f3f2e7',C:'#503d46',Y:'#f4cf64',D:'#4b3741',H:(SALON_COLORS as any)[color]?.value||'#79503b'};
- return <svg role="img" aria-label="선택한 머리 모양 미리보기" viewBox="0 0 12 14" width="72" height="84" style={{imageRendering:'pixelated'}}>{adventureAvatarRows('down',style,top?'vest':'').flatMap((row:string,y:number)=>Array.from(row).map((p,x)=>p==='.'?null:<rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={colors[p]}/>))}</svg>;
+ return <svg role="img" aria-label="선택한 머리 모양 미리보기" viewBox="0 0 12 14" width="72" height="84" style={{imageRendering:'pixelated'}}>{adventureAvatarRows('down',style,top?.id==='asami-formal'?'formal':top?'vest':'').flatMap((row:string,y:number)=>Array.from(row).map((p,x)=>p==='.'?null:<rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={colors[p]}/>))}</svg>;
 }
 type Screen='party'|'manage'|'bag'|'shop'|'journal'|'travel'|null;
 // A timeout is uncertain: reload authoritative state instead of retrying the action.
