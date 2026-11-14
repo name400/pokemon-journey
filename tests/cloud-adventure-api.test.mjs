@@ -10144,3 +10144,13 @@ test('field capture stores ordinary size without rerolling on reload',async()=>{
   await get();await call('start',{species:1});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:17,y:5,facing:'up',zaRoyaleRank:'A',adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();const rev=state.revision;await call('throwZoneVisible',{ball:'masterball'});await call('throwZoneVisible',{ball:'masterball',revision:rev},409);await get();const m=state.box.find(p=>p.speciesId===673);assert.ok(m);assert.equal(m.adventureAlpha,false);assert.deepEqual(rawMon(m.boxId).adventureScaleV1,{version:1,scale:255});globalThis.__adventureRandom=()=>0;await get();assert.deepEqual(rawMon(m.boxId).adventureScaleV1,{version:1,scale:255});assert.equal(state.world.adventureBalls.masterball,0);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('zone 12 visible size remains the same through reload, flee and capture',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone12-visible-size-qa',displayName:'현장 크기 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:1});const key='zone12:gogoat:673',lead=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:17,y:5,facing:'up',zaRoyaleRank:'A',adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);globalThis.__adventureRandom=()=>0;await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);
+  await call('zone12Wild-gogoat');assert.equal(rawWorld().encounter.adventureScaleV1.scale,255);await get();await call('flee');await get();assert.equal(rawWorld().zaWildSizeRollsV1.entries[key].scale,255);await call('throwZoneVisible',{ball:'masterball'});await get();const mon=state.box.find(p=>p.speciesId===673);assert.ok(mon);assert.equal(rawMon(mon.boxId).adventureScaleV1.scale,255);assert.equal(rawWorld().zaWildSizeRollsV1.entries[key],undefined);assert.equal(rawMon(lead).adventureScaleV1,undefined);
+  const legacy=rawWorld();legacy.zaZone12Spent={};legacy.zaWildShinyRolls={...legacy.zaWildShinyRolls,[key]:true};seedWorld(legacy);await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaWildSizeRollsV1.entries[key],undefined);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});

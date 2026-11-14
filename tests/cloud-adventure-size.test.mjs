@@ -18,3 +18,15 @@ test('newly captured selected families roll once and keep their size through evo
  for(const m of [{...baby,adventureScaleV1:{version:2,scale:240}},makeMon(25,10),{...makeMon(672,10),adventureAlpha:true}])assert.strictEqual(assignAdventureCapturedSize(m,()=>{throw Error('unexpected size roll');}),m);
  assert.throws(()=>assignAdventureCapturedSize(makeMon(712,20),()=>1));
 });
+
+test('visible size follows a fixed encounter and protects unknown ledgers',async()=>{
+ const {assignVisibleAdventureSize,attachVisibleAdventureSize,visibleAdventureSize}=await import('../lib/cloud-adventure/adventure-size.mjs');
+ const {assignWildShiny,clearWildShiny}=await import('../lib/cloud-adventure/adventure-wild-shiny.mjs');
+ const {refreshZoneShinyRolls,refreshVisibleWildOnSameZoneTravel}=await import('../lib/cloud-adventure/adventure-wild-refresh.mjs');
+ const key='zone12:gogoat:673',s={district:'lumiose-zone12',zaWildShinyRolls:{[key]:false}};
+ assert.equal(assignVisibleAdventureSize(s,key,()=>.999),true);assert.equal(visibleAdventureSize(s,key).scale,255);assert.equal(assignVisibleAdventureSize(s,key,()=>{throw Error('must not reroll');}),false);
+ const m=makeMon(673,40);assignWildShiny(s,m,()=>{throw Error('saved shiny');},key);assert.equal(adventurePokemonSize(m),'XL');assert.equal(attachVisibleAdventureSize(s,{...makeMon(712,30)},key).adventureScaleV1,undefined);
+ refreshVisibleWildOnSameZoneTravel(s,12,[{id:'gogoat',species:673}]);assert.equal(visibleAdventureSize(s,key),null);
+ assignVisibleAdventureSize(s,key,()=>0);s.zaWildShinyRolls[key]=true;refreshZoneShinyRolls(s,12);assert.equal(visibleAdventureSize(s,key).scale,0);clearWildShiny(s,key);assert.equal(visibleAdventureSize(s,key),null);
+ const future={zaWildSizeRollsV1:{version:2,entries:{[key]:{version:1,scale:255}}}};assert.equal(assignVisibleAdventureSize(future,key,()=>0),false);clearWildShiny(future,key);assert.equal(future.zaWildSizeRollsV1.version,2);
+});
