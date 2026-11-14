@@ -9870,3 +9870,12 @@ test('Side Mission 89 counts capturing Emolga once and preserves old party',asyn
  try{globalThis.__adventureRandom=()=>0;await get();await call('start',{species:1});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-screw-jaune7',interior:null,x:17,y:12,facing:'down',zaMission15Stage:2,zaSide89Stage:6,adventureBalls:{masterball:1}},state.revision+1));await get();await call('side89Battle');await call('ball',{ball:'masterball'});assert.equal(rawWorld().zaSide89Stage,7);await get();assert.ok(state.box.some(m=>m.speciesId===587));assert.equal(state.world.teamIds[0],id);await call('side89Battle',{},409);}
  finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zone 15 super Pumpkaboo survives capture and reconnect without changing owned Pokemon',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone15-pumpkaboo-form-qa',displayName:'호바귀 폼 검사'};
+ try{
+  globalThis.__adventureRandom=()=>0;globalThis.__adventureTime={hour:22,period:'night',dusk:false};await get();await call('start',{species:1});const id=state.world.activeId,original={...rawMon(id),shiny:true};seedMon(id,original);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone15',interior:null,x:8,y:4,facing:'down',zaZone15Upper:false,zaMission05Complete:false,zaMission06Started:false,adventureBalls:{masterball:1}},state.revision+1));await get();await call('move',{direction:'down'});assert.ok(state.battle);assert.equal(rawWorld().encounter.id,10029);assert.equal(rawWorld().encounter.speciesId,710);assert.notEqual(rawWorld().encounter.adventureAlpha,true);await get();assert.equal(rawWorld().encounter.id,10029);
+  await call('ball',{ball:'masterball'});await get();const found=state.box.find(m=>m.id===10029);assert.ok(found);const stored=rawMon(found.boxId);assert.equal(stored.id,10029);assert.equal(stored.speciesId,710);assert.equal(stored.formId,10128);assert.equal(rawMon(id).shiny,true);assert.equal(state.world.teamIds[0],id);await get();assert.equal(rawMon(found.boxId).id,10029);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});

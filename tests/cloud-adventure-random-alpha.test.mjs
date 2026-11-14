@@ -44,3 +44,13 @@ test('Zones 9–20 use their own survey and documented alpha level ranges',async
  }
  const state={zaMission05Complete:true,adventureDexSpecies:LATER_ZONE_SPECIES[20]};assert.equal(randomWildAlphaLevel(state,20,718,()=>0),null);
 });
+
+test('Zone 15 Pumpkaboo varieties keep alpha eligibility and their own exclusive move',async()=>{
+ const {LATER_ZONE_SPECIES}=await import('../lib/cloud-adventure/adventure-zone-research.mjs');
+ const {makeMon}=await import('../lib/game.mjs');const {makeAdventureAlpha}=await import('../lib/cloud-adventure/adventure-alpha.mjs');
+ const state={zaMission05Complete:true,adventureDexSpecies:LATER_ZONE_SPECIES[15]};
+ for(const [id,move] of [[710,'화염방사'],[10027,'사이코키네시스'],[10028,'악의파동'],[10029,'스톤샤워']]){
+  assert.equal(randomWildAlphaLevel(state,15,id,()=>0),52);assert.equal(randomWildAlphaLevel(state,15,id,()=>.05),null);const alpha=makeAdventureAlpha(makeMon(id,52));assert.equal(alpha.id,id);assert.equal(alpha.speciesId,710);assert.equal(alpha.adventureAlpha,true);assert.equal(alpha.adventureAlphaMove,move);
+ }
+ assert.equal(randomWildAlphaLevel(state,14,10029,()=>0),null);
+});

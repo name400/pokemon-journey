@@ -145,3 +145,18 @@ test('Zone 15 northwest ground approach keeps legacy northern exit and roof sepa
  const saved=restoreAdventurePosition(storeAdventurePosition(s,113),113);assert.deepEqual([saved.x,saved.y,saved.teamIds,saved.zaZone15Items,saved.zaZone15Spent],[2,1,['kept'],['cafe-ultra'],{pumpkaboo:true}]);assert.equal(stepField(saved,'up').district,'lumiose-hibernal-approach');
  const roof=zone15Map({...s,zaZone15Upper:true});assert.equal(roof[0][2],'#');assert.equal(roof[0][15],'X');
 });
+
+test('Pumpkaboo grass encounters retain distinct day and night varieties',()=>{
+ const sequence=values=>()=>values.shift()??0;
+ assert.deepEqual(zone15Encounter('day',sequence([0,0,0])),{speciesId:10027,level:42});
+ assert.deepEqual(zone15Encounter('day',sequence([0,.9,.5])),{speciesId:710,level:43});
+ assert.deepEqual(zone15Encounter('night',sequence([0,0,0])),{speciesId:10029,level:42});
+ assert.deepEqual(zone15Encounter('night',sequence([0,.9,.5])),{speciesId:10028,level:43});
+});
+
+test('caught Pumpkaboo varieties retain their corresponding evolved forms',async()=>{
+ const {makeMon}=await import('../lib/game.mjs');const {evolutionOptions}=await import('../lib/evolution.mjs');const {evolveAdventurePokemon}=await import('../lib/adventure-evolution.mjs');
+ for(const [id,target] of [[710,711],[10027,10030],[10028,10031],[10029,10032]]){
+  const mon={...makeMon(id,42),tradeCount:1,boxId:'kept',shiny:true};const choice=evolutionOptions(mon,{adventureEngine:'cloud'},[mon],{}).find(o=>o.id===target&&o.ready);assert.ok(choice);const next=evolveAdventurePokemon(mon,target);assert.equal(next.id,target);assert.equal(next.boxId,'kept');assert.equal(next.shiny,true);
+ }
+});
