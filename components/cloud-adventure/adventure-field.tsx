@@ -1,3 +1,4 @@
+import {SIDE67_SPOTS} from '@/lib/cloud-adventure/adventure-side67.mjs';
 import {visibleCityResearchEncounters} from '@/lib/cloud-adventure/adventure-city-research.mjs';
 import {isScrewGlideRoof,screwGlideAt} from '@/lib/cloud-adventure/adventure-screw-roofs.mjs';
 import {royaleFieldEntry} from '@/lib/cloud-adventure/adventure-royale-zones.mjs';
@@ -1387,6 +1388,19 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='?'&&w.district==='lumiose-royale'){const px=x*tile,py=y*tile;ctx!.fillStyle='#b5790d';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx!.fill();ctx!.fillStyle='#ffe47b';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,5,0,Math.PI*2);ctx!.fill();return;}if(c==='!'&&w.district==='lumiose-royale'){const px=x*tile,py=y*tile;ctx!.fillStyle='#c99522';ctx!.fillRect(px+7,py+5,tile-14,tile-10);ctx!.fillStyle='#fff2bf';ctx!.fillRect(px+10,py+8,tile-20,tile-16);ctx!.fillStyle='#c99522';ctx!.fillRect(px+12,py+13,tile-24,3);return;}if(c==='!'){const px=x*tile,py=y*tile;ctx!.fillStyle='#692975';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx!.fill();ctx!.fillStyle='#db90e8';ctx!.fillRect(px+tile/2-5,py+tile/2-5,10,4);ctx!.fillStyle='#f6e6fa';ctx!.fillRect(px+tile/2-2,py+tile/2-2,4,4);}else if(c==='$')trainer(x,y,'#d1a94d','down');}));
+   // Quest actors occupy existing blocked wall tiles. Their exact 2D positions
+   // are provisional; sprites do not alter collision or movement requests.
+   if(w.district==='lumiose-coulant-route'&&!w.interior){
+    for(const p of SIDE67_SPOTS){
+     if(p.lower!==(w.zaCoulantLower===true)||w.map?.[p.y]?.[p.x]!=='^')continue;
+     trainer(p.x-.16,p.y,p.id==='calma'?'#bd8aaf':'#8f7893','down');
+     if(p.id==='calma'){
+      const img=fieldImages[700],px=(p.x+.33)*tile,py=p.y*tile;
+      if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-4,py-7,tile*.72,tile*.72);
+      else{ctx.fillStyle='#f7d9e5';ctx.beginPath();ctx.arc(px+6,py+12,6,0,Math.PI*2);ctx.fill();}
+     }else trainer(p.x+.22,p.y,'#6e8790','down');
+    }
+   }
    // The rooftop discussion includes AZ and the team. Companion placement and
    // clothing are visual approximations and do not change movement or saves.
    if(w.district==='lumiose'&&w.interior==='hotelRoof'&&w.zaMission35Stage===6&&w.zaMission35RoofRequired){for(const [x,color] of [[9,'#597f9d'],[13,'#ad8175']] as const)if(!(w.x===x&&w.y===7))trainer(x,7,color,'down');}
@@ -1449,7 +1463,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
    trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,w.zaFieldCrouched===true);
    const {questTarget}=props.current;
-   if(questTarget){const x=(questTarget.x+.5)*tile,y=questTarget.y*tile;ctx.save();ctx.fillStyle='#f6cd45';ctx.strokeStyle='#59400d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-7,y-14);ctx.lineTo(x+7,y-14);ctx.lineTo(x,y-3);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
+   if(questTarget){const x=(questTarget.x+.5)*tile,y=Math.max(16,questTarget.y*tile);ctx.save();ctx.fillStyle='#f6cd45';ctx.strokeStyle='#59400d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-7,y-14);ctx.lineTo(x+7,y-14);ctx.lineTo(x,y-3);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
    ctx.restore();
    // Soft border is part of the camera, never a fullscreen tint over sprites.
    ctx.strokeStyle='#284d3b55';ctx.lineWidth=4;ctx.strokeRect(2,2,width-4,height-4);

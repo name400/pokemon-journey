@@ -113,3 +113,19 @@ test('holovator quest marker tracks only its ground-level active stages',()=>{
  assert.equal(pendingAdventureQuests(world).find(q=>q.id==='23').goal.includes('흙더미'),true);assert.deepEqual(trackedAdventureLocalTarget(world),{x:3,y:0});
  assert.match(pendingAdventureQuests({...save,zaSide23Stage:2})[0].goal,/보상/);assert.deepEqual(trackedAdventureLocalTarget({...world,zaSide23Stage:2}),{x:3,y:0});assert.equal(trackedAdventureLocalTarget({...world,zaSide23Stage:3}),null);assert.equal(trackedAdventureLocalTarget({...world,zaVernalEastRoof:true}),null);assert.equal(trackedAdventureLocalTarget({...world,zaVernalSlowbroBank:true}),null);
 });
+
+test('Sylveon quest tracker follows unfinished conversations, bank stairs and reward',()=>{
+ const base={area:3,district:'lumiose-coulant-route',zaTrackedQuestId:'67',zaSide67Started:true,x:4,y:4};
+ const target=s=>trackedAdventureLocalTarget({...s,map:fieldMap(s)});
+ assert.deepEqual(target(base),{x:4,y:0});
+ assert.deepEqual(target({...base,zaSide67Found:['fans']}),{x:15,y:0});
+ const onlyLower={...base,zaSide67Found:['fans','couple','syndicate']};
+ assert.deepEqual(target(onlyLower),{x:3,y:5});
+ assert.deepEqual(target({...onlyLower,zaCoulantLower:true,y:6}),{x:7,y:4});
+ assert.deepEqual(target({...onlyLower,zaCoulantLower:true,y:6,zaSide67Found:[...onlyLower.zaSide67Found,'family']}),{x:3,y:5});
+ assert.deepEqual(target({...onlyLower,zaCoulantLower:true,y:11,zaSide67Found:[...onlyLower.zaSide67Found,'family']}),{x:9,y:12});
+ const done={...base,zaCoulantLower:true,x:14,y:11,zaSide67Found:['fans','couple','family','syndicate','trainers']};
+ assert.deepEqual(target(done),{x:14,y:12});assert.equal(target({...done,zaSide67Complete:true}),null);
+ assert.equal(target({...done,interior:'other'}),null);assert.equal(target({...done,district:'elsewhere'}),null);
+ assert.equal(trackedAdventureLocalTarget({...done,map:[]}),null);
+});
