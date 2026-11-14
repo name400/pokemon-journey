@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat,playCpu} from '../lib/party-battle.mjs';
-import {mission20GhostsCaught,mission20Complete,advanceMission20Ghosts,mission20VisibleGhosts} from '../lib/cloud-adventure/adventure-mission20.mjs';
+import {mission20GhostsCaught,mission20Complete,advanceMission20Ghosts,mission20VisibleGhosts,mission20GhostTap} from '../lib/cloud-adventure/adventure-mission20.mjs';
 import {lumioseGhostHouseMap,lumioseRustMap,fieldPath,findTile,storeAdventurePosition,restoreAdventurePosition,walkable,stepField,fieldDialogue,fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
 
 test('Rust office courtyard preserves access and restores older positions on new walls',()=>{
@@ -34,6 +34,12 @@ test('ghost house hides only resolved slots and retains old saved positions',()=
  const partly={...base,zaMission20GhostCaught:[92,93,93]};assert.deepEqual([at(partly,6),at(partly,11),at(partly,16)],['.','.','b']);assert.deepEqual(mission20VisibleGhosts(partly,fieldMap(partly)).map(g=>[g.id,g.species,g.x,g.y]),[[94,94,16,5]]);
  const saved=storeAdventurePosition(partly,7),restored=restoreAdventurePosition(structuredClone(saved),7);assert.deepEqual([restored.x,restored.y],[11,5]);assert.deepEqual(restored.teamIds,['owned']);assert.deepEqual(restored.zaMission20GhostCaught,[92,93,93]);assert.ok(walkable(at(restored,11)));assert.equal(at(restored,16),'b');
  assert.deepEqual([at({...base,zaMission20Stage:8},6),at({...base,zaMission20Stage:8},11),at({...base,zaMission20Stage:8},16)],['.','.','.']);assert.equal(fieldMap({...base,zaMission20Stage:8})[9][17],'n');
+});
+
+test('tapping a ghost identifies only the current or an adjacent visible target',()=>{
+ const base={area:3,district:'lumiose-ghost-house',interior:null,zaMission20Stage:7,x:7,y:5,facing:'down',zaMission20GhostMotionV1:{phase:0,tick:0}},map=fieldMap(base);
+ assert.deepEqual(mission20GhostTap(base,map,6,5),{id:92,kind:'face',direction:'left'});assert.deepEqual(mission20GhostTap({...base,x:6},map,6,5),{id:92,kind:'current'});assert.deepEqual(mission20GhostTap(base,map,11,5),{id:93,kind:'far'});assert.equal(mission20GhostTap(base,map,7,5),null);
+ const moved={...base,zaMission20GhostMotionV1:{phase:1,tick:0}},next=fieldMap(moved);assert.equal(mission20GhostTap(moved,next,6,5),null);assert.deepEqual(mission20GhostTap(moved,next,7,5),{id:92,kind:'current'});const cleared={...moved,zaMission20GhostCaught:[92]};assert.equal(mission20GhostTap(cleared,fieldMap(cleared),7,5),null);assert.equal(mission20GhostTap({...base,zaMission20Stage:8},map,6,5),null);
 });
 
 test('ghost movement is bounded, pauses near players and preserves legacy saves',async()=>{
