@@ -117,3 +117,12 @@ test('Café Action registers its outdoor entrance and preserves interior saves',
  assert.ok(taxiDestinations(s).some(p=>p.id==='cafe-action'));assert.ok(mapTravelDestinations(s).some(p=>p.id==='cafe-action'));
  const inside={...s,interior:'cafeAction',x:11,y:6};assert.equal(recordLandmarks({...inside,zaFastTravelLandmarks:[]}),false);const restored=restoreAdventurePosition(storeAdventurePosition(inside,66),66);assert.deepEqual([restored.district,restored.interior,restored.x,restored.y,restored.teamIds],['lumiose-jaune-sector8','cafeAction',11,6,['kept']]);assert.equal(fieldDialogue(restored).actions.length,9);
 });
+
+test('map travel blocks active known alpha threats without trapping stale saves',async()=>{
+ const {canMapTravel}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const near={area:3,district:'lumiose-zone5',x:4,y:11,zaMission04Complete:true,zaZone5AlphaRoarAlertV1:'bellsprout-alpha'};
+ assert.equal(canMapTravel(near),false);assert.equal(canMapTravel({...near,x:8}),true);
+ assert.equal(canMapTravel({...near,zaZone5Spent:{'bellsprout-alpha':true}}),true);
+ assert.equal(canMapTravel({...near,zaZone5AlphaRoarAlertV1:{version:2}}),true);
+ assert.equal(canMapTravel({...near,district:'lumiose'}),true);
+});
