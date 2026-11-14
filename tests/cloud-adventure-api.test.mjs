@@ -9635,3 +9635,14 @@ test('Zone 6 sleeping Houndoom wakes on contact and survives reload',async()=>{
   seedWorld(storeAdventurePosition({...rawWorld(),x:9,y:3,facing:'left',zaZone6HoundoomAwakeV1:false},state.revision+1));await get();assert.match(state.world.interaction.text,/잠들어/);await call('zone6Wild-houndoom-alpha');assert.equal(state.battle.teams[1][0].speciesId,229);assert.equal(state.world.zaZone6HoundoomAwakeV1,true);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('new single battle effort excludes unused bench and preserves legacy results',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'single-effort-participant-qa',displayName:'노력치참가검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,benchId='effort-participant-bench',evs={hp:0,atk:0,def:0,spa:0,spd:0,spe:0};
+  const lead={...makeMon(150,80),boxId:id,moves:['사이코키네시스'],pp:{},evs:{...evs},item:'powerweight'},bench={...makeMon(4,10),evs:{...evs}};seedMon(id,lead);
+  sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(benchId,globalThis.__adventureUser.userId,bench.id,JSON.stringify(bench),'qa',1);
+  const pos={...rawWorld(),area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',x:9,y:3,facing:'left',teamIds:[id,benchId],activeId:id,zaZone6HoundoomAwakeV1:false};seedWorld(storeAdventurePosition(pos,state.revision+1));await get();await call('zone6Wild-houndoom-alpha');assert.equal(rawWorld().combat.adventureEffortVersion,2);await call('forfeit');
+  const foe={...makeMon(25,5),boxId:'foe'},combat=createCombat([lead,{...bench,boxId:benchId}],[foe]);combat.adventureEffortVersion=2;combat.adventureEffortFoes=[];seedWorld({teamIds:[id,benchId],activeId:id,combat,trainer:null,encounter:foe});await get();await call('battle',{command:{type:'move',move:'사이코키네시스'}});assert.equal(rawMon(id).evs.hp,8);assert.equal(rawMon(id).evs.spe,2);assert.equal(rawMon(benchId).evs.spe,0);await get();assert.equal(rawMon(benchId).evs.spe,0);
+ }finally{globalThis.__adventureUser=previous;}
+});

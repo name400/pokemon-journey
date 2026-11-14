@@ -43,3 +43,15 @@ test('power bonus is not granted after swapping items during a turn',async()=>{
  const {applyAdventureBattleEffort}=await import('../lib/cloud-adventure/adventure-effort.mjs'),foe={...makeMon(25,5),boxId:'f'},p={...makeMon(1,30),boxId:'p',item:'powerbracer'},before={adventureEffortVersion:1,teams:[[p],[foe]]},after={...before,teams:[[{...p,item:'powerlens'}],[{...foe,hp:0}]],events:[{kind:'faint',side:1,boxId:'f',hp:0}]};
  const mon=applyAdventureBattleEffort(before,after).teams[0][0];assert.equal(mon.evs.atk,0);assert.equal(mon.evs.spa,0);assert.equal(mon.evs.spe,2);
 });
+
+
+test('new single battles award effort only to the active participant at each faint',async()=>{
+ const {applyAdventureBattleEffort}=await import('../lib/cloud-adventure/adventure-effort.mjs');
+ const evs={hp:0,atk:0,def:0,spa:0,spd:0,spe:0},a={...makeMon(1,30),boxId:'a',evs:{...evs},item:'powerweight'},b={...makeMon(4,30),boxId:'b',evs:{...evs}},foe={...makeMon(25,5),boxId:'foe'};
+ const before={adventureEffortVersion:2,adventureEffortFoes:[],teams:[[a,b],[foe]],requests:[{active:0}]};
+ const events=[{kind:'switch',side:0,boxId:'b',hp:b.hp},{kind:'faint',side:1,boxId:'foe',hp:0}];
+ const result=applyAdventureBattleEffort(before,{...before,events});assert.equal(result.teams[0][0].evs.hp,0);assert.equal(result.teams[0][0].evs.spe,0);assert.equal(result.teams[0][1].evs.spe,2);assert.deepEqual(result.adventureEffortFoes,['foe']);
+ assert.deepEqual(applyAdventureBattleEffort(result,{...result,events}).teams[0],result.teams[0]);
+ const legacy=applyAdventureBattleEffort({...before,adventureEffortVersion:1},{...before,events});assert.equal(legacy.teams[0][0].evs.hp,8);assert.equal(legacy.teams[0][1].evs.spe,2);
+ const unknown={...before,requests:[]},after={...unknown,events};assert.equal(applyAdventureBattleEffort(unknown,after),after);
+});
