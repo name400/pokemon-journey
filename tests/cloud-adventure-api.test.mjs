@@ -10114,3 +10114,14 @@ test('Lure Ball uses preserved encounter water in a legacy battle snapshot',asyn
   const rev=state.revision;await call('ball',{ball:'lureball'});await call('ball',{ball:'lureball',revision:rev},409);await get();assert.equal(state.world.zaZone12Spent.bergmite,true);assert.equal(state.world.adventureBalls.lureball,0);assert.equal(state.box.filter(m=>m.speciesId===712).length,1);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('rain reaches street single and companion battles without changing saved parties',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'outdoor-street-rain-qa',displayName:'거리 날씨 검사'};globalThis.__adventureTime={period:'day',hour:16};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins,mon=rawMon(id);
+  const place=(district,x,y,facing,patch={})=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing,combat:null,encounter:null,...patch},state.revision+1);
+  seedWorld(place('lumiose-vert-sector6',19,8,'down',{zaSide68Stage:1,zaMission20Stage:6}));await get();assert.equal(state.world.weather,'rain');await call('side68Battle');assert.equal(state.battle.weather,'raindance');const oldRevision=state.revision;globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.battle.weather,'raindance');await call('side68Battle',{revision:oldRevision},409);await call('forfeit');
+  globalThis.__adventureTime={period:'day',hour:16};seedWorld(place('lumiose-south-boulevard',15,10,'down',{zaSide81Stage:1,zaMission26Stage:3}));await get();assert.equal(state.world.weather,'rain');await call('side81Battle');assert.equal(state.battle.weather,'sandstorm');await get();assert.equal(state.battle.weather,'sandstorm');assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);await call('forfeit');
+  globalThis.__adventureTime={period:'day',hour:12};seedWorld(place('lumiose-vert-sector6',19,8,'down',{zaSide68Stage:1}));await get();assert.notEqual(state.world.weather,'rain');await call('side68Battle');assert.equal(state.battle.weather,'');await call('forfeit');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.equal(rawMon(id).id,mon.id);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});

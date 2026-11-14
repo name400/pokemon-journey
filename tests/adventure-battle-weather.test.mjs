@@ -23,3 +23,9 @@ test('new multi and triple battles retain inherited rain across turns and restor
  }
  assert.equal(mission35TripleView(createMission35TripleSnapshot([player],foes)).weather,'');
 });
+
+
+test('confirmed outdoor streets, courts and rooftops inherit city rain',()=>{
+ const streets=['lumiose-bleu-sector7','lumiose-bleu6-approach','lumiose-jaune-sector8','lumiose-screw-jaune6','lumiose-screw-magenta8','lumiose-rouge-north','lumiose-rouge-sector1','lumiose-rouge-sector7','lumiose-vert-sector3','lumiose-vert-sector6','lumiose-rust','lumiose-south-boulevard'];
+ for(const district of streets){const s={area:3,district,weather:'rain'};assert.equal(adventureBattleOptions(s).weather,'raindance',district);assert.deepEqual(adventureBattleOptions({...s,interior:'other'}),{});assert.deepEqual(adventureBattleOptions({...s,weather:''}),{});assert.deepEqual(adventureBattleOptions(s,{weather:'sunnyday'}),{weather:'sunnyday'});}
+});
