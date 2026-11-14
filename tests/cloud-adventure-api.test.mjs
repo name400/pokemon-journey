@@ -9717,3 +9717,15 @@ test('director filming follow-ups preserve party, time, rewards and shared owner
   const place115=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-autumnal-approach',interior:null,x:17,y:9,facing:'up',...extra},state.revision+1);seedWorld(place115({zaMission37Complete:false,zaMission38Started:false,zaMission38Complete:false}));await get();await call('director115Start',{},409);seedWorld(place115({zaMission37Complete:true}));await get();assert.equal(state.world.interaction.action,'director115Start');await call('director115Start');await call('setAdventureTrackedQuest',{questId:'115'});await get();assert.deepEqual(trackedAdventureLocalTarget(state.world),{x:17,y:8});await call('director115Film',{},409);seedWorld(place115({teamIds:[lead,rex.boxId]}));await get();await call('director115Film');await get();assert.equal(rawWorld().zaSide115Stage,2);assert.equal(rawMon(rex.boxId).shiny,true);assert.equal(rawMon(rex.boxId).item,'hardstone');const key=JSON.stringify([globalThis.__adventureUser.userId,'protein']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,990)').run(key,globalThis.__adventureUser.userId,'protein');await get();await call('director115Reward',{},409);sql.prepare('UPDATE inventory SET quantity=989 WHERE key=?').run(key);await get();const rewardRev=state.revision;await call('director115Reward');await call('director115Reward',{revision:rewardRev},409);await get();assert.equal(state.wallet.coins,coins+9800);assert.equal(state.inventory.protein,999);assert.equal(rawWorld().zaSide115Stage,3);assert.deepEqual(state.world.teamIds,[lead,rex.boxId]);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=previousTime;}
 });
+
+test('Reflect TM teaches reviewed Rotom form without consuming TM or changing shared data',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm031-form-qa',displayName:'리플렉터'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;
+  seedMon(id,{...makeMon(479,20),id:10008,speciesId:479,boxId:id,moves:['전기쇼크'],pp:{},shiny:true,item:'leftovers',otherModeNote:'keep'});
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm031']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm031');
+  await get();const rev=state.revision;await call('teachStoryTm',{item:'za-tm031',boxId:id,slot:1});await call('teachStoryTm',{revision:rev,item:'za-tm031',boxId:id,slot:1},409);await get();
+  assert.ok(rawMon(id).moves.includes('리플렉터'));assert.equal(rawMon(id).id,10008);assert.equal(rawMon(id).shiny,true);assert.equal(rawMon(id).item,'leftovers');assert.equal(rawMon(id).otherModeNote,'keep');assert.equal(state.inventory['za-tm031'],1);
+  await call('teachStoryTm',{item:'za-tm031',boxId:id,slot:1},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
