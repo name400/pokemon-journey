@@ -10194,3 +10194,18 @@ test('training actions preserve incompatible shared records and inventory',async
   seedMon(id,{...original,evs:null,friendship:null});await get();await call('useAdventureVitamin',{item:'hpup',boxId:id});await get();assert.equal(rawMon(id).evs.hp,10);assert.equal(state.inventory.hpup||0,0);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('TM085 teaches reviewed common families without consuming or overwriting shared data',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm085-common-families-qa',displayName:'대타출동 계열 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'za-tm085']),globalThis.__adventureUser.userId,'za-tm085');
+  for(const species of [255,256,257,396,397,398,427,428,607,608,609])assert.equal(canLearnStoryTm({'za-tm085':1},makeMon(species,20),'za-tm085'),true);
+  for(const species of [255,397,428,609]){
+   const mon={...makeMon(species,45),boxId:id,moves:['몸통박치기','울음소리'],pp:{tackle:3,growl:5},shiny:true,item:'leftovers',custom:{preserved:true}};seedMon(id,mon);await get();const revision=state.revision;
+   await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:1});await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0,revision},409);await get();
+   const saved=rawMon(id);assert.deepEqual(saved.moves,['몸통박치기','대타출동']);assert.equal(saved.pp.tackle,3);assert.equal(saved.shiny,true);assert.equal(saved.item,'leftovers');assert.deepEqual(saved.custom,mon.custom);assert.equal(state.inventory['za-tm085'],1);await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0},409);
+  }
+  const blocked={...makeMon(129,30),boxId:id,moves:['튀어오르기']};seedMon(id,blocked);await get();await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0},409);assert.deepEqual(rawMon(id),blocked);
+ }finally{globalThis.__adventureUser=previous;}
+});
