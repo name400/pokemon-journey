@@ -160,3 +160,14 @@ test('caught Pumpkaboo varieties retain their corresponding evolved forms',async
   const mon={...makeMon(id,42),tradeCount:1,boxId:'kept',shiny:true};const choice=evolutionOptions(mon,{adventureEngine:'cloud'},[mon],{}).find(o=>o.id===target&&o.ready);assert.ok(choice);const next=evolveAdventurePokemon(mon,target);assert.equal(next.id,target);assert.equal(next.boxId,'kept');assert.equal(next.shiny,true);
  }
 });
+
+test('visible Pumpkaboo forms preserve blocked cells and shiny individuals',()=>{
+ const base={area:3,district:'lumiose-zone15',interior:null,x:15,y:6,zaZone15Period:'day',zaWildSpawnCycles:{15:{period:'day',interval:20}}};
+ const before=zone15Map({...base,zaWildSpawnCycles:{15:{period:'day',interval:22}}}),day=zone15Map(base);
+ assert.equal(before[5][16],'#');assert.equal(day[5][16],'1');assert.equal(zone15Visible(base,'1').species,10027);assert.equal(zone15Visible(base,'2'),null);assert.equal(zone15Visible(base,'3'),null);
+ const night={...base,zaZone15Period:'night',zaWildSpawnCycles:{15:{period:'night',interval:21}}};assert.equal(zone15Visible(night,'2').species,10028);assert.equal(zone15Visible(night,'3').species,10029);
+ assert.equal(zone15Visible({...night,zaWildSpawnCycles:{15:{period:'night',interval:23}}},'3'),null);
+ assert.equal(zone15Visible({...night,zaWildSpawnCycles:{15:{period:'night',interval:23}},zaWildShinyRolls:{'zone15:pumpkaboo-super:10029':true}},'3').species,10029);
+ assert.equal(zone15Visible({...night,zaZone15Spent:{'pumpkaboo-super':true}},'3'),null);
+ assert.equal(stepField({...base,x:16,y:6},'up').blocked,true);assert.equal(stepField({...night,x:18,y:6},'up').blocked,true);
+});
