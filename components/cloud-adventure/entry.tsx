@@ -68,7 +68,9 @@ function PlayerHealth({world,battle}:{world:any,battle:any}){
  const health=projectPlayerVitals({...world,combat:battle},now),maxHp=playerMaxHp(world);
  useEffect(()=>{setNow(Date.now());},[safe,v?.version,v?.hp,v?.recoveryAt]);
  useEffect(()=>{if(!safe||health?.version!==1||(maxHp===null||health.hp>=maxHp)||!Number.isSafeInteger(v?.recoveryAt))return;const timer=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer);},[safe,health?.version,health?.hp,v?.recoveryAt,maxHp]);
- return health?.version===1&&Number.isInteger(health.hp)&&health.hp>=1&&maxHp!==null&&health.hp<=maxHp?<p className="adv-player-health">플레이어 체력: {health.hp}/{maxHp}</p>:null;
+ if(health?.version!==1||!Number.isInteger(health.hp)||health.hp<1||maxHp===null||health.hp>maxHp)return null;
+ const low=health.hp/maxHp<=.25;
+ return <div className="adv-player-health" data-low={low?'true':undefined}><p>플레이어 체력: {health.hp}/{maxHp}</p><div className="adv-player-health-meter" role="progressbar" aria-label="플레이어 체력" aria-valuemin={0} aria-valuemax={maxHp} aria-valuenow={health.hp} aria-valuetext={`${health.hp} / ${maxHp}`}><span style={{width:`${health.hp/maxHp*100}%`}}/></div>{low&&<p className="adv-player-health-warning" role="status">{health.hp===1?'위험: 다음 피해에 쓰러질 수 있습니다.':'체력이 낮습니다. 안전한 곳에서 회복하세요.'}</p>}</div>;
 }
 export default function Adventure(){
  const fieldPrediction=useRef<FieldPredictionHandle|null>(null);
