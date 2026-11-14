@@ -112,7 +112,7 @@ import {visibleWildAlpha} from '@/lib/cloud-adventure/adventure-visible-alpha.mj
 import {earlyAlphaUnlocked} from '@/lib/cloud-adventure/adventure-early-alpha.mjs';
 import {bunnelbyQuestSpot} from '@/lib/cloud-adventure/adventure-rouge-sector8.mjs';
 import {tracieAt} from '@/lib/cloud-adventure/adventure-passage-palais.mjs';
-import {NOUVEAU_DRINKS,nouveauCafeSpot,nouveauCafeUnlocked} from '@/lib/cloud-adventure/adventure-nouveau-cafe.mjs';
+import {NOUVEAU_DRINKS,NOUVEAU_CAFE2_DRINKS,nouveauCafeSpot,nouveauCafeUnlocked} from '@/lib/cloud-adventure/adventure-nouveau-cafe.mjs';
 import {side74Available,side74Spot,recordSide74Victory} from '@/lib/cloud-adventure/adventure-side74.mjs';
 import {adventurePlusEligible} from '@/lib/cloud-adventure/adventure-plus-status.mjs';
 import {adventureMoveMastered} from '@/lib/cloud-adventure/adventure-plus-mastery.mjs';
@@ -1041,9 +1041,9 @@ else if(b.action==='mission23RoofLadder'){const spot=interactionAt(s);if(s.comba
 // Nouveau Cafe No. 2 has the same reusable restorative drink service as the
 // original cafe. The exact friendship increment is a conservative game rule.
 // https://bulbapedia.bulbagarden.net/wiki/Nouveau_Caf%C3%A9_%28Truck_No._2%29
-else if(['cafe2Water','cafe2Milk','cafe2Coffee'].includes(b.action)){
- const spot=interactionAt(s),options:any={cafe2Water:{name:'맛있는물',price:100},cafe2Milk:{name:'튼튼밀크',price:200},cafe2Coffee:{name:'불꽃세례 블렌드',price:250}},drink=options[b.action];
- if(s.combat||s.interior||s.district!=='lumiose-bleu-cafe2'||spot?.tile!=='q'||spot.x!==4||spot.y!==12)throw Error('누보 카페 2호의 주문대를 확인하세요.');
+else if(NOUVEAU_CAFE2_DRINKS.some((p:any)=>p.id===b.action)){
+ const spot=interactionAt(s),drink=NOUVEAU_CAFE2_DRINKS.find((p:any)=>p.id===b.action);
+ if(!drink||s.combat||s.interior||s.district!=='lumiose-bleu-cafe2'||spot?.tile!=='q'||spot.x!==4||spot.y!==12)throw Error('누보 카페 2호의 주문대를 확인하세요.');
  const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
  reward=-drink.price;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,30);mons.set(id,rested);changed.set(id,rested);}s.log=[`${drink.name}을(를) 주문해 파티가 회복했다.`,`${drink.price}코인을 지불했다.`];
 }
