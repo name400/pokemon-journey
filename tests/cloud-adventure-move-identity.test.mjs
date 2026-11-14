@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {knowsAdventureMove,sameAdventureMove} from '../lib/cloud-adventure/adventure-move-identity.mjs';
-import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,teachAdventureMove} from '../lib/cloud-adventure/adventure-growth.mjs';
+import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,adventureLearnableMoves,teachAdventureMove} from '../lib/cloud-adventure/adventure-growth.mjs';
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
@@ -29,4 +29,15 @@ test('intro starter level six respects four move slots and old growth',()=>{
  assert.deepEqual(result.mon.moves,before.moves);assert.deepEqual(result.pending,['나뭇잎']);
  const legacy=applyAdventureLevelMoves(before,{...before,level:6,moves:[...before.moves]});
  assert.ok(!legacy.pending.includes('나뭇잎'));
+});
+
+test('starter move relearning respects identity, level and old saves',()=>{
+ const starter={...makeMon(152,6),boxId:'starter-1',origin:'starter'};
+ const world={zaIntroStarterMovesV1:true,zaIntroStarterBoxId:'starter-1'};
+ assert.ok(adventureLearnableMoves(starter,world).includes('나뭇잎'));
+ assert.ok(adventureLearnableMoves(starter,world).includes('꼬리흔들기'));
+ assert.ok(!adventureLearnableMoves({...starter,level:5},world).includes('나뭇잎'));
+ assert.ok(!adventureLearnableMoves({...starter,boxId:'other'},world).includes('나뭇잎'));
+ assert.ok(!adventureLearnableMoves(starter,{}).includes('나뭇잎'));
+ assert.ok(adventureLearnableMoves(starter,{zaIntroStarterMovesV1:true,zaIntroStarterSpecies:152}).includes('나뭇잎'));
 });
