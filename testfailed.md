@@ -1,5 +1,34 @@
 # 배포 검증 실패 기록
 
+## 2026-11-14 — GitHub `7212a3cf` 배포 검사 실패
+
+- 대상 브랜치: `cloud/pokerogue-continue-20261105`; GitHub 커밋 `7212a3cf78e829724a3da10c1e37bf06634e21a1`.
+- 실제 검증 소스: Sites 소스와 병합한 로컬 커밋 `c1ee32fac760dcaf9a857864663634973df806df`; Node.js v24.22.1.
+- 순차 검사: `npm run typecheck` 통과, `npm test` 4,058개 중 4,044개 통과·14개 실패 (161.9초), `npm run build` 통과.
+- 배포하지 않았다. 검사 당시 운영본은 Sites v87.
+
+### 실패 항목
+
+아래 첫 13개는 `tests/cloud-adventure-api.test.mjs`에 있다.
+
+1. 270행 / 미션 36 하강 및 미션 37 진입: 배틀 형식 기대 `mission10-multi-v1`, 실제 `mission37-triples-prototype-v1` (275행).
+2. 646행 / 미션 26 메가진화: `state.battle.requests[0].specials`에 `mega`가 있다는 단언 실패 (653행).
+3. 1004행 / 미션 42 포획 보상: `mission42Cube` 기대 200, 실제 409 `먼저 새 기술을 배우거나 건너뛰세요.` (1010행).
+4. 1595행 / 미션 10 동료 및 후속 진행: 이동 요청에서 같은 기술 습득 대기 409 (1660행).
+5. 2648행 / 랭크 E 상대: 기대 `royaleEExtra7`, 실제 `takeRoyaleBonus` (2656행).
+6. 2665행 / 랭크 F 상대: 기대 `royaleFExtra7`, 실제 `takeRoyaleBonus` (2671행).
+7. 3584행 / 18구역 이어롤 조우: 이동 시 기술 습득 대기 409 (3591행).
+8. 3817행 / 11구역 수변 조우: `zone11Wild-clauncher`에서 기술 습득 대기 409 (3824행).
+9. 4444행 / 플라드리 랩 재입장: `mission35LabEnter`에서 기술 습득 대기 409 (4450행).
+10. 5478행 / 랭크 D 상대: 기대 `royaleDExtra7`, 실제 `takeRoyaleBonus` (5485행).
+11. 5496행 / 랭크 C 상대: 기대 `royaleCExtra7`, 실제 `takeRoyaleBonus` (5504행).
+12. 6220행 / 하수도 불켜미 포획·재입장: 저장된 포켓몬 상태 비교에서 기대 레벨 21, 실제 27 등 차이.
+13. 6562행 / 도시 야생 포획창의 색이 다른 개체와 필드 소모 상태: 전투 상태 관련 기대·실제 불일치.
+
+14. `tests/cloud-adventure-infinite-standard.test.mjs:7` / 추가 일반 상대: 기대 상호작용 `royaleInfiniteExtra7`, 실제 `takeRoyaleBonus` (12행).
+
+기술 습득 대기 상태가 여러 실패에 공통으로 나타나지만 같은 근본 원인이라고 확정할 수는 없다. 신규 전투 형식·기술 습득 처리·상호작용 위치 및 테스트 간 저장 상태를 각각 대조하고, 수정한 정확한 소스로 전체 검사를 다시 실행한다.
+
 ## 2026-11-13 — 이동 복구 모의 브라우저 초기 화면 대기 실패
 
 - 개발 체크아웃 `8ca589a5` 위의 방향 전환 수정 작업 트리에서 `cloud-movement-recovery.mjs`가 `canvas.adv-field` 표시를 기다리다 30초 만에 실패했다. 실패한 세부 시나리오는 출력되지 않았다. 다른 모의 브라우저 검사와 Vite 개발 서버의 소스 변경이 겹친 실행이었으나 실패 원인은 확인되지 않았다.
