@@ -27,3 +27,9 @@ test('sewer roaming reuses current terrain while respecting changed occupants',(
  assert.deepEqual(magentaSewerMonsters(next,'night',fieldMap(next)),magentaSewerMonsters(next,'night'));
  assert.ok(!magentaSewerMonsters(next,'night').some(p=>p.id==='ariados'));
 });
+
+test('new sewer pillars prevent roaming into walls while restoring old roaming positions safely',()=>{
+ const s={area:3,district:'lumiose-crystal-sewer',interior:null,x:11,y:14,steps:3,zaMission20Stage:9,zaMission20PillarsV1:true,zaMagentaSewerPositions:{ariados:{x:4,y:6}},zaMagentaSewerSpent:{inkay:true,skrelp:true,noibat:true}};
+ assert.deepEqual([magentaSewerMonsters(s,'day')[0].x,magentaSewerMonsters(s,'day')[0].y],[4,5]);
+ for(let i=0;i<20;i++){s.steps=i*4+3;stepMagentaSewerMonsters(s,'day');const p=magentaSewerMonsters(s,'day')[0];assert.notEqual(fieldMap(s)[p.y][p.x],'#');}
+});

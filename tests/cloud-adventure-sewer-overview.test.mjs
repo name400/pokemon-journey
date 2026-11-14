@@ -17,6 +17,7 @@ test('new mission 19 investigation groups four fixtures without changing walking
  const base={area:3,district:'lumiose-sewer',zaMission19Stage:11,zaMission19ChandelureStep:2,x:11,y:4,teamIds:['existing']};
  const legacy=fieldMap(base),fresh=fieldMap({...base,zaMission19InspectRoomV1:true});
  for(const [tile,x,y] of [['a',9,1],['b',13,1],['e',9,3],['d',13,3]])assert.equal(fresh[y][x],tile);
+ const after=fieldMap({...base,zaMission19Stage:12,zaMission19InspectRoomV1:true});for(const [tile,x,y] of [['a',9,1],['b',13,1],['e',9,3],['d',13,3]])assert.equal(after[y][x],tile);
  for(const [tile,x,y] of [['a',6,5],['b',16,5],['e',6,9],['d',16,9]])assert.equal(legacy[y][x],tile);
  for(let y=0;y<legacy.length;y++)for(let x=0;x<legacy[y].length;x++)assert.equal(walkable(fresh[y][x]),walkable(legacy[y][x]),`collision ${x},${y}`);
  const saved=storeAdventurePosition(base,17),restored=restoreAdventurePosition(saved,17);assert.deepEqual(restored.teamIds,['existing']);assert.equal(restored.zaMission19InspectRoomV1,undefined);assert.deepEqual([restored.x,restored.y],[11,4]);
