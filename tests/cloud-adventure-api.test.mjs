@@ -9572,3 +9572,13 @@ test('Self-Destruct TM accepts reviewed species and Galarian Yamask without chan
   for(const species of [1,10115]){const mon={...makeMon(species,25),boxId:id,moves:['몸통박치기'],pp:{tackle:3},shiny:true};seedMon(id,mon);await get();await call('teachStoryTm',{item:'za-tm048',boxId:id,slot:0},409);assert.deepEqual(rawMon(id).moves,['몸통박치기']);assert.equal(state.inventory['za-tm048'],1);}
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('center fast travel follows map travel restrictions and zone departure cleanup',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'center-travel-guard-qa',displayName:'센터 이동 안전 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,beforeMon=rawMon(id),beforeCoins=state.wallet.coins;
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x:11,y:2,facing:'down',zaMission04Complete:true,zaMission05Stage:8,zaFastTravelCenters:['hotel','rouge-plaza'],zaZone3FieldSpent:{pancham:true},zaWildShinyRolls:{'field3:espurr:677':true},zaWildVisibleAlphaLevels:{'field3:espurr:677':9},zaSide96Stage:2,...extra},state.revision+1);
+  seedWorld(place({zaMission09Chase:1}));await get();const blocked=structuredClone(rawWorld());await call('mapFastTravel',{destination:'hotel'},409);await call('fastTravel-hotel',{},409);assert.deepEqual(rawWorld(),blocked);assert.equal(state.world.interaction.actions?.some(x=>x.action==='fastTravel-hotel'),false);
+  seedWorld(place({zaMission09Chase:0}));await get();assert.ok(state.world.interaction.actions?.some(x=>x.action==='fastTravel-hotel'));await call('fastTravel-hotel');await get();assert.equal(state.world.district,'lumiose');assert.equal(rawWorld().zaZone3FieldSpent,undefined);assert.equal(rawWorld().zaWildShinyRolls['field3:espurr:677'],true);assert.equal(rawWorld().zaWildVisibleAlphaLevels['field3:espurr:677'],9);assert.equal(rawWorld().zaSide96Stage,2);assert.deepEqual(rawMon(id),beforeMon);assert.equal(state.wallet.coins,beforeCoins);await call('fastTravel-hotel',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});

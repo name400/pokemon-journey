@@ -1762,9 +1762,10 @@ else if(typeof b.action==='string'&&b.action.startsWith('taxi-')){
 }
 else if(typeof b.action==='string'&&b.action.startsWith('fastTravel-')){
  const origin=centerAt(s,interactionAt(s)),target=registeredCenters(s).find(c=>c.id===b.action.slice('fastTravel-'.length));
- if(s.combat||s.adventureCatchWindow||s.unionHost||!fastTravelEnabled(s)||!origin||!target||origin.id===target.id)throw Error('등록된 포켓몬센터에서 이동할 곳을 확인하세요.');
+ if(!canMapTravel(s)||!origin||!target||origin.id===target.id)throw Error('등록된 포켓몬센터에서 이동할 곳을 확인하세요.');
  const arrival={...s,district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,zaRougeStreetSouth:target.zaRougeStreetSouth===true};
  if(fieldMap(arrival)[target.y]?.[target.x]!=='H')throw Error('포켓몬센터 도착 지점을 확인하세요.');
+ clearMapTravelTransient(s);
  Object.assign(s,{district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,facing:'down',zaRougeStreetSouth:target.zaRougeStreetSouth===true});
  recordPlayerCenterPassage(s,target);s.log=[`${target.name} 포켓몬센터로 이동했다.`];
 }
