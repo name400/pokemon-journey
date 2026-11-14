@@ -8501,3 +8501,18 @@ test('Barnie dock mission preserves progress and pays its reward only once',asyn
   const key=JSON.stringify([globalThis.__adventureUser.userId,'pearl']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,997)').run(key,globalThis.__adventureUser.userId,'pearl');await get();await call('side37Reward',{},409);assert.equal(rawWorld().zaSide37Stage,2);assert.equal(state.wallet.coins,coins);sql.prepare('UPDATE inventory SET quantity=0 WHERE key=?').run(key);await get();const revision=state.revision;await call('side37Reward');await call('side37Reward',{revision},409);await get();assert.equal(state.inventory.pearl,3);assert.equal(state.wallet.coins,coins+1500);assert.equal(rawWorld().zaSide37Stage,3);assert.deepEqual(state.world.teamIds,[id]);await call('side37Reward',{},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Maxen and Deb status mission preserves progress and pays each reward once',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side38-status-qa',displayName:'능력 변화 대결 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,coins=state.wallet.coins,strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{}};seedMon(id,strong);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-street',interior:null,x:15,y:4,facing:'down',...extra},state.revision+1);
+  seedWorld(place({zaMission14Stage:8}));await get();await call('side38Start',{},409);
+  seedWorld(place({zaMission14Stage:9}));await get();assert.equal(state.world.interaction.action,'side38Start');await call('side38Start');assert.ok(pendingAdventureQuests(state.world).some(q=>q.id==='38'));await call('side38Deb',{},409);await call('side38Maxen');await call('forfeit');assert.equal(rawWorld().zaSide38Stage,1);seedMon(id,strong);seedWorld(place({}));await get();
+  for(const [action,expected] of [['side38Maxen',[447,307]],['side38Deb',[168,24]]]){
+   if(action==='side38Deb'){seedWorld(place({x:17}));await get();}
+   await call(action);assert.deepEqual(state.battle.teams[1].map(p=>p.speciesId),expected);const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const p of sim.p2.pokemon){p.hp=1;p.setStatus('slp');p.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();
+  }
+  assert.equal(rawWorld().zaSide38Stage,3);assert.equal(state.wallet.coins,coins+3456);seedWorld(place({}));await get();const key=JSON.stringify([globalThis.__adventureUser.userId,'protein']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,997)').run(key,globalThis.__adventureUser.userId,'protein');await get();await call('side38Reward',{},409);assert.equal(rawWorld().zaSide38Stage,3);assert.equal(state.wallet.coins,coins+3456);sql.prepare('UPDATE inventory SET quantity=0 WHERE key=?').run(key);await get();const rev=state.revision;await call('side38Reward');await call('side38Reward',{revision:rev},409);await get();assert.equal(state.wallet.coins,coins+5956);assert.equal(state.inventory.protein,3);assert.equal(state.inventory.calcium,3);assert.equal(state.inventory.powerbracer,1);assert.equal(rawWorld().zaSide38Stage,4);assert.deepEqual(state.world.teamIds,[id]);await call('side38Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
