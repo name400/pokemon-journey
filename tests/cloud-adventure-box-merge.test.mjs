@@ -13,3 +13,8 @@ test('cached indices work across successive immutable patches, appends and remov
 test('legacy duplicate and missing identifiers retain previous Map and filter semantics',()=>{
  for(const [box,patch,traded] of [[[{boxId:'a',v:1},{boxId:'b'},{boxId:'a',v:2}],[{boxId:'a',x:3}],null],[[{v:1},{boxId:'b'}],[{v:2}],undefined],[[{boxId:'a'}],[{boxId:'b'},{boxId:'a',hp:0}],'b']])assert.deepEqual(mergeAdventureBox(box,patch,traded),reference(box,patch,traded));
 });
+test('compact patches exclude both independent adventure trades',()=>{
+ const box=[{boxId:'pikachu',v:1},{boxId:'slowpoke',v:2},{boxId:'kept',v:3}];
+ assert.deepEqual(mergeAdventureBox(box,[{boxId:'slowpoke',v:4},{boxId:'new'}],'pikachu','slowpoke'),[{boxId:'kept',v:3},{boxId:'new'}]);
+ assert.deepEqual(mergeAdventureBox([{boxId:'a'},{boxId:'a'}],[{boxId:'slowpoke'}],undefined,'slowpoke'),[{boxId:'a'}]);
+});

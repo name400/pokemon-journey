@@ -13,6 +13,9 @@ test('movement prefetch selects only relevant owned Pokémon and retains legacy 
   const world=db.prepare('INSERT INTO worlds VALUES(?,?,?)');world.run('u',JSON.stringify(state),7);
   const query=db.prepare(movementWorldSql),row=query.get(JSON.stringify(['extra','foreign']),'u');
   assert.equal(row.revision,7);assert.deepEqual(JSON.parse(row.movement_box).map(p=>p.id),['pending','teammate','lead','extra','heracross']);
+  insert.run('slowpoke','u',JSON.stringify({name:'slowpoke'}),'test',7);insert.run('galar','u',JSON.stringify({name:'galar'}),'test',8);
+  db.prepare('UPDATE worlds SET state=? WHERE user_id=?').run(JSON.stringify({...state,teamIds:['slowpoke'],activeId:'slowpoke',zaTradedSlowpokeId:'slowpoke',zaSide39ReceivedId:'galar'}),'u');
+  const recovered=JSON.parse(query.get('[]','u').movement_box).map(p=>p.id);assert.ok(recovered.includes('slowpoke'));assert.ok(recovered.includes('galar'));
   db.prepare('UPDATE worlds SET state=? WHERE user_id=?').run(JSON.stringify({...state,adventureEngine:'local'}),'u');
   assert.equal(query.get('[]','u').movement_box,null);
   db.prepare('UPDATE worlds SET state=? WHERE user_id=?').run(JSON.stringify({...state,teamIds:'legacy-invalid'}),'u');
