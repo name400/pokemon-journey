@@ -104,3 +104,12 @@ test('random alphas respect floor and time while excluding ordinary encounters',
  assert.equal(randomAlphaPlayerThreat(s)?.id,'swablu');assert.equal(randomAlphaPlayerThreat({...s,zaZone18Period:'night'}),null);assert.equal(randomAlphaPlayerThreat({...s,zaZone18Upper:false}),null);
  assert.equal(randomAlphaPlayerThreat({...s,zaWildVisibleAlphaLevels:{}}),null);
 });
+
+test('early visible random alphas respect layer and avoid burrow species',async()=>{
+ const {randomAlphaPlayerThreat}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const key='zone6:swablu:333',s={area:3,district:'lumiose-zone6',x:8,y:7,zaZone6Layer:'roof',zaZone6Period:'day',zaWildVisibleAlphaLevels:{[key]:40},zaWildShinyRolls:{[key]:true}};
+ assert.equal(randomAlphaPlayerThreat(s)?.id,'swablu');assert.equal(randomAlphaPlayerThreat({...s,zaZone6Layer:'ground'}),null);assert.equal(randomAlphaPlayerThreat({...s,zaZone6Layer:'future'}),null);
+ const cave={area:3,district:'lumiose-zone8',x:13,y:8,zaWildVisibleAlphaLevels:{'zone8:gible:443':40},zaWildShinyRolls:{'zone8:gible:443':true}};assert.equal(randomAlphaPlayerThreat(cave),null);
+ const roof={area:3,district:'lumiose-zone5',x:5,y:3,zaZone5Upper:true,zaWildVisibleAlphaLevels:{'zone5:abra:63':25},zaWildShinyRolls:{'zone5:abra:63':true}};assert.equal(randomAlphaPlayerThreat(roof)?.id,'abra');assert.equal(randomAlphaPlayerThreat({...roof,zaZone5Upper:false}),null);
+ const pit={area:3,district:'lumiose-zone10',x:10,y:8,zaZone10LowerBank:true,zaWildVisibleAlphaLevels:{'zone10:carvanha:318':42},zaWildShinyRolls:{'zone10:carvanha:318':true}};assert.equal(randomAlphaPlayerThreat(pit)?.id,'carvanha');assert.equal(randomAlphaPlayerThreat({...pit,zaZone10Upper:true}),null);
+});

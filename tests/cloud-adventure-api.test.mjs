@@ -9137,3 +9137,17 @@ test('visible random alpha uses stored shiny identity for player threat and capt
   seedWorld(place({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.equal(state.world.activeId,id);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('early visible random alphas respect layers, fixed-alpha priority and save safety',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'random-alpha-early-health-qa',displayName:'초반 무작위 우두머리 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='zone6:houndour:228';
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',zaZone6Spent:{},zaMission05Complete:true,zaRandomAlphaAlertV1:undefined,zaZone6AlphaRoarAlertV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},zaWildVisibleAlphaLevels:{[key]:30},zaWildShinyRolls:{[key]:true},combat:null,encounter:null,x:5,y:6,...extra},state.revision+1);
+  seedWorld(place({}));await get();const rev=state.revision;await call('move',{direction:'right'});await call('move',{direction:'right',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaRandomAlphaAlertV1.id,'houndour');assert.equal(rawWorld().zaWildShinyRolls[key],true);clock+=3000;await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);
+  seedWorld(place({x:6,y:4}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaZone6AlphaRoarAlertV1,'houndoom-alpha');assert.equal(rawWorld().zaRandomAlphaAlertV1,undefined);
+  const roof='zone6:swablu:333';seedWorld(place({zaZone6Layer:'roof',zaWildVisibleAlphaLevels:{[roof]:35},zaWildShinyRolls:{[roof]:true},x:7,y:7}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaRandomAlphaAlertV1.id,'swablu');
+  const water='zone10:carvanha:318';seedWorld(place({district:'lumiose-zone10',zaZone10Upper:false,zaZone10LowerBank:true,zaZone10Spent:{},zaWildVisibleAlphaLevels:{[water]:42},zaWildShinyRolls:{[water]:true},x:10,y:6}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaRandomAlphaAlertV1.id,'carvanha');
+  seedWorld(place({zaRandomAlphaAlertV1:{version:2,opaque:true},zaPlayerVitalsV1:{version:2,opaque:true}}));await get();await call('move',{direction:'right'});await get();assert.deepEqual(rawWorld().zaRandomAlphaAlertV1,{version:2,opaque:true});assert.deepEqual(rawWorld().zaPlayerVitalsV1,{version:2,opaque:true});
+  seedWorld(place({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});
