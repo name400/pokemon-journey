@@ -157,3 +157,15 @@ test('journal exposes explicit bag-held mission rewards without inventing legacy
  assert.deepEqual(pendingAdventureQuests({...save,zaSide117Complete:false,zaSide118Complete:false,zaZone15LiftUnlocked:false}),[]);
  assert.deepEqual(pendingAdventureQuests({...save,zaSide117RewardPending:{expertbelt:2},zaSide118RewardPending:{xl:-1},zaZone15Side80Pending:{quickball:'2'}}),[]);
 });
+
+test('museum quest shows remaining floors and guides the completed search to its requester',()=>{
+ const base={area:3,district:'lumiose-museum-front',zaTrackedQuestId:'21',zaSide21Started:true,zaSide21Found:['museum1-0','museum1-0','museum2-0']},before=structuredClone(base);
+ assert.match(trackedAdventureObjective(base),/1층 1마리, 2층 9마리/);
+ const getTarget=s=>trackedAdventureLocalTarget({...s,map:fieldMap(s)});
+ assert.deepEqual(getTarget(base),{x:11,y:6});assert.equal(getTarget({...base,interior:'museum1'}),null);assert.equal(getTarget({...base,interior:'museum2'}),null);
+ const done={...base,zaSide21Found:[...Array.from({length:2},(_,i)=>`museum1-${i}`),...Array.from({length:10},(_,i)=>`museum2-${i}`)]};
+ assert.match(trackedAdventureObjective(done),/보고/);assert.deepEqual(getTarget({...done,interior:'museum1'}),{x:3,y:14});assert.deepEqual(getTarget({...done,interior:'museum2'}),{x:18,y:5});
+ assert.equal(getTarget({...done,zaSide21Complete:true,interior:'museum1'}),null);assert.equal(getTarget({...done,interior:'other'}),null);assert.equal(trackedAdventureLocalTarget({...done,interior:'museum1',map:[]}),null);
+ assert.deepEqual(base,before);assert.deepEqual(getTarget(JSON.parse(JSON.stringify({...done,interior:'museum1'}))),{x:3,y:14});
+ const unknown={...base,zaSide21Found:['future-spot']};assert.doesNotMatch(trackedAdventureObjective(unknown),/남은 층/);assert.deepEqual(unknown.zaSide21Found,['future-spot']);
+});
