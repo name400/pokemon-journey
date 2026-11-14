@@ -13,6 +13,8 @@ try{
   let revision=1,posts=0,gets=0,fences=0,releaseMove,releaseStalledFence,releaseStalledGet;const moveGate=new Promise(r=>{releaseMove=r;}),fenceGate=new Promise(r=>{releaseStalledFence=r;}),getGate=new Promise(r=>{releaseStalledGet=r;});
   const state=()=>({engine:'cloud',revision,box:[mon],wallet:{coins:100,balls:5,potions:2},inventory:{},fieldShop:[{id:'potion',name:'시험 도구',price:20}],expeditions:[{id:1,name:'시험 장소',region:1}],gameTime:{period:'day'},battle:null,world});
   await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
+  // Keep the browser fixture independent of a local or production account.
+  await page.route('**/api/account',r=>r.fulfill({json:{authenticated:true,profile:{nickname:'격리 테스트'},signOut:'#'}}));
   await page.route('**/api/world**',async r=>{
    if(r.request().method()==='POST'){
     const body=r.request().postDataJSON();if(body.action==='movementFence'){fences++;if(fences===2)releaseMove();if(fences===3)releaseStalledFence();if(scenario==='failed-fence'&&fences===2)return r.fulfill({status:503,json:{error:'복구 실패'}});if((body.revision===null||body.revision===revision)&&(body.activeId==null||body.activeId===world.activeId))revision++;if(scenario==='stalled-fence'&&fences===2){await fenceGate;try{return await r.fulfill({json:{settled:true}});}catch{return;}}return r.fulfill({json:{settled:true}});}posts++;assert.equal(body.action,'move');assert.equal(body.compact,true);const step=stepField(world,body.path?.[0]||body.direction);assert.ok(!step.blocked);world={...world,...step,steps:world.steps+1};revision++;
