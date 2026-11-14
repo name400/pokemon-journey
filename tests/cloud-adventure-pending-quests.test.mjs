@@ -81,3 +81,9 @@ test('unclaimed restaurant rewards remain trackable across locations and reloads
  }
  assert.equal(trackedAdventureLocalTarget({area:3,district:'lumiose-rouge-north',zaRougeStreetSouth:true,zaTrackedQuestId:'sushi-reward',zaSushiRewardPending:'mission',map:[]}),null);
 });
+
+test('holovator quest marker tracks only its ground-level active stages',()=>{
+ const save={area:3,district:'lumiose-vernal',zaMission10Stage:3,zaSide23Stage:1,zaTrackedQuestId:'23',objective:'메인 목표'},world={...save,map:fieldMap(save)};
+ assert.equal(pendingAdventureQuests(world).find(q=>q.id==='23').goal.includes('흙더미'),true);assert.deepEqual(trackedAdventureLocalTarget(world),{x:3,y:0});
+ assert.match(pendingAdventureQuests({...save,zaSide23Stage:2})[0].goal,/보상/);assert.deepEqual(trackedAdventureLocalTarget({...world,zaSide23Stage:2}),{x:3,y:0});assert.equal(trackedAdventureLocalTarget({...world,zaSide23Stage:3}),null);assert.equal(trackedAdventureLocalTarget({...world,zaVernalEastRoof:true}),null);assert.equal(trackedAdventureLocalTarget({...world,zaVernalSlowbroBank:true}),null);
+});
