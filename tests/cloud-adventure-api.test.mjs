@@ -9063,6 +9063,20 @@ test('reviewed Zone 11 and 17 fixed alphas use the shared player alert safely',a
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
 
+test('side 93 finds the existing Magenta roof and preserves rewards and old saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side93-roof-qa',displayName:'일레도리자 집 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],id=state.world.activeId,coins=state.wallet.coins;
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,interior:null,combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(place({district:'lumiose-south-boulevard',zaVert7RoofUpper:false,x:17,y:10,facing:'down',zaRoyaleRank:'B',zaMission30Complete:undefined,zaMission31Started:undefined}));await get();await call('side93Start',{},409);
+  seedWorld(place({zaMission31Started:true,x:17,y:10,facing:'down'}));await get();assert.equal(state.world.interaction.action,'side93Start');const rev=state.revision;await call('side93Start');await call('side93Start',{revision:rev},409);await get();assert.equal(rawWorld().zaSide93Stage,1);assert.ok(pendingAdventureQuests(state.world).some(q=>q.id==='93'));
+  seedWorld(place({district:'lumiose-magenta-sector1',x:17,y:7,facing:'up'}));await get();await walkTo({x:9,y:4});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'screwRoofAccess');await call('side93Reward',{},409);await call('screwRoofAccess');await get();assert.equal(state.world.district,'lumiose-screw-magenta1');assert.equal(rawWorld().zaSide93Stage,2);assert.ok(pendingAdventureQuests(state.world).some(q=>q.id==='93-reward'));assert.ok(state.world.interaction.actions.some(a=>a.action==='side93Reward'));
+  const mon=rawMon(id),key=JSON.stringify([globalThis.__adventureUser.userId,'sunstone']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(key,globalThis.__adventureUser.userId,'sunstone',999);await get();await call('side93Reward',{},409);assert.equal(state.wallet.coins,coins);assert.equal(rawWorld().zaSide93Stage,2);sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();const rewardRev=state.revision;await call('side93Reward');await call('side93Reward',{revision:rewardRev},409);await get();assert.equal(state.wallet.coins,coins+4000);assert.equal(state.inventory.sunstone,999);assert.equal(state.inventory['za-exp-candy-m'],2);assert.equal(rawWorld().zaSide93Stage,3);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);await call('screwRoofAccess');await get();assert.equal(state.world.district,'lumiose-magenta-sector1');
+  seedWorld(place({district:'lumiose-magenta-sector1',x:9,y:4,facing:'up',zaSide93Stage:undefined}));await get();await call('screwRoofAccess');await get();assert.equal(rawWorld().zaSide93Stage,undefined);assert.equal(state.world.interaction.action,'screwRoofAccess');await call('side93Reward',{},409);
+  seedWorld(place({district:'lumiose-magenta-sector1',x:9,y:4,facing:'up',zaSide93Stage:{version:2}}));await get();await call('screwRoofAccess');await get();assert.deepEqual(rawWorld().zaSide93Stage,{version:2});await call('side93Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('reviewed Zone 12 to 14 alphas respect layers, day and saved player health',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureTime=null;globalThis.__adventureUser={userId:'fixed-alpha-park-forest-qa',displayName:'공원 숲 우두머리 검사'};globalThis.__adventureRandom=()=>.999;
  try{
