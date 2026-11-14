@@ -206,3 +206,8 @@ test('Fina court stays reachable without changing the ground map',()=>{
  while(queue.length){const [x,y]=queue.shift();for(const [dx,dy] of [[0,1],[0,-1],[1,0],[-1,0]]){const nx=x+dx,ny=y+dy,key=`${nx},${ny}`,tile=map[ny]?.[nx];if(visited.has(key)||!tile||'#^jXEW'.includes(tile))continue;visited.add(key);queue.push([nx,ny]);}}
  assert.equal(visited.has('17,3'),true);assert.equal(map[3][18],'.');assert.equal(map[16][11],'X');assert.equal(map[0][11],'X');
 });
+
+
+test('side 66 tracking points to the current investigation stage only',()=>{
+ for(const [district,stage,expected] of [['lumiose-bleu-plaza-route',1,{x:4,y:6}],['lumiose-vert-sector3',2,{x:19,y:5}],['lumiose-vert-sector3',1,null],['lumiose-bleu-plaza-route',3,null]]){const s={area:3,district,interior:null,zaTrackedQuestId:'66',zaSide66Stage:stage};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),expected);}
+});
