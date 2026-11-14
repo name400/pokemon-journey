@@ -36,3 +36,30 @@ test('a trained starter and story companion can clear a representative Rogue Slo
  for(let turn=0;turn<20&&!battle.ended;turn++){const view=mission10MultiView(battle);assert.equal(view.requests[0].actors[0].kind,'move');battle=playMission10MultiTurn(battle,{type:'move',move:'razorleaf',...(view.adventurePlusGauge.charge?{plus:true}:{})});}
  assert.equal(battle.winner,0);assert.equal(battle.teams[1][0].hp,0);assert.deepEqual(battle.owners.player,['player']);
 });
+
+test('new Rogue weakness marker applies 63% only at fourfold effectiveness and stacks with aura',()=>{
+ const p={...mon(7,'player',['물대포','몸통박치기','땅고르기','전기쇼크'],30),adventurePlusMastered:['watergun']},f=mon(10087,'boss',['튀어오르기'],90),base={...createCombat([p],[f]),adventurePlusGaugeV1:{charge:1,max:3},disableCpuTera:true};base.snapshot.prng='1,2,3,4';
+ const weakness={...base,adventureRogueWeaknessV1:{targets:['boss']}},aura={...base,adventureRogueAuraV1:{targets:['boss']}},both={...aura,adventureRogueWeaknessV1:{targets:['boss']}};
+ const damage=(c,command)=>f.hp-playCpu(c,command).teams[1][0].hp,water={type:'move',move:'물대포'},normal=damage(base,water),reduced=damage(weakness,water),auraDamage=damage(aura,water),combined=damage(both,water);
+ assert.ok(normal>0&&Math.abs(reduced/normal-.63)<.08,`${reduced}/${normal}`);assert.ok(auraDamage>0&&Math.abs(combined/auraDamage-.63)<.15,`${combined}/${auraDamage}`);
+ const plus={...water,plus:true},plusNormal=damage(base,plus),plusReduced=damage(both,plus);assert.ok(plusNormal>0&&Math.abs(plusReduced/plusNormal-.63)<.1);
+ const neutral={type:'move',move:'몸통박치기'},double={type:'move',move:'땅고르기'},immune={type:'move',move:'전기쇼크'};assert.equal(damage(weakness,neutral),damage(base,neutral));assert.ok(damage(base,double)>0);assert.equal(damage(weakness,double),damage(base,double));assert.equal(damage(weakness,immune),0);
+ const legacy=JSON.parse(JSON.stringify(aura));assert.equal(legacy.adventureRogueWeaknessV1,undefined);assert.equal(damage(legacy,water),auraDamage);
+});
+
+test('Zygarde fourfold marker applies without the Rogue aura and ignores other targets',()=>{
+ const p=mon(361,'player',['얼음숨결'],30),f=mon(10181,'zygarde',['튀어오르기'],90),base={...createCombat([p],[f]),disableCpuTera:true};base.snapshot.prng='1,2,3,4';const tagged={...base,adventureRogueWeaknessV1:{targets:['zygarde']}},other={...base,adventureRogueWeaknessV1:{targets:['other']}},cmd={type:'move',move:'얼음숨결'},damage=c=>f.hp-playCpu(c,cmd).teams[1][0].hp,a=damage(base),b=damage(tagged);assert.ok(a>0&&Math.abs(b/a-.63)<.1,`${b}/${a}`);assert.equal(damage(other),a);
+});
+
+test('fourfold boss modifier applies per target in companion and triple battles',()=>{
+ const p={...mon(7,'player',['물대포'],30),adventurePlusMastered:['watergun']},ally=mon(25,'ally',['튀어오르기']),ally2=mon(25,'ally2',['튀어오르기']),foes=[mon(10087,'boss',['튀어오르기'],90),mon(143,'other',['튀어오르기'],90),mon(143,'third',['튀어오르기'],90)];
+ for(const [raw,play,side,index] of [[createMission10DoubleSnapshot([p],[ally],foes.slice(0,2)),playMission10MultiTurn,1,0],[createMission37TripleSnapshot([p],[ally],[ally2],foes),playMission37TriplePrototype,1,0]]){
+  raw.snapshot.prng='1,2,3,4';const base={...raw,adventurePlusGaugeV1:{charge:1,max:3}},tagged={...base,adventureRogueWeaknessV1:{targets:['boss']}},cmd={type:'move',move:'watergun',target:1},a=play(base,cmd),b=play(tagged,cmd),normal=foes[0].hp-a.teams[side][index].hp,reduced=foes[0].hp-b.teams[side][index].hp;assert.ok(normal>0&&Math.abs(reduced/normal-.63)<.12,`${reduced}/${normal}`);assert.deepEqual(b.owners,base.owners);
+  const otherCmd={type:'move',move:'watergun',target:2},normalOther=play(base,otherCmd),taggedOther=play(tagged,otherCmd),otherSide=raw.format==='mission10-multi-v1'?3:1,otherIndex=otherSide===3?0:1;assert.equal(normalOther.teams[otherSide][otherIndex].hp,taggedOther.teams[otherSide][otherIndex].hp);
+ }
+});
+
+test('Mega attacks bypass Rogue aura but still receive fourfold weakness protection',()=>{
+ const player={...mon(6,'player',['화염방사'],30),item:'charizarditex'},foe=mon(10046,'boss',['튀어오르기'],90),base={...createCombat([player],[foe]),adventurePlusGaugeV1:{charge:3,max:3},disableCpuTera:true};base.snapshot.prng='1,2,3,4';
+ const flagged={...base,adventureRogueAuraV1:{targets:['boss']},adventureRogueWeaknessV1:{targets:['boss']}},cmd={type:'move',move:'화염방사',special:'mega'},a=playCpu(base,cmd),b=playCpu(flagged,cmd),normal=foe.hp-a.teams[1][0].hp,reduced=foe.hp-b.teams[1][0].hp;assert.ok(normal>0&&Math.abs(reduced/normal-.63)<.1,`${reduced}/${normal}`);assert.equal(b.teams[0][0].mega,true);
+});
