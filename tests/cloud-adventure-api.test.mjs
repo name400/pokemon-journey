@@ -8901,3 +8901,27 @@ test('Nett rooftop Water Gun cleans sludge and preserves party and rewards',asyn
   await walkTo({x:4,y:11});await call('face',{direction:'down'});await call('screwRoofAccess');assert.equal(state.world.district,'lumiose-jaune-sector8');
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Side Mission 81 companion battle preserves ownership and rewards once',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side81-courier-qa',displayName:'판짱 배달 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedMon(id,{...makeMon(150,100),boxId:id,moves:['파동탄'],pp:{},shiny:true});
+  const atAndi=(patch={})=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:15,y:10,facing:'down',combat:null,encounter:null,...patch},state.revision+1);
+  seedWorld(atAndi());await get();await call('side81Start',{},409);
+  seedWorld(atAndi({zaMission26Stage:3}));await get();assert.equal(state.world.interaction.action,'side81Start');await call('side81Start');await call('side81Battle');
+  assert.equal(rawWorld().combat.format,'mission10-multi-v1');assert.deepEqual(rawWorld().combat.teams[2].map(m=>m.speciesId),[674,703,673]);assert.deepEqual([...rawWorld().combat.teams[1],...rawWorld().combat.teams[3]].map(m=>m.speciesId).sort((a,b)=>a-b),[306,450,460]);
+  await get();assert.equal(state.battle.teams[0].find(m=>m.battleOwner==='ally').speciesId,674);assert.deepEqual(state.world.teamIds,team);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
+  await battle();assert.equal(state.world.zaSide81Stage,2);assert.equal(state.wallet.coins,coins+3744);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).shiny,true);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'lumiosegalette']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,998)').run(key,globalThis.__adventureUser.userId,'lumiosegalette');await get();await call('side81Reward',{},409);assert.equal(rawWorld().zaSide81Stage,2);sql.prepare('UPDATE inventory SET quantity=997 WHERE key=?').run(key);await get();const rev=state.revision;await call('side81Reward');await call('side81Reward',{revision:rev},409);await get();assert.equal(state.inventory.lumiosegalette,999);assert.equal(state.inventory.lemonade,1);assert.equal(state.wallet.coins,coins+4944);assert.equal(rawWorld().zaSide81Stage,3);await call('side81Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('Side Mission 81 companion defeat can be retried without saving the ally',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side81-loss-qa',displayName:'판짱 패배 검사'};
+ try{
+  const {createMission10DoubleSnapshot}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');await get();await call('start',{species:1});const id=state.world.activeId;
+  const weak={...makeMon(25,1),boxId:id,hp:1,moves:['튀어오르기'],pp:{}},ally={...makeMon(674,1),boxId:'side81-weak-ally',hp:1,moves:['튀어오르기'],pp:{}},enemies=[0,1].map(i=>({...makeMon(150,100),boxId:`side81-strong-${i}`,moves:['파동탄'],pp:{}}));seedMon(id,weak);
+  const combat=createMission10DoubleSnapshot([weak],[ally],enemies),trainer={id:'side81-dolean',side81V1:true};seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:15,y:10,facing:'down',zaSide81Stage:1,combat,trainer},state.revision+1));await get();await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'splash'}]}});assert.equal(state.battleResult.winner,1);assert.equal(state.world.zaSide81Stage,1);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(sql.prepare('SELECT count(*) AS n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,1);await get();await call('side81Battle');assert.equal(state.battle.teams[0].find(m=>m.battleOwner==='ally').speciesId,674);
+ }finally{globalThis.__adventureUser=previous;}
+});
