@@ -10530,3 +10530,13 @@ test('Mission 19 illusory wall supports walking through and restoring the corrid
   await call('move',{direction:'down'});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.zaMission19Inner,state.world.x,state.world.y],[false,11,4]);await call('face',{direction:'up'});await call('mission19Wall');await get();assert.equal(state.world.zaMission19Inner,true);assert.equal(state.wallet.coins,coins);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Zone 17 southern garden and northern promenade keep Pyroar on the correct layer',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone17-lion-layer-qa',displayName:'구역 17 층 검사'};
+ try{globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:1});const id=state.world.activeId,mon=rawMon(id),coins=state.wallet.coins,key='zone17:pyroar-alpha:668';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-street-route',interior:null,x:20,y:1,facing:'up',zaRoyaleRank:'C',zaWildShinyRolls:{[key]:true}},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.zaZone17Promenade],['lumiose-zone17',false]);assert.notEqual(state.world.map[6][17],'e');
+  await walkTo({x:11,y:11});await call('face',{direction:'up'});await call('zone17PromenadeStairs');await get();assert.equal(state.world.zaZone17Promenade,true);assert.equal(state.world.map[6][17],'e');assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  await call('zone17PromenadeStairs');await get();assert.equal(state.world.zaZone17Promenade,false);assert.notEqual(state.world.map[6][17],'e');assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(state.wallet.coins,coins);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
+  const legacy={...rawWorld(),district:'lumiose-zone17',x:11,y:11,zaZone17Upper:false,zaZone17Promenade:undefined};seedWorld(storeAdventurePosition(legacy,state.revision+1));await get();assert.equal(state.world.map[6][17],'e');
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});

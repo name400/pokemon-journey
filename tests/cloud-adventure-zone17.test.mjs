@@ -2,6 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {stepField,fieldPath,fieldMap,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {zone17Map,zone17Visible,zone17Encounter} from '../lib/cloud-adventure/adventure-zone17.mjs';
+import {fixedAlphaPlayerThreat} from '../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs';
+
+test('Zone 17 northern Pyroar use the promenade when the split layer is known',()=>{
+ const base={area:3,district:'lumiose-zone17',interior:null,x:11,y:11,zaZone17Upper:false,zaZone17Spent:{},zaWildShinyRolls:{'zone17:pyroar-alpha:668':true}};
+ assert.equal(zone17Visible({...base,zaZone17Promenade:false},'e'),null);assert.notEqual(zone17Map({...base,zaZone17Promenade:false})[6][17],'e');
+ const north={...base,zaZone17Promenade:true};assert.equal(zone17Visible(north,'e').id,'pyroar-alpha');assert.equal(zone17Map(north)[6][17],'e');assert.equal(north.zaWildShinyRolls['zone17:pyroar-alpha:668'],true);
+ assert.equal(fixedAlphaPlayerThreat({...base,zaZone17Promenade:false}),null);assert.equal(fixedAlphaPlayerThreat(north)?.id,'pyroar-alpha');
+ assert.equal(zone17Visible(base,'e').id,'pyroar-alpha');assert.equal(zone17Visible({...north,zaZone17Spent:{'pyroar-alpha':true}},'e'),null);
+ const enter=stepField({area:3,district:'lumiose-vert-street-route',interior:null,x:20,y:1,zaRoyaleRank:'C'},'up');assert.deepEqual([enter.district,enter.zaZone17Promenade],['lumiose-zone17',false]);
+});
 test('zone seventeen gate, field and save migration',()=>{
  const base={area:3,district:'lumiose-vert2',interior:null,x:1,y:5,facing:'left',zaRoyaleRank:'D'};
  assert.equal(stepField(base,'left').blocked,true);
