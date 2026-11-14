@@ -30,6 +30,8 @@ test('Substitute TM requires ownership and only accepts reviewed base species',a
  assert.equal(canLearnStoryTm({},bulbasaur,'za-tm085'),false);
  assert.equal(canLearnStoryTm({'za-tm085':1},bulbasaur,'za-tm085'),true);
  assert.equal(canLearnStoryTm({'za-tm085':1},unsupported,'za-tm085'),false);
+ for(const id of [133,700,172,280,475,650,653,656,447,448,10100])assert.equal(canLearnStoryTm({'za-tm085':1},makeMon(id,30),'za-tm085'),true,`species ${id}`);
+ const alola=makeMon(10100,30);assert.equal(canLearnStoryTm({'za-tm085':1},{...alola,speciesId:25},'za-tm085'),false);
  assert.equal(canLearnStoryTm({'za-tm085':1},{...bulbasaur,id:10001},'za-tm085'),false);
  assert.equal(canLearnStoryTm({'za-tm085':1},{...bulbasaur,moves:['대타출동']},'za-tm085'),false);
 });

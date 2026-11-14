@@ -7459,3 +7459,14 @@ test('Le Wow prizes retain legacy battle rules and apply Canari to new battles',
   seedWorld(storeAdventurePosition({...rawWorld(),...location,zaLeWowCompleted:true},state.revision+1));sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(100000,'le-wow-prize-qa');await get();await call('leWowRepeat');await weaken(true);await battle();assert.equal(state.wallet.coins,6000);assert.equal(state.world.zaLeWowRun.course,1);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('TM085 reviewed species and Alolan Raichu preserve legacy saves and moves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm085-compat-qa',displayName:'대타출동호환검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  const initial={...makeMon(133,30),moves:['몸통박치기','울음소리','전광석화','방어'],pp:{tackle:3,growl:7,quickattack:0,protect:4}};seedMon(id,initial);await get();await call('teachStoryTm',{item:'za-tm085',slot:1},409);assert.deepEqual(rawMon(id).moves,initial.moves);
+  const key=JSON.stringify(['tm085-compat-qa','za-tm085']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,'tm085-compat-qa','za-tm085');await get();const rev=state.revision;await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:1});assert.deepEqual(rawMon(id).moves,['몸통박치기','대타출동','전광석화','방어']);assert.equal(rawMon(id).pp.tackle,3);assert.equal(rawMon(id).pp.quickattack,0);await get();assert.equal(state.inventory['za-tm085'],1);await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0},409);await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0,revision:rev},409);
+  const form={...makeMon(10100,30),moves:['몸통박치기','울음소리'],pp:{tackle:3}};seedMon(id,form);await get();await call('teachStoryTm',{item:'za-tm085',slot:1});await get();assert.equal(rawMon(id).id,10100);assert.equal(rawMon(id).moves[1],'대타출동');assert.equal(rawMon(id).pp.tackle,3);assert.equal(state.inventory['za-tm085'],1);
+  const incompatible={...makeMon(129,30),moves:['튀어오르기'],pp:{splash:3}};seedMon(id,incompatible);await get();await call('teachStoryTm',{item:'za-tm085',slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);assert.equal(state.inventory['za-tm085'],1);
+ }finally{globalThis.__adventureUser=previous;}
+});
