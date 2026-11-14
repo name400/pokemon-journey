@@ -3,6 +3,13 @@ import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {mission37CompanionGroups} from '../lib/cloud-adventure/adventure-mission37-companions.mjs';
 import {createMission37TripleSnapshot,restoreMission37TripleSnapshot,playMission37TriplePrototype,mission37PlayerTeam,mission37TripleView} from '../lib/cloud-adventure/adventure-mission37-triple.mjs';
+import {applyAdventureBattleEffort} from '../lib/cloud-adventure/adventure-effort.mjs';
+
+test('companion knockouts award effort only to living player-owned Pokémon',()=>{
+ const zero=()=>({hp:0,atk:0,def:0,spa:0,spd:0,spe:0}),player={...makeMon(1,40),boxId:'owned',moves:['튀어오르기'],pp:{},evs:zero()},ally={...makeMon(150,100),boxId:'ally',moves:['파동탄'],pp:{},evs:zero()},ally2={...makeMon(4,40),boxId:'ally2',moves:['튀어오르기'],pp:{},evs:zero()},foes=['enemy-1','enemy-2','enemy-3'].map(boxId=>({...makeMon(25,5),boxId,moves:['튀어오르기'],pp:{}}));
+ const before=createMission37TripleSnapshot([player],[ally],[ally2],foes),battle=restoreMission37TripleSnapshot(before);for(const p of battle.p2.pokemon){p.hp=1;p.setStatus('slp');p.statusState.time=99;}const snapshot=battle.toJSON();snapshot.formatid=before.snapshot.formatid;before.snapshot=snapshot;
+ const next=playMission37TriplePrototype(before,{type:'move',move:'splash'}),after=applyAdventureBattleEffort(before,next);assert.ok(after.adventureEffortFoes.length>0);assert.ok(after.teams[0].find(m=>m.boxId==='owned').evs.spe>0);for(const id of ['ally','ally2'])assert.deepEqual(after.teams[0].find(m=>m.boxId===id).evs,zero());
+});
 
 test('prototype snapshot has three separate allied leads and restores full owned rosters',()=>{
  const owned=Array.from({length:6},(_,i)=>({...makeMon(25,60),boxId:`owned-${i}`,moves:['튀어오르기'],pp:{}}));

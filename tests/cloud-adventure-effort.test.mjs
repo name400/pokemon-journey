@@ -10,6 +10,16 @@ test('ordered faint events award once to those alive at the moment of defeat',as
  const firstFaints=applyAdventureBattleEffort(before,{...after,events:[{kind:'faint',side:0,boxId:'a',hp:0},{kind:'faint',side:1,boxId:'enemy',hp:0}]});assert.equal(firstFaints.teams[0][0].evs.hp,0);assert.equal(firstFaints.teams[0][1].evs.spe,2);
 });
 
+test('triple effort applies only to the player owner and excludes placeholder foes',async()=>{
+ const {applyAdventureBattleEffort}=await import('../lib/cloud-adventure/adventure-effort.mjs'),evs={hp:0,atk:0,def:0,spa:0,spd:0,spe:0};
+ const player={...makeMon(1,30),boxId:'p',evs:{...evs},item:'powerweight'},reserve={...makeMon(4,30),boxId:'reserve',evs:{...evs}},ally={...makeMon(7,30),boxId:'ally',evs:{...evs}},foe={...makeMon(25,5),boxId:'foe'},empty={...makeMon(25,5),boxId:'empty',adventureEmptySlot:true,hp:0};
+ const before={format:'mission37-triples-prototype-v1',adventureEffortVersion:1,adventureEffortFoes:[],owners:{player:['p','reserve'],first:['ally'],second:['empty-ally']},teams:[[player,reserve,ally],[foe,empty]]};
+ const after={...before,events:[{kind:'faint',side:1,boxId:'empty',hp:0},{kind:'faint',side:1,boxId:'foe',hp:0},{kind:'faint',side:1,boxId:'foe',hp:0}]};const result=applyAdventureBattleEffort(before,after);
+ assert.equal(result.teams[0][0].evs.hp,8);assert.equal(result.teams[0][0].evs.spe,2);assert.equal(result.teams[0][1].evs.spe,2);assert.deepEqual(result.teams[0][2].evs,evs);assert.deepEqual(result.adventureEffortFoes,['foe']);
+ assert.deepEqual(applyAdventureBattleEffort(result,{...result,events:after.events}).teams[0],result.teams[0]);assert.equal(applyAdventureBattleEffort({...before,adventureEffortVersion:undefined},after),after);assert.equal(applyAdventureBattleEffort({...before,owners:{}},after),after);
+ const faintedFirst=applyAdventureBattleEffort(before,{...after,events:[{kind:'faint',side:0,boxId:'p',hp:0},{kind:'faint',side:1,boxId:'foe',hp:0}]});assert.deepEqual(faintedFirst.teams[0][0].evs,evs);assert.equal(faintedFirst.teams[0][1].evs.spe,2);
+});
+
 test('power weight retains the simulator speed penalty during battle',async()=>{
  const {Battle}=await import('@pkmn/sim'),{createCombat}=await import('../lib/party-battle.mjs');const player={...makeMon(25,30),boxId:'player'},foe={...makeMon(1,5),boxId:'foe'};
  const normal=Battle.fromJSON(createCombat([{...player,item:''}],[foe]).snapshot),weighted=Battle.fromJSON(createCombat([{...player,item:'powerweight'}],[foe]).snapshot);assert.equal(weighted.p1.active[0].getStat('spe'),Math.floor(normal.p1.active[0].getStat('spe')/2));

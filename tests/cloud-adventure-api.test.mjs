@@ -11,6 +11,7 @@ import {stableTeraType,TERA_TYPES} from '../lib/tera-type.mjs';
 import {configure} from '../lib/pokemon-config.mjs';
 import {createCombat,playCpu} from '../lib/party-battle.mjs';
 import {createMission10DoubleSnapshot,createSoloMultiFoeSnapshot,playMission10MultiTurn,mission10MultiView} from '../lib/cloud-adventure/adventure-mission10-double.mjs';
+import {createMission35TripleSnapshot} from '../lib/cloud-adventure/adventure-mission35-triple.mjs';
 import {Battle} from '@pkmn/sim';
 import {expToNext,gainExperience,victoryExperience} from '../lib/growth.mjs';
 import {activeRoyaleZones,royaleNightIndex} from '../lib/cloud-adventure/adventure-royale-zones.mjs';
@@ -7595,6 +7596,25 @@ test('TM094 reviewed species and forms preserve existing moves and saves',async(
    const mon={...makeMon(pokemon,30),moves:['몸통박치기','울음소리'],pp:{tackle:3,growl:7}};seedMon(id,mon);await get();const rev=state.revision;await call('teachStoryTm',{item:'za-tm094',boxId:id,slot:1});await get();assert.equal(rawMon(id).id,pokemon);assert.deepEqual(rawMon(id).moves,['몸통박치기','날려버리기']);assert.equal(rawMon(id).pp.tackle,3);assert.equal(state.inventory['za-tm094'],1);await call('teachStoryTm',{item:'za-tm094',boxId:id,slot:0},409);await call('teachStoryTm',{item:'za-tm094',boxId:id,slot:0,revision:rev},409);
   }
   const incompatible={...makeMon(1,30),moves:['몸통박치기'],pp:{tackle:3}};seedMon(id,incompatible);await get();await call('teachStoryTm',{item:'za-tm094',boxId:id,slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);assert.equal(state.inventory['za-tm094'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('new Le Yeah triple battle records KO effort once and keeps legacy battle behavior',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'le-yeah-triple-effort-qa',displayName:'세 상대 노력치'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,base={...makeMon(150,100),item:'powerweight',moves:['파동탄'],pp:{},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0}};seedMon(id,base);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector3',interior:'leYeah',x:11,y:6,facing:'up',zaMission20Stage:1},state.revision+1));await get();await call('leYeahStart');
+  const c=rawWorld().combat,sim=Battle.fromJSON(c.snapshot);for(const p of sim.p2.pokemon){p.setStatus('slp');p.statusState.time=99;}sim.p2.active[0].hp=1;seedWorld({combat:{...c,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  const move=state.battle.requests[0].actors[0].moves.find(m=>m.id==='aurasphere'),target=move.targets.find(t=>t.side===1&&t.slot===0);const rev=state.revision;await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'aurasphere',target:target.target}]}});assert.ok(state.battle);assert.equal(rawMon(id).evs.hp,8);assert.equal(rawMon(id).evs.spe,3);assert.equal(rawWorld().combat.adventureEffortFoes.length,1);await get();assert.equal(rawMon(id).evs.hp,8);await call('battle',{revision:rev,command:{type:'turn',actions:[{actor:0,type:'move',move:'aurasphere',target:target.target}]}},409);await call('forfeit');await get();assert.equal(rawMon(id).evs.hp,8);assert.equal(rawMon(id).evs.spe,3);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('unversioned in-progress triple battle keeps its previous effort behavior',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'legacy-triple-effort-qa',displayName:'구형 세 상대 노력치'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,lead={...makeMon(150,100),boxId:id,moves:['파동탄'],pp:{},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0}};seedMon(id,lead);
+  const foes=[0,1,2].map(i=>({...makeMon(25,5),boxId:`legacy-foe-${i}`})),combat=createMission35TripleSnapshot([lead],foes),sim=Battle.fromJSON(combat.snapshot);delete combat.adventureEffortVersion;delete combat.adventureEffortFoes;for(const p of sim.p2.pokemon){p.setStatus('slp');p.statusState.time=99;}sim.p2.active[0].hp=1;combat.snapshot=sim.toJSON();
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:19,y:5,facing:'up',zaMission35Stage:4,combat,trainer:{id:'mission35-aegislash',name:'테스트'},encounter:null},state.revision+1));await get();const move=state.battle.requests[0].actors[0].moves.find(m=>m.id==='aurasphere'),target=move.targets.find(t=>t.side===1&&t.slot===0);await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'aurasphere',target:target.target}]}});assert.ok(state.battle);assert.equal(rawMon(id).evs.spe,0);await get();assert.equal(rawMon(id).evs.spe,0);assert.equal(rawWorld().combat.adventureEffortVersion,undefined);
  }finally{globalThis.__adventureUser=previous;}
 });
 
