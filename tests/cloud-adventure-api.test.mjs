@@ -7370,3 +7370,18 @@ test('same-zone fast travel does not respawn a consumed encounter under its arri
   await call('move',{direction:'down'});await get();assert.deepEqual([state.world.x,state.world.y],[11,4]);assert.equal(rawWorld().zaWildShinyRolls['zone14:drilbur:529'],true);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
+
+test('restaurant rewards retain progress and identify full inventory or wallet before retry',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'restaurant-reward-capacity-qa',displayName:'식당 보상 검사'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],user=globalThis.__adventureUser.userId;
+  const put=(item,quantity)=>sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?) ON CONFLICT(key) DO UPDATE SET quantity=excluded.quantity').run(JSON.stringify([user,item]),user,item,quantity);
+  for(const c of [{district:'lumiose-rouge-sector2',interior:'leWow',x:11,y:6,flag:'zaLeWowRewardPending',action:'claimLeWowReward',item:'hpup',limit:995,mode:'mission'},{district:'lumiose-rouge-north',interior:'sushi',x:16,y:6,flag:'zaSushiRewardPending',action:'claimSushiReward',item:'qualotberry',limit:990,mode:'mission'},{district:'lumiose-rouge-sector2',interior:'leWow',x:11,y:6,flag:'zaLeWowRewardPending',action:'claimLeWowReward',item:'pearlstring',limit:990,mode:'repeat'},{district:'lumiose-rouge-north',interior:'sushi',x:16,y:6,flag:'zaSushiRewardPending',action:'claimSushiReward',item:'bignugget',limit:998,mode:'repeat'}]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:c.district,interior:c.interior,x:c.x,y:c.y,facing:'up',[c.flag]:c.mode},state.revision+1));put(c.item,c.limit);await get();const rev=state.revision,before=structuredClone(state.inventory),wallet=structuredClone(state.wallet);
+   const error=await call(c.action,{},409);assert.match(error.error,/가방 공간/);await get();assert.equal(state.revision,rev);assert.equal(rawWorld()[c.flag],c.mode);assert.deepEqual(state.inventory,before);assert.deepEqual(state.wallet,wallet);
+   put(c.item,c.limit-1);await get();const accepted=state.revision;await call(c.action);await get();assert.equal(rawWorld()[c.flag],undefined);assert.equal(state.inventory[c.item],999);await call(c.action,{revision:accepted},409);assert.deepEqual(state.world.teamIds,team);
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector2',interior:'leWow',x:11,y:6,facing:'up',zaLeWowRewardPending:'mission'},state.revision+1));put('hpup',0);put('carbos',0);put('za-tm045',0);sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER-1999,user);await get();const rev=state.revision,error=await call('claimLeWowReward',{},409);assert.match(error.error,/코인/);await get();assert.equal(state.revision,rev);assert.equal(rawWorld().zaLeWowRewardPending,'mission');assert.equal(state.wallet.coins,Number.MAX_SAFE_INTEGER-1999);assert.equal(state.inventory.hpup||0,0);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER-2000,user);await get();await call('claimLeWowReward');await get();assert.equal(state.wallet.coins,Number.MAX_SAFE_INTEGER);assert.equal(state.inventory.hpup,5);await call('claimLeWowReward',{},409);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
