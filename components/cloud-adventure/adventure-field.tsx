@@ -1,3 +1,4 @@
+import {mission20VisibleGhosts} from '@/lib/cloud-adventure/adventure-mission20.mjs';
 import {side76Available} from '@/lib/cloud-adventure/adventure-side76.mjs';
 import {advanceSide67VisualTrail} from '@/lib/cloud-adventure/adventure-side67-follow.mjs';
 import {side67Found} from '@/lib/cloud-adventure/adventure-side67.mjs';
@@ -1014,7 +1015,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
       if('abekjgnXi'.includes(c)){ctx.fillStyle=c==='X'||c==='i'?'#8a5e50':'#735982';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(layout?(({a:'탈출',b:'공원',e:'다리',k:'비계',j:'건물',g:'옥상',n:'최종',X:'출구',i:'건물'} as Record<string,string>)[c]||'작전'):c==='X'?'출구':c==='n'?'최종':'작전',px+tile/2,py+20);}return;
     }
     if(w.district==='lumiose-crystal-sewer'&&!w.interior){ctx.fillStyle=c==='#'?'#526a6c':(x+y)%2?'#a1ada5':'#afbab0';ctx.fillRect(px,py,tile,tile);if(c==='#'&&w.zaMission20PillarsV1===true&&[4,7,15,18].includes(x)&&[6,10].includes(y)){ctx.fillStyle='#91a49c';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#b6c2b2';ctx.fillRect(px+6,py+5,tile-12,4);ctx.fillStyle='#405b5a';ctx.fillRect(px+5,py+tile-8,tile-10,3);}if(c==='g'){ctx.fillStyle='#6f8a7b';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#bdc9b6';ctx.fillRect(px+6,py+tile/2,tile-12,2);}if(c==='c'){ctx.fillStyle='#cc76b0';ctx.fillRect(px+8,py+4,tile-16,tile-8);ctx.fillStyle='#f9d3ed';ctx.fillRect(px+12,py+7,5,tile-14);}if(c==='X'){ctx.fillStyle='#8a5e50';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('출구',px+tile/2,py+20);}return;}
-    if(w.district==='lumiose-ghost-house'&&!w.interior){ctx.fillStyle=c==='#'?'#6f666d':(x+y)%2?'#c9b7a8':'#d5c5b4';ctx.fillRect(px,py,tile,tile);if('qabnX'.includes(c)){ctx.fillStyle=c==='X'?'#8a5e50':'#77617f';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(({q:'고오스',a:'팬텀',b:'팬텀',n:'입주자',X:'출구'} as Record<string,string>)[c]||'',px+tile/2,py+20);}return;}
+    if(w.district==='lumiose-ghost-house'&&!w.interior){ctx.fillStyle=c==='#'?'#6f666d':(x+y)%2?'#c9b7a8':'#d5c5b4';ctx.fillRect(px,py,tile,tile);if('nX'.includes(c)){ctx.fillStyle=c==='X'?'#8a5e50':'#77617f';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(({q:'고오스',a:'팬텀',b:'팬텀',n:'입주자',X:'출구'} as Record<string,string>)[c]||'',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-sewer'&&!w.interior){
      // The investigation objects and ice bridge are documented in Mission 19.
      // Wall texture, pipe shapes and exact room geometry are 2D approximations.
@@ -1432,6 +1433,13 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     const px=8*tile,py=5*tile,img=shinyFieldImages[179];
     if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);
     else{ctx.fillStyle='#ebadc6';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,10,8,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#465375';ctx.fillRect(px+20,py+13,6,7);ctx.fillRect(px+8,py+22,3,5);ctx.fillRect(px+18,py+22,3,5);}
+   }
+   // Mission 20 uses the server's marker positions so captures and restored
+   // older saves cannot leave an extra ghost in the room.
+   for(const ghost of mission20VisibleGhosts(w,w.map)){
+    const px=ghost.x*tile,py=ghost.y*tile,img=fieldImages[ghost.species];
+    if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);
+    else{ctx.fillStyle=ghost.species===92?'#8b759f':'#66547e';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,10,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.fillRect(px+9,py+12,4,3);ctx.fillRect(px+19,py+12,4,3);}
    }
    for(const m of visibleCityResearchEncounters(w,w.map)){
     const shiny=w.zaWildShinyRolls?.[`cityResearch:${m.id}:${m.species}`];if(typeof shiny!=='boolean')continue;
