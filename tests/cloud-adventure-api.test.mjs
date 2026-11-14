@@ -8281,6 +8281,23 @@ test('Axi Chespin mission grants one starter and safely defers full-bag candy',a
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('new Chespin gift uses Z-A level moves across reload and duplicate requests',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side07-gift-growth-qa',displayName:'선물 포켓몬 성장 검사'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,leadBefore=rawMon(lead),place={area:3,district:'lumiose-rouge-sector2',interior:null,x:18,y:10,facing:'down',regionId:6,zaMission06Started:true,zaSide07Won:true};
+  seedWorld(storeAdventurePosition({...rawWorld(),...place},state.revision+1));await get();const revision=state.revision;await call('side07Claim');await call('side07Claim',{revision},409);await get();const id=state.world.zaSide07GiftId,gift=rawMon(id);assert.equal(gift.adventureKalosMovesV1,true);assert.equal(gift.level,14);
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');await get();const candyRevision=state.revision;await call('useAdventureRareCandy',{boxId:id});await call('useAdventureRareCandy',{boxId:id,revision:candyRevision},409);await get();assert.equal(rawMon(id).level,15);assert.deepEqual(state.world.adventurePendingMoves.filter(m=>m.boxId===id).map(m=>m.move),['씨뿌리기']);assert.deepEqual(rawMon(id).moves,gift.moves);await call('resolveAdventureMove',{slot:1});await get();assert.ok(rawMon(id).moves.includes('씨뿌리기'));assert.equal(rawMon(id).adventureKalosMovesV1,true);assert.equal(state.inventory.rarecandy||0,0);assert.deepEqual(rawMon(lead),leadBefore);assert.deepEqual(state.world.teamIds,[lead,id]);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('verified Frogadier evolution queues Water Shuriken and preserves saved data',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'kalos-evolution-moves-qa',displayName:'칼로스 진화 기술 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon={...makeMon(657,36),boxId:id,adventureKalosMovesV1:true,moves:['몸통박치기','물대포','전광석화','핥기'],pp:{tackle:3},item:'leftovers',custom:{kept:true}};seedMon(id,mon);await get();const revision=state.revision;
+  await call('evolve',{boxId:id,target:658});await call('evolve',{boxId:id,target:658,revision},409);await get();assert.equal(rawMon(id).id,658);assert.equal(rawMon(id).adventureKalosMovesV1,true);assert.deepEqual(rawMon(id).custom,mon.custom);assert.equal(rawMon(id).item,'leftovers');assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(state.world.adventurePendingMoves.filter(m=>m.boxId===id).map(m=>m.move),['물수리검']);assert.ok(state.box.find(m=>m.boxId===id).learnable.includes('물수리검'));
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Branche Fennekin mission follows the sewer and keeps deferred gifts safe',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side08-fennekin-qa',displayName:'푸호꼬 의뢰 검사'};
  try{

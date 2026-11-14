@@ -130,3 +130,15 @@ test('new Kanto-family captures use verified growth and evolution while old reco
  for(const [id,expected] of [[1,['광합성','망각술','오물웨이브','이판사판태클']],[4,['베어가르기','화염방사','드래곤다이브','플레어드라이브']],[7,['아쿠아링','아쿠아제트','철벽','아쿠아브레이크']]])assert.deepEqual(prepareVerifiedWildMoves(makeMon(id,54)).moves,expected);
  const alpha={...makeMon(1,54),adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
 });
+
+test('Kalos gifts and captures use verified level and evolution moves without rewriting old forms',async()=>{
+ const {markAdventureVerifiedGrowth}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,name] of [[650,15,'씨뿌리기'],[653,17,'환상빔'],[657,23,'제비반환'],[658,28,'야습'],[652,38,'벌크업'],[655,46,'고속이동']]){
+  const old={...makeMon(id,level-1),moves:['몸통박치기','방어','울음소리','빛의장막'],pp:{tackle:3}},fresh=markAdventureVerifiedGrowth(old),result=applyAdventureLevelMoves(fresh,{...fresh,level,moves:[...fresh.moves],pp:{...fresh.pp}},{});assert.equal(fresh.adventureKalosMovesV1,true);assert.equal(old.adventureKalosMovesV1,undefined);assert.ok(result.pending.includes(name));assert.equal(result.mon.pp.tackle,3);assert.ok(adventureLearnableMoves({...fresh,level},{}).includes(name));
+ }
+ for(const [id,name] of [[652,'니들가드'],[655,'매지컬플레임'],[658,'물수리검']]){
+  const mon={...makeMon(id,45),adventureKalosMovesV1:true,moves:['몸통박치기','방어','울음소리','빛의장막'],pp:{tackle:3}},result=applyAdventureEvolutionMoves(mon,{});assert.deepEqual(result.pending,[name]);assert.ok(adventureLearnableMoves(mon,{}).includes(name));assert.equal(result.mon.pp.tackle,3);
+ }
+ const delphox={...makeMon(655,36),adventureKalosMovesV1:true};assert.ok(adventureLearnableMoves(delphox,{}).includes('미래예지'));assert.ok(adventureLearnableMoves(delphox,{}).includes('섀도볼'));
+ const future={...makeMon(650,14),adventureKalosMovesV1:{version:2}},wrong={...makeMon(650,14),formId:999};assert.deepEqual(markAdventureVerifiedGrowth(future),future);assert.deepEqual(adventureLearnableMoves(future,{}),adventureLearnableMoves({...future,adventureKalosMovesV1:undefined},{}));assert.equal(markAdventureVerifiedGrowth(wrong).adventureKalosMovesV1,undefined);
+});
