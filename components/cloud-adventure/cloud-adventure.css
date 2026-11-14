@@ -49,3 +49,5 @@
 .adv-player-health-meter span { display: block; height: 100%; background: #34795b; }
 .adv-player-health[data-low="true"] .adv-player-health-meter span { background: #b22e2e; }
 .adv-player-health .adv-player-health-warning { margin: .25rem 0 0; color: #9c2525; font-weight: 700; }
+
+.cloud-adventure-view .adv-course-clock{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px;padding:8px 14px;border:2px solid #557b72;border-radius:8px;background:#f7f4e4;color:#24483f;font-weight:700;flex-wrap:wrap}.cloud-adventure-view .adv-course-clock output{font-size:1.25rem;font-variant-numeric:tabular-nums}.cloud-adventure-view .adv-course-clock span:last-child:not(:first-child){font-size:.85rem}
