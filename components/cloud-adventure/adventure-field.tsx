@@ -1,4 +1,5 @@
 'use client';
+import {side59Available} from '@/lib/cloud-adventure/adventure-side59.mjs';
 import {benchHangMatches} from '@/lib/cloud-adventure/adventure-bench-hang.mjs';
 import {contactAppearance,CONTACT_COLORS} from '@/lib/cloud-adventure/adventure-contacts.mjs';
 import {side11Available} from '@/lib/cloud-adventure/adventure-side11.mjs';
@@ -1413,6 +1414,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     }
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='?'&&w.district==='lumiose-royale'){const px=x*tile,py=y*tile;ctx!.fillStyle='#b5790d';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx!.fill();ctx!.fillStyle='#ffe47b';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,5,0,Math.PI*2);ctx!.fill();return;}if(c==='!'&&w.district==='lumiose-royale'){const px=x*tile,py=y*tile;ctx!.fillStyle='#c99522';ctx!.fillRect(px+7,py+5,tile-14,tile-10);ctx!.fillStyle='#fff2bf';ctx!.fillRect(px+10,py+8,tile-20,tile-16);ctx!.fillStyle='#c99522';ctx!.fillRect(px+12,py+13,tile-24,3);return;}if(c==='!'){const px=x*tile,py=y*tile;ctx!.fillStyle='#692975';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx!.fill();ctx!.fillStyle='#db90e8';ctx!.fillRect(px+tile/2-5,py+tile/2-5,10,4);ctx!.fillStyle='#f6e6fa';ctx!.fillRect(px+tile/2-2,py+tile/2-2,4,4);}else if(c==='$')trainer(x,y,'#d1a94d','down');}));
+   if(w.district==='lumiose-magenta-sector3-roof'&&!w.interior&&side59Available(w)&&w.map?.[2]?.[18]==='#'){const img=fieldImages[701],px=18*tile,py=2*tile;if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-5,py-7,tile+10,tile+10);else{ctx.fillStyle='#d8a979';ctx.fillRect(px+8,py+8,tile-16,tile-12);}}
    if(w.district==='lumiose-bleu-sector8'&&!w.interior&&side12Available(w)&&w.map?.[14]?.[15]==='#')trainer(15,14,'#b578a6','down');
    if(w.district==='lumiose-rouge-sector1'&&!w.interior&&side11Available(w)&&w.map?.[14]?.[15]==='#')trainer(15,14,'#b786a6','down');
    if(w.district==='lumiose-estival-approach'&&!w.interior&&(w.zaSide36Started||w.zaSide36Won||w.zaMission14Stage||['E','D','C','B','A','S'].includes(w.zaRoyaleRank)||w.zaMission15Stage>=1)&&w.map?.[13]?.[16]==='#')trainer(16,13,'#bd9b73','down');
