@@ -1402,13 +1402,14 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    if(w.district==='lumiose-bleu-sector8'&&!w.interior&&side12Available(w)&&w.map?.[14]?.[15]==='#')trainer(15,14,'#b578a6','down');
    if(w.district==='lumiose-rouge-sector1'&&!w.interior&&side11Available(w)&&w.map?.[14]?.[15]==='#')trainer(15,14,'#b786a6','down');
    if(w.district==='lumiose-jaune-street'&&!w.interior&&w.map?.[14]?.[16]==='#')trainer(16,14,'#658e94','down');
+   if(w.district==='lumiose-vernal'&&!w.interior&&!w.zaVernalEastRoof&&!w.zaVernalSlowbroBank&&(w.zaSide30Started||w.zaSide30Won||w.zaMission14Stage||['E','D','C','B','A','S'].includes(w.zaRoyaleRank)||w.zaMission15Stage>=1)&&w.map?.[0]?.[7]==='#')trainer(7,0,'#a878a6','down');
    if(!w.interior&&side16Available(w)){
     if(w.district==='lumiose-aymlis-park'&&!w.zaMission11ParkLower&&w.map?.[3]?.[16]==='^')trainer(16,3,'#9d9272','down');
     if(w.district==='lumiose-bleu-sector8'&&w.map?.[5]?.[5]==='^')trainer(5,5,'#9d9272','down');
    }
    if(w.district==='lumiose-rouge-sector3'&&!w.interior&&w.map?.[11]?.[14]==='^'&&(w.zaSide26Won===true||Number(w.zaMission10Stage)>=2||w.zaMission10Complete===true||w.zaMission11Complete===true||w.zaMission37Complete===true||['F','E','D','C','B','A','S'].includes(w.zaRoyaleRank)))trainer(14,11,'#a87a68','down');
    if(w.district==='lumiose-vert-sector3'&&!w.interior&&(w.zaSide19Started===true||w.zaLidaStage>=2||w.zaMission08Complete===true||['V','F','E','D','C','B','A','S'].includes(w.zaRoyaleRank))){
-    if(w.map?.[0]?.[5]==='^')trainer(5,0,'#a88099','down');if(w.map?.[0]?.[7]==='^')trainer(7,0,'#d5b381','down');
+    if(w.map?.[0]?.[5]==='^')trainer(5,0,'#a88099','down');if(w.map?.[0]?.[7]==='#')trainer(7,0,'#d5b381','down');
    }
    if(w.district==='lumiose-vert-sector3'&&!w.interior&&w.map?.[2]?.[15]==='^'){
     const px=15*tile,py=2*tile;ctx.fillStyle='#8c5944';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff2d6';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('카페',px+tile/2,py+20);
