@@ -42,3 +42,17 @@ test('all additional mapped screws render and remain independently collectible',
 test('old saves on new street entrances retain their position',()=>{
  for(const p of SCREW_ROOFS){const old={area:3,district:p.district,interior:null,x:p.x,y:p.y,facing:'up',teamIds:['kept'],zaColorfulScrewsFound:['old-future-id']};const restored=restoreAdventurePosition(storeAdventurePosition(old,42),42);assert.deepEqual([restored.district,restored.x,restored.y],[p.district,p.x,p.y]);assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.zaColorfulScrewsFound,['old-future-id']);}
 });
+
+test('additional screws preserve a saved position and old collection records',()=>{
+ const additional=COLORFUL_SCREW_SITES.slice(61);
+ assert.equal(additional.length,9);
+ assert.equal(new Set(COLORFUL_SCREW_SITES.map(p=>`${p.district}:${p.interior}:${p.x}:${p.y}`)).size,COLORFUL_SCREW_SITES.length);
+ for(const p of additional){
+  const s={area:3,...p,facing:'up',teamIds:['kept'],zaRedCanariPlush:true,zaMission15Stage:2,zaColorfulScrewsFound:['future-screw',COLORFUL_SCREW_SITES[0].id]};
+  const restored=restoreAdventurePosition(storeAdventurePosition(s,42),42);
+  assert.deepEqual([restored.district,restored.x,restored.y],[p.district,p.x,p.y],p.id);
+  assert.deepEqual(restored.zaColorfulScrewsFound,s.zaColorfulScrewsFound);
+  assert.equal(fieldDialogue(restored).action,'collectColorfulScrew');
+  assert.equal(colorfulScrewAvailable({...restored,zaColorfulScrewsFound:[...s.zaColorfulScrewsFound,p.id,p.id]}),2);
+ }
+});
