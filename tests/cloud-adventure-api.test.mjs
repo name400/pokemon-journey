@@ -10491,3 +10491,13 @@ test('Bleu Sector 1 links plaza and sector 3 while retaining the Shuppet quest',
   await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector3',9,1]);assert.equal(state.world.zaSide66Stage,1);await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector1',11,15]);assert.equal(state.world.zaSide66Stage,1);assert.equal(state.wallet.coins,coins);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Zone 6 upper bridge and lower canal approaches retain their layers after reload',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone6-saison-bridge-qa',displayName:'구역 6 다리 검사'};
+ try{await get();await call('start',{species:152});const id=state.world.activeId,mon=rawMon(id),coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-saison-canalside',interior:null,x:19,y:1,facing:'up',zaZone6Items:['canal-potion'],zaZone6Spent:{'houndoom-alpha':true}},state.revision+1));await get();
+  await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.zaZone6Layer,state.world.x,state.world.y],['lumiose-zone6','ground',13,15]);assert.deepEqual(state.world.zaZone6Items,['canal-potion']);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-saison-canalside',19,1]);
+  await walkTo({x:17,y:1});await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.zaZone6Layer,state.world.x,state.world.y],['lumiose-zone6','canal',3,15]);await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-saison-canalside',17,1]);assert.equal(state.wallet.coins,coins);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
+ }finally{globalThis.__adventureUser=oldUser;}
+});

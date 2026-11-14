@@ -72,6 +72,15 @@ test('Zone 6 southern canal approach crosses into the lower layer and preserves 
  const second=stepField({...road,x:18},'up');assert.deepEqual([second.district,second.zaZone6Layer,second.x,second.y],['lumiose-zone6','canal',5,15]);assert.ok(fieldPath(zone6Map({...road,...second}),second,{x:11,y:8}).length);const secondSaved=restoreAdventurePosition(storeAdventurePosition({...road,...second,zaZone6Items:['canal-potion']},64),64);assert.deepEqual([secondSaved.x,secondSaved.y,secondSaved.zaZone6Layer,secondSaved.zaZone6Items],[5,15,'canal',['canal-potion']]);const secondBack=stepField(secondSaved,'down');assert.deepEqual([secondBack.district,secondBack.x,secondBack.y],['lumiose-saison-canalside',18,1]);assert.notEqual(zone6Map({...state,zaZone6Layer:'ground'})[16][5],'X');
 });
 
+test('Zone 6 upper bridge connects to the canal promenade without replacing lower approaches',()=>{
+ const road={area:3,district:'lumiose-saison-canalside',interior:null,x:19,y:1,facing:'up',teamIds:['kept'],zaZone6Items:['canal-potion']};
+ const upper=stepField(road,'up');assert.deepEqual([upper.district,upper.zaZone6Layer,upper.x,upper.y],['lumiose-zone6','ground',13,15]);
+ const inZone={...road,...upper};assert.ok(fieldPath(zone6Map(inZone),inZone,{x:11,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(inZone,65),65);assert.deepEqual([saved.district,saved.zaZone6Layer,saved.x,saved.y,saved.teamIds,saved.zaZone6Items],['lumiose-zone6','ground',13,15,['kept'],['canal-potion']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-saison-canalside',19,1]);assert.ok(fieldPath(fieldMap({...saved,...back}),back,{x:19,y:15}).length);
+ const low=stepField({...road,x:17},'up');assert.equal(low.zaZone6Layer,'canal');assert.notEqual(zone6Map({...inZone,zaZone6Layer:'canal'})[16][13],'X');
+});
+
 test('North Boulevard and Zone 6 connect both ways without invalidating old saves',()=>{
  const road={area:3,district:'lumiose-north-boulevard',interior:null,x:18,y:1,facing:'up',teamIds:['kept'],zaRoyaleRank:'F'};
  const toZone=stepField(road,'up');assert.deepEqual([toZone.district,toZone.zaZone6Layer,toZone.x,toZone.y],['lumiose-zone6','ground',14,1]);
