@@ -10103,3 +10103,14 @@ test('Side Mission 63 defers only undelivered rewards and guards old or unknown 
   seedWorld(place({zaSide63Stage:2,zaSide63RewardPendingV1:{carbos:1,future:true}}));await get();await call('side63Claim',{},409);assert.deepEqual(rawWorld().zaSide63RewardPendingV1,{carbos:1,future:true});
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Lure Ball uses preserved encounter water in a legacy battle snapshot',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'lure-legacy-water-qa',displayName:'구형 물가 포획'};
+ try{
+  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:7,y:11,facing:'down',zaRoyaleRank:'A',adventureBalls:{lureball:1},combat:null,encounter:null},state.revision+1));await get();await call('zone12Wild-bergmite');await get();
+  const legacy=rawWorld();assert.equal(legacy.encounter.adventureInWater,true);delete legacy.combat.teams[1][0].adventureInWater;seedWorld(legacy);await get();
+  const foe=rawWorld().combat.teams[1][0],{adventureCaptureAttempt}=await import('../lib/cloud-adventure/adventure-balls.mjs');const roll=Array.from({length:999},(_,i)=>(i+1)/1000).find(v=>adventureCaptureAttempt(foe,'lureball',{rareMultiplier:3.5,royaleRank:'A'},()=>v).caught&&!adventureCaptureAttempt(foe,'lureball',{rareMultiplier:1,royaleRank:'A'},()=>v).caught);assert.ok(roll);globalThis.__adventureRandom=()=>roll;
+  const rev=state.revision;await call('ball',{ball:'lureball'});await call('ball',{ball:'lureball',revision:rev},409);await get();assert.equal(state.world.zaZone12Spent.bergmite,true);assert.equal(state.world.adventureBalls.lureball,0);assert.equal(state.box.filter(m=>m.speciesId===712).length,1);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});

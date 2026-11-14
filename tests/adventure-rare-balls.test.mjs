@@ -16,3 +16,11 @@ test('rare ball conditions and thresholds follow their intended context',()=>{
  const caught=adventureAfterCapture(fast,'friendball',afterCapture);assert.equal(caught.friendship,150);assert.equal(caught.originBall,'friendball');
  const a=adventureCaptureAttempt(fast,'fastball',{rareMultiplier:4},()=>0);assert.equal(a.multiplier,4);assert.equal(adventureCaptureRate(fast),190);
 });
+
+
+test('Lure Ball uses only explicitly saved water habitat from the current encounter',()=>{
+ const mon=makeMon(129,20),ctx=rareBallContext(mon,null,{adventureInWater:true});
+ assert.equal(rareBallModifier('lureball',mon,ctx),3.5);
+ for(const encounter of [undefined,{}, {adventureInWater:false},{adventureInWater:'future'}])assert.equal(rareBallModifier('lureball',mon,rareBallContext(mon,null,encounter)),1);
+ assert.equal(rareBallModifier('lureball',{...mon,adventureInWater:true},rareBallContext({...mon,adventureInWater:true},null)),3.5);
+});
