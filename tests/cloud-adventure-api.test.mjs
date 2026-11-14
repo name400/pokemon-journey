@@ -10242,3 +10242,16 @@ test('zone 20 older shiny encounter does not invent a size',async()=>{
   await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaWildSizeRollsV1?.entries?.[key],undefined);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('rogue mega waterfront and rooftop battles inherit rain and preserve battle snapshots',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'rogue-mega-weather-qa',displayName:'폭주 배틀 날씨 검사'};globalThis.__adventureTime={period:'day',hour:16};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  const cases=[{action:'battleMission11Slowbro',district:'lumiose-vernal',x:17,y:11,facing:'up'},{action:'battleMission12Camerupt',district:'lumiose-mission12-jaune3',x:11,y:6,facing:'up',zaMission12Layer:'roof',zaMission12WorkerWon:true},{action:'battleMission13Victreebel',district:'lumiose-north-boulevard',x:14,y:8,facing:'right'}];
+  for(const c of cases){
+   globalThis.__adventureTime={period:'day',hour:16};seedWorld(storeAdventurePosition({...rawWorld(),...c,area:3,interior:null,zaMission10Stage:10,zaMission10Starter:'grass',combat:null,encounter:null},state.revision+1));await get();assert.equal(state.world.weather,'rain');const revision=state.revision;await call(c.action);assert.equal(state.battle.weather,'raindance');await call(c.action,{revision},409);
+   globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.battle.weather,'raindance');await call('forfeit');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.equal(rawMon(id).speciesId,1);
+  }
+  const c=cases[0];seedWorld(storeAdventurePosition({...rawWorld(),...c,area:3,interior:null,zaMission10Stage:10,zaMission10Starter:'grass',combat:null,encounter:null},state.revision+1));await get();assert.notEqual(state.world.weather,'rain');await call(c.action);assert.equal(state.battle.weather,'');
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});
