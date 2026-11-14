@@ -10363,6 +10363,15 @@ test('new zone 20 wild Tepig uses verified level moves through battle and captur
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('visible Froakie keeps Z-A moves across battle, flee, direct capture and reload',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'visible-froakie-moves-qa',displayName:'개구마르 야생 기술 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,team=[...state.world.teamIds],key='zone16:froakie:656';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone16',interior:null,x:11,y:9,facing:'up',zaRoyaleRank:'A',zaMission05Complete:true,zaWildShinyRolls:{[key]:true},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();
+  await call('zone16Wild-froakie');const expected=['전광석화','핥기','거품광선','연막'];assert.deepEqual(rawWorld().encounter.moves,expected);assert.equal(rawWorld().encounter.shiny,true);await get();assert.deepEqual(rawWorld().encounter.moves,expected);await call('flee');await get();globalThis.__adventureRandom=()=>0;const revision=state.revision;await call('throwZoneVisible',{ball:'masterball'});await call('throwZoneVisible',{ball:'masterball',revision},409);await get();const caught=state.box.find(m=>m.speciesId===656);assert.ok(caught);assert.deepEqual(rawMon(caught.boxId).moves,expected);assert.equal(rawMon(caught.boxId).shiny,true);assert.equal(rawMon(caught.boxId).adventureKalosMovesV1,true);assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.equal(rawMon(lead).speciesId,152);
+  globalThis.__adventureUser={userId:'visible-froakie-alpha-moves-qa',displayName:'개구마르 우두머리 기술 검사'};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone16',interior:null,x:11,y:9,facing:'up',zaRoyaleRank:'A',zaMission05Complete:true,zaWildShinyRolls:{[key]:false},zaWildVisibleAlphaLevels:{[key]:35},combat:null,encounter:null},state.revision+1));await get();await call('zone16Wild-froakie');assert.equal(rawWorld().encounter.adventureAlpha,true);assert.equal(rawWorld().encounter.adventureAlphaMove,'얼어붙은바람');assert.ok(rawWorld().encounter.moves.includes('얼어붙은바람'));
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('roaming alpha pursues one tile while idle and attacks after approaching',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now,oldTime=globalThis.__adventureTime;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={hour:12,period:'day'};
  try{

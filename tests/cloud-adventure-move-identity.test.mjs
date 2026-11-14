@@ -142,3 +142,11 @@ test('Kalos gifts and captures use verified level and evolution moves without re
  const delphox={...makeMon(655,36),adventureKalosMovesV1:true};assert.ok(adventureLearnableMoves(delphox,{}).includes('미래예지'));assert.ok(adventureLearnableMoves(delphox,{}).includes('섀도볼'));
  const future={...makeMon(650,14),adventureKalosMovesV1:{version:2}},wrong={...makeMon(650,14),formId:999};assert.deepEqual(markAdventureVerifiedGrowth(future),future);assert.deepEqual(adventureLearnableMoves(future,{}),adventureLearnableMoves({...future,adventureKalosMovesV1:undefined},{}));assert.equal(markAdventureVerifiedGrowth(wrong).adventureKalosMovesV1,undefined);
 });
+
+test('new ordinary Kalos wild encounters use verified moves without altering alphas or forms',async()=>{
+ const {prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[650,22,['구르기','물기','씨뿌리기','바늘미사일']],[653,22,['불꽃세례','애교부리기','환상빔','회오리불꽃']],[656,23,['전광석화','핥기','거품광선','연막']]]){
+  const mon={...makeMon(id,level),pp:{tackle:2}},old=structuredClone(mon),result=prepareVerifiedWildMoves(mon);assert.deepEqual(result.moves,expected);assert.deepEqual(result.pp,{});assert.deepEqual(mon,old);
+ }
+ const alpha={...makeMon(656,23),adventureAlpha:true,moves:['얼어붙은바람'],pp:{icywind:2}},form={...makeMon(656,23),formId:999};assert.equal(prepareVerifiedWildMoves(alpha),alpha);assert.equal(prepareVerifiedWildMoves(form),form);
+});
