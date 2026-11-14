@@ -23,7 +23,7 @@ import {ADVENTURE_BALLS} from '../lib/cloud-adventure/adventure-balls.mjs';
 import {RARE_ADVENTURE_BALLS} from '../lib/cloud-adventure/adventure-rare-balls.mjs';
 import lumioseDex from '../data/lumiose-dex.json' with {type:'json'};
 import {RESEARCH_TYPES,researchSummary,researchItemReward} from '../lib/cloud-adventure/adventure-research.mjs';
-import {pendingAdventureQuests,trackedAdventureObjective} from '../lib/cloud-adventure/adventure-pending-quests.mjs';
+import {pendingAdventureQuests,trackedAdventureObjective,trackedAdventureLocalTarget} from '../lib/cloud-adventure/adventure-pending-quests.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url)),sql=new DatabaseSync(':memory:');
 for(const name of (await fs.readdir(new URL('../drizzle/',import.meta.url))).filter(n=>/^\d.*\.sql$/.test(n)).sort())sql.exec(await fs.readFile(new URL('../drizzle/'+name,import.meta.url),'utf8'));
@@ -3007,6 +3007,15 @@ test('Side Mission 117 saves Josée training, protects alpha duo and pays once',
  }finally{globalThis.__adventureUser=priorUser;}
 });
 
+test('Mareep mission tracking follows observation and deferred reward across reload',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mareep-quest-track-qa',displayName:'메리프 의뢰 추적'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1-high-roof',interior:null,x:8,y:6,facing:'up',zaSide17Stage:1},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone1Mission17Observe');await call('setAdventureTrackedQuest',{questId:'17'});await get();assert.deepEqual(trackedAdventureLocalTarget(state.world),{x:8,y:5});await call('zone1Mission17Observe');await get();assert.equal(state.world.zaSide17RewardPending,true);assert.match(trackedAdventureObjective(state.world),/Duve/);assert.equal(trackedAdventureLocalTarget(state.world),null);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector9',interior:null,x:14,y:13,facing:'down'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone1Mission17Reward');assert.deepEqual(trackedAdventureLocalTarget(state.world),{x:14,y:14});const rev=state.revision;await call('zone1Mission17Reward');await get();assert.equal(state.inventory.prettywing,3);assert.equal(state.wallet.coins,coins+500);assert.equal(trackedAdventureObjective(state.world),state.world.objective);assert.deepEqual(state.world.teamIds,team);await call('zone1Mission17Reward',{},409);await call('zone1Mission17Reward',{revision:rev},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Side Mission 117 resumes saved stages without the original mission unlock flag',async()=>{
  const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side117-legacy-resume-qa',displayName:'도장 진행 복원'};
  try{
@@ -3024,12 +3033,12 @@ test('Side Mission 118 follows Gengar search, preserves stages and pays usable c
   await get();await call('start',{species:1});const id=state.world.activeId,strong={...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);const team=[id];for(let i=0;i<5;i++){const k=`side118-team-${i}`;team.push(k);sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(k,globalThis.__adventureUser.userId,150,JSON.stringify(strong),'qa',i);}
   const place=(district,interior,x,y,extra={})=>storeAdventurePosition({...rawWorld(),area:3,district,interior,x,y,facing:'up',teamIds:team,activeId:id,...extra},state.revision+1);
   seedWorld(place('lumiose-bleu-sector9',null,11,6,{zaSide117Complete:false,zaMission20Stage:15}));await get();await call('side118Start',{},409);await call('mission20EnterHouse');await walkTo('n');await call('side118Start',{},409);
-  seedWorld(place('lumiose-ghost-house',null,17,9,{zaSide117Complete:true}));await get();assert.equal(state.world.interaction.action,'side118Start');await call('side118Start');await get();assert.equal(state.world.zaSide118Stage,1);
+  seedWorld(place('lumiose-ghost-house',null,17,9,{zaSide117Complete:true}));await get();assert.equal(state.world.interaction.action,'side118Start');await call('side118Start');await get();assert.equal(state.world.zaSide118Stage,1);await call('setAdventureTrackedQuest',{questId:'118'});await get();assert.equal(state.world.zaTrackedQuestId,'118');
   seedWorld(place('lumiose-jaune-sector2','justiceDojo',7,5));await get();assert.equal(state.world.interaction.action,'side118Gwynn');await call('side118Gwynn');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[354,69],[711,69],[94,69],[478,69],[609,70]]);assert.equal(state.battle.teams[1][4].item,'chandelurite');await call('forfeit');assert.equal(state.world.zaSide118Stage,1);
   seedMon(id,strong);seedWorld(place('lumiose-jaune-sector2','justiceDojo',7,5));await get();const beforeCoins=state.wallet.coins;await call('side118Gwynn');await battle();assert.equal(state.world.zaSide118Stage,2);assert.equal(state.wallet.coins,beforeCoins+4480);
   seedWorld(place('lumiose-centrico-route',null,14,5,{zaMission38Complete:true}));await get();await call('face',{direction:'right'});assert.ok(state.world.interaction.actions.some(a=>a.action==='side118Hotel'));await call('side118Hotel');await get();assert.equal(state.world.zaSide118Stage,3);
-  seedWorld(place('lumiose-vert-sector9',null,12,9));await get();await call('face',{direction:'down'});assert.equal(state.world.interaction.action,'side118Waterway');await call('side118Waterway');await get();assert.equal(state.world.zaSide118Stage,4);
-  seedWorld(place('lumiose-galerie-lune',null,11,8));await get();assert.equal(state.world.interaction.action,'side118Gallery');await call('side118Gallery');await get();assert.equal(state.world.zaSide118Stage,5);assert.equal(state.world.interaction.action,'side118Reward');
+  seedWorld(place('lumiose-vert-sector9',null,12,9));await get();await call('face',{direction:'down'});assert.equal(state.world.interaction.action,'side118Waterway');assert.deepEqual(trackedAdventureLocalTarget(state.world),{x:12,y:10});await call('side118Waterway');await get();assert.equal(state.world.zaSide118Stage,4);
+  seedWorld(place('lumiose-galerie-lune',null,11,8));await get();assert.equal(state.world.interaction.action,'side118Gallery');assert.deepEqual(trackedAdventureLocalTarget(state.world),{x:11,y:7});await call('side118Gallery');await get();assert.equal(state.world.zaSide118Stage,5);assert.equal(state.world.interaction.action,'side118Reward');
   const key=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-l']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-exp-candy-l');await get();const rewardRev=state.revision;await call('side118Reward');await call('side118Reward',{revision:rewardRev},409);await get();assert.equal(state.world.zaSide118Stage,6);assert.equal(state.inventory['za-exp-candy-l'],999);assert.equal(state.inventory['za-exp-candy-xl'],1);assert.equal(state.wallet.coins,beforeCoins+8480);assert.equal(state.world.zaSide118Complete,true);assert.deepEqual(state.world.zaSide118RewardPending,{large:2,xl:0});await call('claimSide118Rewards',{},409);
   sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();const claimRev=state.revision;await call('claimSide118Rewards');await call('claimSide118Rewards',{revision:claimRev},409);await get();assert.equal(state.inventory['za-exp-candy-l'],999);assert.deepEqual(state.world.zaSide118RewardPending,{large:1,xl:0});
   sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();await call('claimSide118Rewards');await get();assert.equal(state.inventory['za-exp-candy-l'],999);assert.deepEqual(state.world.zaSide118RewardPending,{large:0,xl:0});assert.equal(state.wallet.coins,beforeCoins+8480);await call('claimSide118Rewards',{},409);await call('side118Reward',{},409);

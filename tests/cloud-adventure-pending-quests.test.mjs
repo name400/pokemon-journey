@@ -16,6 +16,26 @@ test('late side quests show their saved stage and stop tracking after completion
  assert.deepEqual(pendingAdventureQuests({zaSide117Stage:0,zaSide118Stage:6}),[]);
 });
 
+test('Mareep, dojo and Gengar objectives point to the current playable interaction',()=>{
+ const cases=[
+  [{district:'lumiose-zone1-high-roof',zaTrackedQuestId:'17',zaSide17Stage:1},{x:8,y:5}],
+  [{district:'lumiose-vert-sector9',zaTrackedQuestId:'17',zaSide17Stage:2,zaSide17RewardPending:true},{x:14,y:14}],
+  [{district:'lumiose-jaune-sector2',zaTrackedQuestId:'117',zaSide117Stage:1},{x:5,y:10}],
+  [{district:'lumiose-jaune-sector2',interior:'justiceDojo',zaTrackedQuestId:'117',zaSide117Stage:2},{x:7,y:4}],
+  [{district:'lumiose-jaune-sector2',interior:'justiceDojo',zaTrackedQuestId:'118',zaSide118Stage:1},{x:7,y:4}],
+  [{district:'lumiose-centrico-route',zaTrackedQuestId:'118',zaSide118Stage:2},{x:15,y:5}],
+  [{district:'lumiose-vert-sector9',zaTrackedQuestId:'118',zaSide118Stage:3},{x:12,y:10}],
+  [{district:'lumiose-galerie-lune',zaTrackedQuestId:'118',zaSide118Stage:4},{x:11,y:7}],
+  [{district:'lumiose-galerie-lune',zaTrackedQuestId:'118',zaSide118Stage:5},{x:11,y:7}],
+ ];
+ for(const [input,expected] of cases){const s={area:3,interior:null,...input},copy=structuredClone(s);s.map=fieldMap(s);assert.deepEqual(trackedAdventureLocalTarget(s),expected);assert.equal(trackedAdventureLocalTarget({...s,map:[]}),null);delete s.map;assert.deepEqual(s,copy);}
+ const dojo={area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',zaTrackedQuestId:'117',zaSide117Stage:1,zaSide118Stage:1};assert.equal(trackedAdventureLocalTarget({...dojo,map:fieldMap(dojo)}),null);
+ assert.equal(trackedAdventureLocalTarget({...dojo,zaSide118Stage:0,zaMission19Stage:1,zaRoyaleEPoints:35000,map:fieldMap(dojo)}),null);
+ assert.deepEqual(trackedAdventureLocalTarget({...dojo,zaSide118Stage:0,zaMission19Stage:1,zaRoyaleEPoints:34999,map:fieldMap(dojo)}),{x:7,y:4});
+ assert.equal(trackedAdventureLocalTarget({...dojo,zaSide118Stage:0,zaSide117Complete:true,map:fieldMap(dojo)}),null);
+ assert.equal(trackedAdventureLocalTarget({zaSide17Stage:2,zaTrackedQuestId:'17',district:'lumiose-zone1-high-roof',map:fieldMap({area:3,district:'lumiose-zone1-high-roof'})}),null);
+});
+
 test('tracked local markers follow real interaction tiles and disappear for other floors or completed quests',()=>{
  const cases=[
   [{district:'lumiose-south-boulevard',zaTrackedQuestId:'14',zaSide14Started:true}, {x:17,y:5},'zaSide14Complete'],
