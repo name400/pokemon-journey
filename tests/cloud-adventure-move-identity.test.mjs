@@ -115,6 +115,18 @@ test('new ordinary wild starter-family base stages use verified latest level mov
  const evolved=makeMon(153,55);assert.equal(prepareVerifiedWildMoves(evolved),evolved);const unknown={...makeMon(152,55),formId:999};assert.equal(prepareVerifiedWildMoves(unknown),unknown);
 });
 
+test('new Pichu family captures use Z-A levels while legacy and unknown forms stay unchanged',async()=>{
+ const {markAdventureVerifiedGrowth}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const id of [172,25,26]){
+  const old={...makeMon(id,11),moves:['울음소리','전광석화','꼬리흔들기','전기쇼크'],pp:{thundershock:3}},fresh=markAdventureVerifiedGrowth(old);
+  const result=applyAdventureLevelMoves(fresh,{...fresh,level:12,moves:[...fresh.moves],pp:{...fresh.pp}},{});assert.deepEqual(result.pending,['볼부비부비']);assert.equal(result.mon.pp.thundershock,3);assert.equal(old.adventurePichuMovesV1,undefined);
+  assert.ok(adventureLearnableMoves({...fresh,level:12},{}).includes('볼부비부비'));
+ }
+ const raichu={...makeMon(26,25),adventurePichuMovesV1:true,moves:['울음소리','전광석화','꼬리흔들기','전기쇼크']};assert.deepEqual(applyAdventureEvolutionMoves(raichu,{}).pending,['번개펀치']);
+ const future={...makeMon(172,11),adventurePichuMovesV1:{version:2}};assert.deepEqual(markAdventureVerifiedGrowth(future),future);
+ const alola=makeMon(10100,25);assert.equal(markAdventureVerifiedGrowth(alola).adventurePichuMovesV1,undefined);
+});
+
 test('new Kanto-family captures use verified growth and evolution while old records remain unchanged',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,level,expected] of [[1,15,['독가루','수면가루']],[4,20,['회오리불꽃']],[7,20,['얼어붙은바람']]]){

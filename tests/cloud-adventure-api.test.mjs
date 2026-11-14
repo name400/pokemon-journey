@@ -10426,6 +10426,17 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('caught Pichu uses Z-A level growth after reload without changing its partner',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-pichu-growth-qa',displayName:'피츄 성장 검사'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,leadBefore=rawMon(lead),foe={...makeMon(172,11),boxId:'wild',hp:0,moves:['울음소리','전광석화','꼬리흔들기','전기쇼크'],pp:{thundershock:3},shiny:true,custom:{kept:true}};
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,adventureBalls:{masterball:1},combat:null,encounter:null,adventureCatchWindow:{foe,moveCount:0,revision:state.revision+1}},state.revision+1));await get();await call('catchWindowBall',{ball:'masterball'});await get();
+  const id=state.world.teamIds.find(x=>x!==lead),caught=rawMon(id);assert.equal(caught.adventurePichuMovesV1,true);assert.equal(caught.shiny,true);assert.deepEqual(caught.custom,foe.custom);
+  const rev=state.revision;await call('useAdventureRareCandy',{boxId:id});await call('useAdventureRareCandy',{boxId:id,revision:rev},409);await get();assert.equal(rawMon(id).level,12);assert.deepEqual(state.world.adventurePendingMoves.filter(m=>m.boxId===id).map(m=>m.move),['볼부비부비']);assert.equal(rawMon(lead).id,leadBefore.id);assert.deepEqual(rawMon(lead).ivs,leadBefore.ivs);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('caught Bulbasaur learns both Z-A level 15 moves without losing capture or shared data',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-kanto-growth-qa',displayName:'관동 계열 성장 검사'};globalThis.__adventureRandom=()=>0;
  try{
