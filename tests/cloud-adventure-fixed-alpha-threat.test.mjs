@@ -136,3 +136,12 @@ test('roaming random alphas follow saved positions and preserve their identity',
  const fish='field2:magikarp:129';assert.equal(randomAlphaPlayerThreat({...lake,zaWildVisibleAlphaLevels:{[fish]:20},zaWildShinyRolls:{[fish]:true}},'day'),null);
  const day='field3:flabebe:669',flower={...s,zaWildVisibleAlphaLevels:{[day]:20},zaWildShinyRolls:{[day]:true}};assert.equal(randomAlphaPlayerThreat(flower,'night'),null);assert.equal(randomAlphaPlayerThreat(flower,'day')?.id,'flabebe');
 });
+
+test('zone 19 ordinary random alpha Furfrou is distinct from the sleeping fixed alpha',async()=>{
+ const {randomAlphaPlayerThreat,randomAlphaAlertMatches}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const key='zone19:furfrou:676',s={area:3,district:'lumiose-zone19',x:4,y:8,zaZone19Period:'day',zaWildVisibleAlphaLevels:{[key]:60},zaWildShinyRolls:{[key]:true}};
+ const p=randomAlphaPlayerThreat(s);assert.equal(p?.id,'furfrou');assert.equal(p?.alert.cycle,'shiny');assert.equal(randomAlphaAlertMatches({...s,zaRandomAlphaAlertV1:p.alert},p),true);
+ assert.equal(randomAlphaPlayerThreat({...s,zaZone19Spent:{furfrou:true}}),null);
+ assert.equal(randomAlphaPlayerThreat({...s,zaWildVisibleAlphaLevels:{version:2}}),null);
+ assert.notEqual(fixedAlphaPlayerThreat({...s,x:10,y:8})?.id,'furfrou-alpha');
+});

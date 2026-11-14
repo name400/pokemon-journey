@@ -9177,3 +9177,13 @@ test('roaming random alpha threatens the player across reconnects',async()=>{
   clock+=3000;await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('zone 19 ordinary random alpha Furfrou keeps its identity and does not wake the fixed alpha',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone19-random-furfrou-qa',displayName:'일반 트리미앙 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='zone19:furfrou:676';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:3,y:8,zaRoyaleRank:'B',zaMission05Complete:true,zaZone19Spent:{},zaZone19Period:'day',zaWildVisibleAlphaLevels:{[key]:60},zaWildShinyRolls:{[key]:true},zaRandomAlphaAlertV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null},state.revision+1));
+  await get();const rev=state.revision;await call('move',{direction:'right'});await call('move',{direction:'right',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaRandomAlphaAlertV1.id,'furfrou');assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaFixedAlphaAlertV1,undefined);
+  clock+=3000;await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});
