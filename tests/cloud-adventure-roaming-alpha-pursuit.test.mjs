@@ -11,3 +11,10 @@ test('pursuit preserves future position records and ignores unsupported targets'
  const threat={id:'patrat',species:504,x:11,y:8},s={area:3,district:'lumiose-zone2',x:11,y:10,zaZone2FieldPositions:{patrat:{x:11,y:8,future:true}}},before=structuredClone(s);
  assert.equal(stepRoamingAlphaPursuit(s,threat,'day'),false);assert.deepEqual(s,before);assert.equal(stepRoamingAlphaPursuit(s,{...threat,id:'binacle',species:688},'day'),null);assert.equal(stepRoamingAlphaPursuit(s,threat,'unknown'),null);
 });
+
+test('zone 3 ground alpha pursues without moving ordinary or unknown records',()=>{
+ const key='field3:pikachu:25',threat={id:'pikachu',species:25,x:15,y:10},base={area:3,district:'lumiose-zone3',x:13,y:10,zaMission05Complete:true,zaWildVisibleAlphaLevels:{[key]:20},zaWildShinyRolls:{[key]:true}};
+ const s=structuredClone(base);assert.equal(stepRoamingAlphaPursuit(s,threat,'day'),true);assert.deepEqual(s.zaZone3FieldPositions.pikachu,{x:14,y:10});assert.deepEqual(zone3FieldMonsters(s,'day').find(p=>p.id==='pikachu').x,14);assert.equal(s.zaWildShinyRolls[key],true);assert.equal(zone3FieldMonsters({...s,zaWildVisibleAlphaLevels:{}},'day').find(p=>p.id==='pikachu').x,15);
+ const future={...base,zaZone3FieldPositions:{pikachu:{x:15,y:10,future:true}}},before=structuredClone(future);assert.equal(stepRoamingAlphaPursuit(future,threat,'day'),false);assert.deepEqual(future,before);assert.equal(stepRoamingAlphaPursuit({...base,zaWildVisibleAlphaLevels:{}},threat,'day'),null);
+ for(const p of [{id:'pancham',species:674,x:7,y:6,px:9,py:6},{id:'skiddo',species:672,x:8,y:10,px:10,py:10}]){const state={area:3,district:'lumiose-zone3',x:p.px,y:p.py,zaWildVisibleAlphaLevels:{[`field3:${p.id}:${p.species}`]:20}};assert.equal(stepRoamingAlphaPursuit(state,p,'day'),true);const moved=zone3FieldMonsters(state,'day').find(v=>v.id===p.id);assert.equal(Math.abs(moved.x-p.px)+Math.abs(moved.y-p.py),1);}
+});
