@@ -16,3 +16,10 @@ test('regional forms exclude ordinary evolution branches without changing base f
  const regular=adventureEvolutionOptions(makeMon(37,60),{},[],bag);assert.ok(regular.some(o=>o.id===38&&o.ready));assert.ok(!regular.some(o=>o.id===10104));
  const other=adventureEvolutionOptions(makeMon(133,40),{},[],{firestone:1,icestone:1});assert.ok(other.some(o=>o.id===136&&o.ready));assert.ok(other.some(o=>o.id===471&&o.ready));
 });
+
+test('conflicting regional identity does not offer an evolution',()=>{
+ const original=makeMon(10164,40),bag={galaricacuff:1,galaricawreath:1};
+ for(const patch of [{speciesId:25},{formId:10205},{id:10165},{id:79,speciesId:25}]){
+  const mon={...original,...patch},before=structuredClone(mon);assert.deepEqual(adventureEvolutionOptions(mon,{},[],bag),[]);assert.deepEqual(mon,before);
+ }
+});

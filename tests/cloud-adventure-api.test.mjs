@@ -10267,3 +10267,15 @@ test('late rogue mega rooftop battles inherit rain and preserve active snapshots
   seedWorld(storeAdventurePosition({...rawWorld(),...cases[0],area:3,interior:null,zaMission10Starter:'grass',combat:null,encounter:null},state.revision+1));await get();assert.notEqual(state.world.weather,'rain');await call(cases[0].action);assert.equal(state.battle.weather,'');
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
+
+test('regional evolution refuses conflicting shared identity without consuming stones',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'regional-evolution-conflict-qa',displayName:'지역 폼 식별 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],original={...makeMon(10164,40),boxId:id,shiny:true,item:'leftovers',custom:{preserved:true}};
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'galaricacuff']),globalThis.__adventureUser.userId,'galaricacuff');
+  for(const patch of [{speciesId:25},{formId:10205}]){
+   const saved={...original,...patch};seedMon(id,saved);await get();const revision=state.revision;assert.deepEqual(state.box.find(mon=>mon.boxId===id).evolutions,[]);await call('evolve',{target:10165},409);await get();assert.deepEqual(rawMon(id),saved);assert.equal(state.inventory.galaricacuff,1);assert.equal(state.revision,revision);assert.deepEqual(state.world.teamIds,team);
+  }
+  const legacy={...original};delete legacy.speciesId;delete legacy.formId;seedMon(id,legacy);await get();const revision=state.revision;await call('evolve',{target:10165});await call('evolve',{target:10165,revision},409);await get();const evolved=rawMon(id);assert.equal(evolved.id,10165);assert.equal(evolved.shiny,true);assert.equal(evolved.item,'leftovers');assert.deepEqual(evolved.custom,original.custom);assert.equal(state.inventory.galaricacuff||0,0);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previous;}
+});
