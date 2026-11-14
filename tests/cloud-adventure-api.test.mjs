@@ -10255,3 +10255,15 @@ test('rogue mega waterfront and rooftop battles inherit rain and preserve battle
   const c=cases[0];seedWorld(storeAdventurePosition({...rawWorld(),...c,area:3,interior:null,zaMission10Stage:10,zaMission10Starter:'grass',combat:null,encounter:null},state.revision+1));await get();assert.notEqual(state.world.weather,'rain');await call(c.action);assert.equal(state.battle.weather,'');
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
+
+test('late rogue mega rooftop battles inherit rain and preserve active snapshots',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'late-rogue-weather-qa',displayName:'후반 폭주 날씨 검사'};globalThis.__adventureTime={period:'day',hour:16};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  const cases=[{action:'mission26CaseBattle',district:'lumiose-magenta-sector4-roof',x:19,y:5,facing:'up',zaMission26Stage:3},{action:'mission31CaseBattle',district:'lumiose-rooftop',x:17,y:8,facing:'up',zaMission31Stage:3}];
+  for(const c of cases){
+   globalThis.__adventureTime={period:'day',hour:16};seedWorld(storeAdventurePosition({...rawWorld(),...c,area:3,interior:null,zaMission10Starter:'grass',combat:null,encounter:null},state.revision+1));await get();assert.equal(state.world.weather,'rain');const revision=state.revision;await call(c.action);assert.equal(state.battle.weather,'raindance');await call(c.action,{revision},409);globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.battle.weather,'raindance');await call('forfeit');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.equal(rawMon(id).speciesId,1);
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),...cases[0],area:3,interior:null,zaMission10Starter:'grass',combat:null,encounter:null},state.revision+1));await get();assert.notEqual(state.world.weather,'rain');await call(cases[0].action);assert.equal(state.battle.weather,'');
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});

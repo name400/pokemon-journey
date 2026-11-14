@@ -35,3 +35,9 @@ test('confirmed rogue mega outdoor sites inherit weather without affecting indoo
   const s={area:3,district,weather:'rain'};assert.equal(adventureBattleOptions(s).weather,'raindance',district);assert.deepEqual(adventureBattleOptions({...s,interior:'building'}),{});assert.deepEqual(adventureBattleOptions({...s,weather:''}),{});assert.deepEqual(adventureBattleOptions(s,{weather:'sunnyday'}),{weather:'sunnyday'});
  }
 });
+
+test('late rogue mega rooftops and alley inherit rain only outdoors',()=>{
+ for(const district of ['lumiose-rooftop','lumiose-mission27-roof','lumiose-magenta-sector4','lumiose-magenta-sector4-roof','lumiose-mission32-courtyard','lumiose-mission33-alley','lumiose-mission34-roof']){
+  const s={area:3,district,weather:'rain'};assert.equal(adventureBattleOptions(s).weather,'raindance',district);assert.deepEqual(adventureBattleOptions({...s,interior:'building'}),{});assert.deepEqual(adventureBattleOptions({...s,weather:''}),{});assert.deepEqual(adventureBattleOptions(s,{weather:'sunnyday'}),{weather:'sunnyday'});
+ }
+});
