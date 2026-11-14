@@ -1,3 +1,4 @@
+'use client';
 import {side11Available} from '@/lib/cloud-adventure/adventure-side11.mjs';
 import {side12Available} from '@/lib/cloud-adventure/adventure-side12.mjs';
 import {side05Available} from '@/lib/cloud-adventure/adventure-side05.mjs';
@@ -14,7 +15,6 @@ import {isScrewGlideRoof,screwGlideAt} from '@/lib/cloud-adventure/adventure-scr
 import {royaleFieldEntry} from '@/lib/cloud-adventure/adventure-royale-zones.mjs';
 import {LYSANDRE_WILD,lysandreWild} from '@/lib/cloud-adventure/adventure-lysandre-maze.mjs';
 import {museumSide21Spot,museumSide21Requester} from '@/lib/cloud-adventure/adventure-museum.mjs';
-'use client';
 import {ZONE20_VISIBLE,zone20Visible} from '@/lib/cloud-adventure/adventure-mission42.mjs';
 import {ZONE19_VISIBLE,zone19Visible,ZONE19_TRELLIS} from '@/lib/cloud-adventure/adventure-zone19.mjs';
 import {ZONE18_VISIBLE,zone18Visible} from '@/lib/cloud-adventure/adventure-zone18.mjs';

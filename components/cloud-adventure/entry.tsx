@@ -1,8 +1,8 @@
+'use client';
 import {side12Color,side12Seen} from '@/lib/cloud-adventure/adventure-side12.mjs';
 import {mission20GhostTap} from '@/lib/cloud-adventure/adventure-mission20.mjs';
 import {side24Eligible} from '@/lib/cloud-adventure/adventure-side24.mjs';
 import {side39Eligible} from '@/lib/cloud-adventure/adventure-side39.mjs';
-'use client';
 import {trackedAdventureObjective} from '@/lib/cloud-adventure/adventure-pending-quests.mjs';
 import {projectPlayerVitals,playerRecoverySafe,playerMaxHp} from '@/lib/cloud-adventure/adventure-player-vitals.mjs';
 import {mergeAdventureBox} from '@/lib/cloud-adventure/adventure-box-merge.mjs';
