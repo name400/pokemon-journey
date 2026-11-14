@@ -7518,6 +7518,19 @@ test('completed restaurant courses remain replayable when legacy progression fla
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('Bleu Sector 7 normal-type challenge preserves retries and deferred rewards',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side28-normal-qa',displayName:'노말 배틀 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),boxId:id,moves:['파동탄'],pp:{}});
+  const place={area:3,district:'lumiose-bleu-sector7',interior:null,x:6,y:10,facing:'down',regionId:6,zaMission10Stage:9,zaRoyaleRank:'F',zaGoldCanariLevel:3};
+  seedWorld(storeAdventurePosition({...rawWorld(),...place},state.revision+1));await get();await call('side28Battle',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),...place,zaMission10Stage:10},state.revision+1));await get();assert.equal(state.world.interaction.action,'side28Battle');
+  const coins=state.wallet.coins;await call('side28Battle');assert.deepEqual(state.battle.teams[1].map(p=>p.speciesId),[531,505,428]);assert.deepEqual(state.battle.teams[1].map(p=>p.level),[29,29,30]);assert.equal(state.battle.teams[1][2].item,'silkscarf');await get();await call('forfeit');assert.notEqual(rawWorld().zaSide28Won,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),...place,zaMission10Stage:10},state.revision+1));await get();await call('side28Battle');await battle();assert.equal(state.wallet.coins,coins+3000+2160);assert.equal(rawWorld().zaSide28Won,true);assert.equal(rawWorld().zaSide28RewardPending,true);assert.ok(pendingAdventureQuests(rawWorld()).some(q=>q.id==='28-reward'));
+  const key=JSON.stringify(['side28-normal-qa','silkscarf']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,'side28-normal-qa','silkscarf');await get();await call('side28Reward',{},409);assert.equal(rawWorld().zaSide28RewardPending,true);sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const revision=state.revision;await call('side28Reward');assert.equal(state.inventory.silkscarf,1);await call('side28Reward',{revision},409);await get();assert.equal(state.inventory.silkscarf,1);assert.equal(rawWorld().zaSide28RewardPending,false);assert.deepEqual(state.world.teamIds,[id]);await call('side28Battle',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Vernal holovator quest preserves retries, rewards and both lift routes',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'side23-qa',displayName:'홀로베이터 검증'};
  try{
