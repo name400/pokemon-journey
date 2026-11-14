@@ -9440,3 +9440,17 @@ test('alerted fixed alpha attacks idle players without replay or changing shared
   seedWorld(place({x:16,zaFixedAlphaAlertV1:'lumiose-zone17:pyroar-alpha',zaZone17Spent:{'pyroar-alpha':true}}));await get();rev=state.revision;await call('fixedAlphaIdle');assert.equal(state.revision,rev);assert.equal(state.world.zaPlayerVitalsV1.hp,100);
  }finally{Date.now=oldNow;globalThis.__adventureUser=previous;}
 });
+
+test('visible random alpha attacks idle player using its saved encounter identity',async()=>{
+ const previous=globalThis.__adventureUser,oldNow=Date.now,oldRandom=globalThis.__adventureRandom;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureRandom=()=>.999;globalThis.__adventureUser={userId:'idle-random-alpha-qa',displayName:'무작위 우두머리 정지 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='zone14:aron:304';
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:9,y:3,facing:'right',zaMission05Complete:true,zaZone14Spent:{},zaWildVisibleAlphaLevels:{[key]:40},zaWildShinyRolls:{[key]:true},zaRandomAlphaAlertV1:undefined,zaRandomAlphaRealtimeV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('move',{direction:'right'});assert.equal(state.world.zaPlayerVitalsV1.hp,90);const alert=structuredClone(rawWorld().zaRandomAlphaAlertV1),mon=structuredClone(rawMon(team[0]));assert.equal(alert.id,'aron');assert.equal(alert.cycle,'shiny');
+  await call('randomAlphaIdle');const rev=state.revision;await call('randomAlphaIdle');assert.equal(state.revision,rev);clock+=100000;await call('randomAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,60);await call('randomAlphaIdle',{revision:rev},409);await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaWildVisibleAlphaLevels[key],40);assert.deepEqual(rawWorld().zaRandomAlphaAlertV1,alert);
+  seedWorld(place({x:10,zaRandomAlphaAlertV1:alert,zaRandomAlphaRealtimeV1:{version:1,at:clock-3000,key:'different encounter'}}));await get();await call('randomAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  seedWorld(place({x:10,zaRandomAlphaAlertV1:alert,zaRandomAlphaRealtimeV1:{version:1,at:clock-3000,key:JSON.stringify([1,alert.district,alert.id,alert.species,alert.level,alert.cycle])},zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'hotel'}}));await get();await call('randomAlphaIdle');assert.equal(state.world.district,'lumiose');assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(team[0]),mon);assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  seedWorld(place({x:10,zaRandomAlphaAlertV1:alert,zaRandomAlphaRealtimeV1:{version:2,opaque:true}}));await get();let unchanged=state.revision;await call('randomAlphaIdle');assert.equal(state.revision,unchanged);assert.deepEqual(rawWorld().zaRandomAlphaRealtimeV1,{version:2,opaque:true});
+  seedWorld(place({x:10,zaRandomAlphaAlertV1:alert,zaZone14Spent:{aron:true}}));await get();unchanged=state.revision;await call('randomAlphaIdle');assert.equal(state.revision,unchanged);assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+ }finally{Date.now=oldNow;globalThis.__adventureRandom=oldRandom;globalThis.__adventureUser=previous;}
+});
