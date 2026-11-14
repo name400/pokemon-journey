@@ -1,3 +1,4 @@
+import {stepRoamingAlphaPursuit} from './adventure-roaming-alpha-pursuit.mjs';
 import {assertAdventureGrowthData} from './adventure-growth-data.mjs';
 import {assertAdventureTrainingData} from './adventure-training-data.mjs';
 import {adventurePokemonSize,assignVisibleAdventureSize} from '@/lib/cloud-adventure/adventure-size.mjs';
@@ -613,7 +614,7 @@ if(b.action==='fixedAlphaIdle'||b.action==='randomAlphaIdle'||b.action==='specia
  if(s.unionHost||s.expedition||s.combat||s.adventureCatchWindow||s.adventurePendingMoves?.length||!mons.has(s.activeId)||!threat||!matches||!center||!destination||fieldMap(destination)[center.y]?.[center.x]!=='H'||!applyPlayerWildDamage(probe,30,now)||timer!==undefined&&(!timer||timer.version!==1||!Number.isSafeInteger(timer.at)||timer.at<0||typeof timer.key!=='string'))return Response.json(await present(u.userId));
  if(timer?.key===key&&now-timer.at<2500)return Response.json(await present(u.userId));
  s[timerKey]={version:1,at:now,key};s.events=[];
- if(timer?.key===key){const impact=applyPlayerWildDamage(s,specialIdle&&threat.damage?threat.damage:30,now);if(impact&&!impact.immune){s.log=[`우두머리 ${threat.name}의 공격에 플레이어 체력이 ${impact.damage} 줄었다.`];if(impact.blackout){Object.assign(s,destination,{facing:'down',zaWildAlphaAlert:false,zaWildAlphaSpent:false,zaPlayerVitalsV1:s.zaPlayerVitalsV1});if(randomIdle)delete s.zaRandomAlphaAlertV1;else if(specialIdle)delete s[threat.alertField];else delete s.zaFixedAlphaAlertV1;delete s[timerKey];s.log=[`야생 포켓몬에게 쓰러져 ${center.name} 포켓몬센터로 돌아왔다. 플레이어 체력을 회복했다.`];}}}
+ if(timer?.key===key){const pursuit=randomIdle&&Math.abs(s.x-threat.x)+Math.abs(s.y-threat.y)>1?stepRoamingAlphaPursuit(s,threat,gameTime(now,adventureClockOffset(s,now)).period):null;if(pursuit!==null){s.log=[pursuit?`우두머리 ${threat.name}이(가) 다가왔다!`:`우두머리 ${threat.name}이(가) 다가올 길을 찾고 있다.`];}else{const impact=applyPlayerWildDamage(s,specialIdle&&threat.damage?threat.damage:30,now);if(impact&&!impact.immune){s.log=[`우두머리 ${threat.name}의 공격에 플레이어 체력이 ${impact.damage} 줄었다.`];if(impact.blackout){Object.assign(s,destination,{facing:'down',zaWildAlphaAlert:false,zaWildAlphaSpent:false,zaPlayerVitalsV1:s.zaPlayerVitalsV1});if(randomIdle)delete s.zaRandomAlphaAlertV1;else if(specialIdle)delete s[threat.alertField];else delete s.zaFixedAlphaAlertV1;delete s[timerKey];s.log=[`야생 포켓몬에게 쓰러져 ${center.name} 포켓몬센터로 돌아왔다. 플레이어 체력을 회복했다.`];}}}}
  else s.log=[`우두머리 ${threat.name}이(가) 공격을 준비한다!`];
  await commit(u.userId,row.revision,s,new Map(),'',0,null);return Response.json(await present(u.userId));
 }
