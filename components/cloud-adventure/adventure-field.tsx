@@ -1,4 +1,9 @@
 'use client';
+import {partnerTrail,partnerTrailPosition} from '@/lib/cloud-adventure/adventure-partner-trail.mjs';
+import {adventureFurfrouAtlas} from '@/lib/cloud-adventure/adventure-furfrou.mjs';
+import {classicSourceFormAtlas} from '@/components/rogue-source-form-images.mjs';
+import {sourceFormFrames} from '@/components/rogue-variant-frames';
+import {pokemonArtId} from '@/components/pokemon-image';
 import {side59Available} from '@/lib/cloud-adventure/adventure-side59.mjs';
 import {benchHangMatches} from '@/lib/cloud-adventure/adventure-bench-hang.mjs';
 import {contactAppearance,CONTACT_COLORS} from '@/lib/cloud-adventure/adventure-contacts.mjs';
@@ -50,18 +55,30 @@ import {trackedAdventureLocalTarget} from '@/lib/cloud-adventure/adventure-pendi
 import {adventureQuestVisuals} from '@/lib/cloud-adventure/adventure-quest-visuals.mjs';
 
 type VisualPath={generation:number;origin:{x:number;y:number};steps:Array<{id:number;x:number;y:number;facing:string}>};
-type Props={visualPath?:VisualPath;world:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;onAimSewer:(id:string)=>void;onAimMission20Ghost:(x:number,y:number)=>void;period:string};
+type Props={visualPath?:VisualPath;world:any;partner:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;onAimSewer:(id:string)=>void;onAimMission20Ghost:(x:number,y:number)=>void;period:string};
 const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 
-export default function AdventureField({world:w,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,onAimMission20Ghost,period}:Props){
+export default function AdventureField({world:w,partner,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,onAimMission20Ghost,period}:Props){
  const questTarget=trackedAdventureLocalTarget(w);
- const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,startX:w.x,startY:w.y,moveStart:0,moveDuration:1,walkUntil:0,visualGeneration:-1,visualStep:-1,facing:w.facing||'down'}),[assetError,setAssetError]=useState(false);
- props.current={w,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period};
+ const partnerLayer=[w.area,w.locationId||0,w.district||'',w.interior||'',...Object.keys(w).filter(k=>/^za.*(?:Layer|Floor|Wing|Upper|Lower|LowerBank|PondLower|DrainLanding|Underground|Roof)$/.test(k)).sort().map(k=>`${k}:${w[k]}`)].join('|');
+ const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,partner,partnerLayer,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,startX:w.x,startY:w.y,moveStart:0,moveDuration:1,walkUntil:0,visualGeneration:-1,visualStep:-1,facing:w.facing||'down'}),[assetError,setAssetError]=useState(false);
+ props.current={w,partner,partnerLayer,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,width=736,height=544;
   let guide:{key:string,x:number,y:number,startX:number,startY:number,targetX:number,targetY:number,start:number}|null=null;
   let side67Trail:ReturnType<typeof advanceSide67VisualTrail>=null;
+  let follower:ReturnType<typeof partnerTrail>=null;
+  const partnerImages=new Map<string,HTMLImageElement>();
+  const requestedForms=new Set<string>();
+  function partnerImage(mon:any,facing:string){
+   const direction=facing==='up'?'back':'front';
+   const form=adventureFurfrouAtlas(mon,direction)||classicSourceFormAtlas(mon,direction);
+   if(form?.key){const key=`form:${form.key}:${form.shiny}:${form.facing}`;if(!requestedForms.has(key)){requestedForms.add(key);void sourceFormFrames(form.key,!!form.shiny,direction).then(frames=>{if(disposed||!frames?.length)return;const img=new Image();img.onload=scheduler.invalidate;img.src=frames[0]!;partnerImages.set(key,img);});}const image=partnerImages.get(key);if(image?.complete&&image.naturalWidth)return image;}
+   const direct=mon.sourceAppearanceMissing?null:mon.shiny&&mon.rogueSourceId!=null?mon.sourceShinyImage:mon.shiny?mon.sourceShinyImage||mon.sourceImage:mon.sourceImage;
+   const id=pokemonArtId(mon),src=direct||(!mon.sourceAppearanceMissing&&id?`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.shiny?'shiny/':''}${id}.png`:'/pokemon-placeholder.svg');
+   let img=partnerImages.get(src);if(!img){img=new Image();img.onload=scheduler.invalidate;img.src=src;partnerImages.set(src,img);}return img;
+  }
   let descentKey='',descentGuides:Array<{x:number,y:number,startX:number,startY:number,targetX:number,targetY:number,start:number,direction:string}>=[];
   const scheduler=createFieldScheduler(requestAnimationFrame,cancelAnimationFrame,draw);invalidate.current=scheduler.invalidate;
   // Load field sprites only when a visible map actually refers to them. This
@@ -1531,6 +1548,11 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    if(w.district==='lumiose-zone7'&&!w.interior&&!w.zaZone7AlphaSpent){const img=w.zaWildShinyRolls?.['alpha:zone7-fletchinder:662']===true?shinyFieldImages[662]:fieldImages[662],px=11*tile,py=8*tile;ctx.fillStyle='#d95b58';ctx.fillRect(px+3,py+3,tile-6,tile-6);if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);}
    if(w.district==='lumiose-zone11'&&!w.interior){const visible=ZONE11_VISIBLE.filter(p=>zone11Visible(w,p.tile)===p);if(!w.zaZone11Upper&&w.zaMission40Stage===2&&!w.zaMission40Complete&&w.zaMission40XerneasRevealed!==false)visible.push({id:'xerneas',tile:'0',species:716,level:75,name:'제르네아스',x:11,y:w.zaMission40XerneasRevealed===true?6:3});for(const m of visible){const px=m.x*tile,py=m.y*tile,img=(w.zaWildShinyRolls?.[`zone11:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]);if(m.alpha||w.zaWildVisibleAlphaLevels?.[`zone11:${m.id}:${m.species}`]){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle='#7c6d93';ctx.fillRect(px+6,py+6,tile-12,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}}}
    if(['lumiose-zone5','lumiose-zone5-drain'].includes(w.district)&&!w.interior&&!w.zaZone5DrainLanding)for(const m of ZONE5_VISIBLE.filter(p=>(w.district==='lumiose-zone5-drain'?p.drain===true:!p.drain&&p.upper===(w.zaZone5Upper===true))&&!w.zaZone5Spent?.[p.id])){const px=m.x*tile,py=m.y*tile,img=(w.zaWildShinyRolls?.[`zone5:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]);if(m.alpha||w.zaWildVisibleAlphaLevels?.[`zone5:${m.id}:${m.species}`]){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle=m.alpha?'#af5462':'#d6b57d';ctx.fillRect(px+6,py+6,tile-12,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}}
+   // The companion is a client-only visual trail; the player's path remains authoritative.
+   const nextFollower=partnerTrail(follower,w.map,{x:s.targetX,y:s.targetY},props.current.partnerLayer,s.facing,walkable);follower=nextFollower;
+   const followPos=partnerTrailPosition(nextFollower,reduce||!s.moveDuration?1:Math.min(1,Math.max(0,(time-s.moveStart)/s.moveDuration)));
+   const partner=props.current.partner;
+   if(partner&&followPos){const img=partnerImage(partner,s.facing),px=followPos.x*tile,py=followPos.y*tile;if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-4,py-6,tile+8,tile+8);}
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
    trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,(w.zaFieldCrouched===true||(!walking&&benchHangMatches(w,w.interaction))),contactAppearance(w).id);
@@ -1543,6 +1565,6 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
   }
   scheduler.invalidate();return()=>{disposed=true;invalidate.current=null;scheduler.dispose();observer.disconnect();motion.removeEventListener('change',scheduler.invalidate);};
  },[]);
- useEffect(()=>{invalidate.current?.();},[w,period]);
+ useEffect(()=>{invalidate.current?.();},[w,period,partner]);
  return <div className="adv-field-wrap"><canvas ref={canvas} className="adv-field" tabIndex={0} aria-label={`${w.areaInfo.name} 필드. 방향키 또는 WASD로 이동, E로 대화. 현재 위치 ${w.x}, ${w.y}${questTarget?'. 추적 중인 의뢰 목적지가 현재 구역에 있습니다.':''}${zone2BudewPosition(w)?'. 야생 꼬몽울이 보입니다.':''}${!w.interior&&['lumiose-zone3','lumiose-zone4'].includes(w.district)?'. 풀이 자란 길에서도 야생 포켓몬이 나타납니다.':''}`} onClick={e=>{if(disabled)return;const rect=e.currentTarget.getBoundingClientRect(),s=scene.current,x=Math.floor(((e.clientX-rect.left)/rect.width*(e.currentTarget.width/2)+s.cameraX)/s.tile),y=Math.floor(((e.clientY-rect.top)/rect.height*(e.currentTarget.height/2)+s.cameraY)/s.tile),budew=zone2BudewPosition(w);if(mission20VisibleGhosts(w,w.map).some(g=>g.x===x&&g.y===y)){onAimMission20Ghost(x,y);return;}if(budew&&budew.x===x&&budew.y===y){onAimBudew();return;}const kakuna=zone2KakunaPosition(w);if(kakuna&&kakuna.x===x&&kakuna.y===y){onAimKakuna();return;}const fieldMon=zone2FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(fieldMon){onAimField(fieldMon.id);return;}const sewerMon=magentaSewerMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(sewerMon){onAimSewer(sewerMon.id);return;}const zone3Mon=zone3FieldMonsters(w,period).find((m:any)=>m.x===x&&m.y===y);if(zone3Mon){onAimZone3(zone3Mon.id);return;}if(w.district==='lumiose-zone2'&&w.map[y]?.[x]==='p'){onAimIslandAlpha();return;}if(w.district==='lumiose-wild'&&w.map[y]?.[x]==='a'&&!w.zaWildAlphaSpent){onAimAlpha();return;}if(x===w.x&&y===w.y){onInteract();return;}}}/><div className="adv-field-hint">{w.district==='lumiose-ghost-house'&&!w.interior&&w.zaMission20Stage===7?'고스트 가까이에서 누르거나 대화하세요':!w.interior&&['lumiose-zone3','lumiose-zone4'].includes(w.district)?'풀이 자란 길에서도 야생 포켓몬이 나타납니다':'방향키 또는 이동 버튼으로 걸으세요'}</div>{assetError&&<span className="adv-asset-error" role="status">일부 타일 이미지를 불러오지 못했습니다.</span>}</div>;
 }
