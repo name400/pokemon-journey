@@ -15,6 +15,13 @@ test('additional standard opponents have valid teams and distinct accessible pos
  assert.equal(fieldMap({...base,zaMission39Started:false})[5][3],'.');
 });
 
+test('facing a Royal trainer takes priority over a card underfoot',()=>{
+ const base={area:3,district:'lumiose-royale',interior:null,zaRoyaleRank:'A',zaMission39Started:true,x:9,y:12,facing:'up'};
+ const map=fieldMap(base);assert.equal(map[12][9],'!');assert.equal(map[11][9],'j');assert.equal(fieldDialogue(base,map).action,'royaleInfiniteExtra7');
+ assert.equal(fieldDialogue({...base,facing:'down'},map).action,'takeRoyaleBonus');
+ const after={...base,zaInfiniteSessionWins:[INFINITE_TRAINERS[7].id]};assert.equal(fieldDialogue(after).action,undefined);assert.equal(fieldDialogue({...after,facing:'down'}).action,'takeRoyaleBonus');
+});
+
 test('reward streak selects the documented trainer group and levels at the provisional boundaries',async()=>{
  const {newInfiniteFieldTier,infiniteFieldTier,infiniteFieldTrainer,infiniteWins,INFINITE_ALTERNATE_TRAINERS}=await import('../lib/cloud-adventure/adventure-infinite-royale.mjs');
  for(const [streak,tier] of [[0,0],[5,0],[6,1],[9,1],[10,2],[19,2],[20,3],[100,3]])assert.equal(newInfiniteFieldTier({zaInfiniteRewardStreak:streak}),tier);
