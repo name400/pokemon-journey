@@ -5,6 +5,7 @@ import {side24Eligible} from '@/lib/cloud-adventure/adventure-side24.mjs';
 import {side39Eligible} from '@/lib/cloud-adventure/adventure-side39.mjs';
 import {trackedAdventureObjective} from '@/lib/cloud-adventure/adventure-pending-quests.mjs';
 import {projectPlayerVitals,playerRecoverySafe,playerMaxHp} from '@/lib/cloud-adventure/adventure-player-vitals.mjs';
+import {fixedAlphaPlayerThreat,fixedAlphaPlayerNear} from '@/lib/cloud-adventure/adventure-fixed-alpha-threat.mjs';
 import {mergeAdventureBox} from '@/lib/cloud-adventure/adventure-box-merge.mjs';
 import {ROYALE_BONUS_CARDS,royaleBonusRankApplies} from '@/lib/cloud-adventure/adventure-royale-bonus.mjs';
 import {adventureMoveMastered} from '@/lib/cloud-adventure/adventure-plus-mastery.mjs';
@@ -112,6 +113,7 @@ export default function Adventure(){
  const [battleResult,setBattleResult]=useState<any>(null),resultRef=useRef<any>(null);
  const syncRequired=useRef(false),pendingMovement=useRef<PendingMovement|null>(null);
  const lock=useRef(false),mounted=useRef(true),revision=useRef(-1),snapshot=useRef<any>(null),screenRef=useRef<Screen>(null),dialogueRef=useRef<any>(null);
+ const idleFixedNoopRevision=useRef<number|null>(null);
  const heldDirection=useRef(''),pathQueue=useRef<string[]>([]),lastFacing=useRef(''),movementEpoch=useRef(0),inputSequence=useRef(0),wakeMovement=useRef<()=>void>(()=>{}),inflightMove=useRef<any>(null);
  const deferredInteraction=useRef<any>(null),deferredRoll=useRef<{direction:string,epoch:number}|null>(null);
  snapshot.current=data;screenRef.current=screen;dialogueRef.current=dialogue;
@@ -231,6 +233,7 @@ export default function Adventure(){
  // Only an active visible pursuit needs a server tick. Movement and menus keep
  // priority, and a hidden tab never accumulates unattended damage requests.
  useEffect(()=>{const w=data?.world;if(!w||w.district!=='lumiose-wild'||w.interior||w.zaWildAlphaAlert!==true||w.zaWildAlphaSpent===true||w.inUnion||w.expedition||data.battle||battleResult||screen||dialogue||w.adventureCatchWindow||w.adventurePendingMoves?.length||w.zaPlayerVitalsV1?.version!==1||typeof w.zaPlayerVitalsV1.lastCenterId!=='string'||w.zaWildAlphaRealtimeV1?.blockedX===w.x&&w.zaWildAlphaRealtimeV1?.blockedY===w.y||w.zaWildAlphaRealtimeV1!==undefined&&(w.zaWildAlphaRealtimeV1?.version!==1||!Number.isSafeInteger(w.zaWildAlphaRealtimeV1?.at)))return;const timer=setInterval(()=>{if(document.hidden||lock.current||syncRequired.current||heldDirection.current||pathQueue.current.length||screenRef.current||dialogueRef.current||resultRef.current)return;void act('wildAlphaIdle');},2500);return()=>clearInterval(timer);},[data?.world?.district,data?.world?.interior,data?.world?.zaWildAlphaAlert,data?.world?.zaWildAlphaSpent,data?.world?.inUnion,data?.world?.expedition,data?.world?.zaPlayerVitalsV1?.version,data?.world?.zaPlayerVitalsV1?.lastCenterId,data?.world?.zaWildAlphaRealtimeV1?.version,data?.world?.zaWildAlphaRealtimeV1?.at,data?.world?.x,data?.world?.y,!!data?.battle,battleResult,screen,dialogue,!!data?.world?.adventureCatchWindow,data?.world?.adventurePendingMoves?.length,act]);
+ useEffect(()=>{const w=data?.world;if(!w||typeof w.zaFixedAlphaAlertV1!=='string'||w.inUnion||w.expedition||data.battle||battleResult||screen||dialogue||w.adventureCatchWindow||w.adventurePendingMoves?.length||w.zaPlayerVitalsV1?.version!==1||typeof w.zaPlayerVitalsV1.lastCenterId!=='string'||w.zaFixedAlphaRealtimeV1!==undefined&&(w.zaFixedAlphaRealtimeV1?.version!==1||!Number.isSafeInteger(w.zaFixedAlphaRealtimeV1?.at)||typeof w.zaFixedAlphaRealtimeV1?.key!=='string'))return;const threat=fixedAlphaPlayerThreat(w);if(!threat||!fixedAlphaPlayerNear(w,threat)||threat.alertKey!==w.zaFixedAlphaAlertV1)return;const timer=setInterval(()=>{if(document.hidden||lock.current||syncRequired.current||heldDirection.current||pathQueue.current.length||screenRef.current||dialogueRef.current||resultRef.current||idleFixedNoopRevision.current===revision.current)return;const before=revision.current;void act('fixedAlphaIdle').then(result=>{if(result&&result.revision===before)idleFixedNoopRevision.current=before;});},2500);return()=>clearInterval(timer);},[data?.world,!!data?.battle,battleResult,screen,dialogue,act]);
  const roster=useMemo(()=>{const q=query.trim().toLowerCase();return (data?.box||[]).filter((p:any)=>!q||`${p.name} ${p.id} ${p.types?.join(' ')}`.toLowerCase().includes(q));},[data?.box,query]);
  const close=()=>{setScreen(null);setTeamEdit(false);setQuery('');setPage(0);};
  const open=(s:Screen)=>{stop();setScreen(s);setDialogue(null);setTeam(data?.world?.teamIds||[]);};

@@ -9426,3 +9426,17 @@ test('idle zone 1 alpha pursuit uses bounded server ticks and preserves saved da
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-wild',interior:null,x:3,y:6,zaWildAlphaPosition:{x:3,y:5,facing:'down'},zaWildAlphaAlert:true,zaWildAlphaSpent:false,zaWildAlphaRealtimeV1:{version:2,opaque:true},zaPlayerVitalsV1:{version:1,hp:50,lastCenterId:'hotel'}},state.revision+1));await get();rev=state.revision;await call('wildAlphaIdle');assert.equal(state.revision,rev);assert.deepEqual(rawWorld().zaWildAlphaRealtimeV1,{version:2,opaque:true});assert.equal(state.world.zaPlayerVitalsV1.hp,50);
  }finally{Date.now=oldNow;globalThis.__adventureUser=previous;}
 });
+
+test('alerted fixed alpha attacks idle players without replay or changing shared Pokemon',async()=>{
+ const previous=globalThis.__adventureUser,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'idle-fixed-alpha-qa',displayName:'고정 우두머리 정지 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,zaZone17Upper:false,zaZone17Promenade:false,x:15,y:6,facing:'right',zaZone17Spent:{},zaMission04Complete:true,zaFixedAlphaAlertV1:undefined,zaFixedAlphaRealtimeV1:undefined,zaWildShinyRolls:{'zone17:pyroar-alpha:668':true},zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('move',{direction:'right'});assert.equal(state.world.zaFixedAlphaAlertV1,'lumiose-zone17:pyroar-alpha');assert.equal(state.world.zaPlayerVitalsV1.hp,90);const mon=structuredClone(rawMon(team[0]));
+  await call('fixedAlphaIdle');let rev=state.revision;assert.equal(state.world.zaPlayerVitalsV1.hp,90);await call('fixedAlphaIdle');assert.equal(state.revision,rev);
+  clock+=100000;await call('fixedAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,60);await call('fixedAlphaIdle',{revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);
+  seedWorld(place({x:16,zaFixedAlphaAlertV1:'lumiose-zone17:pyroar-alpha',zaFixedAlphaRealtimeV1:{version:1,at:clock-3000,key:'lumiose-zone17:pyroar-alpha'},zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'hotel'}}));await get();await call('fixedAlphaIdle');assert.equal(state.world.district,'lumiose');assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(team[0]),mon);assert.equal(rawWorld().zaWildShinyRolls['zone17:pyroar-alpha:668'],true);
+  seedWorld(place({x:16,zaFixedAlphaAlertV1:'lumiose-zone17:pyroar-alpha',zaFixedAlphaRealtimeV1:{version:2,opaque:true}}));await get();rev=state.revision;await call('fixedAlphaIdle');assert.equal(state.revision,rev);assert.deepEqual(rawWorld().zaFixedAlphaRealtimeV1,{version:2,opaque:true});
+  seedWorld(place({x:16,zaFixedAlphaAlertV1:'lumiose-zone17:pyroar-alpha',zaZone17Spent:{'pyroar-alpha':true}}));await get();rev=state.revision;await call('fixedAlphaIdle');assert.equal(state.revision,rev);assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=previous;}
+});
