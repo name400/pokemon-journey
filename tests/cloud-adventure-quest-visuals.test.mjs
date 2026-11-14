@@ -30,3 +30,7 @@ test('targets follow progress and respect the roof and stale markers',()=>{
  s=world('lumiose-bleu-sector7',{zaSide45Stage:1,zaTrackedQuestId:'45',zaBleu7Upper:true});assert.deepEqual(adventureQuestVisuals(s),[]);assert.equal(trackedAdventureLocalTarget(s),null);
  s=world('lumiose-jaune-sector6',{zaSide47Stage:1,zaTrackedQuestId:'47'});s.map=[...s.map];s.map[11]=s.map[11].slice(0,16)+'.'+s.map[11].slice(17);assert.equal(trackedAdventureLocalTarget(s),null);
 });
+
+test('Appée quest shows scrap and Aron only at the outdoor lab',()=>{
+ const s=world('lumiose-floral',{zaMission35Stage:2,zaSide99Stage:1,zaTrackedQuestId:'99'}),visuals=adventureQuestVisuals(s);assert.deepEqual(visuals.filter(p=>p.kind==='scrap').map(p=>[p.x,p.y]),[[2,5]]);assert.deepEqual(visuals.filter(p=>p.kind==='pokemon'&&p.species===304).map(p=>[p.x,p.y]),[[1,4],[2,4]]);assert.deepEqual(trackedAdventureLocalTarget(s),{x:2,y:5});assert.deepEqual(trackedAdventureLocalTarget({...s,zaSide99Stage:2}),{x:3,y:5});assert.deepEqual(adventureQuestVisuals({...s,interior:'lumioseLab'}),[]);assert.equal(trackedAdventureLocalTarget({...s,interior:'lumioseLab'}),null);assert.deepEqual(adventureQuestVisuals(world('lumiose-floral',{zaMission35Stage:1})).filter(p=>p.kind==='scrap'),[]);
+});
