@@ -3,6 +3,12 @@ import assert from 'node:assert/strict';
 import {FAST_TRAVEL_CENTERS,centerAt,recordCenter,recordNearbyCenter,registeredCenters} from '../lib/cloud-adventure/adventure-fast-travel.mjs';
 import {fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('map travel from Sector 1 clears only a known Zone 5 transient ledger',async()=>{
+ const {clearMapTravelTransient}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const known={district:'lumiose-bleu-sector1',zaZone5Spent:{'bellsprout-alpha':true},zaWildShinyRolls:{'zone5:abra:63':true},teamIds:['kept']};clearMapTravelTransient(known);assert.equal(known.zaZone5Spent,undefined);assert.deepEqual(known.zaWildShinyRolls,{'zone5:abra:63':true});assert.deepEqual(known.teamIds,['kept']);
+ const unknown={district:'lumiose-bleu-sector1',zaZone5Spent:{version:2,entry:'future'}};clearMapTravelTransient(unknown);assert.deepEqual(unknown.zaZone5Spent,{version:2,entry:'future'});
+});
+
 test('registered centers are limited to real center tiles and survive save restoration',()=>{
  for(const c of FAST_TRAVEL_CENTERS){const s={area:3,district:c.district,interior:null,zaRougeStreetSouth:c.zaRougeStreetSouth,x:c.x,y:c.y,facing:'down'};assert.equal(fieldMap(s)[c.y][c.x],'H');assert.equal(centerAt(s,{...c,tile:'H'}).id,c.id);}
  const s={area:3,district:'lumiose',interior:null,x:3,y:5,facing:'down',zaMission06Started:true,teamIds:['kept']};assert.equal(recordCenter(s,{x:3,y:5,tile:'H'}),true);assert.equal(recordCenter(s,{x:3,y:5,tile:'H'}),false);assert.equal(recordCenter(s,{x:1,y:5,tile:'H'}),false);
