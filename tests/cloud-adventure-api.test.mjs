@@ -9625,3 +9625,13 @@ test('party evidence quests reject concurrent ownership changes atomically',asyn
   const fish=put('proof-fish',318);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-saison-canalside',interior:null,x:14,y:12,facing:'left',zaSide55Stage:1,teamIds:[lead,fish.boxId]},state.revision+1));await get();assert.equal(state.world.interaction.action,'side55Film');await race('side55Film',fish.boxId);assert.equal(rawWorld().zaSide55Stage,1);await get();const rev=state.revision;await call('side55Film');await call('side55Film',{revision:rev},409);await get();assert.equal(rawWorld().zaSide55Stage,2);assert.equal(rawMon(fish.boxId).shiny,true);assert.equal(state.wallet.coins,200);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Zone 6 sleeping Houndoom wakes on contact and survives reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone6-sleep-houndoom-qa',displayName:'헬가수면테스트'};
+ try{
+  await get();await call('start',{species:1});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector12',interior:null,x:15,y:1,facing:'up'},state.revision+1));await get();await call('move',{direction:'up'});assert.equal(state.world.zaZone6HoundoomAwakeV1,false);await get();assert.equal(state.world.zaZone6HoundoomAwakeV1,false);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone6',interior:null,zaZone6Layer:'ground',x:9,y:3,facing:'left',zaFieldCrouched:false},state.revision+1));await get();await call('move',{direction:'left'});assert.equal(state.world.zaZone6HoundoomAwakeV1,true);await get();assert.equal(state.world.zaZone6HoundoomAwakeV1,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:9,y:3,facing:'left',zaZone6HoundoomAwakeV1:false},state.revision+1));await get();assert.match(state.world.interaction.text,/잠들어/);await call('zone6Wild-houndoom-alpha');assert.equal(state.battle.teams[1][0].speciesId,229);assert.equal(state.world.zaZone6HoundoomAwakeV1,true);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
