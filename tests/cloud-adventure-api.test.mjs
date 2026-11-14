@@ -10313,3 +10313,13 @@ test('roaming alpha pursues one tile while idle and attacks after approaching',a
   }
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;Date.now=oldNow;}
 });
+
+test('capture preserves opaque dex entries and refuses unknown dex containers atomically',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'dex-future-record-qa',displayName:'도감 저장 보호'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,leadBefore=rawMon(lead),foe={...makeMon(4,5),boxId:'wild',hp:0},future={version:2,opaque:['keep']};
+  const place=dex=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,adventureDexSpecies:dex,adventureBalls:{masterball:1},combat:null,encounter:null,adventureCatchWindow:{foe,moveCount:0,revision:state.revision+1}},state.revision+1);
+  seedWorld(place(future));await get();const revision=state.revision,team=[...state.world.teamIds];await call('catchWindowBall',{ball:'masterball'},409);await get();assert.deepEqual(rawWorld().adventureDexSpecies,future);assert.equal(state.revision,revision);assert.equal(rawWorld().adventureBalls.masterball,1);assert.ok(rawWorld().adventureCatchWindow);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(lead),leadBefore);
+  const raw=[1,2000,{version:2,opaque:'keep'},1];seedWorld(place(raw));await get();const rev=state.revision;await call('catchWindowBall',{ball:'masterball'});await call('catchWindowBall',{ball:'masterball',revision:rev},409);await get();assert.deepEqual(rawWorld().adventureDexSpecies,[...raw,4]);assert.equal(rawWorld().adventureBalls.masterball||0,0);assert.ok(state.box.some(mon=>mon.speciesId===4));assert.equal(rawMon(lead).speciesId,1);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
