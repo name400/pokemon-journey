@@ -10291,3 +10291,13 @@ test('newly caught nonstarter Chikorita uses verified Z-A growth and retains its
   while(state.world.adventurePendingMoves?.length){const current=state.world.adventurePendingMoves[0];await call('resolveAdventureMove',{slot:current.move==='차밍보이스'?1:null});}await get();assert.ok(rawMon(id).moves.includes('차밍보이스'));assert.equal(rawMon(id).adventureVerifiedFamilyMovesV1,true);assert.equal(state.inventory.rarecandy||0,0);assert.equal(rawMon(lead).id,leadBefore.id);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('new zone 20 wild Tepig uses verified level moves through battle and capture',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-wild-za-moves-qa',displayName:'야생 기술 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,x:6,y:10,facing:'left',zaRoyaleRank:'A',zaMission38Complete:true,adventureBalls:{masterball:1}},state.revision+1));await get();
+  const {ZONE20_HABITAT_POOLS}=await import('../lib/cloud-adventure/adventure-mission42.mjs'),pool=ZONE20_HABITAT_POOLS.dry,rolls=[.999,0,(pool.indexOf(498)+.5)/pool.length,.999];globalThis.__adventureRandom=()=>rolls.shift()??.999;
+  await call('move',{direction:'left'});const foe=rawWorld().encounter,expected=['기충전','화염방사','돌진','플레어드라이브'];assert.equal(foe.speciesId,498);assert.notEqual(foe.adventureAlpha,true);assert.deepEqual(foe.moves,expected);const revision=state.revision;await get();assert.deepEqual(rawWorld().encounter.moves,expected);await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision},409);await get();const caught=state.box.find(m=>m.speciesId===498);assert.ok(caught);assert.deepEqual(rawMon(caught.boxId).moves,expected);assert.equal(rawMon(caught.boxId).adventureVerifiedFamilyMovesV1,true);assert.equal(rawMon(lead).speciesId,1);assert.ok(team.every(id=>state.world.teamIds.includes(id)));
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});

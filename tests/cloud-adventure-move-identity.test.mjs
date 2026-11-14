@@ -105,3 +105,12 @@ test('newly caught verified starter families use Z-A growth without changing old
  const wrong={...makeMon(152,8),formId:999};assert.equal(markAdventureVerifiedGrowth(wrong).adventureVerifiedFamilyMovesV1,undefined);assert.equal(markAdventureVerifiedGrowth(makeMon(1,8)).adventureVerifiedFamilyMovesV1,undefined);
  const evolved={...makeMon(153,20),adventureVerifiedFamilyMovesV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.ok(applyAdventureEvolutionMoves(evolved,{}).learned.includes('기가드레인'));assert.equal(evolved.pp.tackle,3);
 });
+
+test('new ordinary wild starter-family base stages use verified latest level moves',async()=>{
+ const {prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,expected] of [[152,['신비의부적','광합성','솔라빔','빛의장막']],[158,['싫은소리','아쿠아브레이크','하이드로펌프','역린']],[498,['기충전','화염방사','돌진','플레어드라이브']]]){
+  const mon={...makeMon(id,id===158?56:55),pp:{future:2}},before=structuredClone(mon),result=prepareVerifiedWildMoves(mon);assert.deepEqual(result.moves,expected);assert.deepEqual(result.pp,{});assert.deepEqual(mon,before);
+ }
+ const alpha={...makeMon(152,55),adventureAlpha:true,moves:['원시의힘'],pp:{ancientpower:2}};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
+ const evolved=makeMon(153,55);assert.equal(prepareVerifiedWildMoves(evolved),evolved);const unknown={...makeMon(152,55),formId:999};assert.equal(prepareVerifiedWildMoves(unknown),unknown);
+});
