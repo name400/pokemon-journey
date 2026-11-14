@@ -8766,3 +8766,13 @@ test('Claire opening Detect survives API reconnect and rejects stale replay',asy
   await call('battle',{command:{type:'move',move:'사이코브레이크'}});assert.equal(state.battle.teams[1][0].hp,hp);assert.ok(state.battle.events.some(e=>e.side===1&&e.moveId==='detect'));await call('battle',{revision:rev,command:{type:'move',move:'사이코브레이크'}},409);await get();assert.equal(rawWorld().combat.cpuOpeningMoveV1,'detect');assert.equal(state.battle.teams[1][0].hp,hp);assert.equal(rawMon(id).shiny,true);assert.deepEqual(state.world.teamIds,[id]);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('rain reaches outdoor trainer battles and remains fixed on reconnect',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'outdoor-trainer-weather-qa',displayName:'야외 배틀 날씨 검사'};globalThis.__adventureTime={period:'day',hour:16};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins,lead=rawMon(id);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector5',interior:null,x:2,y:10,facing:'right',zaSide53Stage:1,...extra},state.revision+1);
+  seedWorld(place({}));await get();assert.equal(state.world.weather,'rain');await call('side53Battle');assert.equal(state.battle.weather,'raindance');const rev=state.revision;
+  globalThis.__adventureTime={period:'day',hour:12};await get();assert.equal(state.battle.weather,'raindance');await call('side53Battle',{revision:rev},409);await call('forfeit');seedWorld(place({}));await get();assert.notEqual(state.world.weather,'rain');await call('side53Battle');assert.equal(state.battle.weather,'');await call('forfeit');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.deepEqual({...rawMon(id),pp:undefined},{...lead,pp:undefined});assert.deepEqual(rawMon(id).pp,{});
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});

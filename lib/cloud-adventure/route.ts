@@ -1,3 +1,4 @@
+import {adventureBattleOptions} from '@/lib/cloud-adventure/adventure-battle-weather.mjs';
 import {side59Available,side59Spot} from '@/lib/cloud-adventure/adventure-side59.mjs';
 import {side58Available,side58Spot} from '@/lib/cloud-adventure/adventure-side58.mjs';
 import {zone8PlayerThreat,zone8PlayerAlertKnown,zone8PlayerNear} from '@/lib/cloud-adventure/adventure-zone8.mjs';
@@ -264,7 +265,7 @@ function applyAdventureBattleEffort(before:any,after:any){return applyAdventureF
 function createAdventureCombat(s:any,mons:Map<string,any>,foes:any[],options:any={}){
  const ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)];
  const team=ids.map((id:string)=>mons.get(id));
- const combat=createCombat(team,foes,options);if(s.zaMegaRing===true){combat.adventurePlusGaugeV1={charge:1,max:3};combat.adventurePlusStatusV1=true;combat.adventurePlusStatusV2=true;combat.adventurePlusStatusV3=true;combat.adventurePlusAttackEffectsV1=true;combat.adventureWaterShurikenV1=true;combat.adventurePlusProtectV1=true;}combat.adventureEffortVersion=1;combat.adventureEffortFoes=[];if(isLumioseFriendshipWorld(s)&&!s.unionHost&&!s.expedition&&!s.zaLoanBattle)combat.adventureFaintFriendshipV1=true;combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
+ const combat=createCombat(team,foes,adventureBattleOptions(s,options));if(s.zaMegaRing===true){combat.adventurePlusGaugeV1={charge:1,max:3};combat.adventurePlusStatusV1=true;combat.adventurePlusStatusV2=true;combat.adventurePlusStatusV3=true;combat.adventurePlusAttackEffectsV1=true;combat.adventureWaterShurikenV1=true;combat.adventurePlusProtectV1=true;}combat.adventureEffortVersion=1;combat.adventureEffortFoes=[];if(isLumioseFriendshipWorld(s)&&!s.unionHost&&!s.expedition&&!s.zaLoanBattle)combat.adventureFaintFriendshipV1=true;combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
  const lead=combat.teams[0][combat.requests[0].active];if(lead)s.activeId=lead.boxId;
  return combat;
 }
