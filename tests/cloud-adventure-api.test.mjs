@@ -8310,3 +8310,14 @@ test('battle soda heals the active Pokémon and consumes the last item once',asy
  try{await get();await call('start',{species:1});const id=state.world.activeId,lead={...makeMon(1,80),boxId:id,hp:20,moves:['튀어오르기'],pp:{}},foe={...makeMon(143,100),boxId:'soda-active-foe',moves:['튀어오르기'],pp:{}};seedMon(id,lead);const key=JSON.stringify([globalThis.__adventureUser.userId,'sodapop']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'sodapop');const combat=createCombat([lead],[foe]);seedWorld({...storeAdventurePosition({...rawWorld(),teamIds:[id],activeId:id},state.revision+1),combat,trainer:{id:'soda-active-test',name:'검증'},encounter:null});await get();const rev=state.revision;await call('use',{item:'sodapop'});await call('use',{item:'sodapop',revision:rev},409);await get();assert.equal(rawMon(id).hp,70);assert.equal(state.inventory.sodapop||0,0);assert.equal(state.battle.teams[0][0].hp,70);await call('use',{item:'sodapop'},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+
+test('flower forms preserve their identity, shiny state and inventory through capture and reload',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'flower-form-qa',displayName:'꽃 색 검사'};
+ try{
+  await get();await call('start',{species:152});const own=state.world.teamIds[0],before=rawMon(own);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector3',interior:null,x:20,y:4,facing:'left',adventureBalls:{masterball:2},zaWildShinyRolls:{'cityResearch:flabebe-white:669':true}},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'cityResearchBattle');await call('cityResearchBattle');assert.equal(rawWorld().encounter.id,30106);assert.equal(rawWorld().encounter.shiny,true);await get();const rev=state.revision;await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision:rev},409);await get();assert.ok(state.box.some(p=>p.id===30106&&p.shiny));assert.equal(rawWorld().adventureBalls.masterball,1);assert.deepEqual([rawMon(own).speciesId,rawMon(own).ivs,rawMon(own).item],[before.speciesId,before.ivs,before.item]);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-bleu-street',x:2,y:3,facing:'right'},state.revision+1));await get();assert.equal(state.world.interaction.action,'cityResearchBattle');await call('throwCityResearch',{ball:'masterball'});await get();assert.ok(state.box.some(p=>p.id===30104));assert.equal(rawWorld().adventureBalls.masterball,0);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});

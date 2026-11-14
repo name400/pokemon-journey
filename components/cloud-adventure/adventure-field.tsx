@@ -1461,6 +1461,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     const px=m.x*tile,py=m.y*tile,img=shiny?shinyFieldImages[m.species]:fieldImages[m.species];
     if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);
     else{ctx.fillStyle=shiny?'#e5c45c':'#8b9e8c';ctx.fillRect(px+8,py+8,tile-16,tile-12);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}
+    if('flower' in m){ctx.fillStyle=m.flower;ctx.beginPath();ctx.arc(px+tile-5,py+5,5,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#273b35';ctx.stroke();}
    }
    // Three followers use only the server-confirmed trail; they never affect collision.
    if(w.district==='lumiose-magenta-sector4'&&!w.interior&&w.zaSide25Stage===1&&Array.isArray(w.zaSide25TrailV1))for(const p of w.zaSide25TrailV1.slice(0,3)){
