@@ -1445,6 +1445,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     if(w.district==='lumiose-aymlis-park'&&!w.zaMission11ParkLower&&w.map?.[3]?.[16]==='^')trainer(16,3,'#9d9272','down');
     if(w.district==='lumiose-bleu-sector8'&&w.map?.[5]?.[5]==='^')trainer(5,5,'#9d9272','down');
    }
+   if(w.district==='lumiose-vert-sector4'&&!w.interior&&!['roof','courtyard'].includes(w.zaVert4Layer)&&w.map?.[11]?.[14]==='^')trainer(14,11,'#a4826b','left');
    if(w.district==='lumiose-jaune-sector8'&&!w.interior&&w.map?.[5]?.[17]==='^')trainer(17,5,'#8194b2','down');
    if(w.district==='lumiose-rouge-sector3'&&!w.interior&&w.map?.[11]?.[14]==='^'&&(w.zaSide26Won===true||Number(w.zaMission10Stage)>=2||w.zaMission10Complete===true||w.zaMission11Complete===true||w.zaMission37Complete===true||['F','E','D','C','B','A','S'].includes(w.zaRoyaleRank)))trainer(14,11,'#a87a68','down');
    if(w.district==='lumiose-vert-sector3'&&!w.interior&&(w.zaSide19Started===true||w.zaLidaStage>=2||w.zaMission08Complete===true||['V','F','E','D','C','B','A','S'].includes(w.zaRoyaleRank))){
