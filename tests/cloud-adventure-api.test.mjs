@@ -7774,3 +7774,15 @@ test('adventure Galarian Slowpoke cannot take ordinary evolution branches',async
   const legacy={...makeMon(10164,40),boxId:'galar-legacy',custom:{legacy:true}};delete legacy.speciesId;delete legacy.formId;sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(legacy.boxId,globalThis.__adventureUser.userId,legacy.id,JSON.stringify(legacy),'qa',1);await get();await call('evolve',{boxId:legacy.boxId,target:80},409);await call('evolve',{boxId:legacy.boxId,target:10165});assert.equal(rawMon(legacy.boxId).id,10165);assert.deepEqual(rawMon(legacy.boxId).custom,{legacy:true});await get();assert.equal(state.inventory.galaricacuff||0,0);assert.deepEqual(state.world.teamIds,[id]);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('adventure regional evolution rejects ordinary forms and preserves other Pokémon',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'regional-evolution-qa',displayName:'지역 폼 진화 검사'};
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,leadBefore=rawMon(lead);
+  for(const [boxId,species] of [['alola-vulpix-qa',10103],['galar-meowth-qa',10161]]){const mon={...makeMon(species,40),boxId,custom:{keep:boxId}};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(boxId,globalThis.__adventureUser.userId,mon.id,JSON.stringify(mon),'qa',1);}
+  for(const item of ['icestone','firestone'])sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item);
+  await get();const foxBefore=rawMon('alola-vulpix-qa');await call('evolve',{boxId:'alola-vulpix-qa',target:38},409);assert.deepEqual(rawMon('alola-vulpix-qa'),foxBefore);await get();assert.equal(state.inventory.firestone,1);assert.equal(state.inventory.icestone,1);
+  const revision=state.revision;await call('evolve',{boxId:'alola-vulpix-qa',target:10104});await call('evolve',{boxId:'alola-vulpix-qa',target:10104,revision},409);assert.equal(rawMon('alola-vulpix-qa').id,10104);assert.deepEqual(rawMon('alola-vulpix-qa').custom,{keep:'alola-vulpix-qa'});while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});
+  await get();assert.equal(state.inventory.icestone||0,0);assert.equal(state.inventory.firestone,1);const catBefore=rawMon('galar-meowth-qa');await call('evolve',{boxId:'galar-meowth-qa',target:53},409);assert.deepEqual(rawMon('galar-meowth-qa'),catBefore);await call('evolve',{boxId:'galar-meowth-qa',target:863});assert.equal(rawMon('galar-meowth-qa').id,863);await get();assert.deepEqual(rawMon(lead),leadBefore);assert.deepEqual(state.world.teamIds,[lead]);
+ }finally{globalThis.__adventureUser=previous;}
+});
