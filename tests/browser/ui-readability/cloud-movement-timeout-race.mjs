@@ -10,6 +10,8 @@ try{
   let world={area:3,district:'lumiose',interior:null,areaInfo:{name:'시험 구역',biome:'city'},x:3,y:8,facing:'right',teamIds:['fixture'],activeId:'fixture',badges:[],objective:'여행',log:[],adventureBalls:{},steps:0};world.map=fieldMap(world);
   let revision=1,moves=0,fences=0,gets=0,resolveRecovery,releaseFirst,resolveFirst,resolveOldFence,releaseOldFence;const oldFence=new Promise(r=>resolveOldFence=r),oldFenceGate=new Promise(r=>releaseOldFence=r);const fenceInputs=[],outcomes=[],recovery=new Promise(r=>{resolveRecovery=r;}),firstGate=new Promise(r=>{releaseFirst=r;}),firstDone=new Promise(r=>{resolveFirst=r;}),state=()=>({engine:'cloud',revision,box:[mon],wallet:{coins:100,balls:5},inventory:{},fieldShop:[],expeditions:[],gameTime:{period:'day'},battle:null,world});
   await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
+  // Isolate the race fixture from real account and local sign-in state.
+  await page.route('**/api/account',r=>r.fulfill({json:{authenticated:true,profile:{nickname:'격리 테스트'},signOut:'#'}}));
   await page.route('**/api/world**',async r=>{
    if(r.request().method()==='POST'){
     const b=r.request().postDataJSON();
