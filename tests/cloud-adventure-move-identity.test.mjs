@@ -69,3 +69,16 @@ test('intro starter evolution grants the Z-A evolution move and retains it in mo
  assert.deepEqual(applyAdventureEvolutionMoves(structuredClone(other),world),applyAdventureEvolutionMoves(structuredClone(other)));
  assert.ok(adventureLearnableMoves(evolved,{zaIntroStarterMovesV1:true,zaIntroStarterSpecies:152}).includes('리프블레이드'));
 });
+
+test('intro starter families learn later Z-A moves and stage-specific moves safely',()=>{
+ const world={zaIntroStarterMovesV1:true,zaIntroStarterBoxId:'starter'};
+ for(const [speciesId,from,to,name] of [[153,39,40,'광합성'],[160,25,26,'와이드브레이커'],[500,44,45,'인파이트'],[499,35,36,'벌크업']]){
+  const mon={...makeMon(speciesId,from),boxId:'starter',origin:'starter',moves:['몸통박치기','방어','빛의장막','울음소리'],pp:{tackle:3}};
+  const result=applyAdventureLevelMoves(mon,{...mon,level:to,moves:[...mon.moves],pp:{...mon.pp}},world);
+  assert.equal(result.pending.filter(move=>sameAdventureMove(move,name)).length,1,`${speciesId} ${name}`);assert.deepEqual(result.mon.moves,mon.moves);assert.deepEqual(result.mon.pp,mon.pp);
+  assert.ok(adventureLearnableMoves({...mon,level:to},world).some(move=>sameAdventureMove(move,name)));
+ }
+ const basic={...makeMon(498,35),boxId:'starter',origin:'starter'};assert.ok(!adventureLearnableMoves({...basic,level:36},world).includes('벌크업'));
+ const partner={...makeMon(153,39),boxId:'other',origin:'starter',moves:['몸통박치기'],pp:{}};
+ assert.deepEqual(applyAdventureLevelMoves(partner,{...partner,level:40,moves:[...partner.moves]},world),applyAdventureLevelMoves(partner,{...partner,level:40,moves:[...partner.moves]}));
+});
