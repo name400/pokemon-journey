@@ -9187,3 +9187,13 @@ test('zone 19 ordinary random alpha Furfrou keeps its identity and does not wake
   clock+=3000;await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('Zone 8 alpha emerges before threatening the player and keeps its shiny identity',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone8-emerging-alpha-qa',displayName:'흙더미 출현 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='zone8:gible:443';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:12,y:8,zaRoyaleRank:'F',zaMission05Complete:true,zaZone8Spent:{},zaZone8Burrows:{gible:443,drilbur:529},zaWildVisibleAlphaLevels:{[key]:35},zaWildShinyRolls:{[key]:true},zaZone8EmergedV1:undefined,zaRandomAlphaAlertV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null},state.revision+1));
+  await get();const rev=state.revision;await call('move',{direction:'right'});await call('move',{direction:'right',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaZone8EmergedV1.gible,'443:shiny');assert.equal(rawWorld().zaRandomAlphaAlertV1.id,'gible');assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.match(state.world.interaction.name,/딥상어동/);
+  clock+=3000;await call('move',{direction:'left'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});

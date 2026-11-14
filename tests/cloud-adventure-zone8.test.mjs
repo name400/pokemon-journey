@@ -99,3 +99,11 @@ test('rounded plaza corners recover legacy positions and preserve all gate route
  for(const start of [{x:1,y:11},{x:21,y:5},{x:9,y:15},{x:11,y:15},{x:19,y:1},{x:11,y:1},{x:21,y:10}])assert.ok(fieldPath(map,start,{x:11,y:8}).length,JSON.stringify(start));
  const old=storeAdventurePosition({...s,x:1,y:1},301);delete old.districtPosition.zone8RoundedLayout;assert.equal(restoreAdventurePosition(old,302).district,null);
 });
+
+test('burrow emergence follows proximity and preserves the current spawn identity',async()=>{
+ const {emergeZone8Burrows,zone8BurrowEmerged,ZONE8_VISIBLE,resetZone8Burrows}=await import('../lib/cloud-adventure/adventure-zone8.mjs');const p=ZONE8_VISIBLE.find(x=>x.id==='gible'),key='zone8:gible:443';
+ const s={district:'lumiose-zone8',x:13,y:8,zaZone8Burrows:{gible:443},zaWildShinyRolls:{[key]:true},zaWildVisibleAlphaLevels:{[key]:35}};
+ assert.equal(zone8BurrowEmerged(s,p),false);assert.equal(emergeZone8Burrows(s),true);assert.equal(zone8BurrowEmerged(s,p),true);assert.equal(emergeZone8Burrows(s),false);s.x=12;assert.equal(zone8BurrowEmerged(s,p),true);
+ const unknown={...s,zaZone8EmergedV1:{version:2,opaque:true}};assert.equal(emergeZone8Burrows(unknown),false);resetZone8Burrows(unknown);assert.deepEqual(unknown.zaZone8EmergedV1,{version:2,opaque:true});
+ resetZone8Burrows(s);assert.equal(zone8BurrowEmerged(s,p),false);assert.equal(s.zaWildShinyRolls[key],true);assert.equal(s.zaWildVisibleAlphaLevels[key],35);
+});
