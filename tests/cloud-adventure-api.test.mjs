@@ -9480,3 +9480,8 @@ test('early special alphas attack idle players with their own saved identity',as
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(team[0]),mon);assert.equal(rawWorld().zaWildShinyRolls['keep:shiny'],true);
  }finally{Date.now=oldNow;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;globalThis.__adventureUser=previous;}
 });
+
+test('adventure responses expose server time without changing saved player health',async()=>{
+ const previous=globalThis.__adventureUser,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'health-server-clock-qa',displayName:'체력 서버 시간'};
+ try{await get();await call('start',{species:152});seedWorld({...rawWorld(),zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'hotel',recoveryAt:clock,recoveryRemainder:0}});await get();assert.equal(state.serverNow,clock);assert.equal(state.world.zaPlayerVitalsV1.hp,1);clock+=2000;await get();assert.equal(state.serverNow,clock);assert.equal(state.world.zaPlayerVitalsV1.hp,9);assert.equal(rawWorld().zaPlayerVitalsV1.hp,1);assert.equal(rawWorld().serverNow,undefined);}finally{Date.now=oldNow;globalThis.__adventureUser=previous;}
+});

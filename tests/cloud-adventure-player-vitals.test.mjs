@@ -103,3 +103,13 @@ test('Zone 5 alert blocks recovery only near the still-present alpha on the corr
  assert.equal(playerRecoverySafe(s),false);assert.equal(playerRecoverySafe({...s,x:8}),true);assert.equal(playerRecoverySafe({...s,zaZone5Upper:true}),true);assert.equal(playerRecoverySafe({...s,zaZone5Spent:{'bellsprout-alpha':true}}),true);assert.equal(playerRecoverySafe({...s,zaFieldCrouched:true}),true);
  const drain={area:3,district:'lumiose-zone5-drain',x:18,y:6,zaZone5AlphaRoarAlertV1:'whirlipede-alpha'};assert.equal(playerRecoverySafe(drain),false);assert.equal(playerRecoverySafe({...drain,zaZone5DrainLanding:true}),true);assert.equal(playerRecoverySafe({...drain,zaZone5Spent:{'whirlipede-alpha':true}}),true);
 });
+
+test('recovery projections respect the server period for roaming alpha alerts',async()=>{
+ const {playerRecoverySafe,projectPlayerVitals}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ const {randomAlphaPlayerThreat}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const key='field3:flabebe:669',world={area:3,district:'lumiose-zone3',x:10,y:8,zaMission05Complete:true,zaWildVisibleAlphaLevels:{[key]:20},zaWildShinyRolls:{[key]:true},zaPlayerVitalsV1:{version:1,hp:10,lastCenterId:'hotel',recoveryAt:1000}};
+ const threat=randomAlphaPlayerThreat(world,'day');assert.equal(threat?.id,'flabebe');world.zaRandomAlphaAlertV1=threat.alert;
+ assert.equal(playerRecoverySafe(world,'day'),false);assert.equal(projectPlayerVitals(world,6000,'day').hp,10);
+ assert.equal(playerRecoverySafe(world,'night'),true);assert.equal(projectPlayerVitals(world,6000,'night').hp,31);
+ assert.equal(world.zaPlayerVitalsV1.hp,10);
+});

@@ -74,11 +74,12 @@ function Side09Timer({stage,remainingMs}:{stage:number;remainingMs:number}){
  useEffect(()=>{const deadline=performance.now()+remainingMs;const update=()=>setSeconds(Math.ceil(Math.max(0,deadline-performance.now())/1000));update();const timer=setInterval(update,250);return()=>clearInterval(timer);},[stage,remainingMs]);
  return <div className="adv-course-clock"><span>비계 코스 {stage}/3</span><output aria-label="남은 시간">{seconds}초</output>{seconds===0&&<span>시간 종료 · 도착점에서 기록을 확인하세요</span>}</div>;
 }
-function PlayerHealth({world,battle}:{world:any,battle:any}){
- const [now,setNow]=useState(()=>Date.now()),v=world.zaPlayerVitalsV1,safe=playerRecoverySafe({...world,combat:battle});
- const health=projectPlayerVitals({...world,combat:battle},now),maxHp=playerMaxHp(world);
- useEffect(()=>{setNow(Date.now());},[safe,v?.version,v?.hp,v?.recoveryAt]);
- useEffect(()=>{if(!safe||health?.version!==1||(maxHp===null||health.hp>=maxHp)||!Number.isSafeInteger(v?.recoveryAt))return;const timer=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer);},[safe,health?.version,health?.hp,v?.recoveryAt,maxHp]);
+function PlayerHealth({world,battle,serverNow,revision,period}:{world:any,battle:any;serverNow:any;revision:any;period:any}){
+ const [sample,setSample]=useState<{serverNow:number;revision:number;receivedAt:number}|null>(null),[,setTick]=useState(0),v=world.zaPlayerVitalsV1,safe=playerRecoverySafe({...world,combat:battle},period);
+ useEffect(()=>{setSample(Number.isSafeInteger(serverNow)&&serverNow>=0&&Number.isSafeInteger(revision)?{serverNow,revision,receivedAt:performance.now()}:null);},[serverNow,revision]);
+ const valid=sample&&sample.serverNow===serverNow&&sample.revision===revision,now=valid?sample.serverNow+Math.max(0,Math.floor(performance.now()-sample.receivedAt)):null;
+ const health=now===null?v:projectPlayerVitals({...world,combat:battle},now,period),maxHp=playerMaxHp(world);
+ useEffect(()=>{if(!valid||!safe||health?.version!==1||maxHp===null||health.hp>=maxHp||!Number.isSafeInteger(v?.recoveryAt))return;const timer=setInterval(()=>setTick(n=>n+1),1000);return()=>clearInterval(timer);},[valid,safe,health?.version,health?.hp,v?.recoveryAt,maxHp]);
  if(health?.version!==1||!Number.isInteger(health.hp)||health.hp<1||maxHp===null||health.hp>maxHp)return null;
  const low=health.hp/maxHp<=.25;
  return <div className="adv-player-health" data-low={low?'true':undefined}><p>플레이어 체력: {health.hp}/{maxHp}</p><div className="adv-player-health-meter" role="progressbar" aria-label="플레이어 체력" aria-valuemin={0} aria-valuemax={maxHp} aria-valuenow={health.hp} aria-valuetext={`${health.hp} / ${maxHp}`}><span style={{width:`${health.hp/maxHp*100}%`}}/></div>{low&&<p className="adv-player-health-warning" role="status">{health.hp===1?'위험: 다음 피해에 쓰러질 수 있습니다.':'체력이 낮습니다. 안전한 곳에서 회복하세요.'}</p>}</div>;
@@ -254,7 +255,7 @@ export default function Adventure(){
  const titles={travel:'여행 지도 · 이동 지점',party:'포켓몬 · 파티와 보유함',manage:`${mon.name} · 기술과 성장`,bag:'가방',shop:'프렌들리숍',journal:'여행 수첩'};
  return <div className={`content adventure-game biome-${area.biome}`}>
   <header className="adv-heading"><div><span className="kicker">나의 포켓몬 여행</span><h2><MapPin size={20}/>{area.name}</h2></div><div className="adv-wallet"><span><Coins size={17}/>{(data.wallet?.coins||0).toLocaleString()}<small>코인</small></span><span className="adv-ball-count"><i/>{data.wallet?.balls||0}<small>볼</small></span></div></header>
-  <PlayerHealth world={w} battle={data.battle}/>
+  <PlayerHealth world={w} battle={data.battle} serverNow={data.serverNow} revision={data.revision} period={data.gameTime?.period}/>
   {w.district==='lumiose-side09-course'&&Number.isSafeInteger(w.zaSide09RemainingMs)&&w.zaSide09RemainingMs>=0&&[1,2,3].includes(w.zaSide09Stage)&&<Side09Timer stage={w.zaSide09Stage} remainingMs={w.zaSide09RemainingMs}/>}
   <div className="adv-route-bar"><p><span className="adv-dot"/>{trackedAdventureObjective(w)}</p><button onClick={()=>open('journal')} aria-label={`여행 수첩 열기. 배지 ${w.badges.length}개`}>배지 <b>{w.badges.length}/8</b><span className="adv-mini-badges" aria-hidden="true">{TRAINERS.slice(0,8).map(t=><i key={t.id} className={w.badges.includes(t.id)?'earned':''}/>)}</span><ChevronRight size={16}/></button></div>
   <div className="adv-game-layout"><section className="adv-field-section" aria-label="필드 탐험">
