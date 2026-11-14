@@ -7703,3 +7703,19 @@ test('Vernal holovator quest advances when the Diggersby is captured',async()=>{
  try{globalThis.__adventureRandom=()=>0;await get();await call('start',{species:1});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:3,y:1,facing:'up',regionId:6,zaMission10Stage:3,adventureBalls:{masterball:1}},state.revision+1));await get();await call('side23Start');await call('side23Battle');await call('ball',{ball:'masterball'});await get();assert.equal(state.world.zaSide23Stage,2);assert.ok(state.box.some(m=>m.speciesId===660));assert.equal(state.world.teamIds[0],id);assert.equal(state.world.teamIds.length,2);while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});await call('side23Reward');assert.equal(state.world.zaSide23Stage,3);await call('side23Reward',{},409);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Side Mission 67 persists five conversations and grants its reward once',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side67-qa',displayName:'수로 의뢰 검사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  const place=async(x,y,facing,lower)=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-coulant-route',interior:null,x,y,facing,zaCoulantLower:lower},state.revision+1));await get();};
+  await place(14,11,'down',true);await call('side67Start',{},409);
+  seedWorld(storeAdventurePosition({...state.world,zaMission21Complete:true,zaMission22Complete:true,zaMission23Complete:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'side67Start');await call('side67Start');await call('side67Reward',{},409);
+  for(const [id,x,y,facing,lower] of [['fans',4,1,'up',false],['couple',10,15,'down',false],['family',7,5,'up',true],['syndicate',15,1,'up',false],['trainers',9,11,'down',true]]){
+   await place(x,y,facing,lower);assert.equal(state.world.interaction.action,`side67Resolve-${id}`);const rev=state.revision;await call(`side67Resolve-${id}`);await call(`side67Resolve-${id}`,{revision:rev},409);await get();assert.ok(rawWorld().zaSide67Found.includes(id));await call(`side67Resolve-${id}`,{},409);
+  }
+  assert.equal(rawWorld().zaSide67Found.length,5);assert.ok(pendingAdventureQuests(state.world).some(q=>q.id==='67'));
+  await place(14,11,'down',true);assert.equal(state.world.interaction.action,'side67Reward');const key=JSON.stringify([globalThis.__adventureUser.userId,'hondewberry']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,995)').run(key,globalThis.__adventureUser.userId,'hondewberry');await get();await call('side67Reward',{},409);assert.notEqual(rawWorld().zaSide67Complete,true);
+  sql.prepare('UPDATE inventory SET quantity=994 WHERE key=?').run(key);await get();const coins=state.wallet.coins,rev=state.revision;await call('side67Reward');await call('side67Reward',{revision:rev},409);await get();assert.equal(state.wallet.coins,coins+2700);assert.equal(state.inventory.hondewberry,999);assert.equal(state.inventory.shellbell,1);assert.equal(rawWorld().zaSide67Complete,true);assert.deepEqual(state.world.teamIds,team);await call('side67Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
