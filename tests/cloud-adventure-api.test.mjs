@@ -8757,3 +8757,12 @@ test('Hawlucha rematch preserves owned Pokemon, story and reward state',async()=
   const key=JSON.stringify([globalThis.__adventureUser.userId,'cobaberry']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,995)').run(key,globalThis.__adventureUser.userId,'cobaberry');seedWorld(place({}));await get();await call('side59Reward',{},409);assert.equal(rawWorld().zaSide59Stage,2);sql.prepare('UPDATE inventory SET quantity=994 WHERE key=?').run(key);await get();const rev=state.revision;await call('side59Reward');await call('side59Reward',{revision:rev},409);await get();assert.equal(state.wallet.coins,coins+2500);assert.equal(state.inventory.focussash,1);assert.equal(state.inventory.cobaberry,999);assert.equal(rawWorld().zaSide59Stage,3);assert.equal(rawWorld().zaMission17Complete,true);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).shiny,true);await call('side59Reward',{},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Claire opening Detect survives API reconnect and rejects stale replay',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side58-opening-qa',displayName:'판별 첫 턴 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,lead={...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{psystrike:5},shiny:true};seedMon(id,lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector4',interior:null,x:4,y:3,facing:'left',zaMission19Complete:true,zaSide58Stage:1},state.revision+1));await get();await call('side58Battle');await get();assert.equal(rawWorld().combat.cpuOpeningMoveV1,'detect');const hp=state.battle.teams[1][0].hp,rev=state.revision;
+  await call('battle',{command:{type:'move',move:'사이코브레이크'}});assert.equal(state.battle.teams[1][0].hp,hp);assert.ok(state.battle.events.some(e=>e.side===1&&e.moveId==='detect'));await call('battle',{revision:rev,command:{type:'move',move:'사이코브레이크'}},409);await get();assert.equal(rawWorld().combat.cpuOpeningMoveV1,'detect');assert.equal(state.battle.teams[1][0].hp,hp);assert.equal(rawMon(id).shiny,true);assert.deepEqual(state.world.teamIds,[id]);
+ }finally{globalThis.__adventureUser=previous;}
+});

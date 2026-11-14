@@ -5,3 +5,5 @@
 [상대와 기술 자료](https://www.serebii.net/legendsz-a/sidemissions/bettertodetectthantoprotect.shtml), [전투 상금과 의뢰 보상 공략](https://www.thonky.com/pokemon-legends-z-a/side-mission-058-better-to-detect-than-to-protect)을 대조했다. Serebii는 위치를 블루 4번지로 기재하면서 본문에는 6번지라고 표기하므로, 다른 공략의 코트 설명과 현재 블루 4번지 연결을 따랐다. NPC 좌표는 2D 초안이며 상대 AI의 첫 턴 판별과 원작 실시간 전투는 재현하지 않는다. 실기에서 해금과 위치를 확인하지 못했다.
 
 격리 API에서 해금·상대 편성·기권·재접속·재도전·상금·가방 한도·중복 수령·검은띠 착용과 기존 Distan 진행 및 파티 보존을 확인했다. 운영 D1·실제 기기·Sites 병합본은 확인하지 않았다.
+
+후속: [공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Side_Missions_41-60)의 첫 턴 판별 설명을 반영해, 새 Claire 배틀에서 각 상대가 처음 등장한 턴에 판별을 선택한다. 판별이 사용 불가인 경우 기존 AI를 사용한다. 새 전투에만 규칙을 표시하므로 이미 진행 중인 저장 전투와 다른 상대의 행동은 바꾸지 않는다. 각각 첫 등장·방어 효과·교체·재접속·PP 부족 및 구형 전투를 대표 검사했다. 이는 세 상대가 순차적으로 등장하는 현재 턴제의 근사이며 원작의 실시간 배치와 기기 검증은 남아 있다.
