@@ -129,3 +129,9 @@ test('Sylveon quest tracker follows unfinished conversations, bank stairs and re
  assert.equal(target({...done,interior:'other'}),null);assert.equal(target({...done,district:'elsewhere'}),null);
  assert.equal(trackedAdventureLocalTarget({...done,map:[]}),null);
 });
+
+test('Touri pending reward marker uses the current visible interaction only',()=>{
+ const s={area:3,district:'lumiose-vert-sector9',zaTrackedQuestId:'75-reward',zaSide75Won:true,zaSide75RewardPending:true};
+ assert.ok(pendingAdventureQuests(s).some(q=>q.id==='75-reward'));assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),{x:7,y:5});
+ assert.equal(trackedAdventureLocalTarget({...s,interior:'other',map:fieldMap(s)}),null);assert.equal(trackedAdventureLocalTarget({...s,zaSide75RewardPending:false,map:fieldMap(s)}),null);assert.deepEqual(pendingAdventureQuests({zaSide75RewardPending:true}),[]);
+});
