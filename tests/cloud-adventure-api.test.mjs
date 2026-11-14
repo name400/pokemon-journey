@@ -9945,3 +9945,14 @@ test('intro starter early Z-A moves survive candy growth and reconnect',async()=
   await get();assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('차밍보이스'));assert.equal(rawMon(id).pp.tackle,3);await call('useAdventureRareCandy',{revision},409);assert.equal(state.inventory.rarecandy??0,0);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('intro starter evolution preserves party and offers its Z-A evolution move',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'starter-evolution-za-qa',displayName:'스타터 진화 검증'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;
+  seedWorld({...rawWorld(),zaIntroStarterMovesV1:true,zaIntroStarterBoxId:id});
+  const mon={...makeMon(152,16),boxId:id,origin:'starter',moves:['몸통박치기','꼬리흔들기','나뭇잎','방어'],pp:{tackle:3},item:'leftovers',shiny:true};seedMon(id,mon);await get();const revision=state.revision;
+  await call('evolve',{boxId:id,target:153});assert.equal(rawMon(id).speciesId,153);assert.equal(rawMon(id).item,'leftovers');assert.equal(rawMon(id).shiny,true);assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(state.world.teamIds,[id]);assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='기가드레인'));
+  await get();assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('기가드레인'));assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('나뭇잎'));await call('evolve',{boxId:id,target:153,revision},409);
+ }finally{globalThis.__adventureUser=priorUser;}
+});

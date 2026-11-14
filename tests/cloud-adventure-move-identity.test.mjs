@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {knowsAdventureMove,sameAdventureMove} from '../lib/cloud-adventure/adventure-move-identity.mjs';
-import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,adventureLearnableMoves,teachAdventureMove} from '../lib/cloud-adventure/adventure-growth.mjs';
+import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureEvolutionMoves,adventureLearnableMoves,teachAdventureMove} from '../lib/cloud-adventure/adventure-growth.mjs';
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
@@ -52,4 +52,20 @@ test('intro starters gain confirmed early Z-A moves while preserving legacy save
  }
  const mon={...makeMon(152,8),origin:'starter',boxId:'chosen',moves:['몸통박치기'],pp:{tackle:3}},world={zaIntroStarterMovesV1:true,zaIntroStarterBoxId:'chosen'};
  const next=applyAdventureLevelMoves(mon,{...mon,level:9,moves:[...mon.moves]},world);assert.ok(next.learned.includes('차밍보이스'));assert.equal(next.mon.pp.tackle,3);
+});
+
+test('intro starter evolution grants the Z-A evolution move and retains it in move management',()=>{
+ const world={zaIntroStarterMovesV1:true,zaIntroStarterBoxId:'starter'};
+ for(const [speciesId,move] of [[153,'기가드레인'],[154,'리프블레이드'],[159,'베어가르기'],[160,'깨물어부수기'],[499,'그로우펀치'],[500,'히트스탬프']]){
+  const mon={...makeMon(speciesId,40),boxId:'starter',origin:'starter',moves:['몸통박치기','방어','울음소리','빛의장막'],pp:{tackle:2}};
+  const result=applyAdventureEvolutionMoves({...mon,moves:[...mon.moves],pp:{...mon.pp}},world);assert.deepEqual(result.pending,[move]);assert.deepEqual(result.mon.moves,mon.moves);assert.equal(result.mon.pp.tackle,2);
+  assert.ok(adventureLearnableMoves(mon,world).includes(move));assert.ok(adventureLearnableMoves(mon,world).includes('몸통박치기'));
+  const available=applyAdventureEvolutionMoves({...mon,moves:['몸통박치기'],pp:{tackle:2}},world);assert.ok(available.learned.includes(move));assert.equal(available.mon.pp.tackle,2);
+ }
+ const evolved={...makeMon(154,40),boxId:'starter',origin:'starter'};
+ assert.ok(adventureLearnableMoves(evolved,world).includes('기가드레인'));
+ assert.ok(adventureLearnableMoves(evolved,world).includes('차밍보이스'));
+ const other={...makeMon(499,17),boxId:'other',origin:'starter',moves:['몸통박치기'],pp:{}};
+ assert.deepEqual(applyAdventureEvolutionMoves(structuredClone(other),world),applyAdventureEvolutionMoves(structuredClone(other)));
+ assert.ok(adventureLearnableMoves(evolved,{zaIntroStarterMovesV1:true,zaIntroStarterSpecies:152}).includes('리프블레이드'));
 });
