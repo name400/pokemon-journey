@@ -85,3 +85,22 @@ test('early cemetery and monument alphas respect unlocks and legacy spent flags'
  assert.equal(fixedAlphaPlayerThreat({...monument,x:11,y:8}),null);
  assert.equal(fixedAlphaAlertKnown({...monument,zaZone7Spent:{version:2}}),false);
 });
+
+test('random visible alpha identity follows the saved species, cycle and shiny lifetime',async()=>{
+ const {randomAlphaPlayerThreat,randomAlphaPlayerNear,randomAlphaAlertKnown,randomAlphaAlertMatches}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const key='zone14:aron:304',s={area:3,district:'lumiose-zone14',x:10,y:3,zaWildVisibleAlphaLevels:{[key]:40},zaWildShinyRolls:{[key]:false},zaWildSpawnCycles:{14:{period:'day',interval:4}}};
+ const p=randomAlphaPlayerThreat(s);assert.equal(p.id,'aron');assert.equal(p.alert.cycle,'day:4');assert.equal(randomAlphaPlayerNear(s,p),true);
+ const seen={...s,zaRandomAlphaAlertV1:p.alert};assert.equal(randomAlphaAlertMatches(seen,p),true);assert.equal(playerRecoverySafe(seen),false);assert.equal(predictCloudStep(s,'left'),null);
+ const refreshed={...seen,zaWildSpawnCycles:{14:{period:'night',interval:5}}};assert.equal(randomAlphaAlertMatches(refreshed,randomAlphaPlayerThreat(refreshed)),false);
+ const shiny={...s,zaWildShinyRolls:{[key]:true}},one=randomAlphaPlayerThreat(shiny),later={...shiny,zaRandomAlphaAlertV1:one.alert,zaWildSpawnCycles:{14:{period:'night',interval:5}}};assert.equal(randomAlphaAlertMatches(later,randomAlphaPlayerThreat(later)),true);
+ assert.equal(randomAlphaPlayerThreat({...s,zaZone14Spent:{aron:true}}),null);assert.equal(randomAlphaPlayerThreat({...s,x:11,y:3}),null);
+ assert.equal(randomAlphaPlayerThreat({...s,zaWildVisibleAlphaLevels:{version:2}}),null);assert.equal(randomAlphaPlayerThreat({...s,zaWildShinyRolls:{version:2}}),null);
+ assert.equal(randomAlphaAlertKnown({...s,zaRandomAlphaAlertV1:{version:2,opaque:true}}),false);
+});
+
+test('random alphas respect floor and time while excluding ordinary encounters',async()=>{
+ const {randomAlphaPlayerThreat}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const key='zone18:swablu:333',s={area:3,district:'lumiose-zone18',x:8,y:7,zaZone18Upper:true,zaZone18Period:'day',zaWildVisibleAlphaLevels:{[key]:57},zaWildShinyRolls:{[key]:true}};
+ assert.equal(randomAlphaPlayerThreat(s)?.id,'swablu');assert.equal(randomAlphaPlayerThreat({...s,zaZone18Period:'night'}),null);assert.equal(randomAlphaPlayerThreat({...s,zaZone18Upper:false}),null);
+ assert.equal(randomAlphaPlayerThreat({...s,zaWildVisibleAlphaLevels:{}}),null);
+});
