@@ -4185,6 +4185,16 @@ test('mission 6 bench changes only the personal clock and preserves legacy posit
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
 });
 
+test('Bleu and Magenta center benches support time changes and preserve old saves',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'center-benches-qa',displayName:'센터 벤치 검사'};globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon=rawMon(id),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const p of [{district:'lumiose-bleu-sector7',x:9,y:12,facing:'left'}, {district:'lumiose-magenta-sector8-route',x:14,y:12,facing:'right'}]){
+   seedWorld(storeAdventurePosition({...rawWorld(),...p,area:3,interior:null,zaEmmaMegaSeen:true,zaMission06Started:true,zaSide88Stage:1},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='benchNight'));const rev=state.revision;await call('benchNight');await call('benchNight',{revision:rev},409);await get();assert.equal(state.gameTime.period,'night');assert.equal(state.world.district,p.district);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawWorld().zaSide88Stage,1);await call('benchMorning');await get();assert.equal(state.gameTime.hour,8);
+  }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});
+
 test('Mission 6 reaches Yvon at Bleu Plaza and preserves the legacy desk',async()=>{
  const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'mission06-yvon-qa',displayName:'랭크 X 승급'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
  try{
