@@ -46,6 +46,7 @@ import {zone3GardenMosaic,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 import {trackedAdventureLocalTarget} from '@/lib/cloud-adventure/adventure-pending-quests.mjs';
+import {adventureQuestVisuals} from '@/lib/cloud-adventure/adventure-quest-visuals.mjs';
 
 type VisualPath={generation:number;origin:{x:number;y:number};steps:Array<{id:number;x:number;y:number;facing:string}>};
 type Props={visualPath?:VisualPath;world:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;onAimSewer:(id:string)=>void;onAimMission20Ghost:(x:number,y:number)=>void;period:string};
@@ -1400,6 +1401,16 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
     if(p?.district===w.district&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&!(p.x===w.x&&p.y===w.y)&&walkable(w.map[p.y]?.[p.x]))trainer(p.x,p.y,'#a17d72',p.facing||'down',walking);
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
+   // Draw only at the active interaction tiles; these figures do not affect movement.
+   for(const p of adventureQuestVisuals(w)){
+    const px=p.x*tile,py=p.y*tile;
+    if(p.kind==='dummy'){
+     ctx.fillStyle='#5b8056';ctx.fillRect(px+13,py+20,6,10);ctx.fillStyle='#91b77b';ctx.beginPath();ctx.ellipse(px+16,py+16,10,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#354d3b';ctx.fillRect(px+11,py+14,3,3);ctx.fillRect(px+18,py+14,3,3);
+    }else{
+     trainer(p.x,p.y,p.color,'down');
+     if(p.kind==='webbed'){ctx.strokeStyle='#f4f5ed';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+5,py+9);ctx.lineTo(px+27,py+26);ctx.moveTo(px+27,py+9);ctx.lineTo(px+5,py+26);ctx.moveTo(px+4,py+18);ctx.lineTo(px+28,py+18);ctx.stroke();}
+    }
+   }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='?'&&w.district==='lumiose-royale'){const px=x*tile,py=y*tile;ctx!.fillStyle='#b5790d';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx!.fill();ctx!.fillStyle='#ffe47b';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,5,0,Math.PI*2);ctx!.fill();return;}if(c==='!'&&w.district==='lumiose-royale'){const px=x*tile,py=y*tile;ctx!.fillStyle='#c99522';ctx!.fillRect(px+7,py+5,tile-14,tile-10);ctx!.fillStyle='#fff2bf';ctx!.fillRect(px+10,py+8,tile-20,tile-16);ctx!.fillStyle='#c99522';ctx!.fillRect(px+12,py+13,tile-24,3);return;}if(c==='!'){const px=x*tile,py=y*tile;ctx!.fillStyle='#692975';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx!.fill();ctx!.fillStyle='#db90e8';ctx!.fillRect(px+tile/2-5,py+tile/2-5,10,4);ctx!.fillStyle='#f6e6fa';ctx!.fillRect(px+tile/2-2,py+tile/2-2,4,4);}else if(c==='$')trainer(x,y,'#d1a94d','down');}));
    if(w.district==='lumiose-bleu-sector8'&&!w.interior&&side12Available(w)&&w.map?.[14]?.[15]==='#')trainer(15,14,'#b578a6','down');
    if(w.district==='lumiose-rouge-sector1'&&!w.interior&&side11Available(w)&&w.map?.[14]?.[15]==='#')trainer(15,14,'#b786a6','down');
