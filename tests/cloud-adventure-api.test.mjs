@@ -9218,3 +9218,16 @@ test('Zone 19 sleeping alpha wakes then threatens without changing its shiny or 
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:10,y:8,facing:'right',zaZone19Spent:{},zaZone19Period:'day',zaZone19FurfrouAwakeV1:undefined,zaWildShinyRolls:{[key]:true},combat:null,encounter:null},state.revision+1));await get();assert.match(state.world.interaction.text,/잠들어/);await call('zone19Wild-furfrou-alpha');await get();assert.equal(rawWorld().zaZone19FurfrouAwakeV1,true);assert.equal(rawWorld().encounter.shiny,true);await call('flee');await get();assert.equal(rawWorld().zaZone19FurfrouAwakeV1,true);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('sleeping Zone 19 alpha receives unaware field capture bonus and wakes on failure',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;Date.now=()=>2000001000000;
+ const {adventureCaptureAttempt}=await import('../lib/cloud-adventure/adventure-balls.mjs');const {makeAdventureAlpha}=await import('../lib/cloud-adventure/adventure-alpha.mjs');const foe=makeAdventureAlpha(makeMon(676,61)),context={overworld:true,alpha:true,moveCount:0,royaleRank:'B'};
+ const roll=Array.from({length:9999},(_,i)=>(i+1)/10000).find(x=>adventureCaptureAttempt(foe,'pokeball',{...context,unaware:true},()=>x).caught&&!adventureCaptureAttempt(foe,'pokeball',{...context,unaware:false},()=>x).caught);assert.ok(roll);
+ try{
+  for(const mode of ['awake','sleep','sleep-fail']){const asleep=mode!=='awake';
+   globalThis.__adventureUser={userId:`zone19-furfrou-unaware-${mode}`,displayName:'수면 포획 검사'};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});sql.prepare('UPDATE wallets SET balls=2 WHERE user_id=?').run(globalThis.__adventureUser.userId);const team=[...state.world.teamIds],key='zone19:furfrou-alpha:676';
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone19',interior:null,x:10,y:8,facing:'right',zaRoyaleRank:'B',zaMission05Complete:true,zaZone19Spent:{},zaZone19Period:'day',zaZone19FurfrouAwakeV1:asleep?false:true,zaWildShinyRolls:{[key]:false},combat:null,encounter:null},state.revision+1));await get();const revision=state.revision;globalThis.__adventureRandom=()=>mode==='sleep-fail'?.999:roll;await call('throwZoneVisible');await call('throwZoneVisible',{revision},409);await get();assert.equal(state.wallet.balls,1);assert.ok(team.every(id=>state.world.teamIds.includes(id)));
+   if(mode==='sleep'){assert.equal(rawWorld().zaZone19Spent['furfrou-alpha'],true);assert.ok(state.box.some(m=>m.speciesId===676&&m.adventureAlpha));}else{assert.equal(rawWorld().encounter.speciesId,676);assert.equal(rawWorld().encounter.adventureAlpha,true);assert.equal(rawWorld().zaZone19FurfrouAwakeV1,true);}
+  }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});
