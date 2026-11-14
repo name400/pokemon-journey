@@ -7070,6 +7070,18 @@ test('wild capture grants party experience once across field, battle and catch-w
  }}finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Lucky Egg boosts capture experience for its holder across capture paths',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;
+ try{for(const kind of ['field','battle','window']){
+  globalThis.__adventureUser={userId:`capture-lucky-egg-${kind}`,displayName:'포획 행복의알 검사'};globalThis.__adventureRandom=()=>0;await get();await call('start',{species:152});const leadId=state.world.activeId,lead={...makeMon(152,50),boxId:leadId,experience:0,item:kind==='battle'?'':'luckyegg'},reserve={...makeMon(4,50),boxId:`capture-lucky-reserve-${kind}`,experience:0,item:kind==='battle'?'luckyegg':''};seedMon(leadId,lead);sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(reserve.boxId,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);
+  const foe={...makeMon(kind==='field'?304:19,kind==='field'?25:5),boxId:'wild'},world={...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',teamIds:[leadId,reserve.boxId],activeId:leadId,zaRoyaleRank:'D',zaMission19Complete:true,zaRedCanariLevel:2,adventureBalls:{masterball:1}};
+  if(kind==='battle'){world.combat=createCombat([lead,reserve],[foe]);world.encounter=foe;world.trainer=null;}
+  if(kind==='window'){world.combat=null;world.encounter=null;world.trainer=null;world.adventureCatchWindow={foe:{...foe,hp:0},moveCount:0,revision:state.revision+1};}
+  seedWorld(storeAdventurePosition(world,state.revision+1));await get();const before=state.revision,action=kind==='field'?'throwZoneVisible':kind==='battle'?'ball':'catchWindowBall';await call(action,{ball:'masterball'});const caught=state.box.find(m=>m.origin==='capture'),xp=victoryExperience([rawMon(caught.boxId)],false);
+  assert.equal(rawMon(leadId).experience,canariBattleExperience(xp,true,false,2,lead.item));assert.equal(rawMon(reserve.boxId).experience,canariBattleExperience(xp,false,false,2,reserve.item));assert.equal(rawMon(leadId).item,lead.item);assert.equal(rawMon(reserve.boxId).item,reserve.item);const saved=rawMon(leadId).experience;await call(action,{ball:'masterball',revision:before},409);await get();assert.equal(rawMon(leadId).experience,saved);assert.equal(state.box.filter(m=>m.origin==='capture').length,1);
+ }}finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('failed field capture gives no experience; later capture queues earned moves once',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'capture-xp-level-qa',displayName:'포획 성장 검사'};
  try{

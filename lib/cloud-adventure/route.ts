@@ -347,7 +347,7 @@ function queueAdventureMoves(s:any,boxId:string,movesToQueue:string[]){s.adventu
 function awardCaptureExperience(s:any,caught:any,mons:Map<string,any>,changed:Map<string,any>){
  const xp=victoryExperience([caught],false);
  for(const id of s.teamIds){const mon=mons.get(id);if(!mon||mon.hp<=0||mon.level>=100)continue;
-  const amount=canariBattleExperience(xp,id===s.activeId,s.zaRedCanariPlush,s.zaRedCanariLevel),g=applyAdventureLevelMoves(mon,gainExperience(s,mon,amount).mon,s);
+  const amount=canariBattleExperience(xp,id===s.activeId,s.zaRedCanariPlush,s.zaRedCanariLevel,mon.item),g=applyAdventureLevelMoves(mon,gainExperience(s,mon,amount).mon,s);
   mons.set(id,g.mon);changed.set(id,g.mon);s.log.push(`${mon.name}이(가) 포획 경험치 ${amount}를 얻었다.`);
   if(g.mon.level>mon.level)s.log.push(`${mon.name}의 레벨이 ${g.mon.level}이 되었다!`);for(const move of g.learned)s.log.push(`${mon.name}이(가) ${move}을(를) 배웠다!`);if(g.pending.length)queueAdventureMoves(s,id,g.pending);
  }
