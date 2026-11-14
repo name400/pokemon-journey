@@ -18,3 +18,9 @@ test('unconfirmed forms and unavailable moves never promise a relearning path',(
  assert.match(msg,/기술머신 보유: 067/);assert.match(msg,/이 폼의 학습 가능 여부는 확인되지 않았습니다/);assert.doesNotMatch(msg,/보유 기술머신 067/);
  const unknown={...makeMon(25,5),adventureAlphaMove:'절대영도',moves:['절대영도']};assert.match(warning(unknown,0,{},{}),/다시 배울 수 있는 경로가 확인되지 않았습니다/);
 });
+
+test('warnings recognize saved English aliases and do not claim a retained duplicate is forgotten',()=>{
+ const mon={...makeMon(25,50),adventureAlphaMove:'10만볼트',moves:['Thunderbolt','울음소리']},before=structuredClone(mon);
+ assert.match(warning(mon,0,{zaResearchRewards:[24]},{}),/보유 기술머신 067/);assert.equal(warning(mon,1,{},{}),null);assert.deepEqual(mon,before);
+ assert.equal(warning({...mon,moves:['Thunderbolt','10만볼트']},0,{zaResearchRewards:[24]},{}),null);
+});

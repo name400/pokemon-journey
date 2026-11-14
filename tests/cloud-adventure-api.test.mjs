@@ -6980,6 +6980,17 @@ test('new recovery Plus moves support natural mastery and seed mastery without d
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('move aliases preserve owned moves, PP, mastery and field access',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'move-alias-safety-qa',displayName:'기술 이름 호환 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),items=['za-tm062','za-tm072','seedofmasteryza'];for(const item of items)sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item);
+  const original={...makeMon(6,50),moves:['Flamethrower','울음소리'],pp:{flamethrower:2,growl:3},custom:{preserved:true}};seedMon(id,original);await get();await call('teachStoryTm',{boxId:id,item:'za-tm062',slot:1},409);assert.deepEqual(rawMon(id),original);await call('teachStoryTm',{boxId:id,item:'za-tm072',slot:1});await get();assert.deepEqual(rawMon(id).moves,['Flamethrower','회오리불꽃']);assert.equal(rawMon(id).pp.flamethrower,2);assert.equal(state.inventory['za-tm072'],1);
+  const pikachu={...makeMon(25,50),moves:['thunderbolt','울음소리'],pp:{thunderbolt:2,growl:3},custom:{preserved:true}};seedMon(id,pikachu);seedWorld({zaResearchRewards:[24,4]});await get();await call('teachResearchTm',{boxId:id,level:24,slot:1},409);await call('learn',{boxId:id,move:'10만볼트',slot:1},409);assert.deepEqual(rawMon(id),pikachu);seedWorld({adventurePendingMoves:[{boxId:id,move:'10만볼트'}]});await get();await call('resolveAdventureMove',{slot:1},409);assert.deepEqual(rawMon(id),pikachu);await call('resolveAdventureMove',{slot:null});await call('teachResearchTm',{boxId:id,level:4,slot:1});await get();assert.deepEqual(rawMon(id).moves,['thunderbolt','방어']);assert.equal(rawMon(id).pp.thunderbolt,2);assert.deepEqual(state.world.zaResearchRewards,[24,4]);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',zaMission19JoseeWon:true},state.revision+1));await get();const rev=state.revision;await call('masterAdventureMove',{boxId:id,move:'thunderbolt'});await call('masterAdventureMove',{boxId:id,move:'10만볼트',revision:rev},409);await get();assert.deepEqual(rawMon(id).adventurePlusMastered,['thunderbolt']);assert.equal(state.inventory.seedofmasteryza,undefined);
+  seedMon(id,{...rawMon(id),moves:['Rock Smash'],pp:{rocksmash:3}});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:18,y:12,facing:'right',zaZone2RockCleared:false},state.revision+1));await get();await call('smashZone2Rock');await get();assert.equal(state.world.zaZone2RockCleared,true);assert.equal(rawMon(id).pp.rocksmash,3);assert.deepEqual(rawMon(id).custom,{preserved:true});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Gardevoir naturally masters Wish without consuming a seed',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'gardevoir-wish-natural-qa',displayName:'가디안 자연 숙달'};
  try{
