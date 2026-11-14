@@ -13,3 +13,7 @@
 ## 후속: 코트 접근과 의뢰 추적
 
 [Serebii](https://www.serebii.net/legendsz-a/sidemissions/letusbattle...artistically.shtml)가 명시한 루주 1번지 배틀코트의 기존 2D 맵에 Fina를 추가했다. 정확한 칸은 초안이다. 기존 센트리코 임시 위치에서 이미 시작한 저장은 그 위치에서도 이어서 배틀·보상을 받을 수 있다. 새 미수락 의뢰는 코트에서 시작한다. 미션 95와 96은 수락한 경우 여행 수첩에서 추적할 수 있고, 현재 맵에 대상이 있으면 해당 위치에 표식을 표시한다. 완료·미수락·알 수 없는 저장에서 보상은 추정하지 않는다.
+
+## 후속: 자폭 기술머신의 남은 확인 종과 폼
+
+[Serebii의 Z-A 기술머신 목록](https://www.serebii.net/attackdex-sv/self-destruct.shtml)과 [Dittobase의 Z-A 학습표](https://www.dittobase.com/legends-za/moves/self-destruct)를 대조해 침바루·꼴깍몬·치렁·랑딸랑·프리지오·골비람 계열과 일부 전설 등 누락된 기본 종을 추가했다. 히스이 침바루, 호바귀·펌킨인 크기 폼, 게노세크트 카세트, 500년 전 마기아나는 프로젝트의 명시적 폼 ID에만 적용한다. 원작 실기 검증이나 메가 폼 전체 지원은 아니다. 보유한 포켓몬의 기존 기술과 기술머신은 자동으로 바꾸지 않는다.
