@@ -51,3 +51,10 @@ test('TM085 supports confirmed Hoenn starters and Lumiose evolution lines',async
  for(const id of added)assert.equal(canLearnStoryTm(bag,{...makeMon(id,30),moves:[]},'za-tm085'),true,`base ${id}`);
  assert.equal(canLearnStoryTm(bag,{id:99999,speciesId:443,moves:[]},'za-tm085'),false);assert.equal(canLearnStoryTm(bag,{id:443,speciesId:444,moves:[]},'za-tm085'),false);
 });
+
+test('TM099 requires ownership and reviewed compatible form',async()=>{
+ const {makeMon}=await import('../lib/game.mjs');const {canLearnStoryTm}=await import('../lib/cloud-adventure/adventure-story-tm.mjs');const bag={'za-tm099':1};
+ for(const id of [35,36,39,40,63,64,65,66,67,68,150,173,280,281,282,448])assert.equal(canLearnStoryTm(bag,{...makeMon(id,30),moves:[]},'za-tm099'),true);
+ for(const mon of [{id:129,speciesId:129,moves:[]},{id:99999,speciesId:35,moves:[]},{id:35,speciesId:36,moves:[]},{...makeMon(35,30),moves:['Metronome']}])assert.equal(canLearnStoryTm(bag,mon,'za-tm099'),false);
+ assert.equal(canLearnStoryTm({}, {...makeMon(35,30),moves:[]},'za-tm099'),false);
+});

@@ -216,3 +216,7 @@ test('side 66 tracking points to the current investigation stage only',()=>{
 test('side 78 tracking points to Odette only while its current stage is pending',()=>{
  for(const [id,stage,expected] of [['78',1,{x:3,y:0}],['78-reward',2,{x:3,y:0}],['78',3,null]]){const s={area:3,district:'lumiose-vernal',interior:null,zaTrackedQuestId:id,zaSide78Stage:stage};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),expected);}
 });
+
+test('side 79 tracking follows battle and reward stages at Furiko',()=>{
+ for(const [id,stage,expected] of [['79',1,{x:4,y:6}],['79-reward',2,{x:4,y:6}],['79',3,null]]){const s={area:3,district:'lumiose-hibernal-approach',interior:null,zaTrackedQuestId:id,zaSide79Stage:stage};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),expected);}
+});
