@@ -53,3 +53,9 @@ test('green plush raises the health cap without rewriting injuries or corrupt le
  const damaged={zaGreenCanariLevel:2,zaPlayerVitalsV1:{version:1,hp:175,lastCenterId:'hotel'}};assert.deepEqual(applyPlayerAlphaRoar(damaged,5000),{blackout:false,damage:10});assert.equal(damaged.zaPlayerVitalsV1.hp,165);
  const future={zaGreenCanariLevel:9,zaPlayerVitalsV1:{version:1,hp:150,lastCenterId:'hotel'}},before=structuredClone(future);assert.equal(playerMaxHp(future),null);assert.equal(syncPlayerVitals(future,5000),false);assert.equal(recordPlayerCenterVisit(future,{id:'jaune'}),false);assert.equal(applyPlayerAlphaRoar(future,5000),null);assert.deepEqual(future,before);
 });
+
+test('roof alpha alert stops recovery only while that alpha remains present',async()=>{
+ const {syncPlayerVitals,projectPlayerVitals}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ const w={district:'lumiose-zone1-roof',zaZone1RoofRoarAlert:true,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}};
+ assert.equal(syncPlayerVitals(w,1000),false);w.zaZone1RoofAlphaSpent=true;assert.equal(syncPlayerVitals(w,2000),true);assert.equal(projectPlayerVitals(w,3000).hp,34);
+});

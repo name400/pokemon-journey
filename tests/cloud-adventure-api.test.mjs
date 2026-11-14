@@ -7914,6 +7914,24 @@ test('noticed wild alpha roar damages the player and safely returns them to thei
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('zone 1 rooftop alpha roar protects old saves and returns the player after a later hit',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'roof-alpha-roar-qa',displayName:'옥상 포효'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const roof=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1-roof',interior:null,x:18,y:7,facing:'up',zaMission05Complete:true,zaZone1RoofAlphaSpent:false,zaZone1RoofRoarAlert:false,...extra},state.revision+1);
+  seedWorld(roof({zaPlayerVitalsV1:{version:1,hp:11,lastCenterId:'hotel',extra:'kept'},zaWildShinyRolls:{'keep:shiny':true}}));await get();const revision=state.revision;
+  await call('move',{direction:'up'});await call('move',{direction:'up',revision},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);assert.equal(state.world.zaZone1RoofRoarAlert,true);
+  clock+=5000;await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);await call('move',{direction:'down'});await call('move',{direction:'up'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(state.world.zaPlayerVitalsV1.extra,'kept');assert.equal(rawWorld().zaWildShinyRolls['keep:shiny'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  const future={version:2,hp:1,lastCenterId:'hotel',opaque:true};seedWorld(roof({zaPlayerVitalsV1:future}));await get();await call('move',{direction:'up'});await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);assert.equal(state.world.district,'lumiose-zone1-roof');
+  seedWorld(roof({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'up'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);
+  seedWorld(roof({zaFieldCrouched:true,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);assert.notEqual(state.world.zaZone1RoofRoarAlert,true);
+  seedWorld(roof({zaFieldCrouched:false,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel',lastDamageAt:clock-1000}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
+  seedWorld(roof({zaZone1RoofAlphaSpent:true,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);assert.notEqual(state.world.zaZone1RoofRoarAlert,true);
+  seedWorld(roof({x:18,y:8,zaDodgeReadyAt:0,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('dodge',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
+});
+
 test('player immunity and safe recovery survive reload without GET writes or duplicate movement',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'player-health-timing-qa',displayName:'체력 시간 검사'};globalThis.__adventureRandom=()=>.999;
  try{
