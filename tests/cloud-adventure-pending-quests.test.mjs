@@ -8,3 +8,7 @@ test('quest journal derives active objectives and only explicit unclaimed reward
  completed.zaTradePotionPending=true;completed.zaSableyeRevivePending=true;completed.zaSide119LuxuryPending=2;assert.deepEqual(pendingAdventureQuests(JSON.parse(JSON.stringify(completed))).map(q=>q.id),['2-reward','3-reward','119-reward']);
  const twelve={zaSide21Started:true,zaSide21Found:Array.from({length:12},(_,i)=>`museum1-${i}`)};assert.match(pendingAdventureQuests(twelve)[0].goal,/보고/);
 });
+
+test('tracked objective follows an active quest and falls back after completion',async()=>{
+ const {trackedAdventureObjective}=await import('../lib/cloud-adventure/adventure-pending-quests.mjs');const old={objective:'메인 목표'};assert.equal(trackedAdventureObjective(old),'메인 목표');const active={...old,zaSide14Started:true,zaTrackedQuestId:'14'};assert.match(trackedAdventureObjective(active),/Soleil/);assert.equal(trackedAdventureObjective({...active,zaSide14Complete:true}),'메인 목표');assert.equal(trackedAdventureObjective({...active,zaTrackedQuestId:'invalid'}),'메인 목표');const progress={...old,zaEmmaMet:true,zaBunnelbyQuest:1,zaTrackedQuestId:'1'};assert.match(trackedAdventureObjective(progress),/파르빗/);assert.match(trackedAdventureObjective({...progress,zaBunnelbyQuest:2}),/보고/);
+});
