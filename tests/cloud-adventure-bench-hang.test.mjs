@@ -12,3 +12,9 @@ test('Bleu and Magenta center benches reuse blocked cells and remain reachable f
  }
  const roof={area:3,district:'lumiose-bleu-sector7',zaBleu7Upper:true,interior:null};assert.equal(isAdventureBench(roof,{tile:'^',x:8,y:12}),false);
 });
+
+test('Vert center shop and bench are reachable without blocking existing paths',()=>{
+ const s={area:3,district:'lumiose-vert-street-route',interior:null,x:11,y:12,facing:'right',zaEmmaMegaSeen:true},map=fieldMap(s),spot=interactionAt(s,map);
+ assert.equal(map[12][12],'^');assert.equal(map[13][12],'M');assert.equal(walkable(map[12][12]),false);assert.equal(isAdventureBench(s,spot),true);assert.ok(fieldDialogue(s,map).actions.some(a=>a.action==='benchNight'));
+ const shop={...s,y:13};assert.equal(interactionAt(shop,map).tile,'M');assert.equal(fieldDialogue(shop,map).action,'shop');assert.ok(fieldPath(map,shop,{x:10,y:13}).length);
+});

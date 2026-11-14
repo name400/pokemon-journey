@@ -4189,10 +4189,16 @@ test('Bleu and Magenta center benches support time changes and preserve old save
  const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'center-benches-qa',displayName:'센터 벤치 검사'};globalThis.__adventureTime={period:'day',hour:12};
  try{
   await get();await call('start',{species:152});const id=state.world.activeId,mon=rawMon(id),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
-  for(const p of [{district:'lumiose-bleu-sector7',x:9,y:12,facing:'left'}, {district:'lumiose-magenta-sector8-route',x:14,y:12,facing:'right'}]){
+  for(const p of [{district:'lumiose-bleu-sector7',x:9,y:12,facing:'left'}, {district:'lumiose-magenta-sector8-route',x:14,y:12,facing:'right'}, {district:'lumiose-vert-street-route',x:11,y:12,facing:'right'}]){
    seedWorld(storeAdventurePosition({...rawWorld(),...p,area:3,interior:null,zaEmmaMegaSeen:true,zaMission06Started:true,zaSide88Stage:1},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='benchNight'));const rev=state.revision;await call('benchNight');await call('benchNight',{revision:rev},409);await get();assert.equal(state.gameTime.period,'night');assert.equal(state.world.district,p.district);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawWorld().zaSide88Stage,1);await call('benchMorning');await get();assert.equal(state.gameTime.hour,8);
   }
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});
+
+test('Vert center shop purchase and healing preserve party and reject stale requests',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert-center-qa',displayName:'베르 센터 검사'};
+ try{await get();await call('start',{species:152});const id=state.world.activeId,original={...rawMon(id),hp:1};seedMon(id,original);sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-street-route',interior:null,x:11,y:13,facing:'right'},state.revision+1));await get();assert.equal(state.world.interaction.action,'shop');const revision=state.revision,before=state.wallet.potions;await call('buy',{item:'potion'});await call('buy',{item:'potion',revision},409);await get();assert.equal(state.wallet.potions,before+1);assert.equal(state.wallet.coins,880);assert.deepEqual(rawMon(id),original);await call('face',{direction:'left'});assert.ok(state.world.interaction.actions.some(a=>a.action==='heal'));await call('heal');await get();assert.equal(state.world.activeId,id);assert.equal(state.world.district,'lumiose-vert-street-route');assert.equal(state.wallet.potions,before+1);assert.equal(rawMon(id).hp,rawMon(id).maxHp);
+ }finally{globalThis.__adventureUser=previous;}
 });
 
 test('Mission 6 reaches Yvon at Bleu Plaza and preserves the legacy desk',async()=>{
