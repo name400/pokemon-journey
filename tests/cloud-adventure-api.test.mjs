@@ -7552,6 +7552,19 @@ test('TM085 reviewed species and Alolan Raichu preserve legacy saves and moves',
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('TM094 reviewed species and forms preserve existing moves and saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm094-compat-qa',displayName:'날려버리기 호환 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key=JSON.stringify(['tm094-compat-qa','za-tm094']);
+  const initial={...makeMon(325,30),moves:['몸통박치기','울음소리'],pp:{tackle:3,growl:7}};seedMon(id,initial);await get();await call('teachStoryTm',{item:'za-tm094',slot:1},409);assert.deepEqual(rawMon(id).moves,initial.moves);
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,'tm094-compat-qa','za-tm094');
+  for(const pokemon of [325,449,666,30086,30162,10042]){
+   const mon={...makeMon(pokemon,30),moves:['몸통박치기','울음소리'],pp:{tackle:3,growl:7}};seedMon(id,mon);await get();const rev=state.revision;await call('teachStoryTm',{item:'za-tm094',boxId:id,slot:1});await get();assert.equal(rawMon(id).id,pokemon);assert.deepEqual(rawMon(id).moves,['몸통박치기','날려버리기']);assert.equal(rawMon(id).pp.tackle,3);assert.equal(state.inventory['za-tm094'],1);await call('teachStoryTm',{item:'za-tm094',boxId:id,slot:0},409);await call('teachStoryTm',{item:'za-tm094',boxId:id,slot:0,revision:rev},409);
+  }
+  const incompatible={...makeMon(1,30),moves:['몸통박치기'],pp:{tackle:3}};seedMon(id,incompatible);await get();await call('teachStoryTm',{item:'za-tm094',boxId:id,slot:0},409);assert.deepEqual(rawMon(id).moves,incompatible.moves);assert.equal(state.inventory['za-tm094'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Le Yeah entry, five-course challenge, recovery and rewards remain playable',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'le-yeah-course-qa',displayName:'르예검증'};
  try{
