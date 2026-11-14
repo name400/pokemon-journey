@@ -23,3 +23,7 @@
 Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 운영v4: https://pokemon-roguelike-adventure.jminwoo0823.chatgpt.site
 현재큰미커밋변경의새코어는아직운영배포되지않았다.
+
+### 사이드 미션 95 — 고스트 타입 배틀
+- 메인 미션 35 시작 후 기존 사이드 56 홀로베이터 옥상에서 Malé의 의뢰를 받고, 파티 전원이 실제 고스트 타입일 때 나목령·펌킨인·깜까미·팬텀과 배틀한다. 전투 상금 2,784원, 별도 의뢰 보상 4,444원과 주술부적은 각각 한 번만 지급한다. 구형 저장에 새 단계가 없으면 미수락 상태로 둔다.
+- [Thonky](https://www.thonky.com/pokemon-legends-z-a/side-mission-095-a-haunting-experience) 기준 의뢰 해금·레벨·상금 및 보상을 반영했다. 기존 옥상과 의뢰인 위치는 2D 근사이며 원작 분수와 연결 경로의 정확한 좌표는 확인하지 못했다. 상대 기술·실시간 전투 동작은 기존 턴제 엔진의 근사다. 실제 Sites 병합본과 원작 실기는 검증하지 않았다.
