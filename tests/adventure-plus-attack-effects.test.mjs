@@ -51,3 +51,27 @@ test('Charge Beam Plus is active in companion and three-ally fights',()=>{
   const fight=flags(c);fight.snapshot.prng='1,2,3,4';const next=play(fight,{type:'move',move:'chargebeam',target:1,plus:true});assert.equal(boosted(next),1);assert.equal(next.adventurePlusGaugeV1.charge,0);assert.equal(boosted(JSON.parse(JSON.stringify(next))),1);
  }
 });
+
+test('Fake Out and First Impression Plus critically hit without changing older battles',()=>{
+ for(const [move,id] of [['속이기','fakeout'],['만나자마자','firstimpression']]){
+  const p={...mon(25,'p',move),adventurePlusMastered:[id]},foe=mon(143,'foe','튀어오르기'),old=flags(createCombat([p],[foe])),fresh={...old,adventurePlusCritV1:true};old.snapshot.prng='1,2,3,4';
+  const legacy=playCpu(old,{type:'move',move,plus:true}),ordinary=playCpu(fresh,{type:'move',move}),plus=playCpu(fresh,{type:'move',move,plus:true});
+  assert.equal(legacy.events.find(e=>e.kind==='damage'&&e.targetBoxId==='foe')?.critical,false,id);assert.equal(ordinary.events.find(e=>e.kind==='damage'&&e.targetBoxId==='foe')?.critical,false,id);assert.equal(plus.events.find(e=>e.kind==='damage'&&e.targetBoxId==='foe')?.critical,true,id);assert.equal(plus.adventurePlusGaugeV1.charge,0);assert.equal(JSON.parse(JSON.stringify(plus)).adventurePlusCritV1,true);
+ }
+});
+
+test('Plus critical still honors immunity, critical-blocking and first-turn restrictions',()=>{
+ const p={...mon(25,'p','속이기'),adventurePlusMastered:['fakeout']},ghost=mon(92,'ghost','튀어오르기'),shell={...mon(143,'shell','튀어오르기'),ability:'shellarmor'};
+ for(const foe of [ghost,shell]){const c={...flags(createCombat([p],[foe])),adventurePlusCritV1:true};c.snapshot.prng='1,2,3,4';const next=playCpu(c,{type:'move',move:'속이기',plus:true});if(foe===ghost)assert.equal(next.teams[1][0].hp,foe.hp);else{const event=next.events.find(e=>e.kind==='damage'&&e.targetBoxId==='shell');assert.ok(event);assert.equal(event.critical,false);}}
+ const starter={...mon(25,'p','튀어오르기'),moves:['튀어오르기','만나자마자'],adventurePlusMastered:['firstimpression']},foe=mon(143,'foe','튀어오르기');let c={...flags(createCombat([starter],[foe])),adventurePlusCritV1:true};c=playCpu(c,{type:'move',move:'튀어오르기'});const before=c.teams[1][0].hp;c=playCpu(JSON.parse(JSON.stringify(c)),{type:'move',move:'만나자마자',plus:true});assert.equal(c.teams[1][0].hp,before);
+});
+
+test('First Impression Plus applies to the selected player in multi and triple battles',()=>{
+ const p={...mon(25,'p','만나자마자'),adventurePlusMastered:['firstimpression']},ally=mon(143,'ally','튀어오르기'),ally2=mon(143,'ally2','튀어오르기'),foes=[1,2,3].map(i=>mon(143,`foe${i}`,'튀어오르기'));
+ for(const [snapshot,play] of [[createMission10DoubleSnapshot([p],[ally],foes.slice(0,2)),playMission10MultiTurn],[createMission37TripleSnapshot([p],[ally],[ally2],foes),playMission37TriplePrototype]]){const c={...flags(snapshot),adventurePlusCritV1:true};c.snapshot.prng='1,2,3,4';const next=play(c,{type:'move',move:'firstimpression',target:1,plus:true});const event=next.events.find(e=>e.kind==='damage'&&e.actorBoxId==='p');assert.ok(event);assert.equal(event.critical,true);assert.equal(next.adventurePlusGaugeV1.charge,0);assert.deepEqual(next.owners,c.owners);}
+});
+
+test('Mega Fake Out receives the critical effect in new snapshots only',()=>{
+ const p={...mon(428,'p','속이기'),item:'lopunnite'},foe=mon(143,'foe','튀어오르기'),old={...flags(createCombat([p],[foe])),adventurePlusGaugeV1:{charge:3,max:3}},fresh={...old,adventurePlusCritV1:true};old.snapshot.prng='1,2,3,4';
+ const a=playCpu(old,{type:'move',move:'속이기',special:'mega'}),b=playCpu(fresh,{type:'move',move:'속이기',special:'mega'});assert.equal(b.teams[0][0].mega,true);assert.equal(a.events.find(e=>e.kind==='damage'&&e.targetBoxId==='foe')?.critical,false);assert.equal(b.events.find(e=>e.kind==='damage'&&e.targetBoxId==='foe')?.critical,true);
+});

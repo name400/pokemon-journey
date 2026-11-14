@@ -9261,3 +9261,11 @@ test('Wish Plus can be mastered and recorded in a new adventure battle',async()=
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaMission19Complete:true,zaRoyaleRank:'D',zaMegaRing:true,combat:null,encounter:null},state.revision+1));await get();await call('zone14Wild-aron');await get();assert.equal(rawWorld().combat.adventurePlusWishV1,true);assert.equal(state.battle.requests[0].moves.find(m=>m.id==='wish').plusReady,true);const nextRev=state.revision;await call('battle',{command:{type:'move',move:'희망사항',plus:true}});await call('battle',{revision:nextRev,command:{type:'move',move:'희망사항',plus:true}},409);await get();const pending=rawWorld().combat.snapshot.sides[0].slotConditions[0].wish;assert.equal(pending.hp,Math.floor(mon.maxHp*4/10));assert.equal(rawWorld().combat.adventurePlusGaugeV1.charge,0);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
+
+test('new adventure snapshots apply Fake Out Plus critical and reject stale actions',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'plus-opening-critical-qa',displayName:'플러스 급소 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(25,50),boxId:id,moves:['속이기'],adventurePlusMastered:['fakeout'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaRoyaleRank:'D',zaMission19Complete:true,zaMegaRing:true,combat:null,encounter:null},state.revision+1));await get();await call('zone14Wild-aron');await get();assert.equal(rawWorld().combat.adventurePlusCritV1,true);const rev=state.revision;await call('battle',{command:{type:'move',move:'속이기',plus:true}});await call('battle',{revision:rev,command:{type:'move',move:'속이기',plus:true}},409);await get();assert.ok(state.battle.events.some(e=>e.kind==='damage'&&e.actorBoxId===id&&e.critical===true));assert.equal(rawWorld().combat.adventurePlusGaugeV1.charge,0);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
