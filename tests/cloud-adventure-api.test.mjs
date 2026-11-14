@@ -7964,7 +7964,7 @@ test('zone 1 rooftop alpha attacks after its roar and preserves saved progress',
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
 });
 
-test('zone 2 alpha Magikarp can roar and attack without replacing the night encounter',async()=>{
+test('zone 2 alpha Magikarp and Staryu use their own player attacks',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now,oldTime=globalThis.__adventureTime;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone2-alpha-player-qa',displayName:'구역 2 야생 공격'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={period:'day',hour:12};
  try{
   await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
@@ -7977,7 +7977,10 @@ test('zone 2 alpha Magikarp can roar and attack without replacing the night enco
   seedWorld(island({zaFieldCrouched:true,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);assert.notEqual(state.world.zaZone2IslandRoarAlert,'magikarp');
   seedWorld(island({zaFieldCrouched:false,zaDodgeReadyAt:0,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('dodge',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
   seedWorld(island({zaZone2AlphaSpent:true,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
-  globalThis.__adventureTime={period:'night',hour:22};seedWorld(island({zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaZone2IslandRoarAlert,'staryu');assert.equal(state.world.zaPlayerVitalsV1.hp,90);clock+=3000;await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);
+  globalThis.__adventureTime={period:'night',hour:22};seedWorld(island({zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaZone2IslandRoarAlert,'staryu');assert.equal(state.world.zaPlayerVitalsV1.hp,90);clock+=3000;const iceRev=state.revision;await call('move',{direction:'up'});await call('move',{direction:'up',revision:iceRev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,23);assert.match(state.world.log.join(' '),/냉동빔/);clock+=3000;await call('move',{direction:'down'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);clock+=3000;await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose');assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  seedWorld(island({x:20,y:12,zaZone2IslandRoarAlert:'magikarp',zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaZone2IslandRoarAlert,'staryu');assert.equal(state.world.zaPlayerVitalsV1.hp,90);
+  seedWorld(island({x:20,y:12,zaZone2IslandRoarAlert:'staryu',zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel',lastDamageAt:clock-1000}}));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
+  seedWorld(island({zaZone2IslandRoarAlert:'staryu',zaDodgeReadyAt:0,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('dodge',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;Date.now=oldNow;}
 });
 
