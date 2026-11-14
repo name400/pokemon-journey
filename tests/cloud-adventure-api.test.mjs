@@ -7397,3 +7397,17 @@ test('Sushi High Roller first mission pays its cash reward once and protects pen
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:'sushi',x:16,y:6,facing:'up',zaSushiCompleted:true,zaSushiRewardPending:undefined},state.revision+1));await get();await call('claimSushiReward',{},409);assert.equal(state.wallet.coins,2000);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('implemented story milestones direct players to their next available objective',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'story-next-objective-qa',displayName:'진행 안내 검사'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds];
+  const cases=[
+   {place:{district:'lumiose',interior:'hotel',x:11,y:6},flags:{zaMission10Stage:9},action:'mission10HotelMeeting',stage:'zaMission10Stage',value:10,expected:/세 현장/},
+   {place:{district:'lumiose-jaune-sector2',interior:'justiceDojo',x:11,y:8},flags:{zaMission19Stage:15,zaRoyaleRank:'D'},action:'mission19Reward',stage:'zaMission19Stage',value:16,expected:/낮에 호텔/},
+   {place:{district:'lumiose',interior:'hotel',x:11,y:6},flags:{zaMission20Stage:5,zaMission21Complete:true,zaMission22Complete:true,zaMission23Complete:true},action:'mission20Report',stage:'zaMission20Stage',value:6,expected:/Philippe/},
+   {place:{district:'lumiose-rust',interior:'rustOffice',x:11,y:7},flags:{zaMission20Stage:14},action:'mission20Finish',stage:'zaMission20Stage',value:15,expected:/배틀존/},
+  ];
+  for(const c of cases){seedWorld(storeAdventurePosition({...rawWorld(),area:3,...c.place,facing:'up',...c.flags},state.revision+1));await get();await call(c.action);assert.equal(state.world[c.stage],c.value);assert.match(state.world.log.join(' '),c.expected);assert.doesNotMatch(state.world.log.join(' '),/준비 중/);await get();assert.equal(state.world[c.stage],c.value);assert.deepEqual(state.world.teamIds,team);await call(c.action,{},409);}
+ }finally{globalThis.__adventureUser=oldUser;}
+});
