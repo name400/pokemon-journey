@@ -5,3 +5,5 @@
 의뢰의 야간 상황·상대·기술은 [Serebii](https://www.serebii.net/legendsz-a/sidemissions/justafewquestionsforyou....shtml), 보상은 [공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Side_Missions_41-60)을 참고했다. 원작은 질문의 어느 답을 선택해도 배틀로 이어지며, 이 구현은 그 질문과 귀가 장면을 간략한 대사로 처리한다. 벤치와 경찰의 정확한 위치 및 밤의 제한 조건은 실기 미확인이다. 전투는 기존 턴제이며 원작 실시간 전투·실제 기기·운영 D1·Sites 병합본은 확인하지 않았다.
 
 격리 API에서 낮 거절과 야간 시작, 재접속·기권·재도전, 편성·승리·가방 한도·중복 보상과 파티 이로치 보존을 검사했다.
+
+후속: [트레이너 자료](https://bulbapedia.bulbagarden.net/wiki/Mission_(Legends:_Z-A)/Trainers)는 Licier의 전투 상금 1,920원을 의뢰 보상과 별도로 기재한다. 새로 시작한 전투에만 이 상금을 지급한다. 이미 시작된 구형 전투와 완료된 저장에 상금을 추정해 소급 지급하지 않으며, 보상 수령과 리비전 검사는 그대로다. 격리 API에서 신규 승리·보상과 구형 배틀 복원·중복 요청을 확인했다.
