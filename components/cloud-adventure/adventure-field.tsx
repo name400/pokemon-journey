@@ -1408,6 +1408,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
      ctx.fillStyle='#5b8056';ctx.fillRect(px+13,py+20,6,10);ctx.fillStyle='#91b77b';ctx.beginPath();ctx.ellipse(px+16,py+16,10,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#354d3b';ctx.fillRect(px+11,py+14,3,3);ctx.fillRect(px+18,py+14,3,3);
     }else{
      trainer(p.x,p.y,p.color,'down');
+     if(p.kind==='frozen'){ctx.fillStyle='#a6e3eeaa';ctx.fillRect(px+4,py+16,24,13);ctx.strokeStyle='#d7f8ff';ctx.lineWidth=2;ctx.strokeRect(px+4,py+16,24,13);}
      if(p.kind==='webbed'){ctx.strokeStyle='#f4f5ed';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+5,py+9);ctx.lineTo(px+27,py+26);ctx.moveTo(px+27,py+9);ctx.lineTo(px+5,py+26);ctx.moveTo(px+4,py+18);ctx.lineTo(px+28,py+18);ctx.stroke();}
     }
    }
