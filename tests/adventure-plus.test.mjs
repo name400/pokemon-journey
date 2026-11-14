@@ -2,6 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat,playCpu,combatView} from '../lib/party-battle.mjs';
+import {adventureMoveMastered} from '../lib/cloud-adventure/adventure-plus-mastery.mjs';
+
+test('reviewed Ralts family mastery respects species and exact level',()=>{
+ for(const [species,move,level] of [[280,'confusion',9],[281,'psybeam',21],[282,'wish',35],[282,'dazzlinggleam',33],[475,'psybeam',10],[475,'psychocut',45],[475,'leafblade',53]]){
+  const before={...makeMon(species,level-1)},at={...before,level};assert.equal(adventureMoveMastered(before,move),false,`${species} ${move}`);assert.equal(adventureMoveMastered(at,move),true,`${species} ${move}`);assert.equal(adventureMoveMastered(JSON.parse(JSON.stringify(at)),move),true);
+ }
+ assert.equal(adventureMoveMastered(makeMon(280,100),'wish'),false);assert.equal(adventureMoveMastered(makeMon(475,100),'moonblast'),false);assert.equal(adventureMoveMastered({...makeMon(280,5),adventurePlusMastered:['wish']},'wish'),true);
+});
 
 test('Plus moves require mastery and spend a persistent gauge only on execution',()=>{
  const player={...makeMon(1,20),boxId:'plus-p',moves:['몸통박치기','울음소리'],adventurePlusMastered:['tackle']};

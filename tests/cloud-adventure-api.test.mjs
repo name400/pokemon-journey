@@ -6980,6 +6980,16 @@ test('new recovery Plus moves support natural mastery and seed mastery without d
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('Gardevoir naturally masters Wish without consuming a seed',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'gardevoir-wish-natural-qa',displayName:'가디안 자연 숙달'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],mon={...makeMon(282,35),boxId:id,moves:['희망사항','사이코키네시스'],pp:{},custom:{preserved:true}};mon.hp=Math.floor(mon.maxHp/3);seedMon(id,mon);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'seedofmasteryza']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'seedofmasteryza');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',zaMission19JoseeWon:true,zaMegaRing:true},state.revision+1));await get();await call('masterAdventureMove',{boxId:id,move:'희망사항'},409);assert.equal(state.inventory.seedofmasteryza,1);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaRoyaleRank:'D',zaMission19Complete:true,zaMegaRing:true},state.revision+1));await get();await call('zone14Wild-aron');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='wish').plusReady,true);const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.active[0].setStatus('slp');sim.p2.active[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()}});await get();const rev=state.revision;await call('battle',{command:{type:'move',move:'희망사항',plus:true}});await call('battle',{revision:rev,command:{type:'move',move:'희망사항',plus:true}},409);await get();assert.equal(rawWorld().combat.snapshot.sides[0].slotConditions[0].wish.hp,Math.floor(mon.maxHp*4/10));assert.equal(state.battle.adventurePlusGauge.charge,0);assert.equal(state.inventory.seedofmasteryza,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id).custom,{preserved:true});assert.equal(rawMon(id).adventurePlusMastered,undefined);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('new adventure protects against stale requests while Plus attacks pierce Protect',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-protect-qa',displayName:'방어 관통 검사'};
  try{
