@@ -9197,3 +9197,13 @@ test('Zone 8 alpha emerges before threatening the player and keeps its shiny ide
   clock+=3000;await call('move',{direction:'left'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('emerged Zone 8 burrow alpha supports direct capture without rerolls',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone8-emerged-ball-qa',displayName:'흙더미 직접 포획 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),key='zone8:gible:443';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:12,y:8,facing:'right',zaRoyaleRank:'F',zaMission05Complete:true,zaZone8Spent:{},zaZone8Burrows:{gible:443,drilbur:529},zaWildVisibleAlphaLevels:{[key]:35},zaWildShinyRolls:{[key]:true},zaZone8EmergedV1:undefined,zaRandomAlphaAlertV1:undefined,adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));
+  await get();await call('throwZoneVisible',{ball:'masterball'},409);await get();assert.equal(rawWorld().adventureBalls.masterball,1);await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaZone8EmergedV1.gible,'443:shiny');assert.ok(state.world.interaction.actions.some(a=>a.action==='throwZoneVisible'));
+  const rev=state.revision;await call('throwZoneVisible',{ball:'masterball'});await call('throwZoneVisible',{ball:'masterball',revision:rev},409);await get();const caught=state.box.filter(m=>m.speciesId===443&&m.shiny===true);assert.equal(caught.length,1);assert.equal(rawMon(caught[0].boxId).adventureAlpha,true);assert.equal(rawWorld().zaZone8Spent.gible,true);assert.equal(rawWorld().adventureBalls.masterball,0);assert.ok(team.every(id=>state.world.teamIds.includes(id)));assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});
