@@ -9505,3 +9505,15 @@ test('missing party cannot bypass a restaurant course and can explicitly cancel 
   seedWorld(place({zaLeYeahRun:{version:2,opaque:'kept'}}));await get();await call('team',{ids:[backup.boxId]},409);await call('cancelMissingPartyCourse',{},409);assert.deepEqual(rawWorld().zaLeYeahRun,{version:2,opaque:'kept'});assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('missing party cannot bypass story battle series and may cancel safely',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'missing-story-series-qa',displayName:'스토리 연전 파티 복구'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,original=structuredClone(rawMon(id)),backup={...makeMon(25,20),boxId:'story-recovery-backup'};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(backup.boxId,globalThis.__adventureUser.userId,backup.id,JSON.stringify(backup),'capture',Date.now());sql.prepare('UPDATE pokemon_box SET user_id=? WHERE id=?').run('other-owner',id);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,interior:null,x:11,y:8,facing:'up',activeId:id,teamIds:[id],zaMission20SBCSeries:undefined,zaMission42Stage:undefined,zaMission42Phase:undefined,zaMission42ChamberV1:undefined,zaMission42Underground:undefined,combat:null,encounter:null,...extra},state.revision+1);
+  for(const scenario of [{district:'lumiose-centrico-route',zaMission20Stage:11,zaMission20SBCSeries:'vivica'},{district:'lumiose-zone20',zaMission42Stage:2,zaMission42Phase:1,zaMission42ChamberV1:true,zaMission42Underground:true}]){
+   seedWorld(place(scenario));await get();const wallet=structuredClone(state.wallet),rev=state.revision;assert.equal(state.world.activeId,undefined);await call('team',{ids:[backup.boxId]},409);await call('cancelMissingPartyCourse');await call('cancelMissingPartyCourse',{revision:rev},409);await get();if(scenario.zaMission42Stage){assert.equal(state.world.zaMission42Stage,1);assert.equal(state.world.zaMission42Phase,0);assert.equal(state.world.zaMission42Underground,true);}else{assert.equal(state.world.zaMission20SBCSeries,undefined);assert.equal(state.world.zaMission20Stage,11);}assert.deepEqual(state.wallet,wallet);await call('team',{ids:[backup.boxId]});await get();assert.equal(state.world.activeId,backup.boxId);assert.deepEqual(rawMon(backup.boxId),backup);assert.deepEqual(rawMon(id),original);
+  }
+  const future={version:2,opaque:'kept'};seedWorld(place({district:'lumiose-zone20',zaMission42Stage:2,zaMission42Phase:future,zaMission42ChamberV1:true,zaMission42Underground:true}));await get();await call('team',{ids:[backup.boxId]},409);await call('cancelMissingPartyCourse',{},409);assert.deepEqual(rawWorld().zaMission42Phase,future);assert.equal(rawWorld().zaMission42Stage,2);
+ }finally{globalThis.__adventureUser=previous;}
+});
