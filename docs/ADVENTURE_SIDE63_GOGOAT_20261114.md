@@ -1,7 +1,7 @@
 # 사이드 미션 63: XL 고고트
 
 - [Serebii](https://www.serebii.net/legendsz-a/sidemissions/anextra-largegogoat.shtml)는 마젠타 8번지 Lugo의 XL 고고트 의뢰와 메인 미션 20 시작 후 해금을 설명한다. [Bulbapedia 공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Side_Missions_61-80#Side_Mission_063:_An_Extra-Large_Gogoat)은 인계 및 8,000원·알칼로이드 10개 보상을 기록한다. 실제 게임에서 독립 확인하지는 않았다.
-- [Serebii 크기 설명](https://www.serebii.net/legendsz-a/pokemonsize.shtml)에 따르면 우두머리는 XL이다. 현 구현은 크기가 확인되는 우두머리 고고트만 받는다. 일반 XL도 원작 의뢰 대상이지만 저장에 일반 크기 정보가 없어 지원하지 못한다. XL 여부를 폼 또는 우두머리 여부로 역추론하지 않는다.
+- [Serebii 크기 설명](https://www.serebii.net/legendsz-a/pokemonsize.shtml)에 따르면 우두머리는 XL이다. 기존 우두머리 외에 새 포획에서 크기가 기록된 일반 XL 고고트도 받는다. 이전 일반 개체에 누락된 크기는 추측하지 않는다. XL 여부를 폼 또는 우두머리 여부로 역추론하지 않는다.
 - 기존 코드에는 구역 12 무작위 우두머리 고고트와 구역 3 무작위 우두머리 메이클의 진화 경로가 있다. 자연 플레이 전체 경로는 이번에 검증하지 않았다.
 - 의뢰 위치의 타일과 메인 미션 20 진행 단계 5 이후라는 해금 시점은 현 2D 맵과 진행 구조에 맞춘 잠정값이다. 원작의 정확한 좌표 및 최초 해금 시점을 재현했다고 보장하지 않는다.
 - 확인 후 인계한 개체는 탐험 파티와 탐험 보유함에서 제외된다. 공유 보유함의 원본 행은 보존하며, 교환 중이거나 도구를 지녔거나 마지막으로 싸울 수 있는 파티원인 경우 인계를 거절한다. 보상은 용량과 중복 요청을 확인해 같은 트랜잭션으로 처리한다.

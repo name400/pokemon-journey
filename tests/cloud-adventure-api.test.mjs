@@ -10125,3 +10125,22 @@ test('rain reaches street single and companion battles without changing saved pa
   globalThis.__adventureTime={period:'day',hour:12};seedWorld(place('lumiose-vert-sector6',19,8,'down',{zaSide68Stage:1}));await get();assert.notEqual(state.world.weather,'rain');await call('side68Battle');assert.equal(state.battle.weather,'');await call('forfeit');await get();assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);assert.equal(rawMon(id).id,mon.id);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
+
+test('ordinary XL catches can complete size quests without rewriting old Pokemon',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'ordinary-xl-quest-qa',displayName:'일반 XL 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,old=structuredClone(rawMon(lead)),wallet=state.wallet.coins;
+  const place=(district,x,y,facing,patch={})=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing,combat:null,encounter:null,...patch},state.revision+1);
+  seedWorld(place('lumiose-zone12',17,5,'up',{zaRoyaleRank:'A',adventureBalls:{masterball:2}}));await get();await call('zone12Wild-gogoat');await call('ball',{ball:'masterball'});await get();while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});await get();const goat=state.box.find(m=>m.speciesId===673);assert.ok(goat);assert.notEqual(goat.adventureAlpha,true);assert.deepEqual(rawMon(goat.boxId).adventureScaleV1,{version:1,scale:255});assert.deepEqual(goat.adventureScaleV1,{version:1,scale:255});assert.equal(rawMon(lead).adventureScaleV1,undefined);
+  seedWorld(place('lumiose-magenta-sector8-route',4,6,'up',{zaSide63Stage:1}));await get();const rev=state.revision;await call('side63Give',{boxId:goat.boxId,confirmed:true});await call('side63Give',{boxId:goat.boxId,confirmed:true,revision:rev},409);await get();assert.equal(state.world.zaSide63Stage,2);assert.equal(state.wallet.coins,wallet+8000);assert.equal(rawMon(goat.boxId).adventureScaleV1.scale,255);
+  seedWorld(place('lumiose-zone12',7,11,'down',{zaZone12PondLower:false}));await get();await call('zone12Wild-bergmite');await call('ball',{ball:'masterball'});await get();while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});await get();const baby=state.box.find(m=>m.speciesId===712);assert.ok(baby);assert.equal(rawMon(baby.boxId).adventureScaleV1.scale,255);
+  seedMon(baby.boxId,{...rawMon(baby.boxId),level:37});await get();await call('evolve',{boxId:baby.boxId,target:713});await get();while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});await get();assert.equal(rawMon(baby.boxId).speciesId,713);seedWorld(place('lumiose-south-boulevard',16,7,'right',{zaMission37Complete:true,zaSide113Stage:1}));await get();await call('iceFollowup113Show');await get();assert.equal(state.world.zaSide113Stage,2);assert.equal(rawMon(baby.boxId).adventureScaleV1.scale,255);assert.equal(rawMon(lead).adventureScaleV1,undefined);assert.deepEqual(rawMon(lead).ivs,old.ivs);assert.equal(rawMon(lead).nature,old.nature);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('field capture stores ordinary size without rerolling on reload',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'field-size-qa',displayName:'필드 크기 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:1});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone12',interior:null,x:17,y:5,facing:'up',zaRoyaleRank:'A',adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();const rev=state.revision;await call('throwZoneVisible',{ball:'masterball'});await call('throwZoneVisible',{ball:'masterball',revision:rev},409);await get();const m=state.box.find(p=>p.speciesId===673);assert.ok(m);assert.equal(m.adventureAlpha,false);assert.deepEqual(rawMon(m.boxId).adventureScaleV1,{version:1,scale:255});globalThis.__adventureRandom=()=>0;await get();assert.deepEqual(rawMon(m.boxId).adventureScaleV1,{version:1,scale:255});assert.equal(state.world.adventureBalls.masterball,0);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
