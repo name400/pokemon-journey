@@ -63,7 +63,7 @@ test('Café Ultimo destination respects Zone 15 access and ground layer',async()
 });
 
 test('taxi landmarks land on walkable tiles facing their existing entrances',async()=>{
- const {FAST_TRAVEL_LANDMARKS}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');const expected={'museum':'enterMuseum','gare':'stationLeave','hotel-z':'enterHotel','research-lab':'enterLumioseLab','richissime':'enterRichissime','le-wow':'enterLeWow','le-nah':'enterLeNah','sushi':'enterSushi','quasartico':'enterQuasarticoOffice','cafe-woof':'woofNatural','cafe-gallant':'enterCafeGallant','cafe-nouveau2':'cafe2Water'};
+ const {FAST_TRAVEL_LANDMARKS}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');const expected={'museum':'enterMuseum','gare':'stationLeave','hotel-z':'enterHotel','research-lab':'enterLumioseLab','richissime':'enterRichissime','le-wow':'enterLeWow','le-nah':'enterLeNah','le-yeah':'enterLeYeah','sushi':'enterSushi','quasartico':'enterQuasarticoOffice','cafe-woof':'woofNatural','cafe-gallant':'enterCafeGallant','cafe-nouveau2':'cafe2Water'};
  for(const p of FAST_TRAVEL_LANDMARKS){const s={area:3,...p,interior:null,zaMission10Stage:6,zaRoyaleRank:'V',zaRougeStreetSouth:false};assert.ok(['.',',',';','g','H'].includes(fieldMap(s)[s.y][s.x]),p.id);const d=fieldDialogue(s),actions=d?.actions||(d?.action?[d]:[]);if(expected[p.id])assert.ok(actions.some(a=>a.action===expected[p.id]),`${p.id}: ${d?.name}`);if(p.id==='richissime')assert.match(d.name,/리시심/);}
 });
 
@@ -125,4 +125,11 @@ test('map travel blocks active known alpha threats without trapping stale saves'
  assert.equal(canMapTravel({...near,zaZone5Spent:{'bellsprout-alpha':true}}),true);
  assert.equal(canMapTravel({...near,zaZone5AlphaRoarAlertV1:{version:2}}),true);
  assert.equal(canMapTravel({...near,district:'lumiose'}),true);
+});
+
+test('Le Yeah ground visits register a map destination without altering unrelated landmarks',async()=>{
+ const {recordLandmarks,registeredLandmarks,taxiDestinations}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const world={area:3,district:'lumiose-rouge-sector3',interior:null,x:16,y:10,zaMission04Complete:true,zaFastTravelLandmarks:['future-landmark']};
+ assert.ok(taxiDestinations(world).some(p=>p.id==='le-yeah'));assert.ok(!registeredLandmarks(world).some(p=>p.id==='le-yeah'));assert.equal(recordLandmarks(world),true);assert.ok(registeredLandmarks(world).some(p=>p.id==='le-yeah'));assert.ok(world.zaFastTravelLandmarks.includes('future-landmark'));assert.equal(recordLandmarks(world),false);
+ for(const other of [{...world,district:'lumiose-rouge-sector3-roof',zaFastTravelLandmarks:[]},{...world,interior:'leYeah',zaFastTravelLandmarks:[]}]){assert.equal(recordLandmarks(other),false);assert.deepEqual(other.zaFastTravelLandmarks,[]);}
 });
