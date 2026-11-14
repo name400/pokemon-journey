@@ -153,3 +153,15 @@ test('zone 19 sleeping fixed Furfrou only threatens after its own wake state',as
  const future={...s,zaZone19FurfrouAwakeV1:{version:2}};assert.equal(wakeZone19Furfrou(future),false);assert.equal(fixedAlphaPlayerThreat({...future,x:10}),null);clearZone19FurfrouAwake(future);assert.deepEqual(future.zaZone19FurfrouAwakeV1,{version:2});
  assert.equal(refreshZone19Spawns(s,'night',4),true);assert.equal(s.zaZone19FurfrouAwakeV1,undefined);assert.equal(s.zaWildShinyRolls['zone19:furfrou-alpha:676'],true);
 });
+
+test('idle threat projections can use server period when the device clock disagrees',async()=>{
+ const {specialAlphaIdleThreat}=await import('../lib/cloud-adventure/adventure-special-alpha-idle.mjs');
+ const {randomAlphaPlayerThreat,randomAlphaAlertMatches}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const oldNow=Date.now;Date.now=()=>2000000200000; // 20:00: device says night
+ try{
+  const island={area:3,district:'lumiose-zone2',x:20,y:12,zaMission05Complete:true,zaZone2RockCleared:true,zaZone2AlphaSpent:false,zaZone2IslandRoarAlert:'magikarp'};
+  assert.equal(specialAlphaIdleThreat(island),null);assert.equal(specialAlphaIdleThreat(island,'day')?.id,'magikarp');assert.equal(specialAlphaIdleThreat(island,'night'),null);
+  const key='field3:flabebe:669',world={area:3,district:'lumiose-zone3',x:6,y:6,zaMission05Complete:true,zaWildVisibleAlphaLevels:{[key]:20},zaWildShinyRolls:{[key]:true}};
+  assert.equal(randomAlphaPlayerThreat(world,'night'),null);const day=randomAlphaPlayerThreat(world,'day');assert.equal(day?.id,'flabebe');assert.equal(randomAlphaAlertMatches({...world,zaRandomAlphaAlertV1:day.alert},day),true);
+ }finally{Date.now=oldNow;}
+});
