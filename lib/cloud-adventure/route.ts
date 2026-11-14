@@ -1479,7 +1479,7 @@ else if(b.action==='stationLeave'||b.action==='stationStay'){
  else{const count=Number.isInteger(s.zaStationLeaveConfirm)?s.zaStationLeaveConfirm:0;if(count<0||count>2)throw Error('열차 선택을 다시 확인하세요.');if(count<2){s.zaStationLeaveConfirm=count+1;s.log=['정말 떠날지 다시 생각해 보자.'];}else{delete s.zaStationLeaveConfirm;Object.assign(s,{district:'lumiose-vert-street-route',interior:null,x:10,y:12,facing:'down'});s.log=['떠나는 꿈을 꾸었다. 베르 포켓몬센터 앞에서 깨어났다.'];}}
 }
 else if(b.action==='side88Ride'){
- const spot=interactionAt(s);if(s.combat||s.unionHost||s.zaSide88Stage||!side88Origin(s,spot))throw Error('루주 광장의 Tesse에게 첫 승차를 신청하세요.');
+ const spot=interactionAt(s);if(s.combat||s.unionHost||s.zaSide88Stage||!side88Origin(s,spot)||!taxiAvailable(s,spot))throw Error('루주 광장의 Tesse에게 첫 승차를 신청하세요.');
  clearMapTravelTransient(s);Object.assign(s,{area:3,district:'lumiose-magenta-sector8-route',interior:null,x:13,y:13,facing:'down',zaRougeStreetSouth:false,zaSide88Stage:1});recordCenter(s,{x:12,y:14,tile:'H'});s.log=['Tesse의 첫 손님으로 무료 탑승했다. 길을 헤맨 끝에 마젠타 포켓몬센터에 도착했다.'];
 }
 else if(b.action==='side88Battle'){
