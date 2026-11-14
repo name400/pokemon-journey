@@ -9849,3 +9849,24 @@ test('Side Mission 90 follows Froslass over the existing roof and safely claims 
   const key=JSON.stringify([globalThis.__adventureUser.userId,'dawnstone']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'dawnstone');await get();await call('side90Reward',{},409);assert.equal(rawWorld().zaSide90Stage,3);sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);await get();const revision=state.revision;await call('side90Reward');await call('side90Reward',{revision},409);await get();assert.equal(state.inventory.dawnstone,999);assert.equal(state.wallet.coins,coins+400);assert.equal(rawWorld().zaSide90Stage,4);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.activeId,id);assert.ok(rawWorld().zaMission27Bridges.includes('east'));await call('side90Reward',{},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Side Mission 89 uses roof glides and safely rewards the Emolga chase',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side89-emolga-qa',displayName:'에몽가 추적 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),boxId:id,moves:['파동탄','냉동빔'],pp:{},shiny:true});
+  const place=patch=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector7',interior:null,x:9,y:4,facing:'up',combat:null,encounter:null,zaMission15Stage:2,...patch},state.revision+1);
+  seedWorld(place({}));await get();await call('screwRoofAccess');await walkTo({x:5,y:4});await call('face',{direction:'up'});await call('side89Start',{},409);
+  seedWorld(place({zaMission30Started:true}));await get();await call('screwRoofAccess');await walkTo({x:5,y:4});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'side89Start');await call('side89Start');
+  for(const [x,y] of [[17,4],[7,4],[16,12],[6,12],[17,12]]){
+   await walkTo({x:state.world.x<11?10:14,y:6});await call('rotoGlide');await walkTo({x,y});await call('face',{direction:y===4?'up':'down'});await call('side89Follow');await get();
+  }
+  assert.equal(rawWorld().zaSide89Stage,6);const beforeFight=state.revision;await call('side89Battle');await get();assert.equal(state.battle.teams[1][0].speciesId,587);assert.equal(state.battle.teams[1][0].level,53);await call('forfeit');assert.equal(rawWorld().zaSide89Stage,6);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-screw-jaune7',interior:null,x:17,y:12,facing:'down'},state.revision+1));await get();await call('side89Battle');await battle();assert.equal(rawWorld().zaSide89Stage,7);
+  await walkTo({x:14,y:6});await call('rotoGlide');await walkTo({x:5,y:4});await call('face',{direction:'up'});const key=JSON.stringify([globalThis.__adventureUser.userId,'kelpsyberry']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,992)').run(key,globalThis.__adventureUser.userId,'kelpsyberry');await get();const coins=state.wallet.coins;await call('side89Reward',{},409);assert.equal(rawWorld().zaSide89Stage,7);sql.prepare('UPDATE inventory SET quantity=991 WHERE key=?').run(key);await get();const rev=state.revision;await call('side89Reward');await call('side89Reward',{revision:rev},409);await get();assert.equal(state.inventory.kelpsyberry,999);assert.equal(state.inventory.pomegberry,8);assert.equal(state.inventory.tamatoberry,8);assert.equal(state.wallet.coins,coins+2000);assert.equal(rawWorld().zaSide89Stage,8);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).shiny,true);assert.ok(state.revision>beforeFight);await call('side89Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('Side Mission 89 counts capturing Emolga once and preserves old party',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'side89-capture-qa',displayName:'에몽가 포획 검사'};
+ try{globalThis.__adventureRandom=()=>0;await get();await call('start',{species:1});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-screw-jaune7',interior:null,x:17,y:12,facing:'down',zaMission15Stage:2,zaSide89Stage:6,adventureBalls:{masterball:1}},state.revision+1));await get();await call('side89Battle');await call('ball',{ball:'masterball'});assert.equal(rawWorld().zaSide89Stage,7);await get();assert.ok(state.box.some(m=>m.speciesId===587));assert.equal(state.world.teamIds[0],id);await call('side89Battle',{},409);}
+ finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
