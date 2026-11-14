@@ -20,3 +20,5 @@
 - 새 전투의 공격 기술플러스 추가 효과로 차지빔은 특수공격 상승 확률 100%, 열탕은 화상 확률 50%, 원시의힘·괴상한바람·은빛바람은 능력 상승 확률 60%를 적용한다. [Serebii](https://www.serebii.net/legendsz-a/plusmoves.shtml)와 [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Plus_Move)의 플러스 수치에 근거한다. 명중·면역과 부가효과는 기존 턴제 시뮬레이터에 따르며, 일반 원시의힘 등의 확률은 시뮬레이터의 기존 값(10%)을 유지하므로 원작 일반 기술 수치(30%)와 다르다. 이미 시작한 구형 전투는 이전 효과를 유지한다.
 
 - [물수리검의 원작 설명](https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move))과 [Serebii 기술 정보](https://stats.serebii.net/attackdex-sv/watershuriken.shtml)에 따라 새 메가링 전투에서 일반 물수리검은 위력 15로 다섯 번, 플러스와 메가진화 중에는 위력 75로 한 번 공격한다. 기존 기술플러스 공격 피해 배율을 한 번 적용하며 대상·명중·기절과 피해 반올림은 턴제 시뮬레이터 규칙을 따른다. 이미 시작된 전투는 기존 연속 타격 규칙을 유지한다. 원작의 실시간 투사체 궤적·사용 간격은 재현하지 않는다.
+
+- 파이리·꼬부기와 각 진화형도 [파이리 계열](https://www.dittobase.com/legends-za/pokedex/charmander) 및 [꼬부기 계열](https://www.dittobase.com/legends-za/pokedex/squirtle)의 개별 기술 숙달 레벨을 대조해 공격 기술의 자연 숙달을 지원한다. 리자몽의 에어슬래시·불대문자·드래곤클로와 거북왕의 러스터캐논·하이드로펌프는 해당 진화형에만 적용한다. 종·현재 레벨로 판정해 기존 저장과 숙달의씨 이력을 수정하지 않는다. 소수 종의 사실관계를 개별 확인했으며 사이트 자료를 자동 수집하거나 대량으로 복제하지 않았다. 자료는 2차 출처이고 실기에서는 대조하지 못했다. 변화 기술 플러스의 미지원 효과와 다른 종의 자연 숙달은 남아 있다.

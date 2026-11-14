@@ -8691,3 +8691,13 @@ test('Licier night incident preserves party and rewards across retry and reconne
   const key=JSON.stringify([globalThis.__adventureUser.userId,'laxmint']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,997)').run(key,globalThis.__adventureUser.userId,'laxmint');seedWorld(place({}));await get();await call('side50Reward',{},409);assert.equal(rawWorld().zaSide50Stage,2);sql.prepare('UPDATE inventory SET quantity=996 WHERE key=?').run(key);await get();const rev=state.revision;await call('side50Reward');await call('side50Reward',{revision:rev},409);await get();assert.equal(state.wallet.coins,coins+2000);assert.equal(state.inventory.laxmint,999);assert.equal(rawWorld().zaSide50Stage,3);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).shiny,true);await call('side50Reward',{},409);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
+
+test('Kanto starter natural Plus unlocks at level boundary and survives battle reconnect',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-kanto-qa',displayName:'관동 스타터 숙달 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,base={...makeMon(4,32),boxId:id,moves:['화염방사'],pp:{flamethrower:5},shiny:true};seedMon(id,base);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaRoyaleRank:'D',zaMission19Complete:true,zaMegaRing:true,...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('zone14Wild-aron');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='flamethrower').plusReady,false);await call('battle',{command:{type:'move',move:'화염방사',plus:true}},409);await call('forfeit');
+  seedMon(id,{...base,level:33});seedWorld(place({}));await get();await call('zone14Wild-aron');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='flamethrower').plusReady,true);await get();assert.equal(state.battle.requests[0].moves.find(m=>m.id==='flamethrower').plusReady,true);const rev=state.revision;await call('battle',{command:{type:'move',move:'화염방사',plus:true}});await call('battle',{revision:rev,command:{type:'move',move:'화염방사',plus:true}},409);await get();assert.equal(rawMon(id).shiny,true);assert.equal(rawMon(id).adventurePlusMastered,undefined);assert.deepEqual(state.world.teamIds,[id]);
+ }finally{globalThis.__adventureUser=previous;}
+});

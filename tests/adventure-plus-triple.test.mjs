@@ -29,3 +29,12 @@ test('player Mega uses the gauge without charging the companions for their own M
  const ready={...battle,adventurePlusGaugeV1:{charge:3,max:3}},result=playMission37TriplePrototype(ready,{type:'move',move:'splash',special:'mega'});
  assert.equal(result.adventurePlusGaugeV1.charge,0);assert.deepEqual(result.megaUsed,[true,true,true]);assert.equal(mission37PlayerTeam(result)[0].mega,true);
 });
+
+
+test('Kanto fire and water starters gain only reviewed natural Plus mastery',async()=>{
+ const {adventureMoveMastered}=await import('../lib/cloud-adventure/adventure-plus-mastery.mjs');
+ for(const [id,move,level] of [[4,'ember',7],[5,'flamethrower',33],[6,'airslash',39],[6,'dragonclaw',10],[7,'watergun',6],[8,'icywind',23],[9,'hydropump',39]]){
+  const mon=makeMon(id,level-1),before=JSON.stringify(mon);assert.equal(adventureMoveMastered(mon,move),false);assert.equal(adventureMoveMastered({...mon,level},move),true);assert.equal(JSON.stringify(mon),before);
+ }
+ assert.equal(adventureMoveMastered(makeMon(4,100),'fireblast'),false);assert.equal(adventureMoveMastered(makeMon(8,100),'hydropump'),false);assert.equal(adventureMoveMastered({...makeMon(4,5),adventurePlusMastered:['fireblast']},'fireblast'),true);
+});
