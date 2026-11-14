@@ -224,3 +224,18 @@ test('side 79 tracking follows battle and reward stages at Furiko',()=>{
 test('side 77 tracking points to Mawile or Réu on the north scaffold',()=>{
  for(const [id,stage,expected] of [['77',1,{x:12,y:2}],['77-reward',2,{x:12,y:2}],['77',3,null]]){const s={area:3,district:'lumiose-zone9-nw-scaffold',interior:null,zaTrackedQuestId:id,zaSide77Stage:stage};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),expected);}
 });
+
+test('six trainer and lift quests track only saved active or reward stages',()=>{
+ const cases=[
+  [41,'lumiose-vert-sector9',19,5], [64,'lumiose-rouge-sector7',19,11],
+  [68,'lumiose-vert-sector6',19,9], [69,'lumiose-screw-magenta8',19,3],
+  [71,'lumiose-magenta-sector2',16,11],
+ ];
+ for(const [n,district,x,y] of cases)for(const stage of [1,2]){
+  const s={area:3,district,interior:null,[`zaSide${n}Stage`]:stage,zaTrackedQuestId:String(n),objective:'메인'},before=structuredClone(s);
+  assert.equal(pendingAdventureQuests(s).filter(q=>q.id===String(n)).length,1);assert.notEqual(trackedAdventureObjective(s),'메인');const map=fieldMap(s);assert.deepEqual(trackedAdventureLocalTarget({...s,map}),{x,y});assert.equal(trackedAdventureLocalTarget({...s,map,interior:'hotel'}),null);assert.equal(trackedAdventureLocalTarget({...s,map,district:'elsewhere'}),null);assert.equal(trackedAdventureLocalTarget({...s,map:[]}),null);assert.deepEqual(s,before);assert.equal(pendingAdventureQuests({...s,[`zaSide${n}Stage`]:3}).some(q=>q.id===String(n)),false);assert.equal(pendingAdventureQuests({...s,[`zaSide${n}Stage`]:'future'}).some(q=>q.id===String(n)),false);
+ }
+ for(const [wins,y] of [[[],8],[['arbok'],9],[['glalie'],8]]){const s={area:3,district:'lumiose-rust',zaSide70Stage:1,zaSide70Wins:wins,zaTrackedQuestId:'70'};assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),{x:16,y});}
+ const reward={area:3,district:'lumiose-rust',zaSide70Stage:2,zaSide70Wins:['arbok','glalie'],zaTrackedQuestId:'70'};assert.match(trackedAdventureObjective(reward),/보상/);assert.deepEqual(trackedAdventureLocalTarget({...reward,map:fieldMap(reward)}),{x:16,y:8});
+ for(const invalid of [{zaSide70Stage:1,zaSide70Wins:['unknown']},{zaSide70Stage:2,zaSide70Wins:['arbok']},{zaSide70Stage:3,zaSide70Wins:['arbok','glalie']}])assert.equal(pendingAdventureQuests(invalid).some(q=>q.id==='70'),false);
+});
