@@ -8216,3 +8216,15 @@ test('Hea Audino mission supports retry and safely defers full-bag rewards',asyn
   const future={version:2,opaque:true};seedWorld({...rawWorld(),zaSide15RewardsV1:future});await get();await call('side15Reward',{},409);assert.deepEqual(rawWorld().zaSide15RewardsV1,future);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Axi Chespin mission grants one starter and safely defers full-bag candy',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side07-chespin-qa',displayName:'도치마론 의뢰 검사'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,strong={...makeMon(150,100),boxId:lead,moves:['화염방사'],pp:{}};seedMon(lead,strong);const place={area:3,district:'lumiose-rouge-sector2',interior:null,x:18,y:10,facing:'down',regionId:6};seedWorld(storeAdventurePosition({...rawWorld(),...place},state.revision+1));await get();await call('side07Battle',{},409);
+  seedWorld(storeAdventurePosition({...state.world,...place,zaMission06Started:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'side07Battle');await call('side07Battle');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[650,14],[650,14],[650,14]]);await call('forfeit');await get();assert.notEqual(rawWorld().zaSide07Won,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),...place},state.revision+1));seedMon(lead,strong);await get();const coins=state.wallet.coins;await call('side07Battle');await battle();await get();assert.equal(rawWorld().zaSide07Won,true);assert.equal(state.wallet.coins,coins);assert.equal(state.world.interaction.action,'side07Claim');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-exp-candy-xs']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,998)').run(key,globalThis.__adventureUser.userId,'za-exp-candy-xs');await get();const revision=state.revision;await call('side07Claim');await call('side07Claim',{revision},409);await get();const id=state.world.zaSide07GiftId;assert.equal(rawMon(id).id,650);assert.equal(rawMon(id).level,14);assert.deepEqual(state.world.teamIds,[lead,id]);assert.equal(state.wallet.coins,coins+1000);assert.equal(state.inventory['za-exp-candy-xs'],999);assert.equal(state.inventory['za-exp-candy-s'],1);assert.deepEqual(rawWorld().zaSide07PendingV1,{xs:2,small:0});await call('side07ClaimCandy',{},409);
+  sql.prepare('UPDATE inventory SET quantity=997 WHERE key=?').run(key);await get();await call('side07ClaimCandy');await get();assert.equal(state.inventory['za-exp-candy-xs'],999);assert.equal(state.wallet.coins,coins+1000);assert.deepEqual(rawWorld().zaSide07PendingV1,{xs:0,small:0});await call('side07Claim',{},409);await call('side07ClaimCandy',{},409);assert.equal(rawMon(lead).id,150);
+  const future={version:2,opaque:true};seedWorld({...rawWorld(),zaSide07PendingV1:future});await get();await call('side07ClaimCandy',{},409);assert.deepEqual(rawWorld().zaSide07PendingV1,future);
+ }finally{globalThis.__adventureUser=previous;}
+});
