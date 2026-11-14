@@ -1405,7 +1405,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    // Draw only at the active interaction tiles; these figures do not affect movement.
    for(const p of adventureQuestVisuals(w)){
     const px=p.x*tile,py=p.y*tile;
-    if(p.kind==='dummy'){
+    if(p.kind==='hole'){ctx.fillStyle='#a87c4c';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,11,7,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#4f392e';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2+1,7,4,0,0,Math.PI*2);ctx.fill();}
+    else if(p.kind==='dummy'){
      ctx.fillStyle='#5b8056';ctx.fillRect(px+13,py+20,6,10);ctx.fillStyle='#91b77b';ctx.beginPath();ctx.ellipse(px+16,py+16,10,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#354d3b';ctx.fillRect(px+11,py+14,3,3);ctx.fillRect(px+18,py+14,3,3);
     }else{
      trainer(p.x,p.y,p.color,'down');
