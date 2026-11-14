@@ -668,6 +668,7 @@ else if(b.action==='introHotel'){if(s.combat||s.zaIntroStage!=='hotel')throw Err
 else if(b.action==='resolveAdventureMove'){
  if(s.combat||!pending.length)throw Error('선택할 새 기술이 없습니다.');
  const next=pending[0],m=mons.get(next?.boxId);
+ if(!next||typeof next!=='object'||Array.isArray(next)||Object.keys(next).some(k=>k!=='boxId'&&k!=='move')||typeof next.boxId!=='string'||!next.boxId||typeof next.move!=='string'||!next.move)throw Error('기술 선택 대기 기록을 확인하세요.');
  if(b.slot!==null){if(!m||typeof next?.move!=='string'||!Number.isInteger(b.slot)||b.slot<0||b.slot>3||knowsAdventureMove(m,next.move)||!adventureLearnableMoves(m,s).includes(next.move))throw Error('교체할 기술을 확인하세요.');teachAdventureMove(m,next.move,b.slot);changed.set(m.boxId,m);s.log=[`${m.name}이(가) ${next.move}을(를) 배웠다!`];}
  else s.log=[m&&typeof next?.move==='string'?`${m.name}은(는) ${next.move}을(를) 배우지 않았다.`:'확인할 수 없는 기술 선택을 건너뛰었다.'];
  s.adventurePendingMoves=pending.slice(1);

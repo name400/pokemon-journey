@@ -10435,3 +10435,13 @@ test('capture preserves opaque dex entries and refuses unknown dex containers at
   const raw=[1,2000,{version:2,opaque:'keep'},1];seedWorld(place(raw));await get();const rev=state.revision;await call('catchWindowBall',{ball:'masterball'});await call('catchWindowBall',{ball:'masterball',revision:rev},409);await get();assert.deepEqual(rawWorld().adventureDexSpecies,[...raw,4]);assert.equal(rawWorld().adventureBalls.masterball||0,0);assert.ok(state.box.some(mon=>mon.speciesId===4));assert.equal(rawMon(lead).speciesId,1);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('unknown move queue entries cannot be silently discarded',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'future-move-entry-qa',displayName:'기술 대기 기록 검사'};
+ try{await get();await call('start',{species:152});const id=state.world.activeId,mon=rawMon(id);
+  for(const entry of [null,'future',{version:2,boxId:id,move:'몸통박치기'},{boxId:id,move:'몸통박치기',future:{kept:true}}]){
+   const queue=[entry,{boxId:id,move:'몸통박치기'}];seedWorld({adventurePendingMoves:queue});await get();const revision=state.revision;await call('resolveAdventureMove',{slot:null},409);await get();assert.equal(state.revision,revision);assert.deepEqual(rawWorld().adventurePendingMoves,queue);assert.deepEqual(rawMon(id),mon);
+  }
+  const future={version:2,move:'future'},known=[{boxId:id,move:'몸통박치기'},future];seedWorld({adventurePendingMoves:known});await get();const revision=state.revision;await call('resolveAdventureMove',{slot:null});await call('resolveAdventureMove',{slot:null,revision},409);await get();assert.deepEqual(rawWorld().adventurePendingMoves,[future]);assert.deepEqual(rawMon(id),mon);seedWorld({adventurePendingMoves:[{boxId:'missing-pokemon',move:'몸통박치기'}]});await get();await call('resolveAdventureMove',{slot:null});await get();assert.deepEqual(rawWorld().adventurePendingMoves,[]);
+ }finally{globalThis.__adventureUser=previous;}
+});
