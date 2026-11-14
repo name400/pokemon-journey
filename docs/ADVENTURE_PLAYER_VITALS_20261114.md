@@ -103,3 +103,9 @@
 [구역 11](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-11-guide-all-pokemon-and-alphas)의 야도란·블로스터와 [구역 17](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-17-guide-all-pokemon-and-alphas)의 화염레오·입치트를 공통 플레이어 경계 처리에 연결했다. 기존 필드 출현과 높이층·소진 상태를 확인하며, 플레이어 아래의 숨은 개체나 다른 층은 감지하지 않는다. 위험 가까이에서는 서버 확인을 기다리고, 포효 뒤 이동 공격·회피·무적·체력 회복 중단·센터 복귀는 기존 처리를 사용한다. 알 수 없는 경계·소진·층·체력 형식은 덮어쓰지 않는다.
 
 [체력 자료](https://www.serebii.net/legendsz-a/playerhealth.shtml)의 포효 피해 10 외에 두 칸 감지, 이동 시 공격과 일반 공격 피해 30은 기존 2D 턴제의 잠정 규칙이다. 원작의 실제 거리·기술·빈도·실시간 추격은 확인하지 못했다. 격리 API에서 구역 11 지상과 구역 17 지상·옥상, 중복·복구·회피·소진·구형·미래 저장 및 파티·재화·이로치를 대표 검사했다. 실기·운영 D1·Sites 병합본은 미검증이다.
+
+## 구역 12~14 고정 우두머리
+
+공통 경계 처리에 [구역 12](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-12-guide-all-pokemon-and-alphas)의 눈설왕·크레베이스, [구역 13](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-13-guide-all-pokemon-and-alphas)의 우츠동·대로트, [구역 14](https://www.nintendolife.com/guides/pokemon-legends-z-a-wild-zone-14-guide-all-pokemon-and-alphas)의 몰드류를 연결했다. 기존 지도의 출현 여부, 연못 층, 낮밤 및 소진 기록을 그대로 확인하며 보이지 않는 개체는 감지하지 않는다. 우츠동의 낮 한정은 기존 게임의 출현 규칙이며 인용 자료가 그 제한을 확인한다는 뜻은 아니다. 구르기·체력·복귀·이동 예측은 기존 공통 처리를 사용하고 미지의 기록 형식은 덮어쓰지 않는다.
+
+[체력 자료](https://www.serebii.net/legendsz-a/playerhealth.shtml)에 근거한 포효 피해 10을 제외한 두 칸 감지·이동 시 공격·30 피해는 2D 턴제의 잠정값이다. 개체별 원작 기술·범위·실시간 추격은 확인하지 못했다. 격리 API에서 공원과 연못 층, 숲의 낮밤, 변전소 피해·중복 요청·알 수 없는 소진 기록 및 파티·재화·이로치 보존을 대표 검사했다. 실제 기기·운영 D1·Sites 병합본은 검증하지 않았다.

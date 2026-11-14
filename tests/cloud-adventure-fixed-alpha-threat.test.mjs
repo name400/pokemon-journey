@@ -19,3 +19,18 @@ test('alert suspends recovery and blocks movement prediction near a visible alph
  assert.equal(playerRecoverySafe(w),false);assert.equal(playerRecoverySafe({...w,zaZone17Spent:{'pyroar-alpha':true}}),true);
  assert.equal(predictCloudStep(w,'left'),null);
 });
+
+test('reviewed park, forest and substation alphas respect layers, time and unknown data',()=>{
+ const park={area:3,district:'lumiose-zone12',x:7,y:7};
+ assert.equal(fixedAlphaPlayerThreat(park)?.id,'abomasnow-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...park,zaZone12PondLower:true,x:7,y:11})?.id,'avalugg-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...park,zaZone12PondLower:'unknown'}),null);
+ const forest={area:3,district:'lumiose-zone13',x:12,y:10,zaZone13Period:'day'};
+ assert.equal(fixedAlphaPlayerThreat(forest)?.id,'weepinbell-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...forest,zaZone13Period:'night',x:10,y:5})?.id,'trevenant-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...forest,zaZone13Period:'twilight'}),null);
+ const substation={area:3,district:'lumiose-zone14',x:10,y:7};
+ assert.equal(fixedAlphaPlayerThreat(substation)?.id,'excadrill-alpha');
+ assert.equal(fixedAlphaPlayerThreat({...substation,zaZone14Spent:{'excadrill-alpha':true}}),null);
+ assert.equal(fixedAlphaAlertKnown({...substation,zaZone14Spent:{version:2}}),false);
+});
