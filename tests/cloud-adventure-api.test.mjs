@@ -9371,3 +9371,17 @@ test('world-only actions keep concurrent shared edits and still return the activ
   await call('spin',{phase:'start',direction:1});await get();assert.ok(rawMon(id).spinStarted>0);assert.equal(rawMon(id).otherModeNote,'map-update');
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('changed shared Pokemon use atomic snapshot guards for movement, items and party healing',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'shared-mon-cas-qa',displayName:'공유 개체 동시 변경'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:13,facing:'down'},state.revision+1));await get();
+  const batch=globalThis.__adventureEnv.DB.batch;const inject=patch=>{globalThis.__adventureEnv.DB.batch=async statements=>{globalThis.__adventureEnv.DB.batch=batch;seedMon(id,{...rawMon(id),...patch});return batch(statements);};};
+  const worldBefore=structuredClone(rawWorld()),steps=rawMon(id).walkSteps||0;let conflict;try{inject({otherModeNote:'movement'});conflict=await call('move',{direction:'down',compact:true},409);}finally{globalThis.__adventureEnv.DB.batch=batch;}assert.equal(conflict.code,'MOVEMENT_PRECHECK_CONFLICT');assert.equal(rawMon(id).otherModeNote,'movement');assert.equal(rawMon(id).walkSteps||0,steps);assert.deepEqual(rawWorld(),worldBefore);
+  await get();await call('move',{direction:'down',compact:true});await get();assert.equal(rawMon(id).walkSteps,steps+1);assert.equal(rawMon(id).otherModeNote,'movement');
+  const candy=JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(candy,globalThis.__adventureUser.userId,'rarecandy');await get();const level=rawMon(id).level;try{inject({otherModeNote:'candy'});await call('useAdventureRareCandy',{},409);}finally{globalThis.__adventureEnv.DB.batch=batch;}assert.equal(rawMon(id).otherModeNote,'candy');assert.equal(rawMon(id).level,level);assert.equal(sql.prepare('SELECT quantity FROM inventory WHERE key=?').get(candy).quantity,1);
+  await get();await call('useAdventureRareCandy');await get();assert.equal(rawMon(id).level,level+1);assert.equal(rawMon(id).otherModeNote,'candy');
+  const second={...makeMon(25,10),boxId:'cas-heal-other',hp:1,status:'par'};sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(second.boxId,globalThis.__adventureUser.userId,second.id,JSON.stringify(second),'capture',Date.now());seedMon(id,{...rawMon(id),hp:1});seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:3,y:6,facing:'up',teamIds:[id,second.boxId]},state.revision+1));await get();
+  try{globalThis.__adventureEnv.DB.batch=async statements=>{globalThis.__adventureEnv.DB.batch=batch;seedMon(second.boxId,{...rawMon(second.boxId),otherModeNote:'heal'});return batch(statements);};await call('heal',{},409);}finally{globalThis.__adventureEnv.DB.batch=batch;}assert.equal(rawMon(id).hp,1);assert.equal(rawMon(second.boxId).hp,1);assert.equal(rawMon(second.boxId).otherModeNote,'heal');await get();await call('heal');await get();assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(second.boxId).hp,rawMon(second.boxId).maxHp);assert.equal(rawMon(second.boxId).otherModeNote,'heal');
+ }finally{globalThis.__adventureUser=previous;}
+});
