@@ -680,6 +680,16 @@ test('Mission 19 follows Chandelure after either Klefki capture path',async()=>{
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('Mission 20 field balls preserve progress on failure and capture a ghost only once',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'mission20-field-ball-qa',displayName:'빈집 필드 포획'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],lead=rawMon(team[0]);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-ghost-house',interior:null,x:11,y:14,facing:'up',zaMission20Stage:7,adventureBalls:{ultraball:1,masterball:1}},state.revision+1));await get();await walkTo('q');
+  assert.ok(state.world.interaction.actions.some(a=>a.action==='throwMission20Ghost'));await call('throwMission20Ghost',{ball:'ultraball'});assert.ok(state.battle);assert.deepEqual(state.world.zaMission20GhostCaught||[],[]);assert.equal(rawWorld().adventureBalls.ultraball,0);await get();assert.ok(state.battle);await call('flee');await get();
+  const before=state.revision;await call('throwMission20Ghost',{ball:'masterball'});assert.deepEqual(state.world.zaMission20GhostCaught,[92]);assert.equal(rawWorld().adventureBalls.masterball,0);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);assert.equal(rawMon(team[0]).personality,lead.personality);assert.deepEqual(rawMon(team[0]).ivs,lead.ivs);const caught=state.box.find(m=>m.speciesId===92&&m.origin==='capture');assert.ok(caught);assert.equal(caught.shiny,false);await call('throwMission20Ghost',{ball:'masterball',revision:before},409);await get();assert.deepEqual(state.world.zaMission20GhostCaught,[92]);assert.equal(state.box.filter(m=>m.speciesId===92&&m.origin==='capture').length,1);await call('throwMission20Ghost',{ball:'masterball'},409);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Mission 20 clears each ghost by capture or defeat and preserves legacy slots',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission20-ghost-resolution-qa',displayName:'빈집고스트테스트'};
  try{
