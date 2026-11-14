@@ -146,7 +146,7 @@ function canRefreshWildAtPosition(s:any,zone:number,period:string){
  const view:any={...s,[`zaZone${zone}Spent`]:undefined};
  if([6,13,14,15,17,18,19].includes(zone))view[`zaZone${zone}Period`]=period;
  // Inspect the hypothetical next population even where occupied tiles hide encounters.
- const hidesOccupied=[15,17,18,19].includes(zone);
+ const hidesOccupied=[6,13,15,17,18,19].includes(zone);
  if(hidesOccupied){view.x=-1;view.y=-1;}
  if(zone===14){const time=gameTime(undefined,adventureClockOffset(s));view.weather=adventureFieldWeather(s,time,AREAS[s.area]?.biome);}
  const tile=fieldMap(view)[s.y]?.[s.x],p=fieldWildResolvers[zone]?.(view,tile);

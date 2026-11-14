@@ -5368,6 +5368,19 @@ for(const c of [
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
 
+for(const c of [
+ {zone:6,x:15,y:5,tile:'b',id:'meditite',species:307,from:'night',to:'day',extra:{zaZone6Layer:'ground'}},
+ {zone:13,x:11,y:5,tile:'d',id:'trevenant-alpha',species:709,from:'day',to:'night',extra:{}},
+ {zone:13,x:14,y:11,tile:'e',id:'weepinbell-alpha',species:70,from:'night',to:'day',direction:'up',extra:{}},
+])test(`Zone ${c.zone} time-only spawn waits for player at ${c.x},${c.y}`,async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;
+ try{
+  Date.now=()=>now;globalThis.__adventureRandom=()=>.999;globalThis.__adventureUser={userId:`time-only-${c.zone}-${c.id}`,displayName:'시간 출현 위치'};globalThis.__adventureTime={period:c.from,hour:c.from==='day'?12:20};await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),shiny=`zone${c.zone}:${c.id}:${c.species}`;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:`lumiose-zone${c.zone}`,interior:null,x:c.x,y:c.y,facing:'down',zaRoyaleRank:'B',...c.extra,[`zaZone${c.zone}Period`]:c.from,[`zaZone${c.zone}Spent`]:undefined,zaWildShinyRolls:{[shiny]:true},zaWildClockV2:true,zaWildSpawnCycles:{[c.zone]:{period:c.from,interval:0}},combat:null,encounter:null},state.revision+1));
+  await get();assert.deepEqual([state.world.x,state.world.y],[c.x,c.y]);now+=1200000;globalThis.__adventureTime={period:c.to,hour:c.to==='day'?12:20};await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[`lumiose-zone${c.zone}`,c.x,c.y]);assert.notEqual(state.world.map[c.y][c.x],c.tile);await get();assert.deepEqual([state.world.x,state.world.y],[c.x,c.y]);await call('move',{direction:c.direction||'down'});await get();assert.equal(state.world.map[c.y][c.x],c.tile);assert.equal(rawWorld().zaWildShinyRolls[shiny],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('wild refresh waits when a respawn would occupy the player save position',async()=>{
  const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'occupied-wild-refresh-qa',displayName:'재출현 위치'};
  try{
