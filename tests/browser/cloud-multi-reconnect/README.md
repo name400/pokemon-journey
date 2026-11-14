@@ -20,3 +20,5 @@ For the isolated local-D1 Worker route and browser path, run `node --test tests/
 `PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/browser/cloud-multi-reconnect/status-medicine.mjs` checks status medicine selection and reconnect for an owned reserve using a mocked route at both viewport sizes.
 
 `PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node tests/browser/cloud-multi-reconnect/soda-pop.mjs` checks Soda Pop targeting, one turn and reconnect at mobile and desktop widths using the mocked route and real multi-battle engine.
+
+`side37-binacle.mjs` checks the five-Binacle, three-active approximation with a mocked route at mobile and desktop widths, including target selection and reload. It uses the same fixture and `PLAYWRIGHT_MODULE` setting as above.
