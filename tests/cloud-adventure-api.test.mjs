@@ -9968,3 +9968,16 @@ test('evolved intro starter learns a Z-A level move via candy and reconnect',asy
   await get();assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('인파이트'));assert.equal(rawMon(id).pp.tackle,3);assert.equal(rawMon(id).item,'leftovers');assert.equal(rawMon(id).shiny,true);await call('useAdventureRareCandy',{revision},409);assert.equal(state.inventory.rarecandy??0,0);
  }finally{globalThis.__adventureUser=priorUser;}
 });
+
+test('new intro starter uses Z-A move levels and old saves retain legacy choices',async()=>{
+ const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'starter-za-level-version-qa',displayName:'스타터 기술표 검증'};
+ try{
+  await get();await call('startIntro');for(let i=0;i<6;i++)await call('introMove',{direction:'right'});await call('introMove',{direction:'left'});await call('introMove',{direction:'left'});await call('introMove',{direction:'up'});await call('introTalk',{species:152});await call('introConfirm',{species:152,confirmed:true});
+  const id=state.world.activeId;assert.equal(rawWorld().zaIntroStarterMovesV2,true);
+  const mon={...makeMon(152,8),boxId:id,origin:'starter',moves:['몸통박치기','꼬리흔들기','나뭇잎','방어'],pp:{tackle:3}};seedMon(id,mon);seedWorld({...rawWorld(),zaIntroStage:'complete',zaIntroStarterSpecies:152});
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'rarecandy');
+  await get();const revision=state.revision;await call('useAdventureRareCandy');assert.ok(state.world.adventurePendingMoves.some(p=>p.move==='차밍보이스'));assert.ok(!state.world.adventurePendingMoves.some(p=>p.move==='독가루'));
+  await get();const choices=state.box.find(p=>p.boxId===id).learnable;assert.ok(choices.includes('차밍보이스'));assert.ok(!choices.includes('독가루'));assert.equal(rawMon(id).pp.tackle,3);await call('useAdventureRareCandy',{revision},409);
+  seedWorld({...rawWorld(),zaIntroStarterMovesV2:undefined});await get();assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('독가루'));assert.equal(rawMon(id).pp.tackle,3);
+ }finally{globalThis.__adventureUser=priorUser;}
+});

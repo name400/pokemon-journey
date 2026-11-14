@@ -82,3 +82,15 @@ test('intro starter families learn later Z-A moves and stage-specific moves safe
  const partner={...makeMon(153,39),boxId:'other',origin:'starter',moves:['몸통박치기'],pp:{}};
  assert.deepEqual(applyAdventureLevelMoves(partner,{...partner,level:40,moves:[...partner.moves]},world),applyAdventureLevelMoves(partner,{...partner,level:40,moves:[...partner.moves]}));
 });
+
+test('new intro starter uses Z-A levels while old and unidentified saves keep their learnsets',()=>{
+ const mon={...makeMon(152,8),boxId:'starter',origin:'starter',moves:['몸통박치기','꼬리흔들기','나뭇잎'],pp:{tackle:2}};
+ const old={zaIntroStarterMovesV1:true,zaIntroStarterBoxId:'starter'},fresh={...old,zaIntroStarterMovesV2:true};
+ const grow=world=>applyAdventureLevelMoves(mon,{...mon,level:9,moves:[...mon.moves],pp:{...mon.pp}},world);
+ const before=grow(old),after=grow(fresh);assert.ok(before.learned.includes('독가루')||before.pending.includes('독가루'));assert.ok(after.learned.includes('차밍보이스'));assert.ok(![...after.learned,...after.pending].includes('독가루'));assert.equal(after.mon.pp.tackle,2);
+ assert.ok(adventureLearnableMoves({...mon,level:9},old).includes('독가루'));assert.ok(!adventureLearnableMoves({...mon,level:9},fresh).includes('독가루'));
+ const stranger={...mon,boxId:'other'};assert.deepEqual(adventureLearnableMoves(stranger,fresh),adventureLearnableMoves(stranger,{}));
+ const changedSpecies={...makeMon(1,9),boxId:'starter',origin:'starter'};assert.deepEqual(adventureLearnableMoves(changedSpecies,fresh),adventureLearnableMoves(changedSpecies,{}));
+ const evolving={...makeMon(153,20),boxId:'starter',origin:'starter'};assert.ok(adventureLearnableMoves(evolving,fresh).includes('기가드레인'));assert.ok(adventureLearnableMoves(evolving,fresh).includes('차밍보이스'));
+ for(const [id,element] of [[152,'나뭇잎'],[158,'물대포'],[498,'불꽃세례']]){const s={...makeMon(id,5),boxId:'starter',origin:'starter',moves:['몸통박치기'],pp:{}},result=applyAdventureIntroStarterMoves(s,{...s,level:6,moves:[...s.moves]},fresh);assert.deepEqual(result.learned,[element]);}
+});
