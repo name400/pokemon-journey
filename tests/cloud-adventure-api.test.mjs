@@ -8201,3 +8201,18 @@ test('Bond Abra trade preserves shared ownership and safely replaces the adventu
   const saved=rawWorld();seedWorld({...saved,teamIds:[lead],activeId:lead,districtPosition:{...saved.districtPosition,revision:state.revision+1}});await get();assert.deepEqual(state.world.teamIds,[id]);assert.equal(state.world.activeId,id);await call('side24Trade',{boxId:lead,confirmed:true},409);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Hea Audino mission supports retry and safely defers full-bag rewards',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side15-hea-qa',displayName:'다부니 의뢰 검사'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,strong={...makeMon(150,100),boxId:lead,moves:['파동탄'],pp:{}};seedMon(lead,strong);
+  const place={area:3,district:'lumiose-rouge-sector1',interior:null,x:18,y:10,facing:'down',regionId:6};seedWorld(storeAdventurePosition({...rawWorld(),...place},state.revision+1));await get();await call('side15Start',{},409);
+  seedWorld(storeAdventurePosition({...state.world,...place,zaMission07Started:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'side15Start');await call('side15Start');await get();assert.equal(state.world.interaction.action,'side15Battle');assert.ok(pendingAdventureQuests(state.world).some(q=>q.id==='15'));
+  await call('side15Battle');assert.deepEqual(state.battle.teams[1].map(m=>[m.speciesId,m.level]),[[531,20]]);await call('forfeit');await get();assert.notEqual(rawWorld().zaSide15Won,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),...place},state.revision+1));seedMon(lead,strong);await get();await call('side15Battle');const before=state.wallet.coins;await battle();await get();assert.equal(rawWorld().zaSide15Won,true);assert.equal(state.wallet.coins,before+960);assert.deepEqual(rawWorld().zaSide15RewardsV1,{revive:3,super_potions:5,coins:900});
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'revive']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'revive');sql.prepare('UPDATE wallets SET super_potions=99 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const revision=state.revision;await call('side15Reward');await call('side15Reward',{revision},409);await get();assert.equal(state.wallet.coins,before+1860);assert.deepEqual(rawWorld().zaSide15RewardsV1,{revive:3,super_potions:5,coins:0});await call('side15Reward',{},409);
+  sql.prepare('UPDATE inventory SET quantity=997 WHERE key=?').run(key);sql.prepare('UPDATE wallets SET super_potions=95 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('side15Reward');await get();assert.equal(state.inventory.revive,999);assert.equal(state.wallet.super_potions,99);assert.deepEqual(rawWorld().zaSide15RewardsV1,{revive:1,super_potions:1,coins:0});
+  sql.prepare('UPDATE inventory SET quantity=998 WHERE key=?').run(key);sql.prepare('UPDATE wallets SET super_potions=98 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('side15Reward');await get();assert.deepEqual(rawWorld().zaSide15RewardsV1,{revive:0,super_potions:0,coins:0});assert.equal(state.wallet.coins,before+1860);assert.deepEqual(state.world.teamIds,[lead]);await call('side15Reward',{},409);
+  const future={version:2,opaque:true};seedWorld({...rawWorld(),zaSide15RewardsV1:future});await get();await call('side15Reward',{},409);assert.deepEqual(rawWorld().zaSide15RewardsV1,future);
+ }finally{globalThis.__adventureUser=previous;}
+});
