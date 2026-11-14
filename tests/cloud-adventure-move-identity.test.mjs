@@ -114,3 +114,19 @@ test('new ordinary wild starter-family base stages use verified latest level mov
  const alpha={...makeMon(152,55),adventureAlpha:true,moves:['원시의힘'],pp:{ancientpower:2}};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
  const evolved=makeMon(153,55);assert.equal(prepareVerifiedWildMoves(evolved),evolved);const unknown={...makeMon(152,55),formId:999};assert.equal(prepareVerifiedWildMoves(unknown),unknown);
 });
+
+test('new Kanto-family captures use verified growth and evolution while old records remain unchanged',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[1,15,['독가루','수면가루']],[4,20,['회오리불꽃']],[7,20,['얼어붙은바람']]]){
+  const old={...makeMon(id,level-1),moves:['몸통박치기','방어','울음소리','빛의장막'],pp:{tackle:3}},fresh=markAdventureVerifiedGrowth(old),result=applyAdventureLevelMoves(fresh,{...fresh,level,moves:[...fresh.moves],pp:{...fresh.pp}},{});
+  assert.deepEqual(result.pending,expected);assert.equal(result.mon.pp.tackle,3);assert.deepEqual(old.moves,result.mon.moves);assert.equal(old.adventureKantoMovesV1,undefined);
+  for(const move of expected)assert.ok(adventureLearnableMoves({...fresh,level},{}).includes(move));
+ }
+ for(const [id,expected] of [[3,['파워휩']],[6,['에어슬래시','불대문자']],[9,['러스터캐논','하이드로펌프']]]){
+  const mon={...makeMon(id,50),adventureKantoMovesV1:true,moves:['몸통박치기','방어','울음소리','빛의장막'],pp:{tackle:3}},result=applyAdventureEvolutionMoves(mon,{});assert.deepEqual(result.pending,expected);assert.equal(result.mon.pp.tackle,3);for(const name of expected)assert.ok(adventureLearnableMoves(mon,{}).includes(name));
+ }
+ const future={...makeMon(1,14),adventureKantoMovesV1:{version:2}};assert.deepEqual(markAdventureVerifiedGrowth(future),future);assert.deepEqual(adventureLearnableMoves(future,{}),adventureLearnableMoves({...future,adventureKantoMovesV1:undefined},{}));
+ const wrong={...makeMon(1,14),formId:999};assert.equal(markAdventureVerifiedGrowth(wrong).adventureKantoMovesV1,undefined);
+ for(const [id,expected] of [[1,['광합성','망각술','오물웨이브','이판사판태클']],[4,['베어가르기','화염방사','드래곤다이브','플레어드라이브']],[7,['아쿠아링','아쿠아제트','철벽','아쿠아브레이크']]])assert.deepEqual(prepareVerifiedWildMoves(makeMon(id,54)).moves,expected);
+ const alpha={...makeMon(1,54),adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
+});

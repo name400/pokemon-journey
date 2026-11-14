@@ -10304,6 +10304,26 @@ test('newly caught nonstarter Chikorita uses verified Z-A growth and retains its
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('caught Bulbasaur learns both Z-A level 15 moves without losing capture or shared data',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-kanto-growth-qa',displayName:'관동 계열 성장 검사'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,leadBefore=rawMon(lead),foe={...makeMon(1,14),boxId:'wild',hp:0,moves:['몸통박치기','덩굴채찍','성장','씨뿌리기'],pp:{tackle:3},shiny:true,custom:{kept:true}};
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,adventureBalls:{masterball:1},combat:null,encounter:null,adventureCatchWindow:{foe,moveCount:0,revision:state.revision+1}},state.revision+1));await get();const revision=state.revision;await call('catchWindowBall',{ball:'masterball'});await call('catchWindowBall',{ball:'masterball',revision},409);await get();
+  const id=state.world.teamIds.find(x=>x!==lead),caught=rawMon(id);assert.equal(caught.adventureKantoMovesV1,true);assert.equal(caught.shiny,true);assert.deepEqual(caught.custom,foe.custom);
+  const rev=state.revision;await call('useAdventureRareCandy',{boxId:id});await call('useAdventureRareCandy',{boxId:id,revision:rev},409);await get();assert.equal(rawMon(id).level,15);assert.deepEqual(state.world.adventurePendingMoves.filter(m=>m.boxId===id).map(m=>m.move),['독가루','수면가루']);assert.ok(state.box.find(m=>m.boxId===id).learnable.includes('수면가루'));assert.deepEqual(rawMon(id).moves,caught.moves);
+  await call('resolveAdventureMove',{slot:0});await call('resolveAdventureMove',{slot:null});await get();assert.ok(rawMon(id).moves.includes('독가루'));assert.equal(rawMon(id).adventureKantoMovesV1,true);assert.equal(state.inventory.rarecandy||0,0);assert.equal(rawMon(lead).id,leadBefore.id);assert.deepEqual(rawMon(lead).ivs,leadBefore.ivs);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('verified Charmeleon evolution preserves its marker and offers both Z-A evolution moves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'kanto-evolution-moves-qa',displayName:'관동 진화 기술 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon={...makeMon(5,36),boxId:id,adventureKantoMovesV1:true,moves:['몸통박치기','불꽃세례','용의숨결','불꽃엄니'],pp:{tackle:3},item:'leftovers',custom:{kept:true}};seedMon(id,mon);await get();const revision=state.revision;
+  await call('evolve',{boxId:id,target:6});await call('evolve',{boxId:id,target:6,revision},409);await get();assert.equal(rawMon(id).id,6);assert.equal(rawMon(id).adventureKantoMovesV1,true);assert.deepEqual(rawMon(id).custom,mon.custom);assert.equal(rawMon(id).item,'leftovers');assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(state.world.adventurePendingMoves.filter(m=>m.boxId===id).map(m=>m.move),['에어슬래시','불대문자']);assert.ok(state.box.find(m=>m.boxId===id).learnable.includes('드래곤클로'));
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('new zone 20 wild Tepig uses verified level moves through battle and capture',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone20-wild-za-moves-qa',displayName:'야생 기술 검사'};globalThis.__adventureRandom=()=>.999;
  try{
