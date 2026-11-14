@@ -35,8 +35,16 @@ test('roaming Skiddo keeps size across shiny preservation and clears it on exit'
  const {assignVisibleAdventureSize,visibleAdventureSize,adventureFieldSizeFactor}=await import('../lib/cloud-adventure/adventure-size.mjs');
  const {refreshRoamingWildOnExit,refreshRoamingWildSpawns}=await import('../lib/cloud-adventure/adventure-roaming-refresh.mjs');
  const key='field3:skiddo:672',base={area:3,district:'lumiose-rouge-north',zaWildShinyRolls:{[key]:false}};
- assert.equal(assignVisibleAdventureSize(base,key,()=>.999),true);assert.equal(adventureFieldSizeFactor(base,key),1.18);assert.equal(adventureFieldSizeFactor(base,'field3:other:999'),1);
+ assert.equal(assignVisibleAdventureSize(base,key,()=>.999),true);assert.equal(adventureFieldSizeFactor(base,key),1.18);assert.ok(adventureFieldSizeFactor(base,key,true)>adventureFieldSizeFactor(base,key));assert.equal(adventureFieldSizeFactor({...base,zaWildVisibleAlphaLevels:{[key]:25}},key),1.25);assert.equal(adventureFieldSizeFactor(base,'field3:other:999'),1);
  assert.equal(refreshRoamingWildOnExit(base,3),true);assert.equal(visibleAdventureSize(base,key),null);
  base.zaWildShinyRolls[key]=true;assignVisibleAdventureSize(base,key,()=>0);assert.equal(refreshRoamingWildOnExit(base,3),false);assert.equal(visibleAdventureSize(base,key).scale,0);
  const present={...base,district:'lumiose-zone3',x:2,y:2,zaWildSpawnCycles:{3:{period:'day',interval:10}}};assert.equal(refreshRoamingWildSpawns(present,'night',11),true);assert.equal(visibleAdventureSize(present,key).scale,0);
+});
+
+test('managed ordinary field slots share size handling without confusing forms or alpha',async()=>{
+ const {assignVisibleAdventureSize,attachVisibleAdventureSize,visibleAdventureSize,adventureFieldSizeFactor}=await import('../lib/cloud-adventure/adventure-size.mjs');
+ const world={};for(const [key,id] of [['zone6:magikarp:129',129],['field2:magikarp:129',129],['field3:skiddo:672',672],['zone15:pumpkaboo-super:10029',10029]]){
+  assert.equal(assignVisibleAdventureSize(world,key,()=>.999),true);const m=makeMon(id,40);attachVisibleAdventureSize(world,m,key);assert.equal(adventurePokemonSize(m),'XL');assert.equal(adventureFieldSizeFactor(world,key),1.18);assert.equal(visibleAdventureSize(world,key).scale,255);const alpha={...makeMon(id,40),adventureAlpha:true};attachVisibleAdventureSize(world,alpha,key);assert.equal(alpha.adventureScaleV1,undefined);
+ }
+ assert.equal(assignVisibleAdventureSize(world,'zone20:story:718',()=>0),false);assert.equal(assignVisibleAdventureSize(world,'zone6:__proto__:129:extra',()=>0),false);assert.equal(attachVisibleAdventureSize(world,makeMon(25,40),'zone6:magikarp:129').adventureScaleV1,undefined);
 });

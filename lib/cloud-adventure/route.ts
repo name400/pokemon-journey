@@ -273,7 +273,7 @@ function prepareVisibleWild(s:any){
  if(s.district==='lumiose-zone1-roof'&&zone1RoofAlphaReady(s)){ensure('alpha:zone1-roof-pidgey:16');return changed;}
  if(s.district==='lumiose-zone4'&&earlyAlphaUnlocked(s)&&!s.zaZone4AlphaSpent){ensure('alpha:zone4-spinarak:167');return changed;}
  if(s.district==='lumiose-zone7'&&!s.zaZone7AlphaSpent)ensure('alpha:zone7-fletchinder:662');
- const ensureRoaming=(key:string,zone:number,species:number)=>{if(typeof s.zaWildShinyRolls?.[key]==='boolean')return;const level=randomWildAlphaLevel(s,zone,species,random);if(level!==null)s.zaWildVisibleAlphaLevels={...(s.zaWildVisibleAlphaLevels||{}),[key]:level};ensure(key);if(zone===3&&species===672&&level===null&&!s.zaWildVisibleAlphaLevels?.[key])assignVisibleAdventureSize(s,key,random);};
+ const ensureRoaming=(key:string,zone:number,species:number)=>{if(typeof s.zaWildShinyRolls?.[key]==='boolean')return;const level=randomWildAlphaLevel(s,zone,species,random);if(level!==null)s.zaWildVisibleAlphaLevels={...(s.zaWildVisibleAlphaLevels||{}),[key]:level};ensure(key);if(level===null&&!s.zaWildVisibleAlphaLevels?.[key]&&!['field2:budew:406','field2:kakuna:14'].includes(key))assignVisibleAdventureSize(s,key,random);};
  if(s.district==='lumiose-zone2'){if(zone2IslandAlphaReady(s))ensure(`alpha:zone2-island:${period==='night'?120:129}`);if(zone2BudewPosition(s))ensureRoaming('field2:budew:406',2,406);if(zone2KakunaPosition(s))ensureRoaming('field2:kakuna:14',2,14);for(const p of zone2FieldMonsters(s,period))ensureRoaming(`field2:${p.id}:${p.speciesId}`,2,p.speciesId);return changed;}
  if(s.district==='lumiose-zone3'){for(const p of zone3FieldMonsters(s,period))ensureRoaming(`field3:${p.id}:${p.speciesId}`,3,p.speciesId);return changed;}
  if(s.district==='lumiose-crystal-sewer'){for(const p of magentaSewerMonsters(s,period))ensure(`sewer:${p.id}:${p.speciesId}`);return changed;}
@@ -282,7 +282,7 @@ function prepareVisibleWild(s:any){
  const n=Number(match[1]),view=n===6?{...s,zaZone6Period:time.period}:n===19?{...s,zaZone19Period:time.period}:n===18?{...s,zaZone18Period:time.period}:n===17?{...s,zaZone17Period:time.period}:n===15?{...s,zaZone15Period:time.period}:n===13?{...s,zaZone13Period:time.period}:n===14?{...s,zaZone14Period:time.period,weather:adventureFieldWeather(s,time,AREAS[s.area]?.biome)}:s,map=fieldMap(view),find=fieldWildResolvers[n];
  for(const tile of new Set(map.join(''))){const p=find(view,tile);if(!p||typeof p.id!=='string'||!Number.isInteger(p.species))continue;const key=`zone${n}:${p.id}:${p.species}`;if(typeof s.zaWildShinyRolls?.[key]==='boolean')continue;
   if(n>=5&&n<=20&&!p.alpha&&(!p.burrow||n===8)){const level=randomWildAlphaLevel(s,n,p.species,random);if(level!==null)s.zaWildVisibleAlphaLevels={...(s.zaWildVisibleAlphaLevels||{}),[key]:level};}
-  assignWildShiny(s,{},random,key);if(n===12&&!p.alpha&&!s.zaWildVisibleAlphaLevels?.[key])assignVisibleAdventureSize(s,key,random);changed=true;}
+  assignWildShiny(s,{},random,key);if(n<=19&&!p.alpha&&!p.burrow&&!s.zaWildVisibleAlphaLevels?.[key])assignVisibleAdventureSize(s,key,random);changed=true;}
  return changed;
 }
 async function initializeVisibleWildForRead(id:string){
