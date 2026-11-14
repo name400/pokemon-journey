@@ -17,3 +17,15 @@ test('special dual-type and ground immunity previews match their simulator type 
  const grass=createCombat([p],[mon(152,'g',['튀어오르기'])]);assert.equal(value(grass,'flyingpress'),2);
  const flying=createCombat([p],[mon(16,'f',['튀어오르기'])]);assert.equal(value(flying,'thousandarrows'),1);
 });
+
+test('multi and triple show separate opposing type previews without touching stored snapshots',async()=>{
+ const {createMission10DoubleSnapshot,mission10MultiView,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
+ const {createMission37TripleSnapshot,mission37TripleView,playMission37TriplePrototype}=await import('../lib/cloud-adventure/adventure-mission37-triple.mjs');
+ const p=mon(362,'p',['프리즈드라이','웨더볼']),a=mon(25,'a',['튀어오르기']),b=mon(25,'b',['튀어오르기']),water=mon(79,'water',['튀어오르기']),ice=mon(361,'ice',['튀어오르기']),ghost=mon(92,'ghost',['튀어오르기']);
+ for(const [c,view,play] of [[createMission10DoubleSnapshot([p],[a],[water,ice]),mission10MultiView,playMission10MultiTurn],[createMission37TripleSnapshot([p],[a],[b],[water,ice,ghost]),mission37TripleView,playMission37TriplePrototype]]){
+  const saved=JSON.stringify(c),v=view(c),moves=v.requests[0].moves,freeze=moves.find(m=>m.id==='freezedry'),weather=moves.find(m=>m.id==='weatherball');
+  assert.deepEqual(freeze.effectivenessByTarget.slice(0,2).map(x=>[x.slot,x.multiplier]),[[0,2],[1,.5]]);
+  assert.ok(weather.effectivenessByTarget.every(x=>x.multiplier===null));assert.equal(JSON.stringify(c),saved);
+  const next=play(JSON.parse(saved),{type:'move',move:'freezedry',target:1});assert.ok(next.teams.flat().find(m=>m.boxId==='water').hp<water.hp);assert.deepEqual(next.owners,c.owners);
+ }
+});
