@@ -34,3 +34,27 @@ test('tracked local markers follow real interaction tiles and disappear for othe
 test('tracked objective follows an active quest and falls back after completion',async()=>{
  const {trackedAdventureObjective}=await import('../lib/cloud-adventure/adventure-pending-quests.mjs');const old={objective:'메인 목표'};assert.equal(trackedAdventureObjective(old),'메인 목표');const active={...old,zaSide14Started:true,zaTrackedQuestId:'14'};assert.match(trackedAdventureObjective(active),/Soleil/);assert.equal(trackedAdventureObjective({...active,zaSide14Complete:true}),'메인 목표');assert.equal(trackedAdventureObjective({...active,zaTrackedQuestId:'invalid'}),'메인 목표');const progress={...old,zaEmmaMet:true,zaBunnelbyQuest:1,zaTrackedQuestId:'1'};assert.match(trackedAdventureObjective(progress),/파르빗/);assert.match(trackedAdventureObjective({...progress,zaBunnelbyQuest:2}),/보고/);
 });
+
+test('Emma investigation markers follow quest stage and both existing quest locations',()=>{
+ const base={area:3,zaEmmaMet:true,zaMission05Stage:7};
+ const cases=[
+  [{...base,district:'lumiose-rouge-sector6',zaTrackedQuestId:'1'},[7,4]],
+  [{...base,district:'lumiose-rouge-sector6',zaTrackedQuestId:'1',zaBunnelbyQuest:1},[5,5]],
+  [{...base,district:'lumiose-zone3',zaTrackedQuestId:'1',zaBunnelbyQuest:2},[19,10]],
+  [{...base,district:'lumiose-zone3',zaTrackedQuestId:'1',zaBunnelbyQuest:1},[20,11]],
+  [{...base,district:'lumiose-passage-palais',zaTrackedQuestId:'2',zaTradeQuest:1},[6,8]],
+  [{...base,district:'lumiose-zone3',zaTrackedQuestId:'2',zaTradeQuest:1},[3,12]],
+  [{...base,district:'lumiose-passage-palais',zaTrackedQuestId:'2-reward',zaTradeQuest:2,zaTradePotionPending:true},[6,8]],
+  [{...base,district:'lumiose-rouge-north',zaTrackedQuestId:'3'},[22,13]],
+  [{...base,district:'lumiose-zone4',zaTrackedQuestId:'3',zaSableyeQuest:1},[18,6]],
+  [{...base,district:'lumiose-rouge-north',zaTrackedQuestId:'3-reward',zaSableyeQuest:3,zaSableyeRevivePending:true},[22,13]],
+ ];
+ for(const [save,[x,y]] of cases){const world={...save,map:fieldMap(save)},before=structuredClone(world);assert.deepEqual(trackedAdventureLocalTarget(world),{x,y});assert.deepEqual(world,before);assert.deepEqual(trackedAdventureLocalTarget(JSON.parse(JSON.stringify(world))),{x,y});}
+ for(const save of [
+  {...base,district:'lumiose-rouge-sector6',zaAcademyCourtyard:true,zaTrackedQuestId:'1'},
+  {...base,district:'lumiose-zone3',zaZone3TowerUpper:true,zaTrackedQuestId:'2',zaTradeQuest:1},
+  {...base,district:'lumiose-rouge-north',zaRougeStreetSouth:true,zaTrackedQuestId:'3'},
+  {...base,district:'lumiose-rouge-north',zaTrackedQuestId:'3',zaSableyeQuest:1},
+  {...base,district:'lumiose-zone4',zaTrackedQuestId:'3',zaSableyeQuest:3},
+ ])assert.equal(trackedAdventureLocalTarget({...save,map:fieldMap(save)}),null);
+});
