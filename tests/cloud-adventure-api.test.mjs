@@ -6691,7 +6691,7 @@ test('medicine shop purchases preserve old revive stock and enforce atomic limit
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'medicine-shop-qa',displayName:'회복 도구 상점'};
  try{
   await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];sql.prepare('UPDATE wallets SET coins=5000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
-  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up',zaRevives:2},state.revision+1));await get();assert.equal(state.world.interaction.action,'shop');assert.deepEqual(state.fieldShop.filter(p=>p.category==='medicine').map(p=>[p.id,p.price]),[['revive',800],['fullheal',200]]);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up',zaRevives:2},state.revision+1));await get();assert.equal(state.world.interaction.action,'shop');assert.deepEqual(state.fieldShop.filter(p=>p.category==='medicine').map(p=>[p.id,p.price]),[['revive',800],['paralyzeheal',100],['burnheal',100],['iceheal',100],['awakening',100],['fullheal',200]]);
   const rev=state.revision;await call('buyAdventureMedicine',{item:'revive',quantity:2});await call('buyAdventureMedicine',{item:'revive',quantity:2,revision:rev},409);await get();assert.equal(state.inventory.revive,2);assert.equal(state.world.zaRevives,2);assert.equal(state.wallet.coins,3400);
   await call('buyAdventureMedicine',{item:'fullheal',quantity:3});await get();assert.equal(state.inventory.fullheal,3);assert.equal(state.wallet.coins,2800);assert.deepEqual(state.world.teamIds,team);
   for(const item of ['maxrevive','lumiosegalette','__proto__'])await call('buyAdventureMedicine',{item},409);for(const quantity of [0,-1,100,1.5])await call('buyAdventureMedicine',{item:'revive',quantity},409);
@@ -8121,4 +8121,24 @@ test('side 18 adds Cyclone tea after all three party species and protects reward
   const teaRev=state.revision;await call('cyclonePantrio');await call('cyclonePantrio',{revision:teaRev},409);await get();assert.equal(state.wallet.coins,5000);assert.deepEqual(state.world.teamIds,team);const beforeHeal=rawMon(lead);seedMon(lead,{...beforeHeal,hp:1});await get();await call('cycloneBlend');await get();assert.equal(state.wallet.coins,4400);assert.equal(rawMon(lead).hp,rawMon(lead).maxHp);
   seedWorld(place({zaSide18Stage:1,zaSide18RewardPending:{version:2}}));await get();await call('side18Finish',{},409);await get();assert.deepEqual(rawWorld().zaSide18RewardPending,{version:2});
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('specific status medicines cure only matching owned party conditions',async()=>{
+ const previous=globalThis.__adventureUser;
+ try{for(const format of ['field','single','solo','companion','triple'])for(const [item,status] of [['paralyzeheal','마비'],['burnheal','화상'],['iceheal','얼음'],['awakening','잠듦']]){
+  globalThis.__adventureUser={userId:`specific-status-${format}-${item}`,displayName:'상태 치료'};await get();await call('start',{species:1});const id=state.world.activeId,lead={...makeMon(1,80),boxId:id,moves:['튀어오르기'],pp:{},status:'독'},reserve={...makeMon(4,30),boxId:`specific-reserve-${format}-${item}`,hp:30,status,custom:'kept'},boxed={...makeMon(7,20),boxId:`specific-boxed-${format}-${item}`,status};seedMon(id,lead);
+  for(const m of [reserve,boxed])sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(m.boxId,globalThis.__adventureUser.userId,m.id,JSON.stringify(m),'qa',1);
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,item]),globalThis.__adventureUser.userId,item);
+  const foes=[0,1,2].map(i=>({...makeMon(129,5),boxId:`specific-foe-${i}`,moves:['튀어오르기'],pp:{}})),ally=[{...makeMon(25,80),boxId:'specific-ally',moves:['튀어오르기'],pp:{}}],combat=format==='field'?null:format==='single'?createCombat([lead,reserve],foes.slice(0,1)):format==='solo'?createSoloMultiFoeSnapshot([lead,reserve],foes.slice(0,2)):format==='companion'?createMission10DoubleSnapshot([lead,reserve],ally,foes.slice(0,2)):(await import('../lib/cloud-adventure/adventure-mission37-triple.mjs')).createMission37TripleSnapshot([lead,reserve],ally,[{...ally[0],boxId:'specific-ally2'}],foes);
+  seedWorld({...storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,teamIds:[id,reserve.boxId],activeId:id,zaMission37Stage:2},state.revision+1),combat,trainer:combat?{id:format==='triple'?'mission37-wave-2':'specific-status-test',name:'검증'}:null,encounter:null});await get();const action=format==='field'?'useAdventureStatusHeal':'use';await call(action,{item,boxId:boxed.boxId},409);await call(action,{item,boxId:id},409);await call(action,{item,boxId:'specific-ally'},409);assert.equal(state.inventory[item],1);
+  const revision=state.revision;await call(action,{item,boxId:reserve.boxId});await call(action,{item,boxId:reserve.boxId,revision},409);await get();assert.equal(rawMon(reserve.boxId).status,null);assert.equal(rawMon(reserve.boxId).custom,'kept');assert.equal(rawMon(boxed.boxId).status,status);assert.equal(state.inventory[item],undefined);
+ }}finally{globalThis.__adventureUser=previous;}
+});
+
+test('specific status medicine shop and sale update funds and stock atomically',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'specific-medicine-shop',displayName:'상태 치료제 상점'};
+ try{
+  await get();await call('start',{species:152});sql.prepare('UPDATE wallets SET coins=500 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up'},state.revision+1));await get();const before=state.revision;await call('buyAdventureMedicine',{item:'paralyzeheal',quantity:3});await call('buyAdventureMedicine',{item:'paralyzeheal',quantity:3,revision:before},409);await get();assert.equal(state.wallet.coins,200);assert.equal(state.inventory.paralyzeheal,3);await call('buyAdventureMedicine',{item:'burnheal',quantity:3},409);assert.equal(state.wallet.coins,200);
+  const rev=state.revision;await call('sellAdventureSupply',{item:'paralyzeheal',quantity:2});await call('sellAdventureSupply',{item:'paralyzeheal',quantity:2,revision:rev},409);await get();assert.equal(state.wallet.coins,250);assert.equal(state.inventory.paralyzeheal,1);
+ }finally{globalThis.__adventureUser=previous;}
 });
