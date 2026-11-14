@@ -32,14 +32,16 @@ import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails,zone2BankTint} from '@/
 import {zone3GardenMosaic,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-zone3-garden.mjs';
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
+import {trackedAdventureLocalTarget} from '@/lib/cloud-adventure/adventure-pending-quests.mjs';
 
 type VisualPath={generation:number;origin:{x:number;y:number};steps:Array<{id:number;x:number;y:number;facing:string}>};
 type Props={visualPath?:VisualPath;world:any;disabled:boolean;onInteract:()=>void;onAimAlpha:()=>void;onAimBudew:()=>void;onAimKakuna:()=>void;onAimIslandAlpha:()=>void;onAimField:(id:string)=>void;onAimZone3:(id:string)=>void;onAimSewer:(id:string)=>void;period:string};
 const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],meadow:['#82bd68','#b5da82','#e5d0a0'],rock:['#aab584','#d3d5aa','#c9b58a'],water:['#80bc9f','#c0dba1','#e9dcad'],electric:['#98c09a','#c9dcb2','#d8c7a4'],forest:['#69a86a','#9dc97c','#dbcda0'],poison:['#8eaa8d','#bdcaa2','#c9bea4'],psychic:['#a0b49a','#cfdbb8','#dfd3bd'],volcano:['#ae9f7d','#c7b68d','#cfb393'],ground:['#b3af7f','#d4ca95','#cdb887'],league:['#82ab93','#b8cdb5','#c6c5b3']};
 
 export default function AdventureField({world:w,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}:Props){
- const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,startX:w.x,startY:w.y,moveStart:0,moveDuration:1,walkUntil:0,visualGeneration:-1,visualStep:-1,facing:w.facing||'down'}),[assetError,setAssetError]=useState(false);
- props.current={w,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period};
+ const questTarget=trackedAdventureLocalTarget(w);
+ const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,startX:w.x,startY:w.y,moveStart:0,moveDuration:1,walkUntil:0,visualGeneration:-1,visualStep:-1,facing:w.facing||'down'}),[assetError,setAssetError]=useState(false);
+ props.current={w,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
   const images=new Map<string,HTMLImageElement>();let disposed=false,width=736,height=544;
@@ -1446,6 +1448,8 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
    trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,w.zaFieldCrouched===true);
+   const {questTarget}=props.current;
+   if(questTarget){const x=(questTarget.x+.5)*tile,y=questTarget.y*tile;ctx.save();ctx.fillStyle='#f6cd45';ctx.strokeStyle='#59400d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-7,y-14);ctx.lineTo(x+7,y-14);ctx.lineTo(x,y-3);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
    ctx.restore();
    // Soft border is part of the camera, never a fullscreen tint over sprites.
    ctx.strokeStyle='#284d3b55';ctx.lineWidth=4;ctx.strokeRect(2,2,width-4,height-4);

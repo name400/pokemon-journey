@@ -1,12 +1,34 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {pendingAdventureQuests} from '../lib/cloud-adventure/adventure-pending-quests.mjs';
+import {pendingAdventureQuests,trackedAdventureLocalTarget} from '../lib/cloud-adventure/adventure-pending-quests.mjs';
+import {fieldMap} from '../lib/cloud-adventure/adventure-world.mjs';
 test('quest journal derives active objectives and only explicit unclaimed rewards',()=>{
  assert.deepEqual(pendingAdventureQuests({}),[]);assert.deepEqual(pendingAdventureQuests({zaEmmaMet:true}),[]);assert.deepEqual(pendingAdventureQuests({zaEmmaMet:true,zaEmmaMegaSeen:true,zaMission05Stage:7}),[]);assert.deepEqual(pendingAdventureQuests({zaEmmaMet:true,zaMission05Stage:7}).map(q=>q.id),['1','2','3']);
  const save={zaEmmaMet:true,zaBunnelbyQuest:1,zaTradeQuest:1,zaSableyeQuest:2,zaSide14Started:true,zaSide21Started:true,zaSide21Found:['museum1-1','museum1-1','museum2-1'],zaSide27Started:true,zaSide72Stage:1,zaSide74Stage:2,zaSide88Stage:1,zaSide42Won:true,zaSide42RewardPending:true,zaSide119Started:true,zaSide119Wins:2};const before=structuredClone(save),quests=pendingAdventureQuests(save),ids=quests.map(q=>q.id);assert.deepEqual(ids,['1','2','3','14','21','27','72','74','88','119','42-reward']);assert.match(quests.find(q=>q.id==='21').goal,/2\/12/);assert.match(quests.find(q=>q.id==='74').goal,/보상/);assert.match(quests.find(q=>q.id==='119').goal,/2\/4/);assert.deepEqual(save,before);
  const completed={zaEmmaMet:true,zaEmmaBattleComplete:true,zaBunnelbyQuest:3,zaTradeQuest:2,zaSableyeQuest:3,zaSide14Started:true,zaSide14Complete:true,zaSide21Started:true,zaSide21Complete:true,zaSide27Started:true,zaSide27Complete:true,zaSide72Stage:1,zaSide72Complete:true,zaSide74Stage:2,zaSide74Complete:true,zaSide88Stage:2,zaSide88Complete:true,zaSide119Started:true,zaSide119Complete:true};assert.deepEqual(pendingAdventureQuests(completed),[]);
  completed.zaTradePotionPending=true;completed.zaSableyeRevivePending=true;completed.zaSide119LuxuryPending=2;assert.deepEqual(pendingAdventureQuests(JSON.parse(JSON.stringify(completed))).map(q=>q.id),['2-reward','3-reward','119-reward']);
  const twelve={zaSide21Started:true,zaSide21Found:Array.from({length:12},(_,i)=>`museum1-${i}`)};assert.match(pendingAdventureQuests(twelve)[0].goal,/보고/);
+});
+
+test('tracked local markers follow real interaction tiles and disappear for other floors or completed quests',()=>{
+ const cases=[
+  [{district:'lumiose-south-boulevard',zaTrackedQuestId:'14',zaSide14Started:true}, {x:17,y:5},'zaSide14Complete'],
+  [{district:'lumiose-zone11',zaTrackedQuestId:'72',zaSide72Stage:1}, {x:3,y:10},'zaSide72Complete'],
+  [{district:'lumiose-vert-sector9',zaTrackedQuestId:'74',zaSide74Stage:2,zaMission26Started:true}, {x:5,y:6},'zaSide74Complete'],
+  [{district:'lumiose-magenta-sector8-route',zaTrackedQuestId:'88',zaSide88Stage:1}, {x:13,y:14},'zaSide88Complete'],
+ ];
+ for(const [save,point,completed] of cases){
+  const world={...save,map:fieldMap(save)},before=structuredClone(world);
+  assert.deepEqual(trackedAdventureLocalTarget(world),point);
+  assert.equal(trackedAdventureLocalTarget({...world,[completed]:true}),null);
+  assert.equal(trackedAdventureLocalTarget({...world,interior:'hotel'}),null);
+  assert.equal(trackedAdventureLocalTarget({...world,district:'elsewhere'}),null);
+  assert.equal(trackedAdventureLocalTarget({...world,map:[]}),null);
+  assert.deepEqual(world,before);
+ }
+ const shore={district:'lumiose-zone11',zaTrackedQuestId:'72',zaSide72Stage:1,zaZone11Upper:true};
+ assert.equal(trackedAdventureLocalTarget({...shore,map:fieldMap(shore)}),null);
+ assert.equal(trackedAdventureLocalTarget({}),null);
 });
 
 test('tracked objective follows an active quest and falls back after completion',async()=>{
