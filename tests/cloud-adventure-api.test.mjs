@@ -9360,3 +9360,14 @@ test('new quests and dex sync preserve concurrent shared edits and wallet bounds
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-sector8',x:17,y:6,facing:'up',zaSide34Won:true,zaSide34RewardsV1:{coins:1100,lemonade:1,'za-tm031':1}},state.revision+1));sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER-1099,globalThis.__adventureUser.userId);await get();const before=structuredClone(rawWorld().zaSide34RewardsV1);await call('side34Reward',{},409);assert.deepEqual(rawWorld().zaSide34RewardsV1,before);assert.equal(rawMon(id).otherModeNote,'sync');
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('world-only actions keep concurrent shared edits and still return the active Pokemon',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'world-only-shared-qa',displayName:'공유 이동'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:2,facing:'down',zaMission04Complete:true,zaFastTravelCenters:['hotel']},state.revision+1));await get();
+  const batch=globalThis.__adventureEnv.DB.batch;const concurrent=async(action,extra,note)=>{globalThis.__adventureEnv.DB.batch=async statements=>{globalThis.__adventureEnv.DB.batch=batch;seedMon(id,{...rawMon(id),otherModeNote:note});return batch(statements);};try{await call(action,extra);}finally{globalThis.__adventureEnv.DB.batch=batch;}assert.equal(rawMon(id).otherModeNote,note);assert.equal(state.box.find(m=>m.boxId===id)?.otherModeNote,note);};
+  await concurrent('face',{direction:'up',compact:true},'face-update');await concurrent('mapFastTravel',{destination:'hotel'},'map-update');await get();assert.equal(state.world.district,'lumiose');assert.equal(rawMon(id).otherModeNote,'map-update');
+  const oldSteps=rawMon(id).walkSteps||0;await call('move',{direction:'down'});await get();assert.equal(rawMon(id).walkSteps,oldSteps+1);assert.equal(rawMon(id).otherModeNote,'map-update');
+  await call('spin',{phase:'start',direction:1});await get();assert.ok(rawMon(id).spinStarted>0);assert.equal(rawMon(id).otherModeNote,'map-update');
+ }finally{globalThis.__adventureUser=previous;}
+});
