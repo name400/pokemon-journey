@@ -7385,3 +7385,15 @@ test('restaurant rewards retain progress and identify full inventory or wallet b
   sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER-2000,user);await get();await call('claimLeWowReward');await get();assert.equal(state.wallet.coins,Number.MAX_SAFE_INTEGER);assert.equal(state.inventory.hpup,5);await call('claimLeWowReward',{},409);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Sushi High Roller first mission pays its cash reward once and protects pending progress',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'sushi-mission-coin-qa',displayName:'스시 보상 검사'};
+ try{
+  await get();await call('start',{species:1});const user=globalThis.__adventureUser.userId,team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:'sushi',x:16,y:6,facing:'up',zaSushiCompleted:true,zaSushiRewardPending:'mission'},state.revision+1));sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(Number.MAX_SAFE_INTEGER-1499,user);await get();const rev=state.revision;
+  const err=await call('claimSushiReward',{},409);assert.match(err.error,/코인/);await get();assert.equal(state.revision,rev);assert.equal(state.world.zaSushiRewardPending,'mission');assert.equal(state.inventory.qualotberry||0,0);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(500,user);await get();const old=state.revision;await call('claimSushiReward');await get();assert.equal(state.wallet.coins,2000);for(const item of ['qualotberry','grepaberry','kelpsyberry'])assert.equal(state.inventory[item],10);assert.equal(state.world.zaSushiRewardPending,undefined);assert.deepEqual(state.world.teamIds,team);await call('claimSushiReward',{revision:old},409);await get();assert.equal(state.wallet.coins,2000);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:'sushi',x:16,y:6,facing:'up',zaSushiRewardPending:'repeat'},state.revision+1));await get();await call('claimSushiReward');await get();assert.equal(state.wallet.coins,2000);assert.equal(state.inventory.bignugget,2);assert.equal(state.inventory.seedofmasteryza,1);await call('claimSushiReward',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-north',interior:'sushi',x:16,y:6,facing:'up',zaSushiCompleted:true,zaSushiRewardPending:undefined},state.revision+1));await get();await call('claimSushiReward',{},409);assert.equal(state.wallet.coins,2000);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
