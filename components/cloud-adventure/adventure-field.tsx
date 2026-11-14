@@ -1,4 +1,5 @@
 'use client';
+import {benchHangMatches} from '@/lib/cloud-adventure/adventure-bench-hang.mjs';
 import {contactAppearance,CONTACT_COLORS} from '@/lib/cloud-adventure/adventure-contacts.mjs';
 import {side11Available} from '@/lib/cloud-adventure/adventure-side11.mjs';
 import {side12Available} from '@/lib/cloud-adventure/adventure-side12.mjs';
@@ -1516,7 +1517,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    if(['lumiose-zone5','lumiose-zone5-drain'].includes(w.district)&&!w.interior&&!w.zaZone5DrainLanding)for(const m of ZONE5_VISIBLE.filter(p=>(w.district==='lumiose-zone5-drain'?p.drain===true:!p.drain&&p.upper===(w.zaZone5Upper===true))&&!w.zaZone5Spent?.[p.id])){const px=m.x*tile,py=m.y*tile,img=(w.zaWildShinyRolls?.[`zone5:${m.id}:${m.species}`]===true?shinyFieldImages[m.species]:fieldImages[m.species]);if(m.alpha||w.zaWildVisibleAlphaLevels?.[`zone5:${m.id}:${m.species}`]){ctx.fillStyle='#d95b58';ctx.fillRect(px+2,py+2,tile-4,tile-4);}if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-8,py-12,tile+16,tile+16);else{ctx.fillStyle=m.alpha?'#af5462':'#d6b57d';ctx.fillRect(px+6,py+6,tile-12,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(m.name,px+tile/2,py+20);}}
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
-   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,w.zaFieldCrouched===true,contactAppearance(w).id);
+   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,(w.zaFieldCrouched===true||(!walking&&benchHangMatches(w,w.interaction))),contactAppearance(w).id);
    const {questTarget}=props.current;
    if(questTarget){const x=(questTarget.x+.5)*tile,y=Math.max(16,questTarget.y*tile);ctx.save();ctx.fillStyle='#f6cd45';ctx.strokeStyle='#59400d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-7,y-14);ctx.lineTo(x+7,y-14);ctx.lineTo(x,y-3);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
    ctx.restore();
