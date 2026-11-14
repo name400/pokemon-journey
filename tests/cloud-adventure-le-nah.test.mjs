@@ -35,3 +35,11 @@ test('Substitute TM requires ownership and only accepts reviewed base species',a
  assert.equal(canLearnStoryTm({'za-tm085':1},{...bulbasaur,id:10001},'za-tm085'),false);
  assert.equal(canLearnStoryTm({'za-tm085':1},{...bulbasaur,moves:['대타출동']},'za-tm085'),false);
 });
+
+test('TM085 supports reviewed important base species without inferring form identity',async()=>{
+ const {makeMon}=await import('../lib/game.mjs');const {canLearnStoryTm}=await import('../lib/cloud-adventure/adventure-story-tm.mjs');
+ const bag={'za-tm085':1},added=[150,199,208,212,214,227,228,229,233,246,247,248,302,303,304,305,306,307,308,309,310,318,319,322,323,333,334];
+ for(const id of added)assert.equal(canLearnStoryTm(bag,{...makeMon(id,30),moves:[]},'za-tm085'),true,`base ${id}`);
+ for(const mon of [{id:129,speciesId:129,moves:[]},{id:10043,speciesId:150,moves:[]},{id:99999,speciesId:247,moves:[]},{id:247,speciesId:248,moves:[]}])assert.equal(canLearnStoryTm(bag,mon,'za-tm085'),false);
+ assert.equal(canLearnStoryTm({}, {...makeMon(247,30),moves:[]},'za-tm085'),false);assert.equal(canLearnStoryTm(bag,{...makeMon(247,30),moves:['대타출동']},'za-tm085'),false);
+});

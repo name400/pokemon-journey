@@ -9023,3 +9023,14 @@ test('new adventure battles opt into Plus drain without changing saved older bat
   const old=structuredClone(rawWorld().combat);delete old.adventurePlusDrainV1;seedWorld({combat:old});await get();assert.equal(rawWorld().combat.adventurePlusDrainV1,undefined);await call('battle',{command:{type:'move',move:'꿈먹기'}});await get();assert.equal(rawWorld().combat.adventurePlusDrainV1,undefined);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('TM085 newly reviewed base species preserve existing saves and item ownership',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm085-important-base-qa',displayName:'대타출동 기본 종 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const initial={...makeMon(247,45),boxId:id,moves:['몸통박치기','울음소리','방어','깨물어부수기'],pp:{tackle:3,growl:7,protect:4,crunch:2},shiny:true,item:'leftovers',custom:'preserved'};seedMon(id,initial);await get();await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:1},409);assert.deepEqual(rawMon(id).moves,initial.moves);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm085']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm085');
+  for(const species of [247,150,306]){const mon={...makeMon(species,45),boxId:id,moves:[...initial.moves],pp:{...initial.pp},shiny:true,item:'leftovers',custom:'preserved'};seedMon(id,mon);await get();const rev=state.revision;await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:1});await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:1,revision:rev},409);await get();const after=rawMon(id);assert.deepEqual(after.moves,['몸통박치기','대타출동','방어','깨물어부수기']);assert.equal(after.pp.tackle,3);assert.equal(after.pp.protect,4);assert.equal(after.pp.crunch,2);assert.equal(after.item,'leftovers');assert.equal(after.shiny,true);assert.equal(after.custom,'preserved');assert.equal(state.inventory['za-tm085'],1);await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0},409);}
+  const blocked={...makeMon(129,30),boxId:id,moves:['튀어오르기'],pp:{splash:3}};seedMon(id,blocked);await get();await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0},409);assert.deepEqual(rawMon(id).moves,blocked.moves);assert.equal(state.inventory['za-tm085'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;}
+});
