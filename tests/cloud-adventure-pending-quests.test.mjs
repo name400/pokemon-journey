@@ -193,3 +193,16 @@ test('recent investigations track saved objectives and their actual current-floo
  for(const [id,key,finished] of [['65','zaSide65Stage',6],['81','zaSide81Stage',3],['82','zaSide82Stage',3],['83','zaSide83Stage',3],['84','zaSide84Stage',3],['85','zaSide85Stage',5],['86','zaSide86Stage',4]]){const done={[key]:finished,zaTrackedQuestId:id,objective:'메인 목표'};assert.equal(trackedAdventureObjective(done),'메인 목표');assert.equal(pendingAdventureQuests(done).some(q=>q.id===id),false);}
  for(const bad of [null,0,99,'1',{},[]])assert.equal(pendingAdventureQuests({zaSide85Stage:bad}).some(q=>q.id==='85'),false);
 });
+
+test('Malé and Fina tracked goals follow the current court and compatible legacy spot',()=>{
+ const s95={area:3,district:'lumiose-screw-jaune6',zaSide95Stage:1,zaTrackedQuestId:'95',objective:'메인 목표'};
+ const s96={area:3,district:'lumiose-rouge-sector1',zaSide96Stage:1,zaTrackedQuestId:'96',objective:'메인 목표'};
+ for(const [s,target] of [[s95,{x:2,y:9}],[s96,{x:18,y:3}]]){const map=fieldMap(s);assert.match(trackedAdventureObjective(s),/배틀/);assert.deepEqual(trackedAdventureLocalTarget({...s,map}),target);assert.match(trackedAdventureObjective({...s,[s.zaTrackedQuestId==='95'?'zaSide95Stage':'zaSide96Stage']:2}),/보상/);assert.equal(trackedAdventureLocalTarget({...s,interior:'hotel',map}),null);assert.equal(trackedAdventureLocalTarget({...s,map:[]}),null);assert.equal(trackedAdventureObjective({...s,[s.zaTrackedQuestId==='95'?'zaSide95Stage':'zaSide96Stage']:3}),'메인 목표');}
+ const legacy={...s96,district:'lumiose-centrico-route'};assert.deepEqual(trackedAdventureLocalTarget({...legacy,map:fieldMap(legacy)}),{x:22,y:3});assert.equal(trackedAdventureLocalTarget({...legacy,zaSide96Stage:0,map:fieldMap(legacy)}),null);assert.equal(pendingAdventureQuests({}).some(q=>q.id==='95'||q.id==='96'),false);
+});
+
+test('Fina court stays reachable without changing the ground map',()=>{
+ const state={area:3,district:'lumiose-rouge-sector1',zaMission35Stage:1},map=fieldMap(state),visited=new Set(['11,15']),queue=[[11,15]];
+ while(queue.length){const [x,y]=queue.shift();for(const [dx,dy] of [[0,1],[0,-1],[1,0],[-1,0]]){const nx=x+dx,ny=y+dy,key=`${nx},${ny}`,tile=map[ny]?.[nx];if(visited.has(key)||!tile||'#^jXEW'.includes(tile))continue;visited.add(key);queue.push([nx,ny]);}}
+ assert.equal(visited.has('17,3'),true);assert.equal(map[3][18],'.');assert.equal(map[16][11],'X');assert.equal(map[0][11],'X');
+});

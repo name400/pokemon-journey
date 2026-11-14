@@ -9,3 +9,7 @@
 ## 후속: 기술머신 048 학습 범위
 
 [Z-A 기술머신 목록](https://www.gamerguides.com/pokemon-legends-z-a/database/items/tms-1)과 [기술별 목록](https://www.serebii.net/attackdex-sv/self-destruct.shtml)을 대조해 멜리시, 폭타·얼음귀신·메탕·메타그로스, 나룸퍼프 계열과 호바귀 계열 등 19개 기본 종을 추가했다. 가라르 데스마스는 [해당 폼의 학습표](https://rotomlabs.net/dex/legends-z-a/yamask/galarian)를 별도로 확인해 명시적으로 지원한다. 알 수 없는 폼은 기본 종으로 추정하지 않는다. 목록은 여전히 전체 호환성을 뜻하지 않으며 기존 포켓몬·기술·가방은 소급 변경하지 않는다.
+
+## 후속: 코트 접근과 의뢰 추적
+
+[Serebii](https://www.serebii.net/legendsz-a/sidemissions/letusbattle...artistically.shtml)가 명시한 루주 1번지 배틀코트의 기존 2D 맵에 Fina를 추가했다. 정확한 칸은 초안이다. 기존 센트리코 임시 위치에서 이미 시작한 저장은 그 위치에서도 이어서 배틀·보상을 받을 수 있다. 새 미수락 의뢰는 코트에서 시작한다. 미션 95와 96은 수락한 경우 여행 수첩에서 추적할 수 있고, 현재 맵에 대상이 있으면 해당 위치에 표식을 표시한다. 완료·미수락·알 수 없는 저장에서 보상은 추정하지 않는다.
