@@ -145,3 +145,15 @@ test('Side 14 only tracks an explicitly saved outstanding reward',()=>{
  }
  for(const count of [0,-1,3,1.5,'1'])assert.equal(pendingAdventureQuests({...old,zaSide14DreamPending:count}).some(q=>q.id==='14'),false);
 });
+
+test('journal exposes explicit bag-held mission rewards without inventing legacy rewards',()=>{
+ const save={zaSide117Complete:true,zaSide117RewardPending:{expertbelt:1,seedofmasteryza:6},zaSide118Complete:true,zaSide118RewardPending:{large:0,xl:1},zaZone15LiftUnlocked:true,zaZone15Side80Pending:{quickball:2,lumiosegalette:0},objective:'메인 목표'};
+ const before=structuredClone(save),quests=pendingAdventureQuests(save);
+ assert.deepEqual(quests.map(q=>q.id),['117-reward','118-reward','80-reward']);
+ for(const q of quests){assert.match(q.goal,/가방/);assert.equal(trackedAdventureObjective({...save,zaTrackedQuestId:q.id}),q.goal);}
+ assert.deepEqual(save,before);
+ for(const field of ['zaSide117RewardPending','zaSide118RewardPending','zaZone15Side80Pending']){const old={...save};delete old[field];assert.equal(pendingAdventureQuests(old).length,2);}
+ const empty={...save,zaSide117RewardPending:{expertbelt:0,seedofmasteryza:0},zaSide118RewardPending:{large:0,xl:0},zaZone15Side80Pending:{quickball:0,lumiosegalette:0}};assert.deepEqual(pendingAdventureQuests(empty),[]);
+ assert.deepEqual(pendingAdventureQuests({...save,zaSide117Complete:false,zaSide118Complete:false,zaZone15LiftUnlocked:false}),[]);
+ assert.deepEqual(pendingAdventureQuests({...save,zaSide117RewardPending:{expertbelt:2},zaSide118RewardPending:{xl:-1},zaZone15Side80Pending:{quickball:'2'}}),[]);
+});
