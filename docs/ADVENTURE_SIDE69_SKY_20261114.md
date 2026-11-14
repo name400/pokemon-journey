@@ -5,3 +5,5 @@
 [의뢰와 상대 기술](https://www.serebii.net/legendsz-a/sidemissions/askybattle%2Cforoldtimes%27sake.shtml), [옥상 위치·해금](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/magenta-sector-8.html)과 [트레이너 상금](https://bulbapedia.bulbagarden.net/wiki/Mission_(Legends:_Z-A)/Trainers)을 참고했다. 다른 공략은 배틀 상금을 3,456원으로 표기하므로 현재 2,304원은 실기 확인 전 잠정값이다. NPC 좌표와 옥상 구조는 기존 2D 초안이고 원작의 실시간 배틀은 턴제로 근사했다.
 
 격리 API에서 해금·종 데이터 기반 비행 타입 제한·재접속·기권·재도전·승리·가방 한도·중복 보상 및 기존 파티와 보유함 보존을 확인했다. 원작 실기, 운영 D1과 Sites 병합본은 미검증이다.
+
+추가 대조: [일본 공략](https://pente.koro-pokemon.com/legendsz-a/side-mission-069.shtml)도 마젠타 8번지 남동 건물 옥상, 상금 2,304원과 의뢰 보상 3,900원·예리한부리·파워앵클을 기재한다. 다른 공략의 상금 3,456원과 여전히 상충하며 실제 기기에서 확인한 것은 아니다. 구현 수치는 변경하지 않았다.
