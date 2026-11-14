@@ -1,3 +1,4 @@
+import {side18Available,side18Spot} from '@/lib/cloud-adventure/adventure-side18.mjs';
 import {side25Available,side25Cafe,side25Trash} from '@/lib/cloud-adventure/adventure-side25.mjs';
 import {side76Available,side76Spot,SIDE76_QUESTIONS} from '@/lib/cloud-adventure/adventure-side76.mjs';
 import {adventureEvolutionOptions} from '@/lib/cloud-adventure/adventure-evolution-options.mjs';
@@ -98,7 +99,7 @@ import {MISSION19_CANARI,MISSION19_GWYNN,MISSION19_IVOR,sewerInspected,sewerBran
 import {RANK_E_TRAINERS,RANK_E_EXTRA_POSITIONS,rankEPoints,rankEWins} from '@/lib/cloud-adventure/adventure-rank-d.mjs';
 import {MISSION15_CASES,mission15Case,mission15Complete} from '@/lib/cloud-adventure/adventure-mission15.mjs';
 import {RANK_F_TRAINERS,RANK_F_EXTRA_POSITIONS,rankFPoints,rankFWins,RANK_E_MANI,RANK_E_TARRAGON,RANK_E_CANARI} from '@/lib/cloud-adventure/adventure-rank-e.mjs';
-import {cafeWoofDrink,cafeBatailleDrink,cafeActionDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
+import {cafeWoofDrink,cafeBatailleDrink,cafeActionDrink,cafeCycloneDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
 import {leYeahCourse,leYeahAvailable,LE_YEAH_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-yeah.mjs';
 import {leNahCourse,leNahAvailable,LE_NAH_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-nah.mjs';
 import {sushiCourseTeam,sushiAvailable,SUSHI_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-sushi.mjs';
@@ -253,6 +254,11 @@ function awardCrystalExperience(s:any,mon:any,mons:Map<string,any>,changed:Map<s
  s.log.push(`${mon.name}이(가) 경험치 ${amount}를 얻었다.`);if(g.mon.level>mon.level)s.log.push(`${mon.name}의 레벨이 ${g.mon.level}이 되었다!`);for(const move of g.learned)s.log.push(`${mon.name}이(가) ${move}을(를) 배웠다!`);if(g.pending.length)queueAdventureMoves(s,mon.boxId,g.pending);
 }
 function isSide25Trail(value:any){return Array.isArray(value)&&value.length<=3&&value.every((p:any)=>p&&typeof p==='object'&&!Array.isArray(p)&&Object.keys(p).every(k=>k==='x'||k==='y')&&Number.isInteger(p.x)&&p.x>=0&&p.x<23&&Number.isInteger(p.y)&&p.y>=0&&p.y<17);}
+function grantSide18Items(s:any,bag:Record<string,number>,changes:Record<string,number>){
+ const p=s.zaSide18RewardPending;if(!p||typeof p!=='object'||Array.isArray(p)||Object.keys(p).some(k=>!['hpup','whiteherb'].includes(k)))throw Error('보관된 보상을 확인하세요.');
+ const remaining:any={};let total=0;for(const [key,max] of [['hpup',3],['whiteherb',1]] as const){const n=p[key],stock=bag[key]??0;if(!Number.isSafeInteger(n)||n<0||n>max||!Number.isSafeInteger(stock)||stock<0)throw Error('보상과 보유 수량을 확인하세요.');const amount=Math.min(n,Math.max(0,999-stock));if(amount){changes[key]=(changes[key]||0)+amount;total+=amount;}remaining[key]=n-amount;}
+ if(remaining.hpup||remaining.whiteherb)s.zaSide18RewardPending=remaining;else delete s.zaSide18RewardPending;return total;
+}
 function grantSide25Items(s:any,bag:Record<string,number>,changes:Record<string,number>){
  const p=s.zaSide25RewardPending;if(!p||typeof p!=='object'||Array.isArray(p)||Object.keys(p).some(k=>!['rarecandy','duskball'].includes(k)))throw Error('보관된 보상을 확인하세요.');
  const candy=p.rarecandy,balls=p.duskball,stock=bag.rarecandy??0,current=s.adventureBalls?.duskball??0;
@@ -512,6 +518,9 @@ else if(['useAdventureExpCandyXS','useAdventureExpCandyS','useAdventureExpCandyM
 else if(b.action==='useZygardeCube'){if(s.combat)throw Error('배틀이 끝난 후 지가르데큐브를 사용하세요.');if(!(bag['za-zygarde-cube']>0))throw Error('지가르데큐브가 필요합니다.');const m=mons.get(s.activeId);if(!m||![718,10181].includes(m.id)||m.speciesId!==718)throw Error('선두에 10%폼 또는 50%폼 지가르데가 필요합니다.');const next=evolveAdventurePokemon(m,m.id===10181?718:10181);changed.set(m.boxId,next);registerAdventureDex(s,next.speciesId);s.log=[`지가르데가 ${next.id===10181?'10%폼':'50%폼'}으로 변했다!`];}
 else if(b.action==='team'){if(s.combat)throw Error('전투 후 파티를 편성하세요.');if(!Array.isArray(b.ids)||b.ids.length<1||b.ids.length>6||new Set(b.ids).size!==b.ids.length||b.ids.some((id:any)=>!mons.has(id)))throw Error('보유 포켓몬 1–6마리를 선택하세요.');if(!b.ids.some((id:string)=>mons.get(id).hp>0))throw Error('파티에 싸울 수 있는 포켓몬을 한 마리 이상 넣으세요.');s.teamIds=b.ids;s.activeId=b.ids[0];s.log=['파티를 편성했다.'];}
 else if(b.action==='switch'&&!s.combat){if(!mons.has(b.id))throw Error('보유한 포켓몬이 아닙니다.');const nextTeam=[b.id,...s.teamIds.filter((id:string)=>id!==b.id)].slice(0,6);if(!nextTeam.some((id:string)=>mons.get(id)?.hp>0))throw Error('파티에 싸울 수 있는 포켓몬을 한 마리 이상 넣으세요.');s.teamIds=nextTeam;s.activeId=b.id;s.log=['선두 포켓몬을 바꿨다.'];}
+else if(b.action==='side18Start'){if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||!side18Available(s)||!side18Spot(s,interactionAt(s))||s.zaSide18Stage!==undefined||s.zaSide18RewardPending!==undefined)throw Error('Servando의 의뢰를 확인하세요.');s.zaSide18Stage=1;s.log=['야나프·바오프·앗차프를 함께 파티에 데려오자.'];}
+else if(b.action==='side18Finish'){if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||!side18Spot(s,interactionAt(s))||s.zaSide18Stage!==1||s.zaSide18RewardPending!==undefined)throw Error('Servando의 의뢰를 확인하세요.');const ids=new Set(s.teamIds.map((id:string)=>mons.get(id)?.speciesId));if(![511,513,515].every(id=>ids.has(id)))throw Error('야나프·바오프·앗차프를 모두 파티에 넣으세요.');s.zaSide18RewardPending={hpup:3,whiteherb:1};grantSide18Items(s,bag,bagChanges);s.zaSide18Stage=2;reward=1000;s.log=[s.zaSide18RewardPending?'팬트리오 차가 메뉴에 추가됐다. 1000코인을 받았고 들어가지 않은 보상은 맡겼다.':'팬트리오 차가 메뉴에 추가됐다! 1000코인, 맥스업 3개와 하양허브를 받았다.'];}
+else if(b.action==='side18Reward'){if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||!side18Spot(s,interactionAt(s))||s.zaSide18Stage!==2||!s.zaSide18RewardPending)throw Error('맡긴 보상을 확인하세요.');if(!grantSide18Items(s,bag,bagChanges))throw Error('보상을 받을 가방 공간이 필요합니다.');s.log=['맡긴 카페 의뢰 보상을 받았다.'];}
 else if(b.action==='side25Start'){const p=interactionAt(s);if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||!side25Available(s)||!side25Cafe(s,p)||s.zaSide25Stage!==undefined||s.zaSide25TrailV1!==undefined||s.zaSide25RewardPending!==undefined)throw Error('카페의 Fumi에게 의뢰를 확인하세요.');s.zaSide25Stage=1;s.zaSide25TrailV1=[{x:3,y:7},{x:4,y:7},{x:6,y:7}];s.log=['맛있는 쓰레기를 받아 깨봉이 세 마리를 수거 장소로 안내하자.'];}
 else if(b.action==='side25Finish'){const p=interactionAt(s);if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||s.zaSide25Stage!==1||s.zaSide25RewardPending!==undefined||!side25Trash(s,p))throw Error('깨봉이들과 쓰레기 수거 장소를 확인하세요.');s.zaSide25RewardPending={rarecandy:2,duskball:5};grantSide25Items(s,bag,bagChanges);s.zaSide25Stage=2;if(isSide25Trail(s.zaSide25TrailV1))delete s.zaSide25TrailV1;reward=1200;s.log=[s.zaSide25RewardPending?'깨봉이들을 안내했다. 1200코인과 들어가는 보상을 받았고 나머지는 수거 장소에 맡겼다.':'깨봉이들을 안내했다! 1200코인, 이상한사탕 2개와 다크볼 5개를 받았다.'];}
 else if(b.action==='side25Reward'){if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||s.zaSide25Stage!==2||!side25Trash(s,interactionAt(s))||!s.zaSide25RewardPending)throw Error('맡긴 보상을 확인하세요.');if(!grantSide25Items(s,bag,bagChanges))throw Error('보상을 받을 가방 공간이 필요합니다.');s.log=['맡긴 깨봉이 의뢰 보상을 받았다.'];}
@@ -1176,6 +1185,11 @@ else if(b.action==='ultimoCoffee'){
 }
 else if(cafeActionDrink(b.action)){
  const drink=cafeActionDrink(b.action)!,spot=interactionAt(s);if(s.combat||s.adventureCatchWindow||s.interior!=='cafeAction'||s.district!=='lumiose-jaune-sector8'||spot?.tile!=='n'||spot.x!==11||spot.y!==5)throw Error('리테이크 카페의 주문대를 확인하세요.');
+ const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
+ reward=-drink.price;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,1);mons.set(id,rested);changed.set(id,rested);}s.log=[`${drink.name}을(를) 주문해 파티가 회복했다.`,`${drink.price}코인을 지불했다.`];
+}
+else if(cafeCycloneDrink(b.action)){
+ const drink=cafeCycloneDrink(b.action)!;if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||!side18Spot(s,interactionAt(s))||(drink.requiresSide18&&s.zaSide18Stage!==2))throw Error('Café Cyclone의 주문과 메뉴를 확인하세요.');
  const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
  reward=-drink.price;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,1);mons.set(id,rested);changed.set(id,rested);}s.log=[`${drink.name}을(를) 주문해 파티가 회복했다.`,`${drink.price}코인을 지불했다.`];
 }

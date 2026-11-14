@@ -169,3 +169,11 @@ test('museum quest shows remaining floors and guides the completed search to its
  assert.deepEqual(base,before);assert.deepEqual(getTarget(JSON.parse(JSON.stringify({...done,interior:'museum1'}))),{x:3,y:14});
  const unknown={...base,zaSide21Found:['future-spot']};assert.doesNotMatch(trackedAdventureObjective(unknown),/남은 층/);assert.deepEqual(unknown.zaSide21Found,['future-spot']);
 });
+
+test('Cyclone quest and explicit remaining reward point to the same café without inventing old rewards',()=>{
+ const s={area:3,district:'lumiose-vert-sector3',interior:null,zaTrackedQuestId:'18',zaSide18Stage:1},before=structuredClone(s);
+ assert.match(trackedAdventureObjective(s),/야나프/);assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),{x:15,y:2});assert.deepEqual(s,before);
+ assert.deepEqual(pendingAdventureQuests({zaSide18Stage:2}),[]);
+ const pending={...s,zaTrackedQuestId:'18-reward',zaSide18Stage:2,zaSide18RewardPending:{hpup:2,whiteherb:0}};assert.match(trackedAdventureObjective(pending),/보상/);assert.deepEqual(trackedAdventureLocalTarget({...pending,map:fieldMap(pending)}),{x:15,y:2});
+ assert.deepEqual(pendingAdventureQuests({...pending,zaSide18RewardPending:{hpup:4,whiteherb:0}}),[]);assert.equal(trackedAdventureLocalTarget({...pending,interior:'other',map:fieldMap({...pending,interior:'other'})}),null);
+});
