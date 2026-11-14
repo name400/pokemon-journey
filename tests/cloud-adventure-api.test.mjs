@@ -5334,6 +5334,18 @@ test('Zone 8 rerolls ordinary burrows across cycles while keeping an existing sh
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 17 time change does not spawn a rooftop encounter under the player',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;
+ try{
+  Date.now=()=>now;globalThis.__adventureRandom=()=>.999;
+  for(const p of [{from:'day',to:'night',spent:'klefki',shiny:'zone17:lampent:608'},{from:'night',to:'day',spent:'lampent',shiny:'zone17:klefki:707'}]){
+   now=12*50000;globalThis.__adventureUser={userId:`zone17-occupied-${p.from}-qa`,displayName:'옥상 시간 전환 검증'};globalThis.__adventureTime={period:p.from,hour:p.from==='day'?12:20};await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,x:8,y:6,facing:'down',zaRoyaleRank:'C',zaZone17Upper:true,zaZone17Period:p.from,zaZone17Spent:{[p.spent]:true},zaWildShinyRolls:{[p.shiny]:true},zaWildClockV2:true,zaWildSpawnCycles:{17:{period:p.from,interval:0}},combat:null,encounter:null},state.revision+1));await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone17',8,6]);
+   now+=1200000;globalThis.__adventureTime={period:p.to,hour:p.to==='day'?12:20};await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone17',8,6]);assert.notEqual(state.world.map[6][8],'f');assert.equal(rawWorld().zaZone17Spent[p.spent],true);assert.equal(rawWorld().zaWildSpawnCycles[17].period,p.from);assert.equal(rawWorld().zaWildShinyRolls[p.shiny],true);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone17',8,6]);await call('move',{direction:'down'});await get();assert.equal(state.world.map[6][8],'f');assert.equal(rawWorld().zaWildShinyRolls[p.shiny],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('wild refresh waits when a respawn would occupy the player save position',async()=>{
  const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'occupied-wild-refresh-qa',displayName:'재출현 위치'};
  try{
