@@ -135,3 +135,13 @@ test('Touri pending reward marker uses the current visible interaction only',()=
  assert.ok(pendingAdventureQuests(s).some(q=>q.id==='75-reward'));assert.deepEqual(trackedAdventureLocalTarget({...s,map:fieldMap(s)}),{x:7,y:5});
  assert.equal(trackedAdventureLocalTarget({...s,interior:'other',map:fieldMap(s)}),null);assert.equal(trackedAdventureLocalTarget({...s,zaSide75RewardPending:false,map:fieldMap(s)}),null);assert.deepEqual(pendingAdventureQuests({zaSide75RewardPending:true}),[]);
 });
+
+test('Side 14 only tracks an explicitly saved outstanding reward',()=>{
+ const old={zaSide14Started:true,zaSide14Complete:true};
+ assert.equal(pendingAdventureQuests(old).some(q=>q.id==='14'),false);
+ for(const count of [1,2]){
+  const s={...old,zaSide14DreamPending:count,zaTrackedQuestId:'14'};
+  assert.match(pendingAdventureQuests(s).find(q=>q.id==='14').goal,/맡긴 휘핑팝/);
+ }
+ for(const count of [0,-1,3,1.5,'1'])assert.equal(pendingAdventureQuests({...old,zaSide14DreamPending:count}).some(q=>q.id==='14'),false);
+});
