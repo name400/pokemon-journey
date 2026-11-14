@@ -17,3 +17,13 @@ test('quest Pokémon use species visuals without replacing people or changing in
  const ante={area:3,district:'lumiose-rouge-sector7',zaSide65Stage:1};assert.equal(cloudNpcTile('#',ante,15,11),true);
  for(const invalid of [{area:3,district:'lumiose-magenta-sector9'}, {area:3,district:'lumiose-magenta-sector9',zaSide85Stage:4},{area:3,district:'lumiose-rouge7-roof',zaSide65Stage:5},{area:3,district:'lumiose-rouge7-roof',zaSide65Stage:1,interior:'other'}])assert.ok(!adventureQuestVisuals({...invalid,map:fieldMap(invalid)}).some(p=>p.kind==='pokemon'));
 });
+
+test('Mawile and daytime alpha Weedle appear only during their active quest',()=>{
+ const oldNow=Date.now;try{
+  Date.now=()=>600000;
+  for(const [district,key,species,x,y] of [['lumiose-magenta-sector3','zaSide43Stage',13,17,6],['lumiose-zone9-nw-scaffold','zaSide77Stage',303,12,2]]){
+   const s={area:3,district,interior:null,[key]:1},map=fieldMap(s);assert.ok(adventureQuestVisuals({...s,map}).some(p=>p.kind==='pokemon'&&p.species===species&&p.x===x&&p.y===y));assert.equal(adventureQuestVisuals({...s,[key]:2,map}).some(p=>p.kind==='pokemon'&&p.species===species),false);
+  }
+  Date.now=()=>1100000;const s={area:3,district:'lumiose-magenta-sector3',interior:null,zaSide43Stage:1};assert.equal(adventureQuestVisuals({...s,map:fieldMap(s)}).some(p=>p.kind==='pokemon'&&p.species===13),false);
+ }finally{Date.now=oldNow;}
+});
