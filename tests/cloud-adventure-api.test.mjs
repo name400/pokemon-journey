@@ -7964,6 +7964,23 @@ test('zone 1 rooftop alpha attacks after its roar and preserves saved progress',
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
 });
 
+test('zone 2 alpha Magikarp can roar and attack without replacing the night encounter',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now,oldTime=globalThis.__adventureTime;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'zone2-alpha-player-qa',displayName:'구역 2 야생 공격'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const island=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:19,y:12,facing:'right',zaMission05Complete:true,zaZone2RockCleared:true,zaZone2AlphaSpent:false,zaZone2IslandRoarAlert:undefined,...extra},state.revision+1);
+  seedWorld(island({zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel',extra:'kept'},zaWildShinyRolls:{'keep:shiny':true}}));await get();const rev=state.revision;await call('move',{direction:'right'});await call('move',{direction:'right',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(state.world.zaZone2IslandRoarAlert,'magikarp');
+  clock+=3000;await call('move',{path:['up','down']});await get();assert.deepEqual([state.world.x,state.world.y],[20,11]);assert.equal(state.world.zaPlayerVitalsV1.hp,38);assert.match(state.world.log.join(' '),/하이드로펌프/);
+  clock+=3000;await call('move',{direction:'down'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,1);clock+=3000;await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaWildShinyRolls['keep:shiny'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  const future={version:2,hp:1,lastCenterId:'hotel',opaque:true};seedWorld(island({zaPlayerVitalsV1:future}));await get();await call('move',{direction:'right'});await get();assert.deepEqual(rawWorld().zaPlayerVitalsV1,future);
+  seedWorld(island({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);
+  seedWorld(island({zaFieldCrouched:true,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);assert.notEqual(state.world.zaZone2IslandRoarAlert,'magikarp');
+  seedWorld(island({zaFieldCrouched:false,zaDodgeReadyAt:0,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('dodge',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
+  seedWorld(island({zaZone2AlphaSpent:true,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,30);
+  globalThis.__adventureTime={period:'night',hour:22};seedWorld(island({zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaZone2IslandRoarAlert,'staryu');assert.equal(state.world.zaPlayerVitalsV1.hp,90);clock+=3000;await call('move',{direction:'up'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;Date.now=oldNow;}
+});
+
 test('player immunity and safe recovery survive reload without GET writes or duplicate movement',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000000000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'player-health-timing-qa',displayName:'체력 시간 검사'};globalThis.__adventureRandom=()=>.999;
  try{

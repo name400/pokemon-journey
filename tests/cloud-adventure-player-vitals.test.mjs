@@ -68,3 +68,11 @@ test('wild attack damage shares the roar protection and rejects invalid amounts'
  assert.equal(applyPlayerAlphaRoar(w,2999).immune,true);assert.deepEqual(applyPlayerWildDamage(w,30,3000),{blackout:false,damage:29});
  assert.deepEqual(applyPlayerWildDamage(w,30,5000),{blackout:true,damage:1});assert.equal(w.zaPlayerVitalsV1.hp,100);
 });
+
+test('zone 2 island alpha alert blocks recovery only while the encounter remains',async()=>{
+ const {syncPlayerVitals,projectPlayerVitals}=await import('../lib/cloud-adventure/adventure-player-vitals.mjs');
+ for(const alpha of ['magikarp','staryu']){
+  const w={district:'lumiose-zone2',zaZone2RockCleared:true,zaZone2IslandRoarAlert:alpha,zaPlayerVitalsV1:{version:1,hp:30,lastCenterId:'hotel'}};
+  assert.equal(syncPlayerVitals(w,1000),false);w.zaZone2AlphaSpent=true;assert.equal(syncPlayerVitals(w,2000),true);assert.equal(projectPlayerVitals(w,3000).hp,34);
+ }
+});
