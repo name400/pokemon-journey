@@ -10342,6 +10342,23 @@ test('newly caught nonstarter Chikorita uses verified Z-A growth and retains its
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('future move queue survives candy and capture growth without consuming resources',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'future-growth-queue-qa',displayName:'기술 선택 저장 보호 검사'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,base=makeMon(650,14),mon={...base,boxId:id,adventureKalosMovesV1:true,experience:expToNext(base)-1,moves:['몸통박치기','덩굴채찍','성장','구르기'],pp:{tackle:3},item:'leftovers',custom:{kept:true}},future={version:2,queue:[{unknown:'preserve'}]};seedMon(id,mon);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');seedWorld({adventurePendingMoves:future});await get();let rev=state.revision;
+  await call('useAdventureRareCandy',{boxId:id},409);await get();assert.equal(state.revision,rev);assert.deepEqual(rawWorld().adventurePendingMoves,future);assert.deepEqual(rawMon(id),mon);assert.equal(state.inventory.rarecandy,1);
+  const foe={...makeMon(19,10),boxId:'wild',hp:0};seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone20',interior:null,adventureBalls:{masterball:1},combat:null,encounter:null,adventureCatchWindow:{foe,moveCount:0,revision:state.revision+1}},state.revision+1));await get();rev=state.revision;await call('catchWindowBall',{ball:'masterball'},409);await get();assert.equal(state.revision,rev);assert.deepEqual(rawWorld().adventurePendingMoves,future);assert.equal(rawWorld().adventureBalls.masterball,1);assert.deepEqual(rawMon(id),mon);assert.equal(state.box.filter(m=>m.origin==='capture').length,0);
+  seedWorld({adventurePendingMoves:null,adventureCatchWindow:null});await get();rev=state.revision;await call('useAdventureRareCandy',{boxId:id});await call('useAdventureRareCandy',{boxId:id,revision:rev},409);await get();assert.equal(rawMon(id).level,15);assert.equal(state.inventory.rarecandy||0,0);assert.deepEqual(state.world.adventurePendingMoves.map(p=>p.move),['씨뿌리기']);assert.equal(rawMon(id).item,'leftovers');assert.deepEqual(rawMon(id).custom,mon.custom);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('future move queue prevents a winning battle from overwriting saved progress',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'future-battle-queue-qa',displayName:'전투 기술 선택 저장 보호 검사'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,base=makeMon(650,14),mon={...base,boxId:id,adventureKalosMovesV1:true,experience:expToNext(base)-1,moves:['덩굴채찍','몸통박치기','성장','구르기'],pp:{tackle:3},custom:{kept:true}},foe={...makeMon(19,5),boxId:'wild'},future={version:2,queue:[{unknown:'preserve'}]};seedMon(id,mon);const combat=createCombat([mon],[foe]),sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].canTerastallize=null;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;combat.snapshot=sim.toJSON();seedWorld({combat,encounter:foe,trainer:null,adventurePendingMoves:future});await get();const revision=state.revision,savedCombat=structuredClone(rawWorld().combat);await call('battle',{command:{type:'move',move:'덩굴채찍'}},409);await get();assert.equal(state.revision,revision);assert.deepEqual(rawWorld().adventurePendingMoves,future);assert.deepEqual(rawWorld().combat,savedCombat);assert.deepEqual(rawMon(id),mon);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('caught Bulbasaur learns both Z-A level 15 moves without losing capture or shared data',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-kanto-growth-qa',displayName:'관동 계열 성장 검사'};globalThis.__adventureRandom=()=>0;
  try{
