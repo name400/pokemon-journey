@@ -38,3 +38,5 @@
 @media(max-width:560px){.cloud-adventure-view .adv-city-access{align-items:stretch;flex-direction:column;gap:7px}.cloud-adventure-view .adv-city-access button{width:100%}}
 
 .cloud-adventure-view .adv-roll{min-width:52px;min-height:44px;padding:5px 7px;border:1px solid #9ead9e;border-radius:8px;background:#e5ece1;color:var(--adv-ink);font-size:12px;font-weight:700;box-shadow:0 2px 0 #aabbac}.cloud-adventure-view .adv-roll kbd{font:inherit;font-weight:400}
+
+.cloud-adventure-view .adv-crouch{min-width:52px;min-height:44px;padding:5px 7px;border:1px solid #9ead9e;border-radius:8px;background:#e5ece1;color:var(--adv-ink);font-size:11px;font-weight:700;box-shadow:0 2px 0 #aabbac}.cloud-adventure-view .adv-crouch[aria-pressed="true"]{background:#c7ddc9;border-color:#62826a}.cloud-adventure-view .adv-crouch kbd{font:inherit;font-weight:400}
