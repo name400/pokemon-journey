@@ -9044,3 +9044,21 @@ test('TM085 newly reviewed base species preserve existing saves and item ownersh
   const blocked={...makeMon(129,30),boxId:id,moves:['튀어오르기'],pp:{splash:3}};seedMon(id,blocked);await get();await call('teachStoryTm',{item:'za-tm085',boxId:id,slot:0},409);assert.deepEqual(rawMon(id).moves,blocked.moves);assert.equal(state.inventory['za-tm085'],1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('reviewed Zone 11 and 17 fixed alphas use the shared player alert safely',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom,oldNow=Date.now;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureUser={userId:'fixed-alpha-player-qa',displayName:'공통 우두머리 검사'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),rolls={'zone17:pyroar-alpha:668':true};
+  const place=(extra)=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,zaZone17Upper:false,zaZone17Promenade:false,x:15,y:6,facing:'right',zaZone17Spent:{},zaFixedAlphaAlertV1:undefined,zaWildShinyRolls:rolls,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},combat:null,encounter:null,...extra},state.revision+1);
+  seedWorld(place({}));await get();const rev=state.revision;await call('move',{direction:'right'});await call('move',{direction:'right',revision:rev},409);await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone17:pyroar-alpha');assert.match(state.world.log.join(' '),/화염레오/);
+  clock+=3000;await call('move',{direction:'down'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,60);
+  seedWorld(place({zaZone17Upper:true,x:12,y:8}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone17:mawile-alpha');
+  seedWorld(place({district:'lumiose-zone11',zaZone11Upper:false,zaZone11Spent:{},x:14,y:4}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone11:slowbro-alpha');
+  seedWorld(place({x:15,y:6,zaDodgeReadyAt:0}));await get();await call('dodge',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  seedWorld(place({zaZone17Spent:{'pyroar-alpha':true},zaFixedAlphaAlertV1:'lumiose-zone17:pyroar-alpha'}));await get();await call('move',{direction:'right'});await get();assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaFixedAlphaAlertV1,undefined);
+  seedWorld(place({zaZone17Spent:{version:2},zaFixedAlphaAlertV1:'lumiose-zone17:pyroar-alpha'}));await get();await call('move',{direction:'right'});await get();assert.deepEqual(rawWorld().zaZone17Spent,{version:2});assert.equal(rawWorld().zaFixedAlphaAlertV1,'lumiose-zone17:pyroar-alpha');assert.equal(state.world.zaPlayerVitalsV1.hp,100);
+  seedWorld(place({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);
+  seedWorld(place({zaFixedAlphaAlertV1:{version:2,unknown:true},zaPlayerVitalsV1:{version:2,unknown:true}}));await get();await call('move',{direction:'right'});await get();assert.deepEqual(rawWorld().zaFixedAlphaAlertV1,{version:2,unknown:true});assert.deepEqual(rawWorld().zaPlayerVitalsV1,{version:2,unknown:true});
+  seedWorld(place({zaFixedAlphaAlertV1:'lumiose-zone17:pyroar-alpha',zaPlayerVitalsV1:{version:1,hp:1,lastCenterId:'hotel'}}));await get();await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaPlayerVitalsV1.hp,100);assert.equal(rawWorld().zaWildShinyRolls['zone17:pyroar-alpha:668'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
+});
