@@ -1,3 +1,4 @@
+import {side12Available} from '@/lib/cloud-adventure/adventure-side12.mjs';
 import {side05Available} from '@/lib/cloud-adventure/adventure-side05.mjs';
 import {side06Available} from '@/lib/cloud-adventure/adventure-side06.mjs';
 import {side13Available} from '@/lib/cloud-adventure/adventure-side13.mjs';
@@ -1397,6 +1398,7 @@ export default function AdventureField({world:w,visualPath,disabled,onInteract,o
    }
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(cloudNpcTile(c,w))trainer(x,y,c==='N'?'#8d5ca8':c==='R'?'#719f9a':c==='F'?'#9e758e':c==='D'?'#bb9c42':c==='A'?'#59855b':c==='B'?'#477e9a':'#cf9254','down');}));
    w.map.forEach((row:string,y:number)=>Array.from(row).forEach((c,x)=>{if(c==='?'&&w.district==='lumiose-royale'){const px=x*tile,py=y*tile;ctx!.fillStyle='#b5790d';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx!.fill();ctx!.fillStyle='#ffe47b';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,5,0,Math.PI*2);ctx!.fill();return;}if(c==='!'&&w.district==='lumiose-royale'){const px=x*tile,py=y*tile;ctx!.fillStyle='#c99522';ctx!.fillRect(px+7,py+5,tile-14,tile-10);ctx!.fillStyle='#fff2bf';ctx!.fillRect(px+10,py+8,tile-20,tile-16);ctx!.fillStyle='#c99522';ctx!.fillRect(px+12,py+13,tile-24,3);return;}if(c==='!'){const px=x*tile,py=y*tile;ctx!.fillStyle='#692975';ctx!.beginPath();ctx!.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx!.fill();ctx!.fillStyle='#db90e8';ctx!.fillRect(px+tile/2-5,py+tile/2-5,10,4);ctx!.fillStyle='#f6e6fa';ctx!.fillRect(px+tile/2-2,py+tile/2-2,4,4);}else if(c==='$')trainer(x,y,'#d1a94d','down');}));
+   if(w.district==='lumiose-bleu-sector8'&&!w.interior&&side12Available(w)&&w.map?.[14]?.[15]==='#')trainer(15,14,'#b578a6','down');
    if(!w.interior&&side16Available(w)){
     if(w.district==='lumiose-aymlis-park'&&!w.zaMission11ParkLower&&w.map?.[3]?.[16]==='^')trainer(16,3,'#9d9272','down');
     if(w.district==='lumiose-bleu-sector8'&&w.map?.[5]?.[5]==='^')trainer(5,5,'#9d9272','down');
