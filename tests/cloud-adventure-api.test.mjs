@@ -8711,3 +8711,14 @@ test('legacy Licier and Anguil battles do not gain an untracked prize',async()=>
   }
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Foco critical battle grants separate prize and usable held item safely',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side54-foco-qa',displayName:'급소 의뢰 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,coins=state.wallet.coins,team=[...state.world.teamIds],strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄'],pp:{},shiny:true};seedMon(id,strong);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:null,x:7,y:4,facing:'right',...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('side54Start',{},409);seedWorld(place({zaMission19Stage:7}));await get();assert.equal(state.world.interaction.action,'side54Start');await call('side54Start');await call('side54Battle');assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level]),[[15,44],[319,44],[123,44]]);await get();await call('forfeit');assert.equal(rawWorld().zaSide54Stage,1);
+  seedMon(id,strong);seedWorld(place({}));await get();await call('side54Battle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const p of sim.p2.pokemon){p.hp=1;p.setStatus('slp');p.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.equal(rawWorld().zaSide54Stage,2);assert.equal(state.wallet.coins,coins+2112);
+  seedWorld(place({adventureBalls:{ultraball:97}}));await get();await call('side54Reward',{},409);assert.equal(rawWorld().zaSide54Stage,2);seedWorld(place({adventureBalls:{ultraball:96}}));await get();const rev=state.revision;await call('side54Reward');await call('side54Reward',{revision:rev},409);await get();assert.equal(state.wallet.coins,coins+5112);assert.equal(state.inventory.scopelens,1);assert.equal(rawWorld().adventureBalls.ultraball,99);assert.equal(rawWorld().zaSide54Stage,3);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).shiny,true);await call('side54Reward',{},409);await call('equip',{boxId:id,item:'scopelens'});await get();assert.equal(rawMon(id).item,'scopelens');assert.equal(state.inventory.scopelens,undefined);
+ }finally{globalThis.__adventureUser=previous;}
+});
