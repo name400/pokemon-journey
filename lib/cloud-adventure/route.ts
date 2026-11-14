@@ -93,7 +93,7 @@ import {RANK_F_TRAINERS,RANK_F_EXTRA_POSITIONS,rankFPoints,rankFWins,RANK_E_MANI
 import {cafeWoofDrink,cafeBatailleDrink,cafeActionDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
 import {leYeahCourse,leYeahAvailable,LE_YEAH_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-yeah.mjs';
 import {leNahCourse,leNahAvailable,LE_NAH_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-nah.mjs';
-import {sushiCourseTeam,SUSHI_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-sushi.mjs';
+import {sushiCourseTeam,sushiAvailable,SUSHI_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-sushi.mjs';
 import {leWowAvailable,leWowCourseTeam,LE_WOW_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-wow.mjs';
 import {side88Available,side88Origin,side88Destination,side88Team} from '@/lib/cloud-adventure/adventure-side88.mjs';
 import {isStationSpot} from '@/lib/cloud-adventure/adventure-station.mjs';
@@ -505,7 +505,7 @@ else if(b.action==='enterSushi'){if(s.combat||s.interior||s.district!=='lumiose-
 else if(['sushiStart','sushiRepeat','sushiNext'].includes(b.action)){
  if(s.combat||s.district!=='lumiose-rouge-north'||s.interior!=='sushi'||cell()!=='R'||s.unionHost)throw Error('식당 안내원에게 배틀을 신청하세요.');
  if(b.action!=='sushiNext'){
-  if(s.zaMission24Started!==true||s.zaSushiRun||s.zaSushiRewardPending||(b.action==='sushiStart'&&s.zaSushiCompleted)||(b.action==='sushiRepeat'&&!s.zaSushiCompleted))throw Error('식당 배틀의 진행 조건을 확인하세요.');
+  if(!sushiAvailable(s)||s.zaSushiRun||s.zaSushiRewardPending||(b.action==='sushiStart'&&s.zaSushiCompleted)||(b.action==='sushiRepeat'&&!s.zaSushiCompleted))throw Error('식당 배틀의 진행 조건을 확인하세요.');
   if(b.action==='sushiRepeat')reward=-30000;s.zaSushiRun={course:0,repeat:b.action==='sushiRepeat',multiV1:true};
  }
  const run=s.zaSushiRun;if(!run||!Number.isInteger(run.course)||run.course<0||run.course>=SUSHI_COURSE_COUNT||typeof run.repeat!=='boolean')throw Error('식당 코스 상태를 확인하세요.');
