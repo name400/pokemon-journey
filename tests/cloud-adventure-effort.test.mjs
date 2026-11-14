@@ -55,3 +55,29 @@ test('new single battles award effort only to the active participant at each fai
  const legacy=applyAdventureBattleEffort({...before,adventureEffortVersion:1},{...before,events});assert.equal(legacy.teams[0][0].evs.hp,8);assert.equal(legacy.teams[0][1].evs.spe,2);
  const unknown={...before,requests:[]},after={...unknown,events};assert.equal(applyAdventureBattleEffort(unknown,after),after);
 });
+
+test('multi-owner effort tracks active slots and switches without rewarding companions or reserves',async()=>{
+ const {applyAdventureBattleEffort}=await import('../lib/cloud-adventure/adventure-effort.mjs');
+ const evs={hp:0,atk:0,def:0,spa:0,spd:0,spe:0},a={...makeMon(1,30),boxId:'a',evs:{...evs}},b={...makeMon(4,30),boxId:'b',evs:{...evs},item:'powerweight'},ally={...makeMon(7,30),boxId:'ally',evs:{...evs}},f1={...makeMon(25,5),boxId:'f1'},f2={...makeMon(25,5),boxId:'f2'};
+ const before={format:'mission10-multi-v1',adventureEffortVersion:2,adventureEffortFoes:[],owners:{player:['a','b'],ally:['ally']},teams:[[a,b],[f1],[ally],[f2]]};
+ const after={...before,before:[[a,b,ally],[f1,f2]],beforeActiveBySide:[[0,2],[0,1]],adventureEffortEvents:[{kind:'faint',side:1,boxId:'f1',hp:0},{kind:'switch',side:0,boxId:'b',activeSlot:0},{kind:'faint',side:1,boxId:'f2',hp:0}]};
+ const result=applyAdventureBattleEffort(before,after);assert.equal(result.teams[0][0].evs.spe,2);assert.equal(result.teams[0][0].evs.hp,0);assert.equal(result.teams[0][1].evs.spe,2);assert.equal(result.teams[0][1].evs.hp,8);assert.deepEqual(result.teams[2][0].evs,evs);assert.deepEqual(result.adventureEffortFoes,['f1','f2']);
+ const replay=applyAdventureBattleEffort({...result,teams:[result.teams[0],...before.teams.slice(1)]},{...after,teams:result.teams});assert.deepEqual(replay.teams[0],result.teams[0]);
+ const old=applyAdventureBattleEffort({...before,adventureEffortVersion:1},after);assert.equal(old.teams[0][0].evs.spe,4);assert.equal(old.teams[0][1].evs.hp,16);
+ const unknown={...after,beforeActiveBySide:undefined};assert.equal(applyAdventureBattleEffort(before,unknown),unknown);assert.equal(applyAdventureBattleEffort({...before,adventureEffortFoes:{version:3}},after),after);
+});
+
+test('triple effort follows all slots and player ownership through switches',async()=>{
+ const {applyAdventureBattleEffort}=await import('../lib/cloud-adventure/adventure-effort.mjs');
+ const evs={hp:0,atk:0,def:0,spa:0,spd:0,spe:0},a={...makeMon(1,30),boxId:'a',evs:{...evs}},b={...makeMon(4,30),boxId:'b',evs:{...evs}},ally={...makeMon(7,30),boxId:'ally',evs:{...evs}},foe={...makeMon(25,5),boxId:'foe'};
+ const before={format:'mission37-triples-prototype-v1',adventureEffortVersion:2,adventureEffortFoes:[],owners:{player:['a','b'],first:['ally'],second:['none']},teams:[[a,ally,b],[foe]]};
+ const after={...before,before:before.teams,beforeActiveBySide:[[0,1,-1],[0,-1,-1]],events:[{kind:'switch',side:0,activeSlot:0,boxId:'b',hp:b.hp},{kind:'faint',side:1,boxId:'foe',hp:0}]};const result=applyAdventureBattleEffort(before,after);
+ assert.equal(result.teams[0][0].evs.spe,0);assert.equal(result.teams[0][1].evs.spe,0);assert.equal(result.teams[0][2].evs.spe,2);assert.deepEqual(result.adventureEffortFoes,['foe']);
+ const unknown={...after,events:[{kind:'switch',side:0,boxId:'b'},{kind:'faint',side:1,boxId:'foe'}]};assert.equal(applyAdventureBattleEffort(before,unknown),unknown);
+});
+
+test('real companion battle reports the player switch before an ally knockout',async()=>{
+ const {Battle}=await import('@pkmn/sim'),{createMission10DoubleSnapshot,playMission10MultiTurn}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs'),{applyAdventureBattleEffort}=await import('../lib/cloud-adventure/adventure-effort.mjs');
+ const evs={hp:0,atk:0,def:0,spa:0,spd:0,spe:0},a={...makeMon(1,20),boxId:'a',evs:{...evs},moves:['방어']},b={...makeMon(4,20),boxId:'b',evs:{...evs},moves:['방어']},ally={...makeMon(150,100),boxId:'ally',moves:['사이코키네시스']},f1={...makeMon(25,5),boxId:'f1',moves:['튀어오르기']},f2={...makeMon(25,5),boxId:'f2',moves:['튀어오르기']};
+ const initial=createMission10DoubleSnapshot([a,b],[ally],[f1,f2]),sim=Battle.fromJSON(initial.snapshot);sim.p2.active[0].hp=1;const before={...initial,snapshot:sim.toJSON()};const after=playMission10MultiTurn(before,{type:'switch',slot:2});assert.ok(after.adventureEffortEvents.some(e=>e.kind==='switch'&&e.boxId==='b'));assert.ok(after.adventureEffortEvents.some(e=>e.kind==='faint'&&e.boxId==='f1'));const result=applyAdventureBattleEffort(before,after);assert.equal(result.teams[0].find(x=>x.boxId==='a').evs.spe,0);assert.equal(result.teams[0].find(x=>x.boxId==='b').evs.spe,2);
+});
