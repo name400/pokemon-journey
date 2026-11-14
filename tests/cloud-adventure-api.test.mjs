@@ -6221,6 +6221,19 @@ test('Zone 13 grass battle blocks pickup only until the wild encounter ends',asy
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('Earth Power TM teaches a Galarian form and preserves shared data on reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'earth-power-regional-qa',displayName:'지역 폼 기술머신'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm052']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm052');
+  const mon={...makeMon(10180,30),moves:['몸통박치기'],custom:{keep:true}};seedMon(id,mon);await get();const rev=state.revision;
+  await call('teachStoryTm',{item:'za-tm052',boxId:id,slot:0});await get();const learned=rawMon(id);
+  assert.equal(learned.id,10180);assert.equal(learned.speciesId,618);assert.equal(learned.moves[0],'대지의힘');assert.deepEqual(learned.custom,{keep:true});assert.equal(state.inventory['za-tm052'],1);
+  await call('teachStoryTm',{item:'za-tm052',boxId:id,slot:0,revision:rev},409);await get();assert.deepEqual(rawMon(id),learned);
+  const unovan={...makeMon(562,30),moves:['몸통박치기'],custom:{keep:true}};seedMon(id,unovan);await get();await call('teachStoryTm',{item:'za-tm052',boxId:id,slot:0},409);assert.deepEqual(rawMon(id),unovan);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 15 roof Earth Power TM is saved, reusable and protected against duplicate pickup',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone15-earth-power-qa',displayName:'옥상 기술머신'};
  try{

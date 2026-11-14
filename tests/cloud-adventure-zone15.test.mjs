@@ -14,6 +14,14 @@ test('Zone 15 rooftop TM preserves a previous position and checks reviewed compa
  assert.equal(canLearnStoryTm(bag,{id:25,speciesId:25,moves:[]},'za-tm052'),false);
 });
 
+test('Earth Power TM recognizes reviewed base species and regional forms without conflating them',()=>{
+ const bag={'za-tm052':1};
+ for(const [id,speciesId] of [[3,3],[248,248],[260,260],[530,530],[10115,105],[10179,562],[10180,618]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm052'),true,`${id}`);
+ for(const [id,speciesId] of [[25,25],[562,562],[10179,618],[10180,562]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm052'),false,`${id}`);
+ assert.equal(canLearnStoryTm({}, {id:248,speciesId:248,moves:[]},'za-tm052'),false);
+ assert.equal(canLearnStoryTm(bag,{id:248,speciesId:248,moves:['대지의힘']},'za-tm052'),false);
+});
+
 test('Zone 15 roof Larvitar slots are independent and do not occupy an old saved position',()=>{
  const state={area:3,district:'lumiose-zone15',interior:null,zaZone15Upper:true,zaZone15WebOpen:true,x:17,y:5,facing:'right',zaZone15Spent:{larvitar:true},teamIds:['kept']};
  assert.equal(fieldDialogue(state,fieldMap(state)).action,'zone15Wild-larvitar-roof-east');assert.equal(zone15Visible(state,'f').id,'larvitar-roof-south');
