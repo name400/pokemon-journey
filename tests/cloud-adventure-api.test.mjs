@@ -3482,6 +3482,24 @@ test('additional draft screws can be collected after walking and reconnect only 
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
+test('remaining screws support green upgrades after earlier plush spending',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'remaining-screws-qa',displayName:'남은 나사'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld({...rawWorld(),zaColorfulScrewsFound:[...COLORFUL_SCREW_SITES.slice(0,70).map(p=>p.id),'future-screw'],zaColorfulScrewsSpent:61});await get();
+  for(const p of COLORFUL_SCREW_SITES.slice(70)){
+   const start=p.district==='lumiose-vert6-roof'?{x:18,y:9}:{x:4,y:11};
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:p.district,interior:null,...start,facing:'up',zaRedCanariPlush:true,zaRoyaleRank:'A',zaMission15Stage:2},state.revision+1));
+   await get();if(p.requiresGlide){await walkTo({x:10,y:6});await call('rotoGlide');}await walkTo(p);
+   assert.equal(state.world.interaction?.action,'collectColorfulScrew',`${p.id} ${state.world.district} ${state.world.x},${state.world.y} ${state.world.map[p.y]?.[p.x]}`);const revision=state.revision;await call('collectColorfulScrew');await call('collectColorfulScrew',{revision},409);await get();
+   assert.equal(rawWorld().zaColorfulScrewsFound.filter(id=>id===p.id).length,1);
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector6',interior:null,x:15,y:14,facing:'up'},state.revision+1));await get();
+  for(let i=0;i<3;i++)await call('exchangeCanari-green');await get();assert.equal(state.world.zaGreenCanariLevel,3);assert.equal(rawWorld().zaColorfulScrewsSpent,77);
+  await call('exchangeCanari-green',{},409);assert.ok(rawWorld().zaColorfulScrewsFound.includes('future-screw'));assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('61 distinct collected screws buy the four original plush upgrades exactly once',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'all-plush-upgrades-qa',displayName:'인형 전체 단계'};
  try{

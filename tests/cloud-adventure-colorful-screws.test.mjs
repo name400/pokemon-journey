@@ -45,7 +45,7 @@ test('old saves on new street entrances retain their position',()=>{
 
 test('additional screws preserve a saved position and old collection records',()=>{
  const additional=COLORFUL_SCREW_SITES.slice(61);
- assert.equal(additional.length,9);
+ assert.equal(additional.length,16);
  assert.equal(new Set(COLORFUL_SCREW_SITES.map(p=>`${p.district}:${p.interior}:${p.x}:${p.y}`)).size,COLORFUL_SCREW_SITES.length);
  for(const p of additional){
   const s={area:3,...p,facing:'up',teamIds:['kept'],zaRedCanariPlush:true,zaMission15Stage:2,zaColorfulScrewsFound:['future-screw',COLORFUL_SCREW_SITES[0].id]};
