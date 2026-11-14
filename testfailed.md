@@ -1,5 +1,21 @@
 # 배포 검증 실패 기록
 
+## 2026-11-14 — GitHub `6933590b` 배포 검사 실패
+
+- 대상 브랜치 `cloud/pokerogue-continue-20261105`, GitHub 커밋 `6933590b2b086ba4a7e93fa27a8a2f7714d973f3`.
+- 기존 Sites v88 소스에 병합한 검증 커밋 `9ffc28d5fcdc1e726a2e3a8d45486a456eb71b9a`. Node.js v24.22.1.
+- `npm run typecheck` 통과. `npm test` 4,358개 중 4,354개 통과, 4개 실패 (202.1초). 실패 후 별도로 실행한 `npm run build`는 통과했다.
+- 테스트 실패로 배포하지 않았다. 검사 당시 마지막으로 확인한 운영본은 Sites v88.
+
+### 실패 항목
+
+1. `tests/adventure-api.test.mjs:54`, `world route: save migration, atomic purchases, actual battle/capture/growth and full campaign`: 164행의 기절 이후 시티 아레나 보너스 전투 시나리오에서 기대값 1, 실제 0 (`0 !== 1`). 같은 줄에 여러 단언이 있으므로 구체적인 실패 단언과 전투 결과를 재확인해야 한다.
+2. `tests/cloud-adventure-api.test.mjs:6352`, 누보 카페 이야기·음료·이동 검사: 6357행에서 기대 71, 실제 100. 한 줄에 여러 단언이 있어 해당 값의 구체적 대상은 재확인해야 한다.
+3. 같은 파일 9066행, 구역 12~14 우두머리와 플레이어 체력 검사: 9074행에서 예상 체력 90, 실제 100.
+4. 같은 파일 9081행, 구역 15·16·18·19 우두머리 및 저장 검사: 9087행에서 예상 경고 대상 `lumiose-zone15:banette-alpha`, 실제 `lumiose-zone15:beedrill-alpha`.
+
+이 결과만으로 게임 로직의 결함, 난수·시간에 의존한 테스트 조건, 테스트 기대값 중 원인을 확정할 수 없다. 실패 시 상태와 호출 순서를 재현하고 수정된 정확한 Sites 병합본에서 전체 검사를 다시 실행한다.
+
 ## 2026-11-14 — GitHub `380df57d` 배포 검사 실패
 
 - 대상 브랜치: `cloud/pokerogue-continue-20261105`; GitHub 커밋 `380df57d804416a7f66f2ec6dcdc0e6440ce9bf1`.
