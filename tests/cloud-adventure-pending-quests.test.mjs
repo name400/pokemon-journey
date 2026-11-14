@@ -61,6 +61,7 @@ test('Emma investigation markers follow quest stage and both existing quest loca
 
 test('unclaimed restaurant rewards remain trackable across locations and reloads',()=>{
  const cases=[
+  {id:'60-reward',flag:'zaLeYeahRewardPending',district:'lumiose-rouge-sector3',interior:'leYeah',door:[16,11],host:[11,5]},
   {id:'29-reward',flag:'zaLeNahRewardPending',district:'lumiose-vert-sector6',interior:'leNah',door:[15,12],host:[11,5]},
   {id:'94-reward',flag:'zaLeWowRewardPending',district:'lumiose-rouge-sector2',interior:'leWow',door:[5,5],host:[11,5]},
   {id:'sushi-reward',flag:'zaSushiRewardPending',district:'lumiose-rouge-north',interior:'sushi',door:[19,4],host:[16,5]},
