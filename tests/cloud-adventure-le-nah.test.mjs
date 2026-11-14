@@ -43,3 +43,11 @@ test('TM085 supports reviewed important base species without inferring form iden
  for(const mon of [{id:129,speciesId:129,moves:[]},{id:10043,speciesId:150,moves:[]},{id:99999,speciesId:247,moves:[]},{id:247,speciesId:248,moves:[]}])assert.equal(canLearnStoryTm(bag,mon,'za-tm085'),false);
  assert.equal(canLearnStoryTm({}, {...makeMon(247,30),moves:[]},'za-tm085'),false);assert.equal(canLearnStoryTm(bag,{...makeMon(247,30),moves:['대타출동']},'za-tm085'),false);
 });
+
+
+test('TM085 supports confirmed Hoenn starters and Lumiose evolution lines',async()=>{
+ const {makeMon}=await import('../lib/game.mjs');const {canLearnStoryTm}=await import('../lib/cloud-adventure/adventure-story-tm.mjs');
+ const bag={'za-tm085':1},added=[252,253,254,258,259,260,315,353,354,371,372,373,375,376,406,407,443,444,445,459,460,479];
+ for(const id of added)assert.equal(canLearnStoryTm(bag,{...makeMon(id,30),moves:[]},'za-tm085'),true,`base ${id}`);
+ assert.equal(canLearnStoryTm(bag,{id:99999,speciesId:443,moves:[]},'za-tm085'),false);assert.equal(canLearnStoryTm(bag,{id:443,speciesId:444,moves:[]},'za-tm085'),false);
+});
