@@ -1445,6 +1445,27 @@ test('legacy mission 27 through 29 and 32 through 34 single boss saves finish no
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('pending middle mission stones remain claimable when legacy parent stages are missing',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'legacy-middle-stone-qa',displayName:'미수령 메가스톤 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const cases=[
+   {n:16,district:'lumiose-mission16-roof',x:18,y:6,item:'beedrillite',action:'claimMission15Stone'},
+   {n:17,district:'lumiose-magenta-sector3-roof',x:18,y:6,item:'hawluchanite',action:'claimMission15Stone'},
+   {n:18,district:'lumiose-jaune-sector9',x:14,y:9,item:'banettite',action:'claimMission15Stone'},
+   {n:21,district:'lumiose-magenta-sector6-roof',x:18,y:6,item:'mawilite',action:'mission20ClaimStone'},
+   {n:22,district:'lumiose-mission22-tunnel',x:17,y:5,item:'barbaracite',action:'mission20ClaimStone'},
+   {n:23,district:'lumiose-mission23-roof',x:18,y:4,item:'ampharosite',action:'mission20ClaimStone'},
+  ];
+  for(const c of cases){
+   const flags=Object.fromEntries(cases.map(v=>[`zaMission${v.n}RewardPending`,false]));flags[`zaMission${c.n}RewardPending`]=true;
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:c.district,interior:null,x:c.x,y:c.y,facing:'up',zaMission15Stage:null,zaMission20Stage:null,...flags},state.revision+1));await get();assert.equal(state.world.interaction?.action,c.action,`mission ${c.n}`);
+   if(c.n===16){const key=JSON.stringify(['legacy-middle-stone-qa',c.item]);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,'legacy-middle-stone-qa',c.item);await get();await call(c.action,{},409);assert.equal(rawWorld().zaMission16RewardPending,true);sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();}
+   const revision=state.revision,before=state.inventory[c.item]||0;await call(c.action);assert.equal(state.inventory[c.item],before+1);await call(c.action,{revision},409);await get();assert.equal(state.inventory[c.item],before+1);assert.equal(rawWorld()[`zaMission${c.n}RewardPending`],false);assert.notEqual(state.world.interaction?.action,c.action);assert.equal(rawWorld().zaMission15Stage,null);assert.equal(rawWorld().zaMission20Stage,null);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  }
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('legacy mission 16 through 18 and 21 through 23 single boss saves finish normally',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission16-18-legacy-boss-qa',displayName:'기존폭주저장검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId;
