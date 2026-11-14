@@ -1,5 +1,22 @@
 # 배포 검증 실패 기록
 
+## 2026-11-14 — GitHub `380df57d` 배포 검사 실패
+
+- 대상 브랜치: `cloud/pokerogue-continue-20261105`; GitHub 커밋 `380df57d804416a7f66f2ec6dcdc0e6440ce9bf1`.
+- 기존 Sites 소스와 병합한 검증 커밋: `1c78daf843591ce1977291cf3b0af1198f14bca8`. Node.js v24.22.1.
+- 타입 검사 통과. 전체 테스트 4,144개 중 4,139개 통과, 5개 실패 (171.3초). 실패 후 별도로 실행한 배포용 빌드는 통과.
+- 검사 실패로 배포하지 않았다. 검사 당시 마지막 확인된 운영 버전은 Sites v87.
+
+### 실패 항목
+
+1. `tests/cloud-adventure-api.test.mjs:7219`: 구역 1 무작위 우두머리 포획 기회 검사에서 7221행의 배틀 상태는 `null`을 기대했지만 진행 중인 전투 객체였다. 로그에는 상대 뿔충이 테라스탈 후 뮤츠의 사이코브레이크가 효과 없었다고 나온다.
+2. 같은 파일 7516행: 같은 구역 빠른 이동 후 소모된 조우 재출현 방지 검사에서 7524행 `Cannot read properties of undefined (reading 'aron')` 발생.
+3. `tests/cloud-adventure-magenta-sector4.test.mjs:47`: 남쪽 구역 연결과 구역 7 제한 검사 51행의 기대값은 `true`, 실제는 `undefined`.
+4. `tests/cloud-adventure-world.test.mjs:538`: 구역 17 산책로의 이전 저장 및 북쪽 조우 검사 542행에서 기대 타일 `e`, 실제 `g`.
+5. `tests/cloud-adventure-zone9.test.mjs:82`: 마젠타 구역 6과 남쪽 대로 연결 검사 85행에서 기대값은 `true`, 실제는 `undefined`.
+
+첫 실패는 공격이 무효였던 사실을 보여주나 원인을 확정하지 않는다. 나머지도 실제 맵·저장 회귀인지 테스트의 좌표 또는 기대값 문제인지 확인하고 수정된 병합본으로 전체 검사를 다시 실행해야 한다.
+
 ## 2026-11-14 — 하수도 불켜미 격리 API 검사 기대값 수정
 
 - `f8964de9`의 하수도 지도 작업 트리에서 `Litwick can be caught in the main sewer and remains registered after reentry`가 포획 후 파트너 HP·기술이 달라졌다는 단언으로 실패했다. 포획 경험치 지급 `awardCaptureExperience`가 레벨업 시 최대 HP와 레벨 기술을 적용하므로 기존의 HP·기술 불변 기대가 실제 게임 규칙과 달랐다.
