@@ -14,3 +14,11 @@ test('TM057 admits reviewed species but not an unreviewed form or unrelated spec
  for(const mon of [{id:1,speciesId:1},{id:10100,speciesId:26},{id:99999,speciesId:667}])assert.equal(canLearnStoryTm(bag,{...mon,moves:[]},'za-tm057'),false);
  assert.equal(canLearnStoryTm(bag,{id:4,speciesId:4,moves:['도깨비불']},'za-tm057'),false);assert.equal(canLearnStoryTm({}, {id:4,speciesId:4,moves:[]},'za-tm057'),false);
 });
+
+test('TM057 supports reviewed base species and distinct regional, appliance and size forms',()=>{
+ const bag={'za-tm057':1},can=(id,speciesId=id,moves=[])=>canLearnStoryTm(bag,{id,speciesId,moves},'za-tm057');
+ for(const id of [150,280,302,353,475,479,498,513,562,661,710,711,778,827,935])assert.equal(can(id),true,`species ${id}`);
+ for(const [id,speciesId] of [[10115,105],[10179,562],[10008,479],[10012,479],[10027,710],[10032,711],[10143,778],[10057,359],[10034,6],[10038,94],[10285,478],[10295,668],[10320,952]])assert.equal(can(id,speciesId),true,`form ${id}`);
+ for(const [id,speciesId] of [[105,105],[10149,105],[10196,6],[10008,710],[99999,479],[25,25]])assert.equal(can(id,speciesId),false,`unsupported ${id}`);
+ assert.equal(can(280,280,['도깨비불']),false);assert.equal(canLearnStoryTm({}, {id:280,speciesId:280,moves:[]},'za-tm057'),false);
+});

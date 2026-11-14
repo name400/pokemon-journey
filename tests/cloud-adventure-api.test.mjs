@@ -8165,3 +8165,12 @@ test('side 26 Armie battle grants usable TM and protects partial rewards',async(
   const future={version:2,opaque:true};seedWorld({zaSide26RewardsV1:future});await get();await call('side26Reward',{},409);assert.deepEqual(rawWorld().zaSide26RewardsV1,future);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('TM057 teaches newly supported species and regional form while keeping old moves and stock',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm057-expanded-qa',displayName:'도깨비불 학습'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm057']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm057');
+  for(const id of [280,513,10115,10179,10008]){const mon={...makeMon(id,30),boxId:lead,moves:['몸통박치기','울음소리'],custom:'keep'};seedMon(lead,mon);await get();const rev=state.revision;await call('teachStoryTm',{item:'za-tm057',boxId:lead,slot:1});await call('teachStoryTm',{item:'za-tm057',boxId:lead,slot:1,revision:rev},409);await get();const result=rawMon(lead);assert.deepEqual(result.moves,['몸통박치기','도깨비불']);assert.equal(result.id,id);assert.equal(result.custom,'keep');assert.equal(state.inventory['za-tm057'],1);await call('teachStoryTm',{item:'za-tm057',boxId:lead,slot:0},409);}
+  for(const id of [105,25,10149]){const mon={...makeMon(id,30),boxId:lead,moves:['몸통박치기'],custom:'keep'};seedMon(lead,mon);await get();await call('teachStoryTm',{item:'za-tm057',boxId:lead,slot:0},409);assert.equal(rawMon(lead).id,id);assert.deepEqual(rawMon(lead).moves,['몸통박치기']);assert.equal(state.inventory['za-tm057'],1);}
+ }finally{globalThis.__adventureUser=previous;}
+});
