@@ -6221,6 +6221,18 @@ test('Zone 13 grass battle blocks pickup only until the wild encounter ends',asy
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('Earth Power TM teaches newly reviewed Runerigus without changing the stored party',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'earth-power-runerigus-qa',displayName:'데스판 기술머신'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm052']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm052');
+  const mon={...makeMon(867,30),moves:['몸통박치기'],custom:{keep:true}};seedMon(id,mon);await get();
+  await call('teachStoryTm',{item:'za-tm052',boxId:id,slot:0});await get();const learned=rawMon(id);
+  assert.equal(learned.id,867);assert.equal(learned.moves[0],'대지의힘');assert.deepEqual(learned.custom,{keep:true});assert.deepEqual(state.world.teamIds,team);assert.equal(state.inventory['za-tm052'],1);
+  await call('teachStoryTm',{item:'za-tm052',boxId:id,slot:0},409);await get();assert.deepEqual(rawMon(id),learned);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Earth Power TM teaches a Galarian form and preserves shared data on reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'earth-power-regional-qa',displayName:'지역 폼 기술머신'};
  try{

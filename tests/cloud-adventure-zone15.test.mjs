@@ -16,7 +16,7 @@ test('Zone 15 rooftop TM preserves a previous position and checks reviewed compa
 
 test('Earth Power TM recognizes reviewed base species and regional forms without conflating them',()=>{
  const bag={'za-tm052':1};
- for(const [id,speciesId] of [[3,3],[248,248],[260,260],[530,530],[10115,105],[10179,562],[10180,618]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm052'),true,`${id}`);
+ for(const [id,speciesId] of [[3,3],[248,248],[260,260],[530,530],[696,696],[770,770],[867,867],[934,934],[970,970],[10115,105],[10179,562],[10180,618]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm052'),true,`${id}`);
  for(const [id,speciesId] of [[25,25],[562,562],[10179,618],[10180,562]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm052'),false,`${id}`);
  assert.equal(canLearnStoryTm({}, {id:248,speciesId:248,moves:[]},'za-tm052'),false);
  assert.equal(canLearnStoryTm(bag,{id:248,speciesId:248,moves:['대지의힘']},'za-tm052'),false);
