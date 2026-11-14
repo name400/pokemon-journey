@@ -8576,3 +8576,15 @@ test('Mirte teaches Slash and trims a player Furfrou without altering shared ide
   sql.prepare('UPDATE wallets SET coins=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('side47Trim-star',{},409);await get();assert.equal(rawMon(id).adventureFurfrouTrim,'heart');assert.equal(state.wallet.coins,0);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Piresse draining battle protects progress and rewards',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side49-piresse-qa',displayName:'흡수 배틀 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,coins=state.wallet.coins,team=[...state.world.teamIds],strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{}};seedMon(id,strong);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:8,y:1,facing:'up',...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('side49Start',{},409);seedWorld(place({zaMission19Stage:1}));await get();assert.equal(state.world.interaction.action,'side49Start');await call('side49Start');await call('side49Battle');assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level]),[[168,43],[708,43],[315,44]]);
+  const saved=rawWorld().combat,sim0=Battle.fromJSON(saved.snapshot);assert.equal(sim0.p2.pokemon[0].item,'bigroot');await get();assert.equal(rawWorld().zaSide49Stage,1);await call('forfeit');assert.equal(rawWorld().zaSide49Stage,1);
+  seedMon(id,strong);seedWorld(place({}));await get();await call('side49Battle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const p of sim.p2.pokemon){p.hp=1;p.setStatus('slp');p.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.equal(rawWorld().zaSide49Stage,2);assert.equal(state.wallet.coins,coins+2112);
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'sitrusberry']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,990)').run(key,globalThis.__adventureUser.userId,'sitrusberry');seedWorld(place({}));await get();await call('side49Reward',{},409);assert.equal(rawWorld().zaSide49Stage,2);sql.prepare('UPDATE inventory SET quantity=989 WHERE key=?').run(key);await get();const rev=state.revision;await call('side49Reward');await call('side49Reward',{revision:rev},409);await get();assert.equal(state.wallet.coins,coins+3612);assert.equal(state.inventory.bigroot,1);assert.equal(state.inventory.sitrusberry,999);assert.equal(rawWorld().zaSide49Stage,3);assert.deepEqual(state.world.teamIds,team);await call('side49Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});

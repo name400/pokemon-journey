@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {fieldMap,fieldDialogue,fieldPath} from '../lib/cloud-adventure/adventure-world.mjs';
+import {trackedAdventureLocalTarget} from '../lib/cloud-adventure/adventure-pending-quests.mjs';
+import {adventureQuestVisuals} from '../lib/cloud-adventure/adventure-quest-visuals.mjs';
+test('Piresse appears on a previously blocked tile, with progress and tracked target',()=>{const old={area:3,district:'lumiose-centrico-route',x:8,y:1,facing:'up'},ready={...old,zaMission19Stage:1};assert.equal(fieldMap(old)[0][8],'#');let map=fieldMap(ready);assert.equal(map[0][8],'^');assert.ok(fieldPath(map,{x:9,y:2},{x:8,y:1}).length);assert.equal(fieldDialogue(ready,map).action,'side49Start');assert.equal(fieldDialogue({...ready,zaSide49Stage:1},map).action,'side49Battle');assert.equal(fieldDialogue({...ready,zaSide49Stage:2},map).action,'side49Reward');const tracked={...ready,zaSide49Stage:1,zaTrackedQuestId:'49',map};assert.deepEqual(trackedAdventureLocalTarget(tracked),{x:8,y:0});assert.ok(adventureQuestVisuals(tracked).some(p=>p.x===8&&p.y===0));});
