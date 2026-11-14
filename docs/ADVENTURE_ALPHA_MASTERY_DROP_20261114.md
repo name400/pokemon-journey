@@ -11,3 +11,7 @@
 [우두머리 설명](https://pokemondb.net/pokebase/435253/whats-everything-important-to-know-about-alphas-in-legends?show=435336)은 숙달의씨 외에 경험사탕 XS·S·M·L이 나올 수 있으며 강한 우두머리일수록 더 좋은 사탕이 나오는 경향을 설명한다. 신규 야생 우두머리의 포획·승리에 경험사탕 추첨을 연결했다. 정확한 원작 확률표는 확인하지 못해 **50% 확률, 1~3개, 레벨 20·40·60 경계의 크기 선택**은 이 게임의 임시 분포다. 기존 진행 중 전투는 사탕을 소급하지 않는다.
 
 숙달의씨와 같은 원자적 결과 처리와 중복 방지 규칙을 사용한다. 가방 한도에 걸린 사탕은 크기별로 보관하고 가방에서 일부 또는 전부 수령한다. 알 수 없는 보관 형식이나 비정상 수량은 덮어쓰지 않고, 보관할 수 없는 양은 지급하지 못했다고 알린다. 격리 API에서 필드 포획·전투 승리 후 포획, 기존 숙달의씨, 보관·재접속·중복 수령과 미래 형식 보존을 검사했고 분포 경계는 단위 검사했다. 실제 원작·운영 D1·Sites 병합본은 확인하지 않았다.
+
+## 원작 전리품의 미확인 부분
+
+[Serebii의 종·위치별 우두머리 목록](https://www.serebii.net/legendsz-a/alphapokemon.shtml)에는 개별 드롭과 확률 자료가 있다. 숙달의씨 지급 여부는 [Game Guides](https://www.gamerguides.com/pokemon-legends-z-a/guide/getting-started/information/plus-moves/)와 [Pokémon Database](https://pokemondb.net/pokebase/435253/whats-everything-important-to-know-about-alphas-in-legends?show=435263) 등의 설명이 상충한다. 현행 신규 우두머리의 씨앗 확정 및 경험사탕 임시 분포를 원작과 동일하다고 보장하지 않으며, 실기 또는 신뢰할 수 있는 개별 데이터의 대조가 남아 있다. 이 기록만으로 현행 지급을 결함으로 확정하거나 변경하지 않는다.
