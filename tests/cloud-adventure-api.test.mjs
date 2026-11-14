@@ -9015,3 +9015,11 @@ test('Zone 10 rooftop and canal alphas protect player health and saved data',asy
   seedWorld(place({zaPlayerVitalsV1:undefined}));await get();await call('move',{direction:'right'});await get();assert.equal(rawWorld().zaPlayerVitalsV1,undefined);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;Date.now=oldNow;}
 });
+
+test('new adventure battles opt into Plus drain without changing saved older battles',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-drain-version-qa',displayName:'기술플러스 흡수 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),boxId:id,moves:['꿈먹기'],pp:{}});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:null,x:14,y:5,facing:'up',zaSide84Stage:1,zaMegaRing:true},state.revision+1));await get();await call('side84Battle');assert.equal(rawWorld().combat.adventurePlusDrainV1,true);await get();assert.equal(rawWorld().combat.adventurePlusDrainV1,true);
+  const old=structuredClone(rawWorld().combat);delete old.adventurePlusDrainV1;seedWorld({combat:old});await get();assert.equal(rawWorld().combat.adventurePlusDrainV1,undefined);await call('battle',{command:{type:'move',move:'꿈먹기'}});await get();assert.equal(rawWorld().combat.adventurePlusDrainV1,undefined);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previous;}
+});
