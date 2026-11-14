@@ -10,6 +10,7 @@ import {makeMon,moves,effectiveness} from '../lib/game.mjs';
 import {stableTeraType,TERA_TYPES} from '../lib/tera-type.mjs';
 import {configure} from '../lib/pokemon-config.mjs';
 import {createCombat,playCpu} from '../lib/party-battle.mjs';
+import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {createMission10DoubleSnapshot,createSoloMultiFoeSnapshot,playMission10MultiTurn,mission10MultiView} from '../lib/cloud-adventure/adventure-mission10-double.mjs';
 import {createMission35TripleSnapshot} from '../lib/cloud-adventure/adventure-mission35-triple.mjs';
 import {Battle} from '@pkmn/sim';
@@ -8857,4 +8858,21 @@ test('sewer item tiles cannot impersonate Herup or the Barbaracle encounter',asy
   seedWorld(place({zaMission57Won:true,zaMission57RewardPending:{firestone:1,charcoal:1},zaMission22RewardPending:true}));await get();await call('mission57ClaimItems',{},409);await call('mission20ClaimStone',{},409);await get();assert.deepEqual(rawWorld().zaMission57RewardPending,{firestone:1,charcoal:1});assert.equal(rawWorld().zaMission22RewardPending,true);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),lead);
   await call('sewerSouthItem-southeast-great');seedWorld(place({x:17,y:5,facing:'up'}));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='mission57ClaimItems'));await call('mission57ClaimItems');await get();assert.equal(state.inventory.firestone,1);assert.equal(state.inventory.charcoal,1);assert.equal(rawWorld().zaMission57RewardPending,undefined);await call('mission20ClaimStone');await get();assert.equal(state.inventory.barbaracite,1);assert.equal(rawWorld().zaMission22RewardPending,false);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previous;}
+});
+
+test('Piè trap battle awards a usable Spikes TM and protects pending rewards',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side41-pie-qa',displayName:'함정 기술 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,coins=state.wallet.coins,team=[...state.world.teamIds],strong={...makeMon(150,100),boxId:id,moves:['파동탄'],pp:{},shiny:true};seedMon(id,strong);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector9',interior:null,x:19,y:6,facing:'up',...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('side41Start',{},409);seedWorld(place({zaRoyaleRank:'E',zaSide06Won:true}));await get();assert.equal(state.world.interaction.action,'side41Start');await call('side41Start');await call('side41Battle');assert.deepEqual(state.battle.teams[1].map(p=>[p.speciesId,p.level,p.item]),[[95,36,''],[323,36,''],[569,37,'']]);assert.ok(state.battle.teams[1][2].moves.includes('Spikes'));await get();await call('forfeit');assert.equal(rawWorld().zaSide41Stage,1);
+  seedMon(id,strong);seedWorld(place({}));await get();await call('side41Battle');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const p of sim.p2.pokemon){p.hp=1;p.canTerastallize=null;p.teraType='Normal';p.set.teraType='Normal';p.setStatus('slp');p.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.equal(rawWorld().zaSide41Stage,2);assert.equal(state.wallet.coins,coins+1776);
+  seedWorld(place({}));sql.prepare('UPDATE wallets SET super_potions=95 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('side41Reward',{},409);assert.equal(rawWorld().zaSide41Stage,2);sql.prepare('UPDATE wallets SET super_potions=94 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const rev=state.revision;await call('side41Reward');await call('side41Reward',{revision:rev},409);await get();assert.equal(state.wallet.super_potions,99);assert.equal(state.inventory['za-tm088'],1);assert.equal(state.wallet.coins,coins+3076);assert.equal(rawWorld().zaSide41Stage,3);assert.equal(rawWorld().zaSide06Won,true);assert.deepEqual(state.world.teamIds,team);
+  const chespin={...makeMon(650,20),boxId:id,shiny:true,moves:['몸통박치기','덩굴채찍','물기','씨뿌리기'],pp:{}};seedMon(id,chespin);await get();await call('teachStoryTm',{item:'za-tm088',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'압정뿌리기');assert.equal(rawMon(id).shiny,true);assert.equal(state.inventory['za-tm088'],1);await call('teachStoryTm',{item:'za-tm088',boxId:id,slot:1},409);await call('side41Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('Spikes TM checks base species, explicitly reviewed forms and inventory',()=>{
+ const bag={'za-tm088':1},testMon=(id,speciesId=id)=>({id,speciesId,moves:['몸통박치기']});
+ assert.equal(canLearnStoryTm(bag,testMon(650),'za-tm088'),true);assert.equal(canLearnStoryTm(bag,testMon(25),'za-tm088'),false);assert.equal(canLearnStoryTm(bag,testMon(10161,52),'za-tm088'),true);assert.equal(canLearnStoryTm(bag,testMon(10161,25),'za-tm088'),false);assert.equal(canLearnStoryTm({},testMon(650),'za-tm088'),false);
 });
