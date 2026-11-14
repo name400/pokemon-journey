@@ -21,7 +21,7 @@ import {equippedVernalTop} from '@/lib/cloud-adventure/adventure-clothing.mjs';
 import {SALON_COLORS,SALON_PRICE,SALON_STYLES,salonAppearance} from '@/lib/cloud-adventure/adventure-salon.mjs';
 import {TRAINERS} from '@/lib/campaign.mjs';
 import {stepField,wildAlphaTarget,zone2BudewTarget,zone2KakunaTarget,zone2FieldMonsters,zone2FieldTarget,zone2IslandAlphaTarget,zone3FieldMonsters,zone3FieldTarget,magentaSewerMonsters,magentaSewerTarget} from '@/lib/cloud-adventure/adventure-world.mjs';
-import {ADVENTURE_BALLS,RARE_ADVENTURE_BALL_IDS} from '@/lib/cloud-adventure/adventure-balls.mjs';
+import {ADVENTURE_BALLS,RARE_ADVENTURE_BALL_IDS,fieldBallSelection} from '@/lib/cloud-adventure/adventure-balls.mjs';
 import {alphaMoveReplacementWarning} from '@/lib/cloud-adventure/adventure-alpha-move-warning.mjs';
 import './cloud-adventure.css';
 import {predictCloudStep,predictCloudPath,predictCloudPathSteps,createCloudMoveBuffer,adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
@@ -217,8 +217,8 @@ export default function Adventure(){
  if(!mon)return <div className="content"><p role="alert">파트너 정보를 다시 불러와 주세요.</p><button onClick={()=>load()}>다시 불러오기</button></div>;
  const inBattle=!!data.battle||!!battleResult||!!w.adventureCatchWindow,party=w.teamIds.map((id:string)=>data.box.find((p:any)=>p.boxId===id)).filter(Boolean),ready=mon.evolutions?.some((e:any)=>e.ready),pendingEntries=Array.isArray(w.adventurePendingMoves)?w.adventurePendingMoves:[],rawPending=pendingEntries[0],pendingMove=pendingEntries.length?{boxId:rawPending?.boxId,move:typeof rawPending?.move==='string'?rawPending.move:'알 수 없는 기술'}:null,pendingMon=pendingMove&&data.box.find((p:any)=>p.boxId===pendingMove.boxId);
  const fieldBallCount=(id:string)=>id==='pokeball'?(data.wallet?.balls||0):((w.adventureBalls?.[id]||0)+(RARE_ADVENTURE_BALL_IDS.includes(id)?data.inventory?.[id]||0:0));
- const fieldBallChoice=fieldBallCount(fieldBall)>0?fieldBall:(ADVENTURE_BALLS.find(ball=>fieldBallCount(ball.id)>0)?.id||fieldBall);
- const fieldBallPicker=()=> <label>사용할 볼 <select aria-label="필드 포획 볼" value={fieldBallChoice} onChange={e=>setFieldBall(e.target.value)}>{ADVENTURE_BALLS.map(ball=><option key={ball.id} value={ball.id} disabled={fieldBallCount(ball.id)<=0}>{ball.name} · {fieldBallCount(ball.id)}개</option>)}</select></label>;
+ const fieldBallChoice=fieldBallSelection(fieldBall,fieldBallCount);
+ const fieldBallPicker=()=> <label>사용할 볼 <select aria-label="필드 포획 볼" value={fieldBallChoice} onChange={e=>setFieldBall(e.target.value)}>{ADVENTURE_BALLS.map(ball=><option key={ball.id} value={ball.id} disabled={fieldBallCount(ball.id)<=0}>{ball.name} · {fieldBallCount(ball.id)}개</option>)}</select>{fieldBallCount(fieldBallChoice)<=0?' 보유한 볼을 직접 선택하세요.':''}</label>;
  const titles={travel:'여행 지도 · 이동 지점',party:'포켓몬 · 파티와 보유함',manage:`${mon.name} · 기술과 성장`,bag:'가방',shop:'프렌들리숍',journal:'여행 수첩'};
  return <div className={`content adventure-game biome-${area.biome}`}>
   <header className="adv-heading"><div><span className="kicker">나의 포켓몬 여행</span><h2><MapPin size={20}/>{area.name}</h2></div><div className="adv-wallet"><span><Coins size={17}/>{(data.wallet?.coins||0).toLocaleString()}<small>코인</small></span><span className="adv-ball-count"><i/>{data.wallet?.balls||0}<small>볼</small></span></div></header>
