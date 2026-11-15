@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ZONE1_SPECIES,zone1RandomAlphaLevel} from '../lib/cloud-adventure/adventure-zone1.mjs';
+import {ZONE1_SPECIES,zone1Encounter,zone1RandomAlphaLevel} from '../lib/cloud-adventure/adventure-zone1.mjs';
+
+test('Zone 1 ordinary encounters use the documented species-specific level ranges',()=>{
+ const ranges=[[13,3,4],[16,3,5],[172,4,5],[179,3,5],[659,3,4],[661,3,4],[664,3,4]];
+ for(const [index,[speciesId,min,max]] of ranges.entries())for(const [roll,level] of [[0,min],[.999999,max]]){const samples=[(index+.25)/ranges.length,roll];assert.deepEqual(zone1Encounter(()=>samples.shift()),{speciesId,level});}
+});
 
 test('Zone 1 random alpha requires story and survey, with the 5% boundary and documented levels',()=>{
  const base={zaMission05Complete:true,adventureDexSpecies:ZONE1_SPECIES};
