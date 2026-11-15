@@ -11843,3 +11843,16 @@ test('Espace underground and Zone 10 lower bank stay on the same level across re
   seedWorld(storeAdventurePosition({...lower,zaZone10LowerBank:{version:2}},state.revision+1));await get();await call('move',{direction:'left'},409);assert.deepEqual(rawWorld().zaZone10LowerBank,{version:2});
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Station Front to Racine preserves detour and saved progress',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'station-front-racine-qa',displayName:'역전 동선'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),lead=structuredClone(rawMon(team[0]));
+  const base={...rawWorld(),area:3,district:'lumiose-vert-street-route',interior:null,x:20,y:15,facing:'down',zaMission03Stage:2,zaMission03DetourRequired:true,zaColorfulScrewsFound:['future-screw']};
+  seedWorld(storeAdventurePosition(base,state.revision+1));await get();await call('move',{direction:'down'},409);assert.equal(state.world.district,'lumiose-vert-street-route');
+  seedWorld(storeAdventurePosition({...base,zaMission03Stage:3,zaMission03DetourRequired:false},state.revision+1));await get();const revision=state.revision;await call('move',{direction:'down'});await call('move',{direction:'down',revision},409);await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-sector6',16,15]);assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw']);assert.equal(rawWorld().zaMission03Stage,3);
+  await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-vert-street-route',20,15]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  const after=rawMon(team[0]);assert.equal(after.walkSteps,lead.walkSteps+2);delete after.walkSteps;delete lead.walkSteps;assert.deepEqual(after,lead);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
