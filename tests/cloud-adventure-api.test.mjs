@@ -11802,3 +11802,14 @@ test('Rouge market attack and special attack mints preserve progress and purchas
   assert.equal(state.wallet.coins,0);await call('buyAdventureMint-modestmint',{},409);assert.equal(state.inventory.modestmint,1);const after=rawMon(id);assert.deepEqual({...after,walkSteps:mon.walkSteps},mon);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Jaune Plaza market before Wild Zone 8 preserves progress, stocks and reconnect',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'jaune-preplaza-qa',displayName:'존느 광장'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],mon=structuredClone(rawMon(id));sql.prepare('UPDATE wallets SET coins=41000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const zoneLedger={version:2,keep:{gible:true}};seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-street',interior:null,x:11,y:1,facing:'up',zaRoyaleRank:'V',zaMysteryTrail:4,zaZone8Spent:zoneLedger,customFuture:{keep:7}},state.revision+1));await get();await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-jaune-preplaza');assert.equal(state.battle,null);await get();assert.deepEqual([state.world.x,state.world.y],[11,15]);
+  for(const [x,y,action] of [[7,6,'zone8BuyBerry-kasibberry'],[11,6,'zone8BuyBerry-kebiaberry'],[15,6,'zone8BuyBerry-occaberry'],[8,10,'buyAdventureMint-adamantmint'],[14,10,'buyAdventureMint-modestmint']]){await walkTo({x,y});await call('face',{direction:'up'});assert.ok(state.world.interaction.actions.some(a=>a.action===action),action);}
+  const rev=state.revision;await call('buyAdventureMint-modestmint');await call('buyAdventureMint-modestmint',{revision:rev},409);await get();assert.equal(state.inventory.modestmint,1);await walkTo({x:15,y:6});await call('face',{direction:'up'});await call('zone8BuyBerry-occaberry',{quantity:10});await get();assert.equal(state.inventory.occaberry,10);assert.equal(state.wallet.coins,19000);assert.deepEqual(rawWorld().zaZone8Spent,zoneLedger);assert.deepEqual(rawWorld().customFuture,{keep:7});assert.deepEqual(rawWorld().teamIds,team);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-preplaza',interior:null,x:14,y:10,facing:'up',zaRoyaleRank:'F',zaMission10Stage:1},state.revision+1));await get();assert.equal(state.world.interaction?.actions?.some(a=>a.action==='buyAdventureMint-modestmint')||false,false);await call('buyAdventureMint-modestmint',{},409);await walkTo({x:11,y:15});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-jaune-street');await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-zone8');assert.deepEqual(rawWorld().zaZone8Spent,zoneLedger);assert.deepEqual(rawWorld().teamIds,team);
+ }finally{globalThis.__adventureUser=oldUser;}
+});

@@ -11,7 +11,7 @@ test('zone eight gate, central area and saved location',()=>{
 });
 test('Jaune Street entrance honors Zone 8 access and reconnects on exit',()=>{
  const street={area:3,district:'lumiose-jaune-street',interior:null,x:11,y:1,zaRoyaleRank:'V',teamIds:['kept']};
- assert.equal(stepField(street,'up').blocked,true);
+ const early=stepField(street,'up');assert.equal(early.district,'lumiose-jaune-preplaza');assert.equal(stepField({...street,...early},'down').district,'lumiose-jaune-street');
  const open={...street,zaRoyaleRank:'F'},zone=stepField(open,'up');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone8',9,15]);
  assert.equal(stepField({...open,...zone},'down').district,'lumiose-jaune-street');
  const saved=restoreAdventurePosition(storeAdventurePosition({...open,...zone},22),22);

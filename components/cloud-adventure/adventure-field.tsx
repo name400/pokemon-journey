@@ -1143,6 +1143,15 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='o'){ctx.fillStyle='#667976';ctx.fillRect(px+3,py+6,tile-6,tile-12);ctx.fillStyle='#c1b091';for(let j=7;j<tile-5;j+=7)ctx.fillRect(px+5,py+j,tile-10,3);ctx.fillStyle='#e2d1b0';ctx.fillRect(px+4,py+4,tile-8,2);}
      if(c==='*'){ctx.fillStyle='#ca69b4';ctx.fillRect(px+9,py+5,tile-18,tile-10);ctx.fillStyle='#ffe0f6';ctx.fillRect(px+13,py+8,4,tile-16);}
      if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#a1cbb8';ctx.fillRect(px+8,py+7,tile-16,tile-14);}return;}
+    if(w.district==='lumiose-jaune-preplaza'&&!w.interior){
+     // The early circular marketplace is a 2D approximation; tiles remain the
+     // server's paved floor so the pre-Wild Zone has no grass encounters.
+     const r=Math.sqrt(((x-11)/8)**2+((y-8)/5)**2);
+     ctx.fillStyle=c==='#'?'#747e6d':r<=1?'#b9c994':'#e4dbc4';ctx.fillRect(px,py,tile,tile);
+     if(c===','){ctx.fillStyle='#d3c49d';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e8d9b9';ctx.fillRect(px,py+2,tile,2);}
+     if(c==='^'){ctx.fillStyle='#705039';ctx.fillRect(px+4,py+11,tile-8,tile-12);ctx.fillStyle='#a84d49';ctx.fillRect(px+2,py+4,tile-4,8);ctx.fillStyle='#f0ddb4';for(let i=3;i<tile-3;i+=8)ctx.fillRect(px+i,py+4,4,8);ctx.fillStyle='#8bb56e';ctx.fillRect(px+7,py+13,tile-14,3);}
+     if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-zone8'&&!w.interior){
      // Jaune Plaza's central earth and surrounding sand ring are visual only:
      // the existing map tile continues to control movement and encounters.
