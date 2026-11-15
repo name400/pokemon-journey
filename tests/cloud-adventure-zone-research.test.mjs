@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {LATER_ZONE_SPECIES,laterZoneResearch} from '../lib/cloud-adventure/adventure-zone-research.mjs';
 import {researchSummary,researchActivityCount,recordResearchActivity,recordResearchTrainerWin,researchTrainerProgress} from '../lib/cloud-adventure/adventure-research.mjs';
+test('research recording preserves unrecognized saved counters without blocking other progress',async()=>{
+ const {recordResearchEvolution,recordResearchTradeEvolution}=await import('../lib/cloud-adventure/adventure-research.mjs');
+ const s={zaResearchTrainerWins:{version:2,count:70},zaResearchEvolutions:75,zaResearchItemEvolutions:2,zaResearchTradeEvolutions:'future',zaResearchActivities:{bench:{version:2},cafe:1,extra:'kept'}};
+ assert.equal(recordResearchTrainerWin(s,'trainer'),false);
+ recordResearchEvolution(s,true);
+ assert.equal(recordResearchTradeEvolution(s,{adventureResearchTradeRecipient:'alice'},'alice'),false);
+ recordResearchActivity(s,'bench');recordResearchActivity(s,'cafe');
+ assert.deepEqual(s,{zaResearchTrainerWins:{version:2,count:70},zaResearchEvolutions:75,zaResearchItemEvolutions:3,zaResearchTradeEvolutions:'future',zaResearchActivities:{bench:{version:2},cafe:2,extra:'kept'}});
+ for(const future of [{version:2,bench:2},['future'],'future']){const state={zaResearchActivities:future};recordResearchActivity(state,'bench');assert.strictEqual(state.zaResearchActivities,future);}
+ const legacy={};recordResearchTrainerWin(legacy,'trainer');recordResearchEvolution(legacy,true);recordResearchActivity(legacy,'bench');assert.deepEqual(legacy,{zaResearchTrainerWins:1,zaResearchEvolutions:1,zaResearchItemEvolutions:1,zaResearchActivities:{bench:1}});
+});
 import {RANK_B_ROUNDS} from '../lib/cloud-adventure/adventure-rank-b.mjs';
 
 test('later zone tasks require every documented species once, never optional alpha records',()=>{
