@@ -9,3 +9,9 @@ test('lab wings place documented wild species without blocking their powered pat
 test('old lab saves keep their existing three encounters and no basement-two encounters',()=>{
  const s={district:'lumiose-lysandre-lab',zaMission35Stage:8};assert.deepEqual(lysandreVisibleWild(s).map(p=>p.id),['beldum','metang','arbok-alpha']);assert.deepEqual(lysandreVisibleWild({...s,zaLysandreFloor:2}),[]);assert.deepEqual(lysandreVisibleWild({...s,zaLysandreMazeV2:true,zaLysandreWing:'hub'}),[]);assert.equal(lysandreVisibleWild({...s,zaLysandreWildSpent:{beldum:true}}).some(p=>p.id==='beldum'),false);
 });
+
+test('lab encounters do not occupy the saved player tile in either layout',()=>{
+ for(const s of [{area:3,district:'lumiose-lysandre-lab',zaMission35Stage:4,zaLysandreMazeV2:true,zaLysandreWing:'a',x:3,y:4},{area:3,district:'lumiose-lysandre-lab',zaMission35Stage:8,x:3,y:5}]){
+  const id=s.zaLysandreMazeV2?'houndour':'beldum',before=structuredClone(s);assert.equal(lysandreVisibleWild(s).some(p=>p.id===id),false);assert.deepEqual(s,before);const moved={...s,x:4};assert.ok(lysandreVisibleWild(moved).some(p=>p.id===id));
+ }
+});
