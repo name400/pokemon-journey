@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {espaceVideMap,espaceAdjacentRoadMap,bleuSector4Map} from '../lib/cloud-adventure/adventure-espace-vide.mjs';
+test('both Bleu 6 courtyards connect to the street and preserve older positions',()=>{
+ const state={area:3,district:'lumiose-bleu6-approach',interior:null,x:11,y:8,teamIds:['kept'],zaMission20Stage:7};
+ const map=espaceAdjacentRoadMap('bleu6');
+ assert.ok(fieldPath(map,state,{x:4,y:4}).length);assert.ok(fieldPath(map,state,{x:18,y:12}).length);
+ assert.equal(map[7][8],'h');assert.equal(map[7][16],'.');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...state,x:18,y:12},119),119);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-bleu6-approach',18,12,['kept'],7]);
+ assert.ok(fieldPath(map,saved,{x:11,y:1}).length);assert.ok(fieldPath(map,saved,{x:21,y:8}).length);
+ const old=restoreAdventurePosition(storeAdventurePosition(state,119),119);assert.deepEqual([old.x,old.y],[11,8]);
+ const estival=espaceAdjacentRoadMap('estival');assert.equal(estival[4][4],'#');assert.equal(estival[11][17],'#');
+});
 test('Espace Vide connects lower Zone 10, Estival and Bleu Sector 6 safely',()=>{
  const start={area:3,district:'lumiose-zone10',interior:null,x:21,y:6,facing:'right',zaRoyaleRank:'F',zaZone10Upper:false};
  const lane=stepField(start,'right');assert.equal(lane.district,'lumiose-espace-vide');assert.equal(lane.zaEspaceLower,true);assert.equal(espaceVideMap(lane)[8][5],'l');
