@@ -3,6 +3,18 @@ import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {centerAt,recordNearbyCenter,registeredCenters} from '../lib/cloud-adventure/adventure-fast-travel.mjs';
 
+test('southern Rouge Street meets Centrico without opening Wild Zone 20',()=>{
+ const street={area:3,district:'lumiose-rouge-north',zaRougeStreetSouth:true,interior:null,x:13,y:15,teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(street),{x:11,y:1},street).length);
+ assert.equal(stepField({...street,x:11},'down').blocked,true);
+ const plaza=stepField(street,'down');assert.deepEqual([plaza.district,plaza.x,plaza.y,plaza.zaRougeStreetSouth],['lumiose-centrico-route',16,1,false]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...street,...plaza},175),175);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money],['lumiose-centrico-route',16,1,['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:8}).length);
+ assert.equal(stepField({...saved,zaRougeStreetSouth:{version:2}},'up').blocked,true);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaRougeStreetSouth],['lumiose-rouge-north',13,15,true]);
+});
+
 test('Rouge 2 center shares the existing Centrico registration and preserves saves',()=>{
  const s={area:3,district:'lumiose-rouge-sector2',interior:null,x:15,y:15,facing:'up',teamIds:['kept'],money:731};
  assert.ok(fieldPath(fieldMap(s),{x:9,y:15},s).length);
