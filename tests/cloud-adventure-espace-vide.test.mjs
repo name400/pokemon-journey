@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
-import {espaceVideMap} from '../lib/cloud-adventure/adventure-espace-vide.mjs';
+import {espaceVideMap,espaceAdjacentRoadMap,bleuSector4Map} from '../lib/cloud-adventure/adventure-espace-vide.mjs';
 test('Espace Vide connects lower Zone 10, Estival and Bleu Sector 6 safely',()=>{
  const start={area:3,district:'lumiose-zone10',interior:null,x:21,y:6,facing:'right',zaRoyaleRank:'F',zaZone10Upper:false};
  const lane=stepField(start,'right');assert.equal(lane.district,'lumiose-espace-vide');assert.equal(lane.zaEspaceLower,true);assert.equal(espaceVideMap(lane)[8][5],'l');
@@ -28,4 +28,18 @@ test('lower Espace Vide retains its path beside the canal edge',()=>{
  const lower={area:3,district:'lumiose-espace-vide',interior:null,x:1,y:8,zaEspaceLower:true,teamIds:['kept']},map=espaceVideMap(lower);
  assert.equal(map[11][0],'~');assert.equal(map[11][22],'~');assert.ok(fieldPath(map,lower,{x:21,y:8}).length);
  const saved=restoreAdventurePosition(storeAdventurePosition(lower,75),75);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaEspaceLower,saved.teamIds],[lower.district,1,8,true,['kept']]);
+});
+
+test('Bleu Sectors 6 and 4 connect directly without changing the Espace route',()=>{
+ const start={area:3,district:'lumiose-bleu6-approach',interior:null,x:11,y:1,teamIds:['kept'],zaMission20Stage:7};
+ assert.ok(fieldPath(espaceAdjacentRoadMap('bleu6'),start,{x:6,y:1}).length);
+ const north=stepField({...start,x:6,y:1},'up');
+ assert.deepEqual([north.district,north.x,north.y],['lumiose-bleu-sector4',11,15]);
+ assert.ok(fieldPath(bleuSector4Map(),north,{x:1,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...start,...north},81),81);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-bleu-sector4',11,15,['kept'],7]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu6-approach',6,1]);
+ assert.equal(stepField(start,'up').district,'lumiose-espace-vide');
+ const legacy=restoreAdventurePosition(storeAdventurePosition({...start,x:11,y:15},82),82);
+ assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.teamIds],['lumiose-bleu6-approach',11,15,['kept']]);
 });
