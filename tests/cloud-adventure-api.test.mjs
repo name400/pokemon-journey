@@ -11167,6 +11167,18 @@ test('Mission 3 detour blocks the new Vert 3 courtyard route in both directions'
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('Mission 40 anomaly teams retain their event moves on capture and reload',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission40-anomaly-moves-qa',displayName:'이상 우두머리 기술'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId;seedMon(lead,{...makeMon(152,100),boxId:lead,moves:['방어'],pp:{}});const mon=structuredClone(rawMon(lead)),team=[...state.world.teamIds];
+  const cases=[['steelix',208,'lumiose-zone3',3,11,undefined,'mission40Steelix',['지진','스톤에지','이판사판태클','구멍파기']],['gallade',475,'lumiose-research-zone',5,6,'5','mission40OtherAlpha',['스톤에지','사이코커터','리프블레이드','칼춤']],['pangoro',675,'lumiose-research-zone',17,6,'9','mission40OtherAlpha',['독찌르기','역린','기충전','누르기']]];
+  for(const [name,species,district,x,y,zone,action,moves] of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'up',zaMission40Stage:1,zaMission40Zone:zone,zaZone3TowerUpper:false,adventureBalls:{masterball:3}},state.revision+1));await get();await call(action);assert.equal(state.battle.teams[1][0].speciesId,species);assert.equal(state.battle.teams[1][0].adventureAlpha,true);assert.deepEqual(state.battle.teams[1][0].moves,moves);await get();assert.deepEqual(state.battle.teams[1][0].moves,moves);await call('battle',{command:{type:'move',move:'방어'}});assert.ok(state.battle);await call('ball',{ball:'masterball'});await get();assert.ok(rawWorld().zaMission40Anomalies.includes(name));const caught=state.box.find(p=>p.speciesId===species&&p.origin==='capture');assert.ok(caught);assert.deepEqual(rawMon(caught.boxId).moves,moves);assert.equal(rawMon(caught.boxId).adventureAlphaMove,moves[0]);while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});
+  }
+  assert.deepEqual(rawWorld().zaMission40Anomalies,['steelix','gallade','pangoro']);assert.equal(state.world.teamIds[0],team[0]);assert.deepEqual(rawMon(lead).ivs,mon.ivs);assert.equal(rawMon(lead).id,mon.id);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Mission 40 research preserves unknown saved entries and guards unsupported records',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission40-record-preservation-qa',displayName:'조사 기록 보존'};
  try{
