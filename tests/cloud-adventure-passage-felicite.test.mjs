@@ -41,3 +41,19 @@ test('Bleu Sectors 6 and 8 connect on foot while retaining older routes and save
  const legacy=restoreAdventurePosition(storeAdventurePosition({...start,x:11,y:15},84),84);
  assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.teamIds],['lumiose-bleu6-approach',11,15,['kept']]);
 });
+
+test('Bleu Sector 9 connects north-east to Sector 6 without moving the Old Building',()=>{
+ const start={area:3,district:'lumiose-bleu6-approach',interior:null,x:11,y:8,teamIds:['kept'],zaMission20Stage:7};
+ assert.ok(fieldPath(fieldMap(start),start,{x:1,y:8}).length);
+ const west=stepField({...start,x:1,y:8},'left');
+ assert.deepEqual([west.district,west.x,west.y],['lumiose-bleu-sector9',20,1]);
+ const sector9={...start,...west};const map=fieldMap(sector9);
+ assert.ok(fieldPath(map,sector9,{x:11,y:6}).length);assert.equal(map[5][11],'b');
+ assert.ok(fieldPath(map,sector9,{x:21,y:8}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(sector9,85),85);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-bleu-sector9',20,1,['kept'],7]);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu6-approach',1,8]);
+ assert.equal(stepField({...saved,x:21,y:8},'right').district,'lumiose-bleu-sector8');
+ const legacy=restoreAdventurePosition(storeAdventurePosition({...start,district:'lumiose-bleu-sector9',x:11,y:6},86),86);
+ assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.zaMission20Stage],['lumiose-bleu-sector9',11,6,7]);
+});
