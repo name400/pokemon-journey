@@ -11523,6 +11523,21 @@ test('Mission 3 captured Bunnelby keeps ZA growth on reconnect and level up',asy
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 20 Philippe heals on a new win and preserves retry and legacy battles',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission20-philippe-heal-qa',displayName:'Philippe 회복'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,other='mission20-heal-reserve';
+  const lead={...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{psystrike:3},status:'독',custom:{keep:true}};lead.hp=lead.maxHp-20;
+  const reserve={...makeMon(25,20),boxId:other,hp:0,status:'독',pp:{thunderbolt:1},item:'leftovers',shiny:true};
+  sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);
+  const start=async()=>{seedMon(id,lead);seedMon(other,reserve);seedWorld(storeAdventurePosition({...rawWorld(),teamIds:[id,other],activeId:id,area:3,district:'lumiose-rust',interior:null,x:11,y:6,facing:'up',zaMission20Stage:2},state.revision+1));await get();await call('mission20Philippe');};
+  await start();assert.equal(rawWorld().trainer.mission20HealV1,true);await call('forfeit');assert.equal(rawWorld().zaMission20Stage,2);
+  await start();const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();const coins=state.wallet.coins;await battle();await get();
+  assert.equal(rawWorld().zaMission20Stage,3);assert.equal(state.wallet.coins,coins+3008);assert.deepEqual(state.world.teamIds,[id,other]);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.deepEqual(rawMon(id).custom,{keep:true});assert.equal(rawMon(other).hp,rawMon(other).maxHp);assert.equal(rawMon(other).status,null);assert.equal(rawMon(other).shiny,true);assert.equal(rawMon(other).item,'leftovers');await call('mission20Philippe',{},409);
+  await start();const old=rawWorld().trainer;delete old.mission20HealV1;const oldCombat=rawWorld().combat,oldSim=Battle.fromJSON(oldCombat.snapshot);for(const foe of oldSim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({trainer:old,combat:{...oldCombat,snapshot:oldSim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.equal(rawWorld().zaMission20Stage,3);assert.equal(rawMon(other).hp,0);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 26 requires a Mega finishing attack while preserving in-progress legacy battles',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission26-mega-final-qa',displayName:'메가 마지막 공격'};
  try{
