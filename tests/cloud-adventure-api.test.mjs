@@ -11213,3 +11213,22 @@ test('Mission 35 lab exploration supplies preserve progress and stock limits',as
   assert.deepEqual(rawWorld().zaLysandreB1Supplies,['future','future',...cases.map(c=>c[3])]);assert.deepEqual(rawWorld().zaLysandreCards,['a','b','e']);assert.deepEqual(rawWorld().zaLysandrePowers,['a','b','e']);assert.deepEqual(rawWorld().teamIds,team);assert.deepEqual(rawMon(id),mon);assert.equal(state.wallet.coins,coins);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 35 lab keycards, power and files preserve unknown saved records',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission35-lab-records-qa',displayName:'연구소 진행 기록'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon=structuredClone(rawMon(id)),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const place=(extra)=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaMission35Stage:4,zaLysandreMazeV2:true,zaLysandreBossRoomV5:true,zaLysandreFloor:1,zaLysandreWing:'a',x:17,y:5,facing:'down',...extra},state.revision+1);
+  const malformed={version:2,entries:['future']};
+  const cases=[
+   {field:'zaLysandreCards',action:'mission35LabInspect',loc:{zaLysandreWing:'a',x:17,y:5},old:['future','b','b','e'],expected:'a',log:/3\/3/},
+   {field:'zaLysandrePowers',action:'lysandrePower',loc:{zaLysandreWing:'a',x:5,y:5},old:['future','b','b'],expected:'a',log:/전원/},
+   {field:'zaLysandreFiles',action:'mission35LabInspect',loc:{zaLysandreFloor:3,x:6,y:4},old:['future','b','b'],expected:'a',log:/2\/4/},
+  ];
+  for(const c of cases){
+   seedWorld(place({...c.loc,[c.field]:malformed}));await get();let before=structuredClone(rawWorld());assert.match((await call(c.action,{},409)).error,/기록 형식/);assert.deepEqual(rawWorld(),before);
+   seedWorld(place({...c.loc,[c.field]:c.old}));await get();const rev=state.revision;await call(c.action);assert.deepEqual(rawWorld()[c.field],[...c.old,c.expected]);assert.match(state.world.log.join(' '),c.log);await call(c.action,{revision:rev},409);await get();assert.deepEqual(rawWorld()[c.field],[...c.old,c.expected]);
+  }
+  seedWorld(place({zaLysandreWing:'e',x:17,y:10,facing:'up',zaLysandreCards:malformed}));await get();assert.match(state.world.interaction?.name||'',/C 키카드 문/);assert.equal(state.world.interaction?.action,undefined);assert.deepEqual(rawWorld().zaLysandreCards,malformed);assert.deepEqual(rawWorld().teamIds,team);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
