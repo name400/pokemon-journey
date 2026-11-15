@@ -313,6 +313,15 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      // Compressed street footprints and entrance placements remain provisional.
      const outer=x===0||x===22||y===0||y===16;
      ctx.fillStyle=c==='#'?(outer?'#978f86':'#d6c1af'):c===','?'#c3b9aa':(x+y)%2?'#e2ded2':'#ece7db';ctx.fillRect(px,py,tile,tile);
+     // Triangular grass patch, drawn on existing walkable pavement. Its 2D
+     // position is provisional and does not relocate the existing side quest.
+     if(c==='.'&&x>=14&&x<=16&&y>=3&&y<=5){
+      const gx=px-(x-14)*tile,gy=py-(y-3)*tile;
+      ctx.save();ctx.beginPath();ctx.rect(px,py,tile,tile);ctx.clip();
+      ctx.beginPath();ctx.moveTo(gx+tile*1.5,gy+5);ctx.lineTo(gx+5,gy+tile*3-5);ctx.lineTo(gx+tile*3-5,gy+tile*3-5);ctx.closePath();
+      ctx.fillStyle='#9fbd8a';ctx.fill();ctx.strokeStyle='#c9d5b0';ctx.lineWidth=3;ctx.stroke();
+      ctx.restore();
+     }
      if(c==='#'&&!outer){
       ctx.fillStyle=y<8?'#dcc3af':'#d0beb0';ctx.fillRect(px,py,tile,tile);
       ctx.fillStyle='#9b8172';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y]?.[x-1]!=='#')ctx.fillRect(px,py,4,tile);if(w.map[y]?.[x+1]!=='#')ctx.fillRect(px+tile-4,py,4,tile);
