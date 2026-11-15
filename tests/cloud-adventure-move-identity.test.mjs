@@ -6,6 +6,14 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Fletchling family uses ZA growth and preserves legacy or unknown forms',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [level,expected] of [[5,['울음소리','쪼기']],[8,['울음소리','쪼기','전광석화']],[25,['불꽃세례','깃털댄스','날려버리기','화염바퀴']]]){const mon=makeMon(661,level),old=structuredClone(mon);assert.deepEqual(prepareVerifiedWildMoves(mon).moves,expected);assert.deepEqual(mon,old);}
+ for(const [level,move] of [[8,'전광석화'],[12,'불꽃세례'],[16,'깃털댄스'],[20,'날려버리기'],[25,'화염바퀴'],[30,'강철날개'],[35,'에어슬래시'],[40,'고속이동'],[45,'플레어드라이브']]){const old={...makeMon(661,level-1),moves:['울음소리','쪼기','방어','빛의장막'],pp:{peck:2},custom:{keep:true}},marked=markAdventureVerifiedGrowth(old),result=applyAdventureLevelMoves(marked,{...marked,level},{});assert.equal(old.adventureFletchlingMovesV1,undefined);assert.deepEqual(result.pending,[move]);assert.deepEqual(result.mon.pp,{peck:2});assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...marked,level},{}).includes(move));}
+ for(const [id,move] of [[662,'날개치기'],[663,'브레이브버드']]){const mon={...makeMon(id,35),adventureFletchlingMovesV1:true,moves:['쪼기'],pp:{peck:2}};assert.deepEqual(applyAdventureEvolutionMoves(mon,{}).learned,[move]);assert.equal(mon.pp.peck,2);assert.ok(adventureLearnableMoves(mon,{}).includes(move));}
+ const old=makeMon(661,10),future={...old,adventureFletchlingMovesV1:{version:2}},form={...old,formId:999};assert.equal(markAdventureVerifiedGrowth(future),future);assert.equal(markAdventureVerifiedGrowth(form),form);assert.equal(prepareVerifiedWildMoves({...old,adventureAlpha:true}).adventureAlpha,true);assert.equal(adventureLearnableMoves(future,{}).includes('깃털댄스'),false);
+});
+
 test('new ordinary Bunnelby uses the reviewed growth table without modifying saved monsters',async()=>{
  const {prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [level,expected] of [[5,['째려보기','몸통박치기']],[13,['째려보기','몸통박치기','머드샷']],[32,['전광석화','세차게휘두르기','구멍파기','뛰어오르기']]]){

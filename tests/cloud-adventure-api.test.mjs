@@ -11428,6 +11428,17 @@ test('Mission 19 sewer records preserve unknown entries and reject unknown forma
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 3 Fletchling keeps ZA growth and evolution moves across reconnects',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission03-fletchling-growth-qa',displayName:'화살꼬빈 성장'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:8,y:7,facing:'up',zaMission03Stage:4,zaMission03FletchlingTried:true},state.revision+1));sql.prepare('UPDATE wallets SET balls=10 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('mission03Fletchling');await get();const id=state.world.teamIds.find(x=>x!==lead),caught=rawMon(id);assert.equal(caught.speciesId,661);assert.equal(caught.adventureFletchlingMovesV1,true);assert.deepEqual(caught.moves,['울음소리','쪼기']);assert.equal(state.world.zaMission03Stage,5);
+  seedMon(id,{...caught,level:7,moves:['울음소리','쪼기','방어','빛의장막'],pp:{peck:2},custom:{keep:true}});sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');await get();const rev=state.revision;await call('useAdventureRareCandy',{boxId:id});await get();assert.equal(rawMon(id).level,8);assert.equal(rawMon(id).pp.peck,2);assert.deepEqual(rawMon(id).custom,{keep:true});assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='전광석화'));await call('useAdventureRareCandy',{boxId:id,revision:rev},409);await call('resolveAdventureMove',{slot:null});
+  seedMon(id,{...rawMon(id),level:17,shiny:true,item:'leftovers'});await get();await call('evolve',{boxId:id,target:662});await get();assert.equal(rawMon(id).speciesId,662);assert.equal(rawMon(id).adventureFletchlingMovesV1,true);assert.equal(rawMon(id).shiny,true);assert.equal(rawMon(id).item,'leftovers');assert.deepEqual(rawMon(id).custom,{keep:true});assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='날개치기'));await call('resolveAdventureMove',{slot:null});
+  seedMon(id,{...rawMon(id),level:35});await get();await call('evolve',{boxId:id,target:663});await get();assert.equal(rawMon(id).speciesId,663);assert.equal(rawMon(id).adventureFletchlingMovesV1,true);assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='브레이브버드'));assert.deepEqual(rawMon(id).custom,{keep:true});
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 3 captured Bunnelby keeps ZA growth on reconnect and level up',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission03-bunnelby-growth-qa',displayName:'파르빗 성장'};
  try{
