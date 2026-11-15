@@ -11245,3 +11245,16 @@ test('rank V courier preserves a rolled reward until it is claimed once',async()
   await call('claimRoyaleCourier',{},409);await call('royaleVCourierOffer',{},409);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('hotel roof renewable crystals preserve tutorial progress and respawn independently',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=1700000000000;
+ globalThis.__adventureUser={userId:'hotel-roof-crystals-qa',displayName:'옥상 결정 검사'};globalThis.__adventureRandom=()=>0;Date.now=()=>now;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedMon(id,{...makeMon(150,80),boxId:id,moves:['사이코브레이크'],pp:{}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rooftop',interior:null,x:5,y:5,facing:'down',zaRooftopIntroduced:true,zaRooftopCrystalCleared:true,zaMegaShards:10,customPreserved:{value:17}},state.revision+1));await get();assert.equal(state.world.interaction.action,'smashHotelRoofCrystal');
+  const revision=state.revision;await call('smashHotelRoofCrystal');assert.equal(rawWorld().zaMegaShards,11);assert.equal(rawWorld().zaResearchCrystalBreaks,1);await call('smashHotelRoofCrystal',{revision},409);await get();await call('smashHotelRoofCrystal',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:8,y:5},state.revision+1));await get();await call('smashHotelRoofCrystal');assert.equal(rawWorld().zaMegaShards,17);
+  now+=600000;seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:5},state.revision+1));await get();await call('smashHotelRoofCrystal');assert.equal(rawWorld().zaMegaShards,18);assert.equal(rawWorld().zaRooftopCrystalCleared,true);assert.deepEqual(rawWorld().customPreserved,{value:17});
+  seedWorld({zaHotelRoofCrystalTimesV1:'future'});await get();await call('smashHotelRoofCrystal',{},409);assert.equal(rawWorld().zaHotelRoofCrystalTimesV1,'future');
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
+});
