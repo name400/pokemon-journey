@@ -30,3 +30,17 @@ test('Vernal Avenue and Vert 4 link near Cafe Classe without affecting roofs',()
  assert.equal(stepField({...road,zaVernalEastRoof:true},'right').blocked,true);
  for(const state of [road,sector]){const saved=restoreAdventurePosition(storeAdventurePosition(state,50),50);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],[state.district,state.x,state.y,['kept']]);}
 });
+
+test('Vert 5 and Vert 8 join on the ground while hotel and Zone 1 exits remain',()=>{
+ const start={area:3,district:'lumiose-vert-sector5',interior:null,x:11,y:1,teamIds:['kept'],zaMission05Stage:5};
+ assert.ok(fieldPath(fieldMap(start),start,{x:11,y:15}).length);
+ const south=stepField({...start,x:11,y:15},'down');assert.deepEqual([south.district,south.x,south.y],['lumiose-vert-sector8',9,1]);
+ const eight={...start,...south};assert.ok(fieldPath(fieldMap(eight),eight,{x:11,y:15}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(eight,90),90);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission05Stage],['lumiose-vert-sector8',9,1,['kept'],5]);
+ const north=stepField(saved,'up');assert.deepEqual([north.district,north.x,north.y],['lumiose-vert-sector5',11,15]);
+ assert.equal(stepField({...eight,x:11,y:1},'up').district,'lumiose');
+ assert.equal(stepField({...eight,x:11,y:15},'down').district,'lumiose-zone1');
+ const legacy=restoreAdventurePosition(storeAdventurePosition({...eight,x:11,y:1},91),91);
+ assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.teamIds],['lumiose-vert-sector8',11,1,['kept']]);
+});
