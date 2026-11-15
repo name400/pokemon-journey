@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+test('the eastern courtyard has two walkable approaches and preserves existing services',()=>{
+ const city={area:3,district:'lumiose-bleu-sector7',interior:null,x:16,y:10,zaSide45Stage:1,teamIds:['kept']};
+ const map=fieldMap(city);
+ for(const [x,y] of [[16,11],[15,12],[16,12],[17,12],[16,13],[16,14]])assert.equal(map[y][x],',');
+ assert.ok(fieldPath(map,city,{x:16,y:15}).length);
+ assert.equal(map[14][14],'j');assert.equal(map[13][11],'H');assert.equal(map[5][9],'l');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...city,x:16,y:12},115),115);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaSide45Stage],['lumiose-bleu-sector7',16,12,['kept'],1]);
+ assert.equal(stepField({...saved,x:16,y:13},'down').blocked,undefined);
+ const old=restoreAdventurePosition(storeAdventurePosition({...city,x:11,y:13},115),115);
+ assert.deepEqual([old.x,old.y,old.zaSide45Stage],[11,13,1]);
+});
 test('Bleu Sector 7 connects the park south gate, Sector 5, and Vernal Avenue',()=>{
  const city={area:3,district:'lumiose-bleu-sector7',interior:null,x:16,y:1,zaRoyaleRank:'F',teamIds:['kept']};
  assert.equal(stepField(city,'up').blocked,true);
