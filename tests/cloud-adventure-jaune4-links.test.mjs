@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldMap,fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {centerAt,recordNearbyCenter,registeredCenters} from '../lib/cloud-adventure/adventure-fast-travel.mjs';
+
+test('Jaune 4 center shares Hibernal registration and preserves saves',()=>{
+ const s={area:3,district:'lumiose-jaune-sector4',interior:null,x:14,y:6,facing:'right',teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(s),{x:11,y:15},s).length);
+ assert.equal(fieldDialogue(s).action,'heal');assert.equal(centerAt(s,{tile:'H',x:15,y:6}).id,'hibernal');
+ assert.equal(recordNearbyCenter(s,()=>fieldMap(s)),true);assert.deepEqual(s.zaFastTravelCenters,['hibernal']);
+ assert.equal(recordNearbyCenter(s,()=>fieldMap(s)),false);assert.equal(registeredCenters(s).filter(c=>c.id==='hibernal').length,1);
+ const restored=restoreAdventurePosition(storeAdventurePosition(s,170),170);
+ assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds,restored.money,restored.zaFastTravelCenters],['lumiose-jaune-sector4',14,6,['kept'],731,['hibernal']]);
+ assert.equal(fieldDialogue(restored).action,'heal');
+});
 
 test('Jaune 4 links the ground construction site and Hibernal, preserving saves and old exits',()=>{
  const before={area:3,district:'lumiose-mission12-jaune3',zaMission12Layer:'ground',interior:null,x:11,y:1,teamIds:['kept'],steps:42};
