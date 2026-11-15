@@ -210,3 +210,12 @@ test('visible Pumpkaboo forms preserve blocked cells and shiny individuals',()=>
  assert.equal(zone15Visible({...night,zaZone15Spent:{'pumpkaboo-super':true}},'3'),null);
  assert.equal(stepField({...base,x:16,y:6},'up').blocked,true);assert.equal(stepField({...night,x:18,y:6},'up').blocked,true);
 });
+
+test('Zone 15 garden day and night visible encounters keep saves and layers',()=>{
+ const base={area:3,district:'lumiose-zone15',interior:null,x:4,y:12,facing:'up',zaRoyaleRank:'D',zaZone15Upper:false,teamIds:['kept'],zaZone15Items:['cafe-ultra']};
+ const day={...base,zaZone15Period:'day'},night={...base,zaZone15Period:'night'};
+ assert.equal(zone15Visible(day,'o').species,544);assert.equal(zone15Visible(night,'o').species,93);assert.equal(zone15Visible(day,'m').species,15);assert.equal(zone15Visible(night,'m'),null);
+ assert.equal(zone15Map(day)[11][4],'o');assert.equal(fieldDialogue(day).action,'zone15Wild-whirlipede-garden');assert.equal(fieldDialogue(night).action,'zone15Wild-haunter-garden');
+ assert.equal(zone15Map({...day,zaZone15Spent:{'whirlipede-garden':true}})[11][4],'g');assert.equal(zone15Visible({...night,zaZone15Spent:{'whirlipede-garden':true}},'o').species,93);
+ assert.equal(zone15Visible({...day,zaZone15Upper:true},'o'),null);const same=restoreAdventurePosition(storeAdventurePosition({...day,x:4,y:11},203),203);assert.deepEqual([same.x,same.y,same.teamIds,same.zaZone15Items],[4,11,['kept'],['cafe-ultra']]);assert.equal(zone15Map(same)[11][4],'g');
+});
