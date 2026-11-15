@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,restoreAdventurePosition,storeAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('the provisional courtyard keeps show registration and restores old and new positions',()=>{
+ const base={area:3,district:'lumiose-bleu-sector8',interior:null,x:4,y:6,zaSide16Stage:1,teamIds:['kept']};
+ const map=fieldMap(base);assert.ok(fieldPath(map,base,{x:5,y:3}).length);
+ assert.equal(map[5][5],'^');assert.equal(map[14][16],'s');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...base,x:5,y:3},117),117);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaSide16Stage,saved.teamIds],['lumiose-bleu-sector8',5,3,1,['kept']]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:15}).length);
+ const old=restoreAdventurePosition(storeAdventurePosition({...base,x:16,y:15},117),117);
+ assert.deepEqual([old.x,old.y],[16,15]);assert.equal(fieldDialogue({...old,facing:'up'}).hairSalon,true);
+});
+
 test('Bleu Sector 8 links passage, South Boulevard, salon and Sector 9',()=>{
  const base={area:3,district:'lumiose-bleu-sector8',interior:null,x:21,y:8,facing:'up',teamIds:['kept'],zaMission20Stage:7};
  const map=fieldMap(base);assert.ok(fieldPath(map,base,{x:11,y:15}).length);assert.ok(fieldPath(map,base,{x:1,y:8}).length);
