@@ -10665,6 +10665,13 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 8 visible foe keeps ZA growth through capture and evolution',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone8-family-growth-qa',displayName:'구역 8 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,iv=structuredClone(rawMon(lead).ivs),key='zone8:numel:322';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone8',interior:null,x:6,y:13,facing:'up',zaRoyaleRank:'F',zaZone8Spent:{},zaWildShinyRolls:{[key]:false},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();await call('zone8Wild-numel');assert.equal(rawWorld().encounter.adventureZone8GrowthV1,true);assert.deepEqual(rawWorld().encounter.moves,['기충전','땅고르기','망각술','분연']);await get();await call('flee');await get();globalThis.__adventureRandom=()=>0;await call('throwZoneVisible',{ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===322);assert.ok(caught);const id=caught.boxId;assert.equal(rawMon(id).adventureZone8GrowthV1,true);seedMon(id,{...rawMon(id),level:33,pp:{tackle:3},custom:{keep:true}});await get();await call('evolve',{boxId:id,target:323});await get();assert.equal(rawMon(id).adventureZone8GrowthV1,true);assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(rawMon(id).custom,{keep:true});assert.ok(rawMon(id).moves.includes('스톤샤워')||state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='스톤샤워'));assert.deepEqual(rawMon(lead).ivs,iv);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('Zone 7 visible foe keeps ZA growth through capture and evolution',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone7-family-growth-qa',displayName:'구역 7 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
  try{
