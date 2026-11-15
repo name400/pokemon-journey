@@ -10782,6 +10782,20 @@ test('Magenta 8 ground items protect inventory and persist across reload',async(
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Magenta 8 roof links to Magenta 7 without the northern fire gate',async()=>{
+ const previousUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'magenta8-east-glide-qa',displayName:'마젠타 옥상 연결'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,before=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector8-route',interior:null,x:2,y:3,facing:'up',zaMission15Stage:1,zaMagenta7NorthOpen:false,zaMagenta8Items:['grass-great'],adventureBalls:{nestball:99}},state.revision+1));await get();await call('screwRoofAccess');await get();assert.equal(state.world.district,'lumiose-screw-magenta8');
+  await walkTo({x:5,y:8});await call('face',{direction:'left'});await call('magenta8ScaffoldItem-southwest-nest',{},409);assert.deepEqual(rawWorld().zaMagenta8Items,['grass-great']);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:8,facing:'left',adventureBalls:{nestball:98}},state.revision+1));await get();const rev=state.revision;await call('magenta8ScaffoldItem-southwest-nest');await call('magenta8ScaffoldItem-southwest-nest',{revision:rev},409);await get();assert.equal(state.world.adventureBalls.nestball,99);
+  await walkTo({x:13,y:5});await call('face',{direction:'right'});await call('magenta8ScaffoldItem-center-candy');await get();assert.equal(state.inventory['za-exp-candy-m'],1);
+  await walkTo({x:19,y:8});await call('rotoGlide',{},409);seedWorld(storeAdventurePosition({...rawWorld(),x:19,y:8,facing:'right',zaMission15Stage:2},state.revision+1));await get();await call('rotoGlide');await get();assert.equal(state.world.district,'lumiose-magenta7-south-roof');assert.equal(state.world.zaMagenta7NorthOpen,false);
+  await walkTo({x:5,y:11});await call('face',{direction:'left'});await call('magenta7RoofItem-south-firestone');await get();assert.equal(state.inventory.firestone,1);assert.deepEqual(rawWorld().zaMagenta8Items,['grass-great','southwest-nest','center-candy']);
+  await walkTo({x:11,y:3});await call('rotoGlide',{},409);await walkTo({x:3,y:8});await call('rotoGlide');await get();assert.equal(state.world.district,'lumiose-screw-magenta8');assert.deepEqual([state.world.x,state.world.y],[19,8]);assert.deepEqual(rawMon(lead).ivs,before.ivs);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Magenta 8 scaffold items preserve prior collections and prevent duplicates',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta8-scaffold-qa',displayName:'마젠타 8 비계'};
  try{

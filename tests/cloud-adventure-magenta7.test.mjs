@@ -11,6 +11,11 @@ test('southern roof gliding unlock and collected screw survive reentry',()=>{
  assert.notEqual(fieldMap({...south,zaColorfulScrewsFound:['future-id','magenta7-south-roof']})[4][5],'!');
 });
 
+test('southern roof can be reached and exited without opening the northern courtyard',()=>{
+ const west={area:3,district:'lumiose-screw-magenta8',interior:null,x:19,y:8,zaMission15Stage:2,zaMagenta7NorthOpen:false};
+ const landing=rotoGlideLanding(west),south={...west,...landing};assert.deepEqual([landing.district,landing.x,landing.y],['lumiose-magenta7-south-roof',3,8]);assert.equal(rotoGlideLanding({...south,x:11,y:3}),null);assert.equal(rotoGlideLanding(south).district,west.district);
+});
+
 test('northern roof requires the opened courtyard and restores its separate floor',()=>{
  const s={area:3,district:'lumiose-magenta-sector7',interior:null,x:6,y:3,teamIds:['kept'],zaMagenta7Items:['north-pearl']};
  assert.equal(stepField(s,'up').blocked,true);

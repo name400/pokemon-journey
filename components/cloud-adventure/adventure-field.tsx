@@ -489,7 +489,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     }
     if(['lumiose-magenta-sector1','lumiose-magenta-sector2','lumiose-magenta-sector3','lumiose-magenta-sector3-roof','lumiose-magenta-sector4','lumiose-magenta-sector4-roof','lumiose-magenta-sector6','lumiose-magenta-sector6-roof','lumiose-magenta-sector7','lumiose-magenta7-north-roof','lumiose-magenta7-south-roof','lumiose-magenta-sector9'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#987e91':c==='g'?'#9bb985':c===','?'#c8b2bd':(x+y)%2?'#e1d5df':'#eae0e8';ctx.fillRect(px,py,tile,tile);
      if(['lumiose-magenta7-north-roof','lumiose-magenta7-south-roof'].includes(w.district)&&'ijknt'.includes(c)){ctx.fillStyle='#d4c6aa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
-     if((w.district==='lumiose-magenta7-north-roof'&&x===17&&y===10)||(w.district==='lumiose-magenta7-south-roof'&&x===11&&y===3)){ctx.fillStyle='#477d93';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공',px+tile/2,py+tile/2+3);}
+     if((w.district==='lumiose-magenta7-north-roof'&&x===17&&y===10)||(w.district==='lumiose-magenta7-south-roof'&&((x===11&&y===3&&w.zaMagenta7NorthOpen===true)||(x===3&&y===8)))){ctx.fillStyle='#477d93';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공',px+tile/2,py+tile/2+3);}
      if(w.district==='lumiose-magenta-sector7'&&c===';'){ctx.fillStyle=(x+y)%2?'#c7c0aa':'#d6cbb5';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#b8aa92';ctx.fillRect(px,py,tile,2);}
      if(w.district==='lumiose-magenta-sector7'&&('ijkn'.includes(c))){ctx.fillStyle='#d4c6aa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
      if(w.district==='lumiose-magenta-sector7'&&c==='r'){ctx.fillStyle='#a3b286';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#6f845f';for(let n=0;n<4;n++)ctx.fillRect(px+3+n*7,py+5+(n%2)*5,5,17);}
@@ -944,7 +944,8 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      // Scaffold and nearby roof share a compressed draft plane; no collision changes.
      const scaffold=x<=10&&c!=='#';ctx.fillStyle=c==='#'?'#667980':scaffold?'#a28a6c':'#adb6ae';ctx.fillRect(px,py,tile,tile);
      if(scaffold){ctx.fillStyle='#cfb390';for(let n=4;n<tile;n+=8)ctx.fillRect(px+2,py+n,tile-4,2);ctx.fillStyle='#786858';ctx.fillRect(px+tile-3,py,2,tile);}else if(c!=='#'){ctx.fillStyle='#8c9892';ctx.fillRect(px,py+tile-3,tile,2);}
-     if(c==='i'||c==='k'){ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
+     if('ikopq'.includes(c)){ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
+     if(x===19&&y===8){ctx.fillStyle='#477d93';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공',px+tile/2,py+tile/2+3);}
      if(c==='j'){ctx.fillStyle='#65584d';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e7d8b6';for(let n=0;n<3;n++)ctx.fillRect(px+6,py+7+n*7,tile-12,2);}return;
     }
     if(isScrewGlideRoof(w.district)&&!w.interior){
