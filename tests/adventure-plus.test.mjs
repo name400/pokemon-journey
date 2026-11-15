@@ -4,6 +4,13 @@ import {makeMon} from '../lib/game.mjs';
 import {createCombat,playCpu,combatView} from '../lib/party-battle.mjs';
 import {adventureMoveMastered} from '../lib/cloud-adventure/adventure-plus-mastery.mjs';
 
+test('early story birds and rabbits have species-specific natural mastery',()=>{
+ for(const [species,move,level] of [[661,'peck',10],[661,'quickattack',11],[661,'ember',15],[661,'flareblitz',48],[662,'wingattack',20],[663,'wingattack',10],[663,'bravebird',38],[659,'mudshot',10],[659,'dig',31],[659,'earthquake',47],[660,'bulldoze',23]]){
+  const mon=makeMon(species,level-1),before=structuredClone(mon);assert.equal(adventureMoveMastered(mon,move),false,`${species} ${move}`);assert.equal(adventureMoveMastered({...mon,level},move),true,`${species} ${move}`);assert.deepEqual(mon,before);assert.equal(adventureMoveMastered(JSON.parse(JSON.stringify({...mon,level})),move),true);
+ }
+ assert.equal(adventureMoveMastered(makeMon(661,100),'wingattack'),false);assert.equal(adventureMoveMastered(makeMon(662,100),'bravebird'),false);assert.equal(adventureMoveMastered(makeMon(659,100),'bulldoze'),false);assert.equal(adventureMoveMastered(makeMon(660,100),'earthpower'),false);assert.equal(adventureMoveMastered({...makeMon(659,5),adventurePlusMastered:['earthpower']},'earthpower'),true);
+});
+
 test('reviewed Ralts family mastery respects species and exact level',()=>{
  for(const [species,move,level] of [[280,'confusion',9],[281,'psybeam',21],[282,'wish',35],[282,'dazzlinggleam',33],[475,'psybeam',10],[475,'psychocut',45],[475,'leafblade',53]]){
   const before={...makeMon(species,level-1)},at={...before,level};assert.equal(adventureMoveMastered(before,move),false,`${species} ${move}`);assert.equal(adventureMoveMastered(at,move),true,`${species} ${move}`);assert.equal(adventureMoveMastered(JSON.parse(JSON.stringify(at)),move),true);

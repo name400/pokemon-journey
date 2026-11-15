@@ -43,3 +43,6 @@
 단일 전투의 기술 선택 화면은 프리즈드라이·플라잉프레스·사우전드애로의 특수 타입 상성을 일반 타입표와 구분한다. [원작 프리즈드라이 설명](https://bulbapedia.bulbagarden.net/wiki/Freeze-Dry_(move))은 물 타입 약점을 명시한다. 실행 시 타입이 바뀔 수 있는 기술과 타입 변경 특성은 잘못된 예측 대신 상성 정보 없음을 표시한다. 이 표시는 특성·도구 등 실제 피해 전체를 예측하지 않으며, 저장 상태나 배틀 판정에는 이벤트를 발생시키지 않는다. 다수 전투의 별도 대상별 표시는 이 변경에 포함되지 않는다.
 
 다수 상대·동료 및 세 자리 전투에도 같은 타입 기준 상성 예측을 대상별로 연결했다. 살아 있는 실제 상대만 슬롯별로 표시하고, 타입이 변할 수 있는 기술은 상성 정보를 확정하지 않는다. 이는 [원작의 다수 상대 공격](https://legends.pokemon.com/en-us/news/z-a-battle-club)을 기존 턴제 UI에 옮긴 표시이며 특성·도구·실시간 이동은 예측하지 않는다. 전투 스냅샷·보유함과 행동 판정은 변경하지 않는다. 엔진 검사에서 물·얼음 상대별 상성, 불확실한 기술, 재접속 및 실제 대상 공격을 확인했다. 브라우저와 실기 화면은 검증하지 않았다.
+
+- 초반 포획 대상인 [화살꼬빈](https://www.dittobase.com/legends-za/pokedex/fletchling)·[불화살빈](https://www.dittobase.com/legends-za/pokedex/fletchinder)·[파이어로](https://www.dittobase.com/legends-za/pokedex/talonflame)와 [파르빗](https://www.dittobase.com/legends-za/pokedex/bunnelby)·[파르토](https://www.dittobase.com/legends-za/pokedex/diggersby)의 확인된 공격 기술에 자연 숙달 레벨을 연결했다. 날개치기·브레이브버드·땅고르기는 출처에 명시된 진화형별 레벨만 적용한다. 미확인 기술과 별도의 변화 기술 플러스 효과를 추정하지 않는다. 기존 개체나 숙달의씨 이력은 수정하지 않고 현재 종·레벨로 판정한다.
+- 종별 숙달 직전·해당 레벨, 진화형 전용 기술과 씨앗 이력은 단위 검사했고, 화살꼬빈의 전투 선택·재접속·중복 요청 및 기존 이로치 보존은 격리 SQLite API에서 확인했다. 자료는 2차 출처이며 원작 실기·운영 D1·Sites 병합본은 확인하지 않았다. 다른 종과 변화 기술플러스 효과는 여전히 남아 있다.
