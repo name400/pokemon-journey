@@ -614,6 +614,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      const courtyard=y===4&&x>=4&&x<=6;
      ctx.fillStyle=c==='#'?'#70817e':c===','?'#b8b8a6':(x+y)%2?'#d9dfd3':'#e7e9dc';ctx.fillRect(px,py,tile,tile);
      if(c===','){ctx.fillStyle='#a5aaa0';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:0),py,1,tile-3);}
+     // The guide places a fence overlooking the waterway. These blocked edge
+     // tiles only suggest that boundary; precise railing geometry is unknown.
+     if(c==='#'&&x===22&&y>=6&&y<=11){
+      ctx.fillStyle='#568f98';ctx.fillRect(px+7,py,tile-7,tile);
+      ctx.fillStyle='#85b7b5';ctx.fillRect(px+11,py+9,tile-15,2);ctx.fillRect(px+15,py+22,tile-19,2);
+      ctx.fillStyle='#5d6866';ctx.fillRect(px+2,py,3,tile);ctx.fillRect(px+1,py+5,7,2);ctx.fillRect(px+1,py+tile-7,7,2);
+     }
      if(building&&c==='#'){
       const roof=y===3||y===10;ctx.fillStyle=roof?'#678583':'#d9d1be';ctx.fillRect(px,py,tile,tile);
       if(roof){ctx.fillStyle='#a5b4aa';ctx.fillRect(px+1,py+tile-5,tile-2,3);ctx.fillStyle='rgba(255,255,255,.2)';ctx.fillRect(px+2,py+4,tile-4,2);}
@@ -623,6 +630,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(courtyard){ctx.fillStyle='#9fb69a';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#d8d3bd';ctx.fillRect(px+tile/2-3,py,6,tile);ctx.fillStyle='#688e71';ctx.fillRect(px+3,py+3,4,4);ctx.fillRect(px+tile-7,py+tile-7,4,4);}
      if(c==='s'){ctx.fillStyle='#827a69';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e2d8bd';for(let k=7;k<tile-4;k+=6)ctx.fillRect(px+6,py+k,tile-12,2);}
      if(c==='X'&&x===22&&(y===5||y===12)){ctx.fillStyle='#7aa394';ctx.fillRect(px+2,py+3,tile-4,tile-6);ctx.fillStyle='#d9ead2';ctx.fillRect(px+4,py+5,3,tile-10);ctx.fillRect(px+tile-7,py+5,3,tile-10);ctx.fillRect(px+6,py+5,tile-12,3);}
+     else if(c==='X'&&x===22&&y===14){ctx.fillStyle='#72969a';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#d9e1d1';for(let k=7;k<tile-4;k+=6)ctx.fillRect(px+5,py+k,tile-10,2);}
      else if(c==='X'){ctx.fillStyle='#7e9a91';ctx.fillRect(px+6,py+6,tile-12,tile-12);}
      return;
     }
