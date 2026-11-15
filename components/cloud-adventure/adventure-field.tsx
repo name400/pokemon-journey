@@ -1205,6 +1205,12 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='u'){ctx.fillStyle='#8b5855';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#f1ded0';ctx.fillRect(px+3,py+3,tile-6,5);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('르 와우',px+tile/2,py+21);}
      if(c==='X'){ctx.fillStyle='#688b80';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
+    if(w.district==='lumiose-jaune-sector1'&&!w.interior){
+     // Open, building-free sector; paving and screen geometry are provisional.
+     ctx.fillStyle=c==='#'?'#968c80':c===','?'#bfb1a2':(x+y)%2?'#e4d9c9':'#eee5d6';ctx.fillRect(px,py,tile,tile);
+     if(c===','){ctx.fillStyle='#e7dccc';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);}
+     if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-jaune-sector5'&&!w.interior){
      // Courtyard and building footprints are provisional; the courtyard remains walkable.
      ctx.fillStyle=c==='#'?'#a59183':c===';'?((x+y)%2?'#d0c4b0':'#d9cfbc'):c===','?'#bbada0':(x+y)%2?'#e5dace':'#eee4d9';ctx.fillRect(px,py,tile,tile);
