@@ -2,6 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Vert Sector 9 building alley preserves the canal bridge, missions and old positions',()=>{
+ const base={area:3,district:'lumiose-vert-sector9',interior:null,x:11,y:7,zaMission26Started:true,zaSide74Stage:1,teamIds:['kept']};
+ const map=fieldMap(base);for(let y=2;y<=6;y++)for(let x=10;x<=12;x++)assert.equal(map[y][x],',');
+ assert.ok(fieldPath(map,base,{x:11,y:1}).length);assert.ok(fieldPath(map,base,{x:11,y:15}).length);
+ assert.equal(map[11][11],':');assert.equal(map[11][4],'~');assert.equal(map[6][5],'q');
+ const old=restoreAdventurePosition(storeAdventurePosition({...base,x:11,y:3},122),122);
+ assert.deepEqual([old.district,old.x,old.y,old.zaSide74Stage,old.teamIds],['lumiose-vert-sector9',11,3,1,['kept']]);
+ assert.equal(stepField({...old,x:11,y:15},'down').district,'lumiose-zone1');
+});
+
 test('Zone 1 street is non-grass while neighboring grass and old positions remain intact',()=>{
  const base={area:3,district:'lumiose-zone1',interior:null,x:6,y:8,facing:'right',teamIds:['kept'],steps:42};
  const map=fieldMap(base);
