@@ -525,6 +525,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
       if(c===','){ctx.fillStyle='#f0e1d5';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);}
       if(c==='u'&&x===16&&y===11){ctx.fillStyle='#a85650';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('식당',px+tile/2,py+20);}
      }
+     // Rouge 7's existing court and buildings are a provisional 2D layout.
+     if(w.district==='lumiose-rouge-sector7'){
+      const building=c==='#'&&((x>=3&&x<=7&&y>=3&&y<=6)||(x>=15&&x<=19&&y>=11&&y<=14));
+      if(building){ctx.fillStyle='#c1a89b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#ead5c0';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#8d7870';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#dfcbb7';ctx.fillRect(px+5,py+tile-6,7,3);ctx.fillRect(px+tile-12,py+tile-6,7,3);}else{ctx.fillStyle='#a58e81';ctx.fillRect(px+3,py+10,tile-6,2);}}
+      if(c===';'){ctx.fillStyle=(x+y)%2?'#b78379':'#c18d82';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#f2e4d7';if(x===15)ctx.fillRect(px+2,py,2,tile);if(x===19)ctx.fillRect(px+tile-4,py,2,tile);if(y===6)ctx.fillRect(px,py+2,tile,2);if(y===10)ctx.fillRect(px,py+tile-4,tile,2);if(y===8)ctx.fillRect(px,py+tile/2-1,tile,2);}
+      if(c===','){ctx.fillStyle='#f0e0d2';if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);}
+     }
      if(w.district==='lumiose-rouge-sector7'&&c==='l'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);ctx.fillStyle='#e4ceae';for(let j=8;j<tile-5;j+=6)ctx.fillRect(px+7,py+j,tile-14,2);}if(w.district==='lumiose-rouge-sector5'&&c==='b'){ctx.fillStyle='#795c70';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('탐정',px+tile/2,py+20);}if(w.district==='lumiose-rouge-sector3'&&(c==='q'||c==='m')){ctx.fillStyle=c==='q'?'#b35d54':'#bf9374';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='q'?'안내':'볼',px+tile/2,py+20);}if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-saison-canalside'&&!w.interior){
      // Draft visual interpretation of the existing canal, bridge and quays.
