@@ -3,6 +3,18 @@ import assert from 'node:assert/strict';
 import {zone11Map,zone11Unlocked,zone11Encounter,zone11Visible,zone11WaterAt,ZONE11_WEST_FORK,ZONE11_WEST_BEND_WATER,ZONE11_WEST_BEND_BANK,ZONE11_SOUTHWEST_STAIRS,zone11ExitLabel} from '../lib/cloud-adventure/adventure-zone11.mjs';
 import {stepField,storeAdventurePosition,restoreAdventurePosition,fieldPath,fieldMap,fieldDialogue,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Jaune 10 and Saison promenade connect outside the locked Wild Zone 11',()=>{
+ const city={area:3,district:'lumiose-jaune-sector10',interior:null,x:1,y:12,zaRoyaleRank:'F',zaMission03Stage:7,teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(city),city,{x:21,y:8}).length);assert.equal(stepField({...city,x:21,y:8},'right').blocked,true);
+ const bank=stepField(city,'left');assert.deepEqual([bank.district,bank.x,bank.y],['lumiose-saison-canalside',21,8]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...city,...bank},125),125);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission03Stage,saved.teamIds],['lumiose-saison-canalside',21,8,7,['kept']]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:1}).length);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-jaune-sector10',1,12]);
+ assert.equal(stepField({...city,x:1,y:8},'left').district,'lumiose-jaune-sector6');
+ const old=restoreAdventurePosition(storeAdventurePosition({...city,x:11,y:1},125),125);assert.deepEqual([old.x,old.y],[11,1]);
+});
+
 test('Zone 11 northwest ledge preserves the old entrance and its saved position',()=>{
  const road={area:3,district:'lumiose-jaune-sector10',interior:null,x:21,y:9,facing:'right',zaRoyaleRank:'E',teamIds:['kept']};
  assert.equal(stepField({...road,zaRoyaleRank:'F'},'right').blocked,true);
