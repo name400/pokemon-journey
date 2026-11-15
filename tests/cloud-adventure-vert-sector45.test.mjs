@@ -44,3 +44,18 @@ test('Vert 5 and Vert 8 join on the ground while hotel and Zone 1 exits remain',
  const legacy=restoreAdventurePosition(storeAdventurePosition({...eight,x:11,y:1},91),91);
  assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.teamIds],['lumiose-vert-sector8',11,1,['kept']]);
 });
+
+test('Vert 8 and Vert 9 connect directly and preserve the waterway and old saves',()=>{
+ const start={area:3,district:'lumiose-vert-sector8',interior:null,x:11,y:8,teamIds:['kept'],zaMission03Stage:7};
+ assert.ok(fieldPath(fieldMap(start),start,{x:1,y:8}).length);
+ const west=stepField({...start,x:1,y:8},'left');assert.deepEqual([west.district,west.x,west.y],['lumiose-vert-sector9',21,8]);
+ const nine={...start,...west},map=fieldMap(nine);assert.equal(map[11][5],'~');assert.equal(map[11][11],':');
+ assert.ok(fieldPath(map,nine,{x:11,y:15}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(nine,92),92);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission03Stage],['lumiose-vert-sector9',21,8,['kept'],7]);
+ const east=stepField(saved,'right');assert.deepEqual([east.district,east.x,east.y],['lumiose-vert-sector8',1,8]);
+ assert.equal(stepField({...nine,x:11,y:15},'down').district,'lumiose-zone1');
+ assert.equal(stepField({...start,x:11,y:1},'up').district,'lumiose');
+ const legacy=restoreAdventurePosition(storeAdventurePosition({...nine,x:11,y:10},93),93);
+ assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.teamIds],['lumiose-vert-sector9',11,10,['kept']]);
+});
