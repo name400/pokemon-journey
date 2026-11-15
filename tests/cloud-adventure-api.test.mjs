@@ -11291,3 +11291,14 @@ test('early royale couriers add battles and preserve pending rewards across rank
   assert.equal(state.inventory['za-exp-candy-s'],9);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',x:3,y:11,facing:'down',zaRoyaleRank:'Y',zaRoyaleYSessionWins:{version:2}},state.revision+1));await get();await call('royaleEarlyCourier',{},409);assert.deepEqual(rawWorld().zaRoyaleYSessionWins,{version:2});
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('renewable crystal dialogue reports server cooldown and protects unknown records',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=1700000000000;globalThis.__adventureUser={userId:'crystal-cooldown-qa',displayName:'결정 재생'};globalThis.__adventureRandom=()=>0;Date.now=()=>now;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon={...makeMon(150,80),boxId:id,moves:['사이코브레이크'],pp:{}};seedMon(id,mon);
+  const place=(district,x,y,extra={})=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'down',zaRooftopCrystalCleared:true,zaZone9Upper:true,...extra},state.revision+1);
+  seedWorld(place('lumiose-zone9',4,3,{zaZone9CrystalTimes:{future:777}}));await get();assert.equal(state.world.interaction.action,'smashZone9Crystal');await call('smashZone9Crystal');await get();assert.equal(state.world.interaction.action,undefined);assert.match(state.world.interaction.text,/600초/);assert.deepEqual(rawWorld().zaZone9CrystalTimes,{future:777,'4,3':now});await call('smashZone9Crystal',{},409);
+  now+=600000;await get();assert.equal(state.world.interaction.action,'smashZone9Crystal');seedWorld(place('lumiose-zone9',4,3,{zaZone9CrystalTimes:'future-version'}));await get();assert.match(state.world.interaction.text,/확인할 수 없습니다/);await call('smashZone9Crystal',{},409);assert.equal(rawWorld().zaZone9CrystalTimes,'future-version');seedWorld(place('lumiose-zone9',4,3,{zaZone9CrystalTimes:{version:2,data:{'4,3':now}}}));await get();await call('smashZone9Crystal',{},409);assert.deepEqual(rawWorld().zaZone9CrystalTimes,{version:2,data:{'4,3':now}});
+  seedWorld(place('lumiose-rooftop',5,5,{zaHotelRoofCrystalTimesV1:{}}));await get();await call('smashHotelRoofCrystal');await get();assert.match(state.world.interaction.text,/600초/);assert.equal(state.world.interaction.action,undefined);now+=600000;await get();assert.equal(state.world.interaction.action,'smashHotelRoofCrystal');assert.deepEqual(rawWorld().teamIds,[id]);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
+});
