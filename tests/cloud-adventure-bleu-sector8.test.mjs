@@ -43,3 +43,10 @@ test('Bleu 8 courtyard pickups preserve old saves and the show marker',()=>{
  assert.deepEqual([saved.x,saved.y,saved.teamIds],[5,3,['kept']]);assert.deepEqual([map[3][4],map[3][5],map[3][6],map[4][4]],['k','l','i','j']);assert.equal(map[5][5],'^');assert.ok(fieldPath(map,saved,{x:11,y:15}).length);
  saved=restoreAdventurePosition(storeAdventurePosition({...saved,zaBleu8Items:['northwest-super']},201),201);map=fieldMap(saved);assert.equal(map[3][4],';');assert.equal(map[3][5],'l');assert.equal(map[5][5],'^');
 });
+
+test('Bleu 9 courtyard and ground items preserve the Old Building and saved positions',()=>{
+ const s={area:3,district:'lumiose-bleu-sector9',interior:null,x:12,y:3,facing:'down',zaMission20Stage:7,teamIds:['kept']};
+ let saved=restoreAdventurePosition(storeAdventurePosition(s,207),207),map=fieldMap(saved);assert.deepEqual([saved.x,saved.y,saved.teamIds],[12,3,['kept']]);
+ assert.equal(map[3][12],'i');assert.equal(map[4][20],'j');assert.equal(map[6][19],'k');assert.equal(map[5][11],'b');assert.ok(fieldPath(map,saved,{x:11,y:15}).length);
+ assert.equal(fieldDialogue({...saved,x:11,y:6,facing:'up'}).action,'mission20EnterHouse');saved=restoreAdventurePosition(storeAdventurePosition({...saved,zaBleu9Items:['court-protein']},208),208);map=fieldMap(saved);assert.equal(map[3][12],';');assert.equal(map[5][11],'b');assert.equal(saved.zaMission20Stage,7);
+});

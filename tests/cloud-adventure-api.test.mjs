@@ -10782,3 +10782,16 @@ test('Café Soleil serves drinks while preserving the Slurpuff quest and saves',
   seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=349 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('soleilWater',{},409);assert.deepEqual(rawMon(id),damaged);assert.equal(rawWorld().zaResearchActivities.cafe,1);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Bleu 9 courtyard items preserve the old building mission and full inventory',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu9-courtyard-qa',displayName:'블루 9 안뜰'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  const place=async(x,y,extra={})=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector9',interior:null,x,y,facing:'down',zaMission20Stage:7,...extra},state.revision+1));await get();};
+  await place(12,3);assert.equal(state.world.interaction.action,'bleu9Item-court-protein');const key=JSON.stringify([globalThis.__adventureUser.userId,'protein']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'protein');await get();await call('bleu9Item-court-protein',{},409);assert.equal(rawWorld().zaBleu9Items,undefined);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;await call('bleu9Item-court-protein');await get();assert.equal(state.inventory.protein,1);await call('bleu9Item-court-protein',{revision:rev},409);await call('bleu9Item-court-protein',{},409);
+  await place(20,4);const potions=state.wallet.super_potions;await call('bleu9Item-east-super');await get();assert.equal(state.wallet.super_potions,potions+1);
+  await place(19,6);await call('bleu9Item-east-awakening');await get();assert.equal(state.inventory.awakening,1);assert.equal(rawWorld().zaMission20Stage,7);assert.deepEqual(state.world.teamIds,team);assert.equal(rawWorld().zaBleu9Items.length,3);
+  await place(11,6,{facing:'up'});assert.equal(state.world.interaction.action,'mission20EnterHouse');
+ }finally{globalThis.__adventureUser=previousUser;}
+});
