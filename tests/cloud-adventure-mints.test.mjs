@@ -18,3 +18,10 @@ test('remaining mint stalls use blocked frontage and survive ground saves',()=>{
   const s={area:3,district,interior:null,x,y,facing,teamIds:['kept']},map=fieldMap(s);assert.ok(fieldDialogue(s).actions.some(a=>a.action===`buyAdventureMint-${item}`));assert.equal(stepField(s,facing).blocked,true);assert.ok(fieldPath(map,{x:11,y:15},{x,y}).length);const restored=restoreAdventurePosition(storeAdventurePosition(s,44),44);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds],[district,x,y,['kept']]);
  }
 });
+
+test('Rouge market has four distinct mint stocks without blocking prior paths',()=>{
+ const base={area:3,district:'lumiose-rouge-sector1',interior:null,teamIds:['kept'],zaMission20Stage:11};
+ for(const [x,y,item,notItem] of [[4,3,'adamantmint','modestmint'],[6,3,'modestmint','adamantmint'],[3,6,'boldmint','calmmint'],[7,6,'calmmint','boldmint']]){
+  const s={...base,x,y,facing:'up'},map=fieldMap(s),offer=fieldDialogue(s);assert.ok(offer.actions.some(a=>a.action===`buyAdventureMint-${item}`));assert.equal(offer.actions.some(a=>a.action===`buyAdventureMint-${notItem}`),false);assert.equal(stepField(s,'up').blocked,true);assert.ok(fieldPath(map,{x:11,y:15},{x,y}).length);const restored=restoreAdventurePosition(storeAdventurePosition(s,44),44);assert.deepEqual([restored.x,restored.y,restored.teamIds],[x,y,['kept']]);
+ }
+});

@@ -11791,3 +11791,14 @@ test('rank B DYN4MO card reward is independent and preserves future records',asy
   seedWorld(storeAdventurePosition({...base,zaRoyaleBRobCardClaimedV1:false},state.revision+1));await get();assert.equal(state.world.interaction.action,'royaleBRobBonus');const rev=state.revision;await call('royaleBRobBonus');assert.equal(rawWorld().zaRoyaleBRobCardClaimedV1,true);assert.equal(rawWorld().zaRoyaleBAceClaimedV1,true);assert.equal(rawWorld().zaRoyaleBonusExtraCards['knockout-fire'].completed,false);await call('royaleBRobBonus',{revision:rev},409);await get();await call('royaleBRobBonus',{},409);assert.ok(rawWorld().zaRoyaleBSessionWins.includes('future-trainer'));assert.deepEqual(rawWorld().teamIds,team);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
 });
+
+test('Rouge market attack and special attack mints preserve progress and purchase safeguards',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rouge-market-attack-mints-qa',displayName:'루주 시장'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],mon=structuredClone(rawMon(id));sql.prepare('UPDATE wallets SET coins=40000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  for(const [x,item,other] of [[4,'adamantmint','modestmint'],[6,'modestmint','adamantmint']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector1',interior:null,x:11,y:15,facing:'up',zaMission20Stage:11,customFuture:{keep:4}},state.revision+1));await get();await walkTo({x,y:3});await call('face',{direction:'up'});assert.ok(state.world.interaction.actions.some(a=>a.action===`buyAdventureMint-${item}`));await call(`buyAdventureMint-${other}`,{},409);const rev=state.revision;await call(`buyAdventureMint-${item}`);await call(`buyAdventureMint-${item}`,{revision:rev},409);await get();assert.equal(state.inventory[item],1);assert.deepEqual(rawWorld().customFuture,{keep:4});assert.deepEqual(rawWorld().teamIds,team);
+  }
+  assert.equal(state.wallet.coins,0);await call('buyAdventureMint-modestmint',{},409);assert.equal(state.inventory.modestmint,1);const after=rawMon(id);assert.deepEqual({...after,walkSteps:mon.walkSteps},mon);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
