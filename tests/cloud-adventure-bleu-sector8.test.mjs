@@ -36,3 +36,10 @@ test('Bleu Sector 8 links passage, South Boulevard, salon and Sector 9',()=>{
  const house={...base,district:'lumiose-ghost-house',x:11,y:15,zaMission20HouseReturn:'bleu9'};
  assert.equal(stepField(house,'down').district,'lumiose-bleu-sector9');assert.equal(stepField({...house,zaMission20HouseReturn:undefined},'down').district,'lumiose-vernal');
 });
+
+test('Bleu 8 courtyard pickups preserve old saves and the show marker',()=>{
+ const s={area:3,district:'lumiose-bleu-sector8',interior:null,x:5,y:3,facing:'down',zaSide16Stage:1,teamIds:['kept']};
+ let saved=restoreAdventurePosition(storeAdventurePosition(s,200),200),map=fieldMap(saved);
+ assert.deepEqual([saved.x,saved.y,saved.teamIds],[5,3,['kept']]);assert.deepEqual([map[3][4],map[3][5],map[3][6],map[4][4]],['k','l','i','j']);assert.equal(map[5][5],'^');assert.ok(fieldPath(map,saved,{x:11,y:15}).length);
+ saved=restoreAdventurePosition(storeAdventurePosition({...saved,zaBleu8Items:['northwest-super']},201),201);map=fieldMap(saved);assert.equal(map[3][4],';');assert.equal(map[3][5],'l');assert.equal(map[5][5],'^');
+});

@@ -10711,3 +10711,16 @@ test('Magenta 8 scaffold items preserve prior collections and prevent duplicates
   sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();await call('magenta8ScaffoldItem-scaffold-pearl');await get();assert.equal(state.inventory.pearl,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawWorld().zaMagenta8Items,['grass-great','scaffold-super','scaffold-pearl']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Bleu 8 courtyard pickups preserve show progress and prevent duplicates',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu8-courtyard-qa',displayName:'블루 8 안뜰'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  const place=(x,y,extra={})=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector8',interior:null,x,y,facing:'down',zaSide16Stage:1,...extra},state.revision+1));
+  place(6,3,{adventureBalls:{...rawWorld().adventureBalls,greatball:99}});await get();assert.equal(state.world.interaction.action,'bleu8Item-northeast-great');await call('bleu8Item-northeast-great',{},409);assert.equal(rawWorld().zaBleu8Items,undefined);
+  place(6,3,{adventureBalls:{...rawWorld().adventureBalls,greatball:98}});await get();const rev=state.revision;await call('bleu8Item-northeast-great');await get();assert.equal(rawWorld().adventureBalls.greatball,99);await call('bleu8Item-northeast-great',{revision:rev},409);await call('bleu8Item-northeast-great',{},409);
+  place(4,4);await get();const hyper=state.wallet.hyper_potions;await call('bleu8Item-southwest-hyper');await get();assert.equal(state.wallet.hyper_potions,hyper+1);
+  place(4,3);await get();const superpot=state.wallet.super_potions;await call('bleu8Item-northwest-super');await get();assert.equal(state.wallet.super_potions,superpot+1);
+  place(5,3);await get();await call('bleu8Item-northwest-ultra');await get();assert.equal(rawWorld().adventureBalls.ultraball,1);assert.equal(rawWorld().zaSide16Stage,1);assert.deepEqual(state.world.teamIds,team);assert.equal(rawWorld().zaBleu8Items.length,4);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
