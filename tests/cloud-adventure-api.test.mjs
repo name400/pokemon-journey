@@ -11121,3 +11121,21 @@ test('Mission 3 detour blocks the new Vert 3 courtyard route in both directions'
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-mission32-courtyard',interior:null,zaMission32Layer:'ground',x:18,y:8,facing:'right',zaMission03Stage:3},state.revision+1));await get();await call('move',{direction:'right'});assert.equal(state.world.district,'lumiose-vert-sector3');await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-mission32-courtyard');assert.equal(state.world.zaMission03Stage,3);assert.equal(state.world.zaVert3CourtSludgeCleared,true);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Mission 40 research preserves unknown saved entries and guards unsupported records',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission40-record-preservation-qa',displayName:'조사 기록 보존'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  seedMon(id,{...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}});
+  const old=['future-target',{version:2},'steelix','steelix'];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone5',interior:null,x:5,y:7,facing:'up',zaZone5Upper:false,zaMission40Stage:1,zaMission40Anomalies:old,adventureBalls:{masterball:2}},state.revision+1));
+  await get();await call('mission40OtherAlpha');await call('ball',{ball:'masterball'});await get();
+  assert.deepEqual(rawWorld().zaMission40Anomalies,[...old,'gallade']);assert.equal(rawWorld().adventureBalls.masterball,1);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone3',x:3,y:11,facing:'up',zaZone3TowerUpper:false,zaMission40Anomalies:{version:2,records:['gallade']}},state.revision+1));
+  await get();const before=structuredClone(rawWorld());assert.match((await call('mission40Steelix',{},409)).error,/조사 기록/);assert.deepEqual(rawWorld(),before);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone3',interior:null,x:3,y:11,facing:'up',zaZone3TowerUpper:false,zaMission40Anomalies:['gallade']},state.revision+1));await get();assert.equal(state.world.interaction?.action,'mission40Steelix',JSON.stringify({district:state.world.district,x:state.world.x,y:state.world.y,facing:state.world.facing,interaction:state.world.interaction,stage:state.world.zaMission40Stage,anomalies:state.world.zaMission40Anomalies}));await call('mission40Steelix');
+  seedWorld({...rawWorld(),zaMission40Anomalies:{version:2,records:['gallade']}});await get();
+  const inBattle=structuredClone(rawWorld()),mon=structuredClone(rawMon(id));assert.match((await call('ball',{ball:'masterball'},409)).error,/조사 기록/);
+  assert.deepEqual(rawWorld(),inBattle);assert.deepEqual(rawMon(id),mon);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
