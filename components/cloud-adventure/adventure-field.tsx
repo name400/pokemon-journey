@@ -595,7 +595,23 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c===';'){ctx.fillStyle='#819e70';ctx.fillRect(px+6,py+7,5,3);ctx.fillRect(px+19,py+19,6,3);ctx.fillStyle='#d8d8bc';if(w.map[y-1]?.[x]!==';')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]!==';')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]!==';')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]!==';')ctx.fillRect(px+tile-2,py,2,tile);}
      if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
-    if(w.district==='lumiose-bleu-plaza-route'&&!w.interior){ctx.fillStyle=c==='#'?'#a79c8f':c===','?'#b8b8ac':(x+y)%2?'#d6d9cd':'#e2e5d8';ctx.fillRect(px,py,tile,tile);if(c==='%'){ctx.fillStyle=y===10?'#425e70':'#d6e3df';ctx.fillRect(px+4,py+5,tile-8,y===10?5:tile-12);if(x===17&&y===12){ctx.fillStyle='#33566a';ctx.fillRect(px+tile/2-2,py+6,4,tile-12);ctx.fillRect(px+6,py+tile/2-2,tile-12,4);}}if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(w.district==='lumiose-bleu-plaza-route'&&!w.interior){
+     // The police station and approach use existing draft tiles, not new collision.
+     const outer=x===0||x===22||y===0||y===16;
+     ctx.fillStyle=c==='#'?(outer?'#968f85':'#d8c0ad'):c===','?'#c1b9ac':(x+y)%2?'#e3dfd4':'#ece8dd';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'&&!outer){
+      ctx.fillStyle='#dcc0ad';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#987f70';
+      if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y]?.[x-1]!=='#')ctx.fillRect(px,py,4,tile);if(w.map[y]?.[x+1]!=='#')ctx.fillRect(px+tile-4,py,4,tile);
+      if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#89766c';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#769399';ctx.fillRect(px+8,py+tile-6,tile-16,3);}else if((x+y)%2===0){ctx.fillStyle='#c5aa97';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
+     }
+     if(c===','){ctx.fillStyle='#ebe3d5';if(w.map[y-1]?.[x]!==',')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]!==',')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]!==',')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]!==',')ctx.fillRect(px+tile-2,py,2,tile);}
+     if(c==='%'){
+      ctx.fillStyle=y===10?'#526c79':'#d8e3df';ctx.fillRect(px,py,tile,tile);
+      if(y===10){ctx.fillStyle='#a4bcc0';ctx.fillRect(px,py+tile-5,tile,3);}else{ctx.fillStyle='#6a8d98';ctx.fillRect(px+6,py+5,tile-12,tile-10);ctx.fillStyle='#c4dad8';ctx.fillRect(px+9,py+7,3,tile-14);ctx.fillRect(px+tile/2+1,py+7,2,tile-14);if(y===13){ctx.fillStyle='#a4b8b3';ctx.fillRect(px,py+tile-4,tile,4);}}
+      if(x===17&&y===12){ctx.fillStyle='#335c6d';ctx.fillRect(px+tile/2-2,py+6,4,tile-12);ctx.fillRect(px+6,py+tile/2-2,tile-12,4);}
+     }
+     if(c==='X'||c==='W'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-jaune-garden-route'&&!w.interior){ctx.fillStyle=c==='#'?'#aa9788':c===','?'#c8bba3':(x+y)%2?'#dfd8c6':'#e7e0cf';ctx.fillRect(px,py,tile,tile);if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-vernal'&&!w.interior&&w.zaVernalSlowbroBank){ctx.fillStyle=c==='#'?'#7a7770':c==='~'?'#4b8794':(x+y)%2?'#c0b49c':'#d1c4a9';ctx.fillRect(px,py,tile,tile);if(c==='~'){ctx.fillStyle='#85b9bf';ctx.fillRect(px+5,py+10,tile-10,2);}if(c==='j'){ctx.fillStyle='#867463';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#eee1c8';for(let i=0;i<3;i++)ctx.fillRect(px+6,py+8+i*6,tile-12,2);}if(c==='d'){ctx.fillStyle='#bb7f96';ctx.fillRect(px+4,py+5,tile-8,tile-10);ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('야도란',px+tile/2,py+20);}return;}
     if(w.district==='lumiose-vernal'&&!w.interior&&w.zaVernalEastRoof){ctx.fillStyle=c==='#'?'#75827e':(x+y)%2?'#cfc8bc':'#e1d9cc';ctx.fillRect(px,py,tile,tile);if(c==='l'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}return;}
