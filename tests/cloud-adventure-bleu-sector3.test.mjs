@@ -1,6 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldPath,fieldMap,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition,VERNAL_CAFE_WINGS} from '../lib/cloud-adventure/adventure-world.mjs';
+test('the Bleu Sector 5 and 3 street connection survives restoration without unlocking Aymlis Park',()=>{
+ const city={area:3,district:'lumiose-bleu-sector5',interior:null,x:10,y:8,zaRoyaleRank:'F',teamIds:['kept'],zaMission20Stage:7};
+ assert.ok(fieldPath(fieldMap(city),city,{x:16,y:1}).length);
+ assert.equal(stepField({...city,x:21,y:5},'right').blocked,true);
+ const next=stepField({...city,x:16,y:1},'up');
+ assert.deepEqual([next.district,next.x,next.y],['lumiose-bleu-sector3',1,12]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...city,...next},114),114);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-bleu-sector3',1,12,['kept'],7]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:21,y:8}).length);
+ assert.equal(stepField({...saved,x:6,y:15},'down').blocked,true);
+ assert.equal(stepField({...saved,x:21,y:8},'right').district,'lumiose-vernal');
+ const back=stepField(saved,'left');
+ assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-sector5',16,1]);
+});
 test('both Aymlis north gates connect to Bleu Sector 3 and preserve save positions',()=>{
  const city={area:3,district:'lumiose-bleu-sector3',interior:null,x:6,y:15,facing:'down',zaRoyaleRank:'F',teamIds:['kept']};
  assert.ok(fieldPath(fieldMap(city),city,{x:16,y:15}).length);
