@@ -65,3 +65,18 @@ test('Bleu Sectors 6 and 4 connect directly without changing the Espace route',(
  const legacy=restoreAdventurePosition(storeAdventurePosition({...start,x:11,y:15},82),82);
  assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.teamIds],['lumiose-bleu6-approach',11,15,['kept']]);
 });
+
+test('Espace surface streets and the underground canal connect without a floor jump',()=>{
+ const upper={area:3,district:'lumiose-espace-vide',interior:null,x:11,y:8,zaEspaceLower:false,teamIds:['kept'],zaMission20Stage:7};
+ const surface=espaceVideMap(upper);for(const end of [{x:1,y:8},{x:21,y:8},{x:11,y:1},{x:11,y:15}])assert.ok(fieldPath(surface,upper,end).length);
+ assert.equal(surface[8][15],',');assert.equal(surface[2][11],':');assert.equal(surface[14][11],':');
+ const lower={...upper,zaEspaceLower:true,x:1,y:8,zaRoyaleRank:'F',zaZone10Upper:false,zaZone10LowerBank:false};
+ const map=espaceVideMap(lower);assert.equal(map[10][15],'~');assert.ok(fieldPath(map,lower,{x:21,y:8}).length);
+ const zone=stepField(lower,'left');assert.deepEqual([zone.district,zone.x,zone.y,zone.zaZone10Upper,zone.zaZone10LowerBank],['lumiose-zone10',21,6,false,true]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...lower,...zone},209),209);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaZone10LowerBank,saved.teamIds,saved.zaMission20Stage],['lumiose-zone10',21,6,true,['kept'],7]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y,back.zaEspaceLower],['lumiose-espace-vide',1,8,true]);
+ assert.equal(stepField({...lower,zaRoyaleRank:'Z'},'left').blocked,true);
+ const future=stepField({...lower,zaZone10LowerBank:{version:2}},'left');assert.equal(future.blocked,true);
+ assert.equal(stepField({...lower,zaZone10LowerBank:null},'left').zaZone10LowerBank,true);
+ const oldGround={...zone,area:3,zaZone10LowerBank:false,x:21,y:6};assert.equal(stepField(oldGround,'right').district,'lumiose-espace-vide');
+});

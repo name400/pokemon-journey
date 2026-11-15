@@ -11831,3 +11831,15 @@ test('Zone 6 southern boulevard entrance keeps old progress across reload',async
   await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone6Layer],['lumiose-zone6',12,15,'ground']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);const after=rawMon(team[0]);assert.equal(after.walkSteps,lead.walkSteps+2);delete after.walkSteps;delete lead.walkSteps;assert.deepEqual(after,lead);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Espace underground and Zone 10 lower bank stay on the same level across reconnect',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'espace-lower-bank-qa',displayName:'에스파스 수로'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),lead=structuredClone(rawMon(team[0]));
+  const lower={...rawWorld(),area:3,district:'lumiose-espace-vide',interior:null,x:1,y:8,facing:'left',zaEspaceLower:true,zaRoyaleRank:'F',zaZone10Upper:false,zaZone10LowerBank:false,zaMission20Stage:7,zaColorfulScrewsFound:['future-screw']};
+  seedWorld(storeAdventurePosition(lower,state.revision+1));await get();await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone10LowerBank],['lumiose-zone10',21,6,true]);
+  assert.equal(rawWorld().zaMission20Stage,7);assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw']);await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaEspaceLower],['lumiose-espace-vide',1,8,true]);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);const after=rawMon(team[0]);assert.equal(after.walkSteps,lead.walkSteps+2);delete after.walkSteps;delete lead.walkSteps;assert.deepEqual(after,lead);
+  seedWorld(storeAdventurePosition({...lower,zaZone10LowerBank:{version:2}},state.revision+1));await get();await call('move',{direction:'left'},409);assert.deepEqual(rawWorld().zaZone10LowerBank,{version:2});
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
