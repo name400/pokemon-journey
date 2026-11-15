@@ -11167,6 +11167,22 @@ test('Mission 3 detour blocks the new Vert 3 courtyard route in both directions'
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('Mission 40 field capture advances all three investigations safely',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'mission40-field-ball-qa',displayName:'이상 우두머리 필드 포획'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,mon=structuredClone(rawMon(lead));sql.prepare('UPDATE wallets SET balls=2 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const place=(district,x,y,zone,extra={})=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'up',zaMission40Stage:1,zaMission40Zone:zone,zaZone3TowerUpper:false,adventureBalls:{masterball:3},...extra},state.revision+1);
+  seedWorld(place('lumiose-zone3',3,11,undefined,{zaMission40Anomalies:{version:2}}));await get();assert.ok(!state.world.interaction.actions?.some(a=>a.action==='throwMission40Alpha'));await call('throwMission40Alpha',{},409);assert.deepEqual(rawWorld().zaMission40Anomalies,{version:2});assert.equal(state.wallet.balls,2);
+  seedWorld(place('lumiose-zone3',3,11,undefined,{zaMission40Anomalies:['future','future'],adventureBalls:{version:2,masterball:3}}));await get();await call('throwMission40Alpha',{ball:'masterball'},409);assert.deepEqual(rawWorld().adventureBalls,{version:2,masterball:3});
+  seedWorld(place('lumiose-zone3',3,11,undefined));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='throwMission40Alpha'));await call('face',{direction:'right'});await call('throwMission40Alpha',{},409);assert.equal(state.wallet.balls,2);await call('face',{direction:'up'});
+  await call('throwMission40Alpha');assert.equal(state.wallet.balls,1);assert.equal(state.battle.teams[1][0].speciesId,208);assert.equal(state.battle.teams[1][0].adventureAlpha,true);assert.equal(state.battle.teams[1][0].shiny,false);assert.deepEqual(state.battle.teams[1][0].moves,['지진','스톤에지','이판사판태클','구멍파기']);await call('flee');await get();assert.deepEqual(rawWorld().zaMission40Anomalies,['future','future']);
+  for(const [id,species,district,x,y,zone,facing] of [['steelix',208,'lumiose-zone3',3,11,undefined,'up'],['gallade',475,'lumiose-zone5',5,7,'5','up'],['pangoro',675,'lumiose-zone9',5,8,'9','down']]){
+   seedWorld(place(district,x,y,zone,{facing,zaZone5Upper:false,zaZone9Upper:true}));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='throwMission40Alpha'));const revision=state.revision;await call('throwMission40Alpha',{ball:'masterball'});await call('throwMission40Alpha',{ball:'masterball',revision},409);await get();assert.ok(rawWorld().zaMission40Anomalies.includes(id));const caught=state.box.find(p=>p.speciesId===species&&p.origin==='capture');assert.ok(caught&&caught.adventureAlpha&&!caught.shiny);assert.equal(rawMon(caught.boxId).adventureMissionId,undefined);while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});
+  }
+  assert.deepEqual(rawWorld().zaMission40Anomalies,['future','future','steelix','gallade','pangoro']);assert.equal(state.world.teamIds[0],lead);assert.deepEqual(rawMon(lead).ivs,mon.ivs);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Mission 40 anomaly teams retain their event moves on capture and reload',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission40-anomaly-moves-qa',displayName:'이상 우두머리 기술'};
  try{

@@ -188,7 +188,7 @@ import {zone6Encounter,zone6Visible,zone6Layer,zone6Map,zone6Item,zone6FayeAvail
 import {zone11Encounter,zone11Visible,zone11Map} from '@/lib/cloud-adventure/adventure-zone11.mjs';
 import {zone5Encounter,zone5Map,zone5Visible,canClearZone5Sludge,zone5PlayerThreat,zone5PlayerAlertKnown,zone5PlayerNear} from '@/lib/cloud-adventure/adventure-zone5.mjs';
 import {storyTm,canLearnStoryTm} from '@/lib/cloud-adventure/adventure-story-tm.mjs';
-import {ANOMALIES,anomalyIds,mission40Objective,recordMission40Anomaly,assertMission40RecordWritable} from '@/lib/cloud-adventure/adventure-mission40.mjs';
+import {ANOMALIES,anomalyIds,mission40Objective,recordMission40Anomaly,assertMission40RecordWritable,mission40FieldTarget} from '@/lib/cloud-adventure/adventure-mission40.mjs';
 import {INFINITE_TRAINERS,INFINITE_EXTRA_POSITIONS,infiniteFieldTrainer,infiniteFieldTier,newInfiniteFieldTier,isInfiniteFieldTrainer,INFINITE_ZACH,INFINITE_GRISELLE,infinitePoints,infiniteWins,infiniteRewardWins,infiniteNextReward,infiniteRewardTeam,infiniteRivalBattleTeam,infiniteTrainerBattleTeam,infiniteTrainerVerified,selectInfiniteRandom,INFINITE_PRIZES,drawInfinitePrize} from '@/lib/cloud-adventure/adventure-infinite-royale.mjs';
 import {PROTECT_WAVES,protectWave} from '@/lib/cloud-adventure/adventure-mission37.mjs';
 import {mission36Partners,mission36PartnerGroups,mission37Companion,mission37CompanionGroups} from '@/lib/cloud-adventure/adventure-mission37-companions.mjs';
@@ -2027,6 +2027,15 @@ else if(b.action==='throwMission20Ghost'){
  const attempt=fieldBallAttempt(s,foe,chosenBall.id,active,{overworld:true,unaware:false,moveCount:0,bluePlushLevel:s.zaBlueCanariLevel,royaleRank:s.zaRoyaleRank,night:gameTime(undefined,adventureClockOffset(s)).period==='night'});
  if(attempt.caught){recordMission20Ghost(s,foe);const owned={...adventureAfterCapture(foe,chosenBall.id,afterCapture,random)};delete owned.adventureMissionId;captured={...owned,boxId:crypto.randomUUID(),origin:'capture',experience:0};recordResearchCapture(s,captured.types);registerAdventureDex(s,captured.speciesId);if(s.teamIds.length<6)s.teamIds.push(captured.boxId);s.log=[`${g.name}을(를) 포획했다!`];s.events=[{kind:'capture',side:0,targetSide:1,type:'normal',category:'status',hit:false,ball:chosenBall.id,shakes:attempt.shakes,caught:true,targetBoxId:foe.boxId}];}
  else{s.combat=createAdventureCombat(s,mons,[foe]);s.encounter=foe;s.trainer=null;s.log=[`볼에서 나온 ${g.name}와 배틀이 시작됐다!`];}
+}
+else if(b.action==='throwMission40Alpha'){
+ if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition)throw Error('현재 이상한 우두머리를 확인하세요.');assertMission40RecordWritable(s);
+ const target=mission40FieldTarget(s,interactionAt(s));if(!target)throw Error('가까운 조사 대상을 확인하세요.');
+ const balls=s.adventureBalls;if(b.ball!==undefined&&b.ball!=='pokeball'&&balls!=null&&(typeof balls!=='object'||Array.isArray(balls)||Object.hasOwn(balls,'version')||Object.hasOwn(balls,'v')))throw Error('볼 보유 기록을 확인하세요.');
+ const foe={...makeAdventureAlpha({...makeMon(target.species,70),moves:[...target.moves],pp:{}}),boxId:`mission40-${target.id}`,adventureMissionId:`mission40-${target.id}`},chosenBall=takeFieldBall(s,bag,bagChanges,b.ball);consume=chosenBall.consume;
+ const attempt=fieldBallAttempt(s,foe,chosenBall.id,active,{overworld:true,alpha:true,moveCount:0,bluePlushLevel:s.zaBlueCanariLevel,royaleRank:s.zaRoyaleRank,night:gameTime(undefined,adventureClockOffset(s)).period==='night'});
+ if(attempt.caught){recordMission40Anomaly(s,foe);const {adventureMissionId:fieldId,...owned}=adventureAfterCapture(foe,chosenBall.id,afterCapture,random);captured={...owned,boxId:crypto.randomUUID(),origin:'capture',experience:0};recordResearchCapture(s,captured.types);registerAdventureDex(s,captured.speciesId);if(s.teamIds.length<6)s.teamIds.push(captured.boxId);s.log=[`이상한 우두머리 ${foe.name}을(를) 포획해 조사했다!`];s.events=[{kind:'capture',side:0,targetSide:1,type:'normal',category:'status',hit:false,ball:chosenBall.id,shakes:attempt.shakes,caught:true,targetBoxId:foe.boxId}];}
+ else{s.combat=applyAdventureAlphaBattleStats(createAdventureCombat(s,mons,[foe]));s.encounter=foe;s.trainer=null;s.log=[`볼에서 나온 ${foe.name}와 배틀이 시작됐다!`];}
 }
 else if(b.action==='throwLysandreWild'){
  if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||!knownVisibleWildLedger(s.zaLysandreWildSpent))throw Error('연구소의 야생 포켓몬과 출현 기록을 확인하세요.');
