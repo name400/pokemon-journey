@@ -675,6 +675,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
     if(['lumiose-bleu-sector3','lumiose-bleu-sector5','lumiose-bleu-sector7','lumiose-south-boulevard','lumiose-bleu-street','lumiose-autumnal-approach','lumiose-jaune-sector11','lumiose-hibernal-approach','lumiose-jaune-street','lumiose-jaune-sector2','lumiose-jaune-sector6','lumiose-jaune-sector7','lumiose-jaune-sector9','lumiose-jaune-sector10','lumiose-jaune-sector12'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#a79c8f':c==='%'?'#718c9b':c===','?'#b8b8ac':(x+y)%2?'#d6d9cd':'#e2e5d8';ctx.fillRect(px,py,tile,tile);
+     // Jaune 12's two existing gates enter Zone 6; positions are provisional.
+     if(w.district==='lumiose-jaune-sector12'){
+      const building=c==='#'&&((x>=3&&x<=7&&y>=2&&y<=5)||(x>=15&&x<=19&&y>=11&&y<=14));
+      if(building){ctx.fillStyle='#b6a993';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#dfd1ba';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#82786c';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#d8cbb2';ctx.fillRect(px+5,py+tile-6,7,3);ctx.fillRect(px+tile-12,py+tile-6,7,3);}else{ctx.fillStyle='#998d7c';ctx.fillRect(px+3,py+10,tile-6,2);}}
+      if(c===','){ctx.fillStyle='#e8e0ce';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);}
+      if(c==='X'&&y===0&&(x===11||x===15)){ctx.fillStyle='#597f72';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('구역6',px+tile/2,py+20);return;}
+     }
      // Jaune 10's buildings and roads are existing provisional ground tiles.
      if(w.district==='lumiose-jaune-sector10'){
       const building=c==='#'&&((x>=3&&x<=7&&y>=2&&y<=5)||(x>=15&&x<=19&&y>=11&&y<=14));
