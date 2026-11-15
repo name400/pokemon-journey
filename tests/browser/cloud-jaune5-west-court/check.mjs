@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {fieldMap,fieldDialogue} from '../../../lib/cloud-adventure/adventure-world.mjs';
+const playwright=await import(process.env.PLAYWRIGHT_MODULE||'playwright');const {chromium}=playwright.default||playwright;
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});
+try{for(const width of [390,1280]){
+ const page=await browser.newPage({viewport:{width,height:844}}),errors=[];page.on('pageerror',e=>errors.push(e.message));let revision=1;
+ const mon={boxId:'fixture',id:1,speciesId:1,name:'이상해씨',types:['풀'],level:5,hp:18,maxHp:20,experience:0,expToNext:20,evolutions:[]};const world={area:3,district:'lumiose-jaune5-west-court',interior:null,areaInfo:{name:'존느 5번지 서쪽 안뜰',biome:'city'},x:11,y:8,facing:'left',zaRoyaleRank:'W',zaMission17Stage:1,teamIds:['fixture'],activeId:'fixture',badges:[],objective:'메인 미션',log:[],steps:0};world.map=fieldMap(world);assert.equal(world.map[0][0],'#');assert.equal(world.map[8][11],';');world.interaction=fieldDialogue(world,world.map);
+ const state=()=>({engine:'cloud',revision,world,box:[mon],wallet:{coins:100,balls:5,potions:1},inventory:{},fieldShop:[],expeditions:[],gameTime:{period:'day'},battle:null});
+ await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));await page.route('**/api/account',r=>r.fulfill({json:{authenticated:true,profile:{nickname:'격리 검사'},signOut:'#'}}));await page.route('**/api/world**',r=>{if(r.request().method()==='POST'){const b=r.request().postDataJSON();assert.equal(b.action,'movementFence');revision++;return r.fulfill({json:{settled:true}});}if(new URL(r.request().url()).searchParams.has('engineOnly'))return r.fulfill({json:{engine:'cloud'}});return r.fulfill({json:state()});});
+ await page.goto((process.env.UI_TEST_URL||'http://127.0.0.1:5399')+'/?mode=adventure&tab=adventure');const canvas=page.locator('canvas.adv-field');await canvas.waitFor();await page.screenshot({path:`/tmp/jaune5-west-court-${width}.png`});assert.deepEqual(errors,[]);await page.close();
+}console.log('Jaune Sector 5 west court: PC and mobile display (mock API).');}finally{await browser.close();}
