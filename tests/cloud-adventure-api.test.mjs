@@ -10795,3 +10795,15 @@ test('Bleu 9 courtyard items preserve the old building mission and full inventor
   await place(11,6,{facing:'up'});assert.equal(state.world.interaction.action,'mission20EnterHouse');
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Rust roof TM075 is reachable once, protects full inventory and teaches',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rust-tm075-qa',displayName:'사무소 옥상 기술머신'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(4,20),moves:['몸통박치기']});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rust-roof',interior:null,x:15,y:10,facing:'down',zaMission15Stage:2,zaMission20Stage:7},state.revision+1));await get();assert.equal(state.world.interaction.action,'rustRoofTm075');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm075']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm075');await get();await call('rustRoofTm075',{},409);assert.notEqual(rawWorld().zaRustRoofTm075,true);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;await call('rustRoofTm075');await get();assert.equal(state.inventory['za-tm075'],1);assert.equal(rawWorld().zaRustRoofTm075,true);assert.equal(state.world.map[11][15],'.');assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaMission20Stage,7);
+  await call('rustRoofTm075',{revision:rev},409);await call('rustRoofTm075',{},409);await call('teachStoryTm',{item:'za-tm075',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'용의파동');assert.equal(state.inventory['za-tm075'],1);
+  assert.equal(canLearnStoryTm({'za-tm075':1},makeMon(1,20),'za-tm075'),false);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
