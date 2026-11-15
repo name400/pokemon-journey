@@ -11701,3 +11701,15 @@ test('TM058 teaches compatible regional forms and preserves existing saved moves
   const legacy={...makeMon(705,30),boxId:lead,moves:['아이언헤드'],custom:{keep:true}};seedMon(lead,legacy);await get();assert.deepEqual(rawMon(lead).moves,['아이언헤드']);assert.deepEqual(rawMon(lead).custom,{keep:true});
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Jaune 9 roof connects to Jaune 11 west building and preserves saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'jaune11-west-roof-qa',displayName:'존느 서쪽 옥상'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,team=[...state.world.teamIds],original=structuredClone(rawMon(lead));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-screw-jaune9',interior:null,x:10,y:6,facing:'right',zaMission15Stage:2,zaColorfulScrewsFound:['future-screw'],zaJaune11WestRoofItems:['future-item']},state.revision+1));await get();await call('rotoGlide');assert.deepEqual([state.world.x,state.world.y],[14,6]);await walkTo({x:19,y:6});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune11-west-roof',1,6]);
+  await walkTo({x:9,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'jaune11WestRoofItem-west-roof-fullheal');const key=JSON.stringify([globalThis.__adventureUser.userId,'fullheal']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'fullheal');await get();await call('jaune11WestRoofItem-west-roof-fullheal',{},409);assert.deepEqual(rawWorld().zaJaune11WestRoofItems,['future-item']);sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;await call('jaune11WestRoofItem-west-roof-fullheal');await call('jaune11WestRoofItem-west-roof-fullheal',{revision:rev},409);assert.equal(state.inventory.fullheal,1);
+  await walkTo({x:18,y:9});await call('face',{direction:'down'});assert.equal(state.world.interaction.action,'jaune11WestRoofItem-east-ledge-bigpearl');await call('jaune11WestRoofItem-east-ledge-bigpearl');await get();assert.equal(state.inventory.bigpearl,1);assert.deepEqual(rawWorld().zaJaune11WestRoofItems,['future-item','west-roof-fullheal','east-ledge-bigpearl']);assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw']);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(lead).personality,original.personality);assert.deepEqual(rawMon(lead).ivs,original.ivs);
+  await walkTo({x:1,y:6});await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-screw-jaune9',19,6]);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune11-west-roof',x:9,y:6,facing:'up',zaJaune11WestRoofItems:{version:2}},state.revision+1));await get();await call('jaune11WestRoofItem-west-roof-fullheal',{},409);assert.deepEqual(rawWorld().zaJaune11WestRoofItems,{version:2});
+ }finally{globalThis.__adventureUser=previous;}
+});
