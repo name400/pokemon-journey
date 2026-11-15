@@ -1351,7 +1351,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
       }
      }return;
     }
-    if(w.district==='lumiose-vert-sector9'&&!w.interior){ctx.fillStyle=c==='#'?'#97a18c':c===','?'#bbb9aa':c==='k'?'#a4c58e':(x+y)%2?'#e0ddcb':'#ebe6d4';ctx.fillRect(px,py,tile,tile);if(c==='~')canalWater(px,py,x,y);if(c===':'){ctx.fillStyle='#b7aa94';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6ddcd';for(let i=4;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}if(c==='W'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(w.district==='lumiose-vert-sector9'&&!w.interior){ctx.fillStyle=c==='#'?'#97a18c':',ij'.includes(c)?'#bbb9aa':c==='k'?'#a4c58e':(x+y)%2?'#e0ddcb':'#ebe6d4';ctx.fillRect(px,py,tile,tile);if(c==='i'||c==='j'){ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}if(c==='~')canalWater(px,py,x,y);if(c===':'){ctx.fillStyle='#b7aa94';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6ddcd';for(let i=4;i<tile;i+=8)ctx.fillRect(px,py+i,tile,2);}if(c==='W'||c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-zone3'&&w.zaZone3TowerUpper&&!w.interior){
      // The garden building has an accessible roof. Its footprint and stone
      // detailing are a visual approximation of the existing 2D floor.

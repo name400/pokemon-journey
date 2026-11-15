@@ -3042,6 +3042,19 @@ test('Richissime hall accepts original invitation and promotion match',async()=>
  }finally{globalThis.__adventureUser=priorUser;}
 });
 
+test('Vert 9 alley items preserve old data, limits and walkable paths',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'vert9-alley-items-qa',displayName:'골목 도구'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],mon=rawMon(id),future={kind:'future',data:42};
+  const place=(extra={})=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vert-sector9',interior:null,x:10,y:4,facing:'up',zaVert9AlleyItems:['older',future],adventureBalls:{repeatball:99,futureball:2},...extra},state.revision+1);
+  seedWorld(place());await get();assert.equal(state.world.interaction.action,'vert9AlleyItem-alley-repeat');await call('vert9AlleyItem-alley-repeat',{},409);assert.deepEqual(rawWorld().zaVert9AlleyItems,['older',future]);
+  seedWorld(place({adventureBalls:{version:2,repeatball:1}}));await get();await call('vert9AlleyItem-alley-repeat',{},409);assert.deepEqual(rawWorld().adventureBalls,{version:2,repeatball:1});
+  seedWorld(place({adventureBalls:{repeatball:3,futureball:2}}));await get();const revision=state.revision;await call('vert9AlleyItem-alley-repeat');await call('vert9AlleyItem-alley-repeat',{revision},409);await get();assert.equal(rawWorld().adventureBalls.repeatball,4);assert.equal(rawWorld().adventureBalls.futureball,2);assert.deepEqual(rawWorld().zaVert9AlleyItems,['older',future,'alley-repeat']);
+  seedWorld(place({x:12,y:6,facing:'up',zaVert9AlleyItems:rawWorld().zaVert9AlleyItems}));sql.prepare('UPDATE wallets SET super_potions=99 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('vert9AlleyItem-alley-super',{},409);assert.deepEqual(rawWorld().zaVert9AlleyItems,['older',future,'alley-repeat']);sql.prepare('UPDATE wallets SET super_potions=98 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('vert9AlleyItem-alley-super');await get();assert.equal(state.wallet.super_potions,99);assert.deepEqual(rawWorld().zaVert9AlleyItems,['older',future,'alley-repeat','alley-super']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);await call('vert9AlleyItem-alley-super',{},409);
+  seedWorld(place({zaVert9AlleyItems:{version:2,items:['future']}}));await get();await call('vert9AlleyItem-alley-repeat',{},409);assert.deepEqual(rawWorld().zaVert9AlleyItems,{version:2,items:['future']});
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Looker Bureau visit unlocks map travel and keeps existing save data',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bureau-map-travel-qa',displayName:'사무소 이동'};
  try{
