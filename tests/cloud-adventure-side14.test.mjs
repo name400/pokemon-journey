@@ -12,3 +12,12 @@ test('market encounters and cafe quest retain legacy coordinates and require the
  const street={district:'lumiose-south-boulevard',zaMission07Started:true,area:3,x:11,y:8};const m=fieldMap(street);for(const [x,name] of [[12,'meuse'],[17,'soleil']]){assert.equal(m[5][x],'^');assert.ok(fieldPath(m,street,{x,y:6}).length);assert.equal(side14Spot(street,{tile:'^',x,y:5}),name);}assert.equal(side14Available({zaRoyaleRank:'Y'}),false);assert.equal(side14Available(street),true);
  for(const [species,item] of [[682,'sachet'],[684,'whippeddream']]){const mon={...makeMon(species,20),item,tradeCount:1},option=evolutionOptions(mon,{adventureEngine:'cloud'},[],{}).find(o=>o.id===species+1);assert.equal(option.ready,true);assert.equal(option.held,item);assert.equal(evolutionOptions({...mon,tradeCount:0},{adventureEngine:'cloud'},[],{}).find(o=>o.id===species+1).ready,false);}
 });
+
+test('Café Soleil menu keeps the mission and deferred reward actions ahead of ordering',async()=>{
+ const {fieldDialogue}=await import('../lib/cloud-adventure/adventure-world.mjs');const {CAFE_SOLEIL_DRINKS,cafeSoleilDrink}=await import('../lib/cloud-adventure/adventure-cafe.mjs');
+ const base={area:3,district:'lumiose-south-boulevard',interior:null,x:17,y:6,facing:'up'};
+ assert.equal(fieldDialogue(base).actions.length,10);assert.equal(cafeSoleilDrink('soleilWater').price,350);assert.equal(CAFE_SOLEIL_DRINKS.find(d=>d.action==='soleilKomala').price,950);
+ assert.equal(fieldDialogue({...base,zaSide14Started:true,zaSide14Complete:false}).action,'side14Reward');
+ assert.equal(fieldDialogue({...base,zaSide14Complete:true,zaSide14DreamPending:1}).action,'side14ClaimDream');
+ assert.equal(fieldDialogue({...base,zaSide14Complete:true,zaSide14DreamPending:0}).actions.length,10);
+});

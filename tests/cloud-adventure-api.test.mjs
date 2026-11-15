@@ -10767,3 +10767,18 @@ test('Bleu 7 raised courtyard preserves saves, stairs and revive capacity',async
   seedWorld(storeAdventurePosition({...rawWorld(),x:7,y:11,facing:'down'},state.revision+1));await get();await call('bleu7WestStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector7',5,13]);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaMission10Stage,10);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Café Soleil serves drinks while preserving the Slurpuff quest and saves',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'soleil-service-qa',displayName:'솔레유 카페'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,other='soleil-reserve',reserve={...makeMon(25,10),boxId:other,hp:0,status:'독',pp:{thundershock:1}};
+  sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);
+  const damaged={...rawMon(id),hp:1,status:'독',pp:{tackle:1},friendship:70};seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const place=async(extra)=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:17,y:6,facing:'up',teamIds:[id,other],...extra},state.revision+1));await get();};
+  await place({zaSide14Started:true,zaSide14Complete:false});assert.equal(state.world.interaction.action,'side14Reward');await call('soleilWater',{},409);assert.equal(state.wallet.coins,1000);assert.deepEqual(rawMon(id),damaged);
+  await place({zaSide14Started:true,zaSide14Complete:true,zaSide14DreamPending:1});assert.equal(state.world.interaction.action,'side14ClaimDream');await call('soleilWater',{},409);assert.equal(rawWorld().zaSide14DreamPending,1);
+  await place({zaSide14DreamPending:0});assert.equal(state.world.interaction.actions.length,10);const rev=state.revision;await call('soleilWater');await get();assert.equal(state.wallet.coins,650);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(rawMon(id).friendship,100);assert.equal(rawMon(other).hp,rawMon(other).maxHp);assert.equal(rawWorld().zaResearchActivities.cafe,1);assert.deepEqual(state.world.teamIds,[id,other]);
+  await call('soleilWater',{revision:rev},409);assert.equal(state.wallet.coins,650);assert.equal(rawWorld().zaResearchActivities.cafe,1);
+  seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=349 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('soleilWater',{},409);assert.deepEqual(rawMon(id),damaged);assert.equal(rawWorld().zaResearchActivities.cafe,1);
+ }finally{globalThis.__adventureUser=previousUser;}
+});

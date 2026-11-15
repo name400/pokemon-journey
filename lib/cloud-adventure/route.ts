@@ -204,7 +204,7 @@ import {MISSION19_CANARI,MISSION19_GWYNN,MISSION19_IVOR,sewerInspected,sewerBran
 import {RANK_E_TRAINERS,RANK_E_EXTRA_POSITIONS,rankEPoints,rankEWins} from '@/lib/cloud-adventure/adventure-rank-d.mjs';
 import {MISSION15_CASES,mission15Case,mission15Complete} from '@/lib/cloud-adventure/adventure-mission15.mjs';
 import {RANK_F_TRAINERS,RANK_F_EXTRA_POSITIONS,rankFPoints,rankFWins,RANK_E_MANI,RANK_E_TARRAGON,RANK_E_CANARI} from '@/lib/cloud-adventure/adventure-rank-e.mjs';
-import {cafeWoofDrink,cafeBatailleDrink,cafeActionDrink,cafeCycloneDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
+import {cafeWoofDrink,cafeBatailleDrink,cafeActionDrink,cafeCycloneDrink,cafeSoleilDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
 import {leYeahCourse,leYeahAvailable,LE_YEAH_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-yeah.mjs';
 import {leNahCourse,leNahAvailable,LE_NAH_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-nah.mjs';
 import {sushiCourseTeam,sushiAvailable,SUSHI_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-sushi.mjs';
@@ -1641,6 +1641,11 @@ else if(b.action==='ultimoCoffee'){
 }
 else if(cafeActionDrink(b.action)){
  const drink=cafeActionDrink(b.action)!,spot=interactionAt(s);if(s.combat||s.adventureCatchWindow||s.interior!=='cafeAction'||s.district!=='lumiose-jaune-sector8'||spot?.tile!=='n'||spot.x!==11||spot.y!==5)throw Error('리테이크 카페의 주문대를 확인하세요.');
+ const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
+ reward=-drink.price;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,30);mons.set(id,rested);changed.set(id,rested);}s.log=[`${drink.name}을(를) 주문해 파티가 회복했다.`,`${drink.price}코인을 지불했다.`];
+}
+else if(cafeSoleilDrink(b.action)){
+ const drink=cafeSoleilDrink(b.action)!,questPending=!!s.zaSide14Started&&!s.zaSide14Complete,held=s.zaSide14Complete===true&&Number.isSafeInteger(s.zaSide14DreamPending)&&s.zaSide14DreamPending>0&&s.zaSide14DreamPending<=2;if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||questPending||held||side14Spot(s,interactionAt(s))!=='soleil')throw Error('Café Soleil의 주문대를 확인하세요.');
  const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
  reward=-drink.price;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,30);mons.set(id,rested);changed.set(id,rested);}s.log=[`${drink.name}을(를) 주문해 파티가 회복했다.`,`${drink.price}코인을 지불했다.`];
 }
