@@ -8062,6 +8062,18 @@ test('Vernal holovator quest advances when the Diggersby is captured',async()=>{
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Stone Emporium interior preserves the outside shop and its purchases',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'stone-emporium-interior-qa',displayName:'돌 가게 실내'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-vernal',interior:null,x:9,y:4,facing:'up',zaVernalSlowbroBank:false,zaVernalEastRoof:false,...extra},state.revision+1);
+  seedWorld(place({zaMission10Stage:9,zaRoyaleRank:'Z'}));await get();await call('enterStoneEmporium',{},409);
+  seedWorld(place({zaMission10Stage:10,zaSide27Started:true}));sql.prepare('UPDATE wallets SET coins=23000 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='enterStoneEmporium'));await call('enterStoneEmporium');await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-vernal','stoneEmporium',11,13]);await call('mapFastTravel',{destination:'hotel'},409);
+  await walkTo({x:11,y:6});await call('face',{direction:'up'});await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='buyEvolutionStone-firestone'));const rev=state.revision;await call('buyEvolutionStone-firestone');await call('buyEvolutionStone-firestone',{revision:rev},409);await get();assert.equal(state.wallet.coins,20000);assert.equal(state.inventory.firestone,1);await call('side27Buy-jaw');await get();assert.equal(state.wallet.coins,0);assert.equal(state.inventory.jawfossil,1);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).id,152);
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.interior,state.world.x,state.world.y],['lumiose-vernal',null,9,4]);await call('face',{direction:'up'});await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='side27Buy-jaw'));assert.equal(state.world.zaSide27Started,true);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Side Mission 67 preserves unrecognized progress records',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side67-future-records-qa',displayName:'수로 기록 보존'};
  try{

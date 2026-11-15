@@ -1507,6 +1507,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      return;
     }
     if(w.interior==='canariQuiz'){ctx.fillStyle=c==='#'?'#65736d':c===','?'#99c89a':c===';'?'#dc9b9b':'#d6d5bd';ctx.fillRect(px,py,tile,tile);if(c==='v'||c==='w'){ctx.fillStyle=c==='v'?'#3f9870':'#bc5660';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 18px sans-serif';ctx.textAlign='center';ctx.fillText(c==='v'?'O':'X',px+tile/2,py+23);}if(c==='X'){ctx.fillStyle='#927562';ctx.fillRect(px+4,py+4,tile-8,tile-8);}return;}
+    if(w.interior==='stoneEmporium'){ctx.fillStyle=c==='#'?'#8b857e':(x+y)%2?'#e6ded1':'#f1e9da';ctx.fillRect(px,py,tile,tile);if(c==='^'){ctx.fillStyle='#72584c';ctx.fillRect(px+3,py+5,tile-6,tile-10);ctx.fillStyle=(x+y)%2?'#81aaa6':'#c9a876';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,5,0,Math.PI*2);ctx.fill();}if(c==='n'){ctx.fillStyle='#95715a';ctx.fillRect(px+3,py+tile-10,tile-6,7);}if(c==='X'){ctx.fillStyle='#84675a';ctx.fillRect(px+4,py+4,tile-8,tile-8);}return;}
     if(w.interior==='cafeAction'){ctx.fillStyle=c==='#'?'#8b766b':(x+y)%2?'#e9dfcb':'#f3ebda';ctx.fillRect(px,py,tile,tile);if(c==='^'){ctx.fillStyle='#775749';ctx.fillRect(px+3,py+5,tile-6,tile-10);ctx.fillStyle='#c7a77d';ctx.fillRect(px+5,py+5,tile-10,4);}if(c==='X'){ctx.fillStyle='#84675a';ctx.fillRect(px+4,py+4,tile-8,tile-8);}return;}
     if(w.interior==='cafeGallant'){ctx.fillStyle=c==='#'?'#907f71':(x+y)%2?'#dbd1bd':'#e8dfcc';ctx.fillRect(px,py,tile,tile);if(c==='k'){ctx.fillStyle='#a27555';ctx.fillRect(px+2,py+5,tile-4,tile-10);}if(c==='X'){ctx.fillStyle='#9b745b';ctx.fillRect(px+4,py+4,tile-8,tile-8);}return;}
     if(['racineGarage','racineRoom'].includes(w.interior)){ctx.fillStyle=c==='#'?'#747977':w.interior==='racineRoom'?(x+y)%2?'#d9cce0':'#e4d7e8':(x+y)%2?'#c8ccbe':'#d7d9ce';ctx.fillRect(px,py,tile,tile);if(c==='k'){ctx.fillStyle='#866c91';ctx.fillRect(px+2,py+5,tile-4,tile-10);}if(c==='u'||c==='X'){ctx.fillStyle=c==='u'?'#816c8c':'#927562';ctx.fillRect(px+4,py+4,tile-8,tile-8);}return;}
@@ -1936,6 +1937,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     if(sylveon){const img=fieldImages[700],px=sylveon.x*tile,py=sylveon.y*tile;if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-4,py-8,tile+8,tile+8);else{ctx.fillStyle='#f7d9e5';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();}}
    }else side67Trail=null;
    // Hotel Z's outdoor SBC confrontation; the compressed placement is draft.
+   if(w.district==='lumiose-vernal'&&w.interior==='stoneEmporium'&&w.map?.[5]?.[11]==='n')trainer(11,5,'#b48969','down');
    if(w.district==='lumiose'&&!w.interior&&w.map?.[7]?.[11]==='v'&&!(w.x===11&&w.y===7))trainer(11,7,'#79658c','down');
    // The rooftop discussion includes AZ and the team. Companion placement and
    // clothing are visual approximations and do not change movement or saves.
