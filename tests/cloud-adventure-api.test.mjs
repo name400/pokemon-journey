@@ -10742,6 +10742,20 @@ test('Magenta 7 northern courtyard requires a fire attack and preserves rewards'
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Magenta 7 north roof connects after clearing and preserves its rewards',async()=>{
+ const previousUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'magenta7-roof-qa',displayName:'북쪽 옥상'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,original=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector7',interior:null,x:6,y:3,facing:'up',zaMagenta7NorthOpen:true,zaMagenta7Items:['north-pearl'],adventureBalls:{greatball:99}},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-magenta7-north-roof');assert.deepEqual([state.world.x,state.world.y],[11,15]);
+  await walkTo({x:5,y:8});await call('face',{direction:'left'});await get();assert.equal(state.world.interaction.action,'magenta7RoofItem-west-great');await call('magenta7RoofItem-west-great',{},409);assert.equal(rawWorld().zaMagenta7RoofItems,undefined);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:8,facing:'left',adventureBalls:{...rawWorld().adventureBalls,greatball:98}},state.revision+1));await get();const rev=state.revision;await call('magenta7RoofItem-west-great');await call('magenta7RoofItem-west-great',{revision:rev},409);await get();assert.equal(state.world.adventureBalls.greatball,99);assert.deepEqual(rawWorld().zaMagenta7RoofItems,['west-great']);
+  await walkTo({x:6,y:5});await call('face',{direction:'left'});await call('magenta7RoofItem-west-thunder');await get();assert.equal(state.inventory.thunderstone,1);assert.deepEqual(rawWorld().zaMagenta7Items,['north-pearl']);assert.deepEqual(rawMon(lead).ivs,original.ivs);
+  const unknown={version:2,items:['future']};seedWorld(storeAdventurePosition({...rawWorld(),x:6,y:9,facing:'right',zaMagenta7RoofItems:unknown},state.revision+1));await get();await call('magenta7RoofItem-west-ultra',{},409);assert.deepEqual(rawWorld().zaMagenta7RoofItems,unknown);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:6,y:9,facing:'right',zaMagenta7RoofItems:['west-great','west-thunder']},state.revision+1));await get();
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-magenta-sector7');assert.deepEqual([state.world.x,state.world.y],[6,3]);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Magenta 8 ground items protect inventory and persist across reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta8-ground-qa',displayName:'마젠타 8 도구'};
  try{

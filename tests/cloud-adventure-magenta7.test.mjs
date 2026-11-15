@@ -3,6 +3,15 @@ import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {adventureBattleOptions} from '../lib/cloud-adventure/adventure-battle-weather.mjs';
 
+test('northern roof requires the opened courtyard and restores its separate floor',()=>{
+ const s={area:3,district:'lumiose-magenta-sector7',interior:null,x:6,y:3,teamIds:['kept'],zaMagenta7Items:['north-pearl']};
+ assert.equal(stepField(s,'up').blocked,true);
+ const roof=stepField({...s,zaMagenta7NorthOpen:true},'up');assert.deepEqual([roof.district,roof.x,roof.y],['lumiose-magenta7-north-roof',11,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...roof,zaMagenta7NorthOpen:true,zaMagenta7RoofItems:['west-great']},182),182);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMagenta7Items],['lumiose-magenta7-north-roof',11,15,['kept'],['north-pearl']]);assert.equal(fieldMap(saved)[8][4],'.');assert.equal(fieldMap(saved)[5][5],'j');
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector7',6,3]);
+});
+
 test('Magenta 7 courtyard and four street connections preserve saves and zone gates',()=>{
  const s={area:3,district:'lumiose-magenta-sector7',interior:null,x:11,y:8,zaRoyaleRank:'Z',teamIds:['kept'],money:731};
  const map=fieldMap(s);assert.equal(map[12][16],';');assert.ok(fieldPath(map,s,{x:16,y:12}).length);
