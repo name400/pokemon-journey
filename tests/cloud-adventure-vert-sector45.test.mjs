@@ -2,6 +2,22 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Vert 2 connects to Vernal on the ground without altering nearby zone gates or layers',()=>{
+ const city={area:3,district:'lumiose-vert2',interior:null,x:1,y:12,zaRoyaleRank:'F',zaMission03Stage:3,teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(city),city,{x:11,y:8}).length);assert.equal(stepField({...city,x:1,y:5},'left').blocked,true);
+ const avenue=stepField(city,'left');assert.deepEqual([avenue.district,avenue.x,avenue.y,avenue.zaVernalEastRoof,avenue.zaVernalSlowbroBank],['lumiose-vernal',21,7,false,false]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...city,...avenue},129),129);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission03Stage,saved.teamIds],['lumiose-vernal',21,7,3,['kept']]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y,back.zaVert2RoofUpper],['lumiose-vert2',1,12,false]);
+ assert.notEqual(stepField({...city,zaVert2RoofUpper:true},'left').transitioned,true);
+ assert.notEqual(stepField({...saved,zaVernalSlowbroBank:true},'right').transitioned,true);
+ assert.notEqual(stepField({...saved,zaVernalEastRoof:true},'right').transitioned,true);
+ assert.equal(stepField({...city,zaVernalEastRoof:{version:2}},'left').blocked,true);
+ assert.equal(stepField({...saved,zaVert2RoofUpper:{version:2}},'right').blocked,true);
+ assert.equal(stepField({...city,x:21,y:8},'right').district,'lumiose-zone2');
+ const old=restoreAdventurePosition(storeAdventurePosition({...city,x:11,y:8},129),129);assert.deepEqual([old.x,old.y],[11,8]);
+});
+
 test('Vert 2 and Vert Street connect at ground level without bypassing locked zones or Mission 3',()=>{
  const base={area:3,district:'lumiose-vert2',interior:null,x:21,y:5,zaMission03Stage:3,zaRoyaleRank:'F',teamIds:['kept']};
  assert.ok(fieldPath(fieldMap(base),{x:11,y:8},base).length);
