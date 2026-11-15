@@ -1,6 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,FLORAL_STREET_BLOCKS} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Vernal and South Boulevard connect without changing saved layers or existing exits',()=>{
+ const avenue={area:3,district:'lumiose-vernal',interior:null,x:14,y:15,teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(avenue),{x:11,y:8},avenue).length);
+ const boulevard=stepField(avenue,'down');assert.deepEqual([boulevard.district,boulevard.x,boulevard.y,boulevard.zaVert7RoofUpper],['lumiose-south-boulevard',7,1,false]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...avenue,...boulevard},161),161);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money],['lumiose-south-boulevard',7,1,['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:8}).length);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaVernalEastRoof,back.zaVernalSlowbroBank],['lumiose-vernal',14,15,false,false]);
+ assert.equal(stepField({...saved,zaVernalEastRoof:{version:2}},'up').blocked,true);
+ assert.notEqual(stepField({...avenue,zaVernalSlowbroBank:true},'down').transitioned,true);
+ assert.equal(stepField({...saved,x:8},'up').district,'lumiose-bleu-sector7');
+ assert.equal(stepField({...avenue,x:20},'down').district,'lumiose-aymlis-park');
+});
 test('Vert Sector 8 and South Boulevard connect at ground level without replacing Zone 1',()=>{
  const sector={area:3,district:'lumiose-vert-sector8',interior:null,x:14,y:15,teamIds:['kept'],money:731};
  assert.ok(fieldPath(fieldMap(sector),{x:1,y:8},sector).length);
