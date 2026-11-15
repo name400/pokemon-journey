@@ -35,3 +35,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 구역 16 및 이전 수변 성장 기술
 - [대여르](https://pokemondb.net/pokedex/falinks/moves/9), [거북손손](https://pokemondb.net/pokedex/binacle/moves/9), [거북손데스](https://pokemondb.net/pokedex/barbaracle/moves/9)의 2차 Z-A 기술표를 새 일반 개체에 연결했다. 거북손손은 기존 구역 2·6에도 출현하며 거북손데스는 구역 16의 직접 조우에 적용한다. 레벨 성장과 기술 떠올리기에 반영하고 구형 개체·우두머리·미확인 표식은 소급하지 않는다.
 - 야생 초기 기술을 레벨 이하에서 최근 4개로 고르는 것은 기존 엔진의 근사다. 크기별 호바귀와 우두머리 기술, 앞 구역의 다른 수생종, 구역 16의 나머지 진화형 직접 출현은 별도 확인이 필요하다. 운영·Sites 병합본은 이번 작업으로 재검증하지 않았다.
+
+### 구역 17 및 하수도 성장 기술
+- 새 일반 클레피와 불켜미·램프라·샹델라 계열에 Z-A 레벨 기술표를 적용하고, 구역 17 램프라와 하수도 불켜미의 전투·직접 포획 경로를 연결했다. 구역 17 직접 출현 파르토·화염레오도 이전에 검토한 계열 기술표를 쓰도록 연결했다. [클레피](https://pokemondb.net/pokedex/klefki/moves/9), [불켜미](https://pokemondb.net/pokedex/litwick/moves/9), [램프라](https://pokemondb.net/pokedex/lampent/moves/9), [샹델라](https://pokemondb.net/pokedex/chandelure/moves/9)의 2차 자료를 사용했다.
+- 야생 초기 기술을 현재 레벨 이하 최근 4개로 고르는 것은 기존 엔진의 근사다. 기존 개체·우두머리·알 수 없는 성장 표식은 변경하지 않는다. 구역 17 무장조와 앞 구역 수생종·진화형 누락, 호바귀 크기별 폼과 우두머리는 추가 대조가 필요하다. Sites 병합본·운영 환경은 이번 변경으로 재검증하지 않았다.
