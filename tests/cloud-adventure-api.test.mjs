@@ -11040,3 +11040,15 @@ test('Jaune 5 courtyard items preserve paths, inventory and unknown save entries
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-sector8',interior:null,x:7,y:7,facing:'up'},state.revision+1));await get();const coins=state.wallet.coins;await call('sellAdventureTreasure',{item:'bigpearl'});assert.equal(state.wallet.coins,coins+4000);assert.equal(state.inventory.bigpearl,undefined);assert.equal(state.inventory.rarecandy,1);assert.deepEqual(rawWorld().zaJaune5CourtItems,[...items,'western-big-pearl','southern-rare-candy']);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Jaune 5 upper route and roof item preserve existing saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'jaune5-upper-qa',displayName:'존느 높은 길'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,items=['future',{version:2}];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector5',interior:null,x:12,y:4,facing:'up',zaJaune5CourtItems:items},state.revision+1));await get();
+  await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-jaune5-upper');await get();assert.equal(state.world.district,'lumiose-jaune5-upper');
+  await walkTo({x:11,y:4});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'jaune5CourtItem-roof-northern-rare-candy');
+  const mon=rawMon(id),revision=state.revision;await call('jaune5CourtItem-roof-northern-rare-candy');assert.equal(state.inventory.rarecandy,1);assert.deepEqual(rawMon(id),mon);assert.deepEqual(rawWorld().zaJaune5CourtItems,[...items,'roof-northern-rare-candy']);await call('jaune5CourtItem-roof-northern-rare-candy',{revision},409);await get();
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-jaune-sector5');assert.deepEqual(rawWorld().zaJaune5CourtItems,[...items,'roof-northern-rare-candy']);
+ }finally{globalThis.__adventureUser=previous;}
+});

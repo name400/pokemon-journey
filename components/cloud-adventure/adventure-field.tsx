@@ -1273,6 +1273,14 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='H'){ctx.fillStyle='#c25b5b';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#fff4e8';ctx.fillRect(px+4,py+4,tile-8,7);ctx.fillStyle='#fff';ctx.fillRect(px+tile/2-2,py+12,4,10);ctx.fillRect(px+tile/2-5,py+15,10,4);}
      if(c==='X'){ctx.fillStyle='#688b80';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
+    if(w.district==='lumiose-jaune5-upper'&&!w.interior){
+     // Roof and stairs are a provisional view of the elevated courtyard path.
+     ctx.fillStyle=c==='#'?'#887c72':c===','?'#bbab99':(x+y)%2?'#c9beb0':'#d8cec0';ctx.fillRect(px,py,tile,tile);
+     if(c==='.'){ctx.fillStyle='#a99c8d';ctx.fillRect(px,py+tile-2,tile,2);}
+     if(c===','){ctx.fillStyle='#e5d5c3';for(let j=4;j<tile;j+=8)ctx.fillRect(px+3,py+j,tile-6,2);}
+     if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}
+     if(jaune5CourtItem(w,{x,y,tile:c})){ctx.fillStyle='#fff2bb';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,5,0,Math.PI*2);ctx.fill();}return;
+    }
     if(w.district==='lumiose-jaune5-west-court'&&!w.interior){
      // The building-enclosed court and its entrance are a provisional 2D layout.
      ctx.fillStyle=c==='#'?'#a28e81':c===','?'#bcae9e':(x+y)%2?'#dfd2c0':'#eadfce';ctx.fillRect(px,py,tile,tile);
