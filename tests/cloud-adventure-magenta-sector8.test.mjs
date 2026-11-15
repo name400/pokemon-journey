@@ -1,7 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,fieldDialogue,stepField,rotoGlideLanding,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {magentaSector8RouteMap} from '../lib/cloud-adventure/adventure-magenta-sector8-route.mjs';
+test('eastern and cafe roofs require glide and preserve saved item state',()=>{
+ const start={area:3,district:'lumiose-screw-magenta8',interior:null,x:19,y:5,zaMission15Stage:1,teamIds:['kept'],zaMagenta8Items:['grass-great']};assert.equal(rotoGlideLanding(start),null);
+ const ready={...start,zaMission15Stage:2},land=rotoGlideLanding(ready),east=restoreAdventurePosition(storeAdventurePosition({...ready,...land},231),231);assert.deepEqual([east.district,east.x,east.y],['lumiose-magenta8-east-roof',3,8]);assert.deepEqual(east.zaMagenta8Items,['grass-great']);assert.equal(stepField({...east,x:10,y:8},'right').blocked,true);
+ assert.equal(rotoGlideLanding({...east,x:10,y:8}).x,14);assert.equal(rotoGlideLanding({...east,x:14,y:8}).x,10);assert.equal(rotoGlideLanding(east).district,start.district);
+});
 test('North Boulevard to Magenta Sector 8 and Zone 18 keeps gate and saves',()=>{
  const start={area:3,district:'lumiose-north-boulevard',interior:null,x:8,y:1,facing:'up',zaRoyaleRank:'C'};
  const route=stepField(start,'up');assert.equal(route.district,'lumiose-magenta-sector8-route');assert.ok(fieldPath(magentaSector8RouteMap(),route,{x:21,y:8}).length);

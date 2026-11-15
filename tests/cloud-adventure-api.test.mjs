@@ -10796,6 +10796,20 @@ test('Magenta 8 roof links to Magenta 7 without the northern fire gate',async()=
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Magenta 8 eastern and cafe rooftops support glide and keep item records',async()=>{
+ const previousUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'magenta8-east-roof-qa',displayName:'마젠타 8 옥상'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,initial=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-screw-magenta8',interior:null,x:19,y:5,facing:'right',zaMission15Stage:1,zaMagenta8Items:['grass-great','future-item']},state.revision+1));await get();await call('rotoGlide',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:19,y:5,facing:'right',zaMission15Stage:2},state.revision+1));await get();await call('rotoGlide');await get();assert.equal(state.world.district,'lumiose-magenta8-east-roof');assert.deepEqual([state.world.x,state.world.y],[3,8]);
+  await walkTo({x:5,y:5});await call('face',{direction:'left'});const rev=state.revision;await call('magenta8ScaffoldItem-east-hpup');await call('magenta8ScaffoldItem-east-hpup',{revision:rev},409);await get();assert.equal(state.inventory.hpup,1);
+  await walkTo({x:8,y:11});await call('face',{direction:'right'});await call('magenta8ScaffoldItem-east-zinc');await get();assert.equal(state.inventory.zinc,1);
+  await walkTo({x:10,y:8});await call('rotoGlide');await get();assert.deepEqual([state.world.x,state.world.y],[14,8]);await walkTo({x:17,y:5});await call('face',{direction:'right'});const key=JSON.stringify([globalThis.__adventureUser.userId,'maxrevive']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'maxrevive');await get();await call('magenta8ScaffoldItem-triste-max-revive',{},409);assert.ok(!rawWorld().zaMagenta8Items.includes('triste-max-revive'));
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();await call('magenta8ScaffoldItem-triste-max-revive');await get();assert.equal(state.inventory.maxrevive,1);assert.deepEqual(rawWorld().zaMagenta8Items,['grass-great','future-item','east-hpup','east-zinc','triste-max-revive']);assert.deepEqual(rawMon(lead).ivs,initial.ivs);
+  await walkTo({x:14,y:8});await call('rotoGlide');await walkTo({x:3,y:8});await call('rotoGlide');await get();assert.equal(state.world.district,'lumiose-screw-magenta8');assert.deepEqual([state.world.x,state.world.y],[19,5]);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Magenta 8 scaffold items preserve prior collections and prevent duplicates',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta8-scaffold-qa',displayName:'마젠타 8 비계'};
  try{

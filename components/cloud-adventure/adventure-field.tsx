@@ -940,12 +940,17 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      }
      if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
+    if(w.district==='lumiose-magenta8-east-roof'&&!w.interior){
+     ctx.fillStyle=c==='#'?'#627683':(x+y)%2?'#abb7b0':'#c6cfbf';ctx.fillRect(px,py,tile,tile);
+     if('iko'.includes(c)){ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
+     if(y===8&&[3,10,14].includes(x)){ctx.fillStyle='#477d93';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공',px+tile/2,py+tile/2+3);}return;
+    }
     if(w.district==='lumiose-screw-magenta8'&&!w.interior){
      // Scaffold and nearby roof share a compressed draft plane; no collision changes.
      const scaffold=x<=10&&c!=='#';ctx.fillStyle=c==='#'?'#667980':scaffold?'#a28a6c':'#adb6ae';ctx.fillRect(px,py,tile,tile);
      if(scaffold){ctx.fillStyle='#cfb390';for(let n=4;n<tile;n+=8)ctx.fillRect(px+2,py+n,tile-4,2);ctx.fillStyle='#786858';ctx.fillRect(px+tile-3,py,2,tile);}else if(c!=='#'){ctx.fillStyle='#8c9892';ctx.fillRect(px,py+tile-3,tile,2);}
      if('ikopq'.includes(c)){ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
-     if(x===19&&y===8){ctx.fillStyle='#477d93';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공',px+tile/2,py+tile/2+3);}
+     if(x===19&&(y===5||y===8)){ctx.fillStyle='#477d93';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공',px+tile/2,py+tile/2+3);}
      if(c==='j'){ctx.fillStyle='#65584d';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e7d8b6';for(let n=0;n<3;n++)ctx.fillRect(px+6,py+7+n*7,tile-12,2);}return;
     }
     if(isScrewGlideRoof(w.district)&&!w.interior){
