@@ -160,6 +160,25 @@ test('Zone 8 opposed street gates keep encounters and saves',async()=>{
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=previousRandom;}
 });
 
+test('Espace Vide northern Great Ball preserves inventory and grants only once',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'espace-north-greatball-qa',displayName:'에스파스 도구 검증'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-espace-vide',interior:null,x:14,y:3,facing:'up',adventureBalls:{greatball:99,ultraball:3},zaMission20Stage:7},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'espaceNorthGreatBall');await call('espaceNorthGreatBall',{},409);
+  assert.equal(rawWorld().zaEspaceNorthGreatBall,undefined);assert.equal(rawWorld().adventureBalls.greatball,99);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-espace-vide',interior:null,x:14,y:3,facing:'up',adventureBalls:{greatball:98,ultraball:3}},state.revision+1));await get();assert.equal(state.world.interaction?.action,'espaceNorthGreatBall');const revision=state.revision;
+  await call('espaceNorthGreatBall');await call('espaceNorthGreatBall',{revision},409);await get();
+  assert.deepEqual(state.world.adventureBalls,{greatball:99,ultraball:3});assert.equal(state.world.zaEspaceNorthGreatBall,true);
+  assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaMission20Stage,7);assert.deepEqual(state.wallet,wallet);
+  await call('espaceNorthGreatBall',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-espace-vide',interior:null,x:14,y:3,facing:'up',zaEspaceNorthGreatBall:{version:2}},state.revision+1));await get();await call('espaceNorthGreatBall',{},409);
+  assert.deepEqual(rawWorld().zaEspaceNorthGreatBall,{version:2});assert.equal(rawWorld().adventureBalls.greatball,99);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-espace-vide',interior:null,x:14,y:3,facing:'up',zaEspaceNorthGreatBall:false,adventureBalls:{version:2,greatball:1}},state.revision+1));await get();await call('espaceNorthGreatBall',{},409);
+  assert.deepEqual(rawWorld().adventureBalls,{version:2,greatball:1});assert.equal(rawWorld().zaEspaceNorthGreatBall,false);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Zone 10 canal item remains accessible while standing on stairs',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone10-stairs-item-qa',displayName:'계단 도구 검증'};
  try{await get();await call('start',{species:1});const before=structuredClone(state.wallet),team=[...state.world.teamIds];seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:6,y:7,facing:'up',zaRoyaleRank:'F'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone10Item-canal-quick');const rev=state.revision;await call('zone10Item-canal-quick');await call('zone10Item-canal-quick',{revision:rev},409);await get();assert.equal(state.world.adventureBalls.quickball,1);assert.deepEqual(state.world.zaZone10Items,['canal-quick']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,before);assert.equal(state.world.interaction.action,'zone10BankStairs');await call('zone10BankStairs');assert.equal(state.world.zaZone10LowerBank,true);
