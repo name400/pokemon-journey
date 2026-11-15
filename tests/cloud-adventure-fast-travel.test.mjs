@@ -3,6 +3,14 @@ import assert from 'node:assert/strict';
 import {FAST_TRAVEL_CENTERS,centerAt,recordCenter,recordNearbyCenter,registeredCenters} from '../lib/cloud-adventure/adventure-fast-travel.mjs';
 import {fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Justice Dojo map travel follows Josée victory and preserves legacy landmark data',async()=>{
+ const {registeredLandmarks,mapTravelDestinations,taxiDestinations,recordLandmarks}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const base={area:3,district:'lumiose-jaune-sector2',interior:null,x:5,y:11,facing:'up',zaMission19Stage:1,zaRoyaleRank:'E',zaFastTravelLandmarks:['future'],teamIds:['kept']};
+ assert.ok(!mapTravelDestinations(base).some(p=>p.id==='justice-dojo'));assert.equal(recordLandmarks({...base,zaFastTravelLandmarks:[]}),false);
+ for(const progression of [{zaMission19JoseeWon:true},{zaMission19Stage:2},{zaMission19Stage:14},{zaMission19Complete:true},{zaRoyaleRank:'D'}]){const s={...base,...progression},before=structuredClone(s);assert.ok(mapTravelDestinations(s).some(p=>p.id==='justice-dojo'));assert.equal(registeredLandmarks(s).find(p=>p.id==='justice-dojo').x,5);assert.ok(!taxiDestinations(s).some(p=>p.id==='justice-dojo'));assert.deepEqual(s,before);}
+ const legacy={...base,zaMission19Stage:9,zaFastTravelLandmarks:{version:2,items:['future']}};assert.ok(mapTravelDestinations(legacy).some(p=>p.id==='justice-dojo'));assert.deepEqual(legacy.zaFastTravelLandmarks,{version:2,items:['future']});assert.equal(fieldDialogue(base).action,'enterJusticeDojo');
+});
+
 test('map travel from Sector 1 clears only a known Zone 5 transient ledger',async()=>{
  const {clearMapTravelTransient}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
  const known={district:'lumiose-bleu-sector1',zaZone5Spent:{'bellsprout-alpha':true},zaWildShinyRolls:{'zone5:abra:63':true},teamIds:['kept']};clearMapTravelTransient(known);assert.equal(known.zaZone5Spent,undefined);assert.deepEqual(known.zaWildShinyRolls,{'zone5:abra:63':true});assert.deepEqual(known.teamIds,['kept']);

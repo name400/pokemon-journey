@@ -3053,6 +3053,16 @@ test('Justice Dojo connects Jaune Sector 2 with missions and hyper training',asy
  }finally{globalThis.__adventureUser=priorUser;}
 });
 
+test('Josée victory unlocks Justice Dojo map travel without rewriting old landmarks',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'mission19-dojo-travel-qa',displayName:'도장 빠른 이동'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,hero={...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{},custom:{kept:true}};seedMon(id,hero);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector2',interior:'justiceDojo',x:7,y:5,facing:'up',zaMission04Complete:true,zaMission19Stage:1,zaMission19JoseeWon:false,zaRoyaleRank:'E',zaRoyaleEPoints:35000,zaFastTravelLandmarks:['future-landmark']},state.revision+1));await get();assert.ok(!state.world.zaMapTravelDestinations.some(p=>p.id==='justice-dojo'));await call('mission19Josee');
+  const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.equal(state.world.zaMission19JoseeWon,true);assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='justice-dojo'));assert.deepEqual(rawWorld().zaFastTravelLandmarks,['future-landmark']);
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();const revision=state.revision;await call('mapFastTravel',{destination:'justice-dojo'});await call('mapFastTravel',{destination:'justice-dojo',revision},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.facing],['lumiose-jaune-sector2',5,11,'up']);assert.equal(state.world.interaction.action,'enterJusticeDojo');assert.deepEqual(rawWorld().zaFastTravelLandmarks,['future-landmark']);assert.deepEqual(rawMon(id).ivs,hero.ivs);assert.deepEqual(rawMon(id).custom,hero.custom);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Rust Syndicate office separates courtyard and preserves story progress',async()=>{
  const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'rust-office-qa',displayName:'사무소테스트'};
  try{
