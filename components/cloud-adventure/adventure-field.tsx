@@ -484,7 +484,9 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='X'||c==='E'){ctx.fillStyle='#648c85';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#b9d0b7';ctx.fillRect(px+8,py+8,tile-16,tile-16);}
      return;
     }
-    if(['lumiose-magenta-sector1','lumiose-magenta-sector2','lumiose-magenta-sector3','lumiose-magenta-sector3-roof','lumiose-magenta-sector4','lumiose-magenta-sector4-roof','lumiose-magenta-sector6','lumiose-magenta-sector6-roof','lumiose-magenta-sector9'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#987e91':c==='g'?'#9bb985':c===','?'#c8b2bd':(x+y)%2?'#e1d5df':'#eae0e8';ctx.fillRect(px,py,tile,tile);
+    if(['lumiose-magenta-sector1','lumiose-magenta-sector2','lumiose-magenta-sector3','lumiose-magenta-sector3-roof','lumiose-magenta-sector4','lumiose-magenta-sector4-roof','lumiose-magenta-sector6','lumiose-magenta-sector6-roof','lumiose-magenta-sector7','lumiose-magenta-sector9'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#987e91':c==='g'?'#9bb985':c===','?'#c8b2bd':(x+y)%2?'#e1d5df':'#eae0e8';ctx.fillRect(px,py,tile,tile);
+     if(w.district==='lumiose-magenta-sector7'&&c===';'){ctx.fillStyle=(x+y)%2?'#c7c0aa':'#d6cbb5';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#b8aa92';ctx.fillRect(px,py,tile,2);}
+     if(w.district==='lumiose-magenta-sector7'&&c==='#'&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle='#bba0a8';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#e1c9bf';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]!=='#')ctx.fillRect(px,py+tile-3,tile,3);}
      if(w.district==='lumiose-magenta-sector4'){
       // Existing 2D building, plaza lawn and streets; dimensions are provisional.
       const outer=x===0||x===22||y===0||y===16;
