@@ -1521,6 +1521,16 @@ test('pending middle mission stones remain claimable when legacy parent stages a
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('new mission 16 through 18 bosses use reviewed moves across reload',async()=>{
+ const previousUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'mission15-rogue-moves-qa',displayName:'폭주 기술'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,before=rawMon(id);
+  for(const e of [{n:16,district:'lumiose-mission16-roof',x:18,y:6,moves:['독찌르기','덤벼들기']},{n:17,district:'lumiose-magenta-sector3-roof',x:18,y:6,moves:['제비반환','에어슬래시','깨뜨리다']},{n:18,district:'lumiose-jaune-sector9',x:14,y:9,moves:['고스트다이브','야습','섀도볼','이상한빛'] }]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:e.district,interior:null,x:e.x,y:e.y,facing:'up',zaMission15Stage:2,zaMission10Starter:'grass',zaMission17ApproachRequired:false,zaMission18ApproachRequired:false,combat:null,encounter:null,trainer:null},state.revision+1));await get();await call('battleMission15Case');assert.deepEqual(state.battle.teams[1][0].moves,e.moves);await get();assert.deepEqual(state.battle.teams[1][0].moves,e.moves);const move=state.battle.requests[0].moves.find(m=>!m.disabled&&m.pp>0).name;await call('battle',{command:{type:'move',move}});const ongoing=!!state.battle;if(ongoing)await call('forfeit');await get();if(ongoing)assert.notEqual(state.world[`zaMission${e.n}Complete`],true);assert.deepEqual(state.world.teamIds,[id]);assert.deepEqual(rawMon(id).ivs,before.ivs);
+  }
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('legacy mission 16 through 18 and 21 through 23 single boss saves finish normally',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission16-18-legacy-boss-qa',displayName:'기존폭주저장검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId;
