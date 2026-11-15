@@ -492,6 +492,19 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='X'||c==='W'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}
      return;
     }
+    if(w.district==='lumiose-bleu-street'&&!w.interior){
+     // Street frontage and cafe position remain provisional 2D artwork.
+     const outer=x===0||x===22||y===0||y===16;
+     ctx.fillStyle=c==='#'?(outer?'#968e83':'#d7c2ae'):c===','?'#bcb5a8':(x+y)%2?'#e4e0d5':'#ede9de';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'&&!outer){
+      ctx.fillStyle=y<8?'#d9bdaa':'#c9baaa';ctx.fillRect(px,py,tile,tile);
+      ctx.fillStyle='#987f70';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y]?.[x-1]!=='#')ctx.fillRect(px,py,4,tile);if(w.map[y]?.[x+1]!=='#')ctx.fillRect(px+tile-4,py,4,tile);
+      if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#89766b';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#719096';ctx.fillRect(px+8,py+tile-6,tile-16,3);}else if((x+y)%2===0){ctx.fillStyle='#c3a995';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
+     }
+     if(c===','){ctx.fillStyle='#e8e0d2';if(w.map[y-1]?.[x]!==',')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]!==',')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]!==',')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]!==',')ctx.fillRect(px+tile-2,py,2,tile);}
+     if(c==='m'){ctx.fillStyle='#c4a38e';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#805f52';ctx.fillRect(px+2,py+4,tile-4,tile-7);ctx.fillStyle='#f1e2cc';ctx.fillRect(px+5,py+9,tile-10,tile-15);ctx.fillStyle='#b95c55';ctx.fillRect(px+3,py+4,tile-6,5);ctx.fillStyle='#fff3db';for(let j=5;j<tile-5;j+=8)ctx.fillRect(px+j,py+4,4,5);ctx.fillStyle='#715d52';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('카페',px+tile/2,py+22);}
+     if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-bleu-sector7'&&!w.interior&&w.zaBleu7Upper!==true){
      // Existing 2D building footprints and their heights are provisional.
      const outer=x===0||x===22||y===0||y===16;
