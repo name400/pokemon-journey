@@ -1247,6 +1247,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(building){ctx.fillStyle=restaurant?'#c4a499':'#b7a79b';ctx.fillRect(px,py,tile,tile);if(y===2||y===11){ctx.fillStyle='#ebd6c3';ctx.fillRect(px,py,tile,4);}if(y===5||y===14){ctx.fillStyle=restaurant?'#825a54':'#82746d';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#e6cfb8';ctx.fillRect(px+4,py+tile-6,8,3);ctx.fillRect(px+tile-12,py+tile-6,8,3);}}
      if(c===','){ctx.fillStyle='#e8dcd0';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);}
      if(c==='u'){ctx.fillStyle='#8b5855';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#f1ded0';ctx.fillRect(px+3,py+3,tile-6,5);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('르 와우',px+tile/2,py+21);}
+     if(c==='H'){ctx.fillStyle='#c25b5b';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#fff4e8';ctx.fillRect(px+4,py+4,tile-8,7);ctx.fillStyle='#fff';ctx.fillRect(px+tile/2-2,py+12,4,10);ctx.fillRect(px+tile/2-5,py+15,10,4);}
      if(c==='X'){ctx.fillStyle='#688b80';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
     if(w.district==='lumiose-jaune5-west-court'&&!w.interior){

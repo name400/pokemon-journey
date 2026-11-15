@@ -1,6 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldMap,fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {centerAt,recordNearbyCenter,registeredCenters} from '../lib/cloud-adventure/adventure-fast-travel.mjs';
+
+test('Rouge 2 center shares the existing Centrico registration and preserves saves',()=>{
+ const s={area:3,district:'lumiose-rouge-sector2',interior:null,x:15,y:15,facing:'up',teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(s),{x:9,y:15},s).length);
+ assert.equal(fieldDialogue(s).action,'heal');
+ assert.equal(centerAt(s,{tile:'H',x:15,y:14}).id,'centrico');
+ assert.equal(recordNearbyCenter(s,()=>fieldMap(s)),true);assert.deepEqual(s.zaFastTravelCenters,['centrico']);
+ assert.equal(recordNearbyCenter(s,()=>fieldMap(s)),false);assert.equal(registeredCenters(s).filter(c=>c.id==='centrico').length,1);
+ const old=restoreAdventurePosition(storeAdventurePosition(s,160),160);
+ assert.deepEqual([old.district,old.x,old.y,old.teamIds,old.money,old.zaFastTravelCenters],['lumiose-rouge-sector2',15,15,['kept'],731,['centrico']]);
+ assert.equal(fieldDialogue(old).action,'heal');
+});
 
 test('Rouge Sector 2 links the academy, streets and gallery without replacing existing entrances',()=>{
  const school={area:3,district:'lumiose-rouge-sector6',zaAcademyCourtyard:true,interior:null,x:11,y:15,teamIds:['kept']};
