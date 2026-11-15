@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Bleu Sector 4 meets Estival Avenue without opening Wild Zones 9 or 10',()=>{
+ const sector={area:3,district:'lumiose-bleu-sector4',interior:null,x:15,y:1,zaRoyaleRank:'Z',teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(sector),{x:11,y:15},sector).length);
+ const avenue=stepField(sector,'up');assert.deepEqual([avenue.district,avenue.x,avenue.y],['lumiose-estival-approach',18,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...avenue},167),167);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money],['lumiose-estival-approach',18,15,['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:1}).length);
+ assert.equal(stepField({...saved,x:1,y:8},'left').blocked,true);
+ assert.equal(stepField({...saved,x:21,y:8},'right').blocked,true);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-sector4',15,1]);
+ assert.equal(stepField({...sector,x:11,y:1},'up').district,'lumiose-zone5');
+});
 test('Bleu Sector 3 connects to the eastern plaza road without opening Wild Zone 16',()=>{
  const sector={area:3,district:'lumiose-bleu-sector3',interior:null,x:1,y:6,zaRoyaleRank:'F',teamIds:['kept'],money:731};
  assert.ok(fieldPath(fieldMap(sector),{x:11,y:8},sector).length);
