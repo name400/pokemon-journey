@@ -791,6 +791,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
       if(building){ctx.fillStyle='#aa9b8b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#dacbb5';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#82766a';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#d4c6b0';ctx.fillRect(px+5,py+tile-6,7,3);ctx.fillRect(px+tile-12,py+tile-6,7,3);}else{ctx.fillStyle='#918579';ctx.fillRect(px+3,py+10,tile-6,2);}}
       if(c==='%'){ctx.fillStyle='#c5a69a';ctx.fillRect(px,py,tile,tile);if(y===3){ctx.fillStyle='#986d66';ctx.fillRect(px,py,tile,5);ctx.fillStyle='#e3c6ad';ctx.fillRect(px,py+5,tile,3);}if(y===5){ctx.fillStyle='#985f58';ctx.fillRect(px,py+tile-10,tile,6);ctx.fillStyle='#efdfc7';for(let k=3;k<tile;k+=8)ctx.fillRect(px+k,py+tile-10,4,6);ctx.fillStyle='#75928c';ctx.fillRect(px+8,py+tile-4,tile-16,3);}}
       if(c===','){ctx.fillStyle='#e8decb';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);}
+      if(c==='%'&&x===6&&y===5){ctx.fillStyle='#fff3de';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('카페',px+tile/2,py+14);}
       if(c==='j'){ctx.fillStyle='#896947';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('승강',px+tile/2,py+20);}
      }
      // Sector 5's buildings and courtyard retain their existing draft footprints.

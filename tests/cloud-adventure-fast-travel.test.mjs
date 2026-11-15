@@ -164,3 +164,9 @@ test('unknown fast travel records survive center visits and zone entry',async()=
  for(const future of [['zone1'],{1:null,other:{x:7}},'future']){const zone={area:3,district:'lumiose-zone1',interior:null,x:11,y:1,zaFastTravelZones:structuredClone(future),teamIds:['kept']};assert.equal(recordZoneEntry(zone,'lumiose-vert-sector9','.'),false);assert.deepEqual(zone.zaFastTravelZones,future);assert.deepEqual(zone.teamIds,['kept']);}
  const zone={area:3,district:'lumiose-zone1',x:11,y:1,zaFastTravelZones:{future:{x:5}}};assert.equal(recordZoneEntry(zone,'lumiose-vert-sector9','.'),true);assert.deepEqual(zone.zaFastTravelZones,{1:{x:11,y:1},future:{x:5}});
 });
+
+test('Café Classe landmark registers only on the ground',async()=>{
+ const {recordLandmarks,taxiDestinations,groundDestinationFlags}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const s={area:3,district:'lumiose-vert-sector4',interior:null,x:6,y:6,zaVert4Layer:'roof',zaFastTravelLandmarks:['future']};
+ assert.equal(recordLandmarks(s),false);assert.deepEqual(s.zaFastTravelLandmarks,['future']);s.zaVert4Layer='courtyard';assert.equal(recordLandmarks(s),false);s.zaVert4Layer='ground';assert.equal(recordLandmarks(s),true);assert.deepEqual(s.zaFastTravelLandmarks,['future','cafe-classe']);assert.ok(taxiDestinations(s).some(p=>p.id==='cafe-classe'));assert.deepEqual(groundDestinationFlags(s.district),{zaVert4Layer:'ground'});
+});

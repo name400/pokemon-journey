@@ -207,7 +207,7 @@ import {MISSION19_CANARI,MISSION19_GWYNN,MISSION19_IVOR,sewerInspected,sewerBran
 import {RANK_E_TRAINERS,RANK_E_EXTRA_POSITIONS,rankEPoints,rankEWins} from '@/lib/cloud-adventure/adventure-rank-d.mjs';
 import {MISSION15_CASES,mission15Case,mission15Complete} from '@/lib/cloud-adventure/adventure-mission15.mjs';
 import {RANK_F_TRAINERS,RANK_F_EXTRA_POSITIONS,rankFPoints,rankFWins,RANK_E_MANI,RANK_E_TARRAGON,RANK_E_CANARI} from '@/lib/cloud-adventure/adventure-rank-e.mjs';
-import {cafeWoofDrink,cafeBatailleDrink,cafeActionDrink,cafeCycloneDrink,cafeSoleilDrink,cafeShutterbugDrink} from '@/lib/cloud-adventure/adventure-cafe.mjs';
+import {cafeWoofDrink,cafeBatailleDrink,cafeActionDrink,cafeCycloneDrink,cafeSoleilDrink,cafeShutterbugDrink,cafeClasseDrink,cafeClasseSpot} from '@/lib/cloud-adventure/adventure-cafe.mjs';
 import {leYeahCourse,leYeahAvailable,LE_YEAH_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-yeah.mjs';
 import {leNahCourse,leNahAvailable,LE_NAH_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-le-nah.mjs';
 import {sushiCourseTeam,sushiAvailable,SUSHI_COURSE_COUNT} from '@/lib/cloud-adventure/adventure-sushi.mjs';
@@ -1682,6 +1682,11 @@ else if(cafeSoleilDrink(b.action)){
  const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
  reward=-drink.price;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,30);mons.set(id,rested);changed.set(id,rested);}s.log=[`${drink.name}을(를) 주문해 파티가 회복했다.`,`${drink.price}코인을 지불했다.`];
 }
+else if(cafeClasseDrink(b.action)){
+ const drink=cafeClasseDrink(b.action)!;if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||!cafeClasseSpot(s,interactionAt(s)))throw Error('아라모드 카페의 주문대를 확인하세요.');
+ const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
+ reward=-drink.price;recordResearchActivity(s,'cafe');for(const id of s.teamIds){const mon=mons.get(id);if(!mon)throw Error('파티 포켓몬을 확인하세요.');const rested=heal(mon);if(id===s.activeId)rested.friendship=friendshipGain(rested,30);mons.set(id,rested);changed.set(id,rested);}s.log=[`${drink.name}을(를) 주문해 파티가 회복했다.`,`${drink.price}코인을 지불했다.`];
+}
 else if(cafeCycloneDrink(b.action)){
  const drink=cafeCycloneDrink(b.action)!;if(s.combat||s.adventureCatchWindow||s.unionHost||s.expedition||!side18Spot(s,interactionAt(s))||(drink.requiresSide18&&s.zaSide18Stage!==2))throw Error('Café Cyclone의 주문과 메뉴를 확인하세요.');
  const wallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!wallet||wallet.coins<drink.price)throw Error('음료를 주문할 코인이 부족합니다.');
@@ -1913,6 +1918,7 @@ else if(b.action==='mapFastTravel'){
  // https://www.pokepedia.fr/Zone_sauvage_n%C2%B0_17
  const center=registeredCenters(s).find(c=>c.id===choice.id),landmark=registeredLandmarks(s).find(c=>c.id===choice.id),n=choice.kind==='zone'?Number(choice.id.slice(4)):0,p=n?(n===17?{x:5,y:15}:s.zaFastTravelZones?.[n]):null;
  const zoneGround:Record<number,any>={3:{zaZone3TowerUpper:false},5:{zaZone5Upper:false},6:{zaZone6Layer:'ground'},9:{zaZone9Upper:false},10:{zaZone10Upper:false,zaZone10LowerBank:false},12:{zaZone12PondLower:false},15:{zaZone15Upper:false},16:{zaZone16Upper:false},17:{zaZone17Upper:false,zaZone17Promenade:false},18:{zaZone18Upper:false,zaZone18Construction:false,zaZone18Scaffold:false},20:{zaMission42Underground:false}};const destination=choice.kind==='sewer'?{district:'lumiose-sewer',x:11,y:15,zaRougeStreetSouth:false,zaSewerReturn:'bleu3',zaSewerIceBranch:false,zaMission19Inner:false}:center?{district:center.district,x:center.x,y:center.y,zaRougeStreetSouth:center.zaRougeStreetSouth===true}:landmark?{district:landmark.district,x:landmark.x,y:landmark.y,zaRougeStreetSouth:false}:{district:`lumiose-zone${n}`,x:p.x,y:p.y,zaRougeStreetSouth:false,...(zoneGround[n]||{})};
+ if(destination.district==='lumiose-vert-sector4'&&s.zaVert4Layer!=null&&!['ground','roof','courtyard'].includes(s.zaVert4Layer))throw Error('목적지 층 기록을 확인하세요.');
  const target={...s,...destination,...groundDestinationFlags(destination.district),area:3,interior:null},arrivalTile=fieldMap(target)[target.y]?.[target.x];if(!['.',',',';','g','H'].includes(arrivalTile))throw Error('이동 지점이 변경되어 현재 사용할 수 없습니다.');
  // A previously defeated field encounter may have exposed the registered
  // arrival tile. Keep that one slot spent until the player moves away; the
@@ -1928,6 +1934,7 @@ else if(b.action==='mapFastTravel'){
 else if(typeof b.action==='string'&&b.action.startsWith('taxi-')){
  const spot=interactionAt(s),id=b.action.slice('taxi-'.length),target:any=taxiDestinations(s).find(c=>c.id===id);
  if(!taxiAvailable(s,spot)||!target||s.adventureCatchWindow)throw Error('택시 승강장과 목적지를 확인하세요.');
+ if(target.district==='lumiose-vert-sector4'&&s.zaVert4Layer!=null&&!['ground','roof','courtyard'].includes(s.zaVert4Layer))throw Error('목적지 층 기록을 확인하세요.');
  const arrival={...s,district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,zaRougeStreetSouth:target.zaRougeStreetSouth===true};const arrivalTile=fieldMap(arrival)[target.y]?.[target.x];if(!['.',',',';','g','H'].includes(arrivalTile))throw Error('택시 도착 지점을 확인하세요.');const previousDistrict=s.district;reward=-710;if(previousDistrict!==target.district)clearMapTravelTransient(s);Object.assign(s,{district:target.district,...groundDestinationFlags(target.district),interior:null,area:3,x:target.x,y:target.y,zaRougeStreetSouth:target.zaRougeStreetSouth===true,facing:target.facing||'down'});recordCenter(s,{x:target.x,y:target.y,tile:'H'});if(arrivalTile==='H'&&!s.unionHost)recordPlayerCenterPassage(s,centerAt(s,{x:target.x,y:target.y,tile:'H'}));recordLandmarks(s);recordZoneEntry(s,previousDistrict,fieldMap(s)[s.y]?.[s.x]);s.log=[`택시를 타고 ${target.name}(으)로 이동했다.`];
 }
 else if(typeof b.action==='string'&&b.action.startsWith('fastTravel-')){

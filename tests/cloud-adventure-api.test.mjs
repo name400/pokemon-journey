@@ -11258,3 +11258,17 @@ test('hotel roof renewable crystals preserve tutorial progress and respawn indep
   seedWorld({zaHotelRoofCrystalTimesV1:'future'});await get();await call('smashHotelRoofCrystal',{},409);assert.equal(rawWorld().zaHotelRoofCrystalTimesV1,'future');
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;Date.now=oldNow;}
 });
+
+test('Café Classe taxi, menu, party healing and ground-layer travel',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'cafe-classe-qa',displayName:'아라모드 카페'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,damaged={...rawMon(id),hp:1,status:'독',pp:{tackle:1},friendship:40};seedMon(id,damaged);
+  sql.prepare('UPDATE wallets SET coins=? WHERE user_id=?').run(1000,globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:14,y:7,facing:'up',zaMission04Complete:true,zaRoyaleRank:'F',zaVert4Layer:'roof',zaFastTravelLandmarks:['future-marker']},state.revision+1));await get();
+  seedWorld(storeAdventurePosition({...rawWorld(),x:14,y:7,facing:'up',zaVert4Layer:'future-layer'},state.revision+1));await get();await call('taxi-cafe-classe',{},409);assert.equal(rawWorld().zaVert4Layer,'future-layer');assert.equal(state.wallet.coins,1000);seedWorld(storeAdventurePosition({...rawWorld(),x:14,y:7,facing:'up',zaVert4Layer:'roof'},state.revision+1));await get();
+  await call('mapFastTravel',{destination:'cafe-classe'},409);const taxiRevision=state.revision;await call('taxi-cafe-classe');await call('taxi-cafe-classe',{revision:taxiRevision},409);await get();assert.equal(state.world.district,'lumiose-vert-sector4');assert.equal(state.world.zaVert4Layer,'ground');assert.equal(state.wallet.coins,290);assert.ok(state.world.zaFastTravelLandmarks.includes('future-marker'));assert.ok(state.world.zaFastTravelLandmarks.includes('cafe-classe'));assert.equal(state.world.interaction.name,'아라모드 카페 (위치 초안)');assert.equal(state.world.interaction.actions.length,8);
+  await call('classeWater',{},409);assert.equal(rawMon(id).hp,1);sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const rev=state.revision;await call('classeWater');await call('classeWater',{revision:rev},409);await get();assert.equal(state.wallet.coins,500);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(rawMon(id).friendship,70);assert.equal(rawWorld().zaResearchActivities.cafe,1);
+  await call('mapFastTravel',{destination:'cafe-classe'});await get();assert.equal(state.wallet.coins,500);assert.equal(state.world.zaVert4Layer,'ground');
+  seedWorld(storeAdventurePosition({...rawWorld(),zaVert4Layer:'roof',x:6,y:6},state.revision+1));await get();await call('classeWater',{},409);assert.equal(state.wallet.coins,500);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
