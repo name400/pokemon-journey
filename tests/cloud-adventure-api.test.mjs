@@ -10864,3 +10864,18 @@ test('Mission 26 SBC confrontation and optional recovery work outside Hotel Z',a
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:11,y:7,zaMission26SBCStage:7},state.revision+1));await get();assert.notEqual(state.world.map[7][11],'v');await call('mission26SBC',{},409);assert.equal(rawWorld().zaMission26SBCStage,7);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Shutterbug Café serves the party without interrupting side mission 14',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'shutterbug-service-qa',displayName:'셔터버그 카페'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,other='shutterbug-reserve',reserve={...makeMon(25,10),boxId:other,hp:0,status:'독',pp:{thundershock:1}};
+  sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,reserve.id,JSON.stringify(reserve),'qa',1);
+  const damaged={...rawMon(id),hp:1,status:'독',pp:{tackle:1},friendship:70};seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=1000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:12,y:6,facing:'up',teamIds:[id,other],zaMission07Started:true},state.revision+1));await get();
+  assert.equal(state.world.interaction.action,'side14Start');assert.equal(state.world.interaction.actions.length,9);assert.ok(state.world.interaction.actions.some(a=>a.action==='shutterbugRoserade'&&a.label.includes('800')));
+  const rev=state.revision;await call('shutterbugWater');await get();assert.equal(state.wallet.coins,700);assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(rawMon(id).friendship,100);assert.equal(rawMon(other).hp,rawMon(other).maxHp);assert.deepEqual(state.world.teamIds,[id,other]);assert.equal(rawWorld().zaResearchActivities.cafe,1);assert.notEqual(rawWorld().zaSide14Started,true);
+  await call('shutterbugWater',{revision:rev},409);assert.equal(state.wallet.coins,700);await call('side14Start');await get();assert.equal(rawWorld().zaSide14Started,true);assert.ok(state.world.interaction.actions.some(a=>a.action==='shutterbugBlend'));
+  seedMon(id,damaged);sql.prepare('UPDATE wallets SET coins=299 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('shutterbugWater',{},409);assert.deepEqual(rawMon(id),damaged);assert.equal(rawWorld().zaResearchActivities.cafe,1);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:17,y:6,facing:'up'},state.revision+1));await get();await call('shutterbugWater',{},409);assert.equal(rawWorld().zaSide14Started,true);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
