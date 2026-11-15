@@ -1205,6 +1205,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='u'){ctx.fillStyle='#8b5855';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#f1ded0';ctx.fillRect(px+3,py+3,tile-6,5);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('르 와우',px+tile/2,py+21);}
      if(c==='X'){ctx.fillStyle='#688b80';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
+    if(w.district==='lumiose-jaune-sector5'&&!w.interior){
+     // Courtyard and building footprints are provisional; the courtyard remains walkable.
+     ctx.fillStyle=c==='#'?'#a59183':c===';'?((x+y)%2?'#d0c4b0':'#d9cfbc'):c===','?'#bbada0':(x+y)%2?'#e5dace':'#eee4d9';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle='#bda99a';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#e6d4c2';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]!=='#')ctx.fillRect(px,py+tile-3,tile,3);}
+     if(c===';'){ctx.fillStyle='#b3a58f';if(w.map[y-1]?.[x]==='#')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='#')ctx.fillRect(px,py+tile-2,tile,2);}
+     if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-jaune-sector4'&&!w.interior){
      // Draft buildings and plaza sit beside the confirmed street connection.
      ctx.fillStyle=c==='#'?'#958c82':c===','?'#c6b6a5':(x+y)%2?'#e1d6c6':'#ece2d2';ctx.fillRect(px,py,tile,tile);
