@@ -6,6 +6,16 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Zone 3 families use ZA level and evolution moves without migrating older foes',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,expected] of [[667,['째려보기','몸통박치기','불꽃세례','울부짖기']],[672,['성장','몸통박치기','덩굴채찍']],[674,['째려보기','몸통박치기']]]){
+  const old=makeMon(id,7),before=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,before);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone3GrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone3GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(markAdventureVerifiedGrowth(future),future);const alpha={...old,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
+ }
+ for(const [id,level,expected] of [[667,8,['분발']],[673,55,['지진']],[675,34,['세차게휘두르기','깨물어부수기']]]){const old={...makeMon(id,level-1),adventureZone3GrowthV1:true,moves:['몸통박치기','방어','빛의장막','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,expected);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});}
+ for(const [id,move] of [[668,'오버히트'],[673,'제비반환'],[675,'깜짝베기']]){const mon={...makeMon(id,40),adventureZone3GrowthV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.deepEqual(applyAdventureEvolutionMoves(mon,{}).learned,[move]);assert.equal(mon.pp.tackle,3);assert.ok(adventureLearnableMoves(mon,{}).includes(move));}
+ assert.ok(adventureLearnableMoves({...makeMon(668,40),adventureZone3GrowthV1:true},{}).includes('파괴광선'));
+});
+
 test('new Zone 2 Budew and Patrat use ZA growth without changing legacy creatures',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,level,expected] of [[406,6,['흡수','애교부리기','성장','저리가루']],[504,6,['몸통박치기','째려보기','물기']]]){

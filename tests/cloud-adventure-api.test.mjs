@@ -10665,6 +10665,17 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 3 wild families retain ZA growth through field catch and evolution',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone3-family-growth-qa',displayName:'구역 3 성장'};globalThis.__adventureRandom=()=>0;globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,iv=structuredClone(rawMon(lead).ivs);
+  for(const [x,y,targetId,species,moves] of [[8,6,'litleo',667,['째려보기','몸통박치기','불꽃세례','울부짖기']],[8,9,'skiddo',672,['성장','몸통박치기','덩굴채찍']],[7,7,'pancham',674,['째려보기','몸통박치기']]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3',interior:null,x,y,facing:'up',zaMission05Complete:true,zaRoyaleRank:'F',zaZone3FieldSpent:{},zaZone3FieldPositions:{},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();await call('throwZone3Field',{targetId,ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===species);assert.ok(caught);assert.equal(rawMon(caught.boxId).adventureZone3GrowthV1,true);assert.deepEqual(rawMon(caught.boxId).moves,moves);
+  }
+  const id=state.world.teamIds.find(x=>rawMon(x)?.speciesId===667);seedMon(id,{...rawMon(id),level:35,pp:{tackle:3},custom:{keep:true}});await get();await call('evolve',{boxId:id,target:668});await get();assert.equal(rawMon(id).adventureZone3GrowthV1,true);assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(rawMon(id).custom,{keep:true});assert.ok(rawMon(id).moves.includes('오버히트')||state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='오버히트'));assert.deepEqual(rawMon(lead).ivs,iv);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('early wild Pichu and Pikachu use consistent reviewed moves in battle and field capture',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'early-pichu-wild-moves-qa',displayName:'초반 야생 기술'};globalThis.__adventureRandom=()=>.999;globalThis.__adventureTime={period:'day',hour:12};
  try{
