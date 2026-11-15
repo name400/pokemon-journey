@@ -6,6 +6,14 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('Zone 8 burrow families and new evolved grass encounters use ZA growth safely',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[443,24,['모래지옥','몸통박치기','용의숨결','땅고르기']],[529,23,['몸통박치기','메탈클로','모래지옥','땅고르기']]]){const old=makeMon(id,level),copy=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,copy);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone8BurrowGrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone8BurrowGrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);const alpha={...old,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);}
+ const wild=makeMon(552,29);assert.equal(prepareVerifiedWildMoves(wild),wild);assert.deepEqual(prepareVerifiedWildMoves(wild,{zone8Evolved:true}).moves,['물기','구멍파기','돌진','깨물어부수기']);assert.equal(prepareVerifiedWildMoves({...wild,adventureAlpha:true},{zone8Evolved:true}).adventureZone8GrowthV1,undefined);
+ for(const [id,level,move] of [[443,25,'물기'],[444,36,'드래곤클로'],[529,24,'베어가르기'],[530,26,'시저크로스']]){const old={...makeMon(id,level-1),adventureZone8BurrowGrowthV1:true,moves:['몸통박치기','방어','빛의장막','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,[move]);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});}
+ const chomp={...makeMon(445,48),adventureZone8BurrowGrowthV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.deepEqual(applyAdventureEvolutionMoves(chomp,{}).learned,['깨물어부수기']);const drill={...makeMon(530,31),adventureZone8BurrowGrowthV1:true,moves:['몸통박치기']};assert.deepEqual(applyAdventureEvolutionMoves(drill,{}).learned,[]);assert.ok(adventureLearnableMoves(drill,{}).includes('금속음'));
+});
+
 test('new Zone 8 families use ZA growth and preserve legacy records',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,level,expected] of [[322,23,['기충전','땅고르기','망각술','분연']],[66,24,['세차게휘두르기','불릿펀치','탁쳐서떨구기','벌크업']],[551,23,['몸통박치기','모래지옥','물기','구멍파기']]]){
