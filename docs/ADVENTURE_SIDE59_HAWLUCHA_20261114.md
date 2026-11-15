@@ -5,3 +5,5 @@
 [의뢰 자료](https://www.serebii.net/legendsz-a/sidemissions/arematchwithhawlucha.shtml)와 [레벨·보상 공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough:Pok%C3%A9mon_Legends:_Z-A/Side_Missions_41-60)을 참고했다. 옥상 인물 좌표는 기존 2D 맵의 초안이며, 상대 기술은 현재 게임의 레벨별 기본 기술을 사용한다. 원작의 정확한 기술·행동, 실시간 배틀과 대화 연출은 미확인 또는 미구현이다.
 
 격리 API에서 해금·재접속·기권·재도전·승리와 가방 한도·중복 보상, 루차불 비포획, 연구 승리 횟수·이로치 파티 및 메인 스토리 보존을 확인했다. 실제 기기·운영 D1·Sites 병합본은 확인하지 않았다.
+
+후속: [마젠타 3번지 조우 자료](https://bulbapedia.bulbagarden.net/wiki/Magenta_Sector_3)의 사이드 59 항목에 따라 새 재대결의 루차불 기술을 플라잉프레스·뛰어오르다·깨뜨리다·깃털댄스로 지정했다. 이미 시작된 전투 스냅샷과 저장 데이터는 변경하지 않는다. 이 목록은 2차 자료이며 원작 실시간 행동은 여전히 근사다.
