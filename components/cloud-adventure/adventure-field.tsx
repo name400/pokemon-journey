@@ -360,6 +360,8 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      // Existing draft footprints and center location; exact original geometry is unknown.
      const outer=x===0||x===22||y===0||y===16,building=c==='#'&&!outer;
      ctx.fillStyle=outer?'#8f7d87':building?'#a79698':c===','?'#c5b3ad':(x+y)%2?'#ddd4cc':'#e8ded6';ctx.fillRect(px,py,tile,tile);
+     if(c===';'){ctx.fillStyle='#a2be91';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#799a6f';for(let n=0;n<3;n++)ctx.fillRect(px+5+n*9,py+tile-10-(n%2)*3,3,7);}
+     if('ijk'.includes(c)){ctx.fillStyle=c==='i'?'#a2be91':'#ddd4cc';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
      if(building){const above=w.map[y-1]?.[x],below=w.map[y+1]?.[x];ctx.fillStyle='#b9a6a5';ctx.fillRect(px,py,tile,tile);if(above!=='#'){ctx.fillStyle='#806e78';ctx.fillRect(px,py,tile,4);}if(below!=='#'){ctx.fillStyle='#8c777e';ctx.fillRect(px,py+tile-8,tile,8);ctx.fillStyle='#d9c8b8';ctx.fillRect(px+5,py+tile-7,7,4);ctx.fillRect(px+tile-12,py+tile-7,7,4);}else{ctx.fillStyle='#99878d';ctx.fillRect(px+3,py+4,tile-6,2);}}
      if(c===','){ctx.fillStyle='#e3d5c8';if(w.map[y-1]?.[x]!==',')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]!==',')ctx.fillRect(px,py+tile-2,tile,2);}
      if(c==='^'&&x===15&&y===12){ctx.fillStyle='#77563d';ctx.fillRect(px+4,py+13,tile-8,5);ctx.fillRect(px+6,py+18,3,7);ctx.fillRect(px+tile-9,py+18,3,7);}

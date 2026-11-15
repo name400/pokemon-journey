@@ -36,3 +36,11 @@ test('Magenta Sector 9 connects North Boulevard while retaining Zone 18 gate',()
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector9',1,8]);
  assert.equal(stepField({...nine,x:11,y:1},'up').blocked,true);
 });
+
+test('Magenta 8 grass and pickups keep old positions and city exits',()=>{
+ const s={area:3,district:'lumiose-magenta-sector8-route',interior:null,x:11,y:4,zaRoyaleRank:'C',teamIds:['kept']};
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,71),71);assert.deepEqual([saved.x,saved.y,saved.teamIds],[11,4,['kept']]);
+ let map=fieldMap(saved);assert.equal(map[4][11],'i');assert.equal(map[5][10],';');assert.ok(fieldPath(map,saved,{x:11,y:15}).length);
+ const collected=restoreAdventurePosition(storeAdventurePosition({...saved,zaMagenta8Items:['grass-great']},72),72);map=fieldMap(collected);
+ assert.equal(map[4][11],';');assert.equal(map[11][20],'j');assert.equal(map[9][17],'k');assert.equal(stepField({...collected,x:21,y:8},'right').blocked,true);
+});

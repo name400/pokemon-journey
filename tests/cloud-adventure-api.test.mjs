@@ -10685,3 +10685,16 @@ test('Magenta 7 northern courtyard requires a fire attack and preserves rewards'
   seedWorld(storeAdventurePosition({...rawWorld(),x:6,y:3,facing:'right'},state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta7Item-north-pearl');await call('magenta7Item-north-pearl');await get();assert.equal(state.inventory.pearl,1);assert.equal(rawWorld().zaMagenta7NorthOpen,true);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Magenta 8 ground items protect inventory and persist across reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta8-ground-qa',displayName:'마젠타 8 도구'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector8-route',interior:null,x:10,y:4,facing:'right',zaRoyaleRank:'C',adventureBalls:{...rawWorld().adventureBalls,greatball:99}},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'magenta8Item-grass-great');await call('magenta8Item-grass-great',{},409);assert.equal(rawWorld().zaMagenta8Items,undefined);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:10,y:4,facing:'right',adventureBalls:{...rawWorld().adventureBalls,greatball:98}},state.revision+1));await get();const rev=state.revision;
+  await call('magenta8Item-grass-great');await get();assert.equal(rawWorld().adventureBalls.greatball,99);await call('magenta8Item-grass-great',{revision:rev},409);await call('magenta8Item-grass-great',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:20,y:10,facing:'down'},state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta8Item-east-quick');await call('magenta8Item-east-quick');await get();assert.equal(rawWorld().adventureBalls.quickball,1);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:17,y:8,facing:'down'},state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta8Item-north-fullheal');await call('magenta8Item-north-fullheal');await get();assert.equal(state.inventory.fullheal,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawWorld().zaMagenta8Items,['grass-great','east-quick','north-fullheal']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
