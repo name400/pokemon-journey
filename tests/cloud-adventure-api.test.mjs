@@ -11184,3 +11184,18 @@ test('Mission 3 captured Bunnelby keeps ZA growth on reconnect and level up',asy
   await call('resolveAdventureMove',{slot:null});seedMon(id,{...rawMon(id),level:20,shiny:true,item:'leftovers',custom:{keep:true}});await get();const evolveRev=state.revision;await call('evolve',{boxId:id,target:660});await get();assert.equal(rawMon(id).speciesId,660);assert.equal(rawMon(id).adventureBunnelbyMovesV1,true);assert.equal(rawMon(id).shiny,true);assert.equal(rawMon(id).item,'leftovers');assert.deepEqual(rawMon(id).custom,{keep:true});assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='땅고르기'));assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('땅고르기'));await call('evolve',{boxId:id,target:660,revision:evolveRev},409);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 26 requires a Mega finishing attack while preserving in-progress legacy battles',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission26-mega-final-qa',displayName:'메가 마지막 공격'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,other='mission26-final-reserve',ally={...makeMon(150,100),boxId:other,moves:['화염방사'],pp:{}};
+  sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(other,globalThis.__adventureUser.userId,ally.id,JSON.stringify(ally),'qa',1);
+  const lead={...makeMon(359,100),boxId:id,moves:['칼춤','아이언헤드'],item:'absolite',pp:{}};
+  const start=async()=>{seedMon(id,lead);seedMon(other,ally);seedWorld(storeAdventurePosition({...rawWorld(),teamIds:[id,other],activeId:id,area:3,district:'lumiose-vernal',interior:null,x:16,y:6,facing:'up',zaMission25Complete:true,zaMission26Stage:0,zaMegaRing:true},state.revision+1));await get();await call('mission26Asami');const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();};
+  const charge=async()=>{await call('battle',{command:{type:'move',move:'칼춤'}});await call('battle',{command:{type:'move',move:'칼춤'}});};
+  await start();await charge();await call('battle',{command:{type:'move',move:'칼춤',special:'mega'}});await get();assert.equal(rawWorld().combat.adventureAsamiMegaSeen,true);
+  const slot=state.battle.requests[0].switches.find(p=>state.battle.teams[0][p.index].boxId===other).slot;await call('battle',{command:{type:'switch',slot}});await call('battle',{command:{type:'move',move:'화염방사'}});assert.equal(state.world.zaMission26Stage||0,0);assert.match(state.world.log.join(' '),/마무리/);await get();assert.deepEqual(state.world.teamIds,[id,other]);
+  await start();await charge();await call('battle',{command:{type:'move',move:'아이언헤드',special:'mega'}});assert.equal(state.world.zaMission26Stage,1);await get();assert.deepEqual(state.world.teamIds,[id,other]);
+  await start();await charge();await call('battle',{command:{type:'move',move:'칼춤',special:'mega'}});const legacy=rawWorld().combat;delete legacy.adventureAsamiFinalHitV1;seedWorld({combat:legacy,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();const legacySlot=state.battle.requests[0].switches.find(p=>state.battle.teams[0][p.index].boxId===other).slot;await call('battle',{command:{type:'switch',slot:legacySlot}});await call('battle',{command:{type:'move',move:'화염방사'}});assert.equal(state.world.zaMission26Stage,1);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
