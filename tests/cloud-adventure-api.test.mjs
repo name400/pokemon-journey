@@ -6027,6 +6027,25 @@ test('Zone 6 roof link round trips onto paved ground and persists',async()=>{
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 19 protects unknown Ultra Ball gifts and malformed ball storage',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-ball-record-qa',displayName:'하수도 볼 기록'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,leadBefore=rawMon(lead),base={...rawWorld(),area:3,district:'lumiose-sewer',interior:null,x:11,y:12,facing:'up',zaMission19Stage:9};
+  for(const pending of [0,3,{version:2,remaining:8}]){
+   const balls={ultraball:95,quickball:2,futureball:7};seedWorld(storeAdventurePosition({...base,zaMission19UltraPending:pending,adventureBalls:balls},state.revision+1));await get();const revision=state.revision;await call('mission19Lock',{},409);assert.equal(state.revision,revision);assert.deepEqual(rawWorld().zaMission19UltraPending,pending);assert.deepEqual(rawWorld().adventureBalls,balls);assert.equal(rawWorld().zaMission19Stage,9);
+  }
+  seedWorld(storeAdventurePosition({...base,zaMission19UltraPending:undefined,adventureBalls:{ultraball:95,quickball:2,futureball:7}},state.revision+1));await get();await call('mission19Lock');assert.deepEqual(rawWorld().adventureBalls,{ultraball:99,quickball:2,futureball:7});assert.equal(rawWorld().zaMission19UltraPending,6);
+  for(const action of ['mission19Lock','mission19ClaimBalls']){
+   const balls={version:2,items:['future']};seedWorld(storeAdventurePosition({...base,zaMission19Stage:action==='mission19Lock'?9:10,zaMission19UltraPending:action==='mission19Lock'?undefined:3,adventureBalls:balls},state.revision+1));await get();
+   const revision=state.revision;await call(action,{},409);assert.equal(state.revision,revision);assert.deepEqual(rawWorld().adventureBalls,balls);
+  }
+  for(const action of ['mission19Lock','mission19ClaimBalls']){
+   const balls=['future'];seedWorld(storeAdventurePosition({...base,zaMission19Stage:action==='mission19Lock'?9:10,zaMission19UltraPending:action==='mission19Lock'?undefined:3,adventureBalls:balls},state.revision+1));await get();const revision=state.revision;await call(action,{},409);assert.equal(state.revision,revision);assert.deepEqual(rawWorld().adventureBalls,balls);
+  }
+  assert.deepEqual(rawMon(lead).ivs,leadBefore.ivs);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 19 continues with a full Ultra Ball pocket and preserves the deferred gift',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-full-ball-pocket-qa',displayName:'하수도 볼 검증'};
  try{
