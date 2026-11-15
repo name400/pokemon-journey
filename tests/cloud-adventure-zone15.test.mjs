@@ -4,6 +4,18 @@ import {zone15Map,zone15Encounter,zone15Visible,zone15Item,ZONE15_TREES,ZONE15_B
 import {stepField,fieldPath,fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 
+test('Hibernal meets North Boulevard outside the gated Zone 15',()=>{
+ const avenue={area:3,district:'lumiose-hibernal-approach',interior:null,x:15,y:1,zaRoyaleRank:'Z',teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(avenue),{x:11,y:15},avenue).length);
+ assert.equal(stepField({...avenue,x:11},'up').blocked,true);
+ const road=stepField(avenue,'up');assert.deepEqual([road.district,road.x,road.y],['lumiose-north-boulevard',21,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...avenue,...road},172),172);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money],['lumiose-north-boulevard',21,15,['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:8}).length);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-hibernal-approach',15,1]);
+ assert.equal(stepField({...avenue,x:11,y:15},'down').district,'lumiose-centrico-route');
+});
+
 test('Zone 15 rooftop TM preserves a previous position and checks reviewed compatibility',()=>{
  const old={area:3,district:'lumiose-zone15',interior:null,zaZone15Upper:true,x:17,y:9,teamIds:['kept']};
  const restored=restoreAdventurePosition(storeAdventurePosition(old,112),112);
