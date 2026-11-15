@@ -15,6 +15,18 @@ test('Magenta Sector 3 links Estival Avenue without changing the lift or older g
  assert.equal(stepField({...start,x:4,y:1,zaMission15Stage:undefined},'up').blocked,true);
  const old=restoreAdventurePosition(storeAdventurePosition(start,141),141);assert.deepEqual([old.district,old.x,old.y,old.teamIds],['lumiose-magenta-sector3',19,9,['kept']]);
 });
+
+test('Magenta Sector 3 links Magenta Street without changing the canal or Zone 7 gate',()=>{
+ const start={area:3,district:'lumiose-magenta-sector3',interior:null,x:19,y:9,facing:'up',zaRoyaleRank:'W',teamIds:['kept']};
+ assert.equal(fieldDialogue(start).action,'magenta3Holovator');assert.ok(fieldPath(fieldMap(start),start,{x:19,y:1}).length);
+ const north=stepField({...start,x:19,y:1},'up');assert.deepEqual([north.district,north.x,north.y],['lumiose-magenta-street',14,15]);
+ const street={...start,...north},map=fieldMap(street);assert.equal(map[4][5],'~');assert.equal(map[8][5],':');
+ const saved=restoreAdventurePosition(storeAdventurePosition(street,142),142);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-magenta-street',14,15,['kept']]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector3',19,1]);
+ assert.equal(stepField({...start,x:4,y:1},'up').blocked,true);
+ assert.equal(stepField({...start,x:11,y:15},'down').district,'lumiose-estival-approach');
+ const old=restoreAdventurePosition(storeAdventurePosition(start,143),143);assert.deepEqual([old.district,old.x,old.y,old.teamIds],['lumiose-magenta-sector3',19,9,['kept']]);
+});
 test('Magenta Sector 3 draft rooftop links lift, scaffold and Mission 17 while preserving saves',()=>{
  const street={area:3,district:'lumiose-magenta-sector3',interior:null,x:19,y:9,facing:'up',zaMission15Stage:2,teamIds:['kept']};
  assert.equal(fieldDialogue(street).action,'magenta3Holovator');
