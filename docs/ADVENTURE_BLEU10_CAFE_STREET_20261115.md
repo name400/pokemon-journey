@@ -11,3 +11,9 @@
 [에스티발 대로 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/estival-avenue.html)와 [남쪽 큰길 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/south-boulevard.html)는 블루 10번지와 두 대로의 인접 관계를 기록한다. 기존 카페 거리의 북쪽과 서쪽을 각 대로에 양방향으로 연결했다. 구체적인 출입 좌표와 화면 간 거리는 여전히 추정이며, 기존 도로·카페·야생 구역 입구는 유지한다. 남쪽 큰길의 미확인 층 정보는 변경하지 않고 진입을 거절한다.
 
 격리 API에서 두 대로 왕복, 의뢰 상태와 파티 보존 및 야생 구역 10 해금 전 차단을 확인했다. 실제 원작 지도·기기 및 운영 Sites에서는 검증하지 않았다.
+
+## 에스파스 비드 지상 연결
+
+[에스파스 비드 지역 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/espace-vide.html)는 서쪽의 블루 10번지와 동쪽 지상 골목의 인접 관계를 설명한다. 두 지상 화면을 양방향으로 연결해 카페 거리에서 계단과 별도의 지하 수로로 갈 수 있다. 출입 칸과 거리 폭은 2D 추정이며 원작의 정확한 경로는 실기에서 검증하지 않았다. 수로의 야생 구역 10 진입과 기존 해금 조건은 그대로 유지하고, 알 수 없는 층 기록을 덮어쓰지 않는다.
+
+격리 API에서 지상 왕복, 알 수 없는 층 거절, 계단과 해금 전후 수로 진입 및 기존 파티·진행 보존을 검사했다. 운영 환경과 Sites 병합본은 확인하지 않았다.
