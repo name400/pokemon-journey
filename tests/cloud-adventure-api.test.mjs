@@ -8966,6 +8966,16 @@ test('Licier night incident preserves party and rewards across retry and reconne
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
 
+test('Kalos gift Fennekin natural Plus unlocks and preserves existing save',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-fennekin-gift-qa',displayName:'푸호꼬 숙달 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,base={...makeMon(653,7),boxId:id,moves:['불꽃세례'],pp:{ember:5},shiny:true};seedMon(id,base);
+  const place=()=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone14',interior:null,x:10,y:3,facing:'right',zaRoyaleRank:'D',zaMission19Complete:true,zaMegaRing:true},state.revision+1);
+  seedWorld(place());await get();await call('zone14Wild-aron');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='ember').plusReady,false);await call('battle',{command:{type:'move',move:'불꽃세례',plus:true}},409);await call('forfeit');
+  seedMon(id,{...base,level:8});seedWorld(place());await get();await call('zone14Wild-aron');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='ember').plusReady,true);await get();assert.equal(state.battle.requests[0].moves.find(m=>m.id==='ember').plusReady,true);const rev=state.revision;await call('battle',{command:{type:'move',move:'불꽃세례',plus:true}});await call('battle',{revision:rev,command:{type:'move',move:'불꽃세례',plus:true}},409);await get();assert.equal(rawMon(id).shiny,true);assert.equal(rawMon(id).adventurePlusMastered,undefined);assert.deepEqual(state.world.teamIds,[id]);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('early story Fletchling natural Plus unlocks without changing its saved mastery',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'plus-early-fletchling-qa',displayName:'화살꼬빈 숙달 검사'};
  try{

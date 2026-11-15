@@ -4,6 +4,14 @@ import {makeMon} from '../lib/game.mjs';
 import {createCombat,playCpu,combatView} from '../lib/party-battle.mjs';
 import {adventureMoveMastered} from '../lib/cloud-adventure/adventure-plus-mastery.mjs';
 
+test('Kalos gift starters have verified natural mastery across evolutions',()=>{
+ for(const [species,move,level] of [[650,'vinewhip',10],[651,'pinmissile',21],[652,'closecombat',48],[652,'gigaimpact',58],[653,'ember',8],[654,'flamethrower',38],[655,'mysticalfire',39],[655,'shadowball',10],[656,'watergun',8],[657,'aerialace',26],[657,'shadowsneak',31],[658,'watershuriken',39]]){
+  const mon=makeMon(species,level-1),before=structuredClone(mon);assert.equal(adventureMoveMastered(mon,move),false,`${species} ${move}`);assert.equal(adventureMoveMastered({...mon,level},move),true,`${species} ${move}`);assert.deepEqual(mon,before);assert.equal(adventureMoveMastered(JSON.parse(JSON.stringify({...mon,level})),move),true);
+ }
+ for(const [species,move] of [[650,'closecombat'],[651,'gigaimpact'],[653,'mysticalfire'],[654,'shadowball'],[656,'aerialace'],[656,'shadowsneak'],[657,'watershuriken']])assert.equal(adventureMoveMastered(makeMon(species,100),move),false);
+ assert.equal(adventureMoveMastered({...makeMon(656,5),adventurePlusMastered:['watershuriken']},'watershuriken'),true);
+});
+
 test('early story birds and rabbits have species-specific natural mastery',()=>{
  for(const [species,move,level] of [[661,'peck',10],[661,'quickattack',11],[661,'ember',15],[661,'flareblitz',48],[662,'wingattack',20],[663,'wingattack',10],[663,'bravebird',38],[659,'mudshot',10],[659,'dig',31],[659,'earthquake',47],[660,'bulldoze',23]]){
   const mon=makeMon(species,level-1),before=structuredClone(mon);assert.equal(adventureMoveMastered(mon,move),false,`${species} ${move}`);assert.equal(adventureMoveMastered({...mon,level},move),true,`${species} ${move}`);assert.deepEqual(mon,before);assert.equal(adventureMoveMastered(JSON.parse(JSON.stringify({...mon,level})),move),true);
