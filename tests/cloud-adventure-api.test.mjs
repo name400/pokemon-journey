@@ -11232,3 +11232,16 @@ test('Mission 35 lab keycards, power and files preserve unknown saved records',a
   seedWorld(place({zaLysandreWing:'e',x:17,y:10,facing:'up',zaLysandreCards:malformed}));await get();assert.match(state.world.interaction?.name||'',/C 키카드 문/);assert.equal(state.world.interaction?.action,undefined);assert.deepEqual(rawWorld().zaLysandreCards,malformed);assert.deepEqual(rawWorld().teamIds,team);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('rank V courier preserves a rolled reward until it is claimed once',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;
+ globalThis.__adventureUser={userId:'royale-courier-qa',displayName:'배달 보상 검사'};globalThis.__adventureTime={hour:20,period:'night'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:1});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:3,y:11,zaMission10Stage:4,zaRoyaleRank:'V',zaRoyaleVSessionWins:['royale-v-ezio'],adventureBalls:{greatball:98},customPreserved:{value:17}},state.revision+1));
+  await get();await call('royaleVCourierOffer');assert.deepEqual(rawWorld().zaRoyaleCourierPendingV1,{v:1,item:'greatball',quantity:5});
+  await call('claimRoyaleCourier',{},409);assert.deepEqual(rawWorld().zaRoyaleCourierPendingV1,{v:1,item:'greatball',quantity:5});
+  seedWorld({adventureBalls:{greatball:94}});await get();await call('claimRoyaleCourier');assert.equal(rawWorld().adventureBalls.greatball,99);assert.equal(rawWorld().zaRoyaleCourierPendingV1,undefined);assert.deepEqual(rawWorld().customPreserved,{value:17});
+  await call('claimRoyaleCourier',{},409);await call('royaleVCourierOffer',{},409);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
