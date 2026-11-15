@@ -532,6 +532,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     }
     if(w.district==='lumiose-vert-sector6'&&!w.interior&&c==='q'&&x===13&&y===13){ctx.fillStyle='#a77182';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('Terri',px+tile/2,py+20);return;}
     if(w.district==='lumiose-vert-sector6'&&!w.interior&&c==='u'&&x===17&&y===13){ctx.fillStyle='#6b8273';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('차고',px+tile/2,py+20);return;}if(['lumiose-vert-sector1','lumiose-vert-sector3','lumiose-vert-sector6','lumiose-vert-sector7'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#9c9588':c==='~'?'#78acc2':c==='g'?'#9bb985':c===':'?'#c4b49c':c===','?'#b6b9ab':(x+y)%2?'#d8e3cf':'#e5ecd9';ctx.fillRect(px,py,tile,tile);
+     // Sector 1's existing buildings and courtyard are a 2D draft; the canal bank is separate.
+     if(w.district==='lumiose-vert-sector1'&&!w.zaVertSaisonBank){
+      const building=c==='#'&&y>=2&&y<=6&&((x>=3&&x<=8)||(x>=15&&x<=19));
+      if(building){ctx.fillStyle='#ab9d8b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#dacbb4';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#82766a';ctx.fillRect(px,py+tile-6,tile,6);ctx.fillStyle='#d5c5ad';ctx.fillRect(px+5,py+tile-5,tile-10,2);}else{ctx.fillStyle='#8e8377';ctx.fillRect(px+3,py+10,tile-6,2);}}
+      if(c===','&&x>=4&&x<=7&&y>=3&&y<=5){ctx.fillStyle='#d9cfb8';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#b5ac9a';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:1),py+3,1,tile-5);}
+      else if(c===','){ctx.fillStyle='#d8d0bf';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);}
+     }
      // The northeastern building and courtyard use existing draft tiles only.
      if(w.district==='lumiose-vert-sector3'&&c==='#'&&x>=15&&x<=19&&y>=2&&y<=5){ctx.fillStyle='#ab9f8c';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#d4c5ad';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#786e64';ctx.fillRect(px,py+tile-6,tile,6);ctx.fillStyle='#ded0b8';ctx.fillRect(px+5,py+tile-5,tile-10,2);}else{ctx.fillStyle='#91877a';ctx.fillRect(px+3,py+9,tile-6,2);}}
      if(w.district==='lumiose-vert-sector3'&&c===','&&x>=16&&x<=18&&y>=3&&y<=5){ctx.fillStyle='#d7cfb9';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#b8af9c';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:1),py+3,1,tile-5);if(x===18&&y===3){ctx.fillStyle='#89a573';ctx.fillRect(px+tile-7,py+3,4,4);ctx.fillRect(px+tile-7,py+10,4,4);}}
