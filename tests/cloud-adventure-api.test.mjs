@@ -11724,3 +11724,19 @@ test('Jaune 12 and North Boulevard connect without changing Zone 6 or saved prog
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-sector12',interior:null,x:21,y:6,facing:'right'},state.revision+1));await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-sector12',21,6]);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('rank B couriers battle and keep earned deliveries safe across requests',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;
+ globalThis.__adventureUser={userId:'rank-b-courier-qa',displayName:'랭크 B 배달원'};globalThis.__adventureTime={period:'night',hour:22};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{}});const team=[...state.world.teamIds];
+  for(const [index,x,y,name,species] of [[21,3,3,'royale-b-matthieu',[715,227]],[22,19,13,'royale-b-morgane',[225,225]]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x,y:y+1,facing:'up',zaRoyaleRank:'B',zaMission35Started:true,zaRoyaleBPoints:0,zaRoyaleBSessionWins:['future-trainer'],zaRoyaleBCourierClaimedV1:['future-courier'],adventureBalls:{ultraball:98},combat:null,trainer:null,encounter:null},state.revision+1));await get();
+   assert.equal(state.world.interaction.action,`royaleBExtra${index}`);await call(`royaleBExtra${index}`);assert.equal(state.world.trainer.id,name);assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),species);
+   const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.ok(rawWorld().zaRoyaleBSessionWins.includes(name));assert.ok(rawWorld().zaRoyaleBSessionWins.includes('future-trainer'));
+   assert.equal(state.world.interaction.action,`royaleBCourierOffer${index}`);await call(`royaleBCourierOffer${index}`);assert.deepEqual(rawWorld().zaRoyaleCourierPendingV1,{v:2,item:'ultraball',quantity:5});assert.deepEqual(rawWorld().zaRoyaleBCourierClaimedV1,['future-courier',name]);await call('claimRoyaleCourier',{},409);
+   seedWorld({adventureBalls:{ultraball:94}});await get();await call('claimRoyaleCourier');assert.equal(rawWorld().adventureBalls.ultraball,99);await call(`royaleBCourierOffer${index}`,{},409);assert.deepEqual(rawWorld().teamIds,team);
+  }
+  seedWorld({zaRoyaleBCourierClaimedV1:{version:2,keep:true}});await get();await call('royaleBCourierOffer22',{},409);assert.deepEqual(rawWorld().zaRoyaleBCourierClaimedV1,{version:2,keep:true});
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
