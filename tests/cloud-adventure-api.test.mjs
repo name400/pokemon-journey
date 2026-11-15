@@ -11682,3 +11682,12 @@ test('mission capture preserves unknown research format without blocking progres
   await call('mission03Fletchling');await get();assert.equal(state.world.zaMission03Stage,5);assert.equal(state.wallet.balls,9);assert.deepEqual(rawWorld().zaResearchCaptures,future);assert.equal(state.world.teamIds.length,originalTeam.length+1);assert.equal(rawMon(state.world.teamIds.at(-1)).speciesId,661);assert.ok(state.world.teamIds.includes(originalTeam[0]));
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 20 ghost progress preserves future slots and refuses unknown containers',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission20-future-ghost-qa',displayName:'빈집 기록 보존'};
+ try{
+  await get();await call('start',{species:1});const team=[...state.world.teamIds],original=structuredClone(rawMon(team[0]));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-ghost-house',interior:null,x:6,y:6,facing:'up',zaMission20Stage:7,zaMission20GhostCaught:{version:2,slots:[99]},adventureBalls:{masterball:2}},state.revision+1));await get();const before=state.revision;await call('throwMission20Ghost',{ball:'masterball'},409);await call('mission20GhostBattle',{},409);assert.deepEqual(rawWorld().zaMission20GhostCaught,{version:2,slots:[99]});assert.equal(rawWorld().adventureBalls.masterball,2);assert.equal(state.revision,before);
+  seedWorld(storeAdventurePosition({...rawWorld(),zaMission20GhostCaught:['future-slot',93],district:'lumiose-ghost-house',x:6,y:6,facing:'up'},state.revision+1));await get();await call('throwMission20Ghost',{ball:'masterball'});await get();assert.deepEqual(state.world.zaMission20GhostCaught,['future-slot',93,92]);assert.equal(rawWorld().adventureBalls.masterball,1);assert.equal(state.world.teamIds.length,team.length+1);assert.equal(rawMon(team[0]).personality,original.personality);assert.deepEqual(rawMon(team[0]).ivs,original.ivs);assert.ok(rawMon(team[0]).level>=original.level);
+ }finally{globalThis.__adventureUser=previous;}
+});
