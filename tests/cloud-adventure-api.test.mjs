@@ -10974,3 +10974,20 @@ test('Mission 23 existing Gwynn battle retains its snapshot and payout rules',as
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector6',interior:null,x:14,y:9,facing:'up',zaMission20Stage:5,zaMission23GwynnWon:false},state.revision+1));await get();const coins=state.wallet.coins;await call('mission23Gwynn');const saved=rawWorld(),combat=saved.combat,sim=Battle.fromJSON(combat.snapshot);for(const p of sim.p2.pokemon){p.hp=1;p.setStatus('slp');p.statusState.time=99;}const trainer={...saved.trainer};delete trainer.mission23PayoutV1;seedWorld({trainer,combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...saved.districtPosition,revision:state.revision+1}});await get();assert.equal(rawWorld().trainer.mission23PayoutV1,undefined);await battle();assert.equal(state.world.zaMission23GwynnWon,true);assert.equal(state.wallet.coins,coins);assert.deepEqual(rawMon(id).custom,{keep:true});await get();assert.equal(state.wallet.coins,coins);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Mission 20 safety battle pairs Corbeau against one sequential trainer',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission20-corbeau-qa',displayName:'코르보 동료'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),moves:['화염방사'],pp:{},custom:{keep:true}});
+  const place=()=>seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector1',interior:null,x:14,y:11,facing:'up',zaMission20Stage:12,zaMegaRing:true},state.revision+1));place();await get();const coins=state.wallet.coins;await call('mission20SafetyBattle');let saved=rawWorld(),sim=Battle.fromJSON(saved.combat.snapshot);assert.equal(saved.combat.adventureCompanionTrainerV1,true);assert.deepEqual(sim.p2.pokemon.map(p=>p.species.num),[127,95,362]);assert.deepEqual(sim.p3.pokemon.map(p=>p.species.num),[545,24,130,407]);assert.deepEqual(sim.p2.pokemon.map(p=>p.moveSlots.map(m=>m.id)),[['lunge','xscissor','takedown','brutalswing'],['dig','sandtomb','breakingswipe','rockslide'],['crunch','iciclecrash','icefang','headbutt']]);assert.equal(sim.p4.pokemonLeft,0);assert.equal(state.battle.teams[0].filter(p=>p.battleOwner==='ally').length,4);await call('forfeit');assert.equal(state.world.zaMission20Stage,12);assert.equal(state.wallet.coins,coins);assert.deepEqual(rawMon(id).custom,{keep:true});
+  place();await get();await call('mission20SafetyBattle');saved=rawWorld();sim=Battle.fromJSON(saved.combat.snapshot);for(const p of sim.p2.pokemon){p.hp=1;p.setStatus('slp');p.statusState.time=99;}seedWorld({combat:{...saved.combat,snapshot:sim.toJSON()},districtPosition:{...saved.districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(state.world.zaMission20Stage,13);assert.equal(state.wallet.coins,coins+2352);assert.deepEqual(state.world.teamIds,[id]);assert.deepEqual(rawMon(id).custom,{keep:true});await get();assert.equal(state.wallet.coins,coins+2352);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
+test('Mission 20 existing solo safety battle remains playable',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission20-safety-legacy-qa',displayName:'기존 안전 단체 전투'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,lead={...makeMon(150,100),boxId:id,moves:['화염방사'],pp:{},custom:{keep:true}};seedMon(id,lead);
+  const foe={...makeMon(127,48),boxId:'legacy-safety-foe',hp:1,status:'잠듦'},combat=createCombat([lead],[foe]);seedWorld({...storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector1',interior:null,x:14,y:11,facing:'up',zaMission20Stage:12},state.revision+1),combat,trainer:{id:'mission20-safety',name:'안전 단체 대표'},encounter:null});await get();const coins=state.wallet.coins;await battle();assert.equal(state.world.zaMission20Stage,13);assert.equal(state.wallet.coins,coins+2352);assert.deepEqual(rawMon(id).custom,{keep:true});
+ }finally{globalThis.__adventureUser=previous;}
+});
