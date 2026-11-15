@@ -6,6 +6,15 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Zone 6 families learn reviewed ZA growth without rewriting old or unknown foes',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[228,18,['째려보기','몸통박치기','울부짖기','물기']],[307,20,['버티기','바위깨기','불릿펀치','환상빔']],[427,18,['튀어오르기','몸통박치기','드레인키스','전광석화']]]){
+  const old=makeMon(id,level),before=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,before);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone6GrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone6GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(markAdventureVerifiedGrowth(future),future);const alpha={...old,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
+ }
+ for(const [id,level,move] of [[228,24,'돌진'],[229,21,'바크아웃'],[307,23,'명상'],[308,34,'고속이동'],[427,20,'고속이동'],[428,36,'아이언테일']]){const old={...makeMon(id,level-1),adventureZone6GrowthV1:true,moves:['몸통박치기','방어','빛의장막','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,[move]);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...old,level},{}).includes(move));}
+ const mon={...makeMon(229,25),adventureZone6GrowthV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.deepEqual(applyAdventureEvolutionMoves(mon,{}).learned,[]);assert.equal(mon.pp.tackle,3);assert.ok(adventureLearnableMoves(mon,{}).includes('나쁜음모'));assert.ok(adventureLearnableMoves({...makeMon(308,40),adventureZone6GrowthV1:true},{}).includes('냉동펀치'));
+});
+
 test('new Zone 5 grass families use ZA growth without rewriting older or unknown foes',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,level,expected] of [[69,13,['덩굴채찍','엉겨붙기','잎날가르기','수면가루']],[543,13,['독침','구르기','방어','엉겨붙기']]]){
