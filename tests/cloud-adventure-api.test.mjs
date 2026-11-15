@@ -10665,6 +10665,13 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 9 Espurr keeps ZA growth and gender through capture evolution and reload',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone9-psychic-growth-qa',displayName:'구역 9 에스퍼 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,iv=structuredClone(rawMon(lead).ivs),key='zone9:espurr:677';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:11,y:8,facing:'up',zaRoyaleRank:'F',zaZone9Upper:true,zaZone9Spent:{},zaWildShinyRolls:{[key]:false},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();await call('zone9Wild-espurr');assert.equal(rawWorld().encounter.adventureZone9PsychicGrowthV1,true);assert.deepEqual(rawWorld().encounter.moves,['염동력','거짓울음','스피드스타','환상빔']);await get();await call('flee');await get();globalThis.__adventureRandom=()=>0;await call('throwZoneVisible',{ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===677);assert.ok(caught);const id=caught.boxId;assert.equal(rawMon(id).adventureZone9PsychicGrowthV1,true);seedMon(id,{...rawMon(id),gender:'F',level:25,pp:{tackle:3},custom:{keep:true}});await get();await call('evolve',{boxId:id,target:10025});await get();assert.equal(rawMon(id).adventureZone9PsychicGrowthV1,true);assert.equal(rawMon(id).gender,'F');assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(rawMon(id).custom,{keep:true});assert.deepEqual(rawMon(lead).ivs,iv);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('Zone 9 visible foe keeps ZA growth through battle capture and reload',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone9-family-growth-qa',displayName:'구역 9 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
  try{

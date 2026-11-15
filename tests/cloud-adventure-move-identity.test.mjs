@@ -6,6 +6,13 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('Zone 9 psychic growth follows species and known Meowstic gender',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[64,29,['순간이동','리플렉터','사이코커터','HP회복']],[677,28,['염동력','거짓울음','스피드스타','환상빔']]]){const old=makeMon(id,level),copy=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,copy);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone9PsychicGrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone9PsychicGrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(prepareVerifiedWildMoves({...old,adventureAlpha:true}).adventureZone9PsychicGrowthV1,undefined);}
+ for(const [id,gender,level,move] of [[64,'M',30,'사이코쇼크'],[65,'F',35,'사이코키네시스'],[677,'F',30,'빛의장막'],[678,'M',46,'회복봉인'],[10025,'F',40,'섀도볼']]){const old={...makeMon(id,level-1),gender,adventureZone9PsychicGrowthV1:true,moves:['몸통박치기','방어','물기','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.ok(result.pending.includes(move));assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...old,level},{}).includes(move));}
+ const male={...makeMon(678,50),gender:'M',adventureZone9PsychicGrowthV1:true},female={...makeMon(10025,50),gender:'F',adventureZone9PsychicGrowthV1:true};assert.ok(adventureLearnableMoves(male,{}).includes('희망사항'));assert.ok(!adventureLearnableMoves(female,{}).includes('희망사항'));assert.ok(adventureLearnableMoves(female,{}).includes('순간이동'));assert.ok(adventureLearnableMoves(female,{}).includes('문포스'));assert.deepEqual(applyAdventureEvolutionMoves({...makeMon(64,16),adventureZone9PsychicGrowthV1:true,moves:['몸통박치기']},{}).learned,['염동력']);
+});
+
 test('new Zone 9 wild species use ZA growth without rewriting older records',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,level,expected] of [[302,28,['섀도클로','이상한빛','탁쳐서떨구기','환상빔']],[303,28,['애교부리기','드레인키스','철벽','깨물어부수기']],[703,29,['돌진','매지컬샤인','철벽','파워젬']]]){
