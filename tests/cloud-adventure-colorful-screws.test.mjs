@@ -44,7 +44,7 @@ test('old saves on new street entrances retain their position',()=>{
 });
 
 test('additional screws preserve a saved position and old collection records',()=>{
- const additional=COLORFUL_SCREW_SITES.slice(61);
+ const additional=COLORFUL_SCREW_SITES.slice(COLORFUL_SCREW_SITES.findIndex(p=>p.id==='vert1-east-court-draft'));
  assert.equal(additional.length,16);
  assert.equal(new Set(COLORFUL_SCREW_SITES.map(p=>`${p.district}:${p.interior}:${p.x}:${p.y}`)).size,COLORFUL_SCREW_SITES.length);
  for(const p of additional){

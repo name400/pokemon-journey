@@ -4,7 +4,7 @@ import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restor
 
 test('Vert Sector 9 building alley preserves the canal bridge, missions and old positions',()=>{
  const base={area:3,district:'lumiose-vert-sector9',interior:null,x:11,y:7,zaMission26Started:true,zaSide74Stage:1,teamIds:['kept']};
- const map=fieldMap(base);for(let y=2;y<=6;y++)for(let x=10;x<=12;x++)assert.equal(map[y][x],',');
+ const map=fieldMap(base);for(let y=2;y<=6;y++)for(let x=10;x<=12;x++)assert.equal(map[y][x],x===10&&y===3?'i':x===12&&y===5?'j':',');
  assert.ok(fieldPath(map,base,{x:11,y:1}).length);assert.ok(fieldPath(map,base,{x:11,y:15}).length);
  assert.equal(map[11][11],':');assert.equal(map[11][4],'~');assert.equal(map[6][5],'q');
  const old=restoreAdventurePosition(storeAdventurePosition({...base,x:11,y:3},122),122);
