@@ -11813,3 +11813,11 @@ test('Jaune Plaza market before Wild Zone 8 preserves progress, stocks and recon
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-preplaza',interior:null,x:14,y:10,facing:'up',zaRoyaleRank:'F',zaMission10Stage:1},state.revision+1));await get();assert.equal(state.world.interaction?.actions?.some(a=>a.action==='buyAdventureMint-modestmint')||false,false);await call('buyAdventureMint-modestmint',{},409);await walkTo({x:11,y:15});await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-jaune-street');await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-zone8');assert.deepEqual(rawWorld().zaZone8Spent,zoneLedger);assert.deepEqual(rawWorld().teamIds,team);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('early Jaune Plaza connects both sides and keeps wild zone records untouched',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'jaune-preplaza-routes-qa',displayName:'광장 연결'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],mon=structuredClone(rawMon(id)),future={version:2,keep:{gible:true}};
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:19,y:1,facing:'up',zaRoyaleRank:'V',zaMysteryTrail:4,zaZone8Spent:future,customFuture:{keep:true}},state.revision+1));await get();await call('move',{direction:'up'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-preplaza',9,15]);await get();await walkTo({x:11,y:1});await call('move',{direction:'up'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-street-north',11,15]);await get();await call('move',{direction:'down'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-preplaza',11,1]);await get();await walkTo({x:9,y:15});await call('move',{direction:'down'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-centrico-route',19,1]);assert.deepEqual(rawWorld().zaZone8Spent,future);assert.deepEqual(rawWorld().customFuture,{keep:true});assert.deepEqual(rawWorld().teamIds,team);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
+ }finally{globalThis.__adventureUser=oldUser;}
+});

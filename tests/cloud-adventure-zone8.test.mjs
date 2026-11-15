@@ -4,7 +4,7 @@ import {zone8Map,zone8Encounter,zone8Visible,zone8Item} from '../lib/cloud-adven
 import {stepField,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 test('zone eight gate, central area and saved location',()=>{
  const base={area:3,district:'lumiose-centrico-route',interior:null,x:19,y:1,facing:'up',zaRoyaleRank:'V'};
- assert.equal(stepField(base,'up').blocked,true);const entered=stepField({...base,zaRoyaleRank:'F'},'up');assert.equal(entered.district,'lumiose-zone8');
+ assert.equal(stepField(base,'up').district,'lumiose-jaune-preplaza');const entered=stepField({...base,zaRoyaleRank:'F'},'up');assert.equal(entered.district,'lumiose-zone8');
  const s={...base,...entered,zaRoyaleRank:'F'},map=zone8Map(s);assert.ok(fieldPath(map,s,{x:11,y:8}).length);assert.equal(zone8Visible(s,'b').species,66);assert.equal(zone8Visible(s,'d').alpha,true);assert.equal(zone8Item(s,'i').kind,'greatball');assert.equal(zone8Item({...s,zaZone8Items:['north-great']},'i'),null);assert.equal(zone8Visible({...s,zaZone8Spent:{machop:true}},'b'),null);
  const saved=restoreAdventurePosition(storeAdventurePosition({...s,x:11,y:8},42),42);assert.deepEqual([saved.district,saved.x,saved.y],['lumiose-zone8',11,8]);assert.equal(stepField(s,'down').district,'lumiose-centrico-route');
  assert.equal(zone8Encounter({x:11,y:8},()=>0).speciesId,66);assert.equal(zone8Encounter({x:3,y:8},()=>0).speciesId,322);
@@ -21,7 +21,7 @@ test('Jaune Street entrance honors Zone 8 access and reconnects on exit',()=>{
 
 test('garden entrance respects unlock while legacy saves can leave',()=>{
  const garden={area:3,district:'lumiose-jaune-garden-route',interior:null,x:4,y:15,facing:'down',zaRoyaleRank:'V',teamIds:['kept']};
- assert.equal(stepField(garden,'down').blocked,true);
+ assert.equal(stepField(garden,'down').district,'lumiose-jaune-preplaza');
  const open={...garden,zaRoyaleRank:'F'},entered=stepField(open,'down');
  assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone8',19,1]);
  const restored=restoreAdventurePosition(storeAdventurePosition({...open,...entered},23),23);
@@ -80,7 +80,7 @@ test('plaza gate approaches retain sand encounters and old positions',()=>{
 test('opposed Jaune Street entrances preserve legacy gates, routes and saved state',()=>{
  for(const [district,x,y,dir,zx,zy,returnDir] of [['lumiose-jaune-street',1,11,'left',1,11,'left'],['lumiose-jaune-street-north',21,5,'right',21,5,'right']]){
   const base={area:3,district,interior:null,x,y,zaRoyaleRank:'V',teamIds:['kept'],coins:321};
-  assert.equal(stepField(base,dir).blocked,true);
+  assert.equal(stepField(base,dir).district,'lumiose-jaune-preplaza');
   const open={...base,zaRoyaleRank:'F'},entered=stepField(open,dir);
   assert.deepEqual([entered.district,entered.x,entered.y],['lumiose-zone8',zx,zy]);
   const zone={...open,...entered,zaZone8Spent:{machop:true},zaZone8Items:['north-great'],zaZone8Burrows:{gible:443}};

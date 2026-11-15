@@ -2,8 +2,10 @@
 
 [광장 설명](https://bulbapedia.bulbagarden.net/wiki/Jaune_Plaza)은 존느 광장이 처음에는 시장이었다가 진행 후 야생 구역 8로 바뀐다고 설명한다. [구역 안내](https://www.pockettactics.com/pokemon-legends-z-a/wild-zone-8)는 미션 10 초반에 개방된다고 설명한다. 기존에는 개방 전 존느 스트리트의 해당 출입구를 완전히 막았으므로, 명확한 초기 랭크에서만 야생 개체가 없는 별도 시장 화면으로 연결했다. 진행 후에는 기존 야생 구역 진입과 해금 판정을 그대로 사용한다. 진행 형식이 미확인이면 초기 시장으로 추정하지 않는다.
 
-초기 시장에는 [열매 판매 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/berry-stalls.html)의 세 판매대와 [민트 자료](https://allthings.how/modest-mint-locations-in-pokemon-legends-z-a/)의 공격·특수공격 민트 판매대를 연결했다. [다른 민트 안내](https://www.fdaytalk.com/mints-in-pokemon-legends-z-a/)는 두 번째 판매대의 종류가 다르게 기재되어 있으므로 그 배치는 미확정이다. 다섯 판매대의 칸·원형 광장의 크기와 통로는 2D 추정이며 원작 지도와 동일하다고 주장하지 않는다. 초기 광장은 존느 스트리트 입구 하나만 왕복하고 다른 원작 출입로는 남아 있다.
+초기 시장에는 [열매 판매 자료](https://altissimo1.github.io/Supplementary-Series/Legends/Legends-Z-A/berry-stalls.html)의 세 판매대와 [민트 자료](https://allthings.how/modest-mint-locations-in-pokemon-legends-z-a/)의 공격·특수공격 민트 판매대를 연결했다. [다른 민트 안내](https://www.fdaytalk.com/mints-in-pokemon-legends-z-a/)는 두 번째 판매대의 종류가 다르게 기재되어 있으므로 그 배치는 미확정이다. 다섯 판매대의 칸·원형 광장의 크기와 통로는 2D 추정이며 원작 지도와 동일하다고 주장하지 않는다. 초기 광장은 기존 야생 구역의 일곱 출입점에 대응하는 주변 거리와 왕복한다. 원작 자료는 광장과 [주변 존느 지구·스트리트의 관계](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/jaune-plaza.html)를 설명하지만 기존 2D 화면과의 접점·방향·좌표는 추정이다.
 
-화면은 기존 구역 8과 별도 ID를 사용해 기존 야생 개체·이로치·수집 기록을 건드리지 않는다. 개방 후에도 옛 시장 화면에 저장되어 있다면 판매대는 사라지고 안전하게 스트리트로 돌아가 다시 들어올 수 있다. 기존 야생 구역 개방 조건은 변경하지 않았으며, 기존 게임의 미션 9 완료 기준과 원작의 정확한 개방 시점 차이는 추가 확인이 필요하다. 새 폴링이나 이동 요청은 추가하지 않는다.
+화면은 기존 구역 8과 별도 ID를 사용해 기존 야생 개체·이로치·수집 기록을 건드리지 않는다. 개방 후에도 옛 시장 화면에 저장되어 있다면 판매대는 사라지고 안전하게 주변 거리로 돌아가 다시 들어올 수 있다. 기존 야생 구역 개방 조건은 변경하지 않았으며, 기존 게임의 미션 9 완료 기준과 원작의 정확한 개방 시점 차이는 추가 확인이 필요하다. 새 폴링이나 이동 요청은 추가하지 않는다.
 
 구역 전후 진입·야생 구역 접근 제한·다섯 판매 목록·가격·중복 요청·재접속·진행 후 퇴장 및 기존 파티·알 수 없는 구역 기록 보존을 단위 및 격리 SQLite API로 확인했다. 실제 원작 기기·운영 D1·Sites 병합본은 확인하지 않았다.
+
+후속: 초기 광장을 기존에 서로 도달 가능한 주변 거리의 일곱 출입점과 연결했다. 다른 지역의 해금 조건이나 후반 야생 구역 출입은 변경하지 않는다. 일곱 방향 왕복·재접속·미확인 진행 및 보존 기록을 단위 검사했고, 센트리코 쪽에서 진입해 북쪽 존느 스트리트로 왕복하는 흐름을 격리 SQLite API로 확인했다. 실제 원작 지도 좌표·운영 D1·Sites 병합본은 검증하지 않았다.
