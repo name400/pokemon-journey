@@ -2,6 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,restoreAdventurePosition,storeAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Bleu 8 roof preserves the courtyard and saved rooftop inventory',()=>{
+ const s={area:3,district:'lumiose-bleu-sector8',interior:null,x:5,y:3,zaSide16Stage:1,zaBleu8Items:['northwest-ultra'],teamIds:['kept']};
+ const roof=stepField(s,'up');assert.deepEqual([roof.district,roof.x,roof.y],['lumiose-bleu8-roof',11,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...roof,zaBleu8Items:['northwest-ultra','roof-fullheal']},240),240);assert.deepEqual(saved.teamIds,['kept']);assert.equal(fieldMap(saved)[7][10],'.');assert.equal(fieldMap(saved)[4][4],'j');
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-sector8',5,3]);assert.equal(fieldMap({...s,...back})[5][5],'^');
+});
+
 test('Bleu Sector 9 courtyard preserves the Old Building interaction and saved progress',()=>{
  const base={area:3,district:'lumiose-bleu-sector9',interior:null,x:10,y:6,zaMission20Stage:7,teamIds:['kept']};
  const map=fieldMap(base);assert.ok(fieldPath(map,base,{x:11,y:3}).length);

@@ -10833,6 +10833,19 @@ test('Magenta 8 scaffold items preserve prior collections and prevent duplicates
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Bleu 8 roof exploration preserves prior courtyard and show progress',async()=>{
+ const previousUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'bleu8-roof-qa',displayName:'블루 8 옥상'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,before=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector8',interior:null,x:5,y:3,facing:'up',zaSide16Stage:1,zaBleu8Items:['northwest-ultra','future-id'],adventureBalls:{duskball:99}},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-bleu8-roof');assert.deepEqual([state.world.x,state.world.y],[11,15]);
+  await walkTo({x:5,y:4});await call('face',{direction:'left'});await call('bleu8Item-roof-northwest-dusk',{},409);assert.deepEqual(rawWorld().zaBleu8Items,['northwest-ultra','future-id']);
+  const unknown={version:2,items:['future']};seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:4,facing:'left',zaBleu8Items:unknown},state.revision+1));await get();await call('bleu8Item-roof-northwest-dusk',{},409);assert.deepEqual(rawWorld().zaBleu8Items,unknown);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:4,facing:'left',zaBleu8Items:['northwest-ultra','future-id'],adventureBalls:{duskball:98}},state.revision+1));await get();const rev=state.revision;await call('bleu8Item-roof-northwest-dusk');await call('bleu8Item-roof-northwest-dusk',{revision:rev},409);await get();assert.equal(state.world.adventureBalls.duskball,99);
+  await walkTo({x:11,y:7});await call('face',{direction:'left'});await call('bleu8Item-roof-fullheal');await get();assert.equal(state.inventory.fullheal,1);assert.deepEqual(rawWorld().zaBleu8Items,['northwest-ultra','future-id','roof-northwest-dusk','roof-fullheal']);assert.deepEqual(rawMon(lead).ivs,before.ivs);
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-bleu-sector8');assert.deepEqual([state.world.x,state.world.y],[5,3]);assert.equal(state.world.zaSide16Stage,1);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Bleu 8 courtyard pickups preserve show progress and prevent duplicates',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu8-courtyard-qa',displayName:'블루 8 안뜰'};
  try{
