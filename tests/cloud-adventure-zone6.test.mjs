@@ -171,3 +171,14 @@ test('Ticien berry healing is preserved in the turn-based battle snapshot',async
  const player={...makeMon(150,10),boxId:'player',moves:['튀어오르기'],pp:{}},base=makeMon(333,22),half=Math.floor(base.maxHp/2),foe={...base,boxId:'foe',hp:half,item:'oranberry',moves:['튀어오르기'],pp:{}};
  let battle=createCombat([player],[foe]);assert.equal(battle.teams[1][0].hp,half+10);assert.equal(battle.teams[1][0].item,'');battle=playCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'튀어오르기'});assert.equal(battle.teams[1][0].hp,half+10);assert.equal(battle.teams[1][0].item,'');
 });
+
+test('Zone 6 south connects to the other side of North Boulevard',()=>{
+ const zone={area:3,district:'lumiose-zone6',interior:null,x:12,y:15,facing:'down',zaZone6Layer:'ground',teamIds:['kept'],zaZone6Spent:{future:true}};
+ const road=stepField(zone,'down');assert.deepEqual([road.district,road.x,road.y],['lumiose-north-boulevard',21,1]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...zone,...road},82),82);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaZone6Spent],['lumiose-north-boulevard',21,1,['kept'],{future:true}]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:18,y:1}).length);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaZone6Layer],['lumiose-zone6',12,15,'ground']);
+ assert.equal(stepField({...saved,x:18},'up').district,'lumiose-zone6');
+ assert.equal(stepField({...zone,x:16},'down').district,'lumiose-jaune-sector12');
+});

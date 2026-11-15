@@ -11821,3 +11821,13 @@ test('early Jaune Plaza connects both sides and keeps wild zone records untouche
   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:19,y:1,facing:'up',zaRoyaleRank:'V',zaMysteryTrail:4,zaZone8Spent:future,customFuture:{keep:true}},state.revision+1));await get();await call('move',{direction:'up'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-preplaza',9,15]);await get();await walkTo({x:11,y:1});await call('move',{direction:'up'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-street-north',11,15]);await get();await call('move',{direction:'down'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-preplaza',11,1]);await get();await walkTo({x:9,y:15});await call('move',{direction:'down'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-centrico-route',19,1]);assert.deepEqual(rawWorld().zaZone8Spent,future);assert.deepEqual(rawWorld().customFuture,{keep:true});assert.deepEqual(rawWorld().teamIds,team);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Zone 6 southern boulevard entrance keeps old progress across reload',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone6-south-boulevard-qa',displayName:'구역 6 남쪽 길'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),lead=structuredClone(rawMon(team[0]));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone6',interior:null,x:12,y:15,facing:'down',zaZone6Layer:'ground',zaColorfulScrewsFound:['future-screw'],zaMission20Stage:7},state.revision+1));await get();await call('move',{direction:'down'});await get();
+  assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-north-boulevard',21,1]);assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw']);assert.equal(rawWorld().zaMission20Stage,7);
+  await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone6Layer],['lumiose-zone6',12,15,'ground']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);const after=rawMon(team[0]);assert.equal(after.walkSteps,lead.walkSteps+2);delete after.walkSteps;delete lead.walkSteps;assert.deepEqual(after,lead);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
