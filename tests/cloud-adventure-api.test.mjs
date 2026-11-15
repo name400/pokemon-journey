@@ -10745,3 +10745,13 @@ test('Bleu 7 resident grants reusable Electroweb TM once and respects full bags'
   await call('bleu7Tm101',{revision:rev},409);await call('bleu7Tm101',{},409);await call('teachStoryTm',{item:'za-tm101',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'일렉트릭네트');assert.equal(state.inventory['za-tm101'],1);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('TM101 teaches a newly supported species without consuming the machine',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm101-expanded-qa',displayName:'추가 호환성'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(694,20),moves:['몸통박치기']});
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm101']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm101');await get();
+  await call('teachStoryTm',{item:'za-tm101',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'일렉트릭네트');assert.equal(state.inventory['za-tm101'],1);assert.deepEqual(state.world.teamIds,team);
+  await call('teachStoryTm',{item:'za-tm101',boxId:id,slot:0},409);assert.equal(rawMon(id).moves[0],'일렉트릭네트');
+ }finally{globalThis.__adventureUser=previousUser;}
+});
