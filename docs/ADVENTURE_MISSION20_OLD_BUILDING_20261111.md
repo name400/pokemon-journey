@@ -19,3 +19,7 @@
 [위치 공략](https://www.gamerguides.com/pokemon-legends-z-a/database/items/tms-1/dragon-pulse)은 북쪽 건물에서 로토글라이드로 도달하는 녹청파 사무소 옥상에 TM075 용의파동이 있다고 설명한다. 기존 두 옥상과 글라이드 경로에 일회성 획득을 연결했다. 정확한 타일 위치와 옥상 평면은 2D 초안이며 원작 실기 검증은 하지 않았다. 가방이 가득 차면 획득 기록을 남기지 않는다. [기술 목록](https://www.serebii.net/attackdex-sv/dragonpulse.shtml)의 Z-A 항목에서 일부 기본 종 36개만 확인했으므로 나머지 종과 폼의 학습 호환성은 미완성이다. 기존 저장과 보유 기술머신은 유지된다.
 
 후속 호환성 보완: [Z-A 기술머신 목록](https://www.serebii.net/attackdex-sv/dragonpulse.shtml)에서 세비퍼·빈티나 계열·곤율랭 계열·저리더프·일레도리자드·티고라스 계열·지가르데·할비롱·데스판을 추가로 확인해 기본 종 48종을 지원한다. [폼별 자료](https://www.dittobase.com/legends-za/moves/dragon-pulse)에서 히스이 미끄네일·미끄래곤을 별도 확인했다. 데이터베이스의 [이용 조건](https://www.dittobase.com/terms)에 따라 필요한 관계만 확인했으며 전체 데이터를 복제하지 않았다. 다른 종·폼은 여전히 미확인이며 화면에도 부분 지원으로 표시한다. 실제 기기에서의 대조는 하지 않았다.
+
+### 상가 건물의 선반과 도구
+
+[상가 건물 자료](https://bulbapedia.bulbagarden.net/wiki/Old_Building)는 안쪽 선반 뒤의 이상한사탕을 기록하며, [별도 지역 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-9.html)는 입구에서 보아 왼쪽 안쪽이라고 설명한다. 기존 빈 공간에 선반과 그 뒤의 일회성 도구를 추가했다. 정확한 선반의 수·모양·좌표와 방 구조는 2D 추정이며 원작 실기는 확인하지 않았다. 선반과 겹치는 기존 저장 위치는 같은 저장 리비전에서 가까운 보행 칸으로 복원한다. 기존 고스트 세 슬롯과 이동 경로, 의뢰 진행은 유지한다. 가방이 가득 차거나 알 수 없는 미래 수령 기록이 있으면 도구를 지급하거나 기록을 덮어쓰지 않는다.

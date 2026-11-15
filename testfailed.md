@@ -13,6 +13,8 @@
 - 3882행에서 블로스터 우두머리 전투 후 `state.world.zaZone11Spent['clawitzer-alpha']`를 확인하는 단계에 `TypeError: Cannot read properties of undefined (reading 'clawitzer-alpha')`가 발생했다.
 - 해당 시점의 `zaZone11Spent`가 undefined였다. 실제 게임 상태 처리 문제인지, 전투 결과·무작위 타입 또는 테스트 전제 문제인지는 이 결과만으로 확정할 수 없다. 전투 로그와 승리·상태 저장 경로를 확인하고, 수정된 정확한 Sites 병합본에서 전체 검사를 다시 실행해야 한다.
 
+개발 브랜치 후속 조사: 실패한 Sites 병합 커밋 `2646e5d2` 객체와 해당 전투 로그는 이 저장소에 없어 당시 승패나 저장 변경을 확인할 수 없다. 현재 라우터에는 해당 조우의 승리·포획 시 소진 ID를 기록하는 처리가 있고, 테스트의 `battle()` 도우미는 전투 종료는 확인하지만 승자까지 단언하지 않는다. 따라서 패배·주기 갱신·저장 문제 중 원인을 확정할 수 없다. 앞선 격리 대표 실행에서는 해당 검사가 통과했으며, 실제 병합본의 실패 기록은 유지한다.
+
 ## 2026-11-15 — GitHub `ac57e03f` 배포 검사 실패
 
 - 대상 브랜치 `cloud/pokerogue-continue-20261105`, GitHub 커밋 `ac57e03f1c93de8b5fc3e34b710b0803eaab57a8`.
