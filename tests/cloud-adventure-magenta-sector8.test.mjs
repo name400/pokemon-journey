@@ -44,3 +44,11 @@ test('Magenta 8 grass and pickups keep old positions and city exits',()=>{
  const collected=restoreAdventurePosition(storeAdventurePosition({...saved,zaMagenta8Items:['grass-great']},72),72);map=fieldMap(collected);
  assert.equal(map[4][11],';');assert.equal(map[11][20],'j');assert.equal(map[9][17],'k');assert.equal(stepField({...collected,x:21,y:8},'right').blocked,true);
 });
+
+test('Magenta 8 scaffold items preserve roof saves and the existing screw route',()=>{
+ const s={area:3,district:'lumiose-screw-magenta8',interior:null,x:6,y:6,facing:'up',teamIds:['kept'],zaMagenta8Items:['grass-great']};
+ let saved=restoreAdventurePosition(storeAdventurePosition(s,73),73),map=fieldMap(saved);
+ assert.deepEqual([saved.x,saved.y,saved.teamIds],[6,6,['kept']]);assert.equal(map[6][6],'i');assert.equal(map[6][9],'k');assert.ok(fieldPath(map,saved,{x:4,y:11}).length);
+ saved=restoreAdventurePosition(storeAdventurePosition({...saved,zaMagenta8Items:['grass-great','scaffold-super']},74),74);map=fieldMap(saved);
+ assert.equal(map[6][6],'.');assert.equal(map[6][9],'k');assert.deepEqual(saved.zaMagenta8Items,['grass-great','scaffold-super']);
+});

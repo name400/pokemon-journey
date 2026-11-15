@@ -926,6 +926,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      }
      if(c==='X'){ctx.fillStyle='#537b85';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
+    if(w.district==='lumiose-screw-magenta8'&&!w.interior){
+     // Scaffold and nearby roof share a compressed draft plane; no collision changes.
+     const scaffold=x<=10&&c!=='#';ctx.fillStyle=c==='#'?'#667980':scaffold?'#a28a6c':'#adb6ae';ctx.fillRect(px,py,tile,tile);
+     if(scaffold){ctx.fillStyle='#cfb390';for(let n=4;n<tile;n+=8)ctx.fillRect(px+2,py+n,tile-4,2);ctx.fillStyle='#786858';ctx.fillRect(px+tile-3,py,2,tile);}else if(c!=='#'){ctx.fillStyle='#8c9892';ctx.fillRect(px,py+tile-3,tile,2);}
+     if(c==='i'||c==='k'){ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
+     if(c==='j'){ctx.fillStyle='#65584d';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#e7d8b6';for(let n=0;n<3;n++)ctx.fillRect(px+6,py+7+n*7,tile-12,2);}return;
+    }
     if(isScrewGlideRoof(w.district)&&!w.interior){
      // Draft scaffold platforms and the street below their glide gap.
      const shade=w.district==='lumiose-screw-bleu3'?['#536e82','#91aeb7','#bdd2d3']:w.district==='lumiose-screw-vert5'?['#6f8170','#a4ae86','#cad1a2']:w.district==='lumiose-screw-vert8'?['#666f8c','#aaa5b4','#d2cbd4']:w.district==='lumiose-screw-jaune6'?['#677d89','#acaf9a','#d4d2bb']:w.district==='lumiose-screw-palais'?['#606a82','#ae9f9c','#cebfbb']:w.district==='lumiose-screw-jaune3'?['#78849a','#b7a68c','#dbcbb0']:w.district==='lumiose-screw-rouge1-court'?['#6c6978','#ab8f7e','#ccb39e']:w.district==='lumiose-screw-jaune9'?['#596679','#a49f96','#c5beb1']:w.district==='lumiose-screw-jaune11'?['#637d7f','#b2ac87','#d4cba4']:w.district==='lumiose-screw-vert3'?['#61766e','#aa987d','#c9bca0']:['#536b7a','#b89b78','#c9ad89'];ctx.fillStyle=c==='#'?shade[0]:(x+y)%2?shade[1]:shade[2];ctx.fillRect(px,py,tile,tile);

@@ -10698,3 +10698,16 @@ test('Magenta 8 ground items protect inventory and persist across reload',async(
   seedWorld(storeAdventurePosition({...rawWorld(),x:17,y:8,facing:'down'},state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta8Item-north-fullheal');await call('magenta8Item-north-fullheal');await get();assert.equal(state.inventory.fullheal,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawWorld().zaMagenta8Items,['grass-great','east-quick','north-fullheal']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Magenta 8 scaffold items preserve prior collections and prevent duplicates',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta8-scaffold-qa',displayName:'마젠타 8 비계'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-screw-magenta8',interior:null,x:6,y:7,facing:'up',zaMagenta8Items:['grass-great'],zaRoyaleRank:'Z'},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'magenta8ScaffoldItem-scaffold-super');const before=state.wallet.super_potions,rev=state.revision;
+  await call('magenta8ScaffoldItem-scaffold-super');await get();assert.equal(state.wallet.super_potions,before+1);await call('magenta8ScaffoldItem-scaffold-super',{revision:rev},409);await call('magenta8ScaffoldItem-scaffold-super',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:9,y:7,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta8ScaffoldItem-scaffold-pearl');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'pearl']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'pearl');await get();await call('magenta8ScaffoldItem-scaffold-pearl',{},409);assert.ok(!rawWorld().zaMagenta8Items.includes('scaffold-pearl'));
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();await call('magenta8ScaffoldItem-scaffold-pearl');await get();assert.equal(state.inventory.pearl,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawWorld().zaMagenta8Items,['grass-great','scaffold-super','scaffold-pearl']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
