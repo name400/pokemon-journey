@@ -165,3 +165,16 @@ test('new ordinary Kalos wild encounters use verified moves without altering alp
  }
  const alpha={...makeMon(656,23),adventureAlpha:true,moves:['얼어붙은바람'],pp:{icywind:2}},form={...makeMon(656,23),formId:999};assert.equal(prepareVerifiedWildMoves(alpha),alpha);assert.equal(prepareVerifiedWildMoves(form),form);
 });
+
+test('newly caught Bunnelby family uses verified ZA growth without rewriting old saves',async()=>{
+ const {markAdventureVerifiedGrowth}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [level,move] of [[7,'머드샷'],[14,'전광석화'],[24,'세차게휘두르기'],[28,'구멍파기'],[32,'뛰어오르기'],[36,'돌진'],[40,'분노의앞니'],[44,'지진']]){
+  const old={...makeMon(659,level-1),moves:['몸통박치기','울음소리','방어','빛의장막'],pp:{tackle:3},custom:{keep:true}},mon=markAdventureVerifiedGrowth(old);
+  assert.equal(old.adventureBunnelbyMovesV1,undefined);assert.equal(mon.adventureBunnelbyMovesV1,true);
+  const result=applyAdventureLevelMoves(mon,{...mon,level},{});assert.deepEqual(result.pending,[move]);assert.deepEqual(result.mon.pp,{tackle:3});assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...mon,level},{}).includes(move));
+ }
+ const diggersby={...makeMon(660,20),adventureBunnelbyMovesV1:true,moves:['몸통박치기'],pp:{tackle:2}};
+ assert.deepEqual(applyAdventureEvolutionMoves(diggersby,{}).learned,['땅고르기']);assert.equal(diggersby.pp.tackle,2);assert.ok(adventureLearnableMoves(diggersby,{}).includes('땅고르기'));
+ const future={...makeMon(659,20),adventureBunnelbyMovesV1:{version:2}};assert.deepEqual(markAdventureVerifiedGrowth(future),future);
+ const other={...makeMon(659,20),formId:999};assert.equal(markAdventureVerifiedGrowth(other).adventureBunnelbyMovesV1,undefined);
+});

@@ -11171,3 +11171,16 @@ test('Mission 19 sewer records preserve unknown entries and reject unknown forma
   assert.deepEqual(rawMon(id),mon);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 3 captured Bunnelby keeps ZA growth on reconnect and level up',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission03-bunnelby-growth-qa',displayName:'파르빗 성장'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,hero={...makeMon(152,10),boxId:lead},foe={...makeMon(659,6),boxId:'mission03-bunnelby',adventureMissionId:'mission03-bunnelby'};seedMon(lead,hero);
+  const combat=createCombat([hero],[foe]);seedWorld({area:3,district:'lumiose-zone1',interior:null,teamIds:[lead],activeId:lead,zaMission03Stage:5,combat,encounter:foe,trainer:null,adventureBalls:{masterball:1}});
+  await get();await call('ball',{ball:'masterball'});await get();const id=state.world.teamIds.find(x=>x!==lead),captured=rawMon(id);assert.equal(captured.speciesId,659);assert.equal(captured.adventureBunnelbyMovesV1,true);assert.equal(state.world.zaMission03Stage,6);
+  seedMon(id,{...captured,level:6,moves:['몸통박치기','째려보기','방어','빛의장막'],pp:{tackle:2},custom:{keep:true}});
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');await get();const rev=state.revision;await call('useAdventureRareCandy',{boxId:id});await get();
+  assert.equal(rawMon(id).level,7);assert.equal(rawMon(id).adventureBunnelbyMovesV1,true);assert.deepEqual(rawMon(id).custom,{keep:true});assert.equal(rawMon(id).pp.tackle,2);assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='머드샷'));assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('머드샷'));await call('useAdventureRareCandy',{boxId:id,revision:rev},409);
+  await call('resolveAdventureMove',{slot:null});seedMon(id,{...rawMon(id),level:20,shiny:true,item:'leftovers',custom:{keep:true}});await get();const evolveRev=state.revision;await call('evolve',{boxId:id,target:660});await get();assert.equal(rawMon(id).speciesId,660);assert.equal(rawMon(id).adventureBunnelbyMovesV1,true);assert.equal(rawMon(id).shiny,true);assert.equal(rawMon(id).item,'leftovers');assert.deepEqual(rawMon(id).custom,{keep:true});assert.ok(state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='땅고르기'));assert.ok(state.box.find(p=>p.boxId===id).learnable.includes('땅고르기'));await call('evolve',{boxId:id,target:660,revision:evolveRev},409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
