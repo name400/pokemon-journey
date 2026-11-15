@@ -18,6 +18,11 @@ test('Jaune 5 courtyard connects Sectors 4 and 7 and restores its saved position
  assert.equal(stepField({...s,...sector8},'left').district,s.district);
  assert.equal(stepField({...s,...sector8,x:1,y:8,zaRoyaleRank:'W'},'left').blocked,true);
  assert.equal(stepField({...s,...sector3,zaMission12Layer:'roof',x:21,y:12},'right').transitioned,undefined);
+ assert.ok(fieldPath(map,s,{x:11,y:15}).length,'plaza street approach must be reachable');
+ const street=stepField({...s,x:11,y:15},'down');assert.deepEqual([street.district,street.x,street.y],['lumiose-jaune-street-north',1,8]);
+ assert.equal(stepField({...s,...street},'left').district,s.district);
+ const streetState={...s,...street,zaRoyaleRank:'W'};assert.ok(fieldPath(fieldMap(streetState),streetState,{x:21,y:5}).length);
+ assert.equal(stepField({...streetState,x:21,y:5},'right').blocked,true,'Zone 8 remains locked');
  const saved=storeAdventurePosition({...s,x:12,y:8},81),restored=restoreAdventurePosition(saved,81);
  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds,restored.steps],[s.district,12,8,['kept'],42]);
  assert.equal(stepField({...s,district:'lumiose-jaune-sector7',x:11,y:15},'down').district,'lumiose-jaune-sector4');
