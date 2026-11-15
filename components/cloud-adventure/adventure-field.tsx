@@ -660,6 +660,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
     if(['lumiose-bleu-sector3','lumiose-bleu-sector5','lumiose-bleu-sector7','lumiose-south-boulevard','lumiose-bleu-street','lumiose-autumnal-approach','lumiose-jaune-sector11','lumiose-hibernal-approach','lumiose-jaune-street','lumiose-jaune-sector2','lumiose-jaune-sector6','lumiose-jaune-sector7','lumiose-jaune-sector9','lumiose-jaune-sector10','lumiose-jaune-sector12'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#a79c8f':c==='%'?'#718c9b':c===','?'#b8b8ac':(x+y)%2?'#d6d9cd':'#e2e5d8';ctx.fillRect(px,py,tile,tile);
+     // Sector 6 buildings and lift are existing draft tiles; quest markers remain dynamic.
+     if(w.district==='lumiose-jaune-sector6'){
+      const building=c==='#'&&((x>=3&&x<=7&&y>=2&&y<=5)||(x>=15&&x<=19&&y>=11&&y<=14));
+      if(building){ctx.fillStyle='#b8aa94';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e1d2b8';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#85796b';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#d9ccb2';ctx.fillRect(px+5,py+tile-6,7,3);ctx.fillRect(px+tile-12,py+tile-6,7,3);}else{ctx.fillStyle='#9c8e7e';ctx.fillRect(px+3,py+10,tile-6,2);}}
+      if(c===','){ctx.fillStyle='#e9e1cf';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);}
+      if(c==='j'&&x===15&&y===12){ctx.fillStyle='#876d4d';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('승강',px+tile/2,py+20);}
+     }
      // Western courtyard and dojo entrance are existing provisional 2D tiles.
      if(w.district==='lumiose-jaune-sector2'){
       const building=c==='#'&&((x>=2&&x<=9&&y>=2&&y<=9)||(x>=15&&x<=19&&y>=11&&y<=14));
