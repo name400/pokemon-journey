@@ -10914,3 +10914,13 @@ test('Bleu 10 street connects sectors 9 and 6 with the Shutterbug Café',async()
   await walkTo({x:17,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu6-approach',1,5]);await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector10-street',17,15]);await walkTo({x:5,y:15});await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector9',11,1]);assert.equal(state.world.zaMission20Stage,7);assert.deepEqual(state.world.teamIds,team);assert.deepEqual([rawMon(id).id,rawMon(id).ivs],[mon.id,mon.ivs]);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Bleu 10 cafe street joins Estival Avenue and South Boulevard without changing Zone 10 access',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu10-avenues-qa',displayName:'블루 10 도로'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins,mon=structuredClone(rawMon(id));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector10-street',interior:null,x:11,y:1,facing:'up',zaRoyaleRank:'Z',zaSide14Started:true},state.revision+1));await get();await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-estival-approach',8,15]);await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector10-street',11,1]);
+  await walkTo({x:1,y:8});await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-south-boulevard',5,1]);await call('move',{direction:'up'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector10-street',1,8]);assert.equal(state.world.zaSide14Started,true);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-south-boulevard',x:11,y:1,facing:'up',zaVert7RoofUpper:false},state.revision+1));await get();await call('move',{direction:'up'},409);assert.equal(state.world.district,'lumiose-south-boulevard');assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),{...mon,walkSteps:rawMon(id).walkSteps});
+ }finally{globalThis.__adventureUser=previous;}
+});
