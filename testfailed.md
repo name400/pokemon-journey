@@ -1,5 +1,18 @@
 # 배포 검증 실패 기록
 
+## 2026-11-15 — GitHub `23ab593e` 배포 검사 실패
+
+- 대상 브랜치 `cloud/pokerogue-continue-20261105`, 지정 GitHub 커밋 `23ab593e9fd2aeb5fd095767ec021e1e55be2ebe`. 검사 당시 브랜치에는 이후 커밋이 하나 더 있었으나 지정 커밋까지만 반영했다.
+- 기존 Sites 소스와 병합한 검증 커밋 `2646e5d2bb57663792e60228576b879254140a47`, Node.js v24.22.1.
+- 타입 검사 통과. 전체 테스트 4,691개 중 4,690개 통과, 1개 실패 (319.4초). 별도 배포용 빌드는 통과했다.
+- 테스트 실패로 배포하지 않았다. 마지막 확인된 운영본은 Sites v88이다.
+
+### 구역 11 우두머리 조우
+
+- 테스트 `tests/cloud-adventure-api.test.mjs:3878`: `Zone 11 alpha Slowbro and Clawitzer start alpha battles from their banks`.
+- 3882행에서 블로스터 우두머리 전투 후 `state.world.zaZone11Spent['clawitzer-alpha']`를 확인하는 단계에 `TypeError: Cannot read properties of undefined (reading 'clawitzer-alpha')`가 발생했다.
+- 해당 시점의 `zaZone11Spent`가 undefined였다. 실제 게임 상태 처리 문제인지, 전투 결과·무작위 타입 또는 테스트 전제 문제인지는 이 결과만으로 확정할 수 없다. 전투 로그와 승리·상태 저장 경로를 확인하고, 수정된 정확한 Sites 병합본에서 전체 검사를 다시 실행해야 한다.
+
 ## 2026-11-15 — GitHub `ac57e03f` 배포 검사 실패
 
 - 대상 브랜치 `cloud/pokerogue-continue-20261105`, GitHub 커밋 `ac57e03f1c93de8b5fc3e34b710b0803eaab57a8`.
