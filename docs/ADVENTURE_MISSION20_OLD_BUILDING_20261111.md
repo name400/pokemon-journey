@@ -23,3 +23,9 @@
 ### 상가 건물의 선반과 도구
 
 [상가 건물 자료](https://bulbapedia.bulbagarden.net/wiki/Old_Building)는 안쪽 선반 뒤의 이상한사탕을 기록하며, [별도 지역 안내](https://altissimo1.github.io/Supplementary-Series/Legends/Lumiose-Locations/bleu-sector-9.html)는 입구에서 보아 왼쪽 안쪽이라고 설명한다. 기존 빈 공간에 선반과 그 뒤의 일회성 도구를 추가했다. 정확한 선반의 수·모양·좌표와 방 구조는 2D 추정이며 원작 실기는 확인하지 않았다. 선반과 겹치는 기존 저장 위치는 같은 저장 리비전에서 가까운 보행 칸으로 복원한다. 기존 고스트 세 슬롯과 이동 경로, 의뢰 진행은 유지한다. 가방이 가득 차거나 알 수 없는 미래 수령 기록이 있으면 도구를 지급하거나 기록을 덮어쓰지 않는다.
+
+## TM075 학습 호환성 보완
+
+[Serebii의 Z-A TM075 표](https://www.serebii.net/attackdex-sv/dragonpulse.shtml)와 [Dittobase의 폼별 표](https://www.dittobase.com/legends-za/moves/dragon-pulse)를 대조해 빠져 있던 기본 종 11종(라티아스·라티오스·그란돈·레쿠쟈·히드런·카디나르마·모토마·싸리용·드니차·드니꽁·드닐레이브)과 싸리용 늘어진 모습·젖힌 모습을 추가했다. 두 자료는 2차 자료이며 원작 실기에서 독립 검증하지 않았다. 확정하지 않은 메가 및 다른 폼은 자동 허용하지 않는다. 기존 데이터는 갱신하지 않고 학습 선택 시에만 호환성을 판단한다. Dittobase [이용 조건](https://www.dittobase.com/terms)을 확인했으며 필요한 소수의 종·폼 관계만 대조했다.
+
+기본 종·폼 및 모순된 식별자 거절, 옥상 기계 획득과 실제 늘어진 싸리용 학습·기계 보존·중복 요청을 격리 검사했다. 실기와 Sites 병합본은 검증하지 않았다.

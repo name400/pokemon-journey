@@ -86,9 +86,10 @@ test('TM 076 uses the existing turn-based Liquidation move',()=>{
 
 test('TM075 supports reviewed species and Hisuian forms without inferring others',()=>{
  const bag={'za-tm075':1};
- for(const id of [336,349,350,559,560,604,695,696,697,718,780,867])assert.equal(canLearnStoryTm(bag,{id,speciesId:id,moves:[]},'za-tm075'),true);
- for(const [id,speciesId] of [[10241,705],[10242,706]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm075'),true);
+ for(const id of [336,349,350,380,381,383,384,485,559,560,604,695,696,697,718,780,867,936,967,978,996,997,998])assert.equal(canLearnStoryTm(bag,{id,speciesId:id,moves:[]},'za-tm075'),true);
+ for(const [id,speciesId] of [[10241,705],[10242,706],[10258,978],[10259,978]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm075'),true);
  assert.equal(canLearnStoryTm(bag,{id:10241,speciesId:706,moves:[]},'za-tm075'),false);
+ assert.equal(canLearnStoryTm(bag,{id:10258,speciesId:967,moves:[]},'za-tm075'),false);
  assert.equal(canLearnStoryTm(bag,{id:10100,speciesId:26,moves:[]},'za-tm075'),false);
  assert.equal(canLearnStoryTm(bag,{id:349,speciesId:349,moves:['용의파동']},'za-tm075'),false);
  assert.equal(canLearnStoryTm({}, {id:349,speciesId:349,moves:[]},'za-tm075'),false);
