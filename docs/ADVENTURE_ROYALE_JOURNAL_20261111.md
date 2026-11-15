@@ -55,3 +55,5 @@
 랭크 B에 [원작 상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankb.shtml)의 Mila·Felix·Sara·Safa·Héléna·Rosalie를 추가했다. 종·레벨·기술은 2차 자료를 따르며 Héléna의 펌킨인 크기는 확인되지 않았다. 공용 경기장 내 배치와 승리당 4,500점은 기존 게임의 임시 규칙이다. 기존 승리 이력, 진행 중인 배틀과 턴제 규칙을 유지한다. 격리 API에서 여섯 편성·재접속, 2마리와 3마리 상대 승리, 기권·중복 승리와 야간·점수 제한, 파티 및 재화 보존을 확인했다. 나머지 랭크 B 상대·직업별 보상과 원작 실기·운영 검증은 남아 있다.
 
 후속으로 랭크 B의 Éthan·Nathaniel·Liham·Eléa·Amira·Fredrique를 [동일한 상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankb.shtml)의 종·레벨·기술로 연결했다. 경기장 좌표와 승리당 점수는 기존 잠정 규칙이다. 입구에서 여섯 상대까지 실제 이동과 대화, 편성·재접속, 세 마리 상대 승리, 기권·중복 승리 제한 및 기존 승리·파티·재화 보존을 격리 API에서 검사했다. 나머지 랭크 B 상대와 직업별 보상, 원작 실기·운영 검증은 남아 있다.
+
+랭크 B에 [상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankb.shtml)의 웨이트리스 Océane·웨이터 Emir와 메가스톤을 가진 Sacha·Idriss를 추가했다. 승리한 웨이터에게 다시 말을 걸면 [로열 회복 안내](https://www.serebii.net/legendsz-a/z-aroyale.shtml)에 따라 파티를 회복한다. 회복 횟수는 다른 랭크처럼 방문당 한 번으로 제한한 잠정 규칙이다. 경기장 좌표와 승리 점수도 초안이며 기존 저장 및 진행 중 전투는 바꾸지 않는다. 격리 API에서 접근·편성·메가스톤·재접속, 체력·상태·PP 회복과 중복 요청, 파티·재화·승리 이력 보존을 대표 검사했다. 다른 상대와 직업별 보상, 실제 기기와 운영 확인은 남아 있다.
