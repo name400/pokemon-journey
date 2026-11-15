@@ -2,6 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Vert 8 and Vert Street connect without bypassing the active Mission 3 detour',()=>{
+ const base={area:3,district:'lumiose-vert-sector8',interior:null,x:21,y:8,zaMission03Stage:3,teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(base),{x:11,y:8},base).length);
+ const street=stepField(base,'right');assert.deepEqual([street.district,street.x,street.y],['lumiose-vert-street-route',21,12]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...base,...street},126),126);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission03Stage,saved.teamIds],['lumiose-vert-street-route',21,12,3,['kept']]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:10,y:13}).length);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector8',21,8]);
+ const active={...base,zaMission03Stage:2,zaMission03DetourRequired:true};assert.equal(stepField(active,'right').blocked,true);
+ assert.equal(stepField({...active,district:'lumiose-vert-street-route',x:21,y:12},'right').blocked,true);
+ assert.notEqual(stepField({...active,zaMission03DetourRequired:undefined},'right').blocked,true);
+ assert.equal(stepField({...base,x:11,y:15},'down').district,'lumiose-zone1');
+ const old=restoreAdventurePosition(storeAdventurePosition({...base,x:11,y:1},126),126);assert.deepEqual([old.x,old.y],[11,1]);
+});
+
 test('Vert 2, 4, 5 and Vert Plaza connect in both directions and retain saves',()=>{
  const start={area:3,district:'lumiose-vert2',interior:null,x:7,y:15,facing:'down',teamIds:['kept']};
  const four=stepField(start,'down');assert.deepEqual([four.district,four.x,four.y],['lumiose-vert-sector4',11,1]);
