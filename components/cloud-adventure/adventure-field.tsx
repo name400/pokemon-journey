@@ -1,4 +1,5 @@
 'use client';
+import {jaune5CourtItem} from '@/lib/cloud-adventure/adventure-jaune5-courtyard.mjs';
 import {partnerTrail,partnerTrailPosition} from '@/lib/cloud-adventure/adventure-partner-trail.mjs';
 import {adventureFurfrouAtlas} from '@/lib/cloud-adventure/adventure-furfrou.mjs';
 import {classicSourceFormAtlas} from '@/components/rogue-source-form-images.mjs';
@@ -1289,7 +1290,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      ctx.fillStyle=c==='#'?'#a59183':c===';'?((x+y)%2?'#d0c4b0':'#d9cfbc'):c===','?'#bbada0':(x+y)%2?'#e5dace':'#eee4d9';ctx.fillRect(px,py,tile,tile);
      if(c==='#'&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle='#bda99a';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#e6d4c2';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]!=='#')ctx.fillRect(px,py+tile-3,tile,3);}
      if(c===';'){ctx.fillStyle='#b3a58f';if(w.map[y-1]?.[x]==='#')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='#')ctx.fillRect(px,py+tile-2,tile,2);}
-     if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+     if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}if(((x===7&&y===8)||(x===10&&y===12))&&jaune5CourtItem(w,{x,y,tile:c})){ctx.fillStyle='#fff2bb';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,5,0,Math.PI*2);ctx.fill();}return;
     }
     if(w.district==='lumiose-jaune-sector4'&&!w.interior){
      // Draft buildings and plaza sit beside the confirmed street connection.
