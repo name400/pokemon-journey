@@ -336,6 +336,11 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      // Surface alley and lower waterside are separate existing layers; shapes are drafts.
      const lower=w.zaEspaceLower===true,outer=x===0||x===22||y===0||y===16;
      ctx.fillStyle=c==='~'?'#6ca5b3':c==='#'?(lower?'#747b77':outer?'#978e84':'#d2bba9'):c===','?(lower?'#b9b3a5':'#c6b9a7'):(x+y)%2?'#e0dacd':'#ece5d8';ctx.fillRect(px,py,tile,tile);
+     if(!lower&&c===';'){
+      ctx.fillStyle=(x+y)%2?'#9fbc8c':'#abc79a';ctx.fillRect(px,py,tile,tile);
+      ctx.fillStyle='#7eaa72';ctx.fillRect(px+6,py+8,3,5);ctx.fillRect(px+tile-10,py+tile-12,3,5);
+      ctx.fillStyle='#d4d7bd';if(w.map[y-1]?.[x]!==';')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]!==';')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]!==';')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]!==';')ctx.fillRect(px+tile-2,py,2,tile);
+     }
      if(!lower&&c==='#'&&!outer){
       ctx.fillStyle=y<8?'#dec2ae':'#d0bbaa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#9a8070';
       if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y]?.[x-1]!=='#')ctx.fillRect(px,py,4,tile);if(w.map[y]?.[x+1]!=='#')ctx.fillRect(px+tile-4,py,4,tile);

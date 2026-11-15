@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {espaceVideMap,espaceAdjacentRoadMap,bleuSector4Map} from '../lib/cloud-adventure/adventure-espace-vide.mjs';
+test('the northern grass strip remains walkable and preserves ground and canal saves',()=>{
+ const state={area:3,district:'lumiose-espace-vide',interior:null,x:12,y:3,teamIds:['kept'],zaMission20Stage:7};
+ const map=espaceVideMap(state);assert.equal(map[2][13],';');assert.equal(map[3][17],';');
+ const next=stepField(state,'right');assert.deepEqual([next.x,next.y,next.blocked],[13,3,undefined]);
+ assert.ok(fieldPath(map,{...state,...next},{x:17,y:2}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...state,x:15,y:2},120),120);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-espace-vide',15,2,['kept'],7]);
+ assert.ok(fieldPath(map,saved,{x:11,y:1}).length);assert.ok(fieldPath(map,saved,{x:11,y:15}).length);
+ const lower={...state,zaEspaceLower:true,x:6,y:8};assert.notEqual(espaceVideMap(lower)[2][13],';');
+ const restored=restoreAdventurePosition(storeAdventurePosition(lower,120),120);assert.deepEqual([restored.x,restored.y,restored.zaEspaceLower],[6,8,true]);
+});
 test('both Bleu 6 courtyards connect to the street and preserve older positions',()=>{
  const state={area:3,district:'lumiose-bleu6-approach',interior:null,x:11,y:8,teamIds:['kept'],zaMission20Stage:7};
  const map=espaceAdjacentRoadMap('bleu6');
