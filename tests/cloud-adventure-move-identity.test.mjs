@@ -6,6 +6,15 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Zone 4 families use ZA growth while old or unknown records remain untouched',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[23,9,['째려보기','몸통박치기','독침','물기']],[92,8,['이상한빛','핥기','최면술','염동력']],[167,8,['독침','실뿜기','흡수','엉겨붙기']]]){
+  const old=makeMon(id,level),before=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,before);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone4GrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone4GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(markAdventureVerifiedGrowth(future),future);const alpha={...old,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
+ }
+ for(const [id,level,move] of [[23,12,'뱀눈초리'],[93,48,'오물웨이브'],[94,55,'고스트다이브'],[167,16,'시저크로스'],[168,40,'덤벼들기']]){const old={...makeMon(id,level-1),adventureZone4GrowthV1:true,moves:['몸통박치기','방어','빛의장막','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,[move]);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...old,level},{}).includes(move));}
+ for(const [id,move] of [[24,'깨물어부수기'],[168,'칼춤']]){const mon={...makeMon(id,30),adventureZone4GrowthV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.deepEqual(applyAdventureEvolutionMoves(mon,{}).learned,[move]);assert.equal(mon.pp.tackle,3);assert.ok(adventureLearnableMoves(mon,{}).includes(move));}
+});
+
 test('new Zone 3 families use ZA level and evolution moves without migrating older foes',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,expected] of [[667,['째려보기','몸통박치기','불꽃세례','울부짖기']],[672,['성장','몸통박치기','덩굴채찍']],[674,['째려보기','몸통박치기']]]){

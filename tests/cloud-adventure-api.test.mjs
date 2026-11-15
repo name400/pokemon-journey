@@ -10665,6 +10665,13 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 4 grass encounter keeps ZA growth after capture and evolution',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone4-family-growth-qa',displayName:'구역 4 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,iv=structuredClone(rawMon(lead).ivs);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone4',interior:null,x:16,y:8,facing:'left',zaRoyaleRank:'F',adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();let rolls=[0,0,0];globalThis.__adventureRandom=()=>rolls.shift()??.999;await call('move',{direction:'left'});assert.equal(rawWorld().encounter.speciesId,23);assert.equal(rawWorld().encounter.adventureZone4GrowthV1,true);assert.deepEqual(rawWorld().encounter.moves,['째려보기','몸통박치기','독침']);await get();globalThis.__adventureRandom=()=>0;await call('ball',{ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===23);assert.ok(caught);const id=caught.boxId;assert.equal(rawMon(id).adventureZone4GrowthV1,true);seedMon(id,{...rawMon(id),level:22,pp:{tackle:3},custom:{keep:true}});await get();await call('evolve',{boxId:id,target:24});await get();assert.equal(rawMon(id).adventureZone4GrowthV1,true);assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(rawMon(id).custom,{keep:true});assert.ok(rawMon(id).moves.includes('깨물어부수기')||state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='깨물어부수기'));assert.deepEqual(rawMon(lead).ivs,iv);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('Zone 3 wild families retain ZA growth through field catch and evolution',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone3-family-growth-qa',displayName:'구역 3 성장'};globalThis.__adventureRandom=()=>0;globalThis.__adventureTime={period:'day',hour:12};
  try{
