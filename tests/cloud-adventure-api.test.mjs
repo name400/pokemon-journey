@@ -11152,3 +11152,22 @@ test('Mission 22 stairs allow walking into the tunnel and retain each return',as
   assert.deepEqual(rawMon(id),{...mon,walkSteps:(mon.walkSteps||0)+4});assert.deepEqual(state.wallet,wallet);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 19 sewer records preserve unknown entries and reject unknown formats',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-record-preservation-qa',displayName:'하수도 기록 보존'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon=structuredClone(rawMon(id));
+  const base=()=>({...rawWorld(),area:3,district:'lumiose-sewer',interior:null,zaMission19Inner:false,zaMission19Stage:11,zaMission19ChandelureStep:2,zaMission19InspectRoomV1:false});
+  const unknown={version:2,entries:['a']};
+  seedWorld(storeAdventurePosition({...base(),zaSewerIceBranch:false,x:6,y:6,facing:'up',zaMission19Inspected:unknown},state.revision+1));await get();
+  let before=structuredClone(rawWorld());assert.match((await call('mission19InspectA',{},409)).error,/기록 형식/);assert.deepEqual(rawWorld(),before);
+  seedWorld(storeAdventurePosition({...base(),zaSewerIceBranch:false,x:6,y:6,facing:'up',zaMission19Inspected:['future','b','b','e']},state.revision+1));await get();await call('mission19InspectA');assert.deepEqual(rawWorld().zaMission19Inspected,['future','b','b','e','a']);assert.equal(rawWorld().zaMission19Stage,11);
+  seedWorld(storeAdventurePosition({...base(),zaSewerIceBranch:false,x:16,y:9,facing:'up'},state.revision+1));await get();await call('mission19InspectD');assert.equal(rawWorld().zaMission19Stage,12);assert.deepEqual(rawWorld().zaMission19Inspected,['future','b','b','e','a','d']);
+  for(const [field,branch,x,y,action] of [['zaSewerSouthItems',false,3,8,'sewerSouthItem-southwest-hyper'],['zaSewerBranchItems',true,16,3,'sewerBranchItem-fork-nugget']]){
+   seedWorld(storeAdventurePosition({...base(),zaSewerIceBranch:branch,x,y,facing:'up',[field]:unknown},state.revision+1));await get();before=structuredClone(rawWorld());const wallet=structuredClone(state.wallet),inventory=structuredClone(state.inventory);
+   assert.match((await call(action,{},409)).error,/기록 형식/);assert.deepEqual(rawWorld(),before);await get();assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,inventory);
+   seedWorld(storeAdventurePosition({...base(),zaSewerIceBranch:branch,x,y,facing:'up',[field]:['future','prior','prior']},state.revision+1));await get();await call(action);assert.deepEqual(rawWorld()[field],['future','prior','prior',action.split('-').slice(1).join('-')]);await get();await call(action,{},409);
+  }
+  assert.deepEqual(rawMon(id),mon);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
