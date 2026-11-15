@@ -10756,6 +10756,19 @@ test('Magenta 7 north roof connects after clearing and preserves its rewards',as
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Magenta 7 south roof gliding and screw preserve existing records',async()=>{
+ const previousUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'magenta7-south-roof-qa',displayName:'남쪽 옥상'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,before=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta7-north-roof',interior:null,x:17,y:10,facing:'down',zaMagenta7NorthOpen:true,zaRedCanariPlush:true,zaMission15Stage:1,zaColorfulScrewsFound:['future-id'],zaMagenta7RoofItems:['west-great']},state.revision+1));await get();await call('rotoGlide',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:17,y:10,facing:'down',zaMission15Stage:2},state.revision+1));await get();await call('rotoGlide');await get();assert.equal(state.world.district,'lumiose-magenta7-south-roof');assert.deepEqual([state.world.x,state.world.y],[11,3]);
+  await walkTo({x:5,y:11});await call('face',{direction:'left'});await get();assert.equal(state.world.interaction.action,'magenta7RoofItem-south-firestone');const revision=state.revision;await call('magenta7RoofItem-south-firestone');await call('magenta7RoofItem-south-firestone',{revision},409);await get();assert.equal(state.inventory.firestone,1);assert.deepEqual(rawWorld().zaMagenta7RoofItems,['west-great','south-firestone']);
+  await walkTo({x:6,y:4});await call('face',{direction:'left'});await get();assert.equal(state.world.interaction.action,'collectColorfulScrew');const future={version:2,ids:['unknown']};seedWorld(storeAdventurePosition({...rawWorld(),x:6,y:4,facing:'left',zaColorfulScrewsFound:future},state.revision+1));await get();await call('collectColorfulScrew',{},409);assert.deepEqual(rawWorld().zaColorfulScrewsFound,future);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:6,y:4,facing:'left',zaColorfulScrewsFound:['future-id']},state.revision+1));await get();const screwRevision=state.revision;await call('collectColorfulScrew');await call('collectColorfulScrew',{revision:screwRevision},409);await get();assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-id','magenta7-south-roof']);assert.deepEqual(rawMon(lead).ivs,before.ivs);
+  await walkTo({x:11,y:3});await call('rotoGlide');await get();assert.equal(state.world.district,'lumiose-magenta7-north-roof');assert.deepEqual([state.world.x,state.world.y],[17,10]);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Magenta 8 ground items protect inventory and persist across reload',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta8-ground-qa',displayName:'마젠타 8 도구'};
  try{

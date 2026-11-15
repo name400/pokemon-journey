@@ -1,7 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldMap,fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,stepField,rotoGlideLanding,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {adventureBattleOptions} from '../lib/cloud-adventure/adventure-battle-weather.mjs';
+
+test('southern roof gliding unlock and collected screw survive reentry',()=>{
+ const north={area:3,district:'lumiose-magenta7-north-roof',interior:null,x:17,y:10,zaMagenta7NorthOpen:true,zaRedCanariPlush:true,teamIds:['kept']};
+ assert.equal(rotoGlideLanding(north),null);
+ const ready={...north,zaMission15Stage:2},landing=rotoGlideLanding(ready);assert.deepEqual([landing.district,landing.x,landing.y],['lumiose-magenta7-south-roof',11,3]);
+ const south=restoreAdventurePosition(storeAdventurePosition({...ready,...landing,zaColorfulScrewsFound:['future-id']},188),188);assert.equal(fieldMap(south)[4][5],'!');assert.deepEqual(south.teamIds,['kept']);assert.equal(rotoGlideLanding(south).district,north.district);
+ assert.notEqual(fieldMap({...south,zaColorfulScrewsFound:['future-id','magenta7-south-roof']})[4][5],'!');
+});
 
 test('northern roof requires the opened courtyard and restores its separate floor',()=>{
  const s={area:3,district:'lumiose-magenta-sector7',interior:null,x:6,y:3,teamIds:['kept'],zaMagenta7Items:['north-pearl']};
