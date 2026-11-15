@@ -6,6 +6,14 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Zone 9 wild species use ZA growth without rewriting older records',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[302,28,['섀도클로','이상한빛','탁쳐서떨구기','환상빔']],[303,28,['애교부리기','드레인키스','철벽','깨물어부수기']],[703,29,['돌진','매지컬샤인','철벽','파워젬']]]){
+  const old=makeMon(id,level),before=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,before);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone9GrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone9GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(markAdventureVerifiedGrowth(future),future);const alpha={...old,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);const form={...old,formId:999};assert.equal(prepareVerifiedWildMoves(form),form);
+ }
+ for(const [id,level,move] of [[302,33,'깜짝베기'],[303,36,'아이언헤드'],[703,30,'빛의장막']]){const old={...makeMon(id,level-1),adventureZone9GrowthV1:true,moves:['몸통박치기','방어','빛의장막','전광석화'].map(x=>x===move?'물기':x),pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,[move]);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...old,level},{}).includes(move));}
+});
+
 test('Zone 8 burrow families and new evolved grass encounters use ZA growth safely',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,level,expected] of [[443,24,['모래지옥','몸통박치기','용의숨결','땅고르기']],[529,23,['몸통박치기','메탈클로','모래지옥','땅고르기']]]){const old=makeMon(id,level),copy=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,copy);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone8BurrowGrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone8BurrowGrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);const alpha={...old,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);}

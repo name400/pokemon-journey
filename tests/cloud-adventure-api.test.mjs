@@ -10665,6 +10665,13 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 9 visible foe keeps ZA growth through battle capture and reload',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone9-family-growth-qa',displayName:'구역 9 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,iv=structuredClone(rawMon(lead).ivs),key='zone9:sableye:302';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone9',interior:null,x:11,y:10,facing:'up',zaRoyaleRank:'F',zaZone9Upper:false,zaZone9Spent:{},zaWildShinyRolls:{[key]:false},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();await call('zone9Wild-sableye');assert.equal(rawWorld().encounter.adventureZone9GrowthV1,true);assert.deepEqual(rawWorld().encounter.moves,['섀도클로','이상한빛','탁쳐서떨구기','환상빔']);await get();await call('flee');await get();globalThis.__adventureRandom=()=>0;await call('throwZoneVisible',{ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===302);assert.ok(caught);const id=caught.boxId;assert.equal(rawMon(id).adventureZone9GrowthV1,true);assert.deepEqual(rawMon(id).moves,['섀도클로','이상한빛','탁쳐서떨구기','환상빔']);await get();assert.equal(rawMon(id).adventureZone9GrowthV1,true);assert.deepEqual(rawMon(lead).ivs,iv);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('Zone 8 emerged burrow capture keeps ZA growth and save state',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone8-burrow-growth-qa',displayName:'구역 8 땅속 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
  try{
