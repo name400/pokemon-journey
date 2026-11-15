@@ -22,3 +22,15 @@ test('Le Wow entrance and interior return keep existing position data',()=>{
  assert.deepEqual([restored.district,restored.interior,restored.x,restored.y,restored.teamIds],['lumiose-rouge-sector2','leWow',11,14,['kept']]);
  const out=stepField({...restored,x:11,y:15},'down');assert.deepEqual([out.interior,out.x,out.y],[null,5,6]);
 });
+
+test('Rouge Sector 2 connects directly to Centrico while retaining gallery and academy access',()=>{
+ const start={area:3,district:'lumiose-rouge-sector2',interior:null,x:11,y:8,teamIds:['kept'],zaMission20Stage:7};
+ assert.ok(fieldPath(fieldMap(start),start,{x:9,y:15}).length);
+ const south=stepField({...start,x:9,y:15},'down');assert.deepEqual([south.district,south.x,south.y],['lumiose-centrico-route',12,1]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...start,...south},104),104);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-centrico-route',12,1,['kept'],7]);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-rouge-sector2',9,15]);
+ assert.equal(stepField({...start,x:11,y:15},'down').district,'lumiose-galerie-lune');
+ assert.equal(stepField({...start,x:11,y:1},'up').district,'lumiose-rouge-sector6');
+ const old=restoreAdventurePosition(storeAdventurePosition({...start,x:11,y:15},105),105);assert.deepEqual([old.district,old.x,old.y,old.teamIds],['lumiose-rouge-sector2',11,15,['kept']]);
+});
