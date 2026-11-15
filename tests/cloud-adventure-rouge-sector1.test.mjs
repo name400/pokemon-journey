@@ -2,6 +2,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('northern market courtyard reaches both existing mint stalls and preserves progress',()=>{
+ const state={area:3,district:'lumiose-rouge-sector1',interior:null,x:5,y:6,zaRoyaleRank:'X',zaMission20Stage:11,teamIds:['kept']};
+ const map=fieldMap(state);assert.ok(fieldPath(map,state,{x:5,y:3}).length);
+ assert.equal(map[5][3],'^');assert.equal(map[5][7],'^');assert.equal(map[5][9],'j');
+ assert.ok(fieldDialogue({...state,x:4,y:5,facing:'left'}).actions.some(a=>a.action==='buyAdventureMint-boldmint'));
+ assert.ok(fieldDialogue({...state,x:6,y:5,facing:'right'}).actions.some(a=>a.action==='buyAdventureMint-calmmint'));
+ const saved=restoreAdventurePosition(storeAdventurePosition({...state,x:5,y:4},123),123);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission20Stage,saved.teamIds],['lumiose-rouge-sector1',5,4,11,['kept']]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:9,y:6}).length);assert.equal(fieldDialogue({...saved,x:9,y:6,facing:'up'}).action,'side04Battle');
+ const old=restoreAdventurePosition(storeAdventurePosition({...state,x:11,y:8},123),123);assert.deepEqual([old.x,old.y],[11,8]);
+});
+
 test('Rouge Sector 1 connects to Autumnal Avenue without altering existing mission paths',()=>{
  const start={area:3,district:'lumiose-rouge-sector1',interior:null,x:11,y:8,teamIds:['kept'],zaMission20Stage:11,zaRoyaleRank:'X'};
  assert.ok(fieldPath(fieldMap(start),start,{x:1,y:10}).length);
