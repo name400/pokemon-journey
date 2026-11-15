@@ -59,3 +59,19 @@ test('Vert 8 and Vert 9 connect directly and preserve the waterway and old saves
  const legacy=restoreAdventurePosition(storeAdventurePosition({...nine,x:11,y:10},93),93);
  assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.teamIds],['lumiose-vert-sector9',11,10,['kept']]);
 });
+
+test('Vert 9 connects to Vert 4 and 5 without changing the waterway or roof layers',()=>{
+ const base={area:3,district:'lumiose-vert-sector9',interior:null,x:11,y:8,teamIds:['kept'],zaMission03Stage:7};
+ const map=fieldMap(base);assert.equal(map[11][5],'~');assert.equal(map[11][11],':');
+ for(const [x,district,backX] of [[9,'lumiose-vert-sector4',11],[13,'lumiose-vert-sector5',9]]){
+  assert.ok(fieldPath(map,base,{x,y:1}).length);
+  const out=stepField({...base,x,y:1},'up');assert.deepEqual([out.district,out.x,out.y],[district,backX,15]);
+  const saved=restoreAdventurePosition(storeAdventurePosition({...base,...out},94),94);
+  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission03Stage],[district,backX,15,['kept'],7]);
+  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector9',x,1]);
+ }
+ const roof={...base,district:'lumiose-vert-sector4',zaVert4Layer:'roof',x:11,y:10};
+ assert.equal(fieldMap(roof)[16][11],'#');
+ const old=restoreAdventurePosition(storeAdventurePosition({...base,x:11,y:10},95),95);assert.deepEqual([old.district,old.x,old.y],['lumiose-vert-sector9',11,10]);
+ assert.equal(stepField({...base,x:21,y:8},'right').district,'lumiose-vert-sector8');
+});
