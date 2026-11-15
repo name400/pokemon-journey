@@ -3,6 +3,14 @@ import assert from 'node:assert/strict';
 import {FAST_TRAVEL_CENTERS,centerAt,recordCenter,recordNearbyCenter,registeredCenters} from '../lib/cloud-adventure/adventure-fast-travel.mjs';
 import {fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Looker Bureau map travel uses visit evidence without changing saved landmarks',async()=>{
+ const {mapTravelDestinations,taxiDestinations,recordLandmarks}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const base={area:3,district:'lumiose-rouge-sector5',interior:null,x:5,y:7,facing:'up',zaMission04Complete:true,zaRoyaleRank:'Y',zaFastTravelLandmarks:{version:2,items:['future']},teamIds:['kept']};
+ assert.ok(!mapTravelDestinations(base).some(p=>p.id==='looker-bureau'));
+ for(const evidence of [{zaBureauVisited:true},{zaEmmaMet:true},{zaMission05Stage:7},{zaMission06Started:true},{zaRoyaleRank:'D'}]){const state={...base,...evidence},before=structuredClone(state);assert.ok(mapTravelDestinations(state).some(p=>p.id==='looker-bureau'));assert.ok(!taxiDestinations(state).some(p=>p.id==='looker-bureau'));assert.equal(recordLandmarks(state),false);assert.deepEqual(state,before);}
+ assert.equal(fieldMap(base)[7][5],'.');assert.equal(fieldDialogue(base).action,'enterBureau');
+});
+
 test('Justice Dojo map travel follows Josée victory and preserves legacy landmark data',async()=>{
  const {registeredLandmarks,mapTravelDestinations,taxiDestinations,recordLandmarks}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
  const base={area:3,district:'lumiose-jaune-sector2',interior:null,x:5,y:11,facing:'up',zaMission19Stage:1,zaRoyaleRank:'E',zaFastTravelLandmarks:['future'],teamIds:['kept']};

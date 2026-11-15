@@ -3042,6 +3042,15 @@ test('Richissime hall accepts original invitation and promotion match',async()=>
  }finally{globalThis.__adventureUser=priorUser;}
 });
 
+test('Looker Bureau visit unlocks map travel and keeps existing save data',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bureau-map-travel-qa',displayName:'사무소 이동'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rouge-sector5',interior:null,x:5,y:7,facing:'up',zaMission04Complete:true,zaRoyaleRank:'Y',zaJoseeComplete:true,zaBureauVisited:false,zaEmmaMet:false,zaFastTravelLandmarks:{version:2,items:['future']}},state.revision+1));await get();assert.ok(!state.world.zaMapTravelDestinations.some(p=>p.id==='looker-bureau'));await call('mapFastTravel',{destination:'looker-bureau'},409);
+  await call('enterBureau');await get();assert.equal(state.world.zaBureauVisited,true);await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='looker-bureau'));const mon=rawMon(id),revision=state.revision;await call('mapFastTravel',{destination:'looker-bureau'});await call('mapFastTravel',{destination:'looker-bureau',revision},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.facing],['lumiose-rouge-sector5',5,7,'up']);assert.equal(state.world.interaction.action,'enterBureau');assert.deepEqual(rawWorld().zaFastTravelLandmarks,{version:2,items:['future']});assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Justice Dojo connects Jaune Sector 2 with missions and hyper training',async()=>{
  const priorUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'justice-dojo-qa',displayName:'도장테스트'};
  try{
