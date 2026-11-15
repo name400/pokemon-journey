@@ -492,6 +492,22 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='X'||c==='W'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}
      return;
     }
+    if(w.district==='lumiose-bleu-sector7'&&!w.interior&&w.zaBleu7Upper!==true){
+     // Existing 2D building footprints and their heights are provisional.
+     const outer=x===0||x===22||y===0||y===16;
+     ctx.fillStyle=c==='#'?(outer?'#938c82':y<8?'#d8c3b1':'#cdbbad'):c===','?'#c5bcad':(x+y)%2?'#e4e0d3':'#eee9dc';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'&&!outer){
+      ctx.fillStyle=y<8?'#dec5b2':'#d4c2b2';ctx.fillRect(px,py,tile,tile);
+      ctx.fillStyle='#a18a7b';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y]?.[x-1]!=='#')ctx.fillRect(px,py,4,tile);if(w.map[y]?.[x+1]!=='#')ctx.fillRect(px+tile-4,py,4,tile);
+      if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#8e7b70';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#78959a';ctx.fillRect(px+8,py+tile-6,tile-16,3);}else if((x+y)%2===0){ctx.fillStyle='#c6ac9a';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
+     }
+     if(c===','){ctx.fillStyle='#ebe3d4';if(w.map[y-1]?.[x]!==',')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]!==',')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]!==',')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]!==',')ctx.fillRect(px+tile-2,py,2,tile);}
+     if(c==='H'||c==='M'){ctx.fillStyle=c==='H'?'#c4585c':'#58899a';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff9ea';if(c==='H'){ctx.fillRect(px+tile/2-2,py+7,4,tile-14);ctx.fillRect(px+7,py+tile/2-2,tile-14,4);}else{ctx.fillRect(px+7,py+8,tile-14,3);ctx.fillRect(px+9,py+11,tile-18,tile-17);}}
+     if(c==='h'){ctx.fillStyle='#739ea5';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle=w.zaMission19Stage>=8?'#d7edf0':'#9ac9d3';ctx.fillRect(px+7,py+7,tile-14,tile-14);}
+     if(c==='l'){ctx.fillStyle='#826649';ctx.fillRect(px+7,py+3,tile-14,tile-6);ctx.fillStyle='#e0c697';for(let j=7;j<tile-4;j+=6)ctx.fillRect(px+8,py+j,tile-16,2);}
+     if(c==='j'){ctx.fillStyle='#718b86';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#b6ded0';ctx.fillRect(px+7,py+7,tile-14,tile-14);ctx.fillStyle='#234b4b';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('승강',px+tile/2,py+20);}
+     if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-bleu-sector3'&&!w.interior){
      // Existing building footprints and landmark positions are a 2D draft.
      const outer=x===0||x===22||y===0||y===16;
