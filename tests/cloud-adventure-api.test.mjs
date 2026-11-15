@@ -10628,6 +10628,18 @@ test('early wild Pichu and Pikachu use consistent reviewed moves in battle and f
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
 
+test('caught Scatterbug retains ZA growth through reload and evolution',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-scatterbug-growth-qa',displayName:'분이벌레 성장 검사'};globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,leadBefore=rawMon(lead),foe={...makeMon(664,6),boxId:'wild',hp:0,moves:['몸통박치기','실뿜기','방어','빛의장막'],pp:{tackle:3},shiny:true,custom:{kept:true}};
+  sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(JSON.stringify([globalThis.__adventureUser.userId,'rarecandy']),globalThis.__adventureUser.userId,'rarecandy');
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,adventureBalls:{masterball:1},combat:null,encounter:null,adventureCatchWindow:{foe,moveCount:0,revision:state.revision+1}},state.revision+1));await get();await call('catchWindowBall',{ball:'masterball'});await get();
+  const id=state.world.teamIds.find(x=>x!==lead),caught=rawMon(id);assert.equal(caught.adventureScatterbugMovesV1,true);assert.equal(caught.shiny,true);assert.deepEqual(caught.custom,foe.custom);
+  const rev=state.revision;await call('useAdventureRareCandy',{boxId:id});await call('useAdventureRareCandy',{boxId:id,revision:rev},409);await get();assert.equal(rawMon(id).level,7);assert.deepEqual(state.world.adventurePendingMoves.filter(m=>m.boxId===id).map(m=>m.move),['저리가루']);await call('resolveAdventureMove',{slot:null});
+  seedMon(id,{...rawMon(id),level:9});await get();await call('evolve',{boxId:id,target:665});await get();assert.equal(rawMon(id).speciesId,665);assert.equal(rawMon(id).adventureScatterbugMovesV1,true);assert.deepEqual(rawMon(id).custom,foe.custom);assert.deepEqual(rawMon(lead).ivs,leadBefore.ivs);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('caught Pichu uses Z-A level growth after reload without changing its partner',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-pichu-growth-qa',displayName:'피츄 성장 검사'};globalThis.__adventureRandom=()=>0;
  try{

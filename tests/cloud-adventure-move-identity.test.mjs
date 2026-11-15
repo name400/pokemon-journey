@@ -6,6 +6,16 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Scatterbug family learns ZA growth and evolution moves without rewriting older data',async()=>{
+ const {markAdventureVerifiedGrowth}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ const initial={...makeMon(664,6),moves:['tackle','string shot','protect','light screen'],pp:{tackle:2},custom:{keep:true}},marked=markAdventureVerifiedGrowth(initial);
+ assert.equal(initial.adventureScatterbugMovesV1,undefined);assert.equal(marked.adventureScatterbugMovesV1,true);
+ const level=applyAdventureLevelMoves(marked,{...marked,level:7},{});assert.deepEqual(level.pending,['저리가루']);assert.equal(level.mon.pp.tackle,2);
+ for(const [species,move] of [[665,'방어'],[666,'바람일으키기']]){const mon={...makeMon(species,12),adventureScatterbugMovesV1:true,moves:['tackle'],pp:{tackle:2}};assert.deepEqual(applyAdventureEvolutionMoves(mon,{}).learned,[move]);assert.ok(adventureLearnableMoves(mon,{}).includes(move));assert.equal(mon.pp.tackle,2);}
+ const vivillon={...makeMon(666,39),adventureScatterbugMovesV1:true,moves:['tackle','protect','gust','string shot']};assert.deepEqual(applyAdventureLevelMoves(vivillon,{...vivillon,level:40},{}).pending,['폭풍','신비의부적']);
+ for(const mon of [{...initial,adventureScatterbugMovesV1:{version:2}},{...initial,formId:999}])assert.equal(markAdventureVerifiedGrowth(mon),mon);
+});
+
 test('new Fletchling family uses ZA growth and preserves legacy or unknown forms',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [level,expected] of [[5,['울음소리','쪼기']],[8,['울음소리','쪼기','전광석화']],[25,['불꽃세례','깃털댄스','날려버리기','화염바퀴']]]){const mon=makeMon(661,level),old=structuredClone(mon);assert.deepEqual(prepareVerifiedWildMoves(mon).moves,expected);assert.deepEqual(mon,old);}
