@@ -10807,3 +10807,15 @@ test('Rust roof TM075 is reachable once, protects full inventory and teaches',as
   assert.equal(canLearnStoryTm({'za-tm075':1},makeMon(1,20),'za-tm075'),false);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 19 inner Chandelure guides both wall entries without changing old saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-inner-guide-qa',displayName:'안쪽 안내 검사'};
+ try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  const outer={...rawWorld(),area:3,district:'lumiose-sewer',interior:null,x:11,y:3,facing:'up',zaMission19Stage:12,zaMission19Inspected:['a','b','e','d'],zaRoyaleRank:'E',zaMission19Inner:false,zaMission19InnerEnabled:undefined,zaMission19InnerGuide:undefined};
+  seedWorld(storeAdventurePosition(outer,state.revision+1));await get();await call('move',{direction:'up'});await get();assert.equal(state.world.zaMission19InnerGuide,0);assert.equal(state.world.map[10][11],'v');
+  await walkTo('v');const revision=state.revision;await call('mission19InnerGuide');await get();assert.equal(state.world.zaMission19InnerGuide,1);assert.equal(state.world.map[8][15],'v');await call('mission19InnerGuide',{revision},409);
+  await walkTo('v');await call('mission19InnerGuide');await get();assert.equal(state.world.zaMission19InnerGuide,2);assert.equal(state.world.map[8][15],'.');assert.equal(state.world.zaMission19Stage,13);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,team);assert.equal(rawMon(id).speciesId,1);
+  seedWorld(storeAdventurePosition({...outer,x:11,y:4},state.revision+1));await get();await call('mission19Wall');await get();assert.equal(state.world.zaMission19InnerGuide,0);
+  seedWorld(storeAdventurePosition({...outer,x:18,y:4,zaMission19Stage:13,zaMission19Inner:true,zaMission19InnerEnabled:true},state.revision+1));await get();assert.equal(state.world.zaMission19InnerGuide,undefined);assert.equal(state.world.interaction.action,'mission19Gwynn');
+ }finally{globalThis.__adventureUser=previous;}
+});
