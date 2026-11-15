@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Magenta Sector 2 joins Centrico while retaining the cafe, Zone 7 gate and saves',()=>{
+ const start={area:3,district:'lumiose-magenta-sector2',interior:null,x:11,y:8,teamIds:['kept'],zaRoyaleRank:'W',zaMission35Stage:4};
+ assert.ok(fieldPath(fieldMap(start),start,{x:16,y:15}).length);
+ const south=stepField({...start,x:16,y:15},'down');assert.deepEqual([south.district,south.x,south.y],['lumiose-centrico-route',1,6]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...start,...south},102),102);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission35Stage],['lumiose-centrico-route',1,6,['kept'],4]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector2',16,15]);
+ assert.equal(stepField({...start,x:1,y:8},'left').blocked,true);
+ assert.equal(stepField({...start,x:21,y:8},'right').district,'lumiose-autumnal-approach');
+ assert.equal(fieldDialogue({...start,x:17,y:7,facing:'up'}).action,'enterLysandreCafe');
+ const old=restoreAdventurePosition(storeAdventurePosition({...start,x:17,y:7},103),103);assert.deepEqual([old.district,old.x,old.y,old.zaMission35Stage],['lumiose-magenta-sector2',17,7,4]);
+});
 test('Magenta Sector 4 links Autumnal Avenue and gated Zone 7 with safe saves',()=>{
  const avenue={area:3,district:'lumiose-autumnal-approach',interior:null,x:1,y:14,zaRoyaleRank:'V',teamIds:['kept']};
  const sector=stepField(avenue,'left');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-magenta-sector4',21,8]);
