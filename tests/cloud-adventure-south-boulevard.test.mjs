@@ -1,6 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,FLORAL_STREET_BLOCKS} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Estival Avenue meets South Boulevard without opening Wild Zones 9 or 10',()=>{
+ const avenue={area:3,district:'lumiose-estival-approach',interior:null,x:14,y:15,zaRoyaleRank:'F',teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(avenue),{x:11,y:1},avenue).length);
+ const boulevard=stepField(avenue,'down');assert.deepEqual([boulevard.district,boulevard.x,boulevard.y,boulevard.zaVert7RoofUpper],['lumiose-south-boulevard',9,1,false]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...avenue,...boulevard},166),166);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money],['lumiose-south-boulevard',9,1,['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:8}).length);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-estival-approach',14,15]);
+ assert.equal(stepField({...saved,zaVert7RoofUpper:{version:2}},'up').blocked,true);
+ assert.equal(stepField({...avenue,zaRoyaleRank:'Z',x:1,y:8},'left').blocked,true);
+ assert.equal(stepField({...avenue,zaRoyaleRank:'Z',x:21,y:8},'right').blocked,true);
+ assert.equal(stepField({...avenue,x:11,y:15},'down').district,'lumiose-espace-vide');
+});
 test('Vernal and South Boulevard connect without changing saved layers or existing exits',()=>{
  const avenue={area:3,district:'lumiose-vernal',interior:null,x:14,y:15,teamIds:['kept'],money:731};
  assert.ok(fieldPath(fieldMap(avenue),{x:11,y:8},avenue).length);
