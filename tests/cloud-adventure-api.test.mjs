@@ -7035,6 +7035,18 @@ test('field balls use stored master and rare inventory atomically with their eff
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 2 roaming catches retain new growth on reconnect and evolution',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone2-family-growth-qa',displayName:'구역 2 성장'};globalThis.__adventureRandom=()=>0;globalThis.__adventureTime={period:'day',hour:12};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,iv=structuredClone(rawMon(lead).ivs);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:10,y:8,facing:'right',zaRoyaleRank:'F',zaZone2FieldSpent:{},zaZone2FieldPositions:{},zaWildVisibleAlphaLevels:{},combat:null,encounter:null},state.revision+1));await get();globalThis.__adventureRandom=()=>.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,504);assert.equal(rawWorld().encounter.adventureZone2GrowthV1,true);assert.deepEqual(rawWorld().encounter.moves,['몸통박치기','째려보기','물기']);await call('flee');globalThis.__adventureRandom=()=>0;
+  for(const [x,y,action,extra,species,moves] of [[9,15,'throwZone2Budew',{},406,['흡수','애교부리기','성장','저리가루']],[10,8,'throwZone2Field',{targetId:'patrat'},504,['몸통박치기','째려보기','물기']]]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x,y,facing:'up',zaRoyaleRank:'F',zaZone2Budew:undefined,zaZone2FieldSpent:{},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();await call(action,{...extra,ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===species);assert.ok(caught);assert.equal(rawMon(caught.boxId).adventureZone2GrowthV1,true);assert.deepEqual(rawMon(caught.boxId).moves,moves);
+  }
+  const id=state.world.teamIds.find(x=>rawMon(x)?.speciesId===504);seedMon(id,{...rawMon(id),level:20,pp:{tackle:3},custom:{keep:true}});await get();await call('evolve',{boxId:id,target:505});await get();assert.equal(rawMon(id).adventureZone2GrowthV1,true);assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(rawMon(id).custom,{keep:true});assert.ok(rawMon(id).moves.includes('이상한빛')||state.world.adventurePendingMoves.some(p=>p.boxId===id&&p.move==='이상한빛'));assert.deepEqual(rawMon(lead).ivs,iv);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('roaming field capture accepts a special ball without a basic ball',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'roaming-special-ball-qa',displayName:'이동 개체 볼 검사'};
  try{globalThis.__adventureRandom=()=>0;globalThis.__adventureTime={period:'day',hour:12};await get();await call('start',{species:152});sql.prepare('UPDATE wallets SET balls=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:10,y:8,facing:'right',zaRoyaleRank:'A',adventureBalls:{quickball:1}},state.revision+1));await get();await call('throwZone2Field',{targetId:'patrat',ball:'quickball'});await get();const caught=state.box.find(m=>m.speciesId===504);assert.ok(caught);assert.equal(rawMon(caught.boxId).originBall,'quickball');assert.equal(rawWorld().adventureBalls.quickball,0);assert.equal(state.wallet.balls,0);assert.equal(state.world.zaZone2FieldSpent.patrat,true);

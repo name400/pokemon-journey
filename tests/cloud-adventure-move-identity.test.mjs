@@ -6,6 +6,19 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Zone 2 Budew and Patrat use ZA growth without changing legacy creatures',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[406,6,['흡수','애교부리기','성장','저리가루']],[504,6,['몸통박치기','째려보기','물기']]]){
+  const old=makeMon(id,level),copy=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,copy);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone2GrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);
+  const future={...old,adventureZone2GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(markAdventureVerifiedGrowth(future),future);const alpha={...old,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
+ }
+ for(const [id,level,move] of [[315,33,'독찌르기'],[407,34,'독찌르기'],[504,11,'판별'],[505,40,'아이언테일']]){
+  const old={...makeMon(id,level-1),adventureZone2GrowthV1:true,moves:['몸통박치기','방어','빛의장막','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,[move]);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...old,level},{}).includes(move));
+ }
+ for(const [id,move] of [[315,'독침'],[505,'이상한빛']]){const mon={...makeMon(id,25),adventureZone2GrowthV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.deepEqual(applyAdventureEvolutionMoves(mon,{}).learned,[move]);assert.equal(mon.pp.tackle,3);assert.ok(adventureLearnableMoves(mon,{}).includes(move));}
+ assert.ok(adventureLearnableMoves({...makeMon(407,30),adventureZone2GrowthV1:true},{}).includes('킬러스핀'));
+});
+
 test('new Zone 1 families use reviewed ZA levels while legacy and unknown records stay unchanged',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [species,level,moves] of [[13,5,['독침','실뿜기']],[16,9,['울음소리','몸통박치기','바람일으키기']],[179,8,['울음소리','몸통박치기','전기쇼크','전기자석파']]]){
