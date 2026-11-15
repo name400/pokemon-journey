@@ -678,6 +678,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='m'){ctx.fillStyle='#c4a38e';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#805f52';ctx.fillRect(px+2,py+4,tile-4,tile-7);ctx.fillStyle='#f1e2cc';ctx.fillRect(px+5,py+9,tile-10,tile-15);ctx.fillStyle='#b95c55';ctx.fillRect(px+3,py+4,tile-6,5);ctx.fillStyle='#fff3db';for(let j=5;j<tile-5;j+=8)ctx.fillRect(px+j,py+4,4,5);ctx.fillStyle='#715d52';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('카페',px+tile/2,py+22);}
      if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
+    if(w.district==='lumiose-bleu7-west-raised'&&!w.interior){
+     // Raised courtyard proportions and stairs are provisional.
+     ctx.fillStyle=c==='#'?'#8d9288':c===','?'#c7c7b6':'#d9d8c7';ctx.fillRect(px,py,tile,tile);
+     if(c!== '#'&&c!=='u'){ctx.fillStyle='#b4b9aa';ctx.fillRect(px,py+tile-3,tile,2);ctx.fillRect(px+(y%2?tile/2:1),py+2,2,tile-5);}
+     if(c==='u'){ctx.fillStyle='#b6a68f';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#eee1c9';for(let n=0;n<4;n++)ctx.fillRect(px+5,py+5+n*6,tile-10,2);}
+     if(c==='i'){ctx.fillStyle='#f4df9e';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}return;
+    }
     if(w.district==='lumiose-bleu-sector7'&&!w.interior&&w.zaBleu7Upper!==true){
      // Existing 2D building footprints and their heights are provisional.
      const outer=x===0||x===22||y===0||y===16;
@@ -690,6 +697,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c===','){ctx.fillStyle='#ebe3d4';if(w.map[y-1]?.[x]!==',')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]!==',')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]!==',')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]!==',')ctx.fillRect(px+tile-2,py,2,tile);}
      if(c==='H'||c==='M'){ctx.fillStyle=c==='H'?'#c4585c':'#58899a';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff9ea';if(c==='H'){ctx.fillRect(px+tile/2-2,py+7,4,tile-14);ctx.fillRect(px+7,py+tile/2-2,tile-14,4);}else{ctx.fillRect(px+7,py+8,tile-14,3);ctx.fillRect(px+9,py+11,tile-18,tile-17);}}
      if(c==='h'){ctx.fillStyle='#739ea5';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle=w.zaMission19Stage>=8?'#d7edf0':'#9ac9d3';ctx.fillRect(px+7,py+7,tile-14,tile-14);}
+     if(c==='u'){ctx.fillStyle='#b6a68f';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#eee1c9';for(let n=0;n<4;n++)ctx.fillRect(px+5,py+5+n*6,tile-10,2);}
      if(c==='l'){ctx.fillStyle='#826649';ctx.fillRect(px+7,py+3,tile-14,tile-6);ctx.fillStyle='#e0c697';for(let j=7;j<tile-4;j+=6)ctx.fillRect(px+8,py+j,tile-16,2);}
      if(c==='j'){ctx.fillStyle='#718b86';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#b6ded0';ctx.fillRect(px+7,py+7,tile-14,tile-14);ctx.fillStyle='#234b4b';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('승강',px+tile/2,py+20);}
      if(c==='q'&&x===16&&y===15){ctx.fillStyle='#d2a783';ctx.fillRect(px+11,py+5,10,9);ctx.fillStyle='#668d95';ctx.fillRect(px+8,py+14,16,13);}

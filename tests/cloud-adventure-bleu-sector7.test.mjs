@@ -48,3 +48,10 @@ test('Bleu Sector 7 scaffold reaches a distinct rooftop and preserves ground sav
  const roof={...ground,x:5,y:9,zaBleu7Upper:true},map=fieldMap(roof);assert.equal(map[10][5],'l');assert.ok(fieldPath(map,roof,{x:15,y:8}).length);
  const saved=restoreAdventurePosition(storeAdventurePosition(roof,83),83);assert.deepEqual([saved.district,saved.x,saved.y,saved.zaBleu7Upper,saved.teamIds],[ground.district,5,9,true,['kept']]);assert.equal(restoreAdventurePosition(storeAdventurePosition(roof,83),84).district,null);
 });
+
+test('western courtyard stairs keep saved ground tiles and create a separate raised area',()=>{
+ const ground={area:3,district:'lumiose-bleu-sector7',interior:null,x:5,y:12,facing:'down',zaMission10Stage:10,teamIds:['kept']};
+ const old=restoreAdventurePosition(storeAdventurePosition(ground,204),204);assert.deepEqual([old.x,old.y,old.teamIds],[5,12,['kept']]);assert.equal(fieldMap(old)[12][5],'u');assert.equal(fieldDialogue(old).action,'bleu7WestStairs');
+ const raised={...ground,district:'lumiose-bleu7-west-raised',x:7,y:11,facing:'down'},map=fieldMap(raised);assert.equal(map[12][7],'u');assert.equal(map[6][15],'i');assert.ok(fieldPath(map,raised,{x:15,y:6}).length);assert.equal(fieldDialogue(raised).action,'bleu7WestStairs');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...raised,zaBleu7WestRevive:true},205),205);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-bleu7-west-raised',7,11,['kept']]);assert.equal(fieldMap(saved)[6][15],'.');
+});

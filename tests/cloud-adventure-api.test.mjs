@@ -10755,3 +10755,15 @@ test('TM101 teaches a newly supported species without consuming the machine',asy
   await call('teachStoryTm',{item:'za-tm101',boxId:id,slot:0},409);assert.equal(rawMon(id).moves[0],'일렉트릭네트');
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Bleu 7 raised courtyard preserves saves, stairs and revive capacity',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu7-raised-qa',displayName:'높은 안뜰'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector7',interior:null,x:5,y:13,facing:'up',zaMission10Stage:10},state.revision+1));await get();assert.equal(state.world.interaction.action,'bleu7WestStairs');await call('bleu7WestStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu7-west-raised',7,11]);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:15,y:7,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'bleu7WestRevive');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'revive']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'revive');await get();await call('bleu7WestRevive',{},409);assert.notEqual(rawWorld().zaBleu7WestRevive,true);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;await call('bleu7WestRevive');await get();assert.equal(state.inventory.revive,1);assert.equal(rawWorld().zaBleu7WestRevive,true);await call('bleu7WestRevive',{revision:rev},409);await call('bleu7WestRevive',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:7,y:11,facing:'down'},state.revision+1));await get();await call('bleu7WestStairs');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector7',5,13]);assert.deepEqual(state.world.teamIds,team);assert.equal(state.world.zaMission10Stage,10);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
