@@ -1,5 +1,32 @@
 # 배포 검증 실패 기록
 
+## 2026-11-15 — GitHub `ad85b741` 배포 검사 실패
+
+- 검사 시작 당시 지정 브랜치 `cloud/pokerogue-continue-20261105`의 최신 GitHub 커밋 `ad85b741aa238e13c76317ba716e060503e3f8a7`.
+- 기존 Sites 소스와 병합한 검증 커밋 `ff68aa53329a6e048bdf2ee6a410023bf848e393`, Node.js v24.22.1.
+- `npm run typecheck` 실패: `lib/cloud-adventure/route.ts:1171:283` TS7006, 매개변수 `mon`에 암시적 `any`.
+- 타입 검사 실패 후 따로 실행한 `npm test`: 4,796개 중 4,784개 통과·12개 실패 (350.1초). 별도 `npm run build` 통과.
+- 배포하지 않았다. 마지막 확인된 운영본은 Sites v88.
+
+### 테스트 실패 상세
+
+아래 1~10번은 `tests/cloud-adventure-api.test.mjs`의 테스트 시작 행이다.
+
+1. 3465행 색깔 나사와 인형 강화: 3469행에서 null의 `action`을 읽어 TypeError.
+2. 4320행 미션 9 다리와 앱솔 전투: 4326행 `battle` 기대 200, 실제 409 `메가진화에는 게이지 3칸이 필요합니다.`.
+3. 6286행 구역 7 기념비 가시덤불: 위치·상호작용 배열이 기대 `lumiose-magenta6-scaffold` 대신 실제 `lumiose-zone7` 등으로 불일치.
+4. 6299행 구역 7 남쪽 가시덤불·TM092: 같은 배열에서 실제 `lumiose-zone7` 등으로 불일치.
+5. 6312행 구역 4 공동묘지 뒷길·TM072: 같은 배열에서 실제 `lumiose-zone4` 등으로 불일치.
+6. 6388행 구역 17 지붕 보상: 같은 배열에서 실제 `lumiose-zone17` 등으로 불일치.
+7. 6401행 구역 9 남쪽 비계: 같은 배열에서 실제 `lumiose-zone9-scaffold` 등으로 불일치.
+8. 6417행 구역 9 북서 비계: 같은 배열에서 실제 `lumiose-zone9-nw-scaffold` 등으로 불일치.
+9. 8044행 블루 구역 7 노말 타입 도전: 같은 배열에서 실제 `lumiose-bleu-sector7` 등으로 불일치.
+10. 11110행 오래된 건물 선반 보상: 같은 배열에서 실제 `lumiose-ghost-house` 등으로 불일치.
+11. `tests/cloud-adventure-colorful-screws.test.mjs:46`: 추가 나사 개수 기대 16, 실제 17.
+12. `tests/cloud-adventure-zone1-roof.test.mjs:5`: 맵 타일 기대 `,`, 실제 `i`.
+
+3~10번은 모두 `lumiose-magenta6-scaffold`, 좌표 8·5, `magenta6DuskStone`을 기대하는 공통 배열 단언에서 불일치했다. 테스트 상태 공유 또는 기대값 문제를 포함해 확인이 필요하나, 로그만으로 공통 원인이나 실제 게임 결함을 단정할 수 없다. 각 경로와 타입 오류를 수정한 뒤 정확한 Sites 병합 소스로 타입 검사·전체 테스트·빌드를 다시 실행한다.
+
 ## 2026-11-15 — GitHub `2c5c228b` 배포 검사 실패
 
 - 대상 브랜치 `cloud/pokerogue-continue-20261105`, GitHub 커밋 `2c5c228bc0f3e7119e8df176e9ca592da3d1736e`. 이 커밋에는 이전에 요청한 `056d1bf5`도 포함된다.
