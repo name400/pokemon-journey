@@ -1353,8 +1353,17 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      // Zone 1's east–west street continues through the ordinary floor on
      // either side of the encounter grass. Its exact width is provisional.
      if(w.district==='lumiose-zone1'&&c==='%'){ctx.fillStyle=y===5?'#8e8275':'#d3c1a8';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===5?'#b4a08a':'#77918a';ctx.fillRect(px+4,py+5,tile-8,tile-10);if(y===6){ctx.fillStyle=x%2?'#e7d8ba':'#b16c5e';ctx.fillRect(px+2,py+2,tile-4,5);}}
-     if(w.district==='lumiose-vert-plaza'&&c===','){ctx.fillStyle=(x+y)%2?'#d0c4af':'#dbd0bc';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#eee4d2';ctx.fillRect(px+2,py+tile-3,tile-4,1);}
-     if(w.district==='lumiose-vert-plaza'&&c==='%'){ctx.fillStyle=y===2||y===12?'#917f71':'#c4b5a1';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2||y===12?'#b2a08c':'#79918a';ctx.fillRect(px+5,py+6,tile-10,tile-12);}
+     // The existing road and building tiles are a compressed 2D draft of the plaza.
+     if(w.district==='lumiose-vert-plaza'&&c===','){
+      ctx.fillStyle=(x+y)%2?'#d0c4af':'#dbd0bc';ctx.fillRect(px,py,tile,tile);
+      ctx.fillStyle='#b2aa98';ctx.fillRect(px,py+tile-2,tile,1);ctx.fillRect(px+(y%2?tile/2:0),py+2,1,tile-4);
+      ctx.fillStyle='#eee4d2';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);
+     }
+     if(w.district==='lumiose-vert-plaza'&&c==='%'){
+      const top=w.map[y-1]?.[x]!=='%',bottom=w.map[y+1]?.[x]!=='%';ctx.fillStyle='#ab9c8e';ctx.fillRect(px,py,tile,tile);
+      if(top){ctx.fillStyle='#80766d';ctx.fillRect(px,py,tile,4);ctx.fillStyle='#d1c0aa';ctx.fillRect(px,py+4,tile,3);}
+      if(bottom){ctx.fillStyle='#c8baa6';ctx.fillRect(px,py+tile-10,tile,10);ctx.fillStyle='#728a82';ctx.fillRect(px+5,py+tile-8,7,5);ctx.fillRect(px+tile-12,py+tile-8,7,5);}else{ctx.fillStyle='#c5b6a2';ctx.fillRect(px+3,py+9,tile-6,2);}
+     }
      if(w.district==='lumiose-zone3'&&!w.zaZone3TowerUpper&&c==='h'&&x===19&&y===14){ctx.fillStyle='#557c70';ctx.fillRect(px+4,py+3,tile-8,tile-6);ctx.fillStyle='#c2e4ca';ctx.fillRect(px+9,py+8,tile-18,tile-16);}
      if(w.district==='lumiose-zone3'&&!w.zaZone3TowerUpper&&c==='^'&&x===17&&y===12){
       // Roserade-like stone figure and pedestal; exact sculpture is provisional.
