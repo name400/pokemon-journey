@@ -1,6 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {megaResearchProgress,recordResearchMegaStones,RESEARCH_MEGA_STONES} from '../lib/cloud-adventure/adventure-mega-research.mjs';
+test('recording rewards preserves unknown mega history and future containers',()=>{
+ const unknown={futureStone:'kept'},s={zaResearchMegaStones:['future-stone',unknown,'absolite','absolite'],zaEmporiumMegaPurchases:['gengarite','newer-stone']};
+ recordResearchMegaStones(s,['firestone','pidgeotite']);
+ assert.deepEqual(s.zaResearchMegaStones,['future-stone',unknown,'absolite','absolite','gengarite','pidgeotite']);
+ assert.equal(megaResearchProgress(s).count,3);
+ recordResearchMegaStones(s,['pidgeotite']);assert.equal(s.zaResearchMegaStones.length,6);
+ for(const future of [{version:2,stones:['future']},'future',42]){const state={zaResearchMegaStones:future};recordResearchMegaStones(state,['absolite']);assert.strictEqual(state.zaResearchMegaStones,future);}
+ const legacy={zaEmporiumMegaPurchases:['gengarite']};recordResearchMegaStones(legacy,['absolite']);assert.deepEqual(legacy.zaResearchMegaStones,['absolite','gengarite']);
+});
 import {SHARD_MEGA_STONES,shardItemUnlocked} from '../lib/cloud-adventure/adventure-mega-exchange.mjs';
 import {researchSummary} from '../lib/cloud-adventure/adventure-research.mjs';
 test('mega research deduplicates verified stones and preserves purchased history',()=>{
