@@ -11272,3 +11272,13 @@ test('Café Classe taxi, menu, party healing and ground-layer travel',async()=>{
   seedWorld(storeAdventurePosition({...rawWorld(),zaVert4Layer:'roof',x:6,y:6},state.revision+1));await get();await call('classeWater',{},409);assert.equal(state.wallet.coins,500);
  }finally{globalThis.__adventureUser=oldUser;}
 });
+
+test('Mission 27 ice bridge preserves legacy and unknown progress records',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission27-bridge-records-qa',displayName:'눈여아 다리 기록'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon={...makeMon(152,30),boxId:id,moves:['몸통박치기'],pp:{}};seedMon(id,mon);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-mission27-roof',interior:null,x:13,y:8,facing:'right',zaMission26Stage:3,...extra},state.revision+1);
+  seedWorld(place({zaMission27Bridges:{version:2,bridges:['east']}}));await get();const before=structuredClone(rawWorld());await call('mission27IceBridge',{},409);assert.deepEqual(rawWorld(),before);assert.deepEqual(rawMon(id),mon);
+  seedWorld(place({zaMission27Bridges:['west','future','future']}));await get();const rev=state.revision;await call('mission27IceBridge');await call('mission27IceBridge',{revision:rev},409);await get();assert.deepEqual(rawWorld().zaMission27Bridges,['west','future','future','east']);assert.equal(state.world.map[8][7],',');assert.equal(state.world.map[8][14],',');assert.deepEqual(rawMon(id),mon);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
