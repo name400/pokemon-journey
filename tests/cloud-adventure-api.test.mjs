@@ -11070,3 +11070,21 @@ test('Mission 9 loan teaches the Mega gauge and preserves prior battle snapshots
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-rooftop',x:p[0],y:p[1]+1,facing:'up',zaMysteryTrail:3},state.revision+1));await get();await call('battleAZLoan');const old=rawWorld().combat;delete old.adventurePlusGaugeV1;delete old.adventureRogueAuraV1;delete old.adventureRogueWeaknessV1;seedWorld({combat:old,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();assert.equal(state.battle.adventurePlusGauge,undefined);assert.ok(state.battle.requests[0].specials.some(x=>x.key==='mega'));await call('forfeit');assert.deepEqual(rawMon(id),mon);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Mission 9 potion heals the loan only and consumes stock atomically',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'az-loan-potion-qa',displayName:'대여 회복'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon=rawMon(id);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-rooftop',interior:null,zaRoyaleRank:'V',zaMysteryTrail:3},state.revision+1));await get();
+  const p=fieldMap(rawWorld()).map((row,y)=>[row.indexOf('n'),y]).find(([x])=>x>=0);assert.ok(p);seedWorld(storeAdventurePosition({...rawWorld(),x:p[0],y:p[1]+1,facing:'up'},state.revision+1));
+  sql.prepare('UPDATE wallets SET potions=2 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();await call('battleAZLoan');
+  // A full-health target and other items are rejected with no charge.
+  await call('use',{item:'potion'},409);await call('use',{item:'super'},409);await call('use',{item:'potion',boxId:id},409);assert.equal(state.wallet.potions,2);assert.deepEqual(rawMon(id),mon);
+  const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p1.pokemon[0].hp-=40;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;combat.teams[0][0].hp=sim.p1.pokemon[0].hp;combat.snapshot=sim.toJSON();seedWorld({combat,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  const hp=state.battle.teams[0][0].hp,revision=state.revision;await call('use',{item:'potion'});assert.equal(state.battle.teams[0][0].hp,hp+20);assert.equal(state.wallet.potions,1);assert.equal(state.battle.adventurePlusGauge.charge,1);assert.deepEqual(rawMon(id),mon);
+  await call('use',{item:'potion',revision},409);await get();assert.equal(state.wallet.potions,1);assert.equal(state.battle.teams[0][0].hp,hp+20);
+  await call('forfeit');assert.deepEqual(rawMon(id),mon);assert.equal(state.world.zaMysteryTrail,3);await call('battleAZLoan');assert.equal(state.wallet.potions,1);
+  // Insufficient inventory must not heal or advance the battle.
+  const next=rawWorld().combat,sim2=Battle.fromJSON(next.snapshot);sim2.p1.pokemon[0].hp-=40;next.teams[0][0].hp=sim2.p1.pokemon[0].hp;next.snapshot=sim2.toJSON();seedWorld({combat:next,districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});sql.prepare('UPDATE wallets SET potions=0 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const before=rawWorld();await call('use',{item:'potion'},409);assert.deepEqual(rawWorld(),before);assert.deepEqual(rawMon(id),mon);
+ }finally{globalThis.__adventureUser=previous;}
+});
