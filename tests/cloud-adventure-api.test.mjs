@@ -10957,3 +10957,12 @@ test('Magenta 6 scaffold Dusk Stone preserves inventory and existing Pokemon',as
   seedMon(id,{...makeMon(608,41),boxId:id});await get();await call('evolve',{boxId:id,target:609});assert.equal(rawMon(id).id,609);assert.equal(state.inventory.duskstone,undefined);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('fast travel discovery preserves unknown save formats during movement',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'travel-future-formats-qa',displayName:'이동저장테스트'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon=rawMon(id),centers={version:2,places:['future']},zones={1:null,future:{x:7,y:8}};
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector7',interior:null,x:9,y:13,facing:'right',zaMission04Complete:true,zaRoyaleRank:'Y',zaFastTravelCenters:centers,zaFastTravelZones:zones},state.revision+1));await get();await call('move',{direction:'right'});await get();assert.deepEqual(rawWorld().zaFastTravelCenters,centers);assert.deepEqual(rawMon(id),{...mon,walkSteps:(mon.walkSteps||0)+1});
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-vert-sector9',interior:null,x:11,y:15,facing:'down'},state.revision+1));await get();await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-zone1');assert.deepEqual(rawWorld().zaFastTravelZones,zones);assert.deepEqual(rawWorld().zaFastTravelCenters,centers);
+ }finally{globalThis.__adventureUser=previous;}
+});

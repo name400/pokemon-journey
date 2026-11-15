@@ -154,3 +154,13 @@ test('landmark visits preserve unknown saved entries and refuse incompatible con
  const mixed={...base,zaFastTravelLandmarks:['legacy',future]};assert.equal(recordLandmarks(mixed),true);assert.deepEqual(mixed.zaFastTravelLandmarks,['legacy',future,'cafe-cyclone']);
  const incompatible={...base,zaFastTravelLandmarks:{version:2,items:['future']}};const before=structuredClone(incompatible);assert.equal(recordLandmarks(incompatible),false);assert.deepEqual(incompatible,before);
 });
+
+
+test('unknown fast travel records survive center visits and zone entry',async()=>{
+ const {recordZoneEntry}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const center={area:3,district:'lumiose',interior:null,x:3,y:5,zaFastTravelCenters:{version:2,places:['future']},teamIds:['kept']};
+ const prior=structuredClone(center.zaFastTravelCenters);assert.equal(recordCenter(center,{x:3,y:5,tile:'H'}),false);assert.deepEqual(center.zaFastTravelCenters,prior);
+ const legacy={...center,zaFastTravelCenters:null};assert.equal(recordCenter(legacy,{x:3,y:5,tile:'H'}),true);assert.deepEqual(legacy.zaFastTravelCenters,['hotel']);
+ for(const future of [['zone1'],{1:null,other:{x:7}},'future']){const zone={area:3,district:'lumiose-zone1',interior:null,x:11,y:1,zaFastTravelZones:structuredClone(future),teamIds:['kept']};assert.equal(recordZoneEntry(zone,'lumiose-vert-sector9','.'),false);assert.deepEqual(zone.zaFastTravelZones,future);assert.deepEqual(zone.teamIds,['kept']);}
+ const zone={area:3,district:'lumiose-zone1',x:11,y:1,zaFastTravelZones:{future:{x:5}}};assert.equal(recordZoneEntry(zone,'lumiose-vert-sector9','.'),true);assert.deepEqual(zone.zaFastTravelZones,{1:{x:11,y:1},future:{x:5}});
+});
