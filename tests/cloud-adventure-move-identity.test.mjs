@@ -6,6 +6,19 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Zone 1 families use reviewed ZA levels while legacy and unknown records stay unchanged',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [species,level,moves] of [[13,5,['독침','실뿜기']],[16,9,['울음소리','몸통박치기','바람일으키기']],[179,8,['울음소리','몸통박치기','전기쇼크','전기자석파']]]){
+  const original=makeMon(species,level),before=structuredClone(original),fresh=prepareVerifiedWildMoves(original);assert.deepEqual(original,before);assert.equal(fresh.adventureZone1GrowthV1,true);assert.deepEqual(fresh.moves,moves);assert.deepEqual(fresh.pp,{});
+  const future={...original,adventureZone1GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(markAdventureVerifiedGrowth(future),future);assert.equal(markAdventureVerifiedGrowth(original),original);
+ }
+ for(const [species,level,move] of [[15,15,'기충전'],[17,21,'날개치기'],[180,17,'이상한빛'],[181,42,'와이드브레이커']]){
+  const old={...makeMon(species,level-1),adventureZone1GrowthV1:true,moves:['몸통박치기','방어','빛의장막','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,[move]);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...old,level},{}).includes(move));
+ }
+ for(const [species,move] of [[14,'단단해지기'],[15,'바늘미사일'],[181,'번개펀치']]){const mon={...makeMon(species,30),adventureZone1GrowthV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.deepEqual(applyAdventureEvolutionMoves(mon,{}).learned,[move]);assert.equal(mon.pp.tackle,3);assert.ok(adventureLearnableMoves(mon,{}).includes(move));}
+ assert.ok(adventureLearnableMoves({...makeMon(181,30),adventureZone1GrowthV1:true},{}).includes('괴전파'));
+});
+
 test('TM058 supports reviewed base species without guessing alternate forms',()=>{
  const bag={'za-tm058':1};
  for(const id of [7,304,374,659,701])assert.equal(canLearnStoryTm(bag,{...makeMon(id,10),moves:['몸통박치기']},'za-tm058'),true);

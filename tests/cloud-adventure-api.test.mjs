@@ -10664,6 +10664,19 @@ test('early wild Pichu and Pikachu use consistent reviewed moves in battle and f
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
 
+test('Zone 1 family catch preserves new growth marker and leaves legacy encounters alone',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-family-growth-qa',displayName:'구역 1 성장'};globalThis.__adventureRandom=()=>0;
+ try{
+  const {prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');await get();await call('start',{species:152});const lead=state.world.activeId,original=structuredClone(rawMon(lead));
+  for(const [species,level] of [[13,5],[16,8],[179,7]]){
+   const foe={...prepareVerifiedWildMoves(makeMon(species,level)),boxId:'wild',hp:0,custom:{keep:species}};
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,adventureBalls:{masterball:1},combat:null,encounter:null,adventureCatchWindow:{foe,moveCount:0,revision:state.revision+1}},state.revision+1));await get();await call('catchWindowBall',{ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===species);assert.ok(caught);assert.equal(rawMon(caught.boxId).adventureZone1GrowthV1,true);assert.deepEqual(rawMon(caught.boxId).custom,{keep:species});
+  }
+  const weedle=state.world.teamIds.find(id=>rawMon(id)?.speciesId===13);seedMon(weedle,{...rawMon(weedle),level:7,pp:{poisonsting:3}});await get();await call('evolve',{boxId:weedle,target:14});await get();assert.equal(rawMon(weedle).speciesId,14);assert.equal(rawMon(weedle).adventureZone1GrowthV1,true);assert.equal(rawMon(weedle).pp.poisonsting,3);assert.ok(rawMon(weedle).moves.includes('단단해지기'));
+  const old={...makeMon(179,7),boxId:'wild',hp:0,custom:{legacy:true}};seedWorld(storeAdventurePosition({...rawWorld(),adventureBalls:{masterball:1},combat:null,encounter:null,adventureCatchWindow:{foe:old,moveCount:0,revision:state.revision+1}},state.revision+1));await get();await call('catchWindowBall',{ball:'masterball'});await get();const oldCaught=state.world.teamIds.map(id=>rawMon(id)).find(m=>m?.custom?.legacy);assert.ok(oldCaught);assert.equal(oldCaught.adventureZone1GrowthV1,undefined);assert.equal(rawMon(lead).speciesId,original.speciesId);assert.deepEqual(rawMon(lead).ivs,original.ivs);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('caught Scatterbug retains ZA growth through reload and evolution',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'caught-scatterbug-growth-qa',displayName:'분이벌레 성장 검사'};globalThis.__adventureRandom=()=>0;
  try{
