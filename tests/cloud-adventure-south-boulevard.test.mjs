@@ -1,6 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,FLORAL_STREET_BLOCKS} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Vert Sector 8 and South Boulevard connect at ground level without replacing Zone 1',()=>{
+ const sector={area:3,district:'lumiose-vert-sector8',interior:null,x:14,y:15,teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(sector),{x:1,y:8},sector).length);
+ const boulevard=stepField(sector,'down');assert.deepEqual([boulevard.district,boulevard.x,boulevard.y,boulevard.zaVert7RoofUpper],['lumiose-south-boulevard',10,1,false]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...boulevard},157),157);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money],['lumiose-south-boulevard',10,1,['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:8}).length);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-sector8',14,15]);
+ assert.equal(stepField({...sector,x:11},'down').district,'lumiose-zone1');
+ assert.equal(stepField({...sector,zaVert7RoofUpper:'future'},'down').blocked,true);
+ assert.equal(stepField({...sector,zaVert7RoofUpper:true},'down').blocked,true);
+ assert.equal(stepField({...saved,zaVert7RoofUpper:'future'},'up').blocked,true);
+});
 test('Vert Sector 7 roof bridge and lift preserve old and upper positions',()=>{
  const lower={area:3,district:'lumiose-south-boulevard',interior:null,x:5,y:10,facing:'down',zaSide40Lift:true,teamIds:['kept']};
  assert.deepEqual(fieldDialogue(lower).actions.map(a=>a.action),['vert7Holovator','side40Reward']);assert.equal(fieldDialogue({...lower,zaSide40RewardClaimed:true}).action,'vert7Holovator');
