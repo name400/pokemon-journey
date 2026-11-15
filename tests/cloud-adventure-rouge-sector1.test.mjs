@@ -2,6 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Rouge Sector 1 connects to Autumnal Avenue without altering existing mission paths',()=>{
+ const start={area:3,district:'lumiose-rouge-sector1',interior:null,x:11,y:8,teamIds:['kept'],zaMission20Stage:11,zaRoyaleRank:'X'};
+ assert.ok(fieldPath(fieldMap(start),start,{x:1,y:10}).length);
+ const west=stepField({...start,x:1,y:10},'left');assert.deepEqual([west.district,west.x,west.y],['lumiose-autumnal-approach',14,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...start,...west},106),106);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-autumnal-approach',14,15,['kept'],11]);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-rouge-sector1',1,10]);
+ assert.equal(stepField({...start,x:1,y:8},'left').district,'lumiose-rouge-sector3');
+ assert.equal(stepField({...start,x:21,y:8},'right').district,'lumiose-zone3');
+ assert.equal(fieldDialogue({...start,x:9,y:6,facing:'up'}).action,'side04Battle');
+ assert.equal(stepField({...saved,x:11,y:1,zaRoyaleRank:'X'},'up').blocked,true);
+ const old=restoreAdventurePosition(storeAdventurePosition({...start,x:9,y:6},107),107);assert.deepEqual([old.district,old.x,old.y,old.zaMission20Stage],['lumiose-rouge-sector1',9,6,11]);
+});
+
 test('Rouge Sector 1 connects to Sectors 3, 4 and 5 while preserving its missions and old routes',()=>{
  const start={area:3,district:'lumiose-rouge-sector1',interior:null,x:11,y:8,teamIds:['kept'],zaMission20Stage:11,zaRoyaleRank:'X'};
  for(const [x,y,dir,district,back] of [[1,8,'left','lumiose-rouge-sector3','down'],[8,1,'up','lumiose-rouge-sector4','down'],[14,1,'up','lumiose-rouge-sector5','down']]){
