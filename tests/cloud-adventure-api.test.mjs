@@ -5331,6 +5331,22 @@ test('Lysandre wings preserve pre-rolled shinies across encounters, catches and 
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
+test('Lysandre field balls preserve alpha identity through escape and capture',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'lysandre-direct-ball-qa',displayName:'연구소 필드 포획'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,lead={...makeMon(152,90),boxId:id};seedMon(id,lead);const team=[...state.world.teamIds];sql.prepare('UPDATE wallets SET balls=2 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  const key='lab:beldum:374',place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:'e',zaLysandreWildSpent:{},zaWildShinyRolls:{[key]:true},zaWildVisibleAlphaLevels:{[key]:59},adventureBalls:{masterball:2},x:4,y:5,facing:'left',...extra},state.revision+1);
+  seedWorld(place({zaLysandreWildSpent:{version:2}}));await get();await call('throwLysandreWild',{},409);assert.deepEqual(rawWorld().zaLysandreWildSpent,{version:2});assert.equal(state.wallet.balls,2);
+  seedWorld(place({zaLysandreWildSpent:{metang:true,'arbok-alpha':true,ekans:true,honedge:true,doublade:true},zaWildVisibleAlphaLevels:{version:2,[key]:59}}));await get();await call('throwLysandreWild',{},409);assert.deepEqual(rawWorld().zaWildVisibleAlphaLevels,{version:2,[key]:59});assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  seedWorld(place({adventureBalls:{version:2,masterball:2}}));await get();await call('throwLysandreWild',{ball:'masterball'},409);assert.deepEqual(rawWorld().adventureBalls,{version:2,masterball:2});
+  seedWorld(place({}));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='throwLysandreWild'));await call('face',{direction:'right'});await call('throwLysandreWild',{},409);assert.equal(state.wallet.balls,2);await call('face',{direction:'left'});
+  await call('throwLysandreWild');assert.equal(state.wallet.balls,1);assert.equal(state.battle.teams[1][0].speciesId,374);assert.equal(state.battle.teams[1][0].level,59);assert.equal(state.battle.teams[1][0].shiny,true);assert.equal(state.battle.teams[1][0].adventureAlpha,true);assert.ok(state.battle.teams[1][0].moves.includes('박치기'));await call('flee');await get();assert.equal(rawWorld().zaWildVisibleAlphaLevels[key],59);assert.equal(rawWorld().zaWildShinyRolls[key],true);
+  const rev=state.revision;await call('throwLysandreWild',{ball:'masterball'});await call('throwLysandreWild',{ball:'masterball',revision:rev},409);await get();assert.equal(state.world.adventureBalls.masterball,1);assert.equal(rawWorld().zaLysandreWildSpent.beldum,true);assert.equal(rawWorld().zaWildVisibleAlphaLevels[key],undefined);assert.ok(state.box.some(p=>p.speciesId===374&&p.shiny&&p.adventureAlpha&&rawMon(p.boxId).moves.includes('박치기')));assert.equal(state.world.teamIds[0],team[0]);assert.deepEqual(rawMon(id).ivs,lead.ivs);
+  seedWorld(place({x:15,y:6,facing:'right',zaWildShinyRolls:{'lab:arbok-alpha:24':true},zaWildVisibleAlphaLevels:{},zaLysandreWildSpent:{beldum:true}}));await get();await call('throwLysandreWild',{ball:'masterball'});await get();assert.equal(rawWorld().zaLysandreWildSpent['arbok-alpha'],true);assert.ok(state.box.some(p=>p.speciesId===24&&p.shiny&&p.adventureAlpha));
+  seedWorld(place({zaLysandreWing:'a',x:4,y:4,zaWildShinyRolls:{'lab:houndour:228':false},zaWildVisibleAlphaLevels:{},zaLysandreWildSpent:{beldum:true,'arbok-alpha':true}}));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='throwLysandreWild'));await call('throwLysandreWild',{ball:'masterball'});await get();assert.equal(rawWorld().zaLysandreWildSpent.houndour,true);assert.ok(state.box.some(p=>p.speciesId===228&&!p.shiny&&!p.adventureAlpha));
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Lysandre keeps old visible wild individuals ordinary',async()=>{
  const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'lysandre-old-wild-qa',displayName:'구형 출현 검증'};globalThis.__adventureRandom=()=>0;
  try{await get();await call('start',{species:152});const key='lab:houndour:228';
