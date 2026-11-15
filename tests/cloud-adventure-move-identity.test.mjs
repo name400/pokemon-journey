@@ -6,6 +6,16 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Zone 5 grass families use ZA growth without rewriting older or unknown foes',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[69,13,['덩굴채찍','엉겨붙기','잎날가르기','수면가루']],[543,13,['독침','구르기','방어','엉겨붙기']]]){
+  const old=makeMon(id,level),before=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,before);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone5GrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone5GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(markAdventureVerifiedGrowth(future),future);const alpha={...old,adventureAlpha:true};assert.equal(prepareVerifiedWildMoves(alpha),alpha);
+ }
+ for(const [id,level,move] of [[69,15,'독가루'],[70,19,'탁쳐서떨구기'],[71,40,'오물웨이브'],[543,16,'싫은소리'],[545,44,'시저크로스']]){const old={...makeMon(id,level-1),adventureZone5GrowthV1:true,moves:['몸통박치기','방어','빛의장막','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,[move]);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...old,level},{}).includes(move));}
+ const mon={...makeMon(71,30),adventureZone5GrowthV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.deepEqual(applyAdventureEvolutionMoves(mon,{}).learned,['오물폭탄']);assert.equal(mon.pp.tackle,3);assert.ok(adventureLearnableMoves(mon,{}).includes('오물폭탄'));
+ for(const id of [544,545])assert.ok(adventureLearnableMoves({...makeMon(id,30),adventureZone5GrowthV1:true},{}).includes('킬러스핀'));
+});
+
 test('new Zone 4 families use ZA growth while old or unknown records remain untouched',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,level,expected] of [[23,9,['째려보기','몸통박치기','독침','물기']],[92,8,['이상한빛','핥기','최면술','염동력']],[167,8,['독침','실뿜기','흡수','엉겨붙기']]]){
