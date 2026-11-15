@@ -8062,6 +8062,19 @@ test('Vernal holovator quest advances when the Diggersby is captured',async()=>{
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Side Mission 67 preserves unrecognized progress records',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side67-future-records-qa',displayName:'수로 기록 보존'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],mon=rawMon(id),future={version:2,data:['future']};
+  const place=(extra={})=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-coulant-route',interior:null,x:4,y:1,facing:'up',zaCoulantLower:false,zaMission20Complete:true,zaSide67Started:true,zaSide67Complete:false,...extra},state.revision+1);
+  seedWorld(place({zaSide67Found:future}));await get();assert.equal(state.world.interaction.action,undefined);await call('side67Resolve-fans',{},409);assert.deepEqual(rawWorld().zaSide67Found,future);assert.ok(!pendingAdventureQuests(state.world).some(q=>q.id==='67'));
+  seedWorld(place({zaSide67Started:'future',zaSide67Found:['couple']}));await get();await call('side67Resolve-fans',{},409);assert.equal(rawWorld().zaSide67Started,'future');assert.deepEqual(rawWorld().zaSide67Found,['couple']);
+  const unknown={kind:'future',value:2},records=['couple','couple',unknown];seedWorld(place({zaSide67Found:records}));await get();assert.equal(state.world.interaction.action,'side67Resolve-fans');await call('side67Resolve-fans');await get();assert.deepEqual(rawWorld().zaSide67Found,[...records,'fans']);assert.match(state.world.log.join(' '),/2\/5/);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);await call('side67Resolve-fans',{},409);
+  seedWorld(place({x:14,y:11,facing:'down',zaCoulantLower:true,zaSide67Started:false,zaSide67Found:future}));await get();await call('side67Start',{},409);assert.deepEqual(rawWorld().zaSide67Found,future);
+  seedWorld(place({x:14,y:11,facing:'down',zaCoulantLower:true,zaSide67Started:false,zaSide67Found:['future']}));await get();await call('side67Start',{},409);assert.deepEqual(rawWorld().zaSide67Found,['future']);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Side Mission 67 persists five conversations and grants its reward once',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side67-qa',displayName:'수로 의뢰 검사'};
  try{
