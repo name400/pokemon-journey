@@ -11673,3 +11673,12 @@ test('Bleu 9 rooftop preserves the old courtyard and safely grants roof items',a
   await place(17,6,{zaBleu9RoofItems:{version:2}});await call('bleu9RoofItem-east-calcium',{},409);assert.deepEqual(rawWorld().zaBleu9RoofItems,{version:2});
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('mission capture preserves unknown research format without blocking progress',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'future-capture-research-qa',displayName:'포획 연구 저장'};
+ try{
+  await get();await call('start',{species:152});const originalTeam=[...state.world.teamIds],future={version:2,counts:{비행:91},future:'keep'};
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:8,y:7,facing:'up',zaMission03Stage:4,zaMission03FletchlingTried:true,zaResearchCaptures:future},state.revision+1));sql.prepare('UPDATE wallets SET balls=10 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();
+  await call('mission03Fletchling');await get();assert.equal(state.world.zaMission03Stage,5);assert.equal(state.wallet.balls,9);assert.deepEqual(rawWorld().zaResearchCaptures,future);assert.equal(state.world.teamIds.length,originalTeam.length+1);assert.equal(rawMon(state.world.teamIds.at(-1)).speciesId,661);assert.ok(state.world.teamIds.includes(originalTeam[0]));
+ }finally{globalThis.__adventureUser=previousUser;}
+});
