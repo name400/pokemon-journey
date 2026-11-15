@@ -5,7 +5,7 @@ import {evolutionOptions} from '../lib/evolution.mjs';
 import {fieldMap,fieldPath,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {CITY_RESEARCH_ENCOUNTERS,cityResearchEncounter} from '../lib/cloud-adventure/adventure-city-research.mjs';
 test('city habitats preserve legacy positions and support the species evolution paths',()=>{
- for(const p of CITY_RESEARCH_ENCOUNTERS.filter(p=>!p.form&&!['litwick','goomy','dratini','riolu','dedenne','scraggy'].includes(p.id))){const state={district:p.district,area:3,x:p.id==='ralts'?11:5,y:p.id==='ralts'?8:2,zaVert4Layer:p.layer,teamIds:['kept'],adventureDexSpecies:[152]};const map=fieldMap(state);assert.equal(map[p.y][p.x],'^');assert.ok(fieldPath(map,state,{x:p.x,y:p.y+1}).length);assert.equal(cityResearchEncounter(state,{...p,tile:'^'}).species,p.species);const saved=storeAdventurePosition(state,2),restored=restoreAdventurePosition(saved,2);assert.deepEqual([restored.x,restored.y],[state.x,state.y]);assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.adventureDexSpecies,[152]);}
+ for(const p of CITY_RESEARCH_ENCOUNTERS.filter(p=>!p.form&&!['litwick','goomy','dratini','riolu','dedenne','scraggy','magenta7-ralts'].includes(p.id))){const state={district:p.district,area:3,x:p.id==='ralts'?11:5,y:p.id==='ralts'?8:2,zaVert4Layer:p.layer,teamIds:['kept'],adventureDexSpecies:[152]};const map=fieldMap(state);assert.equal(map[p.y][p.x],'^');assert.ok(fieldPath(map,state,{x:p.x,y:p.y+1}).length);assert.equal(cityResearchEncounter(state,{...p,tile:'^'}).species,p.species);const saved=storeAdventurePosition(state,2),restored=restoreAdventurePosition(saved,2);assert.deepEqual([restored.x,restored.y],[state.x,state.y]);assert.deepEqual(restored.teamIds,['kept']);assert.deepEqual(restored.adventureDexSpecies,[152]);}
  for(const [id,level,next] of [[568,36,569],[280,20,281],[281,30,282]]){const options=evolutionOptions(makeMon(id,level),{adventureEngine:'cloud'},[],{});assert.equal(options.find(o=>o.id===next)?.ready,true);}
  assert.equal(cityResearchEncounter({district:'lumiose-vert-sector4',zaVert4Layer:'roof'},{tile:'^',x:10,y:2}),null);
 });
@@ -66,4 +66,14 @@ test('flower forms have accessible city encounters and preserve old positions',(
   assert.equal(makeMon(p.form,p.level).speciesId,669);assert.equal(makeMon(p.form,p.level).id,p.form);
   const saved=restoreAdventurePosition(storeAdventurePosition(state,7),7);assert.deepEqual([saved.x,saved.y,saved.teamIds],[...stand,['kept']]);
  }
+});
+
+test('Magenta 7 fire courtyard has an independently saved Ralts encounter',async()=>{
+ const {visibleCityResearchEncounters,consumeCityResearch,refreshCityResearchOnExit,cityResearchArea}=await import('../lib/cloud-adventure/adventure-city-research.mjs');
+ const s={area:3,district:'lumiose-magenta-sector7',interior:null,x:5,y:4,zaMagenta7NorthOpen:true,teamIds:['kept'],zaWildShinyRolls:{'cityResearch:magenta7-ralts:280':true,'cityResearch:ralts:280':false}};
+ const closed={...s,zaMagenta7NorthOpen:false};assert.equal(fieldMap(closed)[4][5],'g');assert.equal(cityResearchEncounter(closed,{x:5,y:4,tile:'p'}),null);
+ const map=fieldMap(s);assert.equal(map[4][5],'p');assert.equal(cityResearchEncounter(s,{x:5,y:4,tile:'p'})?.species,280);assert.ok(visibleCityResearchEncounters(s,map).some(p=>p.id==='magenta7-ralts'));
+ const saved=restoreAdventurePosition(storeAdventurePosition(s,202),202);assert.deepEqual([saved.x,saved.y,saved.teamIds],[5,4,['kept']]);assert.equal(saved.zaWildShinyRolls['cityResearch:magenta7-ralts:280'],true);
+ assert.equal(consumeCityResearch(saved,'magenta7-ralts'),true);assert.equal(fieldMap(saved)[4][5],'g');assert.equal(saved.zaWildShinyRolls['cityResearch:ralts:280'],false);
+ const area=cityResearchArea(saved);saved.district='lumiose-magenta-sector9';assert.equal(refreshCityResearchOnExit(saved,area),true);assert.equal(saved.zaCityResearchSpent['magenta7-ralts'],undefined);assert.equal(saved.zaWildShinyRolls['cityResearch:magenta7-ralts:280'],true);
 });

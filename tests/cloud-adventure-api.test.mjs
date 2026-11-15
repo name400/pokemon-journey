@@ -10724,3 +10724,13 @@ test('Bleu 8 courtyard pickups preserve show progress and prevent duplicates',as
   place(5,3);await get();await call('bleu8Item-northwest-ultra');await get();assert.equal(rawWorld().adventureBalls.ultraball,1);assert.equal(rawWorld().zaSide16Stage,1);assert.deepEqual(state.world.teamIds,team);assert.equal(rawWorld().zaBleu8Items.length,4);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Magenta 7 courtyard Ralts battle is gated and survives reload',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta7-ralts-qa',displayName:'마젠타 랄토스'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector7',interior:null,x:6,y:6,facing:'up',zaMagenta7NorthOpen:false},state.revision+1));await get();await call('cityResearchBattle',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:4,facing:'down',zaMagenta7NorthOpen:true,zaWildShinyRolls:{'cityResearch:magenta7-ralts:280':true}},state.revision+1));await get();assert.equal(state.world.interaction.action,'cityResearchBattle');await call('cityResearchBattle');
+  assert.equal(rawWorld().encounter.speciesId,280);assert.equal(rawWorld().encounter.level,12);assert.equal(rawWorld().encounter.adventureCityResearchId,'magenta7-ralts');await get();assert.equal(rawWorld().encounter.shiny,true);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
