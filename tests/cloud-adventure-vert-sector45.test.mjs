@@ -2,6 +2,23 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition,walkable} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Vert 2 and Vert Street connect at ground level without bypassing locked zones or Mission 3',()=>{
+ const base={area:3,district:'lumiose-vert2',interior:null,x:21,y:5,zaMission03Stage:3,zaRoyaleRank:'F',teamIds:['kept']};
+ assert.ok(fieldPath(fieldMap(base),{x:11,y:8},base).length);
+ assert.equal(stepField({...base,x:17,y:15},'down').blocked,true);assert.equal(stepField({...base,x:1,y:5},'left').blocked,true);
+ const street=stepField(base,'right');assert.deepEqual([street.district,street.x,street.y],['lumiose-vert-street-route',1,14]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...base,...street},128),128);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission03Stage,saved.teamIds],['lumiose-vert-street-route',1,14,3,['kept']]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:10,y:13}).length);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y,back.zaVert2RoofUpper],['lumiose-vert2',21,5,false]);
+ const active={...base,zaMission03Stage:2,zaMission03DetourRequired:true};assert.equal(stepField(active,'right').blocked,true);
+ assert.equal(stepField({...active,district:'lumiose-vert-street-route',x:1,y:14},'left').blocked,true);
+ assert.notEqual(stepField({...active,zaMission03DetourRequired:undefined},'right').blocked,true);
+ assert.notEqual(stepField({...base,zaVert2RoofUpper:true},'right').transitioned,true);
+ assert.equal(stepField({...base,x:21,y:8},'right').district,'lumiose-zone2');
+ const old=restoreAdventurePosition(storeAdventurePosition({...base,x:11,y:8},128),128);assert.deepEqual([old.x,old.y],[11,8]);
+});
+
 test('Vert 5 and Vert Street connect while preserving Lida and the Mission 3 detour',()=>{
  const base={area:3,district:'lumiose-vert-sector5',interior:null,x:21,y:8,zaMission03Stage:3,zaRoyaleRank:'W',zaLidaStage:1,teamIds:['kept']};
  assert.ok(fieldPath(fieldMap(base),{x:6,y:4},base).length);assert.equal(fieldMap(base)[4][5],'n');
