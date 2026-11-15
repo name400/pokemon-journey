@@ -486,7 +486,8 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     }
     if(['lumiose-magenta-sector1','lumiose-magenta-sector2','lumiose-magenta-sector3','lumiose-magenta-sector3-roof','lumiose-magenta-sector4','lumiose-magenta-sector4-roof','lumiose-magenta-sector6','lumiose-magenta-sector6-roof','lumiose-magenta-sector7','lumiose-magenta-sector9'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#987e91':c==='g'?'#9bb985':c===','?'#c8b2bd':(x+y)%2?'#e1d5df':'#eae0e8';ctx.fillRect(px,py,tile,tile);
      if(w.district==='lumiose-magenta-sector7'&&c===';'){ctx.fillStyle=(x+y)%2?'#c7c0aa':'#d6cbb5';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#b8aa92';ctx.fillRect(px,py,tile,2);}
-     if(w.district==='lumiose-magenta-sector7'&&('ij'.includes(c))){ctx.fillStyle='#d4c6aa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
+     if(w.district==='lumiose-magenta-sector7'&&('ijkn'.includes(c))){ctx.fillStyle='#d4c6aa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
+     if(w.district==='lumiose-magenta-sector7'&&c==='r'){ctx.fillStyle='#a3b286';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#6f845f';for(let n=0;n<4;n++)ctx.fillRect(px+3+n*7,py+5+(n%2)*5,5,17);}
      if(w.district==='lumiose-magenta-sector7'&&c==='#'&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle='#bba0a8';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#e1c9bf';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]!=='#')ctx.fillRect(px,py+tile-3,tile,3);}
      if(w.district==='lumiose-magenta-sector4'){
       // Existing 2D building, plaza lawn and streets; dimensions are provisional.

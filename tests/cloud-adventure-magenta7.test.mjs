@@ -37,3 +37,12 @@ test('Courtyard pickup state preserves old saves and clears only collected marke
  const collected=restoreAdventurePosition(storeAdventurePosition({...old,zaMagenta7Items:['courtyard-awakening']},180),180);
  assert.equal(fieldMap(collected)[12][15],';');assert.equal(fieldMap(collected)[12][18],'j');
 });
+
+test('Northern courtyard entrance and rewards survive saving without blocking older paths',()=>{
+ const s={area:3,district:'lumiose-magenta-sector7',interior:null,x:6,y:6,facing:'up',teamIds:['kept']};
+ const closed=fieldMap(s);assert.equal(closed[5][6],'r');assert.equal(stepField(s,'up').blocked,true);
+ const opened={...s,zaMagenta7NorthOpen:true};assert.ok(fieldPath(fieldMap(opened),opened,{x:5,y:3}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...opened,x:5,y:3,zaMagenta7Items:['north-great']},181),181);
+ assert.deepEqual([saved.x,saved.y,saved.teamIds,saved.zaMagenta7NorthOpen],[5,3,['kept'],true]);
+ assert.equal(fieldMap(saved)[3][4],'g');assert.equal(fieldMap(saved)[3][7],'n');assert.ok(fieldPath(fieldMap(saved),saved,{x:6,y:6}).length);
+});

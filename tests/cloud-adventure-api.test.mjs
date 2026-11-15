@@ -10669,3 +10669,19 @@ test('Magenta 7 courtyard items protect inventory and persist after collection',
   assert.equal(state.world.interaction.action,'magenta7Item-courtyard-hyper');await call('magenta7Item-courtyard-hyper');await get();assert.equal(state.wallet.hyper_potions,before+1);assert.deepEqual(rawWorld().zaMagenta7Items,['courtyard-awakening','courtyard-hyper']);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Magenta 7 northern courtyard requires a fire attack and preserves rewards',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta7-north-qa',displayName:'북쪽 안뜰'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];
+  seedMon(id,{...makeMon(152,20),moves:['몸통박치기']});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector7',interior:null,x:6,y:6,facing:'up',zaRoyaleRank:'Z',adventureBalls:{...rawWorld().adventureBalls,greatball:99}},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'magenta7NorthOpen');await call('magenta7NorthOpen',{},409);assert.notEqual(rawWorld().zaMagenta7NorthOpen,true);
+  seedMon(id,{...makeMon(4,20),moves:['불꽃세례']});await get();const revision=state.revision;
+  await call('magenta7NorthOpen');await get();assert.equal(rawWorld().zaMagenta7NorthOpen,true);assert.deepEqual(state.world.teamIds,team);await call('magenta7NorthOpen',{revision},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:3,facing:'left'},state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta7Item-north-great');
+  await call('magenta7Item-north-great',{},409);assert.ok(!rawWorld().zaMagenta7Items?.includes('north-great'));
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:3,facing:'left',adventureBalls:{...rawWorld().adventureBalls,greatball:98}},state.revision+1));await get();await call('magenta7Item-north-great');await get();assert.equal(rawWorld().adventureBalls.greatball,99);await call('magenta7Item-north-great',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:6,y:3,facing:'right'},state.revision+1));await get();assert.equal(state.world.interaction.action,'magenta7Item-north-pearl');await call('magenta7Item-north-pearl');await get();assert.equal(state.inventory.pearl,1);assert.equal(rawWorld().zaMagenta7NorthOpen,true);assert.deepEqual(state.world.teamIds,team);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
