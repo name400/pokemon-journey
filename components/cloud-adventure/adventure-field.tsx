@@ -692,6 +692,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='h'){ctx.fillStyle='#739ea5';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle=w.zaMission19Stage>=8?'#d7edf0':'#9ac9d3';ctx.fillRect(px+7,py+7,tile-14,tile-14);}
      if(c==='l'){ctx.fillStyle='#826649';ctx.fillRect(px+7,py+3,tile-14,tile-6);ctx.fillStyle='#e0c697';for(let j=7;j<tile-4;j+=6)ctx.fillRect(px+8,py+j,tile-16,2);}
      if(c==='j'){ctx.fillStyle='#718b86';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#b6ded0';ctx.fillRect(px+7,py+7,tile-14,tile-14);ctx.fillStyle='#234b4b';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('승강',px+tile/2,py+20);}
+     if(c==='q'&&x===16&&y===15){ctx.fillStyle='#d2a783';ctx.fillRect(px+11,py+5,10,9);ctx.fillStyle='#668d95';ctx.fillRect(px+8,py+14,16,13);}
      if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
     if(w.district==='lumiose-bleu-sector3'&&!w.interior){

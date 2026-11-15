@@ -10734,3 +10734,14 @@ test('Magenta 7 courtyard Ralts battle is gated and survives reload',async()=>{
   assert.equal(rawWorld().encounter.speciesId,280);assert.equal(rawWorld().encounter.level,12);assert.equal(rawWorld().encounter.adventureCityResearchId,'magenta7-ralts');await get();assert.equal(rawWorld().encounter.shiny,true);assert.deepEqual(state.world.teamIds,team);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Bleu 7 resident grants reusable Electroweb TM once and respects full bags',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu7-tm101-qa',displayName:'블루 기술머신'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(25,20),moves:['몸통박치기']});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector7',interior:null,x:16,y:15,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'bleu7Tm101');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm101']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm101');await get();await call('bleu7Tm101',{},409);assert.notEqual(rawWorld().zaBleu7Tm101Claimed,true);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;await call('bleu7Tm101');await get();assert.equal(state.inventory['za-tm101'],1);assert.equal(rawWorld().zaBleu7Tm101Claimed,true);assert.deepEqual(state.world.teamIds,team);
+  await call('bleu7Tm101',{revision:rev},409);await call('bleu7Tm101',{},409);await call('teachStoryTm',{item:'za-tm101',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'일렉트릭네트');assert.equal(state.inventory['za-tm101'],1);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
