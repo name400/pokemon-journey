@@ -7506,6 +7506,18 @@ test('early alphas unlock after Bunnelby independently of other requests and sup
  }}finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
 
+test('Bleu 7 glide roof grants reusable Iron Head TM without changing older saves',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu7-tm058-qa',displayName:'블루 옥상 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],aron={...makeMon(304,20),boxId:id,moves:['몸통박치기','방어'],pp:{tackle:3},shiny:true,custom:{keep:true}};seedMon(id,aron);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector7',interior:null,zaBleu7Upper:true,x:19,y:8,facing:'right',zaMission15Stage:1,...extra},state.revision+1);
+  seedWorld(place({}));await get();await call('rotoGlide',{},409);seedWorld(place({zaMission15Stage:2}));await get();await call('rotoGlide');await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu7-east-roof',3,8]);
+  await walkTo({x:15,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'bleu7Tm058');const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm058']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'za-tm058');await get();await call('bleu7Tm058',{},409);assert.notEqual(rawWorld().zaBleu7Tm058,true);sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;await call('bleu7Tm058');await call('bleu7Tm058',{revision:rev},409);await get();assert.equal(state.inventory['za-tm058'],1);assert.equal(rawWorld().zaBleu7Tm058,true);assert.deepEqual(rawMon(id).custom,aron.custom);assert.equal(rawMon(id).shiny,true);
+  await call('teachStoryTm',{item:'za-tm058',boxId:id,slot:1});await get();assert.equal(rawMon(id).moves[1],'아이언헤드');assert.equal(rawMon(id).pp.tackle,3);assert.equal(state.inventory['za-tm058'],1);assert.deepEqual(state.world.teamIds,team);
+  await walkTo({x:3,y:8});await call('rotoGlide');assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector7',19,8]);
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Zone 1 Scatterbug keeps ZA initial moves through battle and capture',async()=>{
  const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-scatterbug-initial-moves-qa',displayName:'분이벌레 초기 기술'};
  try{

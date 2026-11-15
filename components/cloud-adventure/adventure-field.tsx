@@ -690,6 +690,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='u'){ctx.fillStyle='#b6a68f';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#eee1c9';for(let n=0;n<4;n++)ctx.fillRect(px+5,py+5+n*6,tile-10,2);}
      if(c==='i'){ctx.fillStyle='#f4df9e';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}return;
     }
+    if(!w.interior&&w.district==='lumiose-bleu7-east-roof'){
+     ctx.fillStyle=c==='#'?'#738490':c===','?'#c5d0ce':'#dce4de';ctx.fillRect(px,py,tile,tile);
+     if(c==='i'&&w.district==='lumiose-bleu7-east-roof'){ctx.fillStyle='#f5e4a0';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#b75b60';ctx.fillRect(px+tile/2-5,py+tile/2-2,10,3);}
+     if(x===3&&y===8){ctx.fillStyle='#477d93';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공',px+tile/2,py+tile/2+3);}
+     if(c==='l'||c==='j'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}return;
+    }
+    if(!w.interior&&w.district==='lumiose-bleu-sector7'&&w.zaBleu7Upper===true&&x===19&&y===8){ctx.fillStyle='#477d93';ctx.fillRect(px+3,py+3,tile-6,tile-6);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('활공',px+tile/2,py+tile/2+3);return;}
     if(w.district==='lumiose-bleu-sector7'&&!w.interior&&w.zaBleu7Upper!==true){
      // Existing 2D building footprints and their heights are provisional.
      const outer=x===0||x===22||y===0||y===16;

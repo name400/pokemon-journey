@@ -6,6 +6,14 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('TM058 supports reviewed base species without guessing alternate forms',()=>{
+ const bag={'za-tm058':1};
+ for(const id of [7,304,374,659,701])assert.equal(canLearnStoryTm(bag,{...makeMon(id,10),moves:['몸통박치기']},'za-tm058'),true);
+ for(const id of [1,152,664])assert.equal(canLearnStoryTm(bag,{...makeMon(id,10),moves:['몸통박치기']},'za-tm058'),false);
+ const aron={...makeMon(304,10),moves:['아이언헤드']};assert.equal(canLearnStoryTm(bag,aron,'za-tm058'),false);assert.equal(canLearnStoryTm({}, {...aron,moves:['몸통박치기']},'za-tm058'),false);
+ assert.equal(canLearnStoryTm(bag,{...makeMon(304,10),id:99999,formId:99999,moves:['몸통박치기']},'za-tm058'),false);
+});
+
 test('new Scatterbug family learns ZA growth and evolution moves without rewriting older data',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [level,moves] of [[5,['실뿜기','몸통박치기']],[7,['실뿜기','몸통박치기','저리가루']]]){const mon=makeMon(664,level),before=structuredClone(mon);assert.deepEqual(prepareVerifiedWildMoves(mon).moves,moves);assert.deepEqual(mon,before);}
