@@ -25,3 +25,15 @@ test('Bleu Street joins Sector 6 and retains its existing Espace Vide connection
  const saved=restoreAdventurePosition(storeAdventurePosition({...street,...b6},9),9);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-bleu6-approach',21,8,['kept']]);
 });
+
+test('Bleu Sector 8 joins Bleu Street while retaining the Passage route and saves',()=>{
+ const start={area:3,district:'lumiose-bleu-sector8',interior:null,x:11,y:8,teamIds:['kept'],zaMission20Stage:7};
+ assert.ok(fieldPath(fieldMap(start),start,{x:21,y:6}).length);
+ const east=stepField({...start,x:21,y:6},'right');assert.deepEqual([east.district,east.x,east.y],['lumiose-bleu-street',1,10]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...start,...east},108),108);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission20Stage],['lumiose-bleu-street',1,10,['kept'],7]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-bleu-sector8',21,6]);
+ assert.equal(stepField({...start,x:21,y:8},'right').district,'lumiose-passage-felicite');
+ assert.equal(stepField({...start,x:11,y:1},'up').district,'lumiose-bleu6-approach');
+ const legacy=restoreAdventurePosition(storeAdventurePosition({...start,x:21,y:8},109),109);assert.deepEqual([legacy.district,legacy.x,legacy.y,legacy.teamIds],['lumiose-bleu-sector8',21,8,['kept']]);
+});
