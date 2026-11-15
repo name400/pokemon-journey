@@ -165,3 +165,11 @@ test('idle threat projections can use server period when the device clock disagr
   assert.equal(randomAlphaPlayerThreat(world,'night'),null);const day=randomAlphaPlayerThreat(world,'day');assert.equal(day?.id,'flabebe');assert.equal(randomAlphaAlertMatches({...world,zaRandomAlphaAlertV1:day.alert},day),true);
  }finally{Date.now=oldNow;}
 });
+
+test('Lysandre fixed alpha respects lab wing, floor, occupancy and saved records',()=>{
+ const lab={area:3,district:'lumiose-lysandre-lab',zaMission35Stage:4,zaLysandreMazeV2:true,zaLysandreWing:'e',zaLysandreFloor:1,x:15,y:6};
+ assert.equal(fixedAlphaPlayerThreat(lab)?.alertKey,'lumiose-lysandre-lab:arbok-alpha');assert.ok(fixedAlphaPlayerNear(lab));
+ for(const patch of [{zaLysandreWing:'a'},{zaLysandreFloor:2},{zaMission35Stage:3},{zaLysandreWildSpent:{'arbok-alpha':true}},{zaLysandreWildSpent:{version:2}},{zaLysandreMazeV2:'future'},{x:16}])assert.equal(fixedAlphaPlayerThreat({...lab,...patch}),null);
+ assert.equal(fixedAlphaPlayerThreat({...lab,zaLysandreMazeV2:false,zaLysandreWing:undefined})?.id,'arbok-alpha');
+ assert.equal(playerRecoverySafe({...lab,zaFixedAlphaAlertV1:'lumiose-lysandre-lab:arbok-alpha'}),false);
+});

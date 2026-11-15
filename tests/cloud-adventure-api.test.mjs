@@ -9580,6 +9580,17 @@ test('alerted fixed alpha attacks idle players without replay or changing shared
  }finally{Date.now=oldNow;globalThis.__adventureUser=previous;}
 });
 
+test('Lysandre Arbok detects and attacks until captured, preserving saves',async()=>{
+ const previous=globalThis.__adventureUser,oldNow=Date.now,oldRandom=globalThis.__adventureRandom;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureRandom=()=>.999;globalThis.__adventureUser={userId:'lysandre-arbok-threat-qa',displayName:'연구소 우두머리'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),mon=structuredClone(rawMon(team[0]));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:'e',zaLysandreWildSpent:{},zaWildShinyRolls:{'lab:arbok-alpha:24':true},adventureBalls:{masterball:1},x:14,y:6,facing:'right',zaFixedAlphaAlertV1:undefined,zaFixedAlphaRealtimeV1:undefined,zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}},state.revision+1));await get();
+  await call('move',{direction:'right'});assert.equal(state.world.zaFixedAlphaAlertV1,'lumiose-lysandre-lab:arbok-alpha');assert.equal(state.world.zaPlayerVitalsV1.hp,90);assert.equal(rawWorld().zaWildShinyRolls['lab:arbok-alpha:24'],true);
+  await call('fixedAlphaIdle');const rev=state.revision;await call('fixedAlphaIdle');assert.equal(state.revision,rev);clock+=100000;await call('fixedAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,60);await call('fixedAlphaIdle',{revision:rev},409);await get();
+  await call('lysandreWild-arbok-alpha');assert.equal(state.battle.teams[1][0].shiny,true);await call('ball',{ball:'masterball'});await get();assert.equal(rawWorld().zaLysandreWildSpent['arbok-alpha'],true);assert.ok(state.box.some(p=>p.speciesId===24&&p.shiny&&p.adventureAlpha));const after=state.revision;await call('fixedAlphaIdle');assert.equal(state.revision,after);assert.equal(state.world.teamIds[0],team[0]);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(team[0]).ivs,mon.ivs);assert.equal(rawMon(team[0]).id,mon.id);
+ }finally{Date.now=oldNow;globalThis.__adventureRandom=oldRandom;globalThis.__adventureUser=previous;}
+});
+
 test('visible random alpha attacks idle player using its saved encounter identity',async()=>{
  const previous=globalThis.__adventureUser,oldNow=Date.now,oldRandom=globalThis.__adventureRandom;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureRandom=()=>.999;globalThis.__adventureUser={userId:'idle-random-alpha-qa',displayName:'무작위 우두머리 정지 검사'};
  try{
