@@ -31,3 +31,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 구역 15 일반 개체 성장 기술
 - 새로 만나는 기본 폼 애버라스·호바귀와 그 진화 계열에 Z-A 레벨·진화·떠올리기 기술을 연결했다. [애버라스](https://pokemondb.net/pokedex/larvitar/moves/9), [데기라스](https://pokemondb.net/pokedex/pupitar/moves/9), [마기라스](https://pokemondb.net/pokedex/tyranitar/moves/9), [호바귀](https://pokemondb.net/pokedex/pumpkaboo/moves/9), [펌킨인](https://pokemondb.net/pokedex/gourgeist/moves/9)의 2차 자료 기준이며, 야생 초기 4기술은 기존 엔진의 최근 기술 방식인 근사다. 크기별 호바귀 폼과 우두머리 기술은 검증되지 않아 그대로 두었다.
 - 기존 성장표의 깨트리다·머드숏·록블레스트 표기를 실제 기술명으로 고치고, 이미 저장된 구 표기도 동일 기술로 해석한다. 저장 데이터나 기존 개체를 소급 변경하지 않는다. 다른 구역과 수생종의 누락은 계속 확인이 필요하다. Sites 병합본과 운영 환경은 이번 변경으로 재검증하지 않았다.
+
+### 구역 16 및 이전 수변 성장 기술
+- [대여르](https://pokemondb.net/pokedex/falinks/moves/9), [거북손손](https://pokemondb.net/pokedex/binacle/moves/9), [거북손데스](https://pokemondb.net/pokedex/barbaracle/moves/9)의 2차 Z-A 기술표를 새 일반 개체에 연결했다. 거북손손은 기존 구역 2·6에도 출현하며 거북손데스는 구역 16의 직접 조우에 적용한다. 레벨 성장과 기술 떠올리기에 반영하고 구형 개체·우두머리·미확인 표식은 소급하지 않는다.
+- 야생 초기 기술을 레벨 이하에서 최근 4개로 고르는 것은 기존 엔진의 근사다. 크기별 호바귀와 우두머리 기술, 앞 구역의 다른 수생종, 구역 16의 나머지 진화형 직접 출현은 별도 확인이 필요하다. 운영·Sites 병합본은 이번 작업으로 재검증하지 않았다.
