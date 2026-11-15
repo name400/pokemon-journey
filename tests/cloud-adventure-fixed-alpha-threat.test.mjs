@@ -173,3 +173,14 @@ test('Lysandre fixed alpha respects lab wing, floor, occupancy and saved records
  assert.equal(fixedAlphaPlayerThreat({...lab,zaLysandreMazeV2:false,zaLysandreWing:undefined})?.id,'arbok-alpha');
  assert.equal(playerRecoverySafe({...lab,zaFixedAlphaAlertV1:'lumiose-lysandre-lab:arbok-alpha'}),false);
 });
+
+test('Mission 40 anomaly threats respect progress, layers and unknown records',()=>{
+ for(const [district,id,x,y,extra] of [['lumiose-zone3','steelix',3,11,{}],['lumiose-zone5','gallade',4,6,{}],['lumiose-zone9','pangoro',5,8,{zaZone9Upper:true}],['lumiose-research-zone','gallade',5,6,{zaMission40Zone:'5'}]]){
+  const s={area:3,district,x,y,zaMission40Stage:1,...extra},key=`${district}:mission40-${id}`;assert.equal(fixedAlphaPlayerThreat(s)?.alertKey,key);assert.ok(fixedAlphaPlayerNear(s));assert.equal(playerRecoverySafe({...s,zaFixedAlphaAlertV1:key}),false);assert.equal(fixedAlphaPlayerThreat({...s,zaMission40Anomalies:[id]}),null);assert.equal(fixedAlphaPlayerThreat({...s,zaMission40Anomalies:{version:2}}),null);assert.equal(fixedAlphaAlertKnown({...s,zaFixedAlphaAlertV1:key,zaMission40Anomalies:{version:2}}),false);assert.equal(fixedAlphaPlayerThreat({...s,zaMission40Stage:2}),null);
+ }
+ assert.equal(fixedAlphaPlayerThreat({area:3,district:'lumiose-zone3',x:3,y:11,zaMission40Stage:1,zaZone3TowerUpper:true}),null);
+ assert.equal(fixedAlphaPlayerThreat({area:3,district:'lumiose-zone5',x:4,y:6,zaMission40Stage:1,zaZone5Upper:true}),null);
+ assert.equal(fixedAlphaPlayerThreat({area:3,district:'lumiose-zone5',x:4,y:6,zaMission40Stage:1,zaZone5DrainLanding:true}),null);
+ assert.equal(fixedAlphaPlayerThreat({area:3,district:'lumiose-zone5',x:4,y:6,zaMission40Stage:1,zaZone5DrainLanding:'future'}),null);
+ assert.equal(fixedAlphaPlayerThreat({area:3,district:'lumiose-zone9',x:5,y:8,zaMission40Stage:1,zaZone9Upper:false}),null);
+});

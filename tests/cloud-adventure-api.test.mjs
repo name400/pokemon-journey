@@ -11167,6 +11167,17 @@ test('Mission 3 detour blocks the new Vert 3 courtyard route in both directions'
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('Mission 40 anomaly field threats stop after investigation',async()=>{
+ const previous=globalThis.__adventureUser,oldNow=Date.now,oldRandom=globalThis.__adventureRandom;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureRandom=()=>.999;globalThis.__adventureUser={userId:'mission40-threat-qa',displayName:'이상 우두머리 경계'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,mon=structuredClone(rawMon(lead)),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  for(const [district,id,x,y,direction,extra] of [['lumiose-zone3','steelix',3,12,'up',{zaZone3TowerUpper:false}],['lumiose-zone5','gallade',4,8,'up',{zaZone5Upper:false}],['lumiose-zone9','pangoro',5,7,'down',{zaZone9Upper:true}]]){
+   clock+=200000;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:direction,zaMission40Stage:1,zaMission40Anomalies:['future'],zaFixedAlphaAlertV1:undefined,zaFixedAlphaRealtimeV1:undefined,zaWildShinyRolls:{'keep:shiny':true},zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'},...extra},state.revision+1));await get();await call('move',{direction});const key=`${district}:mission40-${id}`;assert.equal(state.world.zaFixedAlphaAlertV1,key);assert.equal(state.world.zaPlayerVitalsV1.hp,90);await call('fixedAlphaIdle');const revision=state.revision;await call('fixedAlphaIdle');assert.equal(state.revision,revision);clock+=100000;await call('fixedAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,60);await call('fixedAlphaIdle',{revision},409);
+   seedWorld(storeAdventurePosition({...rawWorld(),zaMission40Anomalies:['future',id]},state.revision+1));await get();const completed=state.revision;await call('fixedAlphaIdle');assert.equal(state.revision,completed);assert.deepEqual(rawWorld().zaMission40Anomalies,['future',id]);assert.equal(rawWorld().zaWildShinyRolls['keep:shiny'],true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(lead).ivs,mon.ivs);
+  }
+ }finally{Date.now=oldNow;globalThis.__adventureRandom=oldRandom;globalThis.__adventureUser=previous;}
+});
+
 test('Mission 40 field capture advances all three investigations safely',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'mission40-field-ball-qa',displayName:'이상 우두머리 필드 포획'};globalThis.__adventureRandom=()=>.999;
  try{
