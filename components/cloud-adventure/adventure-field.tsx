@@ -1187,6 +1187,15 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      return;
     }
     if(w.district==='lumiose-zone3-south-roof'&&!w.interior){ctx.fillStyle=c==='#'?'#77847f':c==='g'?'#8bae7e':c===','?'#b59e85':(x+y)%2?'#d5cab9':'#e3d9c9';ctx.fillRect(px,py,tile,tile);if(c!== '#'&&c!=='g'&&c!==','&&c!=='h')roofPaving(px,py,x,y);if(c==='g')sprite('grassDetail',px,py);if(c===','){ctx.fillStyle='#907760';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#dfcbb0';for(let j=5;j<tile;j+=8)ctx.fillRect(px+j,py+3,3,tile-6);}if(c==='h'){ctx.fillStyle='#557c70';ctx.fillRect(px+5,py+4,tile-10,tile-8);ctx.fillStyle='#bce6ca';ctx.fillRect(px+9,py+8,tile-18,tile-16);}return;}
+    if(w.district==='lumiose-rouge-sector2'&&!w.interior){
+     // Existing draft footprints and crossings: no change to map collision or entrances.
+     const restaurant=x>=3&&x<=7&&y>=2&&y<=5, building=c==='#'&&((restaurant)||(x>=15&&x<=19&&y>=11&&y<=14));
+     ctx.fillStyle=c==='#'?'#8d7a75':c===','?'#bcb1a8':(x+y)%2?'#e3d8ce':'#eee4da';ctx.fillRect(px,py,tile,tile);
+     if(building){ctx.fillStyle=restaurant?'#c4a499':'#b7a79b';ctx.fillRect(px,py,tile,tile);if(y===2||y===11){ctx.fillStyle='#ebd6c3';ctx.fillRect(px,py,tile,4);}if(y===5||y===14){ctx.fillStyle=restaurant?'#825a54':'#82746d';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#e6cfb8';ctx.fillRect(px+4,py+tile-6,8,3);ctx.fillRect(px+tile-12,py+tile-6,8,3);}}
+     if(c===','){ctx.fillStyle='#e8dcd0';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);}
+     if(c==='u'){ctx.fillStyle='#8b5855';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#f1ded0';ctx.fillRect(px+3,py+3,tile-6,5);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('르 와우',px+tile/2,py+21);}
+     if(c==='X'){ctx.fillStyle='#688b80';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-rouge-sector4'&&!w.interior){
      // The glass-covered arcade uses existing blocked and skylight tiles; geometry is a draft.
      const building=c==='#'&&x>=7&&x<=15&&y>=2&&y<=5;
