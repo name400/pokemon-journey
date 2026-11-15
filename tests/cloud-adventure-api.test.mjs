@@ -11110,3 +11110,14 @@ test('Mission 32 courtyard connects Vert 3 and preserves existing access and pro
   await call('move',{direction:'down'});await walkTo({x:1,y:8});await call('move',{direction:'left'});assert.equal(state.world.district,'lumiose-zone2');
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Mission 3 detour blocks the new Vert 3 courtyard route in both directions',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission03-vert3-detour-qa',displayName:'초반 우회'};
+ try{
+  await get();await call('start',{species:158});const id=state.world.activeId,mon=rawMon(id),wallet=structuredClone(state.wallet);
+  const location=(district,x,y,layer)=>storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'down',zaMission03Stage:2,zaMission03DetourRequired:true,zaVert3CourtSludgeCleared:true,zaMission32Layer:layer},state.revision+1);
+  seedWorld(location('lumiose-vert-sector3',14,15,undefined));await get();const before=rawWorld();await call('move',{direction:'down'},409);assert.deepEqual(rawWorld(),before);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);
+  seedWorld(location('lumiose-mission32-courtyard',18,8,'ground'));await get();const reverse=rawWorld();await call('move',{direction:'right'},409);assert.deepEqual(rawWorld(),reverse);assert.deepEqual(rawMon(id),mon);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-mission32-courtyard',interior:null,zaMission32Layer:'ground',x:18,y:8,facing:'right',zaMission03Stage:3},state.revision+1));await get();await call('move',{direction:'right'});assert.equal(state.world.district,'lumiose-vert-sector3');await call('move',{direction:'down'});assert.equal(state.world.district,'lumiose-mission32-courtyard');assert.equal(state.world.zaMission03Stage,3);assert.equal(state.world.zaVert3CourtSludgeCleared,true);
+ }finally{globalThis.__adventureUser=previous;}
+});
