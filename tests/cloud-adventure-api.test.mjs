@@ -10854,3 +10854,13 @@ test('Old Building shelf exploration preserves saves and grants rare candy once'
   seedWorld(storeAdventurePosition({...rawWorld(),zaOldBuildingRareCandy:{version:2},x:2,y:1},state.revision+1));await get();assert.equal(state.world.map[1][2],'.');await call('oldBuildingRareCandy',{},409);assert.deepEqual(rawWorld().zaOldBuildingRareCandy,{version:2});
  }finally{globalThis.__adventureUser=old;}
 });
+
+test('Mission 26 SBC confrontation and optional recovery work outside Hotel Z',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission26-outside-qa',displayName:'호텔 앞 SBC'};
+ try{await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],strong={...makeMon(150,100),boxId:id,moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);
+  const initial={...rawWorld(),area:3,district:'lumiose',interior:'hotel',x:11,y:14,facing:'down',zaRoyaleRank:'C',zaMission26Stage:3,zaMission26SBCStage:0,zaMission27Complete:true,zaMission28Complete:true,zaMission29Complete:true,zaMission26Complete:false};seedWorld(storeAdventurePosition(initial,state.revision+1));await get();await call('move',{direction:'down'});await get();assert.equal(state.world.interior,null);assert.deepEqual([state.world.x,state.world.y],[11,6]);assert.equal(state.world.interaction.action,'mission26SBC');assert.equal(state.world.map[7][11],'v');
+  await call('mission26SBC');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[303,707]);await battle();await get();assert.equal(state.world.zaMission26SBCStage,1);assert.equal(state.world.zaMission26HealPending,1);assert.ok(state.world.interaction.actions.some(a=>a.action==='mission26SBCHeal'));
+  seedMon(id,{...rawMon(id),hp:1,status:'독',pp:{psystrike:1}});await get();await call('mission26SBCHeal');await get();assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});assert.equal(state.world.zaMission26HealPending,undefined);await call('mission26SBCHeal',{},409);await call('mission26SBC');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[148,372]);await call('forfeit');await get();assert.equal(state.world.zaMission26SBCStage,1);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',interior:null,x:11,y:7,zaMission26SBCStage:7},state.revision+1));await get();assert.notEqual(state.world.map[7][11],'v');await call('mission26SBC',{},409);assert.equal(rawWorld().zaMission26SBCStage,7);
+ }finally{globalThis.__adventureUser=oldUser;}
+});

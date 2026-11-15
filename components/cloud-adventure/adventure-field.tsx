@@ -1913,6 +1913,8 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     if(calma)trainer(calma.x,calma.y,'#bd8aaf',s.facing,walking);
     if(sylveon){const img=fieldImages[700],px=sylveon.x*tile,py=sylveon.y*tile;if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-4,py-8,tile+8,tile+8);else{ctx.fillStyle='#f7d9e5';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,7,0,Math.PI*2);ctx.fill();}}
    }else side67Trail=null;
+   // Hotel Z's outdoor SBC confrontation; the compressed placement is draft.
+   if(w.district==='lumiose'&&!w.interior&&w.map?.[7]?.[11]==='v'&&!(w.x===11&&w.y===7))trainer(11,7,'#79658c','down');
    // The rooftop discussion includes AZ and the team. Companion placement and
    // clothing are visual approximations and do not change movement or saves.
    if(w.district==='lumiose'&&w.interior==='hotelRoof'&&w.zaMission35Stage===6&&w.zaMission35RoofRequired){for(const [x,color] of [[9,'#597f9d'],[13,'#ad8175']] as const)if(!(w.x===x&&w.y===7))trainer(x,7,color,'down');}
