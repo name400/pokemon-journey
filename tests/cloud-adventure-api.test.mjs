@@ -10835,3 +10835,12 @@ test('Zone 15 garden visible species preserve shiny state and independent catche
   globalThis.__adventureTime={period:'day',hour:12};seedWorld(storeAdventurePosition({...rawWorld(),x:7,y:13,facing:'up',zaZone15Period:'day',zaZone15Spent:{...rawWorld().zaZone15Spent}},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone15Wild-beedrill-garden');await call('zone15Wild-beedrill-garden');assert.equal(rawWorld().encounter.speciesId,15);await call('flee');
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zone 10 occupied land spawn waits for player and preserves a saved shiny',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,oldNow=Date.now;let now=12*50000;globalThis.__adventureUser={userId:'zone10-occupied-qa',displayName:'구역 10 발밑 개체'};
+ try{Date.now=()=>now;globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:1});const team=[...state.world.teamIds],key='zone10:slowpoke:79';
+  const base={...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:5,y:5,facing:'down',zaRoyaleRank:'F',zaZone10Upper:false,zaZone10LowerBank:false,zaWildClockV2:true,zaWildSpawnCycles:{10:{period:'day',interval:0}},zaWildShinyRolls:{[key]:true},combat:null,encounter:null};
+  seedWorld(storeAdventurePosition(base,state.revision+1));await get();assert.notEqual(state.world.map[5][5],'a');assert.equal(rawWorld().zaWildShinyRolls[key],true);await call('move',{direction:'down'});await get();assert.equal(state.world.map[5][5],'a');assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.deepEqual(state.world.teamIds,team);
+  seedWorld(storeAdventurePosition({...base,zaZone10Spent:{slowpoke:true},zaWildShinyRolls:{[key]:true}},state.revision+1));now+=1200000;await get();assert.equal(rawWorld().zaZone10Spent.slowpoke,true);assert.deepEqual([state.world.x,state.world.y],[5,5]);await call('move',{direction:'down'});await get();assert.equal(rawWorld().zaZone10Spent?.slowpoke,undefined);assert.equal(state.world.map[5][5],'a');assert.deepEqual(state.world.teamIds,team);
+ }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
