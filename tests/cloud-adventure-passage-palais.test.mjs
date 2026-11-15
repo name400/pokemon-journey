@@ -22,3 +22,9 @@ test('Palais Tracie uses a previously blocked tile and retains the legacy endpoi
  assert.equal(tracieAt({...s,interior:'hotel'},{x:6,y:8,tile:'v'}),false);
  assert.equal(tracieAt({...s,district:'lumiose-zone3'},{x:11,y:4,tile:'v'}),true);
 });
+
+test('Palais hair salon is accessible without replacing existing arcade routes',()=>{
+ const s={area:3,district:'lumiose-passage-palais',interior:null,x:7,y:5,facing:'left'},map=fieldMap(s);
+ assert.equal(map[5][6],'s');assert.equal(fieldDialogue(s).hairSalon,true);assert.ok(fieldPath(map,{...s,x:11,y:15},{x:7,y:5}).length);
+ assert.equal(fieldDialogue({...s,x:7,y:4}).name,'Pinceau');assert.equal(fieldDialogue({...s,x:7,y:8,zaEmmaMet:true}).action,'startPikachuTrade');
+});

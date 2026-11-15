@@ -5962,6 +5962,16 @@ test('center fast travel clears destination layer flags and preserves an old sav
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
+test('Palais salon uses shared appearance, pricing and saved progress',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'palais-salon-qa',displayName:'팔레 미용실'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],mon=structuredClone(rawMon(id));sql.prepare('UPDATE wallets SET coins=6000 WHERE user_id=?').run(globalThis.__adventureUser.userId);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-passage-palais',interior:null,x:7,y:5,facing:'left',zaSalonAppearance:{style:'long',color:'gold'},zaTradeQuest:1},state.revision+1));await get();assert.equal(state.world.interaction.hairSalon,true);
+  await call('salonChange',{style:'bob',color:'red'},409);assert.equal(state.wallet.coins,6000);const rev=state.revision;await call('salonChange',{style:'bob',color:'black'});await call('salonChange',{style:'bob',color:'black',revision:rev},409);await get();assert.equal(state.wallet.coins,3000);assert.deepEqual(state.world.zaSalonAppearance,{style:'bob',color:'black'});assert.equal(state.world.zaTradeQuest,1);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-galerie-lune',x:11,y:4,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.hairSalon,true);assert.deepEqual(state.world.zaSalonAppearance,{style:'bob',color:'black'});
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('salon changes persist atomically, reject duplicate requests and preserve the party',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'salon-atomic-qa',displayName:'미용실 검증'};
  try{
