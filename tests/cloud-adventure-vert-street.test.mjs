@@ -3,6 +3,18 @@ import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {vertStreetRouteMap} from '../lib/cloud-adventure/adventure-vert-street-route.mjs';
 import {southBoulevardMap} from '../lib/cloud-adventure/adventure-south-boulevard.mjs';
+test('Vert Street meets Centrico without bypassing the Mission 3 detour',()=>{
+ const street={area:3,district:'lumiose-vert-street-route',interior:null,x:8,y:1,teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(street),{x:10,y:15},street).length);
+ assert.equal(stepField({...street,zaMission03Stage:2,zaMission03DetourRequired:true},'up').blocked,true);
+ const plaza=stepField(street,'up');assert.deepEqual([plaza.district,plaza.x,plaza.y],['lumiose-centrico-route',13,15]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...street,...plaza},163),163);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money],['lumiose-centrico-route',13,15,['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:19,y:8}).length);
+ assert.equal(stepField({...saved,zaMission03Stage:2,zaMission03DetourRequired:true},'down').blocked,true);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-street-route',8,1]);
+ assert.equal(stepField({...street,x:3},'up').district,'lumiose-vert-sector1');
+});
 test('Vert Street meets Vert Plaza while retaining the Zone 2 gate and Mission 3 detour',()=>{
  const street={area:3,district:'lumiose-vert-street-route',interior:null,x:1,y:10,teamIds:['kept'],money:731};
  assert.ok(fieldPath(fieldMap(street),{x:10,y:15},street).length);
