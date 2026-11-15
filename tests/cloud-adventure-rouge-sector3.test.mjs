@@ -34,3 +34,18 @@ test('ball boutique offers supported original prices without altering the city p
  assert.equal(d.ballBoutique,true);assert.deepEqual(Object.fromEntries(d.actions.map(a=>[a.ballId,a.price])),{quickball:1000,timerball:1000,netball:1000,duskball:1000,healball:300,luxuryball:3000,nestball:1000,diveball:1000,repeatball:1000,premierball:200});
  assert.ok(!d.actions.some(a=>['pokeball','greatball','masterball'].includes(a.ballId)));assert.equal(fieldMap(s)[14][16],'m');assert.deepEqual(restoreAdventurePosition(storeAdventurePosition(s,77),77).teamIds,['kept']);
 });
+
+test('Rouge 3 and 7 connect directly while keeping shops, old routes and Zone 13 rank gate',()=>{
+ const start={area:3,district:'lumiose-rouge-sector3',interior:null,x:11,y:8,teamIds:['kept'],zaRoyaleRank:'Z',zaEmmaMet:true};
+ assert.ok(fieldPath(fieldMap(start),start,{x:21,y:4}).length);
+ const east=stepField({...start,x:21,y:4},'right');assert.deepEqual([east.district,east.x,east.y],['lumiose-rouge-sector7',1,4]);
+ const seven={...start,...east};assert.ok(fieldPath(fieldMap(seven),seven,{x:11,y:1}).length);
+ const saved=restoreAdventurePosition(storeAdventurePosition(seven,98),98);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaEmmaMet],['lumiose-rouge-sector7',1,4,['kept'],true]);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-rouge-sector3',21,4]);
+ assert.equal(stepField({...seven,x:11,y:1},'up').blocked,true);
+ assert.equal(stepField({...seven,x:1,y:6},'left').district,'lumiose-rouge-sector4');
+ assert.equal(stepField({...start,x:21,y:8},'right').district,'lumiose-zone3');
+ assert.ok(fieldDialogue({...start,x:16,y:14,facing:'down'}).name.startsWith('볼 부티크'));
+ const legacy=restoreAdventurePosition(storeAdventurePosition({...start,x:21,y:8},99),99);assert.deepEqual([legacy.district,legacy.x,legacy.y],['lumiose-rouge-sector3',21,8]);
+});
