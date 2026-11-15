@@ -11713,3 +11713,14 @@ test('Jaune 9 roof connects to Jaune 11 west building and preserves saves',async
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune11-west-roof',x:9,y:6,facing:'up',zaJaune11WestRoofItems:{version:2}},state.revision+1));await get();await call('jaune11WestRoofItem-west-roof-fullheal',{},409);assert.deepEqual(rawWorld().zaJaune11WestRoofItems,{version:2});
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Jaune 12 and North Boulevard connect without changing Zone 6 or saved progress',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'jaune12-north-link-qa',displayName:'존느 12 동쪽 길'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],lead=team[0],mon=structuredClone(rawMon(lead)),wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-jaune-sector12',interior:null,x:11,y:8,facing:'right',zaMission20Stage:7,zaZone6Spent:{'future-slot':true},zaColorfulScrewsFound:['future-screw']},state.revision+1));await get();await walkTo({x:21,y:6});const rev=state.revision;await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-north-boulevard',1,12]);await call('move',{direction:'right',revision:rev},409);
+  assert.deepEqual(rawWorld().zaZone6Spent,{'future-slot':true});assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw']);assert.equal(rawWorld().zaMission20Stage,7);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawMon(lead).personality,mon.personality);assert.deepEqual(rawMon(lead).ivs,mon.ivs);
+  await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-sector12',21,6]);assert.deepEqual(rawWorld().zaZone6Spent,{'future-slot':true});
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-jaune-sector12',interior:null,x:21,y:6,facing:'right'},state.revision+1));await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-jaune-sector12',21,6]);
+ }finally{globalThis.__adventureUser=previous;}
+});
