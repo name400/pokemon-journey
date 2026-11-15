@@ -1,6 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldMap,fieldPath,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+
+test('Magenta Sector 3 links Estival Avenue without changing the lift or older gates',()=>{
+ const start={area:3,district:'lumiose-magenta-sector3',interior:null,x:19,y:9,facing:'up',zaMission15Stage:2,zaRoyaleRank:'Z',teamIds:['kept']};
+ assert.equal(fieldDialogue(start).action,'magenta3Holovator');
+ assert.ok(fieldPath(fieldMap(start),start,{x:11,y:15}).length);
+ const south=stepField({...start,x:11,y:15},'down');assert.deepEqual([south.district,south.x,south.y],['lumiose-estival-approach',15,1]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...start,...south},140),140);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission15Stage],['lumiose-estival-approach',15,1,['kept'],2]);
+ const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector3',11,15]);
+ assert.equal(stepField({...start,x:21,y:10},'right').district,'lumiose-magenta-sector1');
+ assert.equal(stepField({...start,x:1,y:8},'left').district,'lumiose-magenta-sector6');
+ assert.equal(stepField({...start,x:4,y:1,zaMission15Stage:undefined},'up').blocked,true);
+ const old=restoreAdventurePosition(storeAdventurePosition(start,141),141);assert.deepEqual([old.district,old.x,old.y,old.teamIds],['lumiose-magenta-sector3',19,9,['kept']]);
+});
 test('Magenta Sector 3 draft rooftop links lift, scaffold and Mission 17 while preserving saves',()=>{
  const street={area:3,district:'lumiose-magenta-sector3',interior:null,x:19,y:9,facing:'up',zaMission15Stage:2,teamIds:['kept']};
  assert.equal(fieldDialogue(street).action,'magenta3Holovator');
