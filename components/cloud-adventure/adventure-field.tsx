@@ -680,6 +680,12 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
     if(['lumiose-bleu-sector3','lumiose-bleu-sector5','lumiose-bleu-sector7','lumiose-south-boulevard','lumiose-bleu-street','lumiose-autumnal-approach','lumiose-jaune-sector11','lumiose-hibernal-approach','lumiose-jaune-street','lumiose-jaune-sector2','lumiose-jaune-sector6','lumiose-jaune-sector7','lumiose-jaune-sector9','lumiose-jaune-sector10','lumiose-jaune-sector12'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#a79c8f':c==='%'?'#718c9b':c===','?'#b8b8ac':(x+y)%2?'#d6d9cd':'#e2e5d8';ctx.fillRect(px,py,tile,tile);
+     // Jaune 11's northern alley uses opened tiles between existing building blocks.
+     if(w.district==='lumiose-jaune-sector11'){
+      const northernBuilding=c==='#'&&y>=3&&y<=6&&((x>=3&&x<=4)||(x>=6&&x<=7));
+      if(northernBuilding){ctx.fillStyle='#b8aa98';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e6d8c1';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,3);if(w.map[y+1]?.[x]!=='#')ctx.fillRect(px,py+tile-3,tile,3);if(w.map[y]?.[x-1]!== '#')ctx.fillRect(px,py,3,tile);if(w.map[y]?.[x+1]!== '#')ctx.fillRect(px+tile-3,py,3,tile);}
+      if(c===','&&x===5&&y>=3&&y<=6){ctx.fillStyle='#d6cab8';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#afa18d';ctx.fillRect(px,py,2,tile);ctx.fillRect(px+tile-2,py,2,tile);}
+     }
      // Jaune 12's two existing gates enter Zone 6; positions are provisional.
      if(w.district==='lumiose-jaune-sector12'){
       const building=c==='#'&&((x>=3&&x<=7&&y>=2&&y<=5)||(x>=15&&x<=19&&y>=11&&y<=14));
