@@ -11139,3 +11139,16 @@ test('Mission 40 research preserves unknown saved entries and guards unsupported
   assert.deepEqual(rawWorld(),inBattle);assert.deepEqual(rawMon(id),mon);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Mission 22 stairs allow walking into the tunnel and retain each return',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission22-walking-stairs-qa',displayName:'물가 계단 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet);
+  for(const [district,x,y,entry] of [['lumiose-bleu-cafe2',17,6,'cafe2'],['lumiose-bleu-sector5',10,5,'sector5']]){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'up',zaMission20Stage:5,zaMission22IceBridge:true,zaMission22Entry:'legacy',zaUnrelatedProgress:{keep:true}},state.revision+1));await get();
+   const revision=state.revision;await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-mission22-tunnel');assert.equal(rawWorld().zaMission22Entry,entry);assert.equal(rawWorld().zaMission22IceBridge,true);
+   await call('move',{direction:'up',revision},409);await get();assert.equal(state.world.district,'lumiose-mission22-tunnel');await call('move',{direction:'down'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],[district,x,y]);assert.deepEqual(rawWorld().zaUnrelatedProgress,{keep:true});
+  }
+  assert.deepEqual(rawMon(id),{...mon,walkSteps:(mon.walkSteps||0)+4});assert.deepEqual(state.wallet,wallet);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
