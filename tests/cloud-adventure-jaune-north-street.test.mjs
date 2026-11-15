@@ -2,6 +2,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Jaune Sector 2 joins the outer plaza street without opening Wild Zone 8',()=>{
+ const sector={area:3,district:'lumiose-jaune-sector2',interior:null,x:15,y:1,zaRoyaleRank:'Z',teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(sector),{x:11,y:8},sector).length);
+ const street=stepField(sector,'up');assert.deepEqual([street.district,street.x,street.y],['lumiose-jaune-street-north',1,12]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...sector,...street},171),171);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money],['lumiose-jaune-street-north',1,12,['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:15}).length);
+ assert.equal(stepField({...saved,x:11,y:15},'down').blocked,true);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-jaune-sector2',15,1]);
+ assert.equal(stepField({...sector,x:11,y:15},'down').district,'lumiose-saison-canalside');
+});
+
 test('Jaune Sector 3 joins the outer plaza street without opening Wild Zone 8',()=>{
  const sector={area:3,district:'lumiose-mission12-jaune3',interior:null,x:21,y:9,zaRoyaleRank:'Z',teamIds:['kept'],money:731};
  assert.ok(fieldPath(fieldMap(sector),{x:11,y:15},sector).length);
