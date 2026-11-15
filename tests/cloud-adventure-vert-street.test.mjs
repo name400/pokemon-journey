@@ -1,8 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,stepField,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 import {vertStreetRouteMap} from '../lib/cloud-adventure/adventure-vert-street-route.mjs';
 import {southBoulevardMap} from '../lib/cloud-adventure/adventure-south-boulevard.mjs';
+test('Vert Street and Sector 7 connect while preserving the mission 3 detour',()=>{
+ const street={area:3,district:'lumiose-vert-street-route',interior:null,x:21,y:14,teamIds:['kept']};
+ assert.ok(fieldPath(vertStreetRouteMap(),{x:10,y:15},street).length);
+ assert.equal(stepField({...street,zaMission03Stage:2,zaMission03DetourRequired:true},'right').blocked,true);
+ const sector=stepField(street,'right');assert.deepEqual([sector.district,sector.x,sector.y],['lumiose-vert-sector7',1,12]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...street,...sector},49),49);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-sector7',1,12,['kept']]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:15}).length);
+ assert.equal(stepField({...saved,zaMission03Stage:2,zaMission03DetourRequired:true},'left').blocked,true);
+ const back=stepField(saved,'left');assert.deepEqual([back.district,back.x,back.y],['lumiose-vert-street-route',21,14]);
+});
 test('hotel to Vert Street and Zone 17 keeps gate and save',()=>{
  const hotel={area:3,district:'lumiose',interior:null,x:19,y:1,facing:'up',zaRoyaleRank:'D'};
  const street=stepField(hotel,'up');assert.equal(street.district,'lumiose-vert-street-route');assert.ok(fieldPath(vertStreetRouteMap(),street,{x:18,y:1}).length);
