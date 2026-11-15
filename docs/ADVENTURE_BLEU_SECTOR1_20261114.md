@@ -17,3 +17,9 @@ An isolated SQLite API test captures the Zone 5 alpha, crosses the seam in both 
 ## Encounter records on the original exits
 
 The original Zone 5 ground and drain exits used to delete the encounter ledger unconditionally, even when it had an unknown version or malformed contents. They now clear only the recognized boolean ledger, as the Sector 1 exit already does; unknown records remain intact. This is save-format protection, not a claim about the original game's encounter timings. A representative isolated API check covers both exits, known and unknown records, reload, stale requests, party and wallet preservation. Production D1 and the Sites merge remain unverified.
+
+## Street presentation
+
+The [city plan](https://github.com/Insektaure/Shiny-Stash-Live-Map/blob/main/romfs/lumiose.png) shows the city's buildings, paved streets and landscaped spaces as distinct shapes. The existing Sector 1 screen now gives its existing building footprint a roof and facade, outlines pavement and draws a low visual edge around its green area. The existing officer remains the local landmark. These details are a 2D interpretation, not verified building shapes, positions, barriers or heights in the original. The map tiles, collisions, entrances, save positions and encounter rules are unchanged.
+
+The existing sector transition unit test and TypeScript check passed. PC and mobile Chromium screenshots and the officer interaction were checked with a mocked API; original hardware, production D1 and the Sites merge were not tested.
