@@ -24,9 +24,9 @@ test('Vert Street and South Boulevard intersection works both ways after restore
 test('Vert Pokémon Center uses the existing healing action near the road junction',()=>{
  const s={area:3,district:'lumiose-vert-street-route',interior:null,x:10,y:13,facing:'up',teamIds:['kept']};
  assert.ok(fieldPath(vertStreetRouteMap(),{x:10,y:15},{x:10,y:13}).length);
- assert.equal(fieldDialogue(s).action,'heal');
+ assert.ok(fieldDialogue(s).actions.some(a=>a.action==='heal'));
  const saved=restoreAdventurePosition(storeAdventurePosition(s,48),48);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-vert-street-route',10,13,['kept']]);
- assert.equal(fieldDialogue(saved).action,'heal');
+ assert.ok(fieldDialogue(saved).actions.some(a=>a.action==='heal'));
 });
 
 test('station footprint faces the center without blocking the existing intersection',()=>{
