@@ -5325,9 +5325,17 @@ test('Lysandre wings preserve pre-rolled shinies across encounters, catches and 
  try{
   await get();await call('start',{species:152});const playerId=state.world.activeId,team=[...state.world.teamIds];
   for(const [wing,id,species,x,y,facing] of [['a','houndour',228,4,4,'left'],['b','noibat',714,4,6,'left'],['e','doublade',680,18,3,'down']]){
-   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:wing,zaLysandreCards:['a','b','e'],zaLysandrePowers:['a','b','e'],adventureBalls:{masterball:6},x,y,facing},state.revision+1));await get();const key=`lab:${id}:${species}`;assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(state.world.interaction.action,`lysandreWild-${id}`);await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);
-   await call(`lysandreWild-${id}`);assert.equal(state.battle.teams[1][0].speciesId,species);assert.equal(state.battle.teams[1][0].shiny,true);await call('flee');await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);await call(`lysandreWild-${id}`);await call('ball',{ball:'masterball'});await get();assert.equal(rawWorld().zaLysandreWildSpent[id],true);assert.equal(rawWorld().zaWildShinyRolls?.[key],undefined);assert.ok(state.box.some(p=>p.speciesId===species&&p.shiny));assert.equal(state.world.teamIds[0],team[0]);assert.equal(rawMon(playerId).id,152);
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:wing,zaLysandreCards:['a','b','e'],zaLysandrePowers:['a','b','e'],adventureBalls:{masterball:6},x,y,facing},state.revision+1));await get();const key=`lab:${id}:${species}`;assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaWildVisibleAlphaLevels[key],[228,714].includes(species)?57:59);assert.equal(state.world.interaction.action,`lysandreWild-${id}`);await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);
+   await call(`lysandreWild-${id}`);assert.equal(state.battle.teams[1][0].speciesId,species);assert.equal(state.battle.teams[1][0].shiny,true);assert.equal(state.battle.teams[1][0].adventureAlpha,true);await call('flee');await get();assert.equal(rawWorld().zaWildShinyRolls[key],true);await call(`lysandreWild-${id}`);await call('ball',{ball:'masterball'});await get();assert.equal(rawWorld().zaLysandreWildSpent[id],true);assert.equal(rawWorld().zaWildShinyRolls?.[key],undefined);assert.equal(rawWorld().zaWildVisibleAlphaLevels?.[key],undefined);assert.ok(state.box.some(p=>p.speciesId===species&&p.shiny&&p.adventureAlpha));assert.equal(state.world.teamIds[0],team[0]);assert.equal(rawMon(playerId).id,152);while(state.world.adventurePendingMoves?.length)await call('resolveAdventureMove',{slot:null});
   }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
+});
+
+test('Lysandre keeps old visible wild individuals ordinary',async()=>{
+ const previous=globalThis.__adventureUser,random=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'lysandre-old-wild-qa',displayName:'구형 출현 검증'};globalThis.__adventureRandom=()=>0;
+ try{await get();await call('start',{species:152});const key='lab:houndour:228';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:'a',x:4,y:4,facing:'left',zaWildShinyRolls:{[key]:true}},state.revision+1));await get();
+  assert.equal(rawWorld().zaWildShinyRolls[key],true);assert.equal(rawWorld().zaWildVisibleAlphaLevels?.[key],undefined);await call('lysandreWild-houndour');assert.equal(state.battle.teams[1][0].shiny,true);assert.notEqual(state.battle.teams[1][0].adventureAlpha,true);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=random;}
 });
 
