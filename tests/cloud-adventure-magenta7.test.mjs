@@ -28,3 +28,12 @@ test('Magenta 7 courtyard and four street connections preserve saves and zone ga
  assert.equal(stepField({...saved,x:11,y:1},'up').blocked,true);
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector7',7,1]);
  });
+
+test('Courtyard pickup state preserves old saves and clears only collected markers',()=>{
+ const s={area:3,district:'lumiose-magenta-sector7',interior:null,x:15,y:12,teamIds:['kept']};
+ const old=restoreAdventurePosition(storeAdventurePosition(s,179),179);
+ assert.deepEqual([old.x,old.y,old.teamIds],[15,12,['kept']]);
+ assert.equal(fieldMap(old)[12][15],'i');assert.equal(fieldMap(old)[12][18],'j');
+ const collected=restoreAdventurePosition(storeAdventurePosition({...old,zaMagenta7Items:['courtyard-awakening']},180),180);
+ assert.equal(fieldMap(collected)[12][15],';');assert.equal(fieldMap(collected)[12][18],'j');
+});

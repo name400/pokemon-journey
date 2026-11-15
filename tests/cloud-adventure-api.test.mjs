@@ -10653,3 +10653,19 @@ test('Zone 17 Pyroar genders persist in battles, field capture and reload',async
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone17',x:4,y:8,facing:'up',zaZone17Promenade:false,zaZone17Upper:false},state.revision+1));await get();const draws=[0,.65,.5,.999];globalThis.__adventureRandom=()=>draws.shift()??.999;await call('move',{direction:'up'});assert.equal(state.battle.teams[1][0].speciesId,668);assert.equal(state.battle.teams[1][0].gender,'F');await get();assert.equal(rawWorld().encounter.gender,'F');
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Magenta 7 courtyard items protect inventory and persist after collection',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'magenta7-courtyard-qa',displayName:'안뜰 도구'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds];
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-magenta-sector7',interior:null,x:16,y:12,facing:'left',zaRoyaleRank:'Z'},state.revision+1));
+  await get();assert.equal(state.world.interaction.action,'magenta7Item-courtyard-awakening');
+  const key=JSON.stringify([globalThis.__adventureUser.userId,'awakening']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'awakening');
+  await get();await call('magenta7Item-courtyard-awakening',{},409);assert.equal(rawWorld().zaMagenta7Items,undefined);
+  sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;
+  await call('magenta7Item-courtyard-awakening');await get();assert.equal(state.inventory.awakening,1);assert.deepEqual(state.world.teamIds,team);
+  await call('magenta7Item-courtyard-awakening',{revision:rev},409);await call('magenta7Item-courtyard-awakening',{},409);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:17,y:12,facing:'right'},state.revision+1));await get();const before=state.wallet.hyper_potions;
+  assert.equal(state.world.interaction.action,'magenta7Item-courtyard-hyper');await call('magenta7Item-courtyard-hyper');await get();assert.equal(state.wallet.hyper_potions,before+1);assert.deepEqual(rawWorld().zaMagenta7Items,['courtyard-awakening','courtyard-hyper']);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
