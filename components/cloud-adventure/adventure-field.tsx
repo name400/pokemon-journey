@@ -318,7 +318,21 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='X'){ctx.fillStyle=x===22&&(y===12||y===14)?'#986e72':'#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);if(x===22&&(y===12||y===14)){ctx.fillStyle='#f2e5d5';ctx.fillRect(px+8,py+8,tile-16,3);ctx.fillRect(px+8,py+8,3,tile-16);ctx.fillRect(px+tile-11,py+8,3,tile-16);}}return;
     }
     if(['lumiose-estival-approach','lumiose-bleu6-approach'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#a69b90':c===','?'#c7bcb0':(x+y)%2?'#e0d8ca':'#e9e1d5';ctx.fillRect(px,py,tile,tile);if(c==='h'){ctx.fillStyle='#936e40';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('비계',px+tile/2,py+20);}if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
-    if(w.district==='lumiose-espace-vide'&&!w.interior){ctx.fillStyle=c==='#'?'#a2988d':c==='~'?'#79adc1':c===','?'#c2b7ab':(x+y)%2?'#ddd5c9':'#e7dfd2';ctx.fillRect(px,py,tile,tile);if(c===':'){ctx.fillStyle='#8e8d84';for(let j=0;j<3;j++)ctx.fillRect(px+3,py+5+j*8,tile-6,2);}if(c==='l'){ctx.fillStyle='#72523a';ctx.fillRect(px+6,py+8,tile-12,tile-16);}if(c==='W'||c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
+    if(w.district==='lumiose-espace-vide'&&!w.interior){
+     // Surface alley and lower waterside are separate existing layers; shapes are drafts.
+     const lower=w.zaEspaceLower===true,outer=x===0||x===22||y===0||y===16;
+     ctx.fillStyle=c==='~'?'#6ca5b3':c==='#'?(lower?'#747b77':outer?'#978e84':'#d2bba9'):c===','?(lower?'#b9b3a5':'#c6b9a7'):(x+y)%2?'#e0dacd':'#ece5d8';ctx.fillRect(px,py,tile,tile);
+     if(!lower&&c==='#'&&!outer){
+      ctx.fillStyle=y<8?'#dec2ae':'#d0bbaa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#9a8070';
+      if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y]?.[x-1]!=='#')ctx.fillRect(px,py,4,tile);if(w.map[y]?.[x+1]!=='#')ctx.fillRect(px+tile-4,py,4,tile);
+      if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#8a7669';ctx.fillRect(px,py+tile-7,tile,7);ctx.fillStyle='#79949a';ctx.fillRect(px+8,py+tile-6,tile-16,3);}else if((x+y)%2===0){ctx.fillStyle='#c5a997';ctx.fillRect(px+9,py+9,tile-18,tile-18);}
+     }
+     if(lower&&c===','){ctx.fillStyle='#a69f92';ctx.fillRect(px,py+tile-2,tile,2);ctx.fillRect(px+(y%2?tile/2:2),py+3,2,tile-5);if(w.map[y+1]?.[x]==='~'){ctx.fillStyle='#e1d5bc';ctx.fillRect(px,py+tile-4,tile,4);}}
+     if(!lower&&c===','){ctx.fillStyle='#ede2d2';if(w.map[y-1]?.[x]!==',')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]!==',')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]!==',')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]!==',')ctx.fillRect(px+tile-2,py,2,tile);}
+     if(c==='~'){ctx.fillStyle='#add2d3';ctx.fillRect(px+5,py+10,tile-10,2);ctx.fillRect(px+11,py+22,tile-17,2);}
+     if(c===':'||c==='l'){ctx.fillStyle=c==='l'?'#786c5e':'#a39582';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#e4d5bb';for(let j=0;j<3;j++)ctx.fillRect(px+5,py+6+j*7,tile-10,3);}
+     if(c==='W'||c==='X'||c==='E'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-magenta-canal-route'&&!w.interior&&c==='u'&&x===8&&y===7){ctx.fillStyle='#8a9c85';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('퀴즈',px+tile/2,py+20);return;}
     if(w.district==='lumiose-magenta-canal-route'&&!w.interior){ctx.fillStyle=c==='#'?'#9c908a':c==='~'?'#7aafb8':c===','?'#c6bbb0':(x+y)%2?'#d9d4ca':'#e5dfd5';ctx.fillRect(px,py,tile,tile);if(c==='~')canalWater(px,py,x,y);if(c==='%'){ctx.fillStyle='#b0a08e';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#718b89';ctx.fillRect(px+7,py+6,tile-14,tile-12);}if(c==='z'){ctx.fillStyle='#735982';ctx.fillRect(px+4,py+4,tile-8,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('수도',px+tile/2,py+20);}if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;}
     if(w.district==='lumiose-magenta-sewer-bank'&&!w.interior){if(c==='~'){canalWater(px,py,x,y);return;}ctx.fillStyle=c==='#'?'#71837e':c===','?'#b0b3a4':(x+y)%2?'#d1cec0':'#dcd8ca';ctx.fillRect(px,py,tile,tile);if(c==='u'||c==='z'){ctx.fillStyle=c==='u'?'#8d786a':'#536b6b';ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(c==='u'?'경사로':'하수도',px+tile/2,py+20);}return;}
