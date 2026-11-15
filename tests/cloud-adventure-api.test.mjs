@@ -11856,3 +11856,17 @@ test('Station Front to Racine preserves detour and saved progress',async()=>{
   const after=rawMon(team[0]);assert.equal(after.walkSteps,lead.walkSteps+2);delete after.walkSteps;delete lead.walkSteps;assert.deepEqual(after,lead);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zone 10 lower canal connects South Boulevard to Espace without losing saves',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone10-lower-throughway-qa',displayName:'구역 10 물길'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),lead=structuredClone(rawMon(team[0]));const reserveId='zone10-unassigned-reserve',reserve=makeMon(25,20);sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(reserveId,globalThis.__adventureUser.userId,25,JSON.stringify(reserve),'qa',1);
+  const entry={...rawWorld(),area:3,district:'lumiose-south-boulevard',interior:null,x:13,y:1,facing:'up',zaRoyaleRank:'Z',zaZone10Upper:false,zaZone10LowerBank:false,zaZone10Spent:{'sharpedo-alpha':true},zaMission20Stage:7,zaColorfulScrewsFound:['future-screw']};
+  seedWorld(storeAdventurePosition(entry,state.revision+1));await get();await call('move',{direction:'up'},409);assert.equal(state.world.district,'lumiose-south-boulevard');
+  seedWorld(storeAdventurePosition({...entry,zaRoyaleRank:'F'},state.revision+1));await get();const revision=state.revision;await call('move',{direction:'up'});await call('move',{direction:'up',revision},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaZone10LowerBank],['lumiose-zone10',1,6,true]);
+  await walkTo({x:3,y:11});assert.equal(state.world.map[11][3],'w');await walkTo({x:19,y:11});await get();assert.deepEqual([state.world.x,state.world.y,state.world.zaZone10LowerBank],[19,11,true]);
+  await walkTo({x:21,y:6});await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaEspaceLower],['lumiose-espace-vide',1,8,true]);
+  assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(reserveId),reserve);assert.equal(rawWorld().zaMission20Stage,7);assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw']);const after=rawMon(team[0]);assert.ok(after.walkSteps>lead.walkSteps);delete after.walkSteps;delete lead.walkSteps;assert.deepEqual(after,lead);
+  seedWorld(storeAdventurePosition({...entry,zaRoyaleRank:'F',zaZone10LowerBank:{version:2}},state.revision+1));await get();await call('move',{direction:'up'},409);assert.deepEqual(rawWorld().zaZone10LowerBank,{version:2});
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});

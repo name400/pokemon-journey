@@ -150,3 +150,19 @@ test('rooftop sludge respawns only after ten game minutes outside and preserves 
  const old={district:'lumiose-vert2',zaZone10SludgeCleared:true};assert.equal(refreshZone10Sludge(old,999999),false);assert.equal(old.zaZone10SludgeCleared,true);
  const paused={district:'lumiose-vert2',zaZone10SludgeCleared:true,zaZone10SludgeClearedAt:100000,zaClockPausedMs:15000};assert.equal(refreshZone10Sludge(paused,120000),false);paused.zaClockOffsetHours=1;assert.equal(refreshZone10Sludge(paused,120000),true);
 });
+
+test('Zone 10 lower canal connects both districts through shallow water',()=>{
+ const s={area:3,district:'lumiose-south-boulevard',interior:null,x:13,y:1,facing:'up',zaRoyaleRank:'F',teamIds:['kept'],zaColorfulScrewsFound:['future']};
+ assert.equal(stepField({...s,zaRoyaleRank:'Z'},'up').blocked,true);
+ assert.equal(stepField({...s,zaZone10LowerBank:{version:2}},'up').blocked,true);
+ const entry=stepField(s,'up');assert.deepEqual([entry.district,entry.x,entry.y,entry.zaZone10Upper,entry.zaZone10LowerBank],['lumiose-zone10',1,6,false,true]);
+ const zone={...s,...entry},map=zone10Map(zone);for(const [x,y] of [[3,8],[3,11],[11,11],[19,11],[19,8]])assert.equal(map[y][x],'w');
+ assert.equal(map[8][11],'c');assert.equal(map[8][17],'e');assert.equal(map[8][20],'v');assert.equal(map[12][11],'~');
+ assert.ok(fieldPath(map,zone,{x:3,y:11}).length);assert.ok(fieldPath(map,{x:3,y:11},{x:19,y:11}).length);assert.ok(fieldPath(map,zone,{x:21,y:6}).length);
+ const save=restoreAdventurePosition(storeAdventurePosition({...zone,x:11,y:11},221),221);assert.deepEqual([save.district,save.x,save.y,save.zaZone10LowerBank,save.teamIds,save.zaColorfulScrewsFound],['lumiose-zone10',11,11,true,['kept'],['future']]);
+ const west=stepField({...zone,x:1,y:6},'left');assert.deepEqual([west.district,west.x,west.y,west.zaZone10LowerBank],['lumiose-south-boulevard',13,1,false]);
+ assert.equal(stepField({...zone,x:1,y:6,zaVert7RoofUpper:{version:2}},'left').blocked,true);
+ assert.equal(stepField({...zone,x:1,y:6,zaZone10Upper:{version:2}},'left').blocked,true);
+ assert.equal(stepField({...zone,x:21,y:6},'right').district,'lumiose-espace-vide');
+ const old=stepField({...zone,x:1,y:6,zaZone10LowerBank:false},'left');assert.deepEqual([old.district,old.x,old.y],['lumiose-south-boulevard',11,1]);
+});
