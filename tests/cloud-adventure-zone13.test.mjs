@@ -2,6 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone13Map,zone13Encounter,zone13Visible,zone13Item,ZONE13_STUMPS,ZONE13_GROVE_TREES} from '../lib/cloud-adventure/adventure-zone13.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,rotoGlideLanding,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Zone 13 woodland paths connect the existing gates without changing grass or saved state',()=>{
+ const s={area:3,district:'lumiose-zone13',interior:null,x:1,y:1,zaRoyaleRank:'E',teamIds:['kept'],money:731,zaZone13Items:['west-ultra']},map=zone13Map(s);
+ for(const [x,y] of [[1,1],[21,1],[1,15],[21,15]])assert.equal(map[y][x],',');
+ for(const p of [{x:1,y:8},{x:21,y:8},{x:11,y:15}])assert.ok(fieldPath(map,s,p).length);
+ assert.equal(map[3][3],'g');assert.equal(map[10][3],'g');assert.equal(map[8][11],',');
+ const restored=restoreAdventurePosition(storeAdventurePosition(s,123),123);
+ assert.deepEqual([restored.x,restored.y,restored.teamIds,restored.money,restored.zaZone13Items],[1,1,['kept'],731,['west-ultra']]);
+});
 test('Rouge Sector 7 building alley keeps the court, ladder and saved positions',()=>{
  const city={area:3,district:'lumiose-rouge-sector7',interior:null,x:5,y:7,zaRoyaleRank:'F',zaSide64Stage:1,teamIds:['kept']};
  const map=fieldMap(city);for(let y=3;y<=6;y++)assert.equal(map[y][5],',');
