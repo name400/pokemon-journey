@@ -1205,6 +1205,13 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(c==='u'){ctx.fillStyle='#8b5855';ctx.fillRect(px+2,py+2,tile-4,tile-4);ctx.fillStyle='#f1ded0';ctx.fillRect(px+3,py+3,tile-6,5);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('르 와우',px+tile/2,py+21);}
      if(c==='X'){ctx.fillStyle='#688b80';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
     }
+    if(w.district==='lumiose-jaune-sector4'&&!w.interior){
+     // Draft buildings and plaza sit beside the confirmed street connection.
+     ctx.fillStyle=c==='#'?'#958c82':c===','?'#c6b6a5':(x+y)%2?'#e1d6c6':'#ece2d2';ctx.fillRect(px,py,tile,tile);
+     if(c==='#'&&((x>=15&&x<=19&&y>=3&&y<=6)||(x>=3&&x<=7&&y>=10&&y<=13))){ctx.fillStyle='#b9a598';ctx.fillRect(px,py,tile,tile);if(y===3||y===10){ctx.fillStyle='#ead7c3';ctx.fillRect(px,py,tile,4);}if(y===6||y===13){ctx.fillStyle='#887970';ctx.fillRect(px,py+tile-6,tile,6);}}
+     if(c===','){ctx.fillStyle='#eee2d3';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);if(w.map[y]?.[x-1]==='.')ctx.fillRect(px,py,2,tile);if(w.map[y]?.[x+1]==='.')ctx.fillRect(px+tile-2,py,2,tile);}
+     if(c==='X'){ctx.fillStyle='#6f9e8c';ctx.fillRect(px+5,py+5,tile-10,tile-10);}return;
+    }
     if(w.district==='lumiose-rouge-sector4'&&!w.interior){
      // The glass-covered arcade uses existing blocked and skylight tiles; geometry is a draft.
      const building=c==='#'&&x>=7&&x<=15&&y>=2&&y<=5;
