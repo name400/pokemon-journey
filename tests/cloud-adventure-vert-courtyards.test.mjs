@@ -15,6 +15,19 @@ test('Vert Sector 1 joins Vert Plaza on the ground without changing the canal ba
  const old=restoreAdventurePosition(storeAdventurePosition({...start,x:11,y:15},138),138);assert.deepEqual([old.district,old.x,old.y,old.teamIds],['lumiose-vert-sector1',11,15,['kept']]);
 });
 
+test('Vert Sector 1 joins Centrico without opening the separate canal bank',()=>{
+ const start={area:3,district:'lumiose-vert-sector1',interior:null,x:11,y:8,teamIds:['kept'],zaMission03Stage:7};
+ assert.ok(fieldPath(fieldMap(start),start,{x:1,y:6}).length);
+ const west=stepField({...start,x:1,y:6},'left');assert.deepEqual([west.district,west.x,west.y],['lumiose-centrico-route',21,10]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...start,...west},139),139);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission03Stage],['lumiose-centrico-route',21,10,['kept'],7]);
+ const back=stepField(saved,'right');assert.deepEqual([back.district,back.x,back.y,back.zaVertSaisonBank],['lumiose-vert-sector1',1,6,false]);
+ assert.equal(fieldMap({...start,zaVertSaisonBank:true})[6][0],'#');
+ assert.equal(stepField({...start,x:1,y:8},'left').zaVertSaisonBank,true);
+ assert.equal(stepField({...start,x:9,y:15},'down').district,'lumiose-vert-plaza');
+ const old=restoreAdventurePosition(storeAdventurePosition({...start,x:1,y:8},140),140);assert.deepEqual([old.district,old.x,old.y,old.teamIds],['lumiose-vert-sector1',1,8,['kept']]);
+});
+
 test('Vert Sector 1 courtyard remains reachable without changing existing exits',()=>{
  const s={area:3,district:'lumiose-vert-sector1',interior:null,x:5,y:7,teamIds:['kept']},map=fieldMap(s);
  for(const [x,y] of [[4,3],[5,3],[6,3],[7,3],[4,4],[5,4],[6,4],[7,4],[5,5]])assert.equal(map[y][x],',');
