@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fieldMap,fieldPath,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+import {fieldMap,fieldPath,fieldDialogue,stepField,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+test('the western courtyard reaches Marnole and keeps center and bench positions',()=>{
+ const city={area:3,district:'lumiose-bleu-sector7',interior:null,x:6,y:15,zaMission10Stage:10,zaRoyaleRank:'F',teamIds:['kept']};
+ const map=fieldMap(city);
+ assert.ok(fieldPath(map,city,{x:6,y:12}).length);
+ assert.equal(map[11][6],'t');assert.equal(map[12][8],'^');assert.equal(map[13][8],'M');assert.equal(map[13][11],'H');
+ assert.equal(fieldDialogue({...city,x:6,y:12,facing:'up'},map).action,'side28Battle');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...city,x:6,y:12},116),116);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission10Stage],['lumiose-bleu-sector7',6,12,['kept'],10]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:15}).length);
+ const old=restoreAdventurePosition(storeAdventurePosition({...city,x:9,y:12},116),116);
+ assert.deepEqual([old.x,old.y],[9,12]);
+});
 test('the eastern courtyard has two walkable approaches and preserves existing services',()=>{
  const city={area:3,district:'lumiose-bleu-sector7',interior:null,x:16,y:10,zaSide45Stage:1,teamIds:['kept']};
  const map=fieldMap(city);
