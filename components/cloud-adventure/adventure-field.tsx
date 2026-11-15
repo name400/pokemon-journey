@@ -1286,6 +1286,12 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      if(w.district==='lumiose-royale'&&w.zaRoyaleRank==='E'&&c==='a'&&x===3&&y===5){ctx.fillStyle='#ad656b';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('대전',px+tile/2,py+20);return;}
      if(w.district==='lumiose-royale'&&w.zaRoyaleRank==='F'&&((c==='a'&&x===3&&y===5)||(c==='b'&&x===19&&y===11))){ctx.fillStyle='#ad656b';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('대전',px+tile/2,py+20);return;}
      if(w.district==='lumiose-royale'&&w.zaRoyaleRank==='V'&&((c==='a'&&x===3&&y===5)||(c==='b'&&x===19&&y===11)||(c==='e'&&x===12&&y===5)||(c==='t'&&x===3&&y===11)||(c==='j'&&x===9&&y===11)||(c==='k'&&x===15&&y===11)||(c==='n'&&x===19&&y===5))){ctx.fillStyle='#ad656b';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('대전',px+tile/2,py+20);return;}
+     // Quasartico's existing forecourt is a walkable, provisional 2D battle space.
+     if(w.district==='lumiose-quasartico'&&!w.interior&&c===','){
+      ctx.fillStyle=(x+y)%2?'#c8d1cb':'#d3ddd6';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#a0b7ae';
+      if(x===7)ctx.fillRect(px+2,py,2,tile);if(x===15)ctx.fillRect(px+tile-4,py,2,tile);if(y===7)ctx.fillRect(px,py+2,tile,2);if(y===11)ctx.fillRect(px,py+tile-4,tile,2);
+      if(x===11){ctx.fillStyle='#e5ece4';ctx.fillRect(px+tile/2-1,py,2,tile);}
+     }
      if(w.district==='lumiose-rust'&&c===','){ctx.fillStyle='#c3c1b6';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#deddd2';ctx.fillRect(px+4,py+tile-5,tile-8,2);}
      if(c===','&&['lumiose-zone3','lumiose-zone4'].includes(w.district)){ctx.fillStyle='#cfc2aa';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#e5dac7';ctx.fillRect(px,py+tile-3,tile,2);}
      // Zone 1's east–west street continues through the ordinary floor on
@@ -1323,6 +1329,12 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
       else{ctx.fillStyle='#aaa99d';ctx.fillRect(px,py+tile-4,tile,4);ctx.fillStyle='#647979';ctx.fillRect(px+8,py+6,tile-16,tile-10);ctx.fillStyle='#bdcec4';ctx.fillRect(px+11,py+9,3,tile-16);ctx.fillRect(px+tile/2,py+7,2,tile-12);if(x===15||x===16){ctx.fillStyle='#5a605d';ctx.fillRect(px+8,py+9,tile-16,tile-9);ctx.fillStyle='#d9d7c8';ctx.fillRect(px+tile/2-1,py+11,2,tile-11);}}
      }
      if(c==='#'){ctx.fillStyle=w.district==='lumiose-zone3'?'#547e60':'#8e9c91';ctx.fillRect(px,py,tile,tile);if(w.district==='lumiose-zone3'){ctx.fillStyle='#78a47a';ctx.fillRect(px+3,py+5,tile-6,4);ctx.fillRect(px+5,py+tile-9,tile-10,3);}}if(w.district==='lumiose-zone2'&&c==='#'&&(x===0||x===22||y===0||y===16)){ctx.fillStyle='#5b805c';ctx.fillRect(px,py,tile,tile);sprite((x+y)%2?'tree':'treeRound',px,py);}if(c==='r'&&!(w.district==='lumiose-zone3'&&x===10&&y===7)){ctx.fillStyle='#757b78';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,tile*.4,tile*.33,-.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c7cbc5';ctx.fillRect(px+8,py+10,9,3);}
+     // The office outline is a draft: the source confirms the building, not its tile shape.
+     if(w.district==='lumiose-quasartico'&&!w.interior&&c==='#'&&x>=8&&x<=14&&y>=1&&y<=4){
+      ctx.fillStyle=y===1?'#55767b':'#bad0cb';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#77999a';
+      if(y===1)ctx.fillRect(px,py+tile-4,tile,3);else{ctx.fillRect(px+3,py+4,tile-6,tile-8);ctx.fillStyle='#dce9df';ctx.fillRect(px+6,py+6,3,tile-12);ctx.fillRect(px+tile/2,py+6,2,tile-12);}
+      if(y===4){ctx.fillStyle='#536d6c';ctx.fillRect(px,py+tile-4,tile,4);}
+     }
      if(w.district==='lumiose-rust'&&c==='#'&&x>0&&x<22&&y>0&&y<16){ctx.fillStyle=y===2?'#292e32':'#464b4b';ctx.fillRect(px,py,tile,tile);ctx.fillStyle=y===2?'#858681':'#696c68';ctx.fillRect(px+2,py+tile-5,tile-4,3);}
      if(w.district==='lumiose-rouge-north'&&c==='h'){ctx.fillStyle='#767a76';ctx.fillRect(px+5,py+3,tile-10,tile-6);ctx.fillStyle='#d8d3c5';ctx.fillRect(px+5,py+9,tile-10,3);ctx.fillRect(px+5,py+19,tile-10,3);}
      if(w.district==='lumiose-rust'&&c==='l'){ctx.fillStyle='#806044';ctx.fillRect(px+6,py+4,tile-12,tile-8);}
