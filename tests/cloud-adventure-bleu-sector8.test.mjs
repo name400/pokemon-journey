@@ -2,6 +2,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldMap,fieldPath,fieldDialogue,stepField,restoreAdventurePosition,storeAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('Bleu Sector 9 courtyard preserves the Old Building interaction and saved progress',()=>{
+ const base={area:3,district:'lumiose-bleu-sector9',interior:null,x:10,y:6,zaMission20Stage:7,teamIds:['kept']};
+ const map=fieldMap(base);assert.ok(fieldPath(map,base,{x:11,y:3}).length);
+ assert.equal(map[5][11],'b');
+ assert.equal(fieldDialogue({...base,x:11,y:6,facing:'up'},map).action,'mission20EnterHouse');
+ const saved=restoreAdventurePosition(storeAdventurePosition({...base,x:11,y:3},118),118);
+ assert.deepEqual([saved.district,saved.x,saved.y,saved.zaMission20Stage,saved.teamIds],['lumiose-bleu-sector9',11,3,7,['kept']]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:15}).length);
+ const old=restoreAdventurePosition(storeAdventurePosition({...base,x:11,y:6},118),118);
+ assert.deepEqual([old.x,old.y],[11,6]);assert.equal(fieldDialogue({...old,facing:'up'}).action,'mission20EnterHouse');
+});
+
 test('the provisional courtyard keeps show registration and restores old and new positions',()=>{
  const base={area:3,district:'lumiose-bleu-sector8',interior:null,x:4,y:6,zaSide16Stage:1,teamIds:['kept']};
  const map=fieldMap(base);assert.ok(fieldPath(map,base,{x:5,y:3}).length);
