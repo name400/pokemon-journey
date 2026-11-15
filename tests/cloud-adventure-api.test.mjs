@@ -7495,6 +7495,16 @@ test('early alphas unlock after Bunnelby independently of other requests and sup
  }}finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
 
+test('Zone 1 Scatterbug keeps ZA initial moves through battle and capture',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-scatterbug-initial-moves-qa',displayName:'분이벌레 초기 기술'};
+ try{
+  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const lead=state.world.activeId,leadBefore=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:5,y:7,facing:'right',zaMission05Complete:false,adventureBalls:{masterball:1}},state.revision+1));await get();
+  const rolls=[0,.95];globalThis.__adventureRandom=()=>rolls.shift()??.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,664);assert.deepEqual(rawWorld().encounter.moves,['실뿜기','몸통박치기']);await get();assert.deepEqual(rawWorld().encounter.moves,['실뿜기','몸통박치기']);
+  const rev=state.revision;await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision:rev},409);await get();const caught=state.box.find(p=>p.speciesId===664);assert.ok(caught);assert.deepEqual(rawMon(caught.boxId).moves,['실뿜기','몸통박치기']);assert.equal(rawMon(caught.boxId).adventureScatterbugMovesV1,true);assert.deepEqual(rawMon(lead).ivs,leadBefore.ivs);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Zone 1 Bunnelby keeps reviewed moves through battle and capture',async()=>{
  const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-bunnelby-initial-moves-qa',displayName:'파르빗 초기 기술'};
  try{

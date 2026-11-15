@@ -7,7 +7,9 @@ import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
 test('new Scatterbug family learns ZA growth and evolution moves without rewriting older data',async()=>{
- const {markAdventureVerifiedGrowth}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [level,moves] of [[5,['실뿜기','몸통박치기']],[7,['실뿜기','몸통박치기','저리가루']]]){const mon=makeMon(664,level),before=structuredClone(mon);assert.deepEqual(prepareVerifiedWildMoves(mon).moves,moves);assert.deepEqual(mon,before);}
+ for(const mon of [{...makeMon(664,5),adventureAlpha:true},{...makeMon(664,5),formId:999},makeMon(665,10)])assert.equal(prepareVerifiedWildMoves(mon),mon);
  const initial={...makeMon(664,6),moves:['tackle','string shot','protect','light screen'],pp:{tackle:2},custom:{keep:true}},marked=markAdventureVerifiedGrowth(initial);
  assert.equal(initial.adventureScatterbugMovesV1,undefined);assert.equal(marked.adventureScatterbugMovesV1,true);
  const level=applyAdventureLevelMoves(marked,{...marked,level:7},{});assert.deepEqual(level.pending,['저리가루']);assert.equal(level.mon.pp.tackle,2);
