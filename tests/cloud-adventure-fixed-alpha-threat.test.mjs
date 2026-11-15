@@ -86,6 +86,16 @@ test('early cemetery and monument alphas respect unlocks and legacy spent flags'
  assert.equal(fixedAlphaAlertKnown({...monument,zaZone7Spent:{version:2}}),false);
 });
 
+test('Lysandre random alpha threat respects saved identity, wing and unknown records',async()=>{
+ const {randomAlphaPlayerThreat,randomAlphaPlayerNear,randomAlphaAlertKnown,randomAlphaAlertMatches}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
+ const key='lab:houndour:228',s={area:3,district:'lumiose-lysandre-lab',x:4,y:4,zaMission35Stage:4,zaLysandreMazeV2:true,zaLysandreFloor:1,zaLysandreWing:'a',zaWildVisibleAlphaLevels:{[key]:57},zaWildShinyRolls:{[key]:true},zaLysandreWildSpent:{}};
+ const before=structuredClone(s),p=randomAlphaPlayerThreat(s);assert.equal(p.id,'houndour');assert.equal(p.alert.cycle,'shiny');assert.equal(randomAlphaPlayerNear(s,p),true);assert.equal(randomAlphaAlertMatches({...s,zaRandomAlphaAlertV1:p.alert},p),true);assert.deepEqual(s,before);
+ for(const changes of [{zaLysandreWing:'b'},{zaLysandreFloor:2},{zaLysandreWildSpent:{houndour:true}},{zaWildVisibleAlphaLevels:{}},{zaWildShinyRolls:{version:2}},{zaWildVisibleAlphaLevels:{v:2,[key]:57}},{zaLysandreMazeV2:'future'},{x:3,y:4}])assert.equal(randomAlphaPlayerThreat({...s,...changes}),null);
+ for(const changes of [{zaLysandreWing:'hub'},{zaLysandreFloor:2}]){const next={...s,...changes,zaRandomAlphaAlertV1:p.alert};assert.equal(randomAlphaPlayerThreat(next),null);assert.equal(randomAlphaAlertKnown(next),true);}
+ assert.equal(randomAlphaAlertKnown({...s,zaRandomAlphaAlertV1:{version:2}}),false);
+ const legacy={...s,zaLysandreMazeV2:undefined,zaLysandreWing:undefined,zaWildVisibleAlphaLevels:{'lab:beldum:374':59},zaWildShinyRolls:{'lab:beldum:374':false},x:4,y:5};assert.equal(randomAlphaPlayerThreat(legacy)?.id,'beldum');
+});
+
 test('random visible alpha identity follows the saved species, cycle and shiny lifetime',async()=>{
  const {randomAlphaPlayerThreat,randomAlphaPlayerNear,randomAlphaAlertKnown,randomAlphaAlertMatches}=await import('../lib/cloud-adventure/adventure-fixed-alpha-threat.mjs');
  const key='zone14:aron:304',s={area:3,district:'lumiose-zone14',x:10,y:3,zaWildVisibleAlphaLevels:{[key]:40},zaWildShinyRolls:{[key]:false},zaWildSpawnCycles:{14:{period:'day',interval:4}}};

@@ -9665,6 +9665,16 @@ test('alerted fixed alpha attacks idle players without replay or changing shared
  }finally{Date.now=oldNow;globalThis.__adventureUser=previous;}
 });
 
+test('Lysandre random alpha detects and attacks until captured',async()=>{
+ const previous=globalThis.__adventureUser,oldNow=Date.now,oldRandom=globalThis.__adventureRandom;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureRandom=()=>.999;globalThis.__adventureUser={userId:'lysandre-random-alpha-threat-qa',displayName:'연구소 무작위 우두머리'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],key='lab:houndour:228';
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreWing:'a',zaLysandreWildSpent:{},zaWildVisibleAlphaLevels:{[key]:57},zaWildShinyRolls:{[key]:true},adventureBalls:{masterball:1},x:5,y:4,facing:'left',zaPlayerVitalsV1:{version:1,hp:100,lastCenterId:'hotel'}},state.revision+1));await get();
+  await call('move',{direction:'left'});assert.equal(state.world.zaRandomAlphaAlertV1.id,'houndour');assert.equal(state.world.zaPlayerVitalsV1.hp,90);await call('randomAlphaIdle');const rev=state.revision;await call('randomAlphaIdle');assert.equal(state.revision,rev);clock+=100000;await call('randomAlphaIdle');assert.equal(state.world.zaPlayerVitalsV1.hp,60);await call('randomAlphaIdle',{revision:rev},409);await get();
+  await call('throwLysandreWild',{ball:'masterball'});await get();assert.equal(rawWorld().zaLysandreWildSpent.houndour,true);assert.ok(state.box.some(p=>p.speciesId===228&&p.shiny&&p.adventureAlpha));const after=state.revision;await call('randomAlphaIdle');assert.equal(state.revision,after);assert.deepEqual(state.world.teamIds.slice(0,team.length),team);
+ }finally{Date.now=oldNow;globalThis.__adventureRandom=oldRandom;globalThis.__adventureUser=previous;}
+});
+
 test('Lysandre Arbok detects and attacks until captured, preserving saves',async()=>{
  const previous=globalThis.__adventureUser,oldNow=Date.now,oldRandom=globalThis.__adventureRandom;let clock=2000001000000;Date.now=()=>clock;globalThis.__adventureRandom=()=>.999;globalThis.__adventureUser={userId:'lysandre-arbok-threat-qa',displayName:'연구소 우두머리'};
  try{
