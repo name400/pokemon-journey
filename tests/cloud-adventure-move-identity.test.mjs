@@ -6,6 +6,13 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new Zone 10 families use ZA moves without migrating legacy or alternate forms',async()=>{
+ const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [id,level,expected] of [[79,31,['물의파동','박치기','사념의박치기','망각술']],[318,30,['기충전','물기','퀵턴','싫은소리']],[120,31,['아쿠아제트','스피드스타','거품광선','환상빔']]]){const old=makeMon(id,level),copy=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,copy);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone10GrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone10GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(prepareVerifiedWildMoves({...old,adventureAlpha:true}).adventureZone10GrowthV1,undefined);assert.equal(prepareVerifiedWildMoves({...old,formId:999}).adventureZone10GrowthV1,undefined);}
+ for(const [id,level,move] of [[79,36,'파도타기'],[80,45,'미래예지'],[318,32,'깨물어부수기'],[319,36,'고속이동'],[120,32,'빛의장막'],[121,42,'아쿠아브레이크']]){const old={...makeMon(id,level-1),adventureZone10GrowthV1:true,moves:['몸통박치기','방어','물기','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(old,{...old,level},{});assert.deepEqual(result.pending,[move]);assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...old,level},{}).includes(move));}
+ const shark={...makeMon(319,30),adventureZone10GrowthV1:true,moves:['물기']};assert.deepEqual(applyAdventureEvolutionMoves(shark,{}).learned,['베어가르기']);assert.ok(adventureLearnableMoves({...makeMon(199,40),adventureZone10GrowthV1:true},{}).includes('염동력'));
+});
+
 test('Zone 9 psychic growth follows species and known Meowstic gender',async()=>{
  const {markAdventureVerifiedGrowth,prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
  for(const [id,level,expected] of [[64,29,['순간이동','리플렉터','사이코커터','HP회복']],[677,28,['염동력','거짓울음','스피드스타','환상빔']]]){const old=makeMon(id,level),copy=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,copy);assert.deepEqual(fresh.moves,expected);assert.equal(fresh.adventureZone9PsychicGrowthV1,true);assert.equal(markAdventureVerifiedGrowth(old),old);const future={...old,adventureZone9PsychicGrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(future),future);assert.equal(prepareVerifiedWildMoves({...old,adventureAlpha:true}).adventureZone9PsychicGrowthV1,undefined);}

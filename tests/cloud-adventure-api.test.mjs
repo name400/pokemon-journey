@@ -10665,6 +10665,13 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 10 Slowpoke keeps ZA growth through capture evolution and reload',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone10-family-growth-qa',displayName:'구역 10 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,iv=structuredClone(rawMon(lead).ivs),key='zone10:slowpoke:79';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:5,y:6,facing:'up',zaRoyaleRank:'F',zaZone10Upper:false,zaZone10Spent:{},zaWildShinyRolls:{[key]:false},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();await call('zone10Wild-slowpoke');assert.equal(rawWorld().encounter.adventureZone10GrowthV1,true);assert.deepEqual(rawWorld().encounter.moves,['물의파동','박치기','사념의박치기','망각술']);await get();await call('flee');await get();globalThis.__adventureRandom=()=>0;await call('throwZoneVisible',{ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===79);assert.ok(caught);const id=caught.boxId;assert.equal(rawMon(id).adventureZone10GrowthV1,true);seedMon(id,{...rawMon(id),level:37,pp:{tackle:3},custom:{keep:true}});await get();await call('evolve',{boxId:id,target:80});await get();assert.equal(rawMon(id).adventureZone10GrowthV1,true);assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(rawMon(id).custom,{keep:true});assert.deepEqual(rawMon(lead).ivs,iv);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('Zone 9 Espurr keeps ZA growth and gender through capture evolution and reload',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone9-psychic-growth-qa',displayName:'구역 9 에스퍼 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
  try{
