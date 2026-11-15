@@ -10879,3 +10879,13 @@ test('Shutterbug Café serves the party without interrupting side mission 14',as
   seedWorld(storeAdventurePosition({...rawWorld(),x:17,y:6,facing:'up'},state.revision+1));await get();await call('shutterbugWater',{},409);assert.equal(rawWorld().zaSide14Started,true);
  }finally{globalThis.__adventureUser=previousUser;}
 });
+
+test('Side mission 86 reaches Drilbur in the Bleu 6 triangular grass and preserves legacy progress',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side86-bleu6-qa',displayName:'삼각 잔디 의뢰'};
+ try{
+  const {adventureQuestVisuals}=await import('../lib/cloud-adventure/adventure-quest-visuals.mjs');await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;seedMon(id,{...makeMon(150,100),boxId:id,moves:['파동탄'],pp:{}});
+  const place=async(stage)=>{seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu6-approach',interior:null,x:15,y:5,facing:'up',zaSide86Stage:stage},state.revision+1));await get();};
+  await place(undefined);assert.notEqual(state.world.interaction?.action,'side86Battle');await call('side86Battle',{},409);
+  await place(1);assert.equal(state.world.map[4][15],'.');assert.equal(state.world.interaction.action,'side86Battle');assert.ok(adventureQuestVisuals(state.world).some(p=>p.kind==='hole'&&p.x===15&&p.y===4));const rev=state.revision;await call('side86Battle');assert.equal(state.battle.teams[1][0].speciesId,529);assert.equal(rawWorld().zaSide86Stage,2);await call('ball',{},409);await call('forfeit');assert.equal(rawWorld().zaSide86Stage,2);await place(2);assert.equal(state.world.interaction.action,'side86Battle');await call('side86Battle',{revision:rev},409);await call('side86Battle');await battle();assert.equal(rawWorld().zaSide86Stage,3);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,team);await get();assert.equal(adventureQuestVisuals(state.world).some(p=>p.kind==='hole'),false);await call('side86Battle',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});

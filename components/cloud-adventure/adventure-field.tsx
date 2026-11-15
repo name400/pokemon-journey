@@ -314,7 +314,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      const outer=x===0||x===22||y===0||y===16;
      ctx.fillStyle=c==='#'?(outer?'#978f86':'#d6c1af'):c===','?'#c3b9aa':(x+y)%2?'#e2ded2':'#ece7db';ctx.fillRect(px,py,tile,tile);
      // Triangular grass patch, drawn on existing walkable pavement. Its 2D
-     // position is provisional and does not relocate the existing side quest.
+     // position is provisional; the side quest also keeps its legacy location.
      if(c==='.'&&x>=14&&x<=16&&y>=3&&y<=5){
       const gx=px-(x-14)*tile,gy=py-(y-3)*tile;
       ctx.save();ctx.beginPath();ctx.rect(px,py,tile,tile);ctx.clip();
