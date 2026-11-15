@@ -10,5 +10,5 @@ test('building-free Jaune 1 connects four adjacent streets and restores saves',(
  }
  const saved=storeAdventurePosition(s,72),restored=restoreAdventurePosition(saved,72);assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds,restored.steps],[s.district,11,8,['kept'],42]);
  assert.equal(stepField({...s,district:'lumiose-mission12-jaune3',zaMission12Layer:'roof',x:1,y:10},'left').transitioned,undefined);
- assert.equal(stepField({...s,district:'lumiose-jaune-street',x:11,y:1},'up').blocked,true,'Zone 8 remains locked');
+ assert.equal(stepField({...s,district:'lumiose-jaune-street',x:11,y:1},'up').district,'lumiose-jaune-preplaza','early plaza remains accessible');
 });

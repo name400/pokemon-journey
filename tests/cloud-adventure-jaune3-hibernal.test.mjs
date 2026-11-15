@@ -9,7 +9,7 @@ test('Jaune 3 and Jaune Street connect on the ground without changing mission la
  const saved=restoreAdventurePosition(storeAdventurePosition({...city,...street},124),124);
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.zaMission12WorkerWon],['lumiose-jaune-street',7,1,['kept'],false]);
  assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:1}).length);
- assert.equal(stepField({...saved,x:11,y:1},'up').blocked,true);
+ assert.equal(stepField({...saved,x:11,y:1},'up').district,'lumiose-jaune-preplaza');
  const back=stepField(saved,'up');assert.deepEqual([back.district,back.x,back.y,back.zaMission12Layer],['lumiose-mission12-jaune3',15,15,'ground']);
  assert.equal(stepField({...city,x:15,y:15,zaMission12Layer:'roof'},'down').transitioned,undefined);
  assert.equal(fieldDialogue({...city,x:17,y:8,facing:'up'}).action,undefined);

@@ -9,7 +9,7 @@ test('Jaune 9 and 6 connect while preserving mission state and wild-zone gates',
  const sector6={...s,...next};assert.equal(stepField(sector6,'right').district,s.district);
  assert.ok(fieldPath(fieldMap(sector6),sector6,{x:21,y:8}).length);
  assert.equal(stepField({...sector6,x:21,y:8},'right').district,'lumiose-jaune-sector10');
- assert.equal(stepField({...s,x:1,y:10,zaMission15Stage:0,zaMission18ApproachRequired:false},'left').blocked,true,'Zone 8 remains locked');
+ assert.equal(stepField({...s,x:1,y:10,zaMission15Stage:0,zaMission18ApproachRequired:false},'left').district,'lumiose-jaune-preplaza','early plaza remains accessible');
  assert.equal(stepField({...s,x:11,y:15},'down').district,'lumiose-jaune-sector10');
  for(const world of [s,sector6]){const r=restoreAdventurePosition(storeAdventurePosition(world,54),54);assert.deepEqual([r.district,r.x,r.y,r.teamIds,r.steps,r.zaMission18ApproachRequired],[world.district,world.x,world.y,['kept'],42,true]);}
 });

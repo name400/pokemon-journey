@@ -34,7 +34,7 @@ test('Jaune Sector 9 connects to Jaune Street without opening Wild Zone 8',()=>{
  assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds,saved.money,saved.zaMission19Stage],['lumiose-jaune-street',17,15,['kept'],731,4]);
  assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:8}).length);
  const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-jaune-sector9',15,1]);
- assert.equal(stepField({...sector,x:1,y:10},'left').blocked,true);
+ assert.equal(stepField({...sector,x:1,y:10},'left').district,'lumiose-jaune-preplaza');
  assert.equal(stepField({...sector,x:11,y:1},'up').district,'lumiose-jaune-garden-route');
 });
 test('Zone 11 north bank connects Jaune Sectors 10 and 12 and Zone 6',()=>{

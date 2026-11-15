@@ -11,7 +11,7 @@ test('Jaune Sector 9 shares the Mission 18 encounter and preserves pending rewar
 });
 test('Jaune Sector 9 reaches Zone 8 east gate without bypassing its rank gate',()=>{
  const sector={area:3,district:'lumiose-jaune-sector9',interior:null,x:1,y:10,zaRoyaleRank:'V',teamIds:['kept']};
- assert.equal(stepField(sector,'left').blocked,true);
+ assert.equal(stepField(sector,'left').district,'lumiose-jaune-preplaza');
  const zone=stepField({...sector,zaRoyaleRank:'F'},'left');assert.deepEqual([zone.district,zone.x,zone.y],['lumiose-zone8',21,10]);
  const state={...sector,...zone,zaRoyaleRank:'F'};assert.ok(fieldPath(fieldMap(state),state,{x:11,y:12}).length);
  const saved=restoreAdventurePosition(storeAdventurePosition(state,89),89);assert.deepEqual([saved.district,saved.x,saved.y,saved.teamIds],['lumiose-zone8',21,10,['kept']]);

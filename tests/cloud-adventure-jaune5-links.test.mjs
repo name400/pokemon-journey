@@ -22,7 +22,7 @@ test('Jaune 5 courtyard connects Sectors 4 and 7 and restores its saved position
  const street=stepField({...s,x:11,y:15},'down');assert.deepEqual([street.district,street.x,street.y],['lumiose-jaune-street-north',1,8]);
  assert.equal(stepField({...s,...street},'left').district,s.district);
  const streetState={...s,...street,zaRoyaleRank:'W'};assert.ok(fieldPath(fieldMap(streetState),streetState,{x:21,y:5}).length);
- assert.equal(stepField({...streetState,x:21,y:5},'right').blocked,true,'Zone 8 remains locked');
+ assert.equal(stepField({...streetState,x:21,y:5},'right').district,'lumiose-jaune-preplaza','early plaza remains accessible');
  const saved=storeAdventurePosition({...s,x:12,y:8},81),restored=restoreAdventurePosition(saved,81);
  assert.deepEqual([restored.district,restored.x,restored.y,restored.teamIds,restored.steps],[s.district,12,8,['kept'],42]);
  assert.equal(stepField({...s,district:'lumiose-jaune-sector7',x:11,y:15},'down').district,'lumiose-jaune-sector4');
