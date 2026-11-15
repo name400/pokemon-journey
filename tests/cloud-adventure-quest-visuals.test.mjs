@@ -34,3 +34,10 @@ test('targets follow progress and respect the roof and stale markers',()=>{
 test('Appée quest shows scrap and Aron only at the outdoor lab',()=>{
  const s=world('lumiose-floral',{zaMission35Stage:2,zaSide99Stage:1,zaTrackedQuestId:'99'}),visuals=adventureQuestVisuals(s);assert.deepEqual(visuals.filter(p=>p.kind==='scrap').map(p=>[p.x,p.y]),[[2,5]]);assert.deepEqual(visuals.filter(p=>p.kind==='pokemon'&&p.species===304).map(p=>[p.x,p.y]),[[1,4],[2,4]]);assert.deepEqual(trackedAdventureLocalTarget(s),{x:2,y:5});assert.deepEqual(trackedAdventureLocalTarget({...s,zaSide99Stage:2}),{x:3,y:5});assert.deepEqual(adventureQuestVisuals({...s,interior:'lumioseLab'}),[]);assert.equal(trackedAdventureLocalTarget({...s,interior:'lumioseLab'}),null);assert.deepEqual(adventureQuestVisuals(world('lumiose-floral',{zaMission35Stage:1})).filter(p=>p.kind==='scrap'),[]);
 });
+
+test('Slurpuff guides the active cafe mission without changing the map or save',()=>{
+ for(const [district,x,y,target] of [['lumiose-bleu-sector10-street',11,6,[8,8]],['lumiose-bleu-sector10-street',8,8,[3,8]],['lumiose-bleu-sector10-street',3,8,[1,8]],['lumiose-south-boulevard',5,8,[11,8]],['lumiose-south-boulevard',11,8,[16,8]],['lumiose-south-boulevard',16,8,[17,6]]]){
+  const s=world(district,{x,y,zaSide14Started:true}),before=JSON.stringify(s),p=adventureQuestVisuals(s).find(q=>q.species===685);assert.deepEqual(p&&[p.x,p.y],target);assert.equal(JSON.stringify(s),before);assert.equal(adventureQuestVisuals({...s,zaSide14Complete:true}).some(q=>q.species===685),false);assert.equal(adventureQuestVisuals({...s,zaSide14Complete:'future'}).some(q=>q.species===685),false);assert.equal(adventureQuestVisuals({...s,interior:'hotel'}).some(q=>q.species===685),false);
+ }
+ const s=world('lumiose-south-boulevard',{x:5,y:8,zaSide14Started:true,zaVert7RoofUpper:true});assert.equal(adventureQuestVisuals(s).some(q=>q.species===685),false);
+});

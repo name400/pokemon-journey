@@ -10935,3 +10935,12 @@ test('Bleu 10 links to Espace Vide surface without bypassing the Zone 10 canal g
   seedWorld(storeAdventurePosition({...rawWorld(),x:1,y:8,facing:'left',zaEspaceLower:true,zaRoyaleRank:'F'},state.revision+1));await get();await call('move',{direction:'left'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone10',21,6]);assert.equal(state.world.zaSide14Started,true);assert.equal(state.wallet.coins,coins);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),{...mon,walkSteps:rawMon(id).walkSteps});
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Slurpuff guides the cafe mission between the two streets and leaves after completion',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side14-slurpuff-guide-qa',displayName:'나루림 안내'};
+ try{
+  const {adventureQuestVisuals}=await import('../lib/cloud-adventure/adventure-quest-visuals.mjs');await get();await call('start',{species:152});const team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector10-street',interior:null,x:11,y:6,facing:'up',zaMission07Started:true},state.revision+1));await get();assert.equal(adventureQuestVisuals(state.world).some(p=>p.species===685),false);await call('side14Start');await get();assert.ok(adventureQuestVisuals(state.world).some(p=>p.species===685&&p.x===8&&p.y===8));
+  await walkTo({x:1,y:8});await call('move',{direction:'left'});await get();assert.equal(state.world.district,'lumiose-south-boulevard');assert.ok(adventureQuestVisuals(state.world).some(p=>p.species===685));await walkTo({x:17,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'side14Reward');await call('side14Reward');await get();assert.equal(state.wallet.coins,coins+3000);assert.equal(state.inventory.whippeddream,2);assert.equal(adventureQuestVisuals(state.world).some(p=>p.species===685),false);assert.deepEqual(state.world.teamIds,team);await call('side14Reward',{},409);
+ }finally{globalThis.__adventureUser=previous;}
+});

@@ -1855,7 +1855,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
    // Draw only at the active interaction tiles; these figures do not affect movement.
    for(const p of adventureQuestVisuals(w)){
     const px=p.x*tile,py=p.y*tile;
-    if(p.kind==='pokemon'){const img=fieldImages[p.species];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-5,py-8,tile+10,tile+10);else{ctx.fillStyle=p.species===607?'#d9d5e9':'#dfaa45';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx.fill();}}
+    if(p.kind==='pokemon'){const img=fieldImages[p.species];if(img.complete&&img.naturalWidth)ctx.drawImage(img,px-5,py-8,tile+10,tile+10);else{ctx.fillStyle=p.species===607?'#d9d5e9':p.species===685?'#f1cad5':'#dfaa45';ctx.beginPath();ctx.arc(px+tile/2,py+tile/2,8,0,Math.PI*2);ctx.fill();}}
     else if(p.kind==='scrap'){ctx.fillStyle='#777e80';ctx.fillRect(px+5,py+19,23,8);ctx.fillStyle='#a8afb0';ctx.fillRect(px+9,py+15,12,6);ctx.fillRect(px+19,py+11,5,10);ctx.fillStyle='#514e4c';ctx.fillRect(px+6,py+25,23,3);}
     else if(p.kind==='hole'){ctx.fillStyle='#a87c4c';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2,11,7,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#4f392e';ctx.beginPath();ctx.ellipse(px+tile/2,py+tile/2+1,7,4,0,0,Math.PI*2);ctx.fill();}
     else if(p.kind==='dummy'){
