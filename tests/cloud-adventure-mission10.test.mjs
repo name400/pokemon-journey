@@ -29,6 +29,14 @@ test('mission 10 partner and guards have separate, valid temporary teams',async(
  assert.throws(()=>mission10GuardTeams('__proto__'));assert.throws(()=>mission10GuardTeams(''));
 });
 
+test('mission 10 guards and mission 11 use their own partner moves',async()=>{
+ const {mission10GuardTeams,mission11AllyTeam}=await import('../lib/cloud-adventure/adventure-mission10.mjs');
+ const guard=mission10GuardTeams('fire').ally,slowbro=mission11AllyTeam('fire'),rival=mission10RivalTeam('fire');
+ assert.deepEqual(guard.map(m=>m.moves),[['누르기','차밍보이스','잎날가르기','기가드레인'],['아쿠아제트','베어가르기','와이드브레이커','물기'],['번개엄니','바크아웃','스파크','불꽃엄니']]);
+ assert.deepEqual(slowbro[0].moves,['기가드레인','잎날가르기','누르기','차밍보이스']);assert.ok(slowbro.every(m=>m.item===''));assert.equal(rival[0].moves[1],'씨뿌리기');assert.equal(rival[2].item,'manectite');
+ assert.ok([...guard,...slowbro].every(m=>m.moves.every(move=>Object.hasOwn(moves,move))));
+});
+
 test('isolated mission 10 double snapshot preserves both sides, ownership and existing HP',async()=>{
  const {Battle}=await import('@pkmn/sim');const {mission10GuardTeams}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createMission10DoubleSnapshot}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
  const player=Array.from({length:6},(_,i)=>({...makeMon(25,30),boxId:`owned-${i}`}));player[0].hp=Math.floor(player[0].maxHp/2);player[1].hp=0;
