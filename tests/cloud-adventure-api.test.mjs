@@ -7434,6 +7434,17 @@ test('early alphas unlock after Bunnelby independently of other requests and sup
  }}finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
 
+test('Zone 1 Bunnelby keeps reviewed moves through battle and capture',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-bunnelby-initial-moves-qa',displayName:'파르빗 초기 기술'};
+ try{
+  globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const lead=state.world.activeId,leadBefore=rawMon(lead);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:5,y:7,facing:'right',zaMission05Complete:false,adventureBalls:{masterball:1}},state.revision+1));await get();
+  const rolls=[0,.6];globalThis.__adventureRandom=()=>rolls.shift()??.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,659);assert.deepEqual(rawWorld().encounter.moves,['째려보기','몸통박치기']);await get();assert.deepEqual(rawWorld().encounter.moves,['째려보기','몸통박치기']);
+  const rev=state.revision;await call('ball',{ball:'masterball'});await call('ball',{ball:'masterball',revision:rev},409);await get();const caught=state.box.find(p=>p.speciesId===659);assert.ok(caught);assert.deepEqual(rawMon(caught.boxId).moves,['째려보기','몸통박치기']);assert.equal(rawMon(caught.boxId).adventureBunnelbyMovesV1,true);assert.deepEqual(rawMon(lead).ivs,leadBefore.ivs);
+  globalThis.__adventureRandom=()=>.999;seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-zone5',interior:null,x:6,y:7,facing:'right',combat:null,encounter:null},state.revision+1));await get();const zone5Rolls=[0,.7];globalThis.__adventureRandom=()=>zone5Rolls.shift()??.999;await call('move',{direction:'right'});assert.equal(rawWorld().encounter.speciesId,659);assert.deepEqual(rawWorld().encounter.moves,['째려보기','몸통박치기','머드샷']);assert.deepEqual(rawMon(caught.boxId).moves,['째려보기','몸통박치기']);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Zone 1 surveyed grass can yield an alpha without changing older battle saves',async()=>{
  const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-random-alpha-qa',displayName:'구역 1 우두머리 조사'};
  try{globalThis.__adventureRandom=()=>.999;await get();await call('start',{species:152});const lead=state.world.activeId,all=[13,16,172,179,659,661,664],place=(fields)=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:5,y:7,facing:'right',...fields},state.revision+1);

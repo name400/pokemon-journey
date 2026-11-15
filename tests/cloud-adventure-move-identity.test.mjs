@@ -6,6 +6,14 @@ import {applyAdventureLevelMoves,applyAdventureIntroStarterMoves,applyAdventureE
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
 import {canLearnResearchTm} from '../lib/cloud-adventure/adventure-research.mjs';
 
+test('new ordinary Bunnelby uses the reviewed growth table without modifying saved monsters',async()=>{
+ const {prepareVerifiedWildMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [level,expected] of [[5,['째려보기','몸통박치기']],[13,['째려보기','몸통박치기','머드샷']],[32,['전광석화','세차게휘두르기','구멍파기','뛰어오르기']]]){
+  const mon={...makeMon(659,level),pp:{tackle:2}},before=structuredClone(mon),prepared=prepareVerifiedWildMoves(mon);assert.deepEqual(prepared.moves,expected);assert.deepEqual(prepared.pp,{});assert.deepEqual(mon,before);
+ }
+ for(const mon of [{...makeMon(659,5),adventureAlpha:true},{...makeMon(659,5),formId:999},makeMon(660,32)])assert.equal(prepareVerifiedWildMoves(mon),mon);
+});
+
 test('move aliases are recognized without inventing unknown IDs',()=>{
  assert.equal(sameAdventureMove('화염방사','Flamethrower'),true);assert.equal(sameAdventureMove('rocksmash','바위깨기'),true);
  assert.equal(sameAdventureMove('unknown-a','unknown-b'),false);assert.equal(sameAdventureMove('unknown-a','unknown-a'),true);
