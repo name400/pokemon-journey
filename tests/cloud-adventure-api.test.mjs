@@ -3055,6 +3055,17 @@ test('Vert 9 alley items preserve old data, limits and walkable paths',async()=>
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('canal sewer map travel unlocks after cleanup and enters the separate sewer',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'canal-sewer-map-qa',displayName:'운하 하수도 이동'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds],future={version:2,items:['future']};
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:5,zaMission04Complete:true,zaMission20Stage:9,zaFastTravelLandmarks:future,...extra},state.revision+1);
+  seedWorld(place({}));await get();assert.ok(!state.world.zaMapTravelDestinations.some(p=>p.id==='magenta-sewer'));await call('mapFastTravel',{destination:'magenta-sewer'},409);
+  seedWorld(place({zaMission20Stage:10,zaMission20Crystals:['future-crystal']}));await get();assert.ok(state.world.zaMapTravelDestinations.some(p=>p.id==='magenta-sewer'));const mon=rawMon(id),rev=state.revision;await call('mapFastTravel',{destination:'magenta-sewer'});await call('mapFastTravel',{destination:'magenta-sewer',revision:rev},409);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.facing],['lumiose-magenta-sewer-bank',4,8,'up']);assert.ok(state.world.interaction.actions.some(a=>a.action==='mission20CrystalEnter'));assert.deepEqual(rawWorld().zaFastTravelLandmarks,future);assert.deepEqual(rawWorld().zaMission20Crystals,['future-crystal']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);
+  await call('mission20CrystalEnter');assert.equal(state.world.district,'lumiose-crystal-sewer');assert.equal(state.world.zaMission20Stage,10);assert.equal(rawWorld().zaMission20CrystalReturn,'magenta-bank');
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Looker Bureau visit unlocks map travel and keeps existing save data',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bureau-map-travel-qa',displayName:'사무소 이동'};
  try{

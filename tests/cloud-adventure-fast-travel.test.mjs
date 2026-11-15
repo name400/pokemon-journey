@@ -3,6 +3,13 @@ import assert from 'node:assert/strict';
 import {FAST_TRAVEL_CENTERS,centerAt,recordCenter,recordNearbyCenter,registeredCenters} from '../lib/cloud-adventure/adventure-fast-travel.mjs';
 import {fieldMap,fieldDialogue,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
 
+test('canal sewer travel unlocks after cleanup without rewriting unknown landmarks',async()=>{
+ const {mapTravelDestinations,taxiDestinations,recordLandmarks}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const base={area:3,district:'lumiose-magenta-sewer-bank',interior:null,x:4,y:8,zaMission04Complete:true,zaFastTravelLandmarks:{version:2,items:['future']}};
+ for(const stage of [undefined,8,9,16])assert.ok(!mapTravelDestinations({...base,zaMission20Stage:stage}).some(p=>p.id==='magenta-sewer'));
+ for(const progress of [{zaMission20Stage:10},{zaMission20Stage:15},{zaMission20Complete:true}]){const s={...base,...progress},before=structuredClone(s);assert.ok(mapTravelDestinations(s).some(p=>p.id==='magenta-sewer'));assert.ok(!taxiDestinations(s).some(p=>p.id==='magenta-sewer'));assert.equal(recordLandmarks(s),false);assert.deepEqual(s,before);}
+});
+
 test('Looker Bureau map travel uses visit evidence without changing saved landmarks',async()=>{
  const {mapTravelDestinations,taxiDestinations,recordLandmarks}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
  const base={area:3,district:'lumiose-rouge-sector5',interior:null,x:5,y:7,facing:'up',zaMission04Complete:true,zaRoyaleRank:'Y',zaFastTravelLandmarks:{version:2,items:['future']},teamIds:['kept']};
