@@ -1,5 +1,38 @@
 # 배포 검증 실패 기록
 
+## 2026-11-15 — GitHub `af5e7a55` 배포 검사 실패
+
+- 검사 시작 당시 `cloud/pokerogue-continue-20261105`의 최신 GitHub 커밋 `af5e7a5558c7ce7e4376cecbeaeb2eea041ef051`.
+- 기존 Sites 소스와 병합한 검증 커밋 `916fb745e382377e70c26987e9b4c66a51f63eac`, Node.js v24.22.1.
+- 타입 검사 통과. 전체 테스트 4,827개 중 4,809개 통과·18개 실패 (361.2초). 별도 배포용 빌드 통과.
+- 테스트 실패로 배포하지 않았다. 마지막 확인된 운영본은 Sites v88이다.
+
+### 실패 상세
+
+아래 1~9번은 `tests/cloud-adventure-api.test.mjs`의 테스트 시작 행이다.
+
+1. 153행: 구역 8 진입 제한 이동이 기대 409 대신 200.
+2. 1202행: 전체 캠페인 이동 좌표 기대 [13,5], 실제 [13,3].
+3. 1454행: 식당 코스 시작 기대 200, 실제 공유 포켓몬 변경 메시지와 409.
+4. 1681행: 미션 10 물가 이벤트 기대 200, 실제 같은 공유 포켓몬 변경 메시지와 409.
+5. 2631행: 구역 8 정원 진입 제한 이동 기대 409, 실제 200.
+6. 2955행: 구역 1 도로 이동 좌표 기대 [13,5], 실제 [13,3].
+7. 3476행: 색깔 나사·인형 강화에서 null의 `action`을 읽어 TypeError.
+8. 4482행: 루주 택시·야생 구역 제한 검사에서 이동 기대 409, 실제 200.
+9. 8699행: 우두머리 숙련의씨 검사에서 `skipCatchWindow` 기대 200, 실제 포획 기회 없음 409.
+
+다음 아홉 검사는 구역 8 제한 또는 연결 경로의 참 값 기대 `true` 대신 `undefined`가 나왔다.
+
+10. `tests/cloud-adventure-jaune-canal-sectors.test.mjs:29` — 존느 9.
+11~13. `tests/cloud-adventure-jaune-north-street.test.mjs:5,17,31` — 존느 2·3·북쪽 거리.
+14. `tests/cloud-adventure-jaune1-links.test.mjs:5` — 존느 1.
+15. `tests/cloud-adventure-jaune3-hibernal.test.mjs:5` — 존느 3.
+16. `tests/cloud-adventure-jaune5-links.test.mjs:5` — 존느 5.
+17. `tests/cloud-adventure-jaune9-6-links.test.mjs:5` — 존느 9·6.
+18. `tests/cloud-adventure-mission18-location.test.mjs:12` — 미션 18 구역 8 동쪽 입구.
+
+구역 8 출입 및 좌표 관련 결과에 반복 패턴이 있으나 실제 게임 회귀인지 변경된 맵·진행 규칙과 테스트 기대값의 차이인지는 확정할 수 없다. 상호작용·공유 상태와 각 진입 조건을 재현하고 정확한 Sites 병합본에서 전체 검사를 다시 실행한다.
+
 ## 2026-11-15 — 개발 브랜치 루차불 타입 검사
 
 - 개발 브랜치 타입 검사에서 `route.ts`의 사이드 59 상대 생성 콜백 매개변수에 타입이 없어 TS7006이 발생했다. 해당 매개변수의 기존 코드 관례에 맞는 타입을 지정한 후 타입 검사가 통과했다. 이 기록은 실제 Sites 병합본의 다른 실패를 해결하거나 운영 재검증한 뜻이 아니다.
