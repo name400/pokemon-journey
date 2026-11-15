@@ -17,3 +17,14 @@ test('Magenta 7 courtyard and four street connections preserve saves and zone ga
  assert.equal(stepField({...s,district:'lumiose-magenta-sector8-route',x:21,y:8},'right').blocked,true);
  assert.equal(adventureBattleOptions({...s,weather:'rain'}).weather,'raindance');
 });
+
+ test('Sector 7 and 9 ground connection does not open Zone 18 and survives saves',()=>{
+ const s={area:3,district:'lumiose-magenta-sector7',interior:null,x:7,y:1,zaRoyaleRank:'Z',teamIds:['kept'],money:731};
+ assert.ok(fieldPath(fieldMap(s),s,{x:11,y:8}).length);
+ const nine=stepField(s,'up');assert.deepEqual([nine.district,nine.x,nine.y,nine.zaMagenta9Upper],['lumiose-magenta-sector9',17,15,false]);
+ const saved=restoreAdventurePosition(storeAdventurePosition({...s,...nine},178),178);
+ assert.deepEqual([saved.teamIds,saved.money],[['kept'],731]);
+ assert.ok(fieldPath(fieldMap(saved),saved,{x:11,y:8}).length);
+ assert.equal(stepField({...saved,x:11,y:1},'up').blocked,true);
+ const back=stepField(saved,'down');assert.deepEqual([back.district,back.x,back.y],['lumiose-magenta-sector7',7,1]);
+ });
