@@ -11691,3 +11691,13 @@ test('Mission 20 ghost progress preserves future slots and refuses unknown conta
   seedWorld(storeAdventurePosition({...rawWorld(),zaMission20GhostCaught:['future-slot',93],district:'lumiose-ghost-house',x:6,y:6,facing:'up'},state.revision+1));await get();await call('throwMission20Ghost',{ball:'masterball'});await get();assert.deepEqual(state.world.zaMission20GhostCaught,['future-slot',93,92]);assert.equal(rawWorld().adventureBalls.masterball,1);assert.equal(state.world.teamIds.length,team.length+1);assert.equal(rawMon(team[0]).personality,original.personality);assert.deepEqual(rawMon(team[0]).ivs,original.ivs);assert.ok(rawMon(team[0]).level>=original.level);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('TM058 teaches compatible regional forms and preserves existing saved moves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm058-forms-qa',displayName:'아이언헤드 폼'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,team=[...state.world.teamIds],key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm058']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm058');
+  for(const form of [10161,10115,10241,10242,10243]){const mon={...makeMon(form,30),boxId:lead,moves:['몸통박치기'],pp:{tackle:3},custom:{keep:true}};seedMon(lead,mon);await get();await call('teachStoryTm',{item:'za-tm058',boxId:lead,slot:0});await get();assert.deepEqual(rawMon(lead).moves,['아이언헤드']);assert.deepEqual(rawMon(lead).custom,{keep:true});assert.equal(state.inventory['za-tm058'],1);assert.deepEqual(state.world.teamIds,team);}
+  for(const form of [52,705,706,713]){const mon={...makeMon(form,30),boxId:lead,moves:['몸통박치기']};seedMon(lead,mon);await get();await call('teachStoryTm',{item:'za-tm058',boxId:lead,slot:0},409);assert.deepEqual(rawMon(lead).moves,['몸통박치기']);}
+  const legacy={...makeMon(705,30),boxId:lead,moves:['아이언헤드'],custom:{keep:true}};seedMon(lead,legacy);await get();assert.deepEqual(rawMon(lead).moves,['아이언헤드']);assert.deepEqual(rawMon(lead).custom,{keep:true});
+ }finally{globalThis.__adventureUser=previous;}
+});

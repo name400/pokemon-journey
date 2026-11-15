@@ -94,3 +94,13 @@ test('TM075 supports reviewed species and Hisuian forms without inferring others
  assert.equal(canLearnStoryTm(bag,{id:349,speciesId:349,moves:['용의파동']},'za-tm075'),false);
  assert.equal(canLearnStoryTm({}, {id:349,speciesId:349,moves:[]},'za-tm075'),false);
 });
+
+test('TM058 respects regional forms without altering previously learned moves',()=>{
+ const bag={'za-tm058':1};
+ for(const [id,speciesId] of [[10115,105],[10161,52],[10241,705],[10242,706],[10243,713],[10147,801],[30075,649],[30076,649],[30077,649],[30078,649]])assert.equal(canLearnStoryTm(bag,{id,speciesId,moves:[]},'za-tm058'),true,`${id}`);
+ for(const id of [52,705,706,713])assert.equal(canLearnStoryTm(bag,{id,speciesId:id,moves:[]},'za-tm058'),false,`${id}`);
+ assert.equal(canLearnStoryTm(bag,{id:10241,speciesId:706,moves:[]},'za-tm058'),false);
+ assert.equal(canLearnStoryTm(bag,{id:304,speciesId:304,moves:[]},'za-tm058'),true);
+ assert.equal(canLearnStoryTm(bag,{id:25,speciesId:25,moves:[]},'za-tm058'),false);
+ assert.equal(canLearnStoryTm(bag,{id:10242,speciesId:706,moves:['아이언헤드']},'za-tm058'),false);
+});
