@@ -10665,6 +10665,13 @@ test('future move queue prevents a winning battle from overwriting saved progres
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 7 visible foe keeps ZA growth through capture and evolution',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone7-family-growth-qa',displayName:'구역 7 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,iv=structuredClone(rawMon(lead).ivs),key='zone7:vanillite:582';seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone7',interior:null,x:5,y:9,facing:'up',zaRoyaleRank:'F',zaZone7Spent:{},zaWildShinyRolls:{[key]:false},zaWildVisibleAlphaLevels:{},adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();await call('zone7Wild-vanillite');assert.equal(rawWorld().encounter.adventureZone7GrowthV1,true);assert.deepEqual(rawWorld().encounter.moves,['몸통박치기','도발','흰안개','얼어붙은바람']);await get();await call('flee');await get();globalThis.__adventureRandom=()=>0;await call('throwZoneVisible',{ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===582);assert.ok(caught);const id=caught.boxId;assert.equal(rawMon(id).adventureZone7GrowthV1,true);seedMon(id,{...rawMon(id),level:35,pp:{tackle:3},custom:{keep:true}});await get();await call('evolve',{boxId:id,target:583});await get();assert.equal(rawMon(id).adventureZone7GrowthV1,true);assert.equal(rawMon(id).pp.tackle,3);assert.deepEqual(rawMon(id).custom,{keep:true});assert.deepEqual(rawMon(lead).ivs,iv);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
+
 test('Zone 6 visible foe keeps ZA growth through capture and evolution',async()=>{
  const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'zone6-family-growth-qa',displayName:'구역 6 성장'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
  try{
