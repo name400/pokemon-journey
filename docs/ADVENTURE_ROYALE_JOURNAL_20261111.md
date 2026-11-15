@@ -71,3 +71,9 @@
 랭크 B의 SBC Lucie와 운전사 Maxime을 [상대 편성](https://www.serebii.net/legendsz-a/z-aroyale/rankb.shtml)에 맞춰 추가했다. 기존 공용 경기장 좌표와 승리 점수는 근사다. 승리한 엘리트 트레이너 Fredrique에게 다시 말을 걸면 [로열 안내](https://www.serebii.net/legendsz-a/z-aroyale.shtml)에 따른 보너스 카드를 받는다. 정확한 카드와 추첨 방식은 확인되지 않아 기존에 지원하는 타입별 기절 과제 중 그날 아직 사용하지 않은 카드를 임시로 제공하며, 해당 카드의 목표·점수·메달은 기존 게임 규칙이다. 방문당 한 번이라는 제한도 잠정값이다.
 
 활성 카드 세 칸이 차 있으면 수령을 보류하며 자동 교체하지 않는다. 이미 저장한 카드와 알려지지 않은 카드 형식을 보존하고, 수령 후에는 기존 턴제 전투의 카드 진행·보상을 사용한다. 격리 SQLite API에서 두 상대의 접근·편성·재접속·기권, 카드 공간 부족, 수령·중복 거절, 전투 중 카드 완료 및 미확인 카드 형식 보존을 확인했다. 이로써 원작의 특별 카드 분포나 교체 화면을 재현한 것은 아니며, 원작 기기·Sites 병합본·운영 환경은 확인하지 않았다.
+
+랭크 B에 [상대 목록](https://www.serebii.net/legendsz-a/z-aroyale/rankb.shtml)의 러스트단 조무래기·Amaury·Pierre·Mona·Violette·Alicia·Rob·Victoire·Baptiste를 추가했다. 종·레벨·기술은 이 2차 자료를 따르고, Pierre의 미끄네일과 Rob의 메더는 목록에서 폼이 명확하지 않아 기존 기본 폼을 사용한다. 공용 경기장 위치와 승리 점수는 초안이다. 목록의 승급 상대 Grisham은 기존 승급전으로 유지한다.
+
+[로열 보상 안내](https://www.pokemon-france.com/en/guides/pokemon-legends-z-a/z-a-royale/)는 Digi-Z4P 소속을 이긴 뒤 보너스 카드를 제공한다고 설명하며, [단체 명칭 자료](https://bulbapedia.bulbagarden.net/wiki/DG4)는 Digi-Z4P가 DYN4MO(한국어 ZZ4)와 같은 단체라고 설명한다. 승리한 Rob에게도 기존에 구현된 타입별 기절 과제를 임시 카드로 지급한다. Fredrique와 수령 기록은 독립적이고, 카드 세 칸이나 미확인 저장 형식이 막혀 있으면 자동 교체하지 않는다. 카드의 실제 분포·내용·방문당 1회 제한과 원작 실기는 확인하지 않았다.
+
+격리 SQLite API에서 아홉 상대의 경기장 접근·편성·재접속과 대표 승리·기권, Rob 카드의 수령·중복 거절·미확인 수령 기록과 기존 파티·승리 기록 보존을 검사했다. Sites 병합본과 운영 환경은 검증하지 않았다. 원작의 정확한 카드 분포·교체 방식과 폼별 정보는 추가 확인이 필요하다.

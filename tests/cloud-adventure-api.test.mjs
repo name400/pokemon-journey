@@ -11768,3 +11768,26 @@ test('rank B ace awards a usable card without replacing saved cards',async()=>{
   seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',x:17,y:14,facing:'up',combat:null,trainer:null,encounter:null,zaRoyaleBAceClaimedV1:false,zaRoyaleBonusExtraCards:{version:2,data:{keep:true}}},state.revision+1));await get();await call('royaleBAceBonus',{},409);assert.deepEqual(rawWorld().zaRoyaleBonusExtraCards,{version:2,data:{keep:true}});assert.equal(rawWorld().zaRoyaleBAceClaimedV1,false);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
 });
+
+test('remaining rank B opponents are reachable and preserve the session and party',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;
+ globalThis.__adventureUser={userId:'rank-b-remaining-qa',displayName:'랭크 B 상대'};globalThis.__adventureTime={period:'night',hour:22};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{}});
+  const cases=[[29,1,3,'royale-b-rust-grunt',[530,306]],[30,1,5,'royale-b-amaury',[71,512]],[31,1,7,'royale-b-pierre',[35,25,705]],[32,1,9,'royale-b-mona',[707,702]],[33,1,11,'royale-b-violette',[569,691]],[34,1,13,'royale-b-alicia',[780,668]],[35,21,3,'royale-b-rob',[618,208]],[36,21,5,'royale-b-victoire',[478,302]],[37,21,7,'royale-b-baptiste',[148,334,780]]];
+  for(const [index,x,y,name,species] of cases){
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:11,y:14,facing:'up',zaRoyaleRank:'B',zaMission35Started:true,zaRoyaleBPoints:0,zaRoyaleBSessionWins:['future-trainer','royale-b-katrina'],combat:null,trainer:null,encounter:null},state.revision+1));await get();await walkTo({x:x===1?2:20,y});await call('face',{direction:x===1?'left':'right'});assert.equal(state.world.interaction?.action,`royaleBExtra${index}`);await call(`royaleBExtra${index}`);assert.equal(state.world.trainer.id,name);assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),species);await get();assert.equal(state.world.trainer.id,name);
+   if(index===37){const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);for(const foe of sim.p2.pokemon){foe.hp=1;foe.setStatus('slp');foe.statusState.time=99;}seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.ok(rawWorld().zaRoyaleBSessionWins.includes(name));await call(`royaleBExtra${index}`,{},409);}else await call('forfeit');
+   assert.ok(rawWorld().zaRoyaleBSessionWins.includes('future-trainer'));assert.ok(rawWorld().zaRoyaleBSessionWins.includes('royale-b-katrina'));assert.deepEqual(rawWorld().teamIds,team);
+  }
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
+
+test('rank B DYN4MO card reward is independent and preserves future records',async()=>{
+ const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'rank-b-rob-card-qa',displayName:'ZZ4 카드'};globalThis.__adventureTime={period:'night',hour:22};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],base={...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:20,y:3,facing:'right',zaRoyaleRank:'B',zaMission35Started:true,zaRoyaleBPoints:0,zaRoyaleBSessionWins:['future-trainer','royale-b-rob'],zaRoyaleBAceClaimedV1:true,combat:null,trainer:null,encounter:null};
+  seedWorld(storeAdventurePosition({...base,zaRoyaleBRobCardClaimedV1:{version:2,keep:true}},state.revision+1));await get();await call('royaleBRobBonus',{},409);assert.deepEqual(rawWorld().zaRoyaleBRobCardClaimedV1,{version:2,keep:true});
+  seedWorld(storeAdventurePosition({...base,zaRoyaleBRobCardClaimedV1:false},state.revision+1));await get();assert.equal(state.world.interaction.action,'royaleBRobBonus');const rev=state.revision;await call('royaleBRobBonus');assert.equal(rawWorld().zaRoyaleBRobCardClaimedV1,true);assert.equal(rawWorld().zaRoyaleBAceClaimedV1,true);assert.equal(rawWorld().zaRoyaleBonusExtraCards['knockout-fire'].completed,false);await call('royaleBRobBonus',{revision:rev},409);await get();await call('royaleBRobBonus',{},409);assert.ok(rawWorld().zaRoyaleBSessionWins.includes('future-trainer'));assert.deepEqual(rawWorld().teamIds,team);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
+});
