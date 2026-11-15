@@ -11659,3 +11659,17 @@ test('Rank B additional opponents are reachable, preserve progress and enforce b
   assert.equal(rawWorld().zaRoyaleBPoints,27000);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-royale',interior:null,x:15,y:12,facing:'up',zaRoyaleBPoints:45000},state.revision+1));await get();await call('royaleBExtra8',{},409);
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;}
 });
+
+test('Bleu 9 rooftop preserves the old courtyard and safely grants roof items',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu9-roof-qa',displayName:'블루 9 옥상'};
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],id=state.world.activeId,mon=structuredClone(rawMon(id));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector9',interior:null,x:10,y:3,facing:'up',zaMission20Stage:7,zaBleu9Items:['court-protein','future-ground']},state.revision+1));await get();await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-bleu9-roof');await get();assert.deepEqual([state.world.x,state.world.y],[11,15]);
+  const place=async(x,y,extra={})=>{seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-bleu9-roof',interior:null,x,y,facing:'down',...extra},state.revision+1));await get();};
+  await place(17,6);assert.equal(state.world.interaction.action,'bleu9RoofItem-east-calcium');const key=JSON.stringify([globalThis.__adventureUser.userId,'calcium']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,999)').run(key,globalThis.__adventureUser.userId,'calcium');await get();await call('bleu9RoofItem-east-calcium',{},409);assert.equal(rawWorld().zaBleu9RoofItems,undefined);sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const rev=state.revision;await call('bleu9RoofItem-east-calcium');assert.equal(state.inventory.calcium,1);await call('bleu9RoofItem-east-calcium',{revision:rev},409);
+  await place(18,10,{adventureBalls:{ultraball:99}});await call('bleu9RoofItem-east-ultra',{},409);assert.deepEqual(rawWorld().zaBleu9RoofItems,['east-calcium']);await place(18,10,{adventureBalls:{ultraball:1}});await call('bleu9RoofItem-east-ultra');assert.equal(rawWorld().adventureBalls.ultraball,2);
+  await place(4,8);await call('bleu9RoofItem-west-leaf');await place(11,3);await call('bleu9RoofItem-north-candy');await get();assert.equal(state.inventory.leafstone,1);assert.equal(state.inventory['za-exp-candy-m'],1);assert.deepEqual(rawWorld().zaBleu9Items,['court-protein','future-ground']);assert.equal(rawWorld().zaMission20Stage,7);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),{...mon,walkSteps:mon.walkSteps+1});
+  await place(11,15,{facing:'down'});await call('move',{direction:'down'});assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-bleu-sector9',10,3]);await get();
+  await place(17,6,{zaBleu9RoofItems:{version:2}});await call('bleu9RoofItem-east-calcium',{},409);assert.deepEqual(rawWorld().zaBleu9RoofItems,{version:2});
+ }finally{globalThis.__adventureUser=previousUser;}
+});
