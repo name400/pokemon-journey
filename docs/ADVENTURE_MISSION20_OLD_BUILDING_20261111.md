@@ -17,3 +17,5 @@
 ### 녹청파 사무소 옥상 TM075
 
 [위치 공략](https://www.gamerguides.com/pokemon-legends-z-a/database/items/tms-1/dragon-pulse)은 북쪽 건물에서 로토글라이드로 도달하는 녹청파 사무소 옥상에 TM075 용의파동이 있다고 설명한다. 기존 두 옥상과 글라이드 경로에 일회성 획득을 연결했다. 정확한 타일 위치와 옥상 평면은 2D 초안이며 원작 실기 검증은 하지 않았다. 가방이 가득 차면 획득 기록을 남기지 않는다. [기술 목록](https://www.serebii.net/attackdex-sv/dragonpulse.shtml)의 Z-A 항목에서 일부 기본 종 36개만 확인했으므로 나머지 종과 폼의 학습 호환성은 미완성이다. 기존 저장과 보유 기술머신은 유지된다.
+
+후속 호환성 보완: [Z-A 기술머신 목록](https://www.serebii.net/attackdex-sv/dragonpulse.shtml)에서 세비퍼·빈티나 계열·곤율랭 계열·저리더프·일레도리자드·티고라스 계열·지가르데·할비롱·데스판을 추가로 확인해 기본 종 48종을 지원한다. [폼별 자료](https://www.dittobase.com/legends-za/moves/dragon-pulse)에서 히스이 미끄네일·미끄래곤을 별도 확인했다. 데이터베이스의 [이용 조건](https://www.dittobase.com/terms)에 따라 필요한 관계만 확인했으며 전체 데이터를 복제하지 않았다. 다른 종·폼은 여전히 미확인이며 화면에도 부분 지원으로 표시한다. 실제 기기에서의 대조는 하지 않았다.

@@ -10819,3 +10819,9 @@ test('Mission 19 inner Chandelure guides both wall entries without changing old 
   seedWorld(storeAdventurePosition({...outer,x:18,y:4,zaMission19Stage:13,zaMission19Inner:true,zaMission19InnerEnabled:true},state.revision+1));await get();assert.equal(state.world.zaMission19InnerGuide,undefined);assert.equal(state.world.interaction.action,'mission19Gwynn');
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('TM075 teaches a Hisuian form without consuming the machine or changing other Pokémon',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'tm075-hisui-qa',displayName:'용의파동 폼 검사'};
+ try{await get();await call('start',{species:152});const id=state.world.activeId,team=[...state.world.teamIds];seedMon(id,{...makeMon(10242,20),moves:['몸통박치기']});const key=JSON.stringify([globalThis.__adventureUser.userId,'za-tm075']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,1)').run(key,globalThis.__adventureUser.userId,'za-tm075');await get();const revision=state.revision;await call('teachStoryTm',{item:'za-tm075',boxId:id,slot:0});await get();assert.equal(rawMon(id).moves[0],'용의파동');assert.equal(rawMon(id).speciesId,706);assert.equal(state.inventory['za-tm075'],1);assert.deepEqual(state.world.teamIds,team);await call('teachStoryTm',{item:'za-tm075',boxId:id,slot:0,revision},409);await call('teachStoryTm',{item:'za-tm075',boxId:id,slot:0},409);
+ }finally{globalThis.__adventureUser=previous;}
+});
