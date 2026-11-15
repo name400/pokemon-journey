@@ -532,6 +532,14 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     }
     if(w.district==='lumiose-vert-sector6'&&!w.interior&&c==='q'&&x===13&&y===13){ctx.fillStyle='#a77182';ctx.fillRect(px+5,py+5,tile-10,tile-10);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('Terri',px+tile/2,py+20);return;}
     if(w.district==='lumiose-vert-sector6'&&!w.interior&&c==='u'&&x===17&&y===13){ctx.fillStyle='#6b8273';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('차고',px+tile/2,py+20);return;}if(['lumiose-vert-sector1','lumiose-vert-sector3','lumiose-vert-sector6','lumiose-vert-sector7'].includes(w.district)&&!w.interior){ctx.fillStyle=c==='#'?'#9c9588':c==='~'?'#78acc2':c==='g'?'#9bb985':c===':'?'#c4b49c':c===','?'#b6b9ab':(x+y)%2?'#d8e3cf':'#e5ecd9';ctx.fillRect(px,py,tile,tile);
+     // Sector 6's water, bridge and building use the existing provisional ground map.
+     if(w.district==='lumiose-vert-sector6'){
+      const building=c==='#'&&x>=15&&x<=19&&y>=9&&y<=12;
+      if(building){ctx.fillStyle='#afa294';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#ded0bd';if(w.map[y-1]?.[x]!=='#')ctx.fillRect(px,py,tile,4);if(w.map[y+1]?.[x]!=='#'){ctx.fillStyle='#776e66';ctx.fillRect(px,py+tile-8,tile,8);ctx.fillStyle='#cfc0aa';ctx.fillRect(px+5,py+tile-7,7,4);ctx.fillRect(px+tile-12,py+tile-7,7,4);}else{ctx.fillStyle='#958a80';ctx.fillRect(px+3,py+9,tile-6,2);}}
+      if(c==='~'){ctx.fillStyle=(x+y)%2?'#79adc0':'#85b8c6';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#a8d1d5';ctx.fillRect(px+4+(x*3+y)%8,py+8,tile-15,2);ctx.fillRect(px+8,py+tile-8,tile-17,2);}
+      if(c===','&&y>=5&&y<=6&&x>=10&&x<=12){ctx.fillStyle='#c0ad96';ctx.fillRect(px,py,tile,tile);ctx.fillStyle='#8a7b6c';ctx.fillRect(px,py+tile-2,tile,2);if(x===10||x===12){ctx.fillStyle='#eee0c8';ctx.fillRect(x===10?px+2:px+tile-4,py,2,tile);}}
+      else if(c===','){ctx.fillStyle='#d7d5c5';if(w.map[y-1]?.[x]==='.')ctx.fillRect(px,py,tile,2);if(w.map[y+1]?.[x]==='.')ctx.fillRect(px,py+tile-2,tile,2);}
+     }
      // Sector 7's bridge, lawn and buildings follow existing provisional tiles.
      if(w.district==='lumiose-vert-sector7'){
       const building=c==='#'&&((x>=2&&x<=5&&y>=2&&y<=5)||(x>=16&&x<=20&&y>=11&&y<=14));
