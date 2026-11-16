@@ -79,3 +79,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 플라드리 연구소·마젠타 하수도 일반 출현 성장표
 
 연구소 일반 메탕·메탕구의 ZA 성장·진화·기술 관리와 하수도 일반 수레기 계열을 추가했다. 연구소 일반 델빌·헬가·썬더라이·라이볼트·음뱃·음번·아보 및 하수도 아리아도스·오케이징·음뱃은 기존에 대조한 표를 재사용하도록 야생 전투와 필드 투척 경로를 연결했다. 하수도는 풀숲·접촉 조우도 같은 표를 쓴다. 기존 저장·진행 전투·알 수 없는 표식과 우두머리는 소급하지 않으며, 야생 초기 네 기술은 엔진 근사다. 2차 출처: https://pokemondb.net/pokedex/beldum/moves/9 https://pokemondb.net/pokedex/metang/moves/9 https://pokemondb.net/pokedex/metagross/moves/9 https://pokemondb.net/pokedex/skrelp/moves/9 . 출현 좌표·우두머리 확률은 기존 초안 그대로이며 Sites 병합본 검증은 남았다.
+
+### 옥상 일반 조우 성장 연결
+
+구역 3 남쪽 옥상 냐스퍼와 루주 1 옥상 비비용 일반 조우에 기존 ZA 성장표를 적용했다. 비비용은 현재 맵이 생성하는 기본 폼만 적용하고, 냐스퍼의 성별과 암수별 진화형 기술은 기존 식별 규칙을 유지한다. 기존 저장·진행 전투·우두머리·알 수 없는 표식은 소급하지 않는다. 자료: https://pokemondb.net/pokedex/espurr/moves/9 https://pokemondb.net/pokedex/vivillon/moves/9 (2차 자료). 원작의 정확한 야생 초기 기술은 미확인이고 최신 네 기술 선택은 엔진의 근사다.
