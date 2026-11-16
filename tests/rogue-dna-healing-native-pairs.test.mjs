@@ -49,6 +49,48 @@ test('Life Orb and healing item fusion rejects bound and ambiguous donor records
   assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));assert.deepEqual(run,before);
  }
 });
+test('native Wide Lens and a reviewed healing item retain distinct effects through fusion and restore',async()=>{
+ for(const healingItem of items)for(const lensOnDonor of [false,true]){
+  let {doc,run}=fixture(lensOnDonor?healingItem:'widelens',lensOnDonor?'widelens':healingItem);
+  const before=structuredClone(run);
+  assert.ok(classicRewardView(run)[0].fusionPairs.some(pair=>pair.primaryBoxId==='primary'&&pair.donorBoxId==='donor'));
+  assert.deepEqual(run,before);
+  applyClassicAction(doc,{action:'reward',rewardId:'healing-items',boxId:'primary',donorBoxId:'donor',confirmFusion:true});
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  assert.equal(run.party[0].item,'widelens');assert.equal(run.modifiers.find(row=>row.id===healingItem)?.count,1);
+  assert.ok(!run.modifiers.some(row=>row.id==='widelens'));
+  assert.equal(run.party[0].rogueFusion.donor.item,lensOnDonor?'widelens':healingItem);
+  run.party[0].hp=50;const max=run.party[0].maxHp;
+  run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})]);
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  const battle=restoreClassicNativeBattle(run.combat,run),p=battle.p1.active[0],foe=battle.p2.active[0];
+  // Native Wide Lens multiplies 70 by 1.1; source Wide Lens would add 5.
+  assert.equal(battle.runEvent('ModifyAccuracy',foe,p,battle.dex.moves.get('thunder'),70),77);
+  run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});run.party=run.combat.teams[0];
+  assert.equal(run.party[0].hp,50+(healingItem==='leftovers'?Math.floor(max/16):Math.floor(50/8)));
+  run.screen='interlude';delete run.combat;applyClassicAction(doc,{action:'unsplice',boxId:'primary',confirm:true});
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  assert.equal(run.party[0].item,'widelens');assert.equal(run.modifiers.find(row=>row.id===healingItem)?.count,1);
+  assert.ok(!run.modifiers.some(row=>row.id==='widelens'));assert.deepEqual(doc.adventure,{safe:true});assert.equal(doc.coins,37);
+ }
+});
+test('Wide Lens and healing item fusion rejects nontransferable or ambiguous records without mutation',()=>{
+ for(const lensOnDonor of [false,true])for(const mutate of [r=>{r.party[1].rogueNativeItemNontransferable=true;},r=>r.modifiers.push({id:'shellbell',boxId:'donor',count:1,active:false}),r=>r.modifiers.push({id:'shellbell',boxId:'primary',count:4})]){
+  const {run}=fixture(lensOnDonor?'shellbell':'widelens',lensOnDonor?'widelens':'shellbell');mutate(run);const before=structuredClone(run);
+  assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));assert.deepEqual(run,before);
+ }
+});
+test('native and source Wide Lenses remain separately effective when the native lens is removed',()=>{
+ let {run}=fixture('widelens','leftovers');run.modifiers.push({id:'widelens',boxId:'donor',count:1,typeBoost:null});
+ run=stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}).run;
+ run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})]);
+ const battle=restoreClassicNativeBattle(run.combat,run),p=battle.p1.active[0],foe=battle.p2.active[0],move=battle.dex.moves.get('thunder');
+ assert.equal(battle.runEvent('ModifyAccuracy',foe,p,move,70),82);
+ assert.equal(p.takeItem(foe)?.id,'widelens');
+ assert.equal(battle.runEvent('ModifyAccuracy',foe,p,move,70),75);
+ assert.equal(run.combat.modifiers.find(row=>row.id==='widelens')?.count,1);
+ assert.equal(run.combat.modifiers.find(row=>row.id==='leftovers')?.count,1);
+});
 test('Shell Bell caps include the native slot for fusion, reward, direct grant, transfer and automatic allocation',()=>{
  const {run}=fixture();run.modifiers=[{id:'shellbell',boxId:'primary',count:2,typeBoost:null}];const staged=stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}).run;
  staged.rewards=[{...CLASSIC_REWARD_REGISTRY.find(row=>row.id==='shellbell'),rewardId:'bell'}];assert.equal(classicRewardView(staged)[0].targets[0].eligible,false);const before=structuredClone(staged);assert.throws(()=>addClassicModifier(staged,'shellbell',{boxId:'primary'}));assert.deepEqual(staged,before);
