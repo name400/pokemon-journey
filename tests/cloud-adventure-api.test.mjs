@@ -57,6 +57,15 @@ function rawWorld(){return JSON.parse(sql.prepare('SELECT state FROM worlds WHER
 function seedWorld(patch){const w={...rawWorld(),...patch};sql.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').run(JSON.stringify(w),globalThis.__adventureUser.userId);}
 function rawMon(id){return JSON.parse(sql.prepare('SELECT data FROM pokemon_box WHERE id=?').get(id).data);}
 function seedMon(id,p){sql.prepare('UPDATE pokemon_box SET species_id=?,data=? WHERE id=?').run(p.id,JSON.stringify(p),id);}
+test('special ball purchase reports insufficient funds without changing the save',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-ball-funds-qa',displayName:'볼 구매 검사'};
+ try{
+  await get();await call('start',{species:1});seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:5,facing:'up',zaRoyaleRank:'A'},state.revision+1));
+  sql.prepare('UPDATE wallets SET coins=599 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const revision=state.revision,before=structuredClone(state.world.adventureBalls),wallet=structuredClone(state.wallet);
+  const result=await call('buyBall',{ball:'ultraball'},409);assert.match(result.error,/코인이 부족/);await get();assert.equal(state.revision,revision);assert.deepEqual(state.world.adventureBalls,before);assert.deepEqual(state.wallet,wallet);
+  sql.prepare('UPDATE wallets SET coins=1200 WHERE user_id=?').run(globalThis.__adventureUser.userId);await get();const oldRevision=state.revision;await call('buyBall',{ball:'ultraball'});assert.equal(state.wallet.coins,600);assert.equal(state.world.adventureBalls.ultraball,1);await call('buyBall',{ball:'ultraball',revision:oldRevision},409);await get();assert.equal(state.wallet.coins,600);assert.equal(state.world.adventureBalls.ultraball,1);
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('new ZA battles require the Mega Ring without changing saved Pokemon',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-ring-lock-qa',displayName:'메가링 검사'};
  try{

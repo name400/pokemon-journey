@@ -1878,6 +1878,7 @@ else if(b.action==='buyBall'){
  if(ball.id!=='greatball'&&ball.id!=='ultraball'&&(s.area!==3||s.district!=='lumiose'||s.interior))throw Error('미르시티의 볼 코너에서 구매하세요.');
  if(!Number.isInteger(quantity)||quantity<1||quantity>99)throw Error('수량은 1–99개입니다.');
  const stock=s.adventureBalls?.[ball.id]||0;if(!Number.isInteger(stock)||stock<0||stock+quantity>99)throw Error('볼은 종류별 99개까지 보관할 수 있습니다.');
+ const ballWallet:any=await db().prepare('SELECT coins FROM wallets WHERE user_id=?').bind(u.userId).first();if(!ballWallet||ballWallet.coins<ball.price*quantity)throw Error('볼을 살 코인이 부족합니다.');
  s.adventureBalls={...(s.adventureBalls||{}),[ball.id]:stock+quantity};reward=-ball.price*quantity;s.log=[`${ball.name} ${quantity}개를 샀다.`];if(s.area===3&&typeof s.district==='string'&&s.district.startsWith('lumiose'))awardPremierPurchase(s,quantity);
 }
 else if(b.action==='royaleJoin'){
