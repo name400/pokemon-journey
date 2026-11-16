@@ -135,3 +135,9 @@
 .adv-mission38-people span { display:flex; align-items:center; gap:.2rem; padding:.2rem; border-radius:.3rem; background:#e4eee5; }
 .adv-mission38-people span::before { content:""; width:10px; height:15px; flex:none; border-radius:6px 6px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
 @media(max-width:420px){.adv-mission38-scene{grid-template-columns:108px 1fr;gap:.4rem}.adv-mission38-cast img{width:52px;height:70px}}
+
+/* L and the laboratory remain visible while the player reads the explanation. */
+.adv-lab-l-scene { display:grid; grid-template-columns:120px 1fr; gap:.5rem 1rem; align-items:center; }
+.adv-lab-l-cast { grid-row:span 2; display:flex; align-items:end; height:96px; }
+.adv-lab-files { display:grid; place-content:center; width:58px; height:58px; padding:.2rem; color:#ecfff8; background:#47716b; border:3px solid #294c4b; font-size:.7rem; text-align:center; line-height:1.2; }
+@media(max-width:420px){.adv-lab-l-scene{grid-template-columns:105px 1fr;gap:.4rem}.adv-lab-files{width:48px;height:48px}}
