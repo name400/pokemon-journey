@@ -32,8 +32,10 @@ test('companion attacks follow the aura but remain owned and an untagged opposin
 
 test('a trained starter and story companion can clear a representative Rogue Slowbro',async()=>{
  const {mission10RivalTeam}=await import('../lib/cloud-adventure/adventure-mission10.mjs');const {createCompanionBossSnapshot}=await import('../lib/cloud-adventure/adventure-mission10-double.mjs');
- const player=mon(152,'player',['잎날가르기'],45),boss=mon(10071,'boss',['물의파동','환상빔'],34),ally=mission10RivalTeam('grass').map((m,i)=>({...m,boxId:`ally-${i}`,item:''}));let battle=flags(createCompanionBossSnapshot([player],ally,boss));battle.snapshot.prng='1,2,3,4';
- for(let turn=0;turn<20&&!battle.ended;turn++){const view=mission10MultiView(battle);assert.equal(view.requests[0].actors[0].kind,'move');battle=playMission10MultiTurn(battle,{type:'move',move:'razorleaf',...(view.adventurePlusGauge.charge?{plus:true}:{})});}
+ // An evolved starter with its evolution move is a reachable strategy. A
+ // level-45 unevolved Chikorita spamming Razor Leaf can legitimately lose.
+ const player=mon(154,'player',['기가드레인'],36),boss=mon(10071,'boss',['물의파동','환상빔'],34),ally=mission10RivalTeam('grass').map((m,i)=>({...m,boxId:`ally-${i}`,item:''}));let battle=flags(createCompanionBossSnapshot([player],ally,boss));battle.snapshot.prng='1,2,3,4';
+ for(let turn=0;turn<20&&!battle.ended;turn++){const view=mission10MultiView(battle);assert.equal(view.requests[0].actors[0].kind,'move');battle=playMission10MultiTurn(battle,{type:'move',move:'gigadrain',target:1,...(view.adventurePlusGauge.charge?{plus:true}:{})});}
  assert.equal(battle.winner,0);assert.equal(battle.teams[1][0].hp,0);assert.deepEqual(battle.owners.player,['player']);
 });
 
