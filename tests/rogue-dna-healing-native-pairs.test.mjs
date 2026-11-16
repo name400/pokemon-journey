@@ -23,6 +23,32 @@ test('two Shell Bells heal after real damage on consecutive restored turns',asyn
  let {run}=fixture();run=stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}).run;run.party[0].hp=1;run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})]);
  for(let i=0;i<2;i++){run=(await decodeGameData(await encodeGameData({run}))).run;const battle=restoreClassicNativeBattle(run.combat,run),hp=battle.p1.active[0].hp;run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});run.party=run.combat.teams[0];assert.equal(run.party[0].hp,hp+12);assert.equal(classicHeldItemCount('shellbell',run.modifiers,'primary',run.party[0].item),2);}
 });
+test('Life Orb and a reviewed healing item preserve both effects through fusion, battle and unsplice',async()=>{
+ for(const healingItem of items)for(const lifeOrbOnDonor of [false,true]){
+  let {doc,run}=fixture(lifeOrbOnDonor?healingItem:'lifeorb',lifeOrbOnDonor?'lifeorb':healingItem);const before=structuredClone(run);
+  assert.ok(classicRewardView(run)[0].fusionPairs.some(pair=>pair.primaryBoxId==='primary'&&pair.donorBoxId==='donor'));
+  assert.deepEqual(run,before);
+  applyClassicAction(doc,{action:'reward',rewardId:'healing-items',boxId:'primary',donorBoxId:'donor',confirmFusion:true});
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  assert.equal(run.party[0].item,'lifeorb');assert.equal(run.modifiers.find(row=>row.id===healingItem)?.count,1);
+  assert.equal(run.party[0].rogueFusion.donor.item,lifeOrbOnDonor?'lifeorb':healingItem);
+  run.party[0].hp=50;const max=run.party[0].maxHp;
+  run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})]);
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});run.party=run.combat.teams[0];
+  assert.equal(run.party[0].hp,50-Math.floor(max/10)+(healingItem==='leftovers'?Math.floor(max/16):Math.floor(50/8)));
+  run.screen='interlude';delete run.combat;applyClassicAction(doc,{action:'unsplice',boxId:'primary',confirm:true});
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  assert.equal(run.party[0].item,'lifeorb');assert.equal(run.modifiers.find(row=>row.id===healingItem)?.count,1);
+  assert.deepEqual(doc.adventure,{safe:true});assert.equal(doc.coins,37);
+ }
+});
+test('Life Orb and healing item fusion rejects bound and ambiguous donor records atomically',()=>{
+ for(const mutate of [r=>{r.party[1].rogueNativeItemNontransferable=true;},r=>r.modifiers.push({id:'shellbell',boxId:'donor',count:1,active:false}),r=>r.modifiers.push({id:'shellbell',boxId:'primary',count:4})]){
+  const {run}=fixture('lifeorb','shellbell');mutate(run);const before=structuredClone(run);
+  assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));assert.deepEqual(run,before);
+ }
+});
 test('Shell Bell caps include the native slot for fusion, reward, direct grant, transfer and automatic allocation',()=>{
  const {run}=fixture();run.modifiers=[{id:'shellbell',boxId:'primary',count:2,typeBoost:null}];const staged=stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}).run;
  staged.rewards=[{...CLASSIC_REWARD_REGISTRY.find(row=>row.id==='shellbell'),rewardId:'bell'}];assert.equal(classicRewardView(staged)[0].targets[0].eligible,false);const before=structuredClone(staged);assert.throws(()=>addClassicModifier(staged,'shellbell',{boxId:'primary'}));assert.deepEqual(staged,before);
