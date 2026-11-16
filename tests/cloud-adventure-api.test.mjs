@@ -63,12 +63,12 @@ test('adventure API rejects tera for solo and companion battles without changing
   const player={...makeMon(1,40),boxId:id,teraType:'Fire',moves:['방어'],pp:{}},foe={...makeMon(25,40),boxId:'no-tera-foe',teraType:'Water',moves:['방어'],pp:{}};
   seedMon(id,player);seedWorld({combat:createCombat([player],[foe]),trainer:null,encounter:foe});await get();
   assert.ok(!state.battle.requests[0].specials.some(s=>s.key==='terastallize'));
-  let before=rawWorld();await call('battle',{command:{type:'move',move:'방어',special:'terastallize'}},409);assert.deepEqual(rawWorld(),before);
+  let before=rawWorld();for(const special of ['terastallize','dynamax','zmove','ultra']){await call('battle',{command:{type:'move',move:'방어',special}},409);assert.deepEqual(rawWorld(),before);}
   await call('battle',{command:{type:'move',move:'방어'}});assert.equal(state.battle.teams[1][0].terastallized,null);await get();assert.equal(rawMon(id).teraType,'Fire');
   const ally={...makeMon(4,40),boxId:'no-tera-ally',moves:['방어'],pp:{}},foe2={...makeMon(133,40),boxId:'no-tera-foe2',moves:['방어'],pp:{}};
   seedWorld({combat:createMission10DoubleSnapshot([player],[ally],[foe,foe2]),trainer:{id:'no-tera',name:'검증'},encounter:null});await get();
   assert.ok(!state.battle.requests[0].actors[0].specials.some(s=>s.key==='terastallize'));
-  before=rawWorld();await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'protect',special:'terastallize'}]}},409);assert.deepEqual(rawWorld(),before);await get();assert.equal(rawMon(id).teraType,'Fire');
+  before=rawWorld();for(const special of ['terastallize','dynamax','zmove','ultra']){await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'protect',special}]}},409);assert.deepEqual(rawWorld(),before);}await get();assert.equal(rawMon(id).teraType,'Fire');
  }finally{globalThis.__adventureUser=previous;}
 });
 test('underground weather stays dry across reload and rain evolution works on return to surface',async()=>{
