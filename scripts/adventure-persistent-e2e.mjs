@@ -32,6 +32,7 @@ try{
  if(process.argv[2]==='intro'&&!state.world)await call('startIntro');
  if(process.argv[2]==='walk'){const raw=process.argv[3];await walkTo(raw?.startsWith('{')?JSON.parse(raw):raw);}
  if(process.argv[2]==='sequence'){for(const step of JSON.parse(process.argv[3])){if(step.walk!==undefined)await walkTo(step.walk);else if(step.fight)await fight();else await call(step.action,step.args||{});}}
+ if(process.argv[2]==='box')console.log(JSON.stringify({box:state.box.map(m=>({id:m.boxId,species:m.speciesId,name:m.name,level:m.level,item:m.item})),team:state.world.teamIds}));
  if(process.argv[2]==='pending')console.log(JSON.stringify({pending:state.world?.adventurePendingMoves,team:state.world.teamIds.map(id=>state.box.find(m=>m.boxId===id)).map(m=>({id:m.boxId,name:m.name,moves:m.moves,learnable:m.learnable}))}));
  if(process.argv[2]==='party')console.log(JSON.stringify({wallet:state.wallet,team:state.world.teamIds.map(id=>state.box.find(m=>m.boxId===id)).map(m=>({id:m.boxId,species:m.speciesId,name:m.name,level:m.level,hp:m.hp,maxHp:m.maxHp,moves:m.moves}))}));
  if(process.argv[2]==='battle-info')console.log(JSON.stringify({battle:state.battle,wallet:state.wallet}));
