@@ -41,3 +41,18 @@ test('a new prediction continues or returns along the displayed segment without 
  assert.equal(restartVisualSegment({...scene,startX:4},origin,{id:1,x:3,y:8},100),null);
  assert.equal(restartVisualSegment({...scene,startY:7},origin,{id:1,x:3,y:8},100),null);
 });
+
+test('restarted partial segments can be cancelled or restarted again only on their recorded tile',()=>{
+ const scene={x:2.6,y:8,startX:2.4,startY:8,targetX:3,targetY:8,segmentStartX:2,segmentStartY:8,segmentEndX:3,segmentEndY:8};
+ assert.ok(Math.abs(correctionDuration(scene,{x:2,y:8},100)-60)<1e-8);
+ assert.ok(Math.abs(correctionDuration(scene,{x:3,y:8},100)-40)<1e-8);
+ assert.equal(correctionDuration(scene,{x:2,y:7},100),0);
+ assert.equal(correctionDuration(scene,{x:1,y:8},100),0);
+ assert.equal(correctionDuration({...scene,y:7.9},{x:2,y:8},100),0);
+ const restart=restartVisualSegment(scene,{x:2,y:8},{id:3,x:3,y:8,facing:'right'},100);
+ assert.equal(restart?.step,3);assert.ok(Math.abs(restart.duration-40)<1e-8);
+ const turn=restartVisualSegment(scene,{x:2,y:8},{id:3,x:2,y:7,facing:'up'},100);
+ assert.equal(turn?.step,-1);assert.ok(Math.abs(turn.duration-60)<1e-8);
+ assert.equal(restartVisualSegment(scene,{x:1,y:8},{id:3,x:2,y:8},100),null);
+ assert.equal(correctionDuration({...scene,segmentStartY:7},{x:2,y:8},100),0);
+});

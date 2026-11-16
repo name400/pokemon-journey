@@ -67,7 +67,7 @@ const palettes:Record<string,string[]>={city:['#d7d0b9','#bed3bf','#e8dfc9'],mea
 export default function AdventureField({world:w,partner,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,onAimMission20Ghost,period}:Props){
  const questTarget=trackedAdventureLocalTarget(w);
  const partnerLayer=[w.area,w.locationId||0,w.district||'',w.interior||'',...Object.keys(w).filter(k=>/^za.*(?:Layer|Floor|Wing|Upper|Lower|LowerBank|PondLower|DrainLanding|Underground|Roof)$/.test(k)).sort().map(k=>`${k}:${w[k]}`)].join('|');
- const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,partner,partnerLayer,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,layer:partnerLayer,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,startX:w.x,startY:w.y,moveStart:0,moveDuration:1,walkUntil:0,walkDistance:0,visualGeneration:-1,visualStep:-1,facing:w.facing||'down'}),[assetError,setAssetError]=useState(false);
+ const canvas=useRef<HTMLCanvasElement>(null),invalidate=useRef<null|(()=>void)>(null),props=useRef({w,partner,partnerLayer,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period}),scene=useRef({x:w.x,y:w.y,area:w.area,expedition:w.locationId||0,interior:w.interior||null,district:w.district||null,layer:partnerLayer,cameraX:0,cameraY:0,tile:32,targetX:w.x,targetY:w.y,startX:w.x,startY:w.y,segmentStartX:w.x,segmentStartY:w.y,segmentEndX:w.x,segmentEndY:w.y,moveStart:0,moveDuration:1,walkUntil:0,walkDistance:0,visualGeneration:-1,visualStep:-1,facing:w.facing||'down'}),[assetError,setAssetError]=useState(false);
  props.current={w,partner,partnerLayer,questTarget,visualPath,disabled,onInteract,onAimAlpha,onAimBudew,onAimKakuna,onAimIslandAlpha,onAimField,onAimZone3,onAimSewer,period};
  useEffect(()=>{
   const el=canvas.current;if(!el)return;const ctx=el.getContext('2d');if(!ctx)return;
@@ -99,7 +99,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
   function draw(time:number){
    if(disposed||!ctx||!el)return;const {w,visualPath,partnerLayer}=props.current,s=scene.current,oldX=s.x,oldY=s.y;
    const movedArea=s.area!==w.area||s.expedition!==(w.locationId||0)||s.interior!==(w.interior||null)||s.district!==(w.district||null)||s.layer!==partnerLayer;
-   if(movedArea){s.x=w.x;s.y=w.y;s.targetX=w.x;s.targetY=w.y;s.startX=w.x;s.startY=w.y;s.moveStart=time;s.walkUntil=0;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;s.district=w.district||null;s.layer=partnerLayer;}
+   if(movedArea){s.x=w.x;s.y=w.y;s.targetX=w.x;s.targetY=w.y;s.startX=w.x;s.startY=w.y;s.segmentStartX=w.x;s.segmentStartY=w.y;s.segmentEndX=w.x;s.segmentEndY=w.y;s.moveStart=time;s.walkUntil=0;s.area=w.area;s.expedition=w.locationId||0;s.interior=w.interior||null;s.district=w.district||null;s.layer=partnerLayer;}
    const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
    let moving=false,jumped=movedArea;
    if(visualPath&&!movedArea){
@@ -107,7 +107,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      const restart=restartVisualSegment(s,visualPath.origin,visualPath.steps[0],adventureMovementInterval(w));
      s.visualGeneration=visualPath.generation;s.moveStart=time;
      if(restart){s.startX=s.x;s.startY=s.y;s.targetX=restart.targetX;s.targetY=restart.targetY;s.visualStep=restart.step;s.moveDuration=restart.duration;if(restart.facing)s.facing=restart.facing;s.walkUntil=time+140;}
-     else{jumped=true;s.visualStep=-1;s.x=visualPath.origin.x;s.y=visualPath.origin.y;s.targetX=s.x;s.targetY=s.y;s.startX=s.x;s.startY=s.y;s.moveDuration=0;}
+     else{jumped=true;s.visualStep=-1;s.x=visualPath.origin.x;s.y=visualPath.origin.y;s.targetX=s.x;s.targetY=s.y;s.startX=s.x;s.startY=s.y;s.segmentStartX=s.x;s.segmentStartY=s.y;s.segmentEndX=s.x;s.segmentEndY=s.y;s.moveDuration=0;}
     }
     // Complete the current segment before taking the next point. The ordered
     // list survives React batching and successful acknowledgements.
@@ -118,10 +118,10 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      const next=visualPath.steps.find(point=>point.id>s.visualStep);if(!next)break;
      if(Math.abs(next.x-s.targetX)+Math.abs(next.y-s.targetY)!==1||(s.visualStep!==-1&&next.id!==s.visualStep+1)){
       // An interrupted render or discarded prefix must never draw a shortcut.
-      jumped=true;s.x=w.x;s.y=w.y;s.startX=w.x;s.startY=w.y;s.targetX=w.x;s.targetY=w.y;s.moveDuration=0;s.visualStep=visualPath.steps.at(-1)?.id??-1;s.facing=w.facing||'down';break;
+      jumped=true;s.x=w.x;s.y=w.y;s.startX=w.x;s.startY=w.y;s.targetX=w.x;s.targetY=w.y;s.segmentStartX=w.x;s.segmentStartY=w.y;s.segmentEndX=w.x;s.segmentEndY=w.y;s.moveDuration=0;s.visualStep=visualPath.steps.at(-1)?.id??-1;s.facing=w.facing||'down';break;
      }
      const continuous=s.moveDuration>0&&time-s.moveStart-s.moveDuration<adventureMovementInterval(w);
-     s.startX=s.targetX;s.startY=s.targetY;s.targetX=next.x;s.targetY=next.y;s.facing=next.facing;s.visualStep=next.id;
+     s.startX=s.targetX;s.startY=s.targetY;s.targetX=next.x;s.targetY=next.y;s.segmentStartX=s.startX;s.segmentStartY=s.startY;s.segmentEndX=s.targetX;s.segmentEndY=s.targetY;s.facing=next.facing;s.visualStep=next.id;
      s.moveStart=continuous?s.moveStart+s.moveDuration:time;s.moveDuration=adventureMovementInterval(w);s.walkUntil=time+140;
     }
    }else{
@@ -131,6 +131,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
      s.startX=s.x;s.startY=s.y;s.targetX=w.x;s.targetY=w.y;s.moveStart=time;
      // Never interpolate a cancellation across an unvisited tile or a corner.
      s.moveDuration=cancelled?correction:direct;
+     if(!cancelled||!s.moveDuration){s.segmentStartX=s.startX;s.segmentStartY=s.startY;s.segmentEndX=w.x;s.segmentEndY=w.y;}
      if(!s.moveDuration)jumped=true;
      s.walkUntil=time+140;
     }

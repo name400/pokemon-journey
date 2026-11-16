@@ -20,6 +20,13 @@ try{for(const direction of ['right','up']){
   assert.ok(event.from.x>2&&event.from.x<3);assert.deepEqual(event.origin,{x:2,y:8});assert.ok(event.restart&&event.restart.duration>0,'continue from the drawn position');
   assert.deepEqual([event.restart.targetX,event.restart.targetY],direction==='right'?[3,8]:[2,8]);assert.equal(event.restart.step,direction==='right'?1:-1);
   if(direction==='up')await page.waitForFunction(()=>window.__movementTraceEvents.some(e=>e.type==='draw-target'&&e.detail.step===1&&e.detail.target.x===2&&e.detail.target.y===7),null,{timeout:5000});
-  assert.deepEqual([world.x,world.y,world.steps],[2,8,0]);releaseSecond();console.log(`${direction}: restart follows the safe segment and authoritative position`);
+  assert.deepEqual([world.x,world.y,world.steps],[2,8,0]);
+  if(direction==='right'){
+   const count=await page.evaluate(()=>window.__movementTraceEvents.filter(e=>e.type==='draw-correction'&&e.detail.cancelled).length);
+   releaseSecond();await page.waitForFunction(n=>window.__movementTraceEvents.filter(e=>e.type==='draw-correction'&&e.detail.cancelled).length>n,count,{timeout:5000});
+   const correction=await page.evaluate(()=>window.__movementTraceEvents.filter(e=>e.type==='draw-correction'&&e.detail.cancelled).at(-1).detail);
+   assert.ok(correction.duration>0,'a second rejection retraces the recorded segment');assert.deepEqual(correction.target,{x:2,y:8});
+  }else releaseSecond();
+  console.log(`${direction}: restart follows the safe segment and authoritative position`);
  }finally{releaseFirst?.();releaseSecond?.();await page.close();}
 }}finally{await browser.close();}
