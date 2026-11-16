@@ -102,3 +102,14 @@ test('automatic grants skip full native-plus-modifier holders and preserve legac
  // Moving one existing copy away is allowed; no retrospective item deletion.
  transferClassicModifier(run,{fromBoxId:'primary',toBoxId:'donor',id:'leftovers',quantity:1,kind:'modifier'});assert.equal(run.modifiers.find(row=>row.id==='leftovers'&&row.boxId==='primary').count,3);assert.equal(total(run),7);
 });
+
+test('unreviewed two-native conflicts preserve both owners and reward across rejection and reload',async()=>{
+ for(const [primaryItem,donorItem] of [['widelens','quickclaw'],['quickclaw','widelens'],['gripclaw','lifeorb']]){
+  let {doc,run}=fixture();run.party[0].item=primaryItem;run.party[1].item=donorItem;
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);const before=structuredClone(run);
+  assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}),/슬롯/);assert.deepEqual(run,before);
+  assert.ok(!classicRewardView(run,ensureClassicState(doc).system)[0].fusionPairs.some(pair=>pair.primaryBoxId==='primary'&&pair.donorBoxId==='donor'));
+  assert.throws(()=>fuse(doc));assert.deepEqual(run.party,before.party);assert.deepEqual(run.modifiers,before.modifiers);assert.deepEqual(run.rewards,before.rewards);
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);assert.deepEqual(run.party,before.party);assert.deepEqual(run.modifiers,before.modifiers);assert.deepEqual(run.rewards,before.rewards);assert.deepEqual(doc.adventure,{safe:true});assert.deepEqual(doc.classic.slots[1],{id:'other',party:[{untouched:true}]});
+ }
+});
