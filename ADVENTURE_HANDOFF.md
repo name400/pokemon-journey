@@ -43,3 +43,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 구역 17 무장조·구역 18 아공이 성장 기술
 - 새 일반 무장조와 아공이·쉘곤·보만다 계열의 Z-A 레벨 기술, 확인된 진화 기술 및 떠올리기 기술을 연결했다. [무장조](https://pokemondb.net/pokedex/skarmory/moves/9), [아공이](https://pokemondb.net/pokedex/bagon/moves/9), [쉘곤](https://pokemondb.net/pokedex/shelgon/moves/9), [보만다](https://pokemondb.net/pokedex/salamence/moves/9)의 2차 자료를 기준으로 했다. 초기 야생 기술은 기존 엔진의 레벨 이하 최근 4개 방식인 근사다.
 - 구형 개체·진행 중 전투·우두머리·미확인 표식은 소급하지 않는다. 구역 18 파비코·음뱃 계열과 직접 출현 진화형, 앞 구역 수생종 및 호바귀 크기별 폼은 추가 대조가 필요하다. Sites 병합본 및 운영 환경은 이번 변경으로 재검증하지 않았다.
+
+### 구역 18 옥상 파비코·음뱃 성장 기술
+- 새 일반 파비코·파비코리·음뱃·음번에 Z-A 레벨과 확인된 진화 기술을 연결했다. 구역 18 옥상 직접 출현 진화형과 구역 6 파비코, 수정 하수도 음뱃 조우에도 적용한다. 근거는 [파비코](https://pokemondb.net/pokedex/swablu/moves/9), [파비코리](https://pokemondb.net/pokedex/altaria/moves/9), [음뱃](https://pokemondb.net/pokedex/noibat/moves/9), [음번](https://pokemondb.net/pokedex/noivern/moves/9)의 2차 자료다. 야생 초기 기술 4개는 기존 엔진의 근사다.
+- 기존 개체·우두머리·불명 표식은 소급하지 않는다. 구역 16 직접 출현 진화형과 이전 수생종 및 크기별 호바귀 폼은 추가 대조가 필요하다. Sites 병합본과 운영 환경은 재검증하지 않았다.
