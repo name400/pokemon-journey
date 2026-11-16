@@ -12231,3 +12231,13 @@ test('Zone 20 opens after the ending before the postgame wish while preserving p
   seedWorld(storeAdventurePosition({...base,district:'lumiose-floral',x:12,y:1,facing:'up',zaMission42Stage:2},state.revision+1));await get();await call('move',{direction:'up'},409);assert.equal(state.world.district,'lumiose-floral');
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Mission 38 wishes can be made at the zone 20 tower and retain the old plaza path',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'mission38-tower-wish-qa',displayName:'타워의 소원'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon=structuredClone(rawMon(id)),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-centrico-route',interior:null,x:15,y:6,facing:'up',zaMission37Complete:true,zaMission38Started:true,zaMission38Stage:1,zaMission38RoomStart:true,zaMission38Complete:false,zaZone20Items:['south-seed'],adventureBalls:{ultraball:4}},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='zone20Enter'));await call('mission38WishHarmony');await get();await call('zone20Enter');await get();assert.equal(state.world.district,'lumiose-zone20');
+  await walkTo({x:11,y:7});await call('face',{direction:'up'});await get();assert.equal(state.world.interaction.name,'프리즘타워 유적의 Vinnie와 Jett (위치 초안)');assert.ok(!state.world.interaction.actions.some(a=>a.action==='mission38WishHarmony'));assert.ok(state.world.interaction.actions.some(a=>a.action==='mission38WishMore'));assert.ok(state.world.interaction.actions.some(a=>a.action==='mission38Wish'));
+  await call('mission38WishMore');await get();assert.deepEqual(rawWorld().zaMission38WishTried,['harmony','more']);await call('mission38WishMore',{},409);await call('mission38Wish');await get();assert.equal(state.world.zaMission38Complete,true);assert.equal(state.world.zaMission39Started,true);assert.equal(state.world.zaInfiniteRandomGateV2,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawWorld().adventureBalls,{ultraball:4});assert.deepEqual(state.world.zaZone20Items,['south-seed']);await call('mission38Wish',{},409);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
