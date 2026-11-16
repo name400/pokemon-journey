@@ -214,3 +214,19 @@
 /* Approved v52: the player's real HP is legible inside the gauge. */
 .battle-screen[data-v52=true] .bs-hud-own .bs-hp-track{position:relative;height:12px}
 .battle-screen[data-v52=true] .bs-hud-own .bs-hp-inside{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;color:#fff;font:700 9px/1 system-ui,sans-serif;text-shadow:0 1px 2px #000,0 0 2px #000;white-space:nowrap;pointer-events:none}
+
+/* v52 single-battle layout: the arena shares a fixed 16:9 coordinate space. */
+.battle-screen[data-v52-single=true] .bs-scene{height:auto;aspect-ratio:16/9}
+.battle-screen[data-v52-single=true] .bs-combatant-own{left:30%;top:75.56%;width:21.4%;max-width:none}
+.battle-screen[data-v52-single=true] .bs-combatant-foe{left:73.89%;top:43.95%;width:15.56%;max-width:none}
+.battle-screen[data-v52-single=true] .bs-hud-foe{left:67.22%;top:.5%;right:auto}
+.battle-screen[data-v52-single=true] .bs-hud-own{left:4.72%;top:auto;right:auto;bottom:1%}
+.battle-screen[data-v52-single=true] .bs-combatant::before{content:'';position:absolute;left:50%;bottom:0;width:70%;height:10%;transform:translateX(-50%);border-radius:50%;background:#17202a55;z-index:-1}
+.battle-screen .bs-v52-commands{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;max-width:260px;margin:8px 0 4px auto}
+.battle-screen .bs-v52-commands button,.battle-screen .bs-v52-utilities button{min-height:44px;padding:5px 8px;border:2px solid #a74643;border-radius:3px;background:#30273c;color:#fff8ed;font-weight:700;touch-action:manipulation}
+.battle-screen .bs-v52-commands button:disabled,.battle-screen .bs-v52-utilities button:disabled{opacity:.48}
+.battle-screen .bs-v52-utilities{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
+.battle-screen .bs-v52-status{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:8px 0}
+.battle-screen .bs-v52-status section{padding:8px;border:2px solid #a74643;background:#30273c;color:#fff8ed}.battle-screen .bs-v52-status h3,.battle-screen .bs-v52-status p{margin:0 0 4px;color:inherit}
+.battle-screen[data-v52-single=true] .bs-move-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;max-width:416px;margin-left:auto}
+.battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{min-height:44px}

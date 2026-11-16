@@ -66,3 +66,9 @@ const approvedHP=renderToStaticMarkup(React.createElement(BattlePanel,{approvedV
 assert.match(approvedHP,/data-v52="true"/);
 assert.match(approvedHP,/class="bs-hp-inside" aria-hidden="true">\d+ \/ \d+<\/span>/);
 assert.match(approvedHP,/role="progressbar" aria-label="[^"]+ HP"/);
+const v52Commands=renderToStaticMarkup(React.createElement(BattlePanel,{approvedV52:true,battle:{...view,events:[],before:undefined,beforeActive:undefined},battleKey:'v52:commands',title:'命令',busy:false,onCommand(){},onItem(){},onBall(){},onFlee(){}}));
+assert.match(v52Commands,/data-v52-single="true"/);
+for(const label of ['싸운다','포켓몬','가방','도망','볼 선택','상태 확인']) assert.ok(v52Commands.includes(label),label);
+const v52Trainer=renderToStaticMarkup(React.createElement(BattlePanel,{approvedV52:true,battle:{...view,events:[],before:undefined,beforeActive:undefined},battleKey:'v52:trainer',title:'트레이너',busy:false,onCommand(){}}));
+assert.match(v52Trainer,/<button disabled=""[^>]*>볼 선택<\/button>/);
+assert.match(v52Trainer,/<button data-roving="command" disabled="">도망<\/button>/);

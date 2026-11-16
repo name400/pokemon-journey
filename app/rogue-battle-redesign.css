@@ -618,3 +618,9 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
 
 /* Preserve the approved HP-gauge height in the classic battle skin. */
 .rc-shell.is-battle .battle-screen[data-v52=true] .bs-hud-own .bs-hp-track{height:12px}
+/* Keep single-battle v52 arena proportions across the classic responsive skin. */
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene{height:auto;aspect-ratio:16/9}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-combatant-own{left:30%;top:75.56%;width:21.4%;max-width:none}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-combatant-foe{left:73.89%;top:43.95%;width:15.56%;max-width:none}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-grid{grid-template-columns:minmax(0,1fr);max-width:416px;margin-left:auto}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{min-height:44px}
