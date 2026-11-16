@@ -47,3 +47,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 구역 18 옥상 파비코·음뱃 성장 기술
 - 새 일반 파비코·파비코리·음뱃·음번에 Z-A 레벨과 확인된 진화 기술을 연결했다. 구역 18 옥상 직접 출현 진화형과 구역 6 파비코, 수정 하수도 음뱃 조우에도 적용한다. 근거는 [파비코](https://pokemondb.net/pokedex/swablu/moves/9), [파비코리](https://pokemondb.net/pokedex/altaria/moves/9), [음뱃](https://pokemondb.net/pokedex/noibat/moves/9), [음번](https://pokemondb.net/pokedex/noivern/moves/9)의 2차 자료다. 야생 초기 기술 4개는 기존 엔진의 근사다.
 - 기존 개체·우두머리·불명 표식은 소급하지 않는다. 구역 16 직접 출현 진화형과 이전 수생종 및 크기별 호바귀 폼은 추가 대조가 필요하다. Sites 병합본과 운영 환경은 재검증하지 않았다.
+
+### 구역 5·6 옥상 성장 기술
+- 일반 캐이시와 썬더라이 계열에 Z-A 성장 기술표를 적용하고, 구역 5의 피죤 및 구역 6 옥상의 보송송에 기존 표를 연결했다. [캐이시](https://pokemondb.net/pokedex/abra/moves/9), [썬더라이](https://pokemondb.net/pokedex/electrike/moves/9), [썬더볼트](https://pokemondb.net/pokedex/manectric/moves/9), [피죤](https://pokemondb.net/pokedex/pidgeotto/moves/9)의 2차 자료 기준이다. 야생 초기 기술의 최근 4개 선택은 기존 엔진 근사이며 기존 저장·우두머리·미확인 표식은 소급하지 않는다.
+- 후속 대조 후보: 플라베베 계열, 단칼빙, 이브이, 할비롱, 호바귀 크기별 폼, 직접 출현 딱충이·로젤리아·독침붕·휠구·펜드라·고우스트 및 분떠도리·불화살빈의 초기 야생 기술. 현재 코드·출현 경로 및 원작 자료를 다시 확인한 뒤 적용한다. 운영과 Sites 병합본은 재검증하지 않았다.
