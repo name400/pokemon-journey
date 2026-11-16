@@ -12329,3 +12329,13 @@ test('sewer clock pauses through reload and resumes after returning to Bleu 3',a
   now+=50000;await get();assert.equal(state.gameTime.hour,20);assert.equal(state.gameTime.period,'night');assert.deepEqual(rawWorld().zaMission19Inspected,visited);assert.equal(state.world.activeId,id);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
  }finally{Date.now=realNow;globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
+
+test('ordinary new Zone 1 grass battle advances the clock across reload while preserving the encounter',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom,realNow=Date.now;let now=19*50000;Date.now=()=>now;globalThis.__adventureUser={userId:'wild-clock-zone1-qa',displayName:'야생 시계 검사'};globalThis.__adventureTime=null;globalThis.__adventureRandom=()=>0;
+ try{
+  await get();await call('start',{species:152,destination:'lumiose'});const team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:16,y:8,facing:'up'},state.revision+1));await get();await call('move',{direction:'up'});assert.ok(state.battle);assert.equal(rawWorld().combat.adventureWildClockRunsV1,true);assert.equal(rawWorld().zaClockPauseStartedAt,undefined);
+  const foe=structuredClone(rawWorld().encounter);assert.equal(state.gameTime.hour,19);now+=50000;await get();assert.equal(state.gameTime.hour,20);assert.equal(state.gameTime.period,'night');assert.deepEqual(rawWorld().encounter,foe);assert.equal(rawWorld().combat.adventureWildClockRunsV1,true);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
+  await call('flee');await get();assert.equal(state.battle,null);assert.equal(state.gameTime.hour,20);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
+ }finally{Date.now=realNow;globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});

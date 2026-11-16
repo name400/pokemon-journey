@@ -38,3 +38,8 @@ test('old sewer saves begin pausing on the next saved action without inventing e
  assert.equal(adventureClockOffset(saved,200000),4);syncAdventureCombatClock(saved,200000);assert.equal(saved.zaClockPauseStartedAt,200000);assert.equal(saved.zaClockPausedMs,undefined);assert.deepEqual(saved.zaMission19Inspected,['a','b']);assert.equal(saved.zaMission19Stage,12);
  saved.district='lumiose-bleu3-sewer-approach';syncAdventureCombatClock(saved,250000);assert.equal(saved.zaClockPausedMs,50000);assert.equal(saved.zaClockOffsetHours,4);
 });
+test('new ordinary wild battles keep the clock running outdoors while legacy and indoor battles stay paused',()=>{
+ let now=19*hour;const s={area:3,district:'lumiose-zone1',combat:{adventureWildClockRunsV1:true}};syncAdventureCombatClock(s,now);assert.equal(s.zaClockPauseStartedAt,undefined);now+=hour;assert.equal(adventureGameTime(now,adventureClockOffset(s,now)).hour,20);
+ const legacy={area:3,district:'lumiose-zone1',combat:{}};syncAdventureCombatClock(legacy,now);now+=hour;assert.equal(adventureGameTime(now,adventureClockOffset(legacy,now)).hour,20);
+ const indoor={area:3,district:'lumiose-sewer',combat:{adventureWildClockRunsV1:true}};syncAdventureCombatClock(indoor,now);now+=hour;assert.equal(adventureGameTime(now,adventureClockOffset(indoor,now)).hour,21);
+});
