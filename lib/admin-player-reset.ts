@@ -2,6 +2,8 @@ import {encodeGameData,decodeGameData} from './game-storage.mjs';
 import {ensureClassicState} from './rogue-classic-state.mjs';
 import {requireGameMode} from './admin-scope.mjs';
 import {ensureRogueRanking} from './rogue-ranking';
+import {adventureClockExperimentEnabled} from './cloud-adventure/adventure-clock-experiment-gate.mjs';
+import {validateExperimentalClockRevision,restoreExperimentalClock} from './cloud-adventure/adventure-clock-experiment-runtime.mjs';
 
 const saveSql="SELECT COALESCE((SELECT json_object('user_id',user_id,'data',data,'updated_at',updated_at,'revision',revision) FROM saves WHERE user_id=?),'null') AS encoded";
 const adventureSql=`SELECT json_object(
@@ -29,6 +31,7 @@ function clearAdventure(db:D1Database,target:string,guard:{sql:string;args:any[]
 export async function resetAdminPlayer(db:D1Database,actor:string,payload:any){const mode=requireGameMode(payload.mode),target=String(payload.target||''),person=await player(db,target);if(payload.confirmName!==person.label)throw Error('선택한 플레이어의 닉네임을 정확히 입력하세요.');
  if(mode==='rogue')await ensureRogueRanking(db);const ranking=mode==='rogue'?await db.prepare('SELECT best_wave,achieved_at FROM rogue_rankings WHERE user_id=?').bind(target).first<any>():null;
  const before=await snapshot(db,target,mode);if(payload.expectedHash!==await digest(before))throw Error('플레이어 데이터가 변경됐습니다. 다시 확인한 뒤 초기화하세요.');const original=JSON.parse(before),now=Date.now(),id=crypto.randomUUID(),revision=(mode==='rogue'?original?.revision:original?.world?.revision)??0,resetRevision=revision+1;
+ if(mode==='adventure'&&original?.world&&adventureClockExperimentEnabled())validateExperimentalClockRevision(JSON.parse(original.world.state),revision);
  let resetData:any,after:string;
  if(mode==='rogue'){const fresh={__classicOwnerSeed:target+'#'+id,version:2,screen:'home',dex:[],wins:0,coins:0,balls:5,potions:3,superPotions:0,hyperPotions:0,maxPotions:0,fullRestores:0,antidotes:0,inventory:{},collection:[],run:null,choiceIds:[],log:[],events:[]};ensureClassicState(fresh);resetData=await encodeGameData(fresh);after=JSON.stringify({user_id:target,data:resetData,updated_at:now,revision:resetRevision});}
  else after=JSON.stringify({world:null,wallet:{user_id:target,coins:300,potions:0,super_potions:0,antidotes:0,balls:5,hyper_potions:0,max_potions:0,full_restores:0,last_claim:''},box:[],inventory:[]});
@@ -45,7 +48,7 @@ export async function restoreAdminPlayer(db:D1Database,actor:string,payload:any)
  if(mode==='rogue'){statements.push(prepared(db,'UPDATE saves SET data=?,updated_at=?,revision=? WHERE user_id=? AND $GUARD',[before?.data||'{}',now,row.reset_revision+1,target],guard));if(backup.rogueRanking)statements.push(prepared(db,'INSERT INTO rogue_rankings(user_id,best_wave,achieved_at) SELECT ?,?,? WHERE $GUARD',[target,backup.rogueRanking.best_wave,backup.rogueRanking.achieved_at],guard));}
  else{
   statements.push(...clearAdventure(db,target,guard));
-  if(before.world)statements.push(prepared(db,'INSERT INTO worlds(user_id,state,revision,updated_at) SELECT ?,?,?,? WHERE $GUARD',[target,before.world.state,row.reset_revision+1,now],guard));
+  if(before.world){let restoredState=before.world.state;if(adventureClockExperimentEnabled()){const world=JSON.parse(restoredState);restoreExperimentalClock(world,before.world.revision,row.reset_revision+1,row.created_at,now);restoredState=JSON.stringify(world);}statements.push(prepared(db,'INSERT INTO worlds(user_id,state,revision,updated_at) SELECT ?,?,?,? WHERE $GUARD',[target,restoredState,row.reset_revision+1,now],guard));}
   if(before.wallet){const w=before.wallet;statements.push(prepared(db,'INSERT INTO wallets(user_id,coins,potions,super_potions,antidotes,balls,hyper_potions,max_potions,full_restores,last_claim) SELECT ?,?,?,?,?,?,?,?,?,? WHERE $GUARD',[target,w.coins,w.potions,w.super_potions,w.antidotes,w.balls,w.hyper_potions,w.max_potions,w.full_restores,w.last_claim],guard));}
   for(const p of before.box||[])statements.push(prepared(db,'INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) SELECT ?,?,?,?,?,? WHERE $GUARD',[p.id,target,p.species_id,p.data,p.origin,p.created_at],guard));
   for(const i of before.inventory||[])statements.push(prepared(db,'INSERT INTO inventory(key,user_id,item,quantity) SELECT ?,?,?,? WHERE $GUARD',[i.key,target,i.item,i.quantity],guard));
