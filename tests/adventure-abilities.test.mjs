@@ -31,3 +31,19 @@ test('multi and triples suppress reviewed effects and preserve team ownership on
  const resumed=playMission10MultiTurn(JSON.parse(JSON.stringify(double)),{type:'move',move:'protect'});assert.equal(resumed.teams[1][0].ability,'levitate');assert.deepEqual(resumed.owners,{player:['p'],ally:['a']});
  const triple=createMission37TripleSnapshot([p],[ally],[mon(1,'b','overgrow')],[foe,other]);const native3=restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(triple)));assert.equal(native3.p2.active[0].ability,'noability');assert.equal(triple.teams[1][0].ability,'levitate');
 });
+test('Mega acquired ordinary ability stays suppressed across battle restore',()=>{
+ const player={...mon(282,'p','synchronize',['몸통박치기']),item:'gardevoirite'},foe=mon(94,'f','cursedbody');
+ const start=createZAAbilityCombat([player],[foe]);const evolved=adventurePlayCpu(start,{type:'move',move:'몸통박치기',special:'mega'});
+ assert.equal(evolved.teams[0][0].mega,true);assert.equal(evolved.teams[0][0].currentAbility,'pixilate');assert.equal(evolved.teams[1][0].hp,foe.hp);assert.equal(evolved.teams[0][0].ability,'synchronize');
+ const restored=JSON.parse(JSON.stringify(evolved)),next=adventurePlayCpu(restored,{type:'move',move:'몸통박치기'});assert.equal(next.teams[1][0].hp,foe.hp);assert.equal(next.teams[0][0].ability,'synchronize');
+});
+test('unreviewed restricted abilities and unknown values are preserved',()=>{
+ for(const [id,ability] of [[718,'powerconstruct'],[25,'unreviewed'],[681,'stancechange'],[778,'disguise'],[877,'hungerswitch']])assert.equal(adventureNativeTeamSet(mon(id,'x',ability),0).ability,ability);
+ assert.equal(adventureNativeTeamSet(mon(25,'x','immunity'),0).ability,'noability');
+});
+test('ordinary status immunity is disabled in new ZA battles but preserved in the shared engine',()=>{
+ const player=mon(94,'p','cursedbody',['맹독']),foe=mon(143,'f','immunity');
+ const za=adventurePlayCpu(createZAAbilityCombat([player],[foe]),{type:'move',move:'맹독'});
+ const shared=adventurePlayCpu(createCombat([player],[foe]),{type:'move',move:'맹독'});
+ assert.equal(za.teams[1][0].status,'맹독');assert.equal(za.teams[1][0].ability,'immunity');assert.equal(shared.teams[1][0].status,null);
+});

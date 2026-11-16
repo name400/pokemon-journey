@@ -65,6 +65,14 @@ test('ZA intro battle suppresses reviewed ability without changing saved Pokemon
   await call('battle',{command:{type:'move',move:'튀어오르기'}});await get();assert.equal(rawMon(id).ability,'static');assert.deepEqual(rawMon(id).custom,{retained:true});
  }finally{globalThis.__adventureUser=previous;}
 });
+test('ZA legacy encounter without a battle snapshot retains its previous ability rules',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'legacy-ability-qa',displayName:'구형 조우 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(25,40),boxId:id,ability:'static'},foe={...makeMon(129,10),boxId:'wild'};
+  seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,encounter:foe,combat:null},state.revision+1));await get();
+  assert.equal(state.battle.teams[0][state.battle.active[0]].currentAbility,'static');assert.equal(rawMon(id).ability,'static');
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('adventure API rejects tera for solo and companion battles without changing saves',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-no-tera-qa',displayName:'테라 차단 검사'};
  try{
