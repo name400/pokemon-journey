@@ -93,3 +93,20 @@
 .adv-mission37-people span { display:flex; align-items:center; gap:.2rem; padding:.25rem; border-radius:.3rem; background:#e4eee5; }
 .adv-mission37-people span::before { content:""; width:10px; height:15px; flex:none; border-radius:6px 6px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
 @media(max-width:420px){.adv-mission37-ending{grid-template-columns:130px 1fr;gap:.4rem}.adv-mission37-cast img{width:40px;height:64px}}
+
+/* Keep the plaza and both sides of the Mega Evolution visible until confirmed. */
+.adv-mission36-scene { display:grid; grid-template-columns:150px 1fr; gap:.5rem 1rem; align-items:center; }
+.adv-mission36-cast { grid-row:span 2; display:flex; align-items:center; }
+.adv-mission36-people { display:grid; gap:.35rem; color:#40545b; font-size:.7rem; font-weight:bold; }
+.adv-mission36-people span { display:flex; align-items:center; gap:.2rem; padding:.25rem; border-radius:.3rem; background:#e4eee5; }
+.adv-mission36-people span::before { content:""; width:10px; height:15px; flex:none; border-radius:6px 6px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
+.adv-mission36-floette { position:relative; width:80px; height:96px; flex:none; }
+.adv-mission36-floette>div { position:absolute; inset:0; }
+.adv-mission36-floette img { width:100%; height:100%; object-fit:contain; }
+.adv-floette-mega { opacity:0; }
+.adv-mission36-floette.step-3 .adv-floette-normal { animation:adv-emma-away 1s forwards; }
+.adv-mission36-floette.step-3 .adv-floette-mega { animation:adv-emma-appear 1s forwards; }
+.adv-mission36-floette.step-4 .adv-floette-normal { opacity:0; }
+.adv-mission36-floette.step-4 .adv-floette-mega { opacity:1; }
+@media(max-width:420px){.adv-mission36-scene{grid-template-columns:125px 1fr;gap:.4rem}.adv-mission36-floette{width:60px;height:80px}}
+@media(prefers-reduced-motion:reduce){.adv-mission36-floette.step-3 .adv-floette-normal{animation:none;opacity:0}.adv-mission36-floette.step-3 .adv-floette-mega{animation:none;opacity:1}}

@@ -91,3 +91,5 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 미션 9 폭주 메가앱솔 배틀 후 합류 장면은 3단계 확인식 대화로 바꾸었다. 앱솔·앱솔나이트·메가링은 한 번만 저장하고, 옥상 배경과 등장인물 이름을 마지막 확인까지 유지한 뒤 새 미션 진행에 한해 기존 호텔 복귀를 실행한다. 중간 재접속과 구형 완료 저장을 보존한다. [Bulbapedia 공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough%3APok%C3%A9mon_Legends%3A_Z-A/Part_9)은 Emma의 폭주 설명, 앱솔 합류, 호텔 복귀 순서를 기술한다. 한국어 대사와 상징적인 등장인물 표시는 재구성이며 옥상 위치와 정확한 원작 연출은 미확인이다.
 
 미션 37 마지막 빛을 막은 뒤에는 플레이어가 세 장면을 확인할 때까지 프리즘타워 경로와 등장인물 표시를 유지한다. 전투로 빛을 막은 저장과 기존 즉시 판정 경로 모두 재접속을 지원하며, 마지막 확인 시 기존 경로별 호텔 방/로비 도착과 미션 38 시작을 처리한다. 완료된 구형 저장과 알 수 없는 표식은 소급 변경하지 않는다. [Serebii 공략](https://www.serebii.net/legendsz-a/mainmissions/operationprotectlumiose.shtml)은 메가 지가르데가 빛을 막고 동료가 플라엣테와 함께 나와 AZ가 반기는 흐름을 기술한다. 대사·상징적 인물 표시·화면 구성은 재구성이며 정확한 원작 연출은 미확인이다.
+
+미션 36의 마지막 작전에서는 Vinnie의 안내, 동료와 영원한꽃 플라엣테의 출발, 메가진화, 탑의 폭주를 네 단계로 확인한 뒤 기존 미르시티 방어 경로로 이동한다. 각 단계는 저장되어 재접속할 수 있고 기존 미션 진행과 알 수 없는 표식은 소급 변경하지 않는다. [Serebii](https://advent.serebii.net/legendsz-a/mainmissions/prismtower%27sdarkturn.shtml)와 [GameTrek](https://gmtreks.com/pokemon-z-a/main-missions/37)은 작전 후 동료와 플라엣테가 탑에 가고 탑이 폭주하는 순서를 설명한다. 대사, 인물 표식, 장면과 현재 2D 광장 배치는 재구성이며 정확한 원작 연출은 미확인이다.
