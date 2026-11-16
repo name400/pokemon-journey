@@ -8184,7 +8184,7 @@ test('Side Mission 67 persists five conversations and grants its reward once',as
 test('Touri Galarian battle preserves retries and deferred evolution rewards',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'side75-touri-qa',displayName:'가라르 배틀 검사'};
  try{
-  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),boxId:id,moves:['섀도볼'],pp:{}});
+  await get();await call('start',{species:1});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),boxId:id,moves:['섀도볼','파동탄'],pp:{}});
   const place={area:3,district:'lumiose-vert-sector9',interior:null,x:7,y:6,facing:'up',regionId:6};
   seedWorld(storeAdventurePosition({...rawWorld(),...place},state.revision+1));await get();await call('side75Battle',{},409);
   seedWorld(storeAdventurePosition({...state.world,...place,zaMission26Started:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'side75Battle');const coins=state.wallet.coins;
