@@ -21,3 +21,11 @@ test('missing Zone 9, 16 and 17 research species can be encountered in reachable
  assert.notEqual(zone16Encounter({},()=>.9,'day').speciesId,121);
  assert.notEqual(zone17Encounter({},()=>.95,'day').speciesId,608);
 });
+
+test('Zone 17 ordinary encounter excludes Skarmory during rain',()=>{
+ for(const period of ['day','night']){
+  const species=weather=>Array.from({length:100},(_,i)=>zone17Encounter({weather},()=>i/100,period).speciesId);
+  assert.ok(species('').includes(227));assert.ok(!species('rain').includes(227));assert.ok(species('rain').includes(650));assert.ok(species('rain').includes(668));
+  assert.equal(species('rain').includes(608),period==='night');
+ }
+});

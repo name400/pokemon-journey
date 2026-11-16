@@ -2842,6 +2842,18 @@ test('adjacent-rank royale battles preserve points and saved state across reload
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('Zone 17 wild encounter uses current rain without changing saved Pokemon',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime,previousRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone17-rain-encounter-qa',displayName:'구역17 날씨 조우'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,original=structuredClone(rawMon(id));
+  for(const [hour,weather,expected] of [[16,'rain',668],[12,'',227]]){
+   globalThis.__adventureTime={period:'day',hour};globalThis.__adventureRandom=()=>.999;
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone17',interior:null,x:11,y:12,facing:'left',combat:null,trainer:null,encounter:null,zaRoyaleRank:'C',zaZone17Upper:false,zaZone17Promenade:false},state.revision+1));await get();assert.equal(state.world.weather,weather);assert.equal(state.world.map[12][10],'g');
+   let draws=0;globalThis.__adventureRandom=()=>[.01,.9,.5][draws++]??.999;await call('move',{direction:'left'});assert.equal(state.battle.teams[1][0].speciesId,expected);if(expected===227)globalThis.__adventureTime={period:'day',hour:16};await get();assert.equal(state.battle.teams[1][0].speciesId,expected);assert.equal(rawWorld().encounter.speciesId,expected);assert.equal(rawMon(id).ability,original.ability);assert.deepEqual(rawMon(id).ivs,original.ivs);await call('flee');
+  }
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;globalThis.__adventureRandom=previousRandom;}
+});
+
 test('adjacent-rank revisit preserves unrecognized saved entries',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-adjacent-revisit-qa',displayName:'로열 재입장 저장 검사'};globalThis.__adventureTime={period:'night',hour:22};
  try{
