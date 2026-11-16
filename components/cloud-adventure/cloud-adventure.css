@@ -84,3 +84,12 @@
 .adv-absol-people span { display:flex; align-items:center; gap:.25rem; padding:.25rem; border-radius:.3rem; background:#e4eee5; }
 .adv-absol-people span::before { content:""; width:12px; height:16px; flex:none; border-radius:6px 6px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
 @media(max-width:420px){.adv-absol-scene{grid-template-columns:112px 1fr;gap:.4rem}.adv-absol-cast img{width:62px;height:62px}}
+
+/* The cast remains on screen over the tower route until the final dialogue. */
+.adv-mission37-ending { display:grid; grid-template-columns:160px 1fr; gap:.5rem 1rem; align-items:center; }
+.adv-mission37-cast { grid-row:span 2; display:flex; align-items:center; height:96px; }
+.adv-mission37-cast img { width:55px; height:75px; object-fit:contain; }
+.adv-mission37-people { display:grid; gap:.35rem; color:#40545b; font-size:.7rem; font-weight:bold; }
+.adv-mission37-people span { display:flex; align-items:center; gap:.2rem; padding:.25rem; border-radius:.3rem; background:#e4eee5; }
+.adv-mission37-people span::before { content:""; width:10px; height:15px; flex:none; border-radius:6px 6px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
+@media(max-width:420px){.adv-mission37-ending{grid-template-columns:130px 1fr;gap:.4rem}.adv-mission37-cast img{width:40px;height:64px}}
