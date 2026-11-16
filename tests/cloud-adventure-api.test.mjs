@@ -12696,3 +12696,18 @@ test('Zone 3 south rooftop defeat returns to the center without losing progress'
   assert.equal(state.battle,null);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaBunnelbyQuest,2);assert.equal(state.world.zaZone3StatueAntidote,true);assert.equal(rawMon(id).hp,rawMon(id).maxHp);
  }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zone 1 and Rouge wild rooftop defeats return to the center and preserve progress',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;
+ try{
+  for(const [district,x,y,species] of [['lumiose-zone1-courtyard',4,6,172],['lumiose-zone1-roof',7,5,16],['lumiose-rouge-sector1-roof',9,5,666]]){
+   globalThis.__adventureUser={userId:`wild-roof-defeat-${species}`,displayName:'야생 옥상 패배 복귀'};
+   await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+   const player={...makeMon(129,1),boxId:id,moves:['튀어오르기'],pp:{},hp:1};seedMon(id,player);
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district,interior:null,x,y,facing:'right',zaZone1RoofPearl:true,zaSide04Won:true},state.revision+1));
+   await get();globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});assert.equal(state.battle.teams[1][0].speciesId,species);globalThis.__adventureRandom=()=>0.5;
+   for(let i=0;i<50&&state.battle;i++)await call('battle',{command:{type:'move',move:'튀어오르기'}});
+   assert.equal(state.battle,null,district);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5],district);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaZone1RoofPearl,true);assert.equal(state.world.zaSide04Won,true);assert.equal(rawMon(id).hp,rawMon(id).maxHp);
+  }
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
+});
