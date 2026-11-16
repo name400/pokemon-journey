@@ -2826,6 +2826,22 @@ test('Mission 19 fountain accepts documented Freeze-Dry without changing party o
  }finally{globalThis.__adventureUser=previous;}
 });
 
+test('adjacent-rank royale battles preserve points and saved state across reloads',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-adjacent-qa',displayName:'인접 랭크 검사'};globalThis.__adventureTime={period:'night',hour:22};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;
+  for(const [rank,field,expected] of [['X','zaRoyaleXPoints',[400,900]],['W','zaRoyaleWPoints',[450,1000]]]){
+   seedMon(id,{...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{},custom:{keep:true}});
+   seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:5,y:6,facing:'down',combat:null,trainer:null,encounter:null,zaRoyaleRank:rank,zaNaveenComplete:true,zaLidaStage:2,zaMission07Started:true,zaMission08Started:true,[field]:0,zaRoyaleMixedWinsV1:['future-opponent']},state.revision+1));await get();
+   for(let i=0;i<2;i++){
+    if(i){await walkTo({x:19,y:6});await call('face',{direction:'down'});}
+    const action=`royaleMixed-${i}`;assert.equal(state.world.interaction.action,action);await call(action);await get();assert.equal(rawWorld().trainer.adventureRoyaleMixedV1,true);await battle();await get();assert.equal(state.world[field],expected[i]);assert.ok(rawWorld().zaRoyaleMixedWinsV1.includes('future-opponent'));assert.equal(rawWorld().zaRoyaleMixedWinsV1.length,i+2);assert.deepEqual(rawMon(id).custom,{keep:true});await call(action,{},409);
+   }
+  }
+  seedWorld(storeAdventurePosition({...rawWorld(),x:5,y:6,facing:'down',zaRoyaleMixedWinsV1:{version:2}},state.revision+1));await get();await call('royaleMixed-0',{},409);assert.deepEqual(rawWorld().zaRoyaleMixedWinsV1,{version:2});
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Rank X added trainers and waiter preserve progress across reloads',async()=>{
  const prior=globalThis.__adventureUser,priorTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'rank-x-extra-qa',displayName:'랭크 X 검증'};globalThis.__adventureTime={hour:22,period:'night',absoluteHour:22};
  try{
