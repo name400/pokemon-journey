@@ -631,3 +631,6 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{min-height:44px;height:auto;padding:3px 44px 3px 5px;flex-wrap:wrap}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-effectiveness,.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-compact-pp{display:block;font-size:9px}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info{right:0;bottom:0;width:44px;min-width:44px;height:44px;min-height:44px}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-rows:1fr 1fr;height:44px;min-height:44px;max-height:44px;overflow:hidden;padding:2px 44px 2px 4px;gap:0 2px}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-ball-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:none;overflow:visible}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move .bs-type-symbol{width:14px;height:14px;min-width:14px}

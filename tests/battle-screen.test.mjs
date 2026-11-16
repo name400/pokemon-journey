@@ -100,3 +100,11 @@ for(const [x,y,width,height] of [[-210,-202.5,360,202.5],[0,-80,120,80]]){
  assert.ok(g['--v52-detail-top']>=y);
  if(height>=48)assert.ok(g['--v52-detail-top']+g['--v52-detail-height']<=y+height+1e-8);
 }
+
+const {v52Page}=await import('../.sites-runtime/tests/battle-panel.mjs');
+for(const [count,size] of [[0,2],[1,2],[5,2],[4,1],[4,2],[4,4]]){
+ const actual=[];const first=v52Page(count,0,size);
+ for(let page=0;page<first.pages;page++){const range=v52Page(count,page,size);for(let i=range.start;i<range.end;i++)actual.push(i);}
+ assert.deepEqual(actual,Array.from({length:count},(_,i)=>i),'Pagination keeps every move or ball in order');
+ assert.equal(v52Page(count,999,size).page,first.pages-1);
+}

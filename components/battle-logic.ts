@@ -35,6 +35,12 @@ export function v52ControlTop(arenaTop:number,arenaHeight:number,fraction:number
 
 /** Coordinates are relative to the console, which can be narrower than the arena. */
 export function v52OverlayGeometry(x:number,y:number,width:number,height:number):Record<string,number>{
-  const detailTop=v52ControlTop(y,height,.4444,184),moveWidth=Math.min(width,Math.max(104,width*.2889)),sheetWidth=Math.min(width,Math.max(200,Math.min(320,width*.6)));
+  const detailTop=v52ControlTop(y,height,.4444,184),moveWidth=Math.min(width,Math.max(180,width*.2889)),sheetWidth=Math.min(width,Math.max(200,Math.min(320,width*.6)));
   return {'--v52-detail-top':detailTop,'--v52-detail-height':Math.max(44,height-(detailTop-y)-4),'--v52-move-left':x+Math.max(0,width-moveWidth-width*.0167),'--v52-move-width':moveWidth,'--v52-sheet-left':x+Math.max(0,width-sheetWidth-width*.0167),'--v52-sheet-width':sheetWidth,'--v52-command-left':x+width*.6111,'--v52-command-width':width*.3556,'--v52-utility-left':x+width*.4083,'--v52-utility-width':width*.1778,'--v52-command-top':v52ControlTop(y,height,.6765),'--v52-utility-top':v52ControlTop(y,height,.79)};
+}
+
+/** Page compact controls without dropping inventory or move entries. */
+export function v52Page(count:number,requested:number,size:number){
+  const pageSize=Math.max(1,Math.floor(size)),pages=Math.max(1,Math.ceil(Math.max(0,count)/pageSize)),page=Math.max(0,Math.min(Math.floor(requested),pages-1));
+  return {page,pages,start:page*pageSize,end:Math.min(count,(page+1)*pageSize)};
 }

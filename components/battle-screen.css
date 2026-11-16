@@ -265,3 +265,30 @@
 .battle-screen[data-v52-single=true] .bs-move-info{box-sizing:border-box;right:0;bottom:0;width:44px;height:44px;min-height:44px}
 .battle-screen[data-v52-single=true] .bs-move-wrap .bs-move-tooltip{position:fixed;top:8px;bottom:auto;left:50%;right:auto;transform:translateX(-50%);max-height:45dvh;overflow:auto;pointer-events:auto}
 .battle-screen[data-v52-single=true] .bs-ball-panel,.battle-screen[data-v52-single=true] .bs-v52-status,.battle-screen[data-v52-single=true] .bs-ball-grid>button{overflow-wrap:anywhere;min-width:0}
+/* Four compact rows on a normal arena; small arenas page rather than scroll. */
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid{overflow:visible;gap:0}
+.battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-rows:1fr 1fr;gap:0 2px;height:44px;min-height:44px;max-height:44px;overflow:hidden;padding:2px 44px 2px 4px}
+.battle-screen[data-v52-single=true] .bs-move-name{grid-column:1;grid-row:1;min-width:0;overflow:hidden}
+.battle-screen[data-v52-single=true] .bs-move-name b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.battle-screen[data-v52-single=true] .bs-move .bs-type-symbol{grid-column:2;grid-row:1;width:14px;height:14px;min-width:14px}
+.battle-screen[data-v52-single=true] .bs-move-compact-pp{grid-column:3;grid-row:1;white-space:nowrap}
+.battle-screen[data-v52-single=true] .bs-effectiveness{grid-column:1/-1;grid-row:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.battle-screen[data-v52-single=true] .bs-effectiveness>small{display:none}
+.battle-screen[data-v52-single=true] .bs-v52-pages{display:grid;grid-template-columns:minmax(44px,1fr) auto minmax(44px,1fr);align-items:center;gap:2px;height:44px;color:#fff8ed;text-align:center;font-size:10px;background:#30273c}
+.battle-screen[data-v52-single=true] .bs-v52-pages button{height:44px;min-width:44px;padding:0;border:1px solid #a74643;background:#30273c;color:#fff8ed;font-size:20px}
+.battle-screen[data-v52-single=true] .bs-v52-pages button:disabled{opacity:.45}
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-ball-panel,.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-status{overflow:visible}
+.battle-screen[data-v52-single=true] .bs-ball-panel{padding:4px}
+.battle-screen[data-v52-single=true] .bs-ball-panel h3{font-size:11px;line-height:1.15;margin:0 0 3px}
+.battle-screen[data-v52-single=true] .bs-ball-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;padding:0}
+.battle-screen[data-v52-single=true] .bs-ball-grid>button{box-sizing:border-box;min-height:44px;padding:2px;gap:2px}
+.battle-screen[data-v52-single=true] .bs-ball-grid>button>span:not(.bs-ball-atlas){min-width:0}
+.battle-screen[data-v52-single=true] .bs-ball-grid b{font-size:10px;overflow-wrap:anywhere}
+.battle-screen[data-v52-single=true] .bs-ball-grid small{display:none}
+.battle-screen[data-v52-single=true] .bs-ball-grid .bs-ball-atlas,.battle-screen[data-v52-single=true] .bs-ball-grid img{width:20px;height:20px}
+.battle-screen[data-v52-single=true] .bs-ball-panel .bs-throw,.battle-screen[data-v52-single=true] .bs-ball-panel .bs-ball-reselect{min-height:44px;margin-top:2px;padding:3px;font-size:10px}
+.battle-screen[data-v52-single=true] .bs-v52-status{grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;padding:3px}
+.battle-screen[data-v52-single=true] .bs-v52-status section{min-width:0;padding:3px;overflow-wrap:anywhere}
+.battle-screen[data-v52-single=true] .bs-v52-status h3,.battle-screen[data-v52-single=true] .bs-v52-status p{font-size:10px;line-height:1.2}
+/* Atlas offsets are authored for the original 36px sprite cells. */
+.battle-screen[data-v52-single=true] .bs-ball-grid .bs-ball-atlas{width:36px;height:36px}
