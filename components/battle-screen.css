@@ -210,3 +210,7 @@
 .battle-screen .bs-multi-vitals[data-three=true]{grid-template-columns:repeat(3,minmax(0,1fr))}
 .battle-screen .bs-multi-vitals[data-three=true] .bs-hud{padding:8px;min-width:0}
 .battle-screen .bs-multi-vitals[data-three=true] .bs-name b{font-size:clamp(11px,2.5vw,15px);overflow-wrap:anywhere}
+
+/* Approved v52: the player's real HP is legible inside the gauge. */
+.battle-screen[data-v52=true] .bs-hud-own .bs-hp-track{position:relative;height:12px}
+.battle-screen[data-v52=true] .bs-hud-own .bs-hp-inside{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;color:#fff;font:700 9px/1 system-ui,sans-serif;text-shadow:0 1px 2px #000,0 0 2px #000;white-space:nowrap;pointer-events:none}

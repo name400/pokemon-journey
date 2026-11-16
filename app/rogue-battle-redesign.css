@@ -615,3 +615,6 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
  .rc-shell.is-battle .battle-screen .bs-scene[data-multi=true] .bs-multi-vitals.is-foe{width:min(50%,190px)}
  .rc-shell.is-battle .battle-screen .bs-log-lines{max-height:36px;overflow:auto}
 }
+
+/* Preserve the approved HP-gauge height in the classic battle skin. */
+.rc-shell.is-battle .battle-screen[data-v52=true] .bs-hud-own .bs-hp-track{height:12px}
