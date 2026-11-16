@@ -2786,6 +2786,17 @@ test('Magenta 6 court connects the street and scaffold while preserving progress
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Rank W extra trainers support a full visit, healing and preserved saves',async()=>{
+ const prior=globalThis.__adventureUser,priorTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'rank-w-complete-qa',displayName:'랭크 W 검증'};globalThis.__adventureTime={hour:22,period:'night',absoluteHour:22};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,original=rawMon(id);seedMon(id,{...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{},custom:{keep:true}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:3,y:6,facing:'up',zaRoyaleRank:'W',zaMission08Started:true,zaLidaStage:2,zaRoyaleWPoints:0,zaRoyaleWSessionWins:['future-opponent'],zaRoyaleReturn:'plaza'},state.revision+1));await get();const saved=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet);assert.equal(state.world.interaction.action,'royaleWExtra4');await call('royaleWExtra4');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[650,280,25]);await get();assert.equal(state.world.trainer.id,'royale-w-nicolo');await battle();assert.equal(state.world.zaRoyaleWPoints,500);assert.ok(state.world.zaRoyaleWSessionWins.includes('future-opponent'));assert.ok(state.world.zaRoyaleWSessionWins.includes('royale-w-nicolo'));await call('royaleWExtra4',{},409);
+  await walkTo({x:19,y:12});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'royaleWExtra5');await call('royaleWExtra5');await battle();assert.equal(state.world.zaRoyaleWPoints,1000);const injured={...rawMon(id),hp:1,status:'마비',pp:{psystrike:1}};seedMon(id,injured);await get();assert.equal(state.world.interaction.action,'royaleWHeal5');await call('royaleWHeal5');await get();assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});await call('royaleWHeal5',{},409);assert.equal(state.world.zaRoyaleWPoints,1000);assert.equal(state.wallet.coins,wallet.coins);assert.deepEqual(rawMon(id).custom,saved.custom);assert.deepEqual(rawMon(id).ivs,saved.ivs);assert.equal(original.speciesId,152);
+  // A player whose old location is a new marker can still load and leave it.
+  seedWorld(storeAdventurePosition({...rawWorld(),x:12,y:5,facing:'left'},state.revision+1));await get();assert.equal(state.world.x,12);assert.equal(state.world.y,5);assert.equal(state.world.map[5][12],'.');await call('move',{direction:'down'});await get();assert.equal(state.world.map[5][12],'e');
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureTime=priorTime;}
+});
+
 test('Rank V royale trainers retain documented moves through battles and reload',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-v-moves-qa',displayName:'로열기술테스트'};
  try{

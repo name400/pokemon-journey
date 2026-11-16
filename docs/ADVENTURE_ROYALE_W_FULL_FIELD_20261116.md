@@ -1,0 +1,9 @@
+# Rank W field trainers
+
+The [Rank W trainer listing](https://www.serebii.net/legendsz-a/z-aroyale/rankw.shtml) records twelve ordinary opponents, including the eight added here: Nicolo, Paige, Anish, Aymeric, Yui, Samy, Romy and Tiago. Their listed teams, levels and moves inform the new turn-based encounters. The existing four opponents and their identifiers are retained. [Z-A Royale information](https://www.serebii.net/legendsz-a/z-aroyale.shtml) also describes healing offered after defeating waiters and waitresses; Paige and Aymeric now offer optional healing once per visit.
+
+The compressed battle-zone map and the eight new positions are project approximations, not verified original locations. The existing 500-point award per victory, 5,000-point threshold and visit mechanics are project approximations; original individual scores are not established here. Trainer-class medal and card bonuses for the added opponents remain unimplemented. Battles continue to use the project's turn-based system.
+
+No stored Pokémon, items, points or prior wins are migrated. Unknown entries in the existing visit win array are retained. A newly placed opponent is omitted while a player occupies its tile, allowing old saved positions to remain usable; the opponent appears after the player moves away. The per-visit healer history resets only when its value is absent or an array, leaving unknown formats intact.
+
+Representative checks cover data and reachability for all eight opponents, and an isolated API scenario covering two battles, reconnect, repeat prevention, healer use, preserved party data and a saved position on a new marker. These do not establish a complete natural playthrough, actual original coordinates, production behavior or the Sites merged build. Existing test failure records and the disabled experimental menu clock remain unchanged.
