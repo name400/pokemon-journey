@@ -1,0 +1,7 @@
+# Mission 35: elevator-key room power
+
+The [Mission 35 walkthrough](https://www.thonky.com/pokemon-legends-z-a/main-mission-35-reaching-rank-a) describes turning on the return warp's power before taking the elevator key after the Aegislash battle. The draft 2D key room previously hid its power switch until the key had been taken. The switch is now accessible after the battle independently of the key; either order is allowed and the power state persists on reconnect. The return warp remains gated on both power and the key, preserving the existing progression safeguard; the source does not establish whether the original permits returning without the key.
+
+The switch and warp coordinates, room dimensions and existing B1F map are approximations rather than verified original tiles. The old combined purple-room layout retains its previous rules. No save or item is migrated. Unrecognized power-state formats are not overwritten, and the powered switch's new tile remains walkable for someone already saved there.
+
+Isolated API tests cover the full new laboratory sequence with power before key, reload, duplicate requests, obtaining the key and returning, preserved party/wallet/card data, unknown power state, and the legacy key-first exit. Laboratory map regression tests also passed. This is not a natural full playthrough, original-device verification, production D1 test, full test suite, or Sites merged-source test.

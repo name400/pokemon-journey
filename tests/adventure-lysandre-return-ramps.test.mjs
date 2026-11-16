@@ -12,3 +12,7 @@ test('A and B keycards open a return corridor without allowing a puzzle bypass',
  }
  const unknown={zaLysandreWing:'a',zaLysandreCards:{version:2,keep:'a'}};assert.equal(lysandreMazeMap(unknown)[11][11],'#');
 });
+
+test('vault power panel stays walkable for pre-existing key-room positions',()=>{
+ const state={zaLysandreWing:'e-vault',zaLysandreKeyRoomV3:true,zaLysandreAegislashWon:true,zaLysandreElevatorKey:false,x:8,y:8};const map=lysandreMazeMap(state);assert.equal(map[8][8],'z');assert.ok(walkable(map[8][8]));assert.ok(fieldPath(map,state,{x:9,y:8}).length);
+});
