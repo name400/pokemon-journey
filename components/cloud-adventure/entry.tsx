@@ -111,9 +111,11 @@ export default function Adventure(){
  const resetVisual=useCallback(()=>{visualRequests.current.reset();visualGeneration.current++;visualPath.current=null;setPrediction(null);},[setPrediction]);
  const previewPath=useCallback((world:any,directions:string[],atRevision:number,allowTransition=true)=>{
   const steps=predictCloudPathSteps(world,directions,{allowTransition}),last=steps.at(-1);if(!last)return;
-  if(!Number.isSafeInteger(world.steps)||steps.length!==directions.length||steps.some((step:any)=>step.predictedHazard||step.predictedTransition)){
+  if(!Number.isSafeInteger(world.steps)||steps.length!==directions.length||steps.some((step:any)=>step.predictedTransition)){
    visualPath.current=null;visualGeneration.current++;setPrediction({revision:atRevision,...last});return;
   }
+  // Hazard previews remain speculative, but draw each adjacent waypoint.
+  // A battle, short move, conflict or transition still resets to the server.
   const old=visualPath.current,points=steps.map((step:any,index:number)=>({...step,id:world.steps+index+1}));
   // Step identities survive successful ACKs, including turns to a previously
   // visited coordinate. Keep preceding points until the canvas consumes them.
