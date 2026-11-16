@@ -2,6 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {zone13Map,zone13Encounter,zone13Visible,zone13Item,ZONE13_STUMPS,ZONE13_GROVE_TREES} from '../lib/cloud-adventure/adventure-zone13.mjs';
 import {stepField,fieldPath,fieldMap,fieldDialogue,rotoGlideLanding,storeAdventurePosition,restoreAdventurePosition} from '../lib/cloud-adventure/adventure-world.mjs';
+test('Zone 13 grass banks use location and time while preserving old positions and individual records',()=>{
+ const pool=(period,y)=>new Set([0,.26,.51,.76,.99].map(r=>zone13Encounter(period,()=>r,{y}).speciesId));
+ assert.deepEqual([...pool('day',4)],[666]);assert.deepEqual([...pool('night',4)],[708]);
+ assert.deepEqual([...pool('day',11)],[666,70,214,127]);assert.deepEqual([...pool('night',11)],[123,214,127]);
+ const base={area:3,district:'lumiose-zone13',interior:null,zaRoyaleRank:'E',teamIds:['kept'],money:731,zaZone13Items:['west-ultra'],zaZone13Spent:{pinsir:true},zaWildShinyRolls:{'zone13:heracross:214':true}};
+ const map=zone13Map(base);assert.equal(map[6][5],'g');assert.equal(map[11][5],'a');assert.equal(fieldDialogue({...base,x:5,y:10,facing:'down'})?.action,'zone13Wild-heracross');
+ for(const [x,y] of [[5,6],[5,11]]){const saved=restoreAdventurePosition(storeAdventurePosition({...base,x,y},315),315);assert.deepEqual([saved.x,saved.y,saved.teamIds,saved.money,saved.zaZone13Items,saved.zaZone13Spent,saved.zaWildShinyRolls],[x,y,['kept'],731,['west-ultra'],{pinsir:true},{'zone13:heracross:214':true}]);}
+ assert.equal(zone13Map({...base,zaZone13Spent:{heracross:true}})[11][5],'g');
+});
 test('Zone 13 woodland paths connect the existing gates without changing grass or saved state',()=>{
  const s={area:3,district:'lumiose-zone13',interior:null,x:1,y:1,zaRoyaleRank:'E',teamIds:['kept'],money:731,zaZone13Items:['west-ultra']},map=zone13Map(s);
  for(const [x,y] of [[1,1],[21,1],[1,15],[21,15]])assert.equal(map[y][x],',');
