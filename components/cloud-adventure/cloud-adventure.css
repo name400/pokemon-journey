@@ -193,3 +193,15 @@
 .adv-pebble-cast { grid-row:span 2; display:flex; align-items:end; height:96px; }
 .adv-pebble-cast img { width:75px; height:80px; object-fit:contain; }
 @media(max-width:420px){.adv-pebble-scene{grid-template-columns:110px 1fr;gap:.4rem}.adv-pebble-cast img{width:58px;height:70px}}
+/* Show only server-confirmed evolution results; the field remains behind the sheet. */
+.adv-evolution-result{text-align:center;padding:8px;color:inherit}
+.adv-evolution-art{display:flex;align-items:center;justify-content:center;gap:8px;min-height:110px}
+.adv-evolution-art img{width:min(30vw,112px);height:min(30vw,112px);object-fit:contain;image-rendering:pixelated}
+.adv-evolution-art .adv-evolve-before{opacity:.55}
+.adv-evolution-art .adv-evolve-after{animation:adv-evolution-reveal .9s ease-out both}
+.adv-evolution-result p{font-weight:700;line-height:1.4}
+.adv-evolution-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.adv-evolution-actions button{min-height:44px}
+.adv-evolution-result[data-motion-skipped=true] .adv-evolve-after{animation:none}
+@keyframes adv-evolution-reveal{0%{opacity:.15;filter:brightness(3)}55%{opacity:1;filter:brightness(2)}100%{opacity:1;filter:none}}
+@media(prefers-reduced-motion:reduce){.adv-evolution-art .adv-evolve-after{animation:none}}

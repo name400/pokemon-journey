@@ -8,6 +8,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import ts from 'typescript';
 import {makeMon,moves,effectiveness} from '../lib/game.mjs';
 import {stableTeraType,TERA_TYPES} from '../lib/tera-type.mjs';
+import {adventureEvolutionPresentation} from '../lib/cloud-adventure/adventure-evolution-presentation.mjs';
 import {configure} from '../lib/pokemon-config.mjs';
 import {createCombat,playCpu} from '../lib/party-battle.mjs';
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
@@ -1395,7 +1396,7 @@ test('world route: save migration, atomic purchases, actual battle/capture/growt
  assert.equal(sql.prepare('SELECT data FROM saves WHERE user_id=?').get('adventure-qa').data,'{\"classic\":{\"keep\":true}}');
  sql.prepare('DELETE FROM pokemon_box WHERE id IN (?,?)').run(healedId,masterId);seedMon(owned,ballTestMon);seedWorld(ballTestWorld);await get();
  // No automatic evolution at Lv.16, including a reload and movement. Evolve preserves ownership/config.
- const level16=configure({...makeMon(1,16),ivs:original.ivs,shiny:true,walkSteps:500,friendship:180});seedMon(owned,level16);await get();await call('face',{direction:'down'});assert.equal(rawMon(owned).id,1);await call('evolve',{target:2});assert.equal(state.world.zaResearchEvolutions,1);assert.equal(state.world.zaResearchItemEvolutions,undefined);assert.equal(rawMon(owned).id,2);assert.ok(state.world.adventureDexSpecies.includes(1));assert.ok(state.world.adventureDexSpecies.includes(2));assert.equal(rawMon(owned).walkSteps,500);assert.equal(rawMon(owned).shiny,true);assert.ok(state.world.events.some(e=>e.kind==='evolve'));
+ const level16=configure({...makeMon(1,16),ivs:original.ivs,shiny:true,walkSteps:500,friendship:180});seedMon(owned,level16);await get();await call('face',{direction:'down'});assert.equal(rawMon(owned).id,1);const beforeEvolutionView=structuredClone(state),beforeEvolutionRevision=state.revision;await call('evolve',{target:2});const evolutionView=adventureEvolutionPresentation(beforeEvolutionView,state,beforeEvolutionRevision);assert.deepEqual([evolutionView?.before.id,evolutionView?.after.id,evolutionView?.after.boxId],[1,2,owned]);assert.equal(state.world.zaResearchEvolutions,1);assert.equal(state.world.zaResearchItemEvolutions,undefined);assert.equal(rawMon(owned).id,2);assert.ok(state.world.adventureDexSpecies.includes(1));assert.ok(state.world.adventureDexSpecies.includes(2));assert.equal(rawMon(owned).walkSteps,500);assert.equal(rawMon(owned).shiny,true);assert.ok(state.world.events.some(e=>e.kind==='evolve'));
  // Hidden ability, damage, identity and evolution-only move survive an actual
  // manual evolution and are used by the next native battle.
  const savedEvolved=rawMon(owned),savedEvolutionWorld=rawWorld();const karp={...makeMon(129,20),boxId:owned,ability:'rattled',hp:5,shiny:true,teraType:'Fire',status:'독',pp:{splash:2},walkSteps:321,custom:{keep:true}};seedMon(owned,karp);await get();await call('evolve',{target:130});const gyarados=rawMon(owned);assert.equal(gyarados.ability,'moxie');assert.equal(gyarados.hp,Math.max(1,karp.hp+gyarados.maxHp-karp.maxHp));assert.equal(gyarados.pp.splash,2);assert.equal(gyarados.teraType,'Fire');assert.equal(gyarados.shiny,true);assert.deepEqual(gyarados.custom,{keep:true});assert.ok(gyarados.moves.includes('물기'));assert.ok(!state.world.adventurePendingMoves?.length);

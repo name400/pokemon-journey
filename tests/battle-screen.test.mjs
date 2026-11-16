@@ -108,3 +108,14 @@ for(const [count,size] of [[0,2],[1,2],[5,2],[4,1],[4,2],[4,4]]){
  assert.deepEqual(actual,Array.from({length:count},(_,i)=>i),'Pagination keeps every move or ball in order');
  assert.equal(v52Page(count,999,size).page,first.pages-1);
 }
+const {validatePokemonEdit}=await import('../lib/admin-pokemon.mjs');
+const megaHero={...validatePokemonEdit({species:6,level:50,item:'charizarditex'}),boxId:'mega-hero'},megaEnemy={...makeMon(7,50),boxId:'mega-foe'};
+const megaBefore=createCombat([megaHero],[megaEnemy]);
+const megaAfter=playCpu(megaBefore,{type:'move',move:megaBefore.requests[0].moves[0].name,special:'mega'});
+const megaView=combatView(megaAfter),megaEvent=megaView.events.find(event=>event.kind==='form'&&event.boxId==='mega-hero'&&event.pokemon?.mega);
+assert.ok(megaEvent,'Actual Mega command must emit a form event for the displayed individual');
+let megaDisplay=battleDisplay(megaView,true);
+assert.notEqual(megaDisplay.teams[0][0].mega,true,'Final Mega form must not appear before the form event');
+megaDisplay=applyBattleEvent(megaDisplay,megaEvent);
+assert.equal(megaDisplay.teams[0][0].mega,true);
+assert.equal(megaDisplay.teams[0][0].boxId,'mega-hero');
