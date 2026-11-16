@@ -97,3 +97,5 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 미션 10의 첫 팀 MZ 회의를 네 단계 확인식 장면으로 표시하고 회의가 끝나면 세 사건을 연다. 처음 파트너가 확인되는 새 회의에서 AZ의 메가스톤을 한 번만 지급하며, 가방·포켓몬의 지닌 도구·기존 메가도감에 있으면 중복 지급하지 않는다. 원래 스타터나 보유 이력이 불명확한 저장은 임의로 지급하지 않고 기존 완료 저장도 소급하지 않는다. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Walkthrough%3APok%C3%A9mon_Legends%3A_Z-A/Part_10)와 [StrategyWiki](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/The_Secrets_of_Mega_Evolution)는 회의의 세 사건·역할 분담과 회의 뒤 AZ의 스타터 메가스톤을 설명한다. 대사와 상징적 인물 표시는 재구성이며 정확한 원작 연출은 미확인이다.
 
 미션 10~후반 대표 통합 검사 한 번에서 미션 37 배틀 도우미 `testBattleMove`가 `undefined.m` 오류로 실패했고 같은 검사의 후속 1회는 통과했다. 실패 원인은 미확정이며, 이 결과를 Sites 병합본 검증으로 간주하지 않는다.
+
+미션 35 AZ의 과거 이야기를 네 단계 확인식 장면으로 확장했다. 옥상 및 구형 로비 경로에서 현재 배경·AZ·플라엣테·동료 표시를 유지하며, 마지막 확인에만 랭크 A 진행을 열고 저장 후 재접속할 수 있다. 알 수 없는 장면 표식과 기존 완료 저장은 변경하지 않는다. [Serebii 공략](https://serebii.net/legendsz-a/mainmissions/reachingranka.shtml)은 전쟁과 플라엣테의 부활, 무기와 앙주의 경위를 AZ가 옥상에서 말한다고 설명한다. 한국어 대사와 상징적인 인물 표시는 재구성이며 원작의 정확한 연출은 미확인이다.

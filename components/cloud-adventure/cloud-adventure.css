@@ -117,3 +117,12 @@
 .adv-mission10-cast span { display:flex; flex-direction:column; align-items:center; padding:.25rem; border-radius:.3rem; background:#e4eee5; }
 .adv-mission10-cast span::before { content:""; width:14px; height:20px; border-radius:7px 7px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
 @media(max-width:420px){.adv-mission10-meeting{grid-template-columns:96px 1fr;gap:.4rem}}
+
+/* AZ, Floette and the listeners stay over the current hotel scene. */
+.adv-mission35-scene { display:grid; grid-template-columns:130px 1fr; gap:.5rem 1rem; align-items:center; }
+.adv-mission35-cast { grid-row:span 2; display:flex; align-items:center; height:96px; }
+.adv-mission35-cast img { width:72px; height:80px; object-fit:contain; }
+.adv-mission35-people { display:grid; gap:.35rem; color:#40545b; font-size:.7rem; font-weight:bold; }
+.adv-mission35-people span { display:flex; align-items:center; gap:.2rem; padding:.25rem; border-radius:.3rem; background:#e4eee5; }
+.adv-mission35-people span::before { content:""; width:10px; height:15px; flex:none; border-radius:6px 6px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
+@media(max-width:420px){.adv-mission35-scene{grid-template-columns:108px 1fr;gap:.4rem}.adv-mission35-cast img{width:55px;height:70px}}
