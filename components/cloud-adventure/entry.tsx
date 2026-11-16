@@ -50,6 +50,7 @@ import {equippedVernalTop} from '@/lib/cloud-adventure/adventure-clothing.mjs';
 import {SALON_COLORS,SALON_PRICE,SALON_STYLES,salonAppearance,salonColorAvailable} from '@/lib/cloud-adventure/adventure-salon.mjs';
 import {TRAINERS} from '@/lib/campaign.mjs';
 import {isLumioseFriendshipWorld} from '@/lib/cloud-adventure/adventure-friendship.mjs';
+import {side09DisplayDeadline} from '@/lib/cloud-adventure/adventure-side09.mjs';
 import {stepField,wildAlphaTarget,zone2BudewTarget,zone2KakunaTarget,zone2FieldMonsters,zone2FieldTarget,zone2IslandAlphaTarget,zone3FieldMonsters,zone3FieldTarget,magentaSewerMonsters,magentaSewerTarget} from '@/lib/cloud-adventure/adventure-world.mjs';
 import {ADVENTURE_BALLS,RARE_ADVENTURE_BALL_IDS,fieldBallSelection} from '@/lib/cloud-adventure/adventure-balls.mjs';
 import {alphaMoveReplacementWarning} from '@/lib/cloud-adventure/adventure-alpha-move-warning.mjs';
@@ -89,9 +90,10 @@ const PredictedAdventureField=forwardRef<FieldPredictionHandle,ComponentProps<ty
  return <AdventureField {...props} world={prediction&&prediction.revision===revision?{...world,...prediction}:world} visualPath={prediction&&prediction.revision===revision?prediction.visualPath:undefined}/>;
 });
 
-function Side09Timer({stage,remainingMs}:{stage:number;remainingMs:number}){
+function Side09Timer({stage,startedAt,remainingMs}:{stage:number;startedAt:number;remainingMs:number}){
  const [seconds,setSeconds]=useState(()=>Math.ceil(remainingMs/1000));
- useEffect(()=>{const deadline=performance.now()+remainingMs;const update=()=>setSeconds(Math.ceil(Math.max(0,deadline-performance.now())/1000));update();const timer=setInterval(update,250);return()=>clearInterval(timer);},[stage,remainingMs]);
+ const sample=useRef<{stage:number;startedAt:number;deadline:number}|null>(null);
+ useEffect(()=>{sample.current=side09DisplayDeadline(sample.current,stage,startedAt,performance.now(),remainingMs);const deadline=sample.current.deadline;const update=()=>setSeconds(Math.ceil(Math.max(0,deadline-performance.now())/1000));update();const timer=setInterval(update,250);return()=>clearInterval(timer);},[stage,startedAt,remainingMs]);
  return <div className="adv-course-clock"><span>비계 코스 {stage}/3</span><output aria-label="남은 시간">{seconds}초</output>{seconds===0&&<span>시간 종료 · 도착점에서 기록을 확인하세요</span>}</div>;
 }
 function PlayerHealth({world,battle,serverNow,revision,period}:{world:any,battle:any;serverNow:any;revision:any;period:any}){
@@ -288,7 +290,7 @@ export default function Adventure(){
  return <div className={`content adventure-game biome-${area.biome}`}>
   <header className="adv-heading"><div><span className="kicker">나의 포켓몬 여행</span><h2><MapPin size={20}/>{area.name}</h2></div><div className="adv-wallet"><span><Coins size={17}/>{(data.wallet?.coins||0).toLocaleString()}<small>코인</small></span><span className="adv-ball-count"><i/>{data.wallet?.balls||0}<small>볼</small></span></div></header>
   <PlayerHealth world={w} battle={data.battle} serverNow={data.serverNow} revision={data.revision} period={data.gameTime?.period}/>
-  {w.district==='lumiose-side09-course'&&Number.isSafeInteger(w.zaSide09RemainingMs)&&w.zaSide09RemainingMs>=0&&[1,2,3].includes(w.zaSide09Stage)&&<Side09Timer stage={w.zaSide09Stage} remainingMs={w.zaSide09RemainingMs}/>}
+  {w.district==='lumiose-side09-course'&&Number.isSafeInteger(w.zaSide09RemainingMs)&&w.zaSide09RemainingMs>=0&&[1,2,3].includes(w.zaSide09Stage)&&<Side09Timer stage={w.zaSide09Stage} startedAt={w.zaSide09AttemptV1?.startedAt} remainingMs={w.zaSide09RemainingMs}/>}
   <div className="adv-route-bar"><p><span className="adv-dot"/>{trackedAdventureObjective(w)}</p>{isLumioseFriendshipWorld(w)?<button onClick={()=>open('journal')} aria-label={w.zaRoyaleRank?`여행 수첩 열기. Z-A 로열 랭크 ${w.zaRoyaleRank}`:'여행 수첩 열기. Z-A 로열 참가 전'}>Z-A 로열 <b>{w.zaRoyaleRank?`랭크 ${w.zaRoyaleRank}`:'참가 전'}</b><ChevronRight size={16}/></button>:<button onClick={()=>open('journal')} aria-label={`여행 수첩 열기. 배지 ${w.badges.length}개`}>배지 <b>{w.badges.length}/8</b><span className="adv-mini-badges" aria-hidden="true">{TRAINERS.slice(0,8).map(t=><i key={t.id} className={w.badges.includes(t.id)?'earned':''}/>)}</span><ChevronRight size={16}/></button>}</div>
   <div className="adv-game-layout"><section className="adv-field-section" aria-label="필드 탐험">
    <div className="adv-field-top"><span><span className="adv-dot"/> {inBattle?'배틀 중':busy?'저장 중…':w.interior?'실내 탐험':'필드 탐험'}</span><span>{w.interior?'남쪽 출구로 나가기':w.district==='lumiose-bleu-sector1'?'북쪽 센트리코·구역 5 · 서쪽 블루 거리·광장 · 동쪽 베르날 · 남쪽 블루 3번지 (배치 초안)':w.district==='lumiose-zone3-south-roof'?'남쪽 홀로베이터 · 옥상 정원 (배치 초안)':w.district==='lumiose-royale'?'배틀 존 · 남쪽 광장':w.district==='lumiose-rouge-north'?'남쪽 루주 광장 · 동쪽 묘지 · 서쪽 노스불바드 (배치 초안)':w.district==='lumiose-north-boulevard'?'동쪽 루주 거리 · 서쪽 콰자르티코 (배치 초안)':w.district==='lumiose-quasartico'?'콰자르티코 앞뜰 · 동쪽 노스불바드 (배치 초안)':w.district==='lumiose-centrico-route'?'Centrico 센터 · 서쪽 Rouge Plaza 방면 · 동쪽 Vert Sector 2 (초안)':w.district==='lumiose-zone3'?'루주 광장 · 동남 이베르날 접근 (초안)':w.district==='lumiose-hibernal-approach'?'이베르날 애비뉴 · 서쪽 루주 광장 (초안)':w.district==='lumiose-zone12'?'야생 구역 12 · 연못·블루 5 수로 동선 (초안)':w.district==='lumiose-bleu-sector5'?'블루 5번지 · 구역 12·수로 접근 (초안)':w.district==='lumiose-zone1'?'야생 구역 1 초안 · 동쪽 광장 · 서쪽 야생 구역 2':w.district==='lumiose-zone2'?'야생 구역 2 초안 · 별가사리는 밤 · 동쪽 구역 1':w.district==='lumiose-observation'?`야생 Lv.${area.min}–${area.max} · 서쪽 야생 구역`:w.district==='lumiose-wild'?`야생 Lv.${area.min}–${area.max} · 서쪽 현장 · 동쪽 관측 정원`:w.district==='lumiose-site'?'서쪽 정원 · 동쪽 야생 구역':w.district==='lumiose-garden'?'서쪽 광장 · 동쪽 공사 현장':w.district?'서쪽 야생 구역 1 · 동쪽 정원 · 남쪽 항구':<>야생 Lv.{area.min||40}–{area.max||65} · {data.gameTime?.period==='night'?'밤':'낮'}</>}</span></div>

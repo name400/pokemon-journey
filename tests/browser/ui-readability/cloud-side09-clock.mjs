@@ -1,0 +1,14 @@
+// Mock a response produced promptly but delivered late on a timed course.
+import assert from 'node:assert/strict';
+import {fieldMap,stepField} from '../../../lib/cloud-adventure/adventure-world.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+const page=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+const mon={boxId:'fixture',id:1,speciesId:1,name:'이상해씨',types:['풀'],level:5,hp:18,maxHp:20,experience:0,expToNext:20,evolutions:[]};
+let startedAt=Date.now(),attempt={stage:3,startedAt},initial=true;let world={area:3,district:'lumiose-side09-course',interior:null,areaInfo:{name:'비계 코스',biome:'city'},x:2,y:12,facing:'right',teamIds:['fixture'],activeId:'fixture',badges:[],objective:'코스 완주',log:[],adventureBalls:{},steps:0,zaMission15Stage:2,zaSide09Stage:3,zaSide09AttemptV1:attempt,zaSide09RemainingMs:10000};world.map=fieldMap(world);let revision=1,release,started;const gate=new Promise(r=>{release=r;}),pending=new Promise(r=>{started=r;});
+const state=()=>({engine:'cloud',revision,box:[mon],wallet:{coins:100,balls:5},inventory:{},fieldShop:[],expeditions:[],gameTime:{period:'day'},battle:null,world});
+try{
+ await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg"/>'}));
+ await page.route('**/api/world**',async r=>{if(r.request().method()==='POST'){const b=r.request().postDataJSON();if(b.action==='movementFence'){revision++;return r.fulfill({json:{settled:true}});}assert.equal(b.action,'move');const next=stepField(world,'right');world={...world,...next,facing:'right',steps:1,zaSide09RemainingMs:Math.max(0,10000-(Date.now()-startedAt))};world.map=fieldMap(world);revision++;started();await gate;}else if(initial&&!new URL(r.request().url()).searchParams.has('engineOnly')){initial=false;startedAt=Date.now();attempt={stage:3,startedAt};world={...world,zaSide09AttemptV1:attempt,zaSide09RemainingMs:10000};}return r.fulfill({json:state()});});
+ await page.goto((process.env.UI_TEST_URL||'http://127.0.0.1:5228')+'/?mode=adventure&tab=adventure');await page.locator('canvas.adv-field').waitFor();await page.keyboard.press('ArrowRight');await pending;await page.waitForTimeout(2400);const timer=page.getByLabel('남은 시간'),before=parseInt(await timer.innerText(),10);const response=page.waitForResponse(r=>r.request().method()==='POST'&&r.url().includes('/api/world'));release();await response;await page.waitForTimeout(300);const after=parseInt(await timer.innerText(),10);assert.ok(after<=before,`remaining time jumped from ${before}s to ${after}s on delayed response`);assert.deepEqual(world.zaSide09AttemptV1,attempt);console.log(`mobile: delayed response did not increase timer (${before}s → ${after}s)`);
+}finally{release?.();await browser.close();}
