@@ -83,3 +83,5 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 옥상 일반 조우 성장 연결
 
 구역 3 남쪽 옥상 냐스퍼와 루주 1 옥상 비비용 일반 조우에 기존 ZA 성장표를 적용했다. 비비용은 현재 맵이 생성하는 기본 폼만 적용하고, 냐스퍼의 성별과 암수별 진화형 기술은 기존 식별 규칙을 유지한다. 기존 저장·진행 전투·우두머리·알 수 없는 표식은 소급하지 않는다. 자료: https://pokemondb.net/pokedex/espurr/moves/9 https://pokemondb.net/pokedex/vivillon/moves/9 (2차 자료). 원작의 정확한 야생 초기 기술은 미확인이고 최신 네 기술 선택은 엔진의 근사다.
+
+미션 5 Emma의 메가진화는 대사 확인을 기다리는 3단계 장면으로 전환했다. 각 단계는 저장해 재접속 시 이어지며 마지막 확인 후 미션 6을 시작한다. 이전 완료 저장은 다시 열지 않고 알 수 없는 장면 표식은 변경하지 않는다. 전룡의 메가진화 시범과 검은 네발 포켓몬을 찾는 부탁의 순서는 [Bulbapedia 공략](https://bulbapedia.bulbagarden.net/wiki/Walkthrough%3APok%C3%A9mon_Legends%3A_Z-A/Part_5)을 참고했다. 한국어 대사와 2D 전환 효과는 게임에 맞춘 재구성이다. 원작 대사·연출 시간의 정확한 재현은 확인하지 않았다.
