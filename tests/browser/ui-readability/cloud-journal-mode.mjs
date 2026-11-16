@@ -10,7 +10,7 @@ try{for(const scenario of ['za-before-rank','za-old-save','classic']){
  await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg"/>'}));
  await page.route('**/api/world**',r=>{if(r.request().method()==='POST'){const body=r.request().postDataJSON();if(body.action==='movementFence')return r.fulfill({json:{settled:true}});requests.push(body);}return r.fulfill({json:new URL(r.request().url()).searchParams.has('engineOnly')?{engine:'cloud'}:state()});});
  await page.goto((process.env.UI_TEST_URL||'http://127.0.0.1:5222')+'/?mode=adventure&tab=adventure');await page.locator('canvas.adv-field').waitFor();
- const button=page.getByLabel(/여행 수첩 열기/);await button.waitFor();
+ const button=page.getByLabel(/여행 수첩 열기/);await button.waitFor();assert.equal(await page.getByRole('button',{name:'구르기'}).count(),classic?1:0);for(const name of ['위로 이동','왼쪽로 이동','아래로 이동','오른쪽로 이동','웅크리기'])assert.equal(await page.getByRole('button',{name,exact:true}).count(),1,name);assert.equal(await page.locator('button.adv-talk').count(),1);
  if(classic)assert.match(await button.innerText(),/배지\s*2\/8/);else {assert.match(await button.innerText(),scenario==='za-old-save'?/랭크 Y/:/참가 전/);assert.doesNotMatch(await button.innerText(),/배지/);}
  await button.click();
  if(classic){await page.getByText('관동 배지 컬렉션').waitFor();await page.getByText('도시 조사단 이야기 초안').waitFor();await page.getByText('여행 지도',{exact:true}).waitFor();}
