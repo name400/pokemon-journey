@@ -12,3 +12,12 @@ test('Academy road joins Rouge Plaza, Hibernal and Sector 6 while retaining the 
  const old={...school,zaAcademyCourtyard:false,x:1,y:8};assert.equal(stepField(old,'left').district,'lumiose-rouge-north');
  assert.ok(academyCourtyardMap(school).every(row=>!row.includes('g')));
 });
+
+test('recovers only the identified Rouge 6 defeat save at its matching revision',()=>{
+ const base={area:3,district:'lumiose-rouge-sector6',interior:null,x:3,y:5,facing:'up',teamIds:['kept'],zaMission20Stage:5,zaMission21Complete:true,zaMission22Complete:true,log:['파티가 쓰러져 포켓몬 센터에서 회복했다.']};
+ const stored=storeAdventurePosition(base,22),restored=restoreAdventurePosition(stored,22);
+ assert.deepEqual([restored.district,restored.x,restored.y],['lumiose-rouge-sector6',2,5]);
+ assert.deepEqual([restored.teamIds,restored.zaMission20Stage,restored.zaMission21Complete,restored.zaMission22Complete],[['kept'],5,true,true]);
+ assert.equal(restoreAdventurePosition({...stored,log:['다른 기록']},22).district,null);
+ assert.equal(restoreAdventurePosition(stored,23).district,null);
+});
