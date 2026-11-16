@@ -12307,3 +12307,13 @@ test('Zone 20 postgame map travel registers visits and supports the mission 42 a
   const futureSpent={version:2,entries:['future']};seedWorld(storeAdventurePosition({...base,district:'lumiose-zone20',x:11,y:14,zaZone20Spent:futureSpent,zaZone20AlphaSpecies:448,zaZone20AlphaSpecies2:448},state.revision+1));await get();assert.equal(state.world.zaMapTravelAllowed,false);const beforeUnknown=rawWorld();await call('mapFastTravel',{destination:'hotel'},409);assert.deepEqual(rawWorld(),beforeUnknown);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('hotel clock pauses across reconnect and resumes outside without changing party or money',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,realNow=Date.now;let now=19*50000;Date.now=()=>now;globalThis.__adventureUser={userId:'indoor-clock-hotel-qa',displayName:'실내 시계 검사'};globalThis.__adventureTime=null;
+ try{
+  await get();await call('start',{species:152,destination:'lumiose'});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins,mon=structuredClone(rawMon(id)),preserved=()=>{const m=rawMon(id);assert.deepEqual([m.id,m.hp,m.item,m.experience,m.ivs,m.moves],[mon.id,mon.hp,mon.item,mon.experience,mon.ivs,mon.moves]);};await walkTo('J');await call('enterHotel');assert.equal(state.world.interior,'hotel');assert.equal(state.gameTime.hour,19);assert.equal(rawWorld().zaClockPauseStartedAt,now);
+  now+=3*50000;await get();assert.equal(state.gameTime.hour,19);assert.equal(state.gameTime.period,'day');assert.deepEqual(state.world.teamIds,team);preserved();assert.equal(state.wallet.coins,coins);
+  await walkTo({x:11,y:14});await call('move',{direction:'down'});await get();assert.equal(state.world.interior,null);assert.equal(state.gameTime.hour,19);assert.equal(rawWorld().zaClockPauseStartedAt,undefined);assert.equal(rawWorld().zaClockPausedMs,3*50000);
+  now+=50000;await get();assert.equal(state.gameTime.hour,20);assert.equal(state.gameTime.period,'night');assert.deepEqual(state.world.teamIds,team);preserved();assert.equal(state.wallet.coins,coins);
+ }finally{Date.now=realNow;globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});
