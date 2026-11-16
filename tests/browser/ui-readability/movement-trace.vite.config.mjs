@@ -8,6 +8,7 @@ export default {...base,plugins:[...(base.plugins||[]),{name:'movement-trace-onl
  if(id.endsWith('/components/cloud-adventure/adventure-field.tsx')){code=inject(code,'s.startX=s.x;s.startY=s.y;s.targetX=w.x;s.targetY=w.y;s.moveStart=time;',"window.__movementTrace?.('draw-target',{from:{x:s.x,y:s.y},previous:{x:s.targetX,y:s.targetY},target:{x:w.x,y:w.y}});s.startX=s.x;s.startY=s.y;s.targetX=w.x;s.targetY=w.y;s.moveStart=time;");
   code=inject(code,'s.startX=s.targetX;s.startY=s.targetY;s.targetX=next.x;s.targetY=next.y;',"window.__movementTrace?.('draw-target',{from:{x:s.x,y:s.y},previous:{x:s.targetX,y:s.targetY},target:{x:next.x,y:next.y},step:next.id,generation:visualPath.generation});s.startX=s.targetX;s.startY=s.targetY;s.targetX=next.x;s.targetY=next.y;");
   code=inject(code,'if(!s.moveDuration)jumped=true;',"window.__movementTrace?.('draw-correction',{cancelled,from:{x:s.startX,y:s.startY},target:{x:s.targetX,y:s.targetY},duration:s.moveDuration});if(!s.moveDuration)jumped=true;");
+  code=inject(code,'s.visualGeneration=visualPath.generation;s.moveStart=time;',"window.__movementTrace?.('draw-generation',{from:{x:s.x,y:s.y},origin:visualPath.origin,restart});s.visualGeneration=visualPath.generation;s.moveStart=time;");
   code=inject(code,'const distance=Math.abs(s.x-oldX)',"window.__movementTrace?.('draw-position',{x:s.x,y:s.y,moving});const distance=Math.abs(s.x-oldX)");}
  return {code,map:null};
 }}]};

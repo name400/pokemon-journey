@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {correctionDuration,directMovementDuration,playerWalkStep} from '../lib/cloud-adventure/field-visual-motion.mjs';
+import {correctionDuration,directMovementDuration,restartVisualSegment,playerWalkStep} from '../lib/cloud-adventure/field-visual-motion.mjs';
 
 test('prediction correction only retraces the current cardinal segment',()=>{
  const s={x:3.4,y:8,startX:3,startY:8,targetX:4,targetY:8};
@@ -30,4 +30,14 @@ test('direct updates use the same speed and never cut a corner',()=>{
  assert.equal(directMovementDuration({x:2,y:8},{x:3,y:8},150),150);
  assert.equal(directMovementDuration({x:2.5,y:8},{x:3,y:7.5},100),0);
  assert.equal(directMovementDuration({x:2,y:8},{x:4,y:8},100),0);
+});
+
+test('a new prediction continues or returns along the displayed segment without cutting a corner',()=>{
+ const scene={x:2.5,y:8,startX:2.75,startY:8,targetX:2,targetY:8},origin={x:2,y:8};
+ assert.deepEqual(restartVisualSegment(scene,origin,{id:1,x:3,y:8,facing:'right'},100),{targetX:3,targetY:8,step:1,facing:'right',duration:50});
+ assert.deepEqual(restartVisualSegment(scene,origin,{id:1,x:2,y:7,facing:'up'},100),{targetX:2,targetY:8,step:-1,facing:null,duration:50});
+ assert.equal(restartVisualSegment(scene,{x:1,y:8},{id:1,x:2,y:8},100),null);
+ assert.equal(restartVisualSegment({...scene,y:7.9},origin,{id:1,x:3,y:8},100),null);
+ assert.equal(restartVisualSegment({...scene,startX:4},origin,{id:1,x:3,y:8},100),null);
+ assert.equal(restartVisualSegment({...scene,startY:7},origin,{id:1,x:3,y:8},100),null);
 });

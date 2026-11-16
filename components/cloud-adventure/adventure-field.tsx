@@ -53,7 +53,7 @@ import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails,zone2BankTint} from '@/
 import {zone3GardenMosaic,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-zone3-garden.mjs';
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
-import {correctionDuration,directMovementDuration,playerWalkStep} from '@/lib/cloud-adventure/field-visual-motion.mjs';
+import {correctionDuration,directMovementDuration,restartVisualSegment,playerWalkStep} from '@/lib/cloud-adventure/field-visual-motion.mjs';
 import {trackedAdventureLocalTarget} from '@/lib/cloud-adventure/adventure-pending-quests.mjs';
 import {adventureQuestVisuals} from '@/lib/cloud-adventure/adventure-quest-visuals.mjs';
 
@@ -104,7 +104,10 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
    let moving=false,jumped=movedArea;
    if(visualPath&&!movedArea){
     if(s.visualGeneration!==visualPath.generation){
-     jumped=true;s.visualGeneration=visualPath.generation;s.visualStep=-1;s.x=visualPath.origin.x;s.y=visualPath.origin.y;s.targetX=s.x;s.targetY=s.y;s.startX=s.x;s.startY=s.y;s.moveStart=time;s.moveDuration=0;
+     const restart=restartVisualSegment(s,visualPath.origin,visualPath.steps[0],adventureMovementInterval(w));
+     s.visualGeneration=visualPath.generation;s.moveStart=time;
+     if(restart){s.startX=s.x;s.startY=s.y;s.targetX=restart.targetX;s.targetY=restart.targetY;s.visualStep=restart.step;s.moveDuration=restart.duration;if(restart.facing)s.facing=restart.facing;s.walkUntil=time+140;}
+     else{jumped=true;s.visualStep=-1;s.x=visualPath.origin.x;s.y=visualPath.origin.y;s.targetX=s.x;s.targetY=s.y;s.startX=s.x;s.startY=s.y;s.moveDuration=0;}
     }
     // Complete the current segment before taking the next point. The ordered
     // list survives React batching and successful acknowledgements.
