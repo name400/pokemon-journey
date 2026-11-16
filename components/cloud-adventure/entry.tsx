@@ -64,6 +64,7 @@ import './cloud-adventure.css';
 import {predictCloudStep,predictCloudPath,predictCloudPathSteps,createCloudMoveBuffer,adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
 import {createVisualMovementRequests} from '@/lib/cloud-adventure/adventure-visual-request.mjs';
 import {adventureJson} from '@/lib/adventure-network.mjs';
+import {createAdventureClockTabClient} from '@/lib/cloud-adventure/adventure-clock-tab-client.mjs';
 
 function SalonPreview({style,color,top,contact}:{style:string;color:string;top:any;contact:any}){
  const colors:Record<string,string>={R:'#d95250',W:'#f3f2dd',S:'#f4c48d',K:'#263e51',E:contact.color,B:'#3d79aa',V:top?.color||'#3d79aa',L:top?.id==='bravely-vest-gray'?'#55575e':top?.id==='bravely-vest-blue'?'#d0d2d8':'#f3f2e7',C:'#503d46',Y:'#f4cf64',D:'#4b3741',H:(SALON_COLORS as any)[color]?.value||'#79503b'};
@@ -75,7 +76,7 @@ const MOVEMENT_RECOVERY_TIMEOUT_MS=4000;
 type PendingMovement={revision:number|null;activeId:string|null};
 class SettledMovementConflict extends Error {}
 async function api(body?:any,light=false,recovery=false){
- const timeout=recovery||['move','face','dodge'].includes(body?.action)?MOVEMENT_RECOVERY_TIMEOUT_MS:undefined;
+ const timeout=recovery||['move','face','dodge','clockLeaseOpen','clockLeaseRenew','clockLeaseClose'].includes(body?.action)?MOVEMENT_RECOVERY_TIMEOUT_MS:undefined;
  const {response,data}=await adventureJson(light?'/api/world?light=1':'/api/world',body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store'},timeout);
  if(!response.ok){if(response.status===409&&data.code==='MOVEMENT_PRECHECK_CONFLICT')throw new SettledMovementConflict(data.error||'진행이 변경됐습니다.');throw Error(data.error||'탐험 요청 실패');}return data;
 }
@@ -184,6 +185,13 @@ export default function Adventure(){
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  },[accept,load,stop]);
  useEffect(()=>{mounted.current=true;pendingMovement.current={revision:null,activeId:null};syncRequired.current=true;void load(false,true);return()=>{mounted.current=false;stop();};},[load,stop]);
+ // Server and client both require separate test-only gates. No visual controls
+ // or production clock behaviour are changed by this lifecycle experiment.
+ const clockClient=useRef<any>(null);
+ useEffect(()=>{if((globalThis as any).__adventureClockLeaseTestOnly!==true)return;const client=createAdventureClockTabClient({send:(action:string,extra:any)=>act(action,extra)});clockClient.current=client;const hidden=()=>{if(document.hidden)client.suspend();};document.addEventListener('visibilitychange',hidden);return()=>{document.removeEventListener('visibilitychange',hidden);client.dispose();if(clockClient.current===client)clockClient.current=null;};},[act]);
+ const clockScreenOpen=!!screen&&!!data?.world&&isLumioseFriendshipWorld(data.world)&&!data.battle&&!data.world.adventureCatchWindow&&!data.world.inUnion&&!data.world.expedition;
+ useEffect(()=>{clockClient.current?.setOpen(clockScreenOpen&&!document.hidden);},[clockScreenOpen]);
+
  const migrationAttempt=useRef<number|null>(null);
  const legacyReady=!!data?.world&&!data.world.district&&!data.world.zaIntroStage&&!data.world.interior&&!data.world.expedition&&!data.world.inUnion&&!screen&&!dialogue&&!data.battle&&!battleResult&&!resultRef.current&&!data.world.adventureCatchWindow&&!data.world.adventurePendingMoves?.length;
  useEffect(()=>{if(legacyReady&&!busy&&migrationAttempt.current!==data.revision){migrationAttempt.current=data.revision;void act('migrateToLumiose');}},[legacyReady,busy,data?.revision,act]);
