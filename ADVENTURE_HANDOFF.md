@@ -93,3 +93,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 미션 37 마지막 빛을 막은 뒤에는 플레이어가 세 장면을 확인할 때까지 프리즘타워 경로와 등장인물 표시를 유지한다. 전투로 빛을 막은 저장과 기존 즉시 판정 경로 모두 재접속을 지원하며, 마지막 확인 시 기존 경로별 호텔 방/로비 도착과 미션 38 시작을 처리한다. 완료된 구형 저장과 알 수 없는 표식은 소급 변경하지 않는다. [Serebii 공략](https://www.serebii.net/legendsz-a/mainmissions/operationprotectlumiose.shtml)은 메가 지가르데가 빛을 막고 동료가 플라엣테와 함께 나와 AZ가 반기는 흐름을 기술한다. 대사·상징적 인물 표시·화면 구성은 재구성이며 정확한 원작 연출은 미확인이다.
 
 미션 36의 마지막 작전에서는 Vinnie의 안내, 동료와 영원한꽃 플라엣테의 출발, 메가진화, 탑의 폭주를 네 단계로 확인한 뒤 기존 미르시티 방어 경로로 이동한다. 각 단계는 저장되어 재접속할 수 있고 기존 미션 진행과 알 수 없는 표식은 소급 변경하지 않는다. [Serebii](https://advent.serebii.net/legendsz-a/mainmissions/prismtower%27sdarkturn.shtml)와 [GameTrek](https://gmtreks.com/pokemon-z-a/main-missions/37)은 작전 후 동료와 플라엣테가 탑에 가고 탑이 폭주하는 순서를 설명한다. 대사, 인물 표식, 장면과 현재 2D 광장 배치는 재구성이며 정확한 원작 연출은 미확인이다.
+
+미션 10의 첫 팀 MZ 회의를 네 단계 확인식 장면으로 표시하고 회의가 끝나면 세 사건을 연다. 처음 파트너가 확인되는 새 회의에서 AZ의 메가스톤을 한 번만 지급하며, 가방·포켓몬의 지닌 도구·기존 메가도감에 있으면 중복 지급하지 않는다. 원래 스타터나 보유 이력이 불명확한 저장은 임의로 지급하지 않고 기존 완료 저장도 소급하지 않는다. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Walkthrough%3APok%C3%A9mon_Legends%3A_Z-A/Part_10)와 [StrategyWiki](https://strategywiki.org/wiki/Pok%C3%A9mon_Legends%3A_Z-A/The_Secrets_of_Mega_Evolution)는 회의의 세 사건·역할 분담과 회의 뒤 AZ의 스타터 메가스톤을 설명한다. 대사와 상징적 인물 표시는 재구성이며 정확한 원작 연출은 미확인이다.
+
+미션 10~후반 대표 통합 검사 한 번에서 미션 37 배틀 도우미 `testBattleMove`가 `undefined.m` 오류로 실패했고 같은 검사의 후속 1회는 통과했다. 실패 원인은 미확정이며, 이 결과를 Sites 병합본 검증으로 간주하지 않는다.
