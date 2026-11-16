@@ -55,3 +55,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 플라베베·단칼빙 계열 성장 기술
 - 일반 플라베베·플라엣테·플라제스의 확인된 빨강·노랑·주황·파랑·하양 꽃과 일반 단칼빙·쌍검킬·킬가르도 실드폼에 Z-A 레벨·진화·떠올리기 기술표를 연결했다. [플라베베](https://pokemondb.net/pokedex/flabebe/moves/9), [플라엣테](https://pokemondb.net/pokedex/floette/moves/9), [플라제스](https://pokemondb.net/pokedex/florges/moves/9), [단칼빙](https://pokemondb.net/pokedex/honedge/moves/9), [쌍검킬](https://pokemondb.net/pokedex/doublade/moves/9), [킬가르도](https://pokemondb.net/pokedex/aegislash/moves/9)의 2차 자료 기준이다. 야생 초기 기술은 레벨 이하 최근 4개 방식인 근사다.
 - 도시의 색상별 플라베베, 구역 3·7·16 일반 조우, 연구소 일반 단칼빙·쌍검킬을 연결했다. 영원한꽃·메가·블레이드폼과 우두머리 및 기존 저장은 소급하지 않는다. 이브이·할비롱·호바귀 크기별 폼과 이전 구역 진화형의 추가 확인이 남았다. Sites 병합본과 운영 환경은 재검증하지 않았다.
+
+### 이브이·할비롱·호바귀 크기별 성장표
+
+구역 19 일반 이브이·할비롱과 구역 15 일반 호바귀의 작은·큰·특대 품종에 Z-A 성장 기술을 신규 조우부터 연결했다. 이브이의 여덟 진화형과 호바귀의 대응 품종 진화형도 성장·기술 관리에 연결하며 기존 개체, 진행 중 전투, 우두머리와 알 수 없는 표식은 소급 변경하지 않는다. 야생 초기 기술은 기존 엔진의 최신 네 기술 규칙을 사용한 근사다. 자료는 [PokémonDB 이브이](https://pokemondb.net/pokedex/eevee/moves/9), [할비롱](https://pokemondb.net/pokedex/drampa/moves/9), 각 진화형 PokémonDB 및 [RotomLabs 호바귀 품종](https://rotomlabs.net/dex/legends-z-a/pumpkaboo/super-size)·펌킨인 품종의 2차 자료이며 실기 독립 검증은 남았다. 미확인 폼과 우두머리 고유 기술은 적용하지 않았다. Sites 병합본과 운영 환경 검증은 별도로 남는다.
