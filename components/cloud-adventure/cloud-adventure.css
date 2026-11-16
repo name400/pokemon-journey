@@ -75,3 +75,12 @@
 .adv-l-figure i { position:absolute; top:22px; left:15px; width:19px; height:19px; border-radius:50%; background:#d9bca5; }
 .adv-l-figure b { position:absolute; top:41px; left:7px; width:34px; height:31px; border-radius:9px 9px 2px 2px; background:#718392; }
 @media(max-width:420px){.adv-l-scene{grid-template-columns:112px 1fr;gap:.4rem}.adv-l-scene-cast img{width:64px;height:64px}}
+
+/* Keep the rooftop and the named cast visible until the player finishes the scene. */
+.adv-absol-scene { display:grid; grid-template-columns:140px 1fr; gap:.5rem 1rem; align-items:center; }
+.adv-absol-cast { grid-row:span 2; display:flex; align-items:center; height:96px; }
+.adv-absol-cast img { width:80px; height:80px; object-fit:contain; }
+.adv-absol-people { display:grid; gap:.35rem; color:#40545b; font-size:.75rem; font-weight:bold; }
+.adv-absol-people span { display:flex; align-items:center; gap:.25rem; padding:.25rem; border-radius:.3rem; background:#e4eee5; }
+.adv-absol-people span::before { content:""; width:12px; height:16px; flex:none; border-radius:6px 6px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
+@media(max-width:420px){.adv-absol-scene{grid-template-columns:112px 1fr;gap:.4rem}.adv-absol-cast img{width:62px;height:62px}}
