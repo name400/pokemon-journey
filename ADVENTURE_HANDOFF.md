@@ -59,3 +59,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 이브이·할비롱·호바귀 크기별 성장표
 
 구역 19 일반 이브이·할비롱과 구역 15 일반 호바귀의 작은·큰·특대 품종에 Z-A 성장 기술을 신규 조우부터 연결했다. 이브이의 여덟 진화형과 호바귀의 대응 품종 진화형도 성장·기술 관리에 연결하며 기존 개체, 진행 중 전투, 우두머리와 알 수 없는 표식은 소급 변경하지 않는다. 야생 초기 기술은 기존 엔진의 최신 네 기술 규칙을 사용한 근사다. 자료는 [PokémonDB 이브이](https://pokemondb.net/pokedex/eevee/moves/9), [할비롱](https://pokemondb.net/pokedex/drampa/moves/9), 각 진화형 PokémonDB 및 [RotomLabs 호바귀 품종](https://rotomlabs.net/dex/legends-z-a/pumpkaboo/super-size)·펌킨인 품종의 2차 자료이며 실기 독립 검증은 남았다. 미확인 폼과 우두머리 고유 기술은 적용하지 않았다. Sites 병합본과 운영 환경 검증은 별도로 남는다.
+
+### 직접 출현 진화형 성장 연결
+
+구역 2 나무 딱충이의 직접 투척, 구역 7 풀숲의 딱충이·로젤리아, 구역 15 독침붕·휠구·펜드라·고우스트의 야생 전투와 직접 투척에서 기존 ZA 성장표를 신규 일반 개체에 연결했다. 구역 4 분떠도리와 구역 9 불화살빈은 이미 포획 후 성장 표식이 있었지만 초기 야생 기술이 공용 표를 쓰던 경로도 수정했다. [딱충이](https://pokemondb.net/pokedex/kakuna/moves/9), [분떠도리](https://pokemondb.net/pokedex/spewpa/moves/9), [불화살빈](https://pokemondb.net/pokedex/fletchinder/moves/9) 및 각 종의 PokémonDB Z-A 기술표를 2차 자료로 대조했다. 야생 초기 기술은 기존 최신 네 기술 규칙의 근사이며, 기존 저장과 우두머리 기술에는 소급 적용하지 않는다. 실기·Sites 병합본 검증은 별도로 남는다.
