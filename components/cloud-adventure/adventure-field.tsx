@@ -53,7 +53,7 @@ import {zone2WaterEdges,zone2BridgeAxis,zone2BridgeRails,zone2BankTint} from '@/
 import {zone3GardenMosaic,zone3ExitLabel} from '@/lib/cloud-adventure/adventure-zone3-garden.mjs';
 import {createFieldScheduler,visibleFieldBounds} from '@/lib/adventure-render.mjs';
 import {adventureMovementInterval} from '@/lib/cloud-adventure/adventure-prediction.mjs';
-import {correctionDuration,playerWalkStep} from '@/lib/cloud-adventure/field-visual-motion.mjs';
+import {correctionDuration,directMovementDuration,playerWalkStep} from '@/lib/cloud-adventure/field-visual-motion.mjs';
 import {trackedAdventureLocalTarget} from '@/lib/cloud-adventure/adventure-pending-quests.mjs';
 import {adventureQuestVisuals} from '@/lib/cloud-adventure/adventure-quest-visuals.mjs';
 
@@ -124,10 +124,10 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
    }else{
     const cancelled=s.visualGeneration!==-1;s.visualGeneration=-1;s.visualStep=-1;s.facing=w.facing||'down';
     if(cancelled||(!movedArea&&(s.targetX!==w.x||s.targetY!==w.y))){
-     const correction=cancelled&&!movedArea?correctionDuration(s,w,adventureMovementInterval(w)):0;
+     const interval=adventureMovementInterval(w),correction=cancelled&&!movedArea?correctionDuration(s,w,interval):0,direct=!cancelled&&!movedArea?directMovementDuration(s,w,interval):0;
      s.startX=s.x;s.startY=s.y;s.targetX=w.x;s.targetY=w.y;s.moveStart=time;
      // Never interpolate a cancellation across an unvisited tile or a corner.
-     s.moveDuration=cancelled?correction:Math.abs(s.x-w.x)+Math.abs(s.y-w.y)>1.25?0:adventureMovementInterval(w)*.85;
+     s.moveDuration=cancelled?correction:direct;
      if(!s.moveDuration)jumped=true;
      s.walkUntil=time+140;
     }
@@ -1882,7 +1882,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
     const px=Math.round(x*tile+tile/2-12),py=Math.round(y*tile+tile-29),step=playerStep??(walk&&!reduce?(Math.floor(time/95)%2===0?3:-3):0);
     ctx!.fillStyle='#28473155';ctx!.beginPath();ctx!.ellipse(px+12,py+28,12,4,0,0,Math.PI*2);ctx!.fill();
     const colors:Record<string,string>={R:color,W:'#f3f2dd',S:'#f4c48d',K:'#263e51',B:'#3d79aa',V:top?.color||'#3d79aa',L:top?.id==='bravely-vest-gray'?'#55575e':top?.id==='bravely-vest-blue'?'#d0d2d8':'#f3f2e7',C:'#503d46',Y:'#f4cf64',D:'#4b3741',E:(CONTACT_COLORS as any)[lens]||'#263e51',H:(SALON_COLORS as any)[appearance?.color||'brown']?.value||'#79503b'};
-    adventureAvatarRows(face,appearance?.style,top?.id==='asami-formal'?'formal':top?'vest':'',lens).forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];ctx!.fillRect(px+rx*2,py+(crouched?6:0)+ry*(crouched?1.55:2)+(ry>10?(rx<6?step:-step):0),2,crouched?1.55:2);}));
+    adventureAvatarRows(face,appearance?.style,top?.id==='asami-formal'?'formal':top?'vest':'',lens).forEach((row:string,ry:number)=>Array.from(row).forEach((p,rx)=>{if(p==='.')return;ctx!.fillStyle=colors[p];const stride=ry>10?(rx<6?step:-step):0,side=playerStep!==undefined&&(face==='left'||face==='right');ctx!.fillRect(px+rx*2+(side?stride:0),py+(crouched?6:0)+ry*(crouched?1.55:2)+(side?0:stride),2,crouched?1.55:2);}));
    }
    // Naveen and Lida lead across the draft rooftop; positions are visual only.
    if(w.district==='lumiose-protect'&&!w.interior&&w.zaMission36DescentPending&&w.zaMission36RooftopRoute&&w.zaMission37Stage===1){
@@ -2041,7 +2041,7 @@ export default function AdventureField({world:w,partner,visualPath,disabled,onIn
    if(partner&&followPos){const img=partnerImage(partner,s.facing),px=followPos.x*tile,py=followPos.y*tile;if(img?.complete&&img.naturalWidth)ctx.drawImage(img,px-4,py-6,tile+8,tile+8);}
    const companion=w.zaRooftopCompanionPosition;if(w.district==='lumiose-rooftop'&&w.zaRooftopIntroduced&&!w.zaRooftopTraversed&&Number.isInteger(companion?.x)&&Number.isInteger(companion?.y)&&(companion.x!==w.x||companion.y!==w.y))trainer(companion.x,companion.y,'#a87fbd',companion.facing||'down',moving);
    for(const member of w.unionMembers||[])if(member.x!==w.x||member.y!==w.y)trainer(member.x,member.y,'#e7b93e','down');
-   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,(w.zaFieldCrouched===true||(!walking&&benchHangMatches(w,w.interaction))),contactAppearance(w).id,playerWalkStep(s.walkDistance,moving,reduce));
+   trainer(s.x,s.y,'#d95250',s.facing,walking,salonAppearance(w),equippedVernalTop(w)||undefined,(w.zaFieldCrouched===true||(!walking&&benchHangMatches(w,w.interaction))),contactAppearance(w).id,playerWalkStep(s.walkDistance,moving,reduce,adventureMovementInterval(w)));
    const {questTarget}=props.current;
    if(questTarget){const x=(questTarget.x+.5)*tile,y=Math.max(16,questTarget.y*tile);ctx.save();ctx.fillStyle='#f6cd45';ctx.strokeStyle='#59400d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-7,y-14);ctx.lineTo(x+7,y-14);ctx.lineTo(x,y-3);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}
    ctx.restore();

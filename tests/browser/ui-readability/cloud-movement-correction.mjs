@@ -13,7 +13,7 @@ try{
  await page.route('**/api/world**',async r=>{if(r.request().method()==='POST'){const b=r.request().postDataJSON();if(b.action==='movementFence'){revision++;return r.fulfill({json:{settled:true}});}assert.equal(b.action,'move');posts++;await gate;return r.fulfill({status:409,json:{error:'이동이 차단되었습니다.'}});}return r.fulfill({json:state()});});
  await page.goto(base+'/?mode=adventure&tab=adventure');await page.locator('canvas.adv-field').waitFor();await page.keyboard.press('ArrowRight');
  await page.waitForFunction(()=>window.__movementTraceEvents.some(e=>e.type==='draw-target'&&e.detail.step!==undefined),null,{timeout:5000});
- await page.waitForTimeout(65);release();
+ await page.waitForFunction(()=>window.__movementTraceEvents.some(e=>e.type==='draw-position'&&e.detail.x>2.05&&e.detail.x<2.5),null,{timeout:5000});release();
  await page.waitForFunction(()=>window.__movementTraceEvents.some(e=>e.type==='draw-correction'&&e.detail.cancelled),null,{timeout:5000});
  const event=await page.evaluate(()=>window.__movementTraceEvents.find(e=>e.type==='draw-correction'&&e.detail.cancelled).detail);
  assert.deepEqual(event.target,{x:2,y:8});assert.ok(event.from.x>2&&event.from.x<3);assert.ok(event.duration>0&&event.duration<150);assert.equal(posts,1);
