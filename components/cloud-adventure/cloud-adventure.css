@@ -65,3 +65,13 @@
 @keyframes adv-emma-away { 0% { opacity: 1; } 45% { opacity: .25; filter: brightness(2); } 100% { opacity: 0; } }
 @keyframes adv-emma-appear { 0%, 40% { opacity: 0; } 65% { opacity: 1; filter: brightness(2); } 100% { opacity: 1; filter: none; } }
 @media (prefers-reduced-motion: reduce) { .adv-emma-mega-art.step-2 .adv-emma-normal { animation: none; opacity: 0; } .adv-emma-mega-art.step-2 .adv-emma-transformed { animation: none; opacity: 1; } }
+
+/* A symbolic L figure and Zygarde stay visible over the rooftop through the conversation. */
+.adv-l-scene { display:grid; grid-template-columns:140px 1fr; gap:.5rem 1rem; align-items:center; }
+.adv-l-scene-cast { grid-row:span 2; display:flex; align-items:end; height:96px; }
+.adv-l-scene-cast img { width:80px; height:80px; object-fit:contain; }
+.adv-l-figure { position:relative; width:48px; height:76px; flex:none; }
+.adv-l-figure span { position:absolute; top:0; left:13px; font-weight:bold; color:#394a58; }
+.adv-l-figure i { position:absolute; top:22px; left:15px; width:19px; height:19px; border-radius:50%; background:#d9bca5; }
+.adv-l-figure b { position:absolute; top:41px; left:7px; width:34px; height:31px; border-radius:9px 9px 2px 2px; background:#718392; }
+@media(max-width:420px){.adv-l-scene{grid-template-columns:112px 1fr;gap:.4rem}.adv-l-scene-cast img{width:64px;height:64px}}
