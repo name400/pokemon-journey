@@ -427,6 +427,18 @@ test('Mission 37 final battle defeat preserves phase and offers a recovered retr
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 37 Zygarde victory describes a Struggle finish without inventing a move',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-struggle-log-qa',displayName:'최종전 기술 문구'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-protect',interior:null,x:11,y:9,facing:'up',zaMission37Started:true,zaMission37Stage:7,zaMission37FinalPhase:5,zaMission37FinalRetryV1:true,zaProtectLayout:undefined,zaProtectRoof:false},state.revision+1));await get();await call('mission37FinalBattle');
+  let combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.active[0].setStatus('slp');sim.p2.active[0].statusState.time=99;sim.makeRequest('move');seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  for(let turn=0;turn<16;turn++)await call('battle',{command:{type:'move',move:'coreenforcer'}});assert.equal(state.battle.requests[0].moves[0].id,'struggle');
+  combat=rawWorld().combat;sim=Battle.fromJSON(combat.snapshot);sim.p2.active[0].hp=1;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();
+  await call('battle',{command:{type:'move',move:'struggle'}});assert.equal(state.battleResult.winner,0);assert.equal(state.world.zaMission37FinalPhase,6);assert.ok(state.world.log.includes('지가르데가 틈을 만들었다. 반응하는 돌을 쥐자.'));assert.ok(!state.world.log.some(line=>line.includes('코어퍼니셔로 틈')));assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);await get();assert.equal(state.world.zaMission37FinalPhase,6);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Mission 37 Ange damage survives defeat, retry and Zygarde attack without duplicates',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission37-ange-hp-qa',displayName:'앙주 체력 검증'};
  try{await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
