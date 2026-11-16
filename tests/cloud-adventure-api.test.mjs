@@ -12214,3 +12214,20 @@ test('First Infinite Royale victory opens the legendary missions after L memory 
   seedWorld(storeAdventurePosition({...ready,zaMission39MemorySceneV1:undefined,zaMission41Started:true,zaMission41Stage:2},state.revision+1));await get();await call('mission39Lida');assert.equal(state.world.zaMission40Started,true);assert.equal(state.world.zaMission41Stage,2);assert.equal(state.world.zaMission39MemorySceneV1,undefined);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Zone 20 opens after the ending before the postgame wish while preserving progress',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'zone20-after-ending-qa',displayName:'엔딩 후 구역 20'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon=structuredClone(rawMon(id)),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const base={...rawWorld(),area:3,interior:null,zaMission37Complete:true,zaMission38Started:true,zaMission38Complete:false,zaMission38Stage:0,zaMission42Stage:0,zaZone20Items:['south-seed'],adventureBalls:{ultraball:4}};
+  for(const [district,x,y,direction,extra,expected] of [
+   ['lumiose-floral',12,1,'up',{},[12,15]],['lumiose-rouge-north',11,15,'down',{zaRougeStreetSouth:true},[12,1]],
+   ['lumiose-magenta-canal-route',21,10,'right',{},[1,9]],['lumiose-vert-sector1',1,8,'left',{zaVertSaisonBank:true},[21,9]]]){
+   seedWorld(storeAdventurePosition({...base,district,x,y,facing:direction,...extra},state.revision+1));await get();await call('move',{direction});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose-zone20',...expected]);assert.equal(state.world.zaMission38Complete,false);assert.deepEqual(state.world.zaZone20Items,['south-seed']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);assert.deepEqual(state.wallet,wallet);
+  }
+  for(const [x,y] of [[11,4],[3,8],[19,8]]){seedWorld(storeAdventurePosition({...base,district:'lumiose-centrico-route',x,y,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'zone20DirectionalGate');await call('zone20DirectionalGate');await get();assert.equal(state.world.district,'lumiose-zone20');assert.deepEqual(state.world.zaZone20Items,['south-seed']);}
+  seedWorld(storeAdventurePosition({...base,district:'lumiose-centrico-route',x:15,y:6,facing:'up'},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='zone20Enter'));await call('zone20Enter');await get();assert.equal(state.world.district,'lumiose-zone20');assert.deepEqual(rawWorld().adventureBalls,{ultraball:4});
+  seedWorld(storeAdventurePosition({...base,district:'lumiose-centrico-route',x:15,y:6,facing:'up',zaMission38Stage:1},state.revision+1));await get();assert.ok(state.world.interaction.actions.some(a=>a.action==='mission38Wish'));await call('mission38Wish');assert.equal(state.world.zaMission38Complete,true);
+  seedWorld(storeAdventurePosition({...base,district:'lumiose-floral',x:12,y:1,facing:'up',zaMission42Stage:2},state.revision+1));await get();await call('move',{direction:'up'},409);assert.equal(state.world.district,'lumiose-floral');
+ }finally{globalThis.__adventureUser=previous;}
+});
