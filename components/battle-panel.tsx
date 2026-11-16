@@ -15,8 +15,8 @@ import {reviewedTransformationAtlas} from './rogue-reviewed-transformation-atlas
 import {reviewedOrdinaryFormAtlas} from './rogue-reviewed-form-atlases.mjs';
 import battleHeights from '@/data/battle-heights.json';
 import {classicSpeciesScale} from '@/lib/rogue-battle-scale.mjs';
-import {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleScenePosition,impactLabel,battleTransformation,hasDifferentBattleForm,type BattleMoveTarget,type BattleMove,type BattleActor,type BattleTurnAction} from './battle-logic';
-export {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleScenePosition,impactLabel,battleTransformation,hasDifferentBattleForm} from './battle-logic';
+import {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleScenePosition,v52ControlTop,impactLabel,battleTransformation,hasDifferentBattleForm,type BattleMoveTarget,type BattleMove,type BattleActor,type BattleTurnAction} from './battle-logic';
+export {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleScenePosition,v52ControlTop,impactLabel,battleTransformation,hasDifferentBattleForm} from './battle-logic';
 export type {BattleMoveTarget,BattleMove,BattleActor,BattleTurnAction} from './battle-logic';
 import {applyBattleEvent,battleDisplay,battleEventLocation,BattleSubmissionGate,useBattlePlayback,type BattleDisplay,type BattleVisualEvent,type BattleEventLocation} from '@/hooks/use-battle-playback';
 import './battle-screen.css';
@@ -192,6 +192,57 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(align);observer?.observe(scene);scene.addEventListener('load',align,true);window.addEventListener('resize',align);align();
     return()=>{cancelled=true;cancelAnimationFrame(frame);observer?.disconnect();scene.removeEventListener('load',align,true);window.removeEventListener('resize',align);};
   },[classicLayout,multiple,battleKey,playing,settings.animations]);
+  // The v52 anchors refer to visible pixels, not transparent image padding.
+  useEffect(()=>{
+    const scene=stage.current;if(!scene||!approvedV52||multiple)return;
+    let cancelled=false,frame=0;
+    const align=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{
+      for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant')){
+        const img=node.querySelector<HTMLImageElement>('.bs-sprite img');
+        if(!img||!img.complete||!img.naturalWidth)continue;
+        const src=img.currentSrc||img.src;
+        void spriteFloor(src).then(bounds=>{
+          if(cancelled||!node.isConnected||(img.currentSrc||img.src)!==src)return;
+          const floor=bounds||{x:.5,y:(1+Math.min(1,img.naturalHeight/img.naturalWidth))/2};
+          const rect=img.getBoundingClientRect(),box=scene.getBoundingClientRect(),nodeRect=node.getBoundingClientRect();
+          if(!box.width||!box.height||!node.offsetWidth||!node.offsetHeight)return;
+          const scaleX=nodeRect.width/node.offsetWidth,scaleY=nodeRect.height/node.offsetHeight;
+          if(!scaleX||!scaleY)return;
+          const current=getComputedStyle(node),left=parseFloat(current.left),top=parseFloat(current.top);
+          if(!Number.isFinite(left)||!Number.isFinite(top))return;
+          const floorX=rect.left+floor.x*rect.width,floorY=rect.top+floor.y*rect.height,own=node.classList.contains('bs-combatant-own');
+          const goalX=box.left+(own?.30:.7389)*box.width,goalY=box.top+(own?.7556:.4395)*box.height;
+          node.style.setProperty('--v52-anchor-x',`${left+(goalX-floorX)/scaleX}px`);
+          node.style.setProperty('--v52-anchor-y',`${top+(goalY-floorY)/scaleY}px`);
+          node.style.setProperty('--v52-floor-x',`${(floorX-nodeRect.left)/scaleX}px`);
+          node.style.setProperty('--v52-floor-y',`${(nodeRect.bottom-floorY)/scaleY}px`);
+        });
+      }
+    });};
+    const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(align);observer?.observe(scene);
+    scene.addEventListener('load',align,true);window.addEventListener('resize',align);align();
+    return()=>{cancelled=true;cancelAnimationFrame(frame);observer?.disconnect();scene.removeEventListener('load',align,true);window.removeEventListener('resize',align);for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant'))for(const name of ['--v52-anchor-x','--v52-anchor-y','--v52-floor-x','--v52-floor-y'])node.style.removeProperty(name);};
+  },[approvedV52,multiple,battleKey,playing,settings.animations]);
+  // Place the compact command buttons over the measured arena without assuming
+  // the height of trainer headers or optional tool rows.
+  useEffect(()=>{
+    const scene=stage.current,screen=root.current,consoleEl=screen?.querySelector<HTMLElement>('.bs-console');
+    if(!approvedV52||multiple||panel!=='command'||!scene||!consoleEl)return;
+    let frame=0;
+    const measure=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{
+      const arena=scene.getBoundingClientRect(),host=consoleEl.getBoundingClientRect();
+      if(!arena.width||!arena.height)return;
+      const zoom=consoleEl.offsetHeight?host.height/consoleEl.offsetHeight:1;
+      if(!zoom)return;
+      const y=(arena.top-host.top)/zoom,height=arena.height/zoom;
+      consoleEl.style.setProperty('--v52-command-top',`${v52ControlTop(y,height,.6765)}px`);
+      consoleEl.style.setProperty('--v52-utility-top',`${v52ControlTop(y,height,.79)}px`);
+      consoleEl.dataset.v52OverlayReady='true';
+    });};
+    const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(measure);observer?.observe(scene);observer?.observe(consoleEl);
+    window.addEventListener('resize',measure);measure();
+    return()=>{cancelAnimationFrame(frame);observer?.disconnect();window.removeEventListener('resize',measure);delete consoleEl.dataset.v52OverlayReady;consoleEl.style.removeProperty('--v52-command-top');consoleEl.style.removeProperty('--v52-utility-top');};
+  },[approvedV52,multiple,panel,battleKey,classicLayout]);
   useEffect(()=>{if(busy)hadBusy.current=true;else if(hadBusy.current){hadBusy.current=false;gate.current.release(battleKey);setSubmitted('')}},[busy,battleKey]);
   useEffect(()=>{if(error){gate.current.release(battleKey);setSubmitted('')}},[error,battleKey]);
   function prepareAudio(){if(!settings.sound)return;try{const Ctor=window.AudioContext||(window as any).webkitAudioContext;if(Ctor&&!audio.current)audio.current=new Ctor();void audio.current?.resume()}catch{}}

@@ -27,3 +27,8 @@ export function impactLabel(m:any){if(String(m.category||'').toLowerCase()==='st
 export function battleTransformation(mon:any){return {tera:typeof mon?.terastallized==='string'?mon.terastallized.toLowerCase():null,giant:mon?.dynamaxed===true||mon?.gigantamax===true,gmax:mon?.gigantamax===true,mega:mon?.mega===true,primal:mon?.primal===true,ultra:mon?.ultra===true};}
 
 export function hasDifferentBattleForm(mon:any){if(mon?.rogueSourceId==null||!mon.battleAppearance)return false;if(mon.rogueBaseBattleAppearance)return mon.battleAppearance!==mon.rogueBaseBattleAppearance;return !!(mon.mega||mon.primal||mon.ultra||mon.gigantamax)&&mon.battleAppearance!==mon.rogueBattleSpecies;}
+
+/** Position the two-row v52 controls within the measured arena. */
+export function v52ControlTop(arenaTop:number,arenaHeight:number,fraction:number):number {
+  return arenaTop+Math.max(0,Math.min(arenaHeight*fraction,arenaHeight-92));
+}
