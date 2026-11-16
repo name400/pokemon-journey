@@ -9,6 +9,32 @@ import {createMission10DoubleSnapshot,playMission10MultiTurn,mission10MultiView}
 import {createMission37TripleSnapshot,restoreMission37TripleSnapshot,playMission37TriplePrototype,mission37TripleView} from '../lib/cloud-adventure/adventure-mission37-triple.mjs';
 import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from '../lib/cloud-adventure/adventure-battle.mjs';
 const mon=(id,boxId,ability,moves=['튀어오르기'])=>({...makeMon(id,50),boxId,ability,moves,pp:{}});
+test('ZA Mimikyu caps the first hit without replacing weak damage with recoil',()=>{
+ const attacker={...makeMon(4,5),boxId:'p',ability:'blaze',moves:['불꽃세례'],pp:{}},foe={...makeMon(778,100),boxId:'f',ability:'disguise',moves:['튀어오르기'],pp:{}},original=structuredClone(foe);
+ const start=createZAAbilityCombat([attacker],[foe]);
+ const next=adventurePlayCpu(JSON.parse(JSON.stringify(start)),{type:'move',move:'불꽃세례'}),damage=foe.hp-next.teams[1][0].hp;
+ assert.ok(damage>0&&damage<Math.floor(foe.maxHp/8),`weak damage ${damage}, max HP ${foe.maxHp}`);
+ assert.equal(next.teams[1][0].battleAppearance,'mimikyubusted');assert.equal(next.teams[1][0].ability,'disguise');assert.deepEqual(foe,original);
+ const legacy=structuredClone(start);delete legacy.adventureDisguiseV1;
+ const old=adventurePlayCpu(legacy,{type:'move',move:'불꽃세례'});assert.equal(foe.hp-old.teams[1][0].hp,Math.floor(foe.maxHp/8));
+});
+test('ZA Mimikyu limits strong hits once and preserves immunity and classic battles',()=>{
+ const attacker={...makeMon(150,100),boxId:'p',ability:'pressure',moves:['섀도볼','몸통박치기'],pp:{}},foe=mon(778,'f','disguise');
+ let start=createZAAbilityCombat([attacker],[foe]);
+ const immune=adventurePlayCpu(structuredClone(start),{type:'move',move:'몸통박치기'});
+ assert.equal(immune.teams[1][0].hp,foe.hp);assert.notEqual(immune.teams[1][0].battleAppearance,'mimikyubusted');
+ let next=adventurePlayCpu(start,{type:'move',move:'섀도볼'});
+ assert.equal(foe.hp-next.teams[1][0].hp,Math.floor(foe.maxHp/8));assert.equal(next.teams[1][0].battleAppearance,'mimikyubusted');
+ next=adventurePlayCpu(JSON.parse(JSON.stringify(next)),{type:'move',move:'섀도볼'});assert.ok(next.teams[1][0].hp<foe.hp-Math.floor(foe.maxHp/8));
+ const classic=adventurePlayCpu(createCombat([attacker],[foe]),{type:'move',move:'섀도볼'});assert.equal(foe.hp-classic.teams[1][0].hp,Math.floor(foe.maxHp/8));
+});
+test('ZA Mimikyu weak-hit behavior survives multi and triple snapshots',()=>{
+ const player={...makeMon(4,5),boxId:'p',ability:'blaze',moves:['불꽃세례'],pp:{}},ally=mon(25,'ally','static'),foe={...makeMon(778,100),boxId:'f',ability:'disguise',moves:['튀어오르기'],pp:{}},other=mon(143,'other','immunity');
+ let multi=createMission10DoubleSnapshot([player],[ally],[foe,other]);multi=playMission10MultiTurn(JSON.parse(JSON.stringify(multi)),{type:'move',move:'ember',target:1});
+ const f=multi.teams[1].find(x=>x.boxId==='f'),damage=foe.hp-f.hp;assert.ok(damage>0&&damage<Math.floor(foe.maxHp/8),`multi damage ${damage}`);assert.equal(f.ability,'disguise');
+ let triple=createMission37TripleSnapshot([player],[ally],[mon(1,'ally2','overgrow')],[foe,other]);triple=playMission37TriplePrototype(JSON.parse(JSON.stringify(triple)),{type:'move',move:'ember',target:1});
+ const t=triple.teams[1].find(x=>x.boxId==='f'),tripleDamage=foe.hp-t.hp;assert.ok(tripleDamage>0&&tripleDamage<Math.floor(foe.maxHp/8),`triple damage ${tripleDamage}`);assert.equal(t.ability,'disguise');
+});
 test('new ZA singles suppress Levitate without changing original ability or existing combats',()=>{
  const player=mon(150,'p','pressure',['지진']),foe=mon(604,'e','levitate'),before=structuredClone([player,foe]);
  const legacy=createCombat([player],[foe]),battle=createZAAbilityCombat([player],[foe]);

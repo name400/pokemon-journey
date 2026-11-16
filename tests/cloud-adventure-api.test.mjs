@@ -57,6 +57,15 @@ function rawWorld(){return JSON.parse(sql.prepare('SELECT state FROM worlds WHER
 function seedWorld(patch){const w={...rawWorld(),...patch};sql.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').run(JSON.stringify(w),globalThis.__adventureUser.userId);}
 function rawMon(id){return JSON.parse(sql.prepare('SELECT data FROM pokemon_box WHERE id=?').get(id).data);}
 function seedMon(id,p){sql.prepare('UPDATE pokemon_box SET species_id=?,data=? WHERE id=?').run(p.id,JSON.stringify(p),id);}
+test('ZA Mimikyu first-hit rule survives API reload without changing saved ability',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-mimikyu-cap-qa',displayName:'따라큐 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(4,5),boxId:id,ability:'blaze',moves:['불꽃세례'],pp:{}},foe={...makeMon(778,100),boxId:'foe',ability:'disguise',moves:['튀어오르기'],pp:{}};
+  const {createZAAbilityCombat}=await import('../lib/cloud-adventure/adventure-abilities.mjs');seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,combat:createZAAbilityCombat([player],[foe]),trainer:{id:'mimikyu-qa',name:'검사'},encounter:null},state.revision+1));
+  await get();assert.equal(rawWorld().combat.adventureDisguiseV1,true);await call('battle',{command:{type:'move',move:'불꽃세례'}});await get();
+  const damage=foe.hp-state.battle.teams[1][0].hp;assert.ok(damage>0&&damage<Math.floor(foe.maxHp/8));assert.equal(state.battle.teams[1][0].battleAppearance,'mimikyubusted');assert.equal(state.battle.teams[1][0].ability,'disguise');assert.equal(rawMon(id).ability,'blaze');
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('special ball purchase reports insufficient funds without changing the save',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-ball-funds-qa',displayName:'볼 구매 검사'};
  try{
@@ -1131,6 +1140,15 @@ test('Mission 40 Pangoro can be investigated on the Zone 9 southwest roof',async
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 41 Yveltal defeat returns the player from the dome to the city center',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission41-defeat-center-qa',displayName:'돔 패배 복귀 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(129,1),boxId:id,moves:['튀어오르기'],pp:{}};player.hp=1;seedMon(id,player);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lune-roof',interior:null,x:17,y:2,facing:'left',zaRoyaleRank:'A',zaMission41Started:true,zaMission41Stage:3,zaMission41DomeInvestigated:true,zaMission41DomeReturnRequired:false},state.revision+1));await get();const wallet=structuredClone(state.wallet),team=[...state.world.teamIds];await call('mission41Yveltal');
+  for(let i=0;i<20&&state.battle;i++)await call('battle',{command:{type:'move',move:'튀어오르기'}});
+  assert.equal(state.battle,null);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaMission41Stage,3);assert.equal(state.world.zaMission41DomeInvestigated,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawMon(id).hp,rawMon(id).maxHp);
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('Mission 41 Yveltal is reachable on the Galerie dome and remains retryable',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission41-dome-qa',displayName:'돔조사테스트'};
  try{
