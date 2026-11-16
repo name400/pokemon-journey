@@ -9,6 +9,7 @@ import ts from 'typescript';
 import {makeMon,moves,effectiveness} from '../lib/game.mjs';
 import {stableTeraType,TERA_TYPES} from '../lib/tera-type.mjs';
 import {adventureEvolutionPresentation} from '../lib/cloud-adventure/adventure-evolution-presentation.mjs';
+import {restoreAdventureBattlePresentation} from '../lib/cloud-adventure/adventure-battle-presentation.mjs';
 import {configure} from '../lib/pokemon-config.mjs';
 import {createCombat,playCpu} from '../lib/party-battle.mjs';
 import {canLearnStoryTm} from '../lib/cloud-adventure/adventure-story-tm.mjs';
@@ -92,7 +93,7 @@ test('ZA intro battle suppresses reviewed ability without changing saved Pokemon
   await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(25,50),boxId:id,ability:'static',moves:['튀어오르기'],pp:{},custom:{retained:true}};
   seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,zaIntroStage:'andi'},state.revision+1));await get();await call('introBattle');
   assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].ability,'noability',JSON.stringify({district:rawWorld().district,expedition:rawWorld().expedition,unionHost:rawWorld().unionHost}));assert.equal(rawWorld().combat.adventureWeatherLockV1,true);assert.equal(rawMon(id).ability,'static');await get();
-  await call('battle',{command:{type:'move',move:'튀어오르기'}});await get();assert.equal(rawMon(id).ability,'static');assert.deepEqual(rawMon(id).custom,{retained:true});
+  await call('battle',{command:{type:'move',move:'튀어오르기'}});assert.ok(state.battle.events.some(event=>event.kind==='move'));await get();assert.ok(state.battle.events.some(event=>event.kind==='move'),'A GET contains the saved previous turn');const resumed=restoreAdventureBattlePresentation(state.battle);assert.deepEqual(resumed.events,[]);assert.deepEqual(resumed.teams,state.battle.teams);assert.equal(rawMon(id).ability,'static');assert.deepEqual(rawMon(id).custom,{retained:true});
  }finally{globalThis.__adventureUser=previous;}
 });
 test('ZA legacy encounter without a battle snapshot retains its previous ability rules',async()=>{

@@ -21,5 +21,11 @@ const hatchDoc={coins:12},hatchSys=ensureClassicState(hatchDoc,{initialStarterId
 const timed=buyClassicSpeciesEgg(hatchDoc,{sourceId:1,expectedCost:cost},()=>.99),hatchRun={wave:1};
 for(let wave=1;wave<=10;wave++){hatchRun.wave=wave;lapseClassicEggs(hatchDoc,hatchRun);lapseClassicEggs(hatchDoc,hatchRun);}
 assert.equal(hatchSys.eggs.length,0);assert.equal(hatchSys.pendingHatches.length,1);assert.equal(hatchSys.pendingHatches[0].id,timed.eggId);assert.equal(hatchDoc.coins,12);
+const resumedHatch=JSON.parse(JSON.stringify(hatchDoc)),hatchView=classicGameView(resumedHatch),hatchEntry=hatchView.pendingHatches[0];
+assert.equal(hatchEntry.id,timed.eggId);assert.equal(hatchEntry.pokemon.rogueSourceId,1);
+assert.equal(classicGameView(JSON.parse(JSON.stringify(resumedHatch))).pendingHatches[0].id,timed.eggId,'The presentation remains available after reconnect');
+applyClassicAction(resumedHatch,{action:'ackHatch',eggId:hatchEntry.id});assert.equal(classicGameView(resumedHatch).pendingHatches.length,0);
+assert.equal(hatchSys.pendingHatches.length,1,'The source save is unchanged by the isolated acknowledgement');
+
 // Previously saved non-shiny eggs with a spurious variant remain intact and do not suppress the guarantee.
 {const doc={},sys=ensureClassicState(doc,{initialStarterId:1}).system,progress=starterProgress(sys,1);progress.candies=cost;progress.sameSpeciesEggPity=[0,10];const legacy={id:'legacy-nonshiny',productId:'common',remainingWaves:5,pokemon:{rogueSourceId:1,shiny:false,variant:2}};sys.eggs=[legacy];const granted=buyClassicSpeciesEgg(doc,{sourceId:1,expectedCost:cost},()=>0),egg=sys.eggs.find(e=>e.id===granted.eggId);assert.deepEqual(sys.eggs[0],legacy);assert.equal(egg.pokemon.shiny,true);assert.equal(egg.pokemon.variant,2);assert.equal(progress.sameSpeciesEggPity[1],0);}
