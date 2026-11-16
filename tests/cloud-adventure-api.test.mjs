@@ -4767,6 +4767,13 @@ test('Mission 35 new rooftop meeting and old lobby saves both advance',async()=>
  }finally{globalThis.__adventureUser=oldUser;}
 });
 
+test('Lysandre keycard return ramps preserve saved progress and allow walking back',async()=>{
+ const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lysandre-return-ramp-qa',displayName:'연구소 복귀 경로'};
+ try{await get();await call('start',{species:152});const id=state.world.activeId,mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet);let steps=mon.walkSteps;
+  for(const wing of ['a','b']){const cards=wing==='a'?['a','future-card']:['a','b','future-card'];seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,x:13,y:11,facing:'left',zaMission35Stage:4,zaLysandreFloor:1,zaLysandreMazeV2:true,zaLysandreGreenRouteV4:true,zaLysandreWing:wing,zaLysandreCards:cards,zaLysandrePowers:['a','b']},state.revision+1));await get();const rev=state.revision;for(let i=0;i<5;i++)await call('move',{direction:'left'});await get();assert.deepEqual([state.world.zaLysandreWing,state.world.x,state.world.y],[wing,8,11]);assert.deepEqual(rawWorld().zaLysandreCards,cards);steps+=5;assert.deepEqual(rawMon(id),{...mon,walkSteps:steps});assert.deepEqual(state.wallet,wallet);await call('move',{direction:'right',revision:rev},409);await get();assert.deepEqual([state.world.x,state.world.y],[8,11]);}
+ }finally{globalThis.__adventureUser=oldUser;}
+});
+
 test('Lysandre new maze requires powered warps and sequential keycards while preserving legacy saves',async()=>{
  const oldUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lysandre-maze-qa',displayName:'연구소 탐험'};
  try{

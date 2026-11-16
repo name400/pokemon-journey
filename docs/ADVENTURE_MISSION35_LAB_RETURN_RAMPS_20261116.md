@@ -1,0 +1,7 @@
+# Mission 35 laboratory return routes
+
+[The Mission 35 walkthrough](https://www.thonky.com/pokemon-legends-z-a/main-mission-35-reaching-rank-a) describes a ramp back after obtaining keycard A and another after keycard B. The current compressed laboratory split each colored area into two separate rooms and required another warp to return. Each of the A and B areas now has a walkable return across the central gap after its matching keycard is recorded. The original powered warp, other exits and existing card order remain available.
+
+The source confirms the return routes but does not establish their exact shape, position, direction, or whether their access depends on the card. The three-tile corridors and card-based opening are 2D approximations: the condition keeps the simplified map from bypassing its powered-warp puzzle. No previous walkable tile becomes blocked and no stored location, Pokémon, item, card or reward is migrated. Unknown non-array card data does not open a corridor.
+
+A map test checks both sides, the closed route before each key, other tiles and unknown card formats. An isolated API test starts from representative already-obtained-card saves and walks both routes, reloads, rejects a stale revision and checks card, Pokémon and wallet data; ordinary movement still increments walking steps. The existing isolated full laboratory sequence, powered warps, boss and old-layout cases also passed. This is not an original-hardware or exact-map comparison, a full natural playthrough, production D1 test, or Sites merged-source test.
