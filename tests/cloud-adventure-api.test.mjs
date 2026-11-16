@@ -4831,6 +4831,80 @@ test('movement fence atomically advances experimental clock and capture revision
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('test-gated clock follows real route read writes, movement fence and normal commit',async()=>{
+ const previousUser=globalThis.__adventureUser,previousNow=Date.now,previousGate=globalThis.__adventureClockLeaseTestOnly,previousTime=globalThis.__adventureTime;let now=12*50000;
+ globalThis.__adventureUser={userId:'clock-route-integration-qa',displayName:'격리 시계 검증'};globalThis.__adventureTime=undefined;Date.now=()=>now;
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,rev=state.revision+1;
+  const base={...rawWorld(),area:3,district:'lumiose-zone2',interior:null,x:11,y:14,facing:'right',zaClockOffsetHours:0,zaClockPausedMs:0,zaClockPauseStartedAt:undefined,zaWildClockV2:undefined};
+  const initial=prototypeClockFromLegacy(base,rev-1,now),lease=prototypeClockTransition(initial,rev-1,now,{type:'open',owner:'aaaaaaaaaaaaaaaa'});
+  seedWorld({...storeAdventurePosition(base,rev),zaClockLeasePrototypeV1:lease});globalThis.__adventureClockLeaseTestOnly=true;
+  now+=5000;await get();let saved=rawWorld();assert.ok(state.revision>rev,'zone initialization should perform an actual read-side save');assert.equal(saved.zaClockLeasePrototypeV1.revision,state.revision);assert.equal(saved.zaClockLeasePrototypeV1.leases.length,1);assert.equal(Object.hasOwn(state.world,'zaClockLeasePrototypeV1'),false);assert.equal(state.gameTime.hour,12);assert.equal(rawMon(id).speciesId,1);
+  const fenceRev=state.revision;const fence=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:fenceRev,activeId:id})}));assert.equal(fence.status,200);
+  await get();saved=rawWorld();assert.equal(saved.zaClockLeasePrototypeV1.revision,state.revision);assert.equal(saved.zaClockLeasePrototypeV1.leases.length,1);
+  const before=state.revision;now+=5000;await call('face',{direction:'left'});saved=rawWorld();assert.equal(state.revision,before+1);assert.equal(saved.zaClockLeasePrototypeV1.revision,state.revision);assert.deepEqual(saved.zaClockLeasePrototypeV1.leases,[]);assert.equal(saved.zaClockLeasePrototypeV1.pausedMs,10000);
+  now+=50000;await get();assert.equal(state.gameTime.hour,13);assert.equal(state.world.activeId,id);assert.equal(rawMon(id).speciesId,1);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureClockLeaseTestOnly=previousGate;globalThis.__adventureTime=previousTime;Date.now=previousNow;}
+});
+
+test('test-gated clock preserves lease during read-side medal settlement and pays once',async()=>{
+ const previousUser=globalThis.__adventureUser,previousNow=Date.now,previousGate=globalThis.__adventureClockLeaseTestOnly,previousTime=globalThis.__adventureTime;let now=12*50000;
+ globalThis.__adventureUser={userId:'clock-medal-integration-qa',displayName:'격리 정산 검증'};globalThis.__adventureTime=undefined;Date.now=()=>now;
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,coins=state.wallet.coins,rev=state.revision+1;
+  const base={...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:8,zaClockOffsetHours:0,zaClockPausedMs:0,zaClockPauseStartedAt:undefined,zaRoyalePrizeMedals:100,zaRoyaleMedalNight:0,zaRoyaleMedalWins:0};
+  const c=prototypeClockTransition(prototypeClockFromLegacy(base,rev-1,now),rev-1,now,{type:'open',owner:'bbbbbbbbbbbbbbbb'});
+  seedWorld({...storeAdventurePosition(base,rev),zaClockLeasePrototypeV1:c});globalThis.__adventureClockLeaseTestOnly=true;now+=5000;await get();let saved=rawWorld();
+  assert.equal(state.wallet.coins,coins+1000);assert.equal(saved.zaRoyalePrizeMedals,0);assert.equal(saved.zaClockLeasePrototypeV1.revision,state.revision);assert.equal(saved.zaClockLeasePrototypeV1.leases.length,1);assert.equal(saved.zaClockLeasePrototypeV1.pausedMs,5000);assert.equal(state.world.activeId,id);
+  const stable=state.revision;now+=1000;await get();saved=rawWorld();assert.equal(state.wallet.coins,coins+1000);assert.equal(state.revision,stable);assert.equal(prototypeClockProject(saved.zaClockLeasePrototypeV1,now).pausedMs,6000);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureClockLeaseTestOnly=previousGate;globalThis.__adventureTime=previousTime;Date.now=previousNow;}
+});
+
+test('test-gated clock keeps legacy indoor pause and requested sleep in one timeline',async()=>{
+ const previousUser=globalThis.__adventureUser,previousNow=Date.now,previousGate=globalThis.__adventureClockLeaseTestOnly,previousTime=globalThis.__adventureTime;let now=12*50000;
+ globalThis.__adventureUser={userId:'clock-rest-integration-qa',displayName:'격리 휴식 검증'};globalThis.__adventureTime=undefined;Date.now=()=>now;
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,rev=state.revision+1;
+  const room={...rawWorld(),area:3,district:'lumiose',interior:'hotel202',zaIntroStage:'complete',zaClockOffsetHours:0,zaClockPausedMs:0,zaClockPauseStartedAt:now-10000};const bed=findTile(fieldMap(room),'z');assert.ok(bed);
+  Object.assign(room,{x:bed.x,y:bed.y});const c=prototypeClockTransition(prototypeClockFromLegacy(room,rev-1,now),rev-1,now,{type:'open',owner:'cccccccccccccccc'});
+  seedWorld({...storeAdventurePosition(room,rev),zaClockLeasePrototypeV1:c});globalThis.__adventureClockLeaseTestOnly=true;now+=5000;await get();assert.equal(state.world.interaction.action,undefined);assert.ok(state.world.interaction.actions.some(a=>a.action==='restUntilNight'));
+  const prior=state.revision;await call('restUntilNight');const saved=rawWorld();assert.equal(state.revision,prior+1);assert.equal(state.gameTime.hour,20);assert.equal(saved.zaClockLeasePrototypeV1.offsetHours,9);assert.equal(saved.zaClockLeasePrototypeV1.pausedMs,15000);assert.equal(saved.zaClockLeasePrototypeV1.fixed,true);assert.equal(saved.zaClockLeasePrototypeV1.revision,state.revision);assert.equal(state.world.activeId,id);
+  now+=50000;await get();assert.equal(state.gameTime.hour,20);assert.equal(rawWorld().zaClockLeasePrototypeV1.revision,state.revision);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureClockLeaseTestOnly=previousGate;globalThis.__adventureTime=previousTime;Date.now=previousNow;}
+});
+
+test('test-gated clock handles a real trainer battle boundary and reconnect',async()=>{
+ const previousUser=globalThis.__adventureUser,previousNow=Date.now,previousGate=globalThis.__adventureClockLeaseTestOnly,previousTime=globalThis.__adventureTime;let now=12*50000;
+ globalThis.__adventureUser={userId:'clock-battle-integration-qa',displayName:'격리 배틀 시계'};globalThis.__adventureTime=undefined;Date.now=()=>now;
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,rev=state.revision+1,world={...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:8,zaIntroStage:'andi',zaClockOffsetHours:0,zaClockPausedMs:0,zaClockPauseStartedAt:undefined};
+  const c=prototypeClockTransition(prototypeClockFromLegacy(world,rev-1,now),rev-1,now,{type:'open',owner:'dddddddddddddddd'});seedWorld({...storeAdventurePosition(world,rev),zaClockLeasePrototypeV1:c});globalThis.__adventureClockLeaseTestOnly=true;
+  await get();now+=5000;await call('introBattle');let saved=rawWorld();assert.ok(state.battle);assert.equal(saved.zaClockLeasePrototypeV1.fixed,true);assert.deepEqual(saved.zaClockLeasePrototypeV1.leases,[]);assert.equal(saved.zaClockLeasePrototypeV1.pausedMs,5000);
+  now+=50000;await get();assert.ok(state.battle);assert.equal(state.gameTime.hour,12);await call('forfeit');saved=rawWorld();assert.equal(saved.zaClockLeasePrototypeV1.fixed,false);assert.equal(saved.zaClockLeasePrototypeV1.pausedMs,55000);assert.equal(saved.zaClockLeasePrototypeV1.revision,state.revision);
+  now+=50000;await get();assert.equal(state.gameTime.hour,13);assert.equal(state.world.activeId,id);assert.equal(rawMon(id).speciesId,1);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureClockLeaseTestOnly=previousGate;globalThis.__adventureTime=previousTime;Date.now=previousNow;}
+});
+
+test('clock lease API is off by default and test-gated tab owners expire or lose authority safely',async()=>{
+ const previousUser=globalThis.__adventureUser,previousNow=Date.now,previousGate=globalThis.__adventureClockLeaseTestOnly,previousTime=globalThis.__adventureTime;let now=12*50000;
+ globalThis.__adventureUser={userId:'clock-lease-api-qa',displayName:'격리 탭 검증'};globalThis.__adventureTime=undefined;Date.now=()=>now;globalThis.__adventureClockLeaseTestOnly=false;
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,rev=state.revision+1,world={...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:8,zaClockOffsetHours:0,zaClockPausedMs:0,zaClockPauseStartedAt:undefined};
+  seedWorld(storeAdventurePosition(world,rev));await get();const before=rawWorld(),prior=state.revision;await call('clockLeaseOpen',{},409);assert.equal(state.revision,prior);assert.deepEqual(rawWorld(),before);
+  globalThis.__adventureClockLeaseTestOnly=true;const request=(revision,action,extra={})=>new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action,revision,...extra})});
+  const concurrent=await Promise.all([route.POST(request(prior,'clockLeaseOpen')),route.POST(request(prior,'clockLeaseOpen'))]);assert.deepEqual(concurrent.map(r=>r.status).sort(),[200,409]);const first=await concurrent.find(r=>r.status===200).json(),a=first.clockLease;assert.ok(a?.owner&&a?.generation);assert.equal(Object.hasOwn(first.world,'zaClockLeasePrototypeV1'),false);
+  await get();now+=5000;const second=await call('clockLeaseOpen'),b=second.clockLease;assert.notEqual(a.owner,b.owner);assert.equal(rawWorld().zaClockLeasePrototypeV1.leases.length,2);
+  await call('clockLeaseClose',{revision:prior+1,owner:a.owner,generation:a.generation},409);assert.equal(rawWorld().zaClockLeasePrototypeV1.leases.length,2);
+  await call('clockLeaseClose',{owner:a.owner,generation:a.generation});assert.equal(rawWorld().zaClockLeasePrototypeV1.leases.length,1);
+  now+=25000;await get();let clock=rawWorld().zaClockLeasePrototypeV1;assert.equal(prototypeClockProject(clock,now).pausedMs,25000);assert.equal(prototypeClockProject(clock,now).paused,false);
+  await call('clockLeaseRenew',{owner:b.owner,generation:b.generation},409);const third=await call('clockLeaseOpen'),c=third.clockLease;assert.notEqual(c.owner,b.owner);
+  now+=1000;await call('face',{direction:'left'});clock=rawWorld().zaClockLeasePrototypeV1;assert.deepEqual(clock.leases,[]);assert.equal(clock.revision,state.revision);await call('clockLeaseRenew',{owner:c.owner,generation:c.generation},409);assert.equal(state.world.activeId,id);assert.equal(rawMon(id).speciesId,1);
+  const catchRevision=state.revision+1,foe={...makeMon(25,5),boxId:'clock-capture-foe'};seedWorld({zaClockLeasePrototypeV1:{...clock,revision:catchRevision},adventureCatchWindow:{revision:catchRevision,foe}});await get();const captureBefore=structuredClone(rawWorld().adventureCatchWindow);
+  await call('clockLeaseOpen',{},409);assert.deepEqual(rawWorld().adventureCatchWindow,captureBefore);
+  const recovery=await route.POST(request(state.revision,'movementFence',{activeId:id}));assert.equal(recovery.status,200);await get();assert.equal(state.world.adventureCatchWindow.revision,state.revision);assert.equal(state.world.adventureCatchWindow.foe.speciesId,25);assert.equal(rawWorld().zaClockLeasePrototypeV1.revision,state.revision);
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureClockLeaseTestOnly=previousGate;globalThis.__adventureTime=previousTime;Date.now=previousNow;}
+});
+
 test('movement fence keeps only currently valid embedded revision markers',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'movement-fence-markers-qa',displayName:'복구 호환 검증'};
  try{
@@ -5035,6 +5109,24 @@ test('trade evolution research belongs to the actual recipient and survives relo
   globalThis.__adventureUser=b;await tradeCall({action:'accept',id:tradeId,boxId:second});await get();assert.ok(rawWorld().adventureDexSpecies.includes(64),'received species is registered on trade');assert.equal(rawMon(first).adventureResearchTradeRecipient,b.userId);await call('evolve',{boxId:first,target:65});assert.equal(rawWorld().zaResearchTradeEvolutions,1);assert.equal(rawMon(first).adventureResearchTradeRecipient,undefined);await get();assert.equal(rawWorld().zaResearchTradeEvolutions,1);
   globalThis.__adventureUser=a;await get();assert.ok(rawWorld().adventureDexSpecies.includes(4),'other recipient also registers species');assert.equal(rawWorld().zaResearchTradeEvolutions,undefined);
  }finally{globalThis.__adventureUser=previous;}
+});
+
+test('test-gated clock advances both trade worlds atomically and revokes their menu leases',async()=>{
+ const previous=globalThis.__adventureUser,previousGate=globalThis.__adventureClockLeaseTestOnly;const a={userId:'clock-trade-a',displayName:'시계 교환 A'},b={userId:'clock-trade-b',displayName:'시계 교환 B'};
+ try{
+  globalThis.__adventureClockLeaseTestOnly=true;globalThis.__adventureUser=a;await get();await call('start',{species:152,destination:'lumiose'});const first=state.world.activeId,leaseA=(await call('clockLeaseOpen')).clockLease;
+  globalThis.__adventureUser=b;await get();await call('start',{species:498,destination:'lumiose'});const second=state.world.activeId,leaseB=(await call('clockLeaseOpen')).clockLease;
+  for(const [u,code] of [[a,'CLKTRA'],[b,'CLKTRB']])sql.prepare('INSERT OR REPLACE INTO profiles(user_id,nickname,nickname_key,friend_code,updated_at) VALUES(?,?,?,?,?)').run(u.userId,u.displayName,u.userId,code,1);
+  sql.prepare("INSERT INTO friendships(pair_key,requester,recipient,status,created_at) VALUES(?,?,?,'accepted',?)").run(JSON.stringify([a.userId,b.userId].sort()),a.userId,b.userId,1);
+  const trade=await import(await loadTS('app/api/trades/route.ts')),send=async body=>{const r=await trade.POST(new Request('http://adventure.test/api/trades',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify(body)})),d=await r.json();assert.equal(r.status,200,JSON.stringify(d));return d;};
+  globalThis.__adventureUser=a;const offered=await send({action:'offer',friendCode:'CLKTRB',boxId:first}),tradeId=offered.items.find(t=>t.status==='pending').id;
+  globalThis.__adventureUser=b;await send({action:'accept',id:tradeId,boxId:second});
+  for(const [u,expected,old] of [[a,second,leaseA],[b,first,leaseB]]){
+   const row=sql.prepare('SELECT state,revision FROM worlds WHERE user_id=?').get(u.userId),w=JSON.parse(row.state);assert.equal(w.activeId,expected);assert.equal(w.zaClockLeasePrototypeV1.revision,row.revision);assert.deepEqual(w.zaClockLeasePrototypeV1.leases,[]);
+   globalThis.__adventureUser=u;await get();assert.equal(Object.hasOwn(state.world,'zaClockLeasePrototypeV1'),false);await call('clockLeaseRenew',{owner:old.owner,generation:old.generation},409);
+  }
+  assert.equal(sql.prepare('SELECT user_id FROM pokemon_box WHERE id=?').get(first).user_id,b.userId);assert.equal(sql.prepare('SELECT user_id FROM pokemon_box WHERE id=?').get(second).user_id,a.userId);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureClockLeaseTestOnly=previousGate;}
 });
 
 test('trade evolution identifies old records with only a form ID',async()=>{
