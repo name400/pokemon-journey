@@ -91,6 +91,37 @@ test('native and source Wide Lenses remain separately effective when the native 
  assert.equal(run.combat.modifiers.find(row=>row.id==='widelens')?.count,1);
  assert.equal(run.combat.modifiers.find(row=>row.id==='leftovers')?.count,1);
 });
+test('native Quick Claw and Grip Claw retain their own effects with healing items across fusion',async()=>{
+ for(const item of ['quickclaw','gripclaw'])for(const healingItem of items)for(const itemOnDonor of [false,true]){
+  let {doc,run}=fixture(itemOnDonor?healingItem:item,itemOnDonor?item:healingItem);const before=structuredClone(run);
+  assert.ok(classicRewardView(run)[0].fusionPairs.some(pair=>pair.primaryBoxId==='primary'&&pair.donorBoxId==='donor'));assert.deepEqual(run,before);
+  applyClassicAction(doc,{action:'reward',rewardId:'healing-items',boxId:'primary',donorBoxId:'donor',confirmFusion:true});
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  assert.equal(run.party[0].item,item);assert.equal(run.modifiers.find(row=>row.id===healingItem)?.count,1);assert.ok(!run.modifiers.some(row=>row.id===item));
+  assert.equal(run.party[0].rogueFusion.donor.item,itemOnDonor?item:healingItem);
+  run.party[0].hp=50;const max=run.party[0].maxHp;run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})]);
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  const battle=restoreClassicNativeBattle(run.combat,run),p=battle.p1.active[0],foe=battle.p2.active[0],move=battle.dex.moves.get('bind');
+  if(item==='quickclaw'){
+   const rolls=[];battle.randomChance=(n,d)=>{rolls.push([n,d]);return true;};
+   assert.equal(battle.runEvent('FractionalPriority',p,foe,move,0),0.1);assert.deepEqual(rolls,[[1,5]]);
+  }else{
+   assert.equal(foe.addVolatile('partiallytrapped',p,move),true);assert.equal(foe.volatiles.partiallytrapped.duration,8);
+  }
+  run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});run.party=run.combat.teams[0];
+  assert.equal(run.party[0].hp,50+(healingItem==='leftovers'?Math.floor(max/16):Math.floor(50/8)));
+  run.screen='interlude';delete run.combat;applyClassicAction(doc,{action:'unsplice',boxId:'primary',confirm:true});
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+  assert.equal(run.party[0].item,item);assert.equal(run.modifiers.find(row=>row.id===healingItem)?.count,1);assert.ok(!run.modifiers.some(row=>row.id===item));
+  assert.deepEqual(doc.adventure,{safe:true});assert.equal(doc.coins,37);
+ }
+});
+test('Quick Claw and Grip Claw fusion rejects incompatible healing records without mutation',()=>{
+ for(const item of ['quickclaw','gripclaw'])for(const itemOnDonor of [false,true])for(const mutate of [r=>{r.party[1].rogueNativeItemNontransferable=true;},r=>r.modifiers.push({id:'shellbell',boxId:'donor',count:1,active:false}),r=>r.modifiers.push({id:'shellbell',boxId:'primary',count:4})]){
+  const {run}=fixture(itemOnDonor?'shellbell':item,itemOnDonor?item:'shellbell');mutate(run);const before=structuredClone(run);
+  assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));assert.deepEqual(run,before);
+ }
+});
 test('Shell Bell caps include the native slot for fusion, reward, direct grant, transfer and automatic allocation',()=>{
  const {run}=fixture();run.modifiers=[{id:'shellbell',boxId:'primary',count:2,typeBoost:null}];const staged=stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}).run;
  staged.rewards=[{...CLASSIC_REWARD_REGISTRY.find(row=>row.id==='shellbell'),rewardId:'bell'}];assert.equal(classicRewardView(staged)[0].targets[0].eligible,false);const before=structuredClone(staged);assert.throws(()=>addClassicModifier(staged,'shellbell',{boxId:'primary'}));assert.deepEqual(staged,before);
