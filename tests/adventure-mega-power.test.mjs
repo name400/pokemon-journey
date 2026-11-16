@@ -97,3 +97,17 @@ test('power installation and finish preserve a partially submitted multi-side ch
  const saved={...c,snapshot:b.toJSON(),adventureMegaPowerV1:power.state};saved.snapshot.formatid=c.snapshot.formatid;
  const next=playMission10MultiTurn(copy(saved),mega);assert.equal(next.teams[0][0].mega,true);assert.equal(next.adventureMegaPowerV1.trainers.p1.active.remaining,2);assert.equal(Battle.fromJSON(next.snapshot).turn,2);
 });
+
+test('new ring-locked singles, companion and triple reject player Mega but preserve other trainers',async()=>{
+ const {adventureCombatView,adventurePlayCpu}=await import('../lib/adventure-tera-policy.mjs');
+ const p=mon(6,'p','charizarditex'),a=mon(9,'a','blastoisinite'),z=mon(3,'z','venusaurite'),foes=[mon(143,'f1'),mon(143,'f2'),mon(143,'f3')];
+ for(const [c,view,play] of [[createZAAbilityCombat([p],foes.slice(0,1)),adventureCombatView,adventurePlayCpu],[{...createMission10DoubleSnapshot([p],[a],foes.slice(0,2)),adventureCompanionMegaV1:true},mission10MultiView,playMission10MultiTurn],[createMission37TripleSnapshot([p],[a],[z],foes),mission37TripleView,playMission37TriplePrototype]]){
+  c.adventureMegaPowerV1.playerLocked=true;const input=copy(c),before=JSON.stringify(input);
+  assert.equal(view(input).requests[0].specials.some(x=>x.key==='mega'),false);
+  assert.throws(()=>play(input,mega));assert.equal(JSON.stringify(input),before);
+  const next=play(copy(c),splash);assert.equal(next.teams[0][0].mega,false);
+  assert.equal(view(copy(next)).requests[0].specials.some(x=>x.key==='mega'),false);
+  if(next.owners?.ally)assert.equal(next.teams[2][0].mega,true);
+  if(next.owners?.first)assert.equal(next.teams[0].find(x=>x.boxId==='a').mega,true);
+ }
+});
