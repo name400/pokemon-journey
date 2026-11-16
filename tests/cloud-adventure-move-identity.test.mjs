@@ -428,3 +428,10 @@ test('Zone 18 rooftop birds use ZA growth and retain old records',async()=>{
  for(const [id,level,move] of [[333,50,'브레이브버드'],[334,55,'드래곤다이브'],[714,44,'폭풍'],[715,52,'폭음파']]){const before={...makeMon(id,level-1),adventureZone18BirdGrowthV1:true,moves:['몸통박치기','방어','물기','전광석화'],pp:{tackle:3},custom:{keep:true}},out=applyAdventureLevelMoves(before,{...before,level},{});assert.deepEqual(out.pending,[move]);assert.equal(out.mon.pp.tackle,3);assert.deepEqual(out.mon.custom,{keep:true});assert.ok(adventureLearnableMoves({...before,level},{}).includes(move));}
  for(const id of [334,715]){const evolved={...makeMon(id,48),adventureZone18BirdGrowthV1:true,moves:['몸통박치기'],pp:{tackle:3}};assert.deepEqual(applyAdventureEvolutionMoves(evolved,{}).learned,['용의파동']);assert.ok(adventureLearnableMoves(evolved,{}).includes('용의파동'));}
 });
+
+test('Mission 20 Gengar growth is opt-in and keeps old and alpha records intact',async()=>{
+ const {prepareVerifiedWildMoves,adventureLearnableMoves,applyAdventureLevelMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ const old=makeMon(94,42),before=structuredClone(old);assert.equal(prepareVerifiedWildMoves(old),old);const fresh=prepareVerifiedWildMoves(old,{mission20Ghost:true});assert.deepEqual(old,before);assert.equal(fresh.adventureZone4GrowthV1,true);assert.ok(adventureLearnableMoves(fresh,{}).includes('섀도클로'));
+ const alpha={...old,adventureAlpha:true},future={...old,adventureZone4GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(alpha,{mission20Ghost:true}),alpha);assert.equal(prepareVerifiedWildMoves(future,{mission20Ghost:true}),future);
+ const mon={...fresh,level:47,moves:['몸통박치기','방어','물기','전광석화'],pp:{tackle:2},custom:{keep:true}},next=applyAdventureLevelMoves(mon,{...mon,level:48},{});assert.ok(next.pending.includes('오물웨이브'));assert.equal(next.mon.pp.tackle,2);assert.deepEqual(next.mon.custom,{keep:true});
+});
