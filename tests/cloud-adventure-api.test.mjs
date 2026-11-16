@@ -12252,3 +12252,18 @@ test('Postgame judge can inspect an owned box member without changing the active
   const foreignResponse=await route.GET(new Request('http://adventure.test/api/world?detail=judge-foreign'));assert.equal(foreignResponse.status,200);assert.ok(!(await foreignResponse.json()).box.some(m=>m.boxId==='judge-foreign'));assert.deepEqual(rawWorld(),before);
  }finally{globalThis.__adventureUser=previous;}
 });
+
+test('Mission 35 lab files reveal the four reports and keep their saved progress',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission35-files-qa',displayName:'연구 자료 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,mon=structuredClone(rawMon(id)),team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const base={...rawWorld(),area:3,district:'lumiose-lysandre-lab',interior:null,zaLysandreFloor:3,zaMission35Stage:4,zaLysandreElevatorKey:true,zaLysandreFiles:['future-entry'],adventureBalls:{ultraball:4}};
+  for(const [x,tile,title,pattern] of [[6,'a','장치',/3,000년/],[10,'b','에너지원',/생명 에너지/],[14,'e','전설',/제르네아스.*이벨타르/],[18,'k','공유된 꿈',/플레어단/]]){
+   seedWorld(storeAdventurePosition({...base,zaLysandreFiles:rawWorld().zaLysandreFiles??base.zaLysandreFiles,x,y:5,facing:'up'},state.revision+1));await get();assert.match(state.world.interaction.name,new RegExp(title));assert.match(state.world.interaction.text,pattern);assert.equal(state.world.interaction.action,'mission35LabInspect');await call('mission35LabInspect');await get();assert.ok(state.world.zaLysandreFiles.includes(tile));assert.ok(state.world.zaLysandreFiles.includes('future-entry'));assert.equal(state.world.interaction.action,undefined);assert.match(state.world.interaction.text,pattern);await call('mission35LabInspect',{},409);
+  }
+  assert.deepEqual(rawWorld().zaLysandreFiles,['future-entry','a','b','e','k']);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(rawMon(id),mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawWorld().adventureBalls,{ultraball:4});
+  seedWorld(storeAdventurePosition({...rawWorld(),x:11,y:9,facing:'up'},state.revision+1));await get();assert.equal(state.world.interaction.action,'mission35LabL');await call('mission35LabL');assert.equal(state.world.zaLabLSceneV1.step,1);
+  seedWorld(storeAdventurePosition({...base,x:6,y:5,facing:'up',zaMission35Stage:5,zaLysandreFiles:['a','b','e','k']},state.revision+1));await get();assert.match(state.world.interaction.text,/3,000년/);assert.equal(state.world.interaction.action,undefined);assert.equal(state.world.zaMission35Stage,5);
+  seedWorld(storeAdventurePosition({...base,x:6,y:5,facing:'up',zaLysandreFiles:{version:2,records:['future']}},state.revision+1));await get();const before=rawWorld();await call('mission35LabInspect',{},409);assert.deepEqual(rawWorld(),before);
+ }finally{globalThis.__adventureUser=previous;}
+});
