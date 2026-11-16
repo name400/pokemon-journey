@@ -2816,6 +2816,16 @@ test('Rank W Lady medals require a win and survive reload without duplicate clai
  }finally{globalThis.__adventureUser=prevUser;globalThis.__adventureTime=prevTime;}
 });
 
+test('Mission 19 fountain accepts documented Freeze-Dry without changing party or old progress',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission19-freezedry-qa',displayName:'분수 진입 검사'};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,mon={...makeMon(362,45),boxId:id,moves:['프리즈드라이'],pp:{freezedry:7},custom:{keep:true}},fixture=()=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu-sector7',interior:null,x:13,y:13,facing:'up',zaMission19Stage:7,zaRoyaleRank:'E'},state.revision+1);seedMon(id,mon);seedWorld(fixture());await get();const before=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet),rev=state.revision;await call('mission19Freeze');assert.equal(state.world.zaMission19Stage,8);assert.match(state.world.log.join(' '),/프리즈드라이/);await call('mission19Freeze',{revision:rev},409);await get();assert.deepEqual(rawMon(id),before);assert.deepEqual(state.wallet,wallet);await call('mission19EnterSewer');await get();assert.equal(state.world.district,'lumiose-sewer');assert.equal(state.world.zaMission19Stage,9);
+  seedMon(id,{...mon,moves:['Freeze-Dry']});seedWorld(fixture());await get();await call('mission19Freeze');assert.equal(state.world.zaMission19Stage,8);
+  seedMon(id,{...mon,moves:['얼음엄니']});seedWorld(fixture());await get();await call('mission19Freeze',{},409);assert.equal(rawWorld().zaMission19Stage,7);
+  seedMon(id,{...mon,hp:0});seedWorld(fixture());await get();await call('mission19Freeze',{},409);assert.equal(rawWorld().zaMission19Stage,7);
+ }finally{globalThis.__adventureUser=previous;}
+});
+
 test('Rank X added trainers and waiter preserve progress across reloads',async()=>{
  const prior=globalThis.__adventureUser,priorTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'rank-x-extra-qa',displayName:'랭크 X 검증'};globalThis.__adventureTime={hour:22,period:'night',absoluteHour:22};
  try{
