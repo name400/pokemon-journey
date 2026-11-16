@@ -12723,3 +12723,13 @@ test('Mission 20 crystal sewer defeat restores the center without resetting crys
   assert.equal(state.battle,null);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaMission20Stage,9);assert.deepEqual(state.world.zaMission20Crystals,['3,4']);assert.equal(state.world.zaMission20CrystalReturn,'magenta');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawMon(id).hp,rawMon(id).maxHp);
  }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
 });
+
+test('Zone 1 rooftop ordinary Pidgey keeps its reviewed ZA growth after capture and reload',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone1-roof-pidgey-growth-qa',displayName:'옥상 구구 성장 검사'};
+ try{
+  await get();await call('start',{species:152});const lead=state.world.activeId,oldLead=structuredClone(rawMon(lead));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1-roof',interior:null,x:7,y:5,facing:'right',adventureBalls:{masterball:1},zaMission05Complete:true},state.revision+1));await get();globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});
+  assert.equal(rawWorld().encounter.speciesId,16);assert.notEqual(rawWorld().encounter.adventureAlpha,true);assert.equal(rawWorld().encounter.adventureZone1GrowthV1,true);assert.deepEqual(rawWorld().encounter.moves,['울음소리','몸통박치기']);await call('ball',{ball:'masterball'});await get();
+  const caught=state.box.find(m=>m.speciesId===16&&m.origin==='capture');assert.ok(caught);assert.equal(rawMon(caught.boxId).adventureZone1GrowthV1,true);assert.deepEqual(rawMon(caught.boxId).moves,['울음소리','몸통박치기']);assert.deepEqual(rawMon(lead).ivs,oldLead.ivs);await get();assert.equal(rawMon(caught.boxId).adventureZone1GrowthV1,true);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
+});
