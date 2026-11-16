@@ -1,5 +1,17 @@
 # 배포 검증 실패 기록
 
+## 2026-11-16 — GitHub `6db2e915` 배포 검사 실패
+
+- 대상 브랜치 `cloud/pokerogue-continue-20261105`, 검사 시작 시 최신 커밋 `6db2e915094e548f5a52b148ea91951b154fe634`.
+- Sites 소스와 병합한 검증 커밋 `c62353021764d0bae0ff693347fd601aca77f75d`, Node.js v24.22.1.
+- `npm run typecheck` 통과. `npm test` 4,941개 중 4,940개 통과·1개 실패 (308.1초). 사용자는 실패 내용을 기록한 뒤 배포하도록 지시했다. 배포 결과는 별도로 확인해야 한다.
+
+### 실패 항목
+
+- `tests/cloud-adventure-rank-b-scene.test.mjs:43`: `New Corbeau victory resumes Zygarde’s entrance and leaves its battle available`.
+- 45행에서 기대값 3, 실제 2 (`2 !== 3`). 한 줄에 여러 단언이 있으므로 정확한 상태 필드 및 장면 진행·전투 결과를 재현해 확인해야 한다.
+- 위 결과만으로 게임의 실제 진행 결함인지 테스트 조건이나 기대값 문제인지 단정할 수 없다.
+
 ## 2026-11-15 — GitHub `af5e7a55` 배포 검사 실패
 
 - 검사 시작 당시 `cloud/pokerogue-continue-20261105`의 최신 GitHub 커밋 `af5e7a5558c7ce7e4376cecbeaeb2eea041ef051`.
