@@ -4103,7 +4103,7 @@ test('direct Lumiose visit preserves existing field position, progress and Poké
 
 test('new adventure can start in Lumiose without changing legacy start',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'lumiose-direct-start-qa',displayName:'도시시작검증'};
- try{await get();await call('start',{species:152,destination:'lumiose'});assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);await get();assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);assert.equal(state.world.teamIds.length,1);}
+ try{await get();await call('start',{species:152,destination:'lumiose'});assert.equal(rawWorld().zaMagentaSewerLayout,2);assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);await get();assert.equal(rawWorld().zaMagentaSewerLayout,2);assert.deepEqual([state.world.area,state.world.district,state.world.x,state.world.y],[3,'lumiose',11,13]);assert.equal(state.world.teamIds.length,1);}
  finally{globalThis.__adventureUser=previousUser;}
 });
 
@@ -4124,7 +4124,7 @@ test('ZA introduction saves the chase and confirms one nearby starter',async()=>
  const previousUser=globalThis.__adventureUser;
  try{
   for(const [species,x] of [[152,2],[498,4],[158,6]]){
-   globalThis.__adventureUser={userId:`za-intro-${species}`,displayName:'도입 검증'};await get();await call('startIntro');assert.equal(state.world.zaIntroStage,'chase');assert.deepEqual(state.world.teamIds,[]);
+   globalThis.__adventureUser={userId:`za-intro-${species}`,displayName:'도입 검증'};await get();await call('startIntro');assert.equal(rawWorld().zaMagentaSewerLayout,2);assert.equal(state.world.zaIntroStage,'chase');assert.deepEqual(state.world.teamIds,[]);
    await call('introTalk',{species},409);await call('introConfirm',{species,confirmed:true},409);await call('introMove',{direction:'right'});await get();assert.equal(state.world.zaIntroX,2);
    for(let i=0;i<5;i++)await call('introMove',{direction:'right'});await get();assert.equal(state.world.zaIntroStage,'choose');assert.equal(sql.prepare('SELECT COUNT(*) n FROM pokemon_box WHERE user_id=?').get(globalThis.__adventureUser.userId).n,0);
    for(let i=0;i<Math.abs(x-4);i++)await call('introMove',{direction:x<4?'left':'right'});await call('introMove',{direction:'up'});await call('introTalk',{species});await get();assert.equal(state.world.zaIntroChoice,species);
