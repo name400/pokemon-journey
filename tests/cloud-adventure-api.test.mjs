@@ -6702,6 +6702,20 @@ test('Zone 11 northern upper bank preserves encounters and old saves',async()=>{
  }finally{globalThis.__adventureUser=prior;}
 });
 
+test('new ZA stories unlock the sewer reentry in Mission 20 while old gates remain usable',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'sewer-reentry-story-gate-qa',displayName:'재진입 의뢰 검증'};
+ try{
+  await get();await call('start',{species:152,destination:'lumiose'});const id=state.world.activeId,mon=structuredClone(rawMon(id)),wallet=structuredClone(state.wallet);assert.equal(rawWorld().zaSewerReentryGateV1,true);
+  const place=extra=>storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu3-sewer-approach',interior:null,x:17,y:3,facing:'up',zaMission19Complete:true,zaBleuSewerOpened:false,zaBleuSewerSludgeCleared:true,...extra},state.revision+1);
+  seedWorld(place({zaMission20Stage:undefined}));await get();assert.notEqual(state.world.interaction.action,'openBleuSewer');const before=structuredClone(rawWorld()),revision=state.revision;await call('openBleuSewer',{},409);assert.deepEqual(rawWorld(),before);assert.equal(state.revision,revision);
+  seedWorld(place({zaMission20Stage:1}));await get();assert.equal(state.world.interaction.action,'openBleuSewer');await call('openBleuSewer');await get();assert.equal(state.world.zaBleuSewerOpened,true);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(id),mon);await call('openBleuSewer',{},409);await walkTo({x:17,y:1});await call('move',{direction:'up'});await get();assert.equal(state.world.district,'lumiose-sewer');assert.equal(state.world.zaSewerReturn,'bleu3');
+  const future={version:2};seedWorld(place({zaSewerReentryGateV1:future,zaBleuSewerOpened:false}));await get();await call('openBleuSewer',{},409);assert.deepEqual(rawWorld().zaSewerReentryGateV1,future);
+  // A save created before this rule retains its existing route and data.
+  seedWorld(place({zaSewerReentryGateV1:undefined,zaBleuSewerOpened:false,zaMission20Stage:undefined}));await get();assert.equal(state.world.interaction.action,'openBleuSewer');await call('openBleuSewer');assert.equal(state.world.zaBleuSewerOpened,true);assert.ok(rawMon(id).walkSteps>mon.walkSteps);assert.deepEqual(rawMon(id),{...mon,walkSteps:rawMon(id).walkSteps});
+  globalThis.__adventureUser={userId:'sewer-reentry-intro-qa',displayName:'신규 도입 검증'};await get();await call('startIntro');assert.equal(rawWorld().zaSewerReentryGateV1,true);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Bleu Sector 3 actual stairs enter the underground junction and preserve progress',async()=>{
  const prior=globalThis.__adventureUser;globalThis.__adventureUser={userId:'bleu3-underground-stairs-qa',displayName:'지하 계단 검증'};
  try{
