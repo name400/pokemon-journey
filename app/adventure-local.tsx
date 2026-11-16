@@ -4,6 +4,7 @@ import {ArrowUp,ArrowDown,ArrowLeft,ArrowRight,Backpack,BookOpen,ChevronRight,Co
 import RewardScene from '@/components/reward-scene';
 import PokemonImage from '@/components/pokemon-image';
 import BattlePanel from '@/components/battle-panel';
+import AdventureBattlePopup from '@/components/adventure-battle-popup';
 import AdventureField from '@/components/adventure-field';
 import AdventureManagement from '@/components/adventure-management';
 import AdventureBag from '@/components/adventure-bag';
@@ -140,7 +141,7 @@ export default function Adventure(){
   <AdventureStoryScene revision={data.revision} events={w.events||[]}/>
   {evolutionScene&&<AdventureEvolutionScene before={evolutionScene.before} after={evolutionScene.after} close={()=>setEvolutionScene(null)}/>}
   {syncRequired&&<SyncBlock retry={()=>load()} error={error}/>}
-  {inBattle&&!data.battle.ended&&data.battle.requests?.[0]?.kind==='move'&&data.inventory?.revive>0&&data.battle.teams?.[0]?.some((p:any,i:number)=>p.hp<=0&&i!==data.battle.requests[0].active)&&<details className="adv-battle-revive"><summary>기력의조각 · {data.inventory.revive}개</summary><p>기절한 대기 포켓몬을 되살립니다. 사용하면 상대가 한 번 행동합니다.</p><div>{data.battle.teams[0].map((p:any,i:number)=>p.hp<=0&&i!==data.battle.requests[0].active?<button key={p.boxId} disabled={busy} onClick={()=>act('battleRevive',{boxId:p.boxId})}>{p.name} 되살리기</button>:null)}</div></details>}
-  {inBattle&&<BattlePanel error={error} battle={data.battle} battleKey={`world:${data.revision}`} biome={area.biome} title={w.trainer?.wildIncident?'야생 포켓몬 진정시키기':w.trainer?`${w.trainer.name} · 배틀`:'야생 포켓몬과 배틀'} trainer={w.trainer?.wildIncident?undefined:w.trainer} onContinue={()=>act('battleContinue')} onForfeit={()=>{if(window.confirm('배틀을 포기하고 센터로 돌아가시겠습니까?'))act('forfeit');}} busy={busy} onCommand={command=>act('battle',{command})} onItem={item=>act('use',{item})} onBall={w.trainer?undefined:()=>act('ball')} onFlee={w.trainer?undefined:()=>act('flee')} items={data.wallet}/>}
+  {inBattle&&!syncRequired&&<AdventureBattlePopup>{!data.battle.ended&&data.battle.requests?.[0]?.kind==='move'&&data.inventory?.revive>0&&data.battle.teams?.[0]?.some((p:any,i:number)=>p.hp<=0&&i!==data.battle.requests[0].active)&&<details className="adv-battle-revive"><summary>기력의조각 · {data.inventory.revive}개</summary><p>기절한 대기 포켓몬을 되살립니다. 사용하면 상대가 한 번 행동합니다.</p><div>{data.battle.teams[0].map((p:any,i:number)=>p.hp<=0&&i!==data.battle.requests[0].active?<button key={p.boxId} disabled={busy} onClick={()=>act('battleRevive',{boxId:p.boxId})}>{p.name} 되살리기</button>:null)}</div></details>}
+  <BattlePanel error={error} battle={data.battle} battleKey={`world:${data.revision}`} biome={area.biome} title={w.trainer?.wildIncident?'야생 포켓몬 진정시키기':w.trainer?`${w.trainer.name} · 배틀`:'야생 포켓몬과 배틀'} trainer={w.trainer?.wildIncident?undefined:w.trainer} onContinue={()=>act('battleContinue')} onForfeit={()=>{if(window.confirm('배틀을 포기하고 센터로 돌아가시겠습니까?'))act('forfeit');}} busy={busy} onCommand={command=>act('battle',{command})} onItem={item=>act('use',{item})} onBall={w.trainer?undefined:()=>act('ball')} onFlee={w.trainer?undefined:()=>act('flee')} items={data.wallet}/></AdventureBattlePopup>}
  </div>;
 }
