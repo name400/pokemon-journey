@@ -242,6 +242,7 @@ import {wildAlphaPosition,releaseWildAlphaPursuit} from '@/lib/cloud-adventure/a
 import {FAST_TRAVEL_CENTERS,centerAt,registeredCenters,recordCenter,recordNearbyCenter,fastTravelEnabled,recordZoneEntry,zoneTravelUnlocked,mapTravelDestinations,canMapTravel,clearMapTravelTransient,taxiAvailable,taxiDestinations,registeredLandmarks,recordLandmarks,groundDestinationFlags} from '@/lib/cloud-adventure/adventure-fast-travel.mjs';
 import {mission10RivalTeam,mission10OriginalStarter,mission10GuardTeams,mission11AllyTeam,mission36RivalTeam} from '@/lib/cloud-adventure/adventure-mission10.mjs';
 import {createMission10DoubleSnapshot,createCompanionBossSnapshot,createCompanionTrainerSnapshot,createSoloMultiFoeSnapshot,playMission10MultiTurn,mission10MultiView} from '@/lib/cloud-adventure/adventure-mission10-double.mjs';
+import {createZAAbilityCombat} from '@/lib/cloud-adventure/adventure-abilities.mjs';
 import {adventureCombatView as combatView,adventurePlayCpu as playCpu,adventureValidateCombatCommand as validateCombatCommand,rejectAdventureSpecial} from '@/lib/adventure-tera-policy.mjs';
 import {rogueCompanionTeam} from '@/lib/cloud-adventure/adventure-companion-rogue.mjs';
 import {mission35TrainerTeam} from '@/lib/cloud-adventure/adventure-mission35-trainers.mjs';
@@ -360,7 +361,7 @@ function enableAdventureMega(combat:any){combat.adventurePlusGaugeV1={charge:1,m
 function createAdventureCombat(s:any,mons:Map<string,any>,foes:any[],options:any={}){
  const ids=[s.activeId,...s.teamIds.filter((id:string)=>id!==s.activeId)];
  const team=ids.map((id:string)=>mons.get(id));
- const combat=createCombat(team,foes,adventureBattleOptions(s,options));if(s.zaMegaRing===true)enableAdventureMega(combat);combat.adventureEffortVersion=isLumioseFriendshipWorld(s)?2:1;combat.adventureEffortFoes=[];if(isLumioseFriendshipWorld(s)&&!s.unionHost&&!s.expedition&&!s.zaLoanBattle)combat.adventureFaintFriendshipV1=true;combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
+ const combat=(isLumioseFriendshipWorld(s)&&!s.unionHost&&!s.expedition?createZAAbilityCombat:createCombat)(team,foes,adventureBattleOptions(s,options));if(s.zaMegaRing===true)enableAdventureMega(combat);combat.adventureEffortVersion=isLumioseFriendshipWorld(s)?2:1;combat.adventureEffortFoes=[];if(isLumioseFriendshipWorld(s)&&!s.unionHost&&!s.expedition&&!s.zaLoanBattle)combat.adventureFaintFriendshipV1=true;combat.adventureMoveCount=0;combat.adventureBattleBase=adventureBattleBase([team,foes]);
  const lead=combat.teams[0][combat.requests[0].active];if(lead)s.activeId=lead.boxId;
  return combat;
 }

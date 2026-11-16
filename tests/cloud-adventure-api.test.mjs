@@ -56,6 +56,15 @@ function rawWorld(){return JSON.parse(sql.prepare('SELECT state FROM worlds WHER
 function seedWorld(patch){const w={...rawWorld(),...patch};sql.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').run(JSON.stringify(w),globalThis.__adventureUser.userId);}
 function rawMon(id){return JSON.parse(sql.prepare('SELECT data FROM pokemon_box WHERE id=?').get(id).data);}
 function seedMon(id,p){sql.prepare('UPDATE pokemon_box SET species_id=?,data=? WHERE id=?').run(p.id,JSON.stringify(p),id);}
+test('ZA intro battle suppresses reviewed ability without changing saved Pokemon',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-ability-qa',displayName:'특성 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(25,50),boxId:id,ability:'static',moves:['튀어오르기'],pp:{},custom:{retained:true}};
+  seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,zaIntroStage:'andi'},state.revision+1));await get();await call('introBattle');
+  assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].ability,'noability',JSON.stringify({district:rawWorld().district,expedition:rawWorld().expedition,unionHost:rawWorld().unionHost}));assert.equal(rawMon(id).ability,'static');await get();
+  await call('battle',{command:{type:'move',move:'튀어오르기'}});await get();assert.equal(rawMon(id).ability,'static');assert.deepEqual(rawMon(id).custom,{retained:true});
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('adventure API rejects tera for solo and companion battles without changing saves',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-no-tera-qa',displayName:'테라 차단 검사'};
  try{
