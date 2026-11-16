@@ -19,7 +19,7 @@ import {normalizeStoredPokemon} from '@/lib/normalize-pokemon.mjs';
 import {env} from 'cloudflare:workers';
 import {getChatGPTUser} from '@/app/chatgpt-auth';
 import {STARTERS} from '@/lib/world.mjs';import {species,makeMon,moves} from '@/lib/game.mjs';import {configure,levelMoves,learnableMoves,tutorMoves,rules} from '@/lib/pokemon-config.mjs';
-import {playCpu,combatView,validateCombatCommand} from '@/lib/party-battle.mjs';import {createAdventureCombat as createCombat,createAdventureWildCombat,adventureBattleParty,reviveAdventureBench} from '@/lib/adventure-combat.mjs';import {TRAINERS,AREAS,areaMap,encounterPool,currentObjective,trainerTeam} from '@/lib/campaign.mjs';import {gainExperience,expToNext,victoryExperience} from '@/lib/growth.mjs';import {evolutionOptions,evolutionContext,gameTime} from '@/lib/evolution.mjs';
+import {adventurePlayCpu as playCpu,adventureCombatView as combatView,adventureValidateCombatCommand as validateCombatCommand} from '@/lib/adventure-tera-policy.mjs';import {createAdventureCombat as createCombat,createAdventureWildCombat,adventureBattleParty,reviveAdventureBench} from '@/lib/adventure-combat.mjs';import {TRAINERS,AREAS,areaMap,encounterPool,currentObjective,trainerTeam} from '@/lib/campaign.mjs';import {gainExperience,expToNext,victoryExperience} from '@/lib/growth.mjs';import {evolutionOptions,evolutionContext,gameTime} from '@/lib/evolution.mjs';
 import {inventoryFor,inventoryKey,inventoryWrites} from '@/lib/inventory';
 import {adventureShopItems as shopItems} from '@/lib/adventure-shop-catalog.mjs';
 export const dynamic='force-dynamic';const db=()=>env.DB!;const random=()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;

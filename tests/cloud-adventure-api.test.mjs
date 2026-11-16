@@ -56,6 +56,21 @@ function rawWorld(){return JSON.parse(sql.prepare('SELECT state FROM worlds WHER
 function seedWorld(patch){const w={...rawWorld(),...patch};sql.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').run(JSON.stringify(w),globalThis.__adventureUser.userId);}
 function rawMon(id){return JSON.parse(sql.prepare('SELECT data FROM pokemon_box WHERE id=?').get(id).data);}
 function seedMon(id,p){sql.prepare('UPDATE pokemon_box SET species_id=?,data=? WHERE id=?').run(p.id,JSON.stringify(p),id);}
+test('adventure API rejects tera for solo and companion battles without changing saves',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-no-tera-qa',displayName:'테라 차단 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId;
+  const player={...makeMon(1,40),boxId:id,teraType:'Fire',moves:['방어'],pp:{}},foe={...makeMon(25,40),boxId:'no-tera-foe',teraType:'Water',moves:['방어'],pp:{}};
+  seedMon(id,player);seedWorld({combat:createCombat([player],[foe]),trainer:null,encounter:foe});await get();
+  assert.ok(!state.battle.requests[0].specials.some(s=>s.key==='terastallize'));
+  let before=rawWorld();await call('battle',{command:{type:'move',move:'방어',special:'terastallize'}},409);assert.deepEqual(rawWorld(),before);
+  await call('battle',{command:{type:'move',move:'방어'}});assert.equal(state.battle.teams[1][0].terastallized,null);await get();assert.equal(rawMon(id).teraType,'Fire');
+  const ally={...makeMon(4,40),boxId:'no-tera-ally',moves:['방어'],pp:{}},foe2={...makeMon(133,40),boxId:'no-tera-foe2',moves:['방어'],pp:{}};
+  seedWorld({combat:createMission10DoubleSnapshot([player],[ally],[foe,foe2]),trainer:{id:'no-tera',name:'검증'},encounter:null});await get();
+  assert.ok(!state.battle.requests[0].actors[0].specials.some(s=>s.key==='terastallize'));
+  before=rawWorld();await call('battle',{command:{type:'turn',actions:[{actor:0,type:'move',move:'protect',special:'terastallize'}]}},409);assert.deepEqual(rawWorld(),before);await get();assert.equal(rawMon(id).teraType,'Fire');
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('underground weather stays dry across reload and rain evolution works on return to surface',async()=>{
  const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime;
  globalThis.__adventureUser={userId:'underground-weather-qa',displayName:'지하 날씨 검사'};globalThis.__adventureTime={hour:16,period:'day'};
@@ -1325,13 +1340,13 @@ test('world route: save migration, atomic purchases, actual battle/capture/growt
  // Older saves can contain an encounter without a native battle snapshot.
  seedMon(owned,{...rawMon(owned),hp:0});seedWorld({area:0,x:3,y:8,activeId:owned,combat:null,trainer:null,encounter:{...makeMon(10,3),boxId:'wild'}});await get();assert.equal(state.battle.teams[0][state.battle.active[0]].boxId,second);assert.equal(state.world.activeId,second);await call('flee');assert.equal(rawWorld().activeId,second);assert.equal(rawMon(owned).hp,0);
  await walkTo('H');await call('heal');assert.equal(rawMon(owned).hp,rawMon(owned).maxHp);assert.equal(rawMon(owned).status,null);
- // Real Tera state exists while the native battle is active, but flee,
- // capture and victory restore the pre-battle form without restoring PP/HP.
+ // A previously saved Tera battle continues safely; ending it restores the
+ // pre-battle form without restoring PP/HP. New Tera commands are rejected.
  const savedTeraMon=rawMon(owned),savedTeraParty=[...state.world.teamIds],savedTeraLead=state.world.activeId;
  const teraMon={...makeMon(1,50),boxId:owned,moves:['울음소리','몸통박치기'],teraType:'Fire',battleAppearance:'bulbasaur',battleArtId:25,customForm:'keep'};seedMon(owned,teraMon);seedWorld({teamIds:[owned],activeId:owned,area:0,x:6,y:3});await get();globalThis.__adventureRandom=()=>0;
- await call('move',{direction:'right'});assert.ok(state.battle.requests[0].specials.some(s=>s.key==='terastallize'));await call('battle',{command:{type:'move',move:'울음소리',special:'terastallize'}});assert.ok(state.battle);assert.equal(rawMon(owned).terastallized,'Fire');await get();assert.equal(state.battle.teams[0][state.battle.active[0]].terastallized,'Fire');const teraBattleMon=state.battle.teams[0][state.battle.active[0]];await call('flee');assert.equal(rawMon(owned).terastallized,undefined);assert.equal(rawMon(owned).battleSprite,undefined);assert.equal(rawMon(owned).currentTypes,undefined);assert.equal(rawMon(owned).battleAppearance,'bulbasaur');assert.equal(rawMon(owned).battleArtId,25);assert.equal(rawMon(owned).customForm,'keep');assert.equal(rawMon(owned).hp,teraBattleMon.hp);assert.deepEqual(rawMon(owned).pp,teraBattleMon.pp);
- seedWorld({area:0,x:6,y:3});await get();await call('move',{direction:'right'});await call('battle',{command:{type:'move',move:'울음소리',special:'terastallize'}});await call('ball');assert.equal(rawMon(owned).terastallized,undefined);assert.equal(rawMon(owned).battleAppearance,'bulbasaur');const newlyCaught=rawMon(state.world.teamIds.at(-1));assert.equal(newlyCaught.battleAppearance,undefined);assert.equal(newlyCaught.currentTypes,undefined);
- seedWorld({teamIds:[owned],area:0,x:6,y:3});await get();await call('move',{direction:'right'});await call('battle',{command:{type:'move',move:'울음소리',special:'terastallize'}});await battle();assert.equal(rawMon(owned).terastallized,undefined);assert.equal(rawMon(owned).battleAppearance,'bulbasaur');assert.equal(rawMon(owned).teraType,'Fire');
+ await call('move',{direction:'right'});assert.ok(!state.battle.requests[0].specials.some(s=>s.key==='terastallize'));await call('battle',{command:{type:'move',move:'울음소리',special:'terastallize'}},409);const legacyTera=async()=>{seedWorld({combat:playCpu(rawWorld().combat,{type:'move',move:'울음소리',special:'terastallize'})});await get();};await legacyTera();assert.ok(state.battle);await get();assert.equal(state.battle.teams[0][state.battle.active[0]].terastallized,'Fire');const teraBattleMon=state.battle.teams[0][state.battle.active[0]];await call('flee');assert.equal(rawMon(owned).terastallized,undefined);assert.equal(rawMon(owned).battleSprite,undefined);assert.equal(rawMon(owned).currentTypes,undefined);assert.equal(rawMon(owned).battleAppearance,'bulbasaur');assert.equal(rawMon(owned).battleArtId,25);assert.equal(rawMon(owned).customForm,'keep');assert.equal(rawMon(owned).hp,teraBattleMon.hp);assert.deepEqual(rawMon(owned).pp,teraBattleMon.pp);
+ seedWorld({area:0,x:6,y:3});await get();await call('move',{direction:'right'});await legacyTera();await call('ball');assert.equal(rawMon(owned).terastallized,undefined);assert.equal(rawMon(owned).battleAppearance,'bulbasaur');const newlyCaught=rawMon(state.world.teamIds.at(-1));assert.equal(newlyCaught.battleAppearance,undefined);assert.equal(newlyCaught.currentTypes,undefined);
+ seedWorld({teamIds:[owned],area:0,x:6,y:3});await get();await call('move',{direction:'right'});await legacyTera();await battle();assert.equal(rawMon(owned).terastallized,undefined);assert.equal(rawMon(owned).battleAppearance,'bulbasaur');assert.equal(rawMon(owned).teraType,'Fire');
  seedWorld({area:0,x:6,y:3});await get();await call('move',{direction:'right'});assert.equal(state.battle.teams[0][state.battle.active[0]].terastallized,null);await call('flee');globalThis.__adventureRandom=()=>.999;
  seedMon(owned,savedTeraMon);seedWorld({teamIds:savedTeraParty,activeId:savedTeraLead,area:0,x:3,y:8});await get();
  // A real victory fills an empty move slot; teaching another move preserves PP
