@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
 import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
-import {CLASSIC_REWARD_REGISTRY,classicRewardView,addClassicModifier,transferClassicModifier,applyClassicTrashDig} from '../lib/rogue-classic-rewards.mjs';
+import {CLASSIC_REWARD_REGISTRY,classicRewardView,classicTransferInventory,addClassicModifier,transferClassicModifier,applyClassicTrashDig} from '../lib/rogue-classic-rewards.mjs';
 import {applyClassicAction,activeClassicRun,classicGameView} from '../lib/rogue-classic-game.mjs';
 import {createClassicCombat,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
@@ -56,6 +56,34 @@ test('overflow and ambiguous held metadata refuse the whole fusion without consu
 test('empty-slot native transfers and unreviewed native conflicts keep their existing behavior',()=>{
  const empty=fixture().run;empty.party[0].item='';const transferred=stageClassicDnaFusion(empty,{primaryBoxId:'primary',donorBoxId:'donor'}).run;assert.equal(transferred.party[0].item,'leftovers');assert.equal(transferred.modifiers.length,0);
  for(const item of ['lifeorb','oranberry','charizarditex']){const {run}=fixture();run.party[1].item=item;const before=structuredClone(run);assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));assert.deepEqual(run,before);}
+});
+
+test('a nontransferable native item cannot be moved manually or through DNA fusion',async()=>{
+ for(const item of ['quickclaw','widelens','gripclaw','lifeorb']){
+  let {doc,run}=fixture();run.party[0].item='';run.party[1].item=item;run.party[1].rogueNativeItemNontransferable=true;
+  run.modifiers.push({id:'quickclaw',boxId:'donor',count:1,typeBoost:null});
+  doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);const before=structuredClone(run);
+  assert.ok(!classicTransferInventory(run,run.party[1]).some(row=>row.kind==='native'));
+  assert.ok(classicTransferInventory(run,run.party[1]).some(row=>row.kind==='modifier'&&row.id==='quickclaw'));
+  assert.throws(()=>transferClassicModifier(run,{fromBoxId:'donor',toBoxId:'primary',id:item,kind:'native'}));
+  assert.deepEqual(run,before);
+  assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));
+  assert.deepEqual(run,before);
+  assert.ok(!classicRewardView(run,ensureClassicState(doc).system)[0].fusionPairs.some(pair=>pair.primaryBoxId==='primary'&&pair.donorBoxId==='donor'));
+ }
+ const {run}=fixture();run.party[0].item='';run.party[0].rogueNativeItemNontransferable=true;run.party[1].item='quickclaw';const before=structuredClone(run);
+ assert.throws(()=>transferClassicModifier(run,{fromBoxId:'donor',toBoxId:'primary',id:'quickclaw',kind:'native'}));
+ assert.throws(()=>stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}));assert.deepEqual(run,before);
+});
+
+test('transferable native and source Quick Claws remain distinct through fusion and save restoration',async()=>{
+ let {doc,run}=fixture();run.party[0].item='';run.party[1].item='quickclaw';run.modifiers.push({id:'quickclaw',boxId:'primary',count:1,typeBoost:null});
+ fuse(doc);doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+ assert.equal(run.party[0].item,'quickclaw');assert.equal(run.modifiers.find(row=>row.id==='quickclaw').count,1);
+ run.screen='interlude';delete run.combat;applyClassicAction(doc,{action:'unsplice',boxId:'primary',confirm:true});
+ doc=await decodeGameData(await encodeGameData(doc));run=activeClassicRun(doc);
+ assert.equal(run.party[0].item,'quickclaw');assert.equal(run.modifiers.find(row=>row.id==='quickclaw').count,1);
+ assert.deepEqual(doc.adventure,{safe:true});assert.equal(doc.coins,37);
 });
 
 test('reward and direct grants include the retained native Leftovers in the four-copy cap',()=>{
