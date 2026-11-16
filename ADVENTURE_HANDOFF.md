@@ -99,3 +99,5 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 미션 10~후반 대표 통합 검사 한 번에서 미션 37 배틀 도우미 `testBattleMove`가 `undefined.m` 오류로 실패했고 같은 검사의 후속 1회는 통과했다. 실패 원인은 미확정이며, 이 결과를 Sites 병합본 검증으로 간주하지 않는다.
 
 미션 35 AZ의 과거 이야기를 네 단계 확인식 장면으로 확장했다. 옥상 및 구형 로비 경로에서 현재 배경·AZ·플라엣테·동료 표시를 유지하며, 마지막 확인에만 랭크 A 진행을 열고 저장 후 재접속할 수 있다. 알 수 없는 장면 표식과 기존 완료 저장은 변경하지 않는다. [Serebii 공략](https://serebii.net/legendsz-a/mainmissions/reachingranka.shtml)은 전쟁과 플라엣테의 부활, 무기와 앙주의 경위를 AZ가 옥상에서 말한다고 설명한다. 한국어 대사와 상징적인 인물 표시는 재구성이며 원작의 정확한 연출은 미확인이다.
+
+미션 38 호텔 로비에 AZ가 남긴 유언과 팀 MZ가 호텔·플라엣테를 이어받는 네 단계 대화를 추가했다. 대화 확인까지 로비와 등장인물 표시를 유지하고 재접속해 이어 볼 수 있으며, 확인 후 기존 광장 목표로 진행한다. 루카리오의 기존 독립 수령 기록·구형 진행·알 수 없는 장면 표식은 보존한다. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Walkthrough%3APok%C3%A9mon_Legends%3A_Z-A/Part_27)와 [Neoseeker](https://www.neoseeker.com/pokemon-legends-z-a/Main_Mission_38)는 호텔의 AZ 유언과 광장으로 가는 흐름을 설명한다. 한국어 대사와 상징적 인물 표시는 재구성이며 정확한 원작 연출은 미확인이다.
