@@ -71,3 +71,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 도시 고정 출현 세 계열
 
 도시·하수도 고정 출현 리오르·깨봉이·곤율랭은 신규 일반 조우의 초기 기술과 성장표를 ZA 자료에 연결했으며, 진화 시 기존 루카리오·더스트나·곤율거니 표식을 이어간다. 전투 진입과 필드 투척 양쪽에 적용하고 기존 저장·우두머리·알 수 없는 표식은 소급하지 않는다. 야생 초기 네 기술은 기존 엔진의 근사다. 자료: https://pokemondb.net/pokedex/riolu/moves/9 https://pokemondb.net/pokedex/trubbish/moves/9 https://pokemondb.net/pokedex/scraggy/moves/9 (2차 자료). 랄토스·데덴네·미뇽·미끄메라 등 다른 도시 출현과 연구소·하수도 별도 풀이 아직 남아 있고, Sites 병합본은 재검증하지 않았다.
+
+### 도시 랄토스·데덴네·미뇽·미끄메라 성장표
+
+도시 일반 고정 출현의 네 종과 일반 진화형에 ZA 레벨·진화·다시 배우기 기술표를 신규 개체부터 연결했다. 랄토스는 가디안·엘레이드 양쪽, 미뇽과 미끄메라는 일반 진화 단계까지 연결하며 별도 지방 폼과 우두머리는 적용하지 않는다. 전투와 필드 투척 모두 같은 초기 기술 규칙을 사용하며 기존 저장·진행 전투·불명 표식은 소급하지 않는다. 초기 네 기술 선택은 엔진의 근사다. 2차 출처 예: https://pokemondb.net/pokedex/ralts/moves/9 https://pokemondb.net/pokedex/dedenne/moves/9 https://pokemondb.net/pokedex/dratini/moves/9 https://pokemondb.net/pokedex/goomy/moves/9 및 각 일반 진화형 페이지. 도시 외 하수도·연구소의 별도 출현, 미확인 지방 폼과 Sites 병합본 검증은 남았다.
