@@ -435,3 +435,13 @@ test('Mission 20 Gengar growth is opt-in and keeps old and alpha records intact'
  const alpha={...old,adventureAlpha:true},future={...old,adventureZone4GrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(alpha,{mission20Ghost:true}),alpha);assert.equal(prepareVerifiedWildMoves(future,{mission20Ghost:true}),future);
  const mon={...fresh,level:47,moves:['몸통박치기','방어','물기','전광석화'],pp:{tackle:2},custom:{keep:true}},next=applyAdventureLevelMoves(mon,{...mon,level:48},{});assert.ok(next.pending.includes('오물웨이브'));assert.equal(next.mon.pp.tackle,2);assert.deepEqual(next.mon.custom,{keep:true});
 });
+
+test('new market fairy families keep ZA level moves through evolution and leave old records intact',async()=>{
+ const {prepareVerifiedWildMoves,adventureLearnableMoves,applyAdventureLevelMoves,applyAdventureEvolutionMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ for(const [base,evolved,boundary,move] of [[682,683,22,'희망사항'],[684,685,21,'실뿜기']]){
+  const old=makeMon(base,20),before=structuredClone(old),fresh=prepareVerifiedWildMoves(old);assert.deepEqual(old,before);assert.equal(fresh.adventureMarketFairyGrowthV1,true);assert.equal(old.adventureMarketFairyGrowthV1,undefined);
+  const a={...fresh,level:boundary-1,moves:['몸통박치기','방어','물기','전광석화'],pp:{tackle:2},custom:{keep:true}},result=applyAdventureLevelMoves(a,{...a,level:boundary},{});assert.ok(result.pending.includes(move));assert.equal(result.mon.pp.tackle,2);assert.deepEqual(result.mon.custom,{keep:true});
+  const evolution={...makeMon(evolved,boundary),adventureMarketFairyGrowthV1:true,moves:['몸통박치기'],pp:{tackle:2}};assert.ok(adventureLearnableMoves(evolution,{}).includes(move));assert.deepEqual(applyAdventureEvolutionMoves(evolution,{}).learned,[]);assert.equal(evolution.pp.tackle,2);
+  const alpha={...old,adventureAlpha:true},future={...old,adventureMarketFairyGrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(alpha),alpha);assert.equal(prepareVerifiedWildMoves(future),future);
+ }
+});
