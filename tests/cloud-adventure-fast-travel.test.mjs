@@ -193,3 +193,13 @@ test('Café Classe landmark registers only on the ground',async()=>{
  const s={area:3,district:'lumiose-vert-sector4',interior:null,x:6,y:6,zaVert4Layer:'roof',zaFastTravelLandmarks:['future']};
  assert.equal(recordLandmarks(s),false);assert.deepEqual(s.zaFastTravelLandmarks,['future']);s.zaVert4Layer='courtyard';assert.equal(recordLandmarks(s),false);s.zaVert4Layer='ground';assert.equal(recordLandmarks(s),true);assert.deepEqual(s.zaFastTravelLandmarks,['future','cafe-classe']);assert.ok(taxiDestinations(s).some(p=>p.id==='cafe-classe'));assert.deepEqual(groundDestinationFlags(s.district),{zaVert4Layer:'ground'});
 });
+
+test('zone 20 map travel opens before mission 42 completion without weakening active phase locks',async()=>{
+ const {zoneTravelUnlocked,canMapTravel,recordZoneEntry,mapTravelDestinations}=await import('../lib/cloud-adventure/adventure-fast-travel.mjs');
+ const base={area:3,district:'lumiose-zone20',interior:null,x:11,y:14,zaMission04Complete:true,zaMission38Complete:true,zaMission42Complete:false};
+ for(const stage of [undefined,0,1]){const s={...base,zaMission42Stage:stage};assert.equal(zoneTravelUnlocked(s,20),true);assert.equal(canMapTravel(s),true);assert.equal(recordZoneEntry(s,'lumiose-centrico-route',','),true);assert.ok(mapTravelDestinations(s).some(p=>p.id==='zone20'));}
+ for(const stage of [2,3,4,5,'1','future']){const s={...base,zaMission42Stage:stage};assert.equal(zoneTravelUnlocked(s,20),false);assert.equal(canMapTravel(s),false);}
+ assert.equal(zoneTravelUnlocked({...base,zaMission38Complete:false,zaMission37Complete:true},20),false);assert.equal(zoneTravelUnlocked({zaMission42Complete:true},20),true);assert.equal(canMapTravel({...base,zaMission42Stage:1,zaMission42Underground:true}),false);
+ for(const ledger of [{version:2,items:[]},{future:true},['future']]){const s={...base,zaZone20Spent:ledger,zaFastTravelZones:{20:{x:11,y:14}}};assert.equal(canMapTravel(s),false);assert.ok(!mapTravelDestinations(s).some(p=>p.id==='zone20'));assert.deepEqual(s.zaZone20Spent,ledger);}
+ for(const marker of [{version:2,x:11,y:14},{v:3,x:11,y:14}]){const s={...base,zaFastTravelZones:{20:marker}};assert.ok(!mapTravelDestinations(s).some(p=>p.id==='zone20'));assert.equal(recordZoneEntry(s,'lumiose-floral',',',()=>Array.from({length:17},()=>Array(23).fill('#'))),false);assert.deepEqual(s.zaFastTravelZones[20],marker);}
+});
