@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {Battle} from '@pkmn/sim';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat} from '../lib/party-battle.mjs';
-import {adventurePlayCpu} from '../lib/adventure-tera-policy.mjs';
+import {adventurePlayCpu,adventureCombatView} from '../lib/adventure-tera-policy.mjs';
 import {createZAAbilityCombat,adventureNativeTeamSet,zaZygardeFieldHp} from '../lib/cloud-adventure/adventure-abilities.mjs';
-import {createMission10DoubleSnapshot,playMission10MultiTurn} from '../lib/cloud-adventure/adventure-mission10-double.mjs';
-import {createMission37TripleSnapshot,restoreMission37TripleSnapshot} from '../lib/cloud-adventure/adventure-mission37-triple.mjs';
+import {createMission10DoubleSnapshot,playMission10MultiTurn,mission10MultiView} from '../lib/cloud-adventure/adventure-mission10-double.mjs';
+import {createMission37TripleSnapshot,restoreMission37TripleSnapshot,playMission37TriplePrototype,mission37TripleView} from '../lib/cloud-adventure/adventure-mission37-triple.mjs';
 import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from '../lib/cloud-adventure/adventure-battle.mjs';
 const mon=(id,boxId,ability,moves=['튀어오르기'])=>({...makeMon(id,50),boxId,ability,moves,pp:{}});
 test('new ZA singles suppress Levitate without changing original ability or existing combats',()=>{
@@ -62,4 +62,21 @@ test('ZA Zygarde retains its stored ability while its known forms transform in n
  const player=mon(718,'p','aurabreak'),ally=mon(25,'a','static'),foe=mon(129,'f','swiftswim'),other=mon(128,'g','intimidate');
  const multi=createMission10DoubleSnapshot([player],[ally],[foe,other]);assert.equal(Battle.fromJSON(multi.snapshot).p1.active[0].ability,'powerconstruct');assert.equal(multi.teams[0][0].ability,'aurabreak');
  const triple=createMission37TripleSnapshot([player],[ally],[mon(1,'b','overgrow')],[foe,other]);assert.equal(restoreMission37TripleSnapshot(triple).p1.active[0].ability,'powerconstruct');assert.equal(triple.teams[0][0].ability,'aurabreak');
+});
+test('ZA Morpeko changes mode on Aura Wheel rather than each turn, and survives reload',()=>{
+ const player=mon(877,'p','hungerswitch',['방어','오라휠']),foe=mon(143,'f','immunity');foe.level=100;
+ let battle=createZAAbilityCombat([player],[foe]);battle=adventurePlayCpu(battle,{type:'move',move:'방어'});assert.equal(battle.teams[0][0].battleAppearance,'morpeko');
+ battle=adventurePlayCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'오라휠'});assert.equal(battle.teams[0][0].battleAppearance,'morpekohangry');assert.equal(battle.teams[0][0].ability,'hungerswitch');assert.equal(adventureCombatView(battle).requests[0].moves.find(m=>m.id==='aurawheel').typeKey,'dark');
+ battle=adventurePlayCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'방어'});assert.equal(battle.teams[0][0].battleAppearance,'morpekohangry');
+ battle=adventurePlayCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'오라휠'});assert.equal(battle.teams[0][0].battleAppearance,'morpeko');assert.equal(battle.events.find(e=>e.kind==='move'&&e.moveId==='aurawheel').type,'dark');
+ const legacy=createZAAbilityCombat([player],[foe]);delete legacy.adventureMorpekoV1;assert.equal(adventurePlayCpu(legacy,{type:'move',move:'방어'}).teams[0][0].battleAppearance,'morpekohangry');
+});
+test('ZA Morpeko mode changes on Aura Wheel in companion and triple battles',()=>{
+ const player=mon(877,'p','hungerswitch',['방어','오라휠']),ally=mon(129,'a','swiftswim'),foe=mon(143,'f','immunity'),other=mon(143,'g','immunity');
+ let multi=createMission10DoubleSnapshot([player],[ally],[foe,other]);multi=playMission10MultiTurn(multi,{type:'move',move:'protect'});assert.equal(multi.teams[0][0].battleAppearance,'morpeko');
+ multi=playMission10MultiTurn(JSON.parse(JSON.stringify(multi)),{type:'move',move:'aurawheel',target:1});assert.equal(multi.teams[0][0].battleAppearance,'morpekohangry');assert.equal(mission10MultiView(multi).requests[0].actors[0].moves.find(m=>m.id==='aurawheel').typeKey,'dark');
+ multi=playMission10MultiTurn(JSON.parse(JSON.stringify(multi)),{type:'move',move:'aurawheel',target:1});assert.equal(multi.events.find(e=>e.kind==='move'&&e.moveId==='aurawheel'&&e.actorBoxId==='p').type,'dark');
+ const triple=createMission37TripleSnapshot([player],[ally],[mon(129,'b','swiftswim')],[foe,other]);
+ let result=playMission37TriplePrototype(JSON.parse(JSON.stringify(triple)),{type:'move',move:'aurawheel',target:1});assert.equal(result.teams[0][0].battleAppearance,'morpekohangry');assert.equal(mission37TripleView(result).requests[0].actors[0].moves.find(m=>m.id==='aurawheel').typeKey,'dark');
+ result=playMission37TriplePrototype(JSON.parse(JSON.stringify(result)),{type:'move',move:'aurawheel',target:1});assert.equal(result.events.find(e=>e.kind==='move'&&e.moveId==='aurawheel'&&e.actorBoxId==='p').type,'dark');
 });

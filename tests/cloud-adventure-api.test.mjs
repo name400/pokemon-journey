@@ -81,6 +81,15 @@ test('ZA Zygarde form transition preserves the original saved ability and reload
   assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'zygardecomplete');assert.equal(rawMon(id).ability,'aurabreak');await get();assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'zygardecomplete');assert.equal(rawMon(id).ability,'aurabreak');
  }finally{globalThis.__adventureUser=previous;}
 });
+test('ZA Morpeko retains its mode and Aura Wheel type across API reload',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-morpeko-form-qa',displayName:'모르페코 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(877,50),boxId:id,ability:'hungerswitch',moves:['방어','오라휠'],pp:{}},foe={...makeMon(143,80),boxId:'foe',moves:['튀어오르기'],pp:{}};
+  const {createZAAbilityCombat}=await import('../lib/cloud-adventure/adventure-abilities.mjs');seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,combat:createZAAbilityCombat([player],[foe]),trainer:{id:'morpeko-qa',name:'검사'},encounter:null},state.revision+1));await get();
+  await call('battle',{command:{type:'move',move:'방어'}});assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'morpeko');
+  await call('battle',{command:{type:'move',move:'오라휠'}});assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'morpekohangry');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='aurawheel').typeKey,'dark');await get();assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'morpekohangry');assert.equal(rawMon(id).ability,'hungerswitch');
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('adventure API rejects tera for solo and companion battles without changing saves',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-no-tera-qa',displayName:'테라 차단 검사'};
  try{
