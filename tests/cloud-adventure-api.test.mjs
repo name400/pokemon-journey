@@ -12116,3 +12116,17 @@ test('legacy Magenta sewer save upgrades safely on re-entry',async()=>{
   await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-magenta-sewer-bank');assert.equal(rawWorld().zaMagentaSewerLayout,2);assert.deepEqual(rawWorld().zaMission20Crystals,entries);
  }finally{globalThis.__adventureUser=priorUser;globalThis.__adventureRandom=priorRandom;}
 });
+
+test('Magenta sewer Moon Stone is recovered once and supports evolution across reload',async()=>{
+ const previous=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureRandom=()=>.999;
+ try{
+  for(const layout of [undefined,2]){
+   globalThis.__adventureUser={userId:`sewer-moonstone-${layout}`,displayName:'하수도 달의돌'};
+   await get();await call('start',{species:1});const id=state.world.activeId,mon={...makeMon(35,30),boxId:id,custom:{keep:true}};seedMon(id,mon);
+   const records=['3,4','future'];seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-crystal-sewer',interior:null,x:2,y:3,facing:'up',zaMagentaSewerLayout:layout,zaMission20Stage:9,zaMission20Crystals:records,zaMission20PillarsV1:true},state.revision+1));await get();assert.equal(state.world.interaction.action,'crystalSewerMoonStone');
+   const key=JSON.stringify([globalThis.__adventureUser.userId,'moonstone']);sql.prepare('INSERT INTO inventory(key,user_id,item,quantity) VALUES(?,?,?,?)').run(key,globalThis.__adventureUser.userId,'moonstone',999);await get();await call('crystalSewerMoonStone',{},409);assert.equal(rawWorld().zaCrystalSewerMoonStone,undefined);assert.deepEqual(rawMon(id),mon);
+   sql.prepare('DELETE FROM inventory WHERE key=?').run(key);await get();const revision=state.revision;await call('crystalSewerMoonStone');assert.equal(state.inventory.moonstone,1);await call('crystalSewerMoonStone',{revision},409);await get();assert.equal(rawWorld().zaCrystalSewerMoonStone,true);assert.deepEqual(rawWorld().zaMission20Crystals,records);assert.deepEqual(rawMon(id),mon);
+   await call('evolve',{boxId:id,target:36});await get();assert.equal(rawMon(id).speciesId,36);assert.deepEqual(rawMon(id).custom,{keep:true});assert.equal(state.inventory.moonstone,undefined);assert.equal(rawWorld().zaCrystalSewerMoonStone,true);
+  }
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
+});
