@@ -73,6 +73,14 @@ test('ZA legacy encounter without a battle snapshot retains its previous ability
   assert.equal(state.battle.teams[0][state.battle.active[0]].currentAbility,'static');assert.equal(rawMon(id).ability,'static');
  }finally{globalThis.__adventureUser=previous;}
 });
+test('ZA Zygarde form transition preserves the original saved ability and reloads',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-zygarde-form-qa',displayName:'지가르데 폼 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(718,80),boxId:id,ability:'aurabreak',moves:['튀어오르기'],pp:{}};player.hp=Math.floor(player.maxHp*.4);
+  seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,zaIntroStage:'andi'},state.revision+1));await get();await call('introBattle');await call('battle',{command:{type:'move',move:'튀어오르기'}});
+  assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'zygardecomplete');assert.equal(rawMon(id).ability,'aurabreak');await get();assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'zygardecomplete');assert.equal(rawMon(id).ability,'aurabreak');
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('adventure API rejects tera for solo and companion battles without changing saves',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-no-tera-qa',displayName:'테라 차단 검사'};
  try{

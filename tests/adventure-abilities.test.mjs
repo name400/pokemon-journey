@@ -4,9 +4,10 @@ import {Battle} from '@pkmn/sim';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat} from '../lib/party-battle.mjs';
 import {adventurePlayCpu} from '../lib/adventure-tera-policy.mjs';
-import {createZAAbilityCombat,adventureNativeTeamSet} from '../lib/cloud-adventure/adventure-abilities.mjs';
+import {createZAAbilityCombat,adventureNativeTeamSet,zaZygardeFieldHp} from '../lib/cloud-adventure/adventure-abilities.mjs';
 import {createMission10DoubleSnapshot,playMission10MultiTurn} from '../lib/cloud-adventure/adventure-mission10-double.mjs';
 import {createMission37TripleSnapshot,restoreMission37TripleSnapshot} from '../lib/cloud-adventure/adventure-mission37-triple.mjs';
+import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from '../lib/cloud-adventure/adventure-battle.mjs';
 const mon=(id,boxId,ability,moves=['튀어오르기'])=>({...makeMon(id,50),boxId,ability,moves,pp:{}});
 test('new ZA singles suppress Levitate without changing original ability or existing combats',()=>{
  const player=mon(150,'p','pressure',['지진']),foe=mon(604,'e','levitate'),before=structuredClone([player,foe]);
@@ -46,4 +47,19 @@ test('ordinary status immunity is disabled in new ZA battles but preserved in th
  const za=adventurePlayCpu(createZAAbilityCombat([player],[foe]),{type:'move',move:'맹독'});
  const shared=adventurePlayCpu(createCombat([player],[foe]),{type:'move',move:'맹독'});
  assert.equal(za.teams[1][0].status,'맹독');assert.equal(za.teams[1][0].ability,'immunity');assert.equal(shared.teams[1][0].status,null);
+});
+test('ZA Zygarde retains its stored ability while its known forms transform in new battles',()=>{
+ for(const id of [718,10181]){
+  const player=mon(id,'p','aurabreak'),foe=mon(129,'f','swiftswim');player.hp=Math.floor(player.maxHp*.4);
+  const source=structuredClone(player),battle=createZAAbilityCombat([player],[foe]);battle.adventureBattleBase=adventureBattleBase([[player],[foe]]);
+  const next=adventurePlayCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'튀어오르기'}),active=next.teams[0][0];
+  assert.equal(active.battleAppearance,'zygardecomplete');assert.equal(active.ability,'aurabreak');assert.equal(active.hp,player.hp+active.maxHp-player.maxHp);
+  const restored=restoreAdventurePokemon(active,adventureBattleBaseFor(next,0,active));assert.equal(restored.id,id);assert.equal(restored.ability,'aurabreak');assert.ok(restored.hp<=restored.maxHp);assert.deepEqual(player,source);
+  assert.equal(zaZygardeFieldHp(active,restored),Math.min(active.hp,restored.maxHp));assert.equal(zaZygardeFieldHp({...active,battleAppearance:'other'},restored),null);
+  const old=adventurePlayCpu(createCombat([player],[foe]),{type:'move',move:'튀어오르기'});assert.notEqual(old.teams[0][0].battleAppearance,'zygardecomplete');
+ }
+ assert.equal(adventureNativeTeamSet(mon(718,'unknown','unreviewed'),0).ability,'unreviewed');
+ const player=mon(718,'p','aurabreak'),ally=mon(25,'a','static'),foe=mon(129,'f','swiftswim'),other=mon(128,'g','intimidate');
+ const multi=createMission10DoubleSnapshot([player],[ally],[foe,other]);assert.equal(Battle.fromJSON(multi.snapshot).p1.active[0].ability,'powerconstruct');assert.equal(multi.teams[0][0].ability,'aurabreak');
+ const triple=createMission37TripleSnapshot([player],[ally],[mon(1,'b','overgrow')],[foe,other]);assert.equal(restoreMission37TripleSnapshot(triple).p1.active[0].ability,'powerconstruct');assert.equal(triple.teams[0][0].ability,'aurabreak');
 });

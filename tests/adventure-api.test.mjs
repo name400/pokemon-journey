@@ -250,3 +250,12 @@ for(const speciesId of [1,4,7])test(`fresh starter ${speciesId} can clear the le
   }
  }finally{globalThis.__adventureUser=priorUser;globalThis.__adventureRandom=priorRandom;if(hadOwnRandom)globalThis.crypto.getRandomValues=priorCryptoRandom;else delete globalThis.crypto.getRandomValues;if(hadOwnUuid)globalThis.crypto.randomUUID=priorCryptoUuid;else delete globalThis.crypto.randomUUID;}
 });
+
+test('ZA local complete Zygarde keeps remaining HP and stored ability across reload',async()=>{
+ await get();if(!state.world)await call('start',{species:1});const id=state.world.activeId;
+ const player={...makeMon(718,80),boxId:id,ability:'aurabreak',moves:['튀어오르기'],pp:{}};player.hp=Math.floor(player.maxHp*.4);
+ const foe={...makeMon(129,2),boxId:'legacy-local-foe',moves:['튀어오르기'],pp:{}};
+ const {createZAAbilityCombat}=await import('../lib/cloud-adventure/adventure-abilities.mjs');
+ seedMon(id,player);seedWorld({cityVisit:true,interior:null,teamIds:[id],activeId:id,combat:createZAAbilityCombat([player],[foe]),trainer:{id:'za-hp-test',name:'검사'},encounter:null});await get();
+ await call('battle',{command:{type:'move',move:'튀어오르기'}});const active=state.battle.teams[0][state.battle.active[0]];assert.equal(active.battleAppearance,'zygardecomplete');assert.equal(rawMon(id).hp,Math.min(active.hp,player.maxHp));assert.equal(rawMon(id).ability,'aurabreak');await get();assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'zygardecomplete');assert.equal(rawMon(id).ability,'aurabreak');
+});
