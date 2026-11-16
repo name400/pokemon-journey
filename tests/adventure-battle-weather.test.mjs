@@ -41,3 +41,17 @@ test('late rogue mega rooftops and alley inherit rain only outdoors',()=>{
   const s={area:3,district,weather:'rain'};assert.equal(adventureBattleOptions(s).weather,'raindance',district);assert.deepEqual(adventureBattleOptions({...s,interior:'building'}),{});assert.deepEqual(adventureBattleOptions({...s,weather:''}),{});assert.deepEqual(adventureBattleOptions(s,{weather:'sunnyday'}),{weather:'sunnyday'});
  }
 });
+
+// Mission 25 starts both Team MZ court fights from Vert 4. The legacy
+// Vernal route is also outdoor; building interiors never inherit rain.
+test('mission 25 court and legacy outdoor battles inherit weather safely',async()=>{
+ const {makeMon}=await import('../lib/game.mjs'),{createCombat,combatView,playCpu}=await import('../lib/party-battle.mjs');
+ for(const district of ['lumiose-vert-sector4','lumiose-vernal']){
+  const s={area:3,district,weather:'rain'},options=adventureBattleOptions(s,{heals:0,strategy:'balanced'});
+  assert.equal(options.weather,'raindance');
+  assert.equal(adventureBattleOptions({...s,interior:'building'}).weather,undefined);
+  const hero={...makeMon(129,30),boxId:'hero',moves:['튀어오르기']},foe={...makeMon(129,30),boxId:'foe',moves:['튀어오르기']};
+  const battle=createCombat([hero],[foe],options);assert.equal(combatView(battle).weather,'raindance');
+  assert.equal(combatView(playCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'튀어오르기'})).weather,'raindance');
+ }
+});
