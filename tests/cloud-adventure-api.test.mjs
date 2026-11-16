@@ -6158,6 +6158,19 @@ test('Mission 41 simulator uses sourced boss moves and preserves retry and reent
  }finally{globalThis.__adventureUser=previousUser;}
 });
 
+test('Mission 41 simulator choices persist and old sequences stay usable',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'mission41-choices-qa',displayName:'시뮬레이터 선택 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);const strong={...makeMon(150,100),moves:['사이코브레이크','파동탄','화염방사','10만볼트'],pp:{}};seedMon(id,strong);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-quasartico',interior:'quasarticoOffice',x:11,y:6,facing:'up',zaMission41Stage:1,zaMission41Sim:0},state.revision+1));await get();await call('mission41Vinnie');await get();assert.deepEqual(rawWorld().zaMission41ChoicesV1,[]);assert.deepEqual(state.world.interaction.actions.map(a=>a.action),['mission41Sim-0','mission41Sim-1','mission41Sim-2']);
+  await call('mission41Sim-2');assert.equal(state.battle.teams[1][0].id,10049);await get();assert.equal(rawWorld().trainer.mission41ChoiceV1,true);await call('forfeit');await get();assert.deepEqual(rawWorld().zaMission41ChoicesV1,[]);seedMon(id,strong);seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-quasartico',interior:'quasarticoOffice',x:11,y:6,facing:'up'},state.revision+1));
+  for(const [n,species] of [[2,10049],[0,10279],[1,10300]]){await get();assert.ok(state.world.interaction.actions.some(a=>a.action===`mission41Sim-${n}`));await call(`mission41Sim-${n}`);assert.equal(state.battle.teams[1][0].id,species);const combat=rawWorld().combat,sim=Battle.fromJSON(combat.snapshot);sim.p2.pokemon[0].hp=1;sim.p2.pokemon[0].setStatus('slp');sim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...combat,snapshot:sim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();await get();assert.ok(rawWorld().zaMission41ChoicesV1.includes(n));if(n!==1)await call(`mission41Sim-${n}`,{},409);}
+  assert.deepEqual(rawWorld().zaMission41ChoicesV1,[2,0,1]);assert.equal(state.world.zaMission41Stage,3);assert.equal(rawWorld().zaMission41DomeInvestigated,false);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose-quasartico',interior:'quasarticoOffice',x:11,y:6,facing:'up',zaMission41Stage:2,zaMission41Sim:1,zaMission41ChoicesV1:undefined,combat:null,trainer:null},state.revision+1));seedMon(id,strong);await get();await call('mission41Sim-2',{},409);await call('mission41Sim');assert.equal(state.battle.teams[1][0].id,10300);const legacyCombat=rawWorld().combat,legacySim=Battle.fromJSON(legacyCombat.snapshot);legacySim.p2.pokemon[0].hp=1;legacySim.p2.pokemon[0].setStatus('slp');legacySim.p2.pokemon[0].statusState.time=99;seedWorld({combat:{...legacyCombat,snapshot:legacySim.toJSON()},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await battle();assert.equal(rawWorld().zaMission41Sim,2);assert.equal(rawWorld().zaMission41ChoicesV1,undefined);
+  seedWorld({zaMission41ChoicesV1:{version:2,done:[0]},districtPosition:{...rawWorld().districtPosition,revision:state.revision+1}});await get();await call('mission41Sim',{},409);assert.deepEqual(rawWorld().zaMission41ChoicesV1,{version:2,done:[0]});
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
 test('Zone 8 central market sells both stocks and preserves saved progress',async()=>{
  const previousUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone8-central-market-qa',displayName:'광장 시장 검증'};globalThis.__adventureRandom=()=>.999;
  try{
