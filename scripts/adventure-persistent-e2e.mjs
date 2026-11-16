@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {Miniflare} from 'miniflare';
 import {fieldPath,findTile} from '../lib/cloud-adventure/adventure-world.mjs';
+import {chooseAdventureAttack} from './adventure-battle-strategy.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const directory=path.join(root,'work','adventure-continuous-d1');
 await fs.mkdir(directory,{recursive:true});
@@ -22,7 +23,7 @@ async function walkTo(target){
  throw Error('Walking limit reached');
 }
 async function fight(){
-  const healed=new Set();let turns=0;while(state.battle&&turns++<60){const req=state.battle.requests[0];if(req.kind==='switch'){const target=req.switches.find(x=>x.hp>0);if(!target)throw Error('No available switch');await call('battle',{command:{type:'switch',slot:target.slot}});}else if(req.kind==='move'){const lead=state.battle.teams[0][state.battle.active[0]];if(lead.hp>0&&lead.hp<=Math.floor(lead.maxHp/2)&&state.wallet?.super_potions>0&&!healed.has(state.battle.active[0])){healed.add(state.battle.active[0]);await call('use',{item:'super'});continue;}const score=m=>(m.power||0)*(m.effectiveness??1)*(lead?.types?.includes(m.type)?1.5:1);const moves=req.moves.filter(m=>!m.disabled&&m.pp>0).sort((a,b)=>score(b)-score(a));if(!moves.length)throw Error('No selectable move');await call('battle',{command:{type:'move',move:moves[0].name}});}else throw Error(`Unsupported battle request ${req.kind}`);}
+  const healed=new Set();let turns=0;while(state.battle&&turns++<60){const req=state.battle.requests[0];if(req.kind==='switch'){const target=req.switches.find(x=>x.hp>0);if(!target)throw Error('No available switch');await call('battle',{command:{type:'switch',slot:target.slot}});}else if(req.kind==='move'){const lead=state.battle.teams[0][state.battle.active[0]];if(lead.hp>0&&lead.hp<=Math.floor(lead.maxHp/2)&&state.wallet?.super_potions>0&&!healed.has(state.battle.active[0])){healed.add(state.battle.active[0]);await call('use',{item:'super'});continue;}await call('battle',{command:chooseAdventureAttack(req,lead)});}else throw Error(`Unsupported battle request ${req.kind}`);}
   if(state.battle)throw Error('Stopped after 60 turns, preserving battle');
  }
 try{
