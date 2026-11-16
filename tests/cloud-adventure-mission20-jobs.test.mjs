@@ -47,3 +47,13 @@ test('new sewer layout preserves mission access and restores its selected layout
  assert.deepEqual([oldRestored.x,oldRestored.y],[14,10]);
  assert.equal(lumioseCrystalSewerMap(oldRestored)[10][14],'.');
 });
+
+test('sewer layout upgrade only occurs at a safe entrance and preserves unknown state',async()=>{
+ const {upgradeMagentaSewerAtEntrance}=await import('../lib/cloud-adventure/adventure-mission20-jobs.mjs');
+ const saved={district:'lumiose-magenta-sewer-bank',zaMission20Stage:9,zaMission20Crystals:['3,4','future'],teamIds:['keep'],adventureBalls:{masterball:1}};
+ const snapshot=structuredClone(saved);assert.equal(upgradeMagentaSewerAtEntrance(saved),true);
+ assert.deepEqual(saved,{...snapshot,zaMagentaSewerLayout:2});
+ for(const extra of [{district:'lumiose-crystal-sewer'},{zaMagentaSewerLayout:3},{zaMagentaSewerLayout:null},{combat:{}},{encounter:{}},{adventureCatchWindow:{}},{trainer:{}},{zaMagentaSewerPositions:{}},{zaMagentaSewerSpent:{}},{zaMission20Crystals:{version:2}}]){
+  const s={...snapshot,...extra},before=structuredClone(s);assert.equal(upgradeMagentaSewerAtEntrance(s),false);assert.deepEqual(s,before);
+ }
+});
