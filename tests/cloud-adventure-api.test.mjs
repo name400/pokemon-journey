@@ -4905,6 +4905,17 @@ test('clock lease API is off by default and test-gated tab owners expire or lose
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureClockLeaseTestOnly=previousGate;globalThis.__adventureTime=previousTime;Date.now=previousNow;}
 });
 
+test('clock conflict retry never reopens after a field action',async()=>{
+ const oldUser=globalThis.__adventureUser,oldGate=globalThis.__adventureClockLeaseTestOnly;globalThis.__adventureUser={userId:'clock-conflict-retry-qa',displayName:'시계 충돌'};globalThis.__adventureClockLeaseTestOnly=true;
+ try{
+  await get();await call('start',{species:1});const rev=state.revision+1;seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:8},rev));await get();const opened=await call('clockLeaseOpen'),owner=opened.clockLease,atOpen=state.revision;
+  const fence=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:atOpen,activeId:state.world.activeId})}));assert.equal(fence.status,200);
+  const stale=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'clockLeaseOpen',revision:atOpen})}));assert.equal(stale.status,409);assert.equal((await stale.json()).code,'CLOCK_REVISION_CONFLICT');
+  await get();const second=await call('clockLeaseOpen',{sinceRevision:atOpen});assert.ok(second.clockLease);const oldRevision=state.revision;await call('face',{direction:'left'});assert.deepEqual(rawWorld().zaClockLeasePrototypeV1.leases,[]);
+  await call('clockLeaseOpen',{sinceRevision:oldRevision},409);await call('clockLeaseRenew',{owner:owner.owner,generation:owner.generation},409);assert.deepEqual(rawWorld().zaClockLeasePrototypeV1.leases,[]);
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureClockLeaseTestOnly=oldGate;}
+});
+
 test('movement fence keeps only currently valid embedded revision markers',async()=>{
  const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'movement-fence-markers-qa',displayName:'복구 호환 검증'};
  try{
