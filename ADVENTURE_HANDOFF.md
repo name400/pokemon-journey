@@ -67,3 +67,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 구역 20 일반 출현 성장표
 
 현 코드의 구역 1~19 풀과 보이는 일반 개체를 표본 집계하고, 구역 20에서 일반 출현하나 성장표가 연결되지 않은 9종을 확인했다. 로즈레이드·칼라마네로·보스로라·하마돈은 기존 검토 표를 연결하고 루카리오·가디안·드래캄·더스트나·곤율거니는 PokémonDB의 Z-A 레벨 표를 별도 추가했다. 구역 20 풀숲·가시 개체 전투·직접 투척에 적용하며 기존 저장·우두머리·미확인 표식은 소급하지 않는다. 초기 야생 기술 최신 네 개 선택은 엔진 근사다. 2차 자료 예: https://pokemondb.net/pokedex/lucario/moves/9 https://pokemondb.net/pokedex/gardevoir/moves/9 https://pokemondb.net/pokedex/dragalge/moves/9 https://pokemondb.net/pokedex/garbodor/moves/9 https://pokemondb.net/pokedex/scrafty/moves/9 . 이벤트·우두머리와 연구소·도시 등 비정규 구역은 이번 집계 범위 밖이며 Sites 병합본 검증도 남는다.
+
+### 도시 고정 출현 세 계열
+
+도시·하수도 고정 출현 리오르·깨봉이·곤율랭은 신규 일반 조우의 초기 기술과 성장표를 ZA 자료에 연결했으며, 진화 시 기존 루카리오·더스트나·곤율거니 표식을 이어간다. 전투 진입과 필드 투척 양쪽에 적용하고 기존 저장·우두머리·알 수 없는 표식은 소급하지 않는다. 야생 초기 네 기술은 기존 엔진의 근사다. 자료: https://pokemondb.net/pokedex/riolu/moves/9 https://pokemondb.net/pokedex/trubbish/moves/9 https://pokemondb.net/pokedex/scraggy/moves/9 (2차 자료). 랄토스·데덴네·미뇽·미끄메라 등 다른 도시 출현과 연구소·하수도 별도 풀이 아직 남아 있고, Sites 병합본은 재검증하지 않았다.
