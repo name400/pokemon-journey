@@ -51,3 +51,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 구역 5·6 옥상 성장 기술
 - 일반 캐이시와 썬더라이 계열에 Z-A 성장 기술표를 적용하고, 구역 5의 피죤 및 구역 6 옥상의 보송송에 기존 표를 연결했다. [캐이시](https://pokemondb.net/pokedex/abra/moves/9), [썬더라이](https://pokemondb.net/pokedex/electrike/moves/9), [썬더볼트](https://pokemondb.net/pokedex/manectric/moves/9), [피죤](https://pokemondb.net/pokedex/pidgeotto/moves/9)의 2차 자료 기준이다. 야생 초기 기술의 최근 4개 선택은 기존 엔진 근사이며 기존 저장·우두머리·미확인 표식은 소급하지 않는다.
 - 후속 대조 후보: 플라베베 계열, 단칼빙, 이브이, 할비롱, 호바귀 크기별 폼, 직접 출현 딱충이·로젤리아·독침붕·휠구·펜드라·고우스트 및 분떠도리·불화살빈의 초기 야생 기술. 현재 코드·출현 경로 및 원작 자료를 다시 확인한 뒤 적용한다. 운영과 Sites 병합본은 재검증하지 않았다.
+
+### 플라베베·단칼빙 계열 성장 기술
+- 일반 플라베베·플라엣테·플라제스의 확인된 빨강·노랑·주황·파랑·하양 꽃과 일반 단칼빙·쌍검킬·킬가르도 실드폼에 Z-A 레벨·진화·떠올리기 기술표를 연결했다. [플라베베](https://pokemondb.net/pokedex/flabebe/moves/9), [플라엣테](https://pokemondb.net/pokedex/floette/moves/9), [플라제스](https://pokemondb.net/pokedex/florges/moves/9), [단칼빙](https://pokemondb.net/pokedex/honedge/moves/9), [쌍검킬](https://pokemondb.net/pokedex/doublade/moves/9), [킬가르도](https://pokemondb.net/pokedex/aegislash/moves/9)의 2차 자료 기준이다. 야생 초기 기술은 레벨 이하 최근 4개 방식인 근사다.
+- 도시의 색상별 플라베베, 구역 3·7·16 일반 조우, 연구소 일반 단칼빙·쌍검킬을 연결했다. 영원한꽃·메가·블레이드폼과 우두머리 및 기존 저장은 소급하지 않는다. 이브이·할비롱·호바귀 크기별 폼과 이전 구역 진화형의 추가 확인이 남았다. Sites 병합본과 운영 환경은 재검증하지 않았다.
