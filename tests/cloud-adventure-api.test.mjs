@@ -2842,6 +2842,15 @@ test('adjacent-rank royale battles preserve points and saved state across reload
  }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
 });
 
+test('adjacent-rank revisit preserves unrecognized saved entries',async()=>{
+ const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-adjacent-revisit-qa',displayName:'로열 재입장 저장 검사'};globalThis.__adventureTime={period:'night',hour:22};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,before=structuredClone(rawMon(id));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose',interior:null,x:11,y:9,facing:'down',zaRoyaleRank:'X',zaNaveenComplete:true,zaMission07Started:true,zaRoyaleXPoints:400,zaRoyaleMixedWinsV1:['royale-mixed-x-y',{future:'preserve'},'future-opponent']},state.revision+1));await get();await call('enterRoyaleZone');await get();assert.equal(state.world.zaRoyaleXPoints,400);assert.deepEqual(rawWorld().zaRoyaleMixedWinsV1,[{future:'preserve'},'future-opponent']);assert.deepEqual(rawMon(id),before);await walkTo({x:5,y:6});await call('face',{direction:'down'});assert.equal(state.world.interaction.action,'royaleMixed-0');
+  seedWorld(storeAdventurePosition({...rawWorld(),district:'lumiose',x:11,y:9,facing:'down',zaRoyaleMixedWinsV1:{version:2}},state.revision+1));await get();await call('enterRoyaleZone');await get();assert.deepEqual(rawWorld().zaRoyaleMixedWinsV1,{version:2});
+ }finally{globalThis.__adventureUser=previousUser;globalThis.__adventureTime=previousTime;}
+});
+
 test('Rank X added trainers and waiter preserve progress across reloads',async()=>{
  const prior=globalThis.__adventureUser,priorTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'rank-x-extra-qa',displayName:'랭크 X 검증'};globalThis.__adventureTime={hour:22,period:'night',absoluteHour:22};
  try{
