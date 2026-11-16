@@ -156,3 +156,18 @@
 .adv-rank-b-zygarde.step-3 .adv-rank-b-fifty { animation:adv-emma-appear 1s forwards; }
 @media(max-width:420px){.adv-rank-b-scene{grid-template-columns:125px 1fr;gap:.4rem}.adv-rank-b-zygarde{width:60px;height:80px}}
 @media(prefers-reduced-motion:reduce){.adv-rank-b-zygarde.step-3 .adv-rank-b-ten{animation:none;opacity:0}.adv-rank-b-zygarde.step-3 .adv-rank-b-fifty{animation:none;opacity:1}}
+
+/* The field and cast remain present through Zygarde's Mega Evolution. */
+.adv-grip-scene { display:grid; grid-template-columns:130px 1fr; gap:.5rem 1rem; align-items:center; }
+.adv-grip-cast { grid-row:span 2; display:flex; align-items:center; }
+.adv-grip-people { color:#40545b; font-size:.75rem; font-weight:bold; padding:.25rem; border-radius:.3rem; background:#e4eee5; }
+.adv-grip-people span { display:flex; align-items:center; gap:.2rem; }
+.adv-grip-people span::before { content:""; width:10px; height:15px; border-radius:6px 6px 3px 3px; background:linear-gradient(#d9bca5 0 42%,#718392 42%); }
+.adv-grip-zygarde { position:relative; width:96px; height:96px; flex:none; }
+.adv-grip-zygarde>div { position:absolute; inset:0; }
+.adv-grip-zygarde img { width:100%; height:100%; object-fit:contain; }
+.adv-grip-mega { opacity:0; }
+.adv-grip-zygarde.step-3 .adv-grip-complete { animation:adv-emma-away 1s forwards; }
+.adv-grip-zygarde.step-3 .adv-grip-mega { animation:adv-emma-appear 1s forwards; }
+@media(max-width:420px){.adv-grip-scene{grid-template-columns:108px 1fr;gap:.4rem}.adv-grip-zygarde{width:74px;height:80px}}
+@media(prefers-reduced-motion:reduce){.adv-grip-zygarde.step-3 .adv-grip-complete{animation:none;opacity:0}.adv-grip-zygarde.step-3 .adv-grip-mega{animation:none;opacity:1}}
