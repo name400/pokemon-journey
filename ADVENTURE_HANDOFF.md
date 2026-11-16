@@ -75,3 +75,7 @@ Site project_id: appgprj_6ae805126fcc81919e2957e973c8955a
 ### 도시 랄토스·데덴네·미뇽·미끄메라 성장표
 
 도시 일반 고정 출현의 네 종과 일반 진화형에 ZA 레벨·진화·다시 배우기 기술표를 신규 개체부터 연결했다. 랄토스는 가디안·엘레이드 양쪽, 미뇽과 미끄메라는 일반 진화 단계까지 연결하며 별도 지방 폼과 우두머리는 적용하지 않는다. 전투와 필드 투척 모두 같은 초기 기술 규칙을 사용하며 기존 저장·진행 전투·불명 표식은 소급하지 않는다. 초기 네 기술 선택은 엔진의 근사다. 2차 출처 예: https://pokemondb.net/pokedex/ralts/moves/9 https://pokemondb.net/pokedex/dedenne/moves/9 https://pokemondb.net/pokedex/dratini/moves/9 https://pokemondb.net/pokedex/goomy/moves/9 및 각 일반 진화형 페이지. 도시 외 하수도·연구소의 별도 출현, 미확인 지방 폼과 Sites 병합본 검증은 남았다.
+
+### 플라드리 연구소·마젠타 하수도 일반 출현 성장표
+
+연구소 일반 메탕·메탕구의 ZA 성장·진화·기술 관리와 하수도 일반 수레기 계열을 추가했다. 연구소 일반 델빌·헬가·썬더라이·라이볼트·음뱃·음번·아보 및 하수도 아리아도스·오케이징·음뱃은 기존에 대조한 표를 재사용하도록 야생 전투와 필드 투척 경로를 연결했다. 하수도는 풀숲·접촉 조우도 같은 표를 쓴다. 기존 저장·진행 전투·알 수 없는 표식과 우두머리는 소급하지 않으며, 야생 초기 네 기술은 엔진 근사다. 2차 출처: https://pokemondb.net/pokedex/beldum/moves/9 https://pokemondb.net/pokedex/metang/moves/9 https://pokemondb.net/pokedex/metagross/moves/9 https://pokemondb.net/pokedex/skrelp/moves/9 . 출현 좌표·우두머리 확률은 기존 초안 그대로이며 Sites 병합본 검증은 남았다.
