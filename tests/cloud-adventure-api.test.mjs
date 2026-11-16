@@ -2809,6 +2809,16 @@ test('Rank W Lady medals require a win and survive reload without duplicate clai
  }finally{globalThis.__adventureUser=prevUser;globalThis.__adventureTime=prevTime;}
 });
 
+test('Rank X added trainers and waiter preserve progress across reloads',async()=>{
+ const prior=globalThis.__adventureUser,priorTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'rank-x-extra-qa',displayName:'랭크 X 검증'};globalThis.__adventureTime={hour:22,period:'night',absoluteHour:22};
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId;seedMon(id,{...makeMon(150,100),boxId:id,moves:['사이코브레이크'],pp:{},custom:{keep:true}});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-royale',interior:null,x:3,y:6,facing:'up',zaRoyaleRank:'X',zaNaveenComplete:true,zaMission07Started:true,zaRoyaleXPoints:0,zaRoyaleXSessionWins:['future-opponent'],zaRoyaleReturn:'plaza'},state.revision+1));await get();const wallet=structuredClone(state.wallet),iv=structuredClone(rawMon(id).ivs);assert.equal(state.world.interaction.action,'royaleXExtra4');await call('royaleXExtra4');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[672,309]);await get();assert.equal(state.world.trainer.id,'royale-x-kylian');await battle();assert.equal(state.world.zaRoyaleXPoints,450);assert.ok(state.world.zaRoyaleXSessionWins.includes('future-opponent'));await call('royaleXExtra4',{},409);
+  await walkTo({x:19,y:6});await call('face',{direction:'up'});assert.equal(state.world.interaction.action,'royaleXExtra9');await call('royaleXHeal9',{},409);await call('royaleXExtra9');assert.deepEqual(state.battle.teams[1].map(m=>m.speciesId),[129,129]);await battle();const injured={...rawMon(id),hp:1,status:'마비',pp:{psystrike:1}};seedMon(id,injured);await get();assert.equal(state.world.interaction.action,'royaleXHeal9');await call('royaleXHeal9');await get();assert.equal(rawMon(id).hp,rawMon(id).maxHp);assert.equal(rawMon(id).status,null);assert.deepEqual(rawMon(id).pp,{});await call('royaleXHeal9',{},409);assert.equal(state.world.zaRoyaleXPoints,900);assert.equal(state.wallet.coins,wallet.coins);assert.deepEqual(rawMon(id).custom,{keep:true});assert.deepEqual(rawMon(id).ivs,iv);
+  seedWorld(storeAdventurePosition({...rawWorld(),x:12,y:5,facing:'left'},state.revision+1));await get();assert.equal(state.world.map[5][12],'.');await call('move',{direction:'down'});await get();assert.equal(state.world.map[5][12],'e');
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureTime=priorTime;}
+});
+
 test('Rank V royale trainers retain documented moves through battles and reload',async()=>{
  const previousUser=globalThis.__adventureUser,previousTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'royale-v-moves-qa',displayName:'로열기술테스트'};
  try{
