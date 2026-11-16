@@ -445,3 +445,10 @@ test('new market fairy families keep ZA level moves through evolution and leave 
   const alpha={...old,adventureAlpha:true},future={...old,adventureMarketFairyGrowthV1:{version:2}};assert.equal(prepareVerifiedWildMoves(alpha),alpha);assert.equal(prepareVerifiedWildMoves(future),future);
  }
 });
+
+test('side 23 Diggersby growth is opt-in and preserves old and unknown records',async()=>{
+ const {prepareVerifiedWildMoves,adventureLearnableMoves,applyAdventureLevelMoves}=await import('../lib/cloud-adventure/adventure-growth.mjs');
+ const old=makeMon(660,28),original=structuredClone(old);assert.equal(prepareVerifiedWildMoves(old),old);const fresh=prepareVerifiedWildMoves(old,{side23Evolved:true});assert.deepEqual(old,original);assert.equal(fresh.adventureBunnelbyMovesV1,true);assert.ok(adventureLearnableMoves(fresh,{}).includes('구멍파기'));
+ const alpha={...old,adventureAlpha:true},future={...old,adventureBunnelbyMovesV1:{version:2}};assert.equal(prepareVerifiedWildMoves(alpha,{side23Evolved:true}),alpha);assert.equal(prepareVerifiedWildMoves(future,{side23Evolved:true}),future);
+ const mon={...fresh,level:31,moves:['몸통박치기','방어','물기','전광석화'],pp:{tackle:2},custom:{keep:true}},next=applyAdventureLevelMoves(mon,{...mon,level:32},{});assert.ok(next.pending.includes('뛰어오르기'));assert.equal(next.mon.pp.tackle,2);assert.deepEqual(next.mon.custom,{keep:true});
+});
