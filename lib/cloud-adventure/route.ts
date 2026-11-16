@@ -651,6 +651,10 @@ if(b.action==='movementFence'){
  if((b.revision!==null&&(!Number.isSafeInteger(b.revision)||b.revision<0))||(b.activeId!=null&&(typeof b.activeId!=='string'||b.activeId.length>100)))throw Error('복구할 진행 상태를 확인하세요.');
  const paths=['$.districtPosition.revision','$.interiorPosition.revision','$.adventureCatchWindow.revision'];
  let stateExpr='state';for(const path of paths)stateExpr=`CASE WHEN json_type(state,'${path}')='integer' AND json_extract(state,'${path}')=revision THEN json_set(${stateExpr},'${path}',revision+1) ELSE ${stateExpr} END`;
+ // An experimental clock can retain its timeline across a recovery fence:
+ // the fence changes no location, combat or owner, only the CAS revision.
+ // No production route creates this experimental state.
+ stateExpr=`CASE WHEN json_extract(state,'$.zaClockLeasePrototypeV1.version')=1 AND json_type(state,'$.zaClockLeasePrototypeV1.revision')='integer' AND json_extract(state,'$.zaClockLeasePrototypeV1.revision')=revision THEN json_set(${stateExpr},'$.zaClockLeasePrototypeV1.revision',revision+1) ELSE ${stateExpr} END`;
  const result=await db().prepare(`UPDATE worlds SET state=${stateExpr},revision=revision+1,updated_at=? WHERE user_id=? AND (? IS NULL OR revision=?) AND (? IS NULL OR json_extract(state,'$.activeId')=?)`).bind(Date.now(),u.userId,b.revision,b.revision,b.activeId??null,b.activeId??null).run();
  if(!result.meta.changes&&b.revision!==null){const current=await db().prepare("SELECT revision,json_extract(state,'$.activeId') AS activeId FROM worlds WHERE user_id=?").bind(u.userId).first<any>();if(b.activeId!=null&&(!current||(current.activeId!==b.activeId&&current.revision!==b.revision)))return Response.json({settled:true});if(b.activeId!=null&&current?.activeId!==b.activeId)throw Error('계정이나 파트너가 변경됐습니다. 화면을 다시 열어 주세요.');if(!current||current.revision<b.revision)throw Error('복구할 진행 상태를 확인할 수 없습니다.');}
  return Response.json({settled:true});

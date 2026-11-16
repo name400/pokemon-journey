@@ -26,6 +26,7 @@ import {RARE_ADVENTURE_BALLS} from '../lib/cloud-adventure/adventure-rare-balls.
 import lumioseDex from '../data/lumiose-dex.json' with {type:'json'};
 import {RESEARCH_TYPES,researchSummary,researchItemReward} from '../lib/cloud-adventure/adventure-research.mjs';
 import {pendingAdventureQuests,trackedAdventureObjective,trackedAdventureLocalTarget} from '../lib/cloud-adventure/adventure-pending-quests.mjs';
+import {prototypeClockFromLegacy,prototypeClockTransition,prototypeClockProject} from '../lib/cloud-adventure/adventure-clock-lease-prototype.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url)),sql=new DatabaseSync(':memory:');
 for(const name of (await fs.readdir(new URL('../drizzle/',import.meta.url))).filter(n=>/^\d.*\.sql$/.test(n)).sort())sql.exec(await fs.readFile(new URL('../drizzle/'+name,import.meta.url),'utf8'));
@@ -4810,6 +4811,23 @@ test('movement fence preserves valid revision-bound state and rejects a delayed 
   const retry=await route.POST(req('movementFence'));assert.equal(retry.status,200);const current=sql.prepare('SELECT revision FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId);assert.equal(current.revision,rev+1);
   await get();assert.deepEqual([state.world.x,state.world.y],[3,8]);assert.deepEqual(state.wallet,wallet);assert.deepEqual(state.inventory,inventory);
   const future=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:rev+20})}));assert.equal(future.status,409);
+ }finally{globalThis.__adventureUser=previousUser;}
+});
+
+test('movement fence atomically advances experimental clock and capture revisions without enabling it',async()=>{
+ const previousUser=globalThis.__adventureUser;globalThis.__adventureUser={userId:'movement-fence-clock-qa',displayName:'시계 복구 검증'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,now=Date.now(),rev=state.revision+1,base={...rawWorld(),area:3,district:'lumiose',interior:null,x:3,y:8,facing:'right'};
+  const initial=prototypeClockFromLegacy(base,rev-1,now),clock=prototypeClockTransition(initial,rev-1,now,{type:'open',owner:'aaaaaaaaaaaaaaaa'});
+  seedWorld({...storeAdventurePosition(base,rev),adventureCatchWindow:{revision:rev,foe:{speciesId:1}},zaClockLeasePrototypeV1:clock});await get();
+  const before=rawWorld(),item=structuredClone(rawMon(id)),expected=prototypeClockProject(clock,now+1000),response=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:rev,activeId:id})}));
+  assert.equal(response.status,200);const row=sql.prepare('SELECT revision,state FROM worlds WHERE user_id=?').get(globalThis.__adventureUser.userId),after=JSON.parse(row.state);
+  assert.equal(row.revision,rev+1);assert.equal(after.adventureCatchWindow.revision,rev+1);assert.equal(after.districtPosition.revision,rev+1);assert.equal(after.zaClockLeasePrototypeV1.revision,rev+1);
+  assert.deepEqual(prototypeClockProject(after.zaClockLeasePrototypeV1,now+1000),expected);assert.deepEqual(after.zaClockLeasePrototypeV1.leases,clock.leases);assert.deepEqual(after.adventureCatchWindow.foe,before.adventureCatchWindow.foe);assert.deepEqual(rawMon(id),item);
+  const stale=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'move',revision:rev,direction:'right',compact:true})}));assert.equal(stale.status,409);assert.deepEqual(rawWorld(),after);
+  // A mismatched or future experimental record must never be silently fixed.
+  const invalid={...after.zaClockLeasePrototypeV1,version:2,revision:rev+2};seedWorld({zaClockLeasePrototypeV1:invalid});const mismatchRev=rev+2;
+  const mismatch=await route.POST(new Request('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'movementFence',revision:mismatchRev,activeId:id})}));assert.equal(mismatch.status,200);assert.deepEqual(rawWorld().zaClockLeasePrototypeV1,invalid);
  }finally{globalThis.__adventureUser=previousUser;}
 });
 

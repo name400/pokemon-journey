@@ -24,14 +24,14 @@ test('real-shaped worlds CAS retains catch window and positions through expiry, 
   await assert.rejects(savePrototypeWorldClock(db,'synthetic',8,130001,{type:'open',owner:A}),/revision/);
   const reopened=await savePrototypeWorldClock(db,'synthetic',9,130001,{type:'open',owner:A});assert.equal(reopened.state.adventureCatchWindow.revision,10);
   const field=await savePrototypeWorldClock(db,'synthetic',10,130002,{type:'field'});assert.deepEqual(field.state.zaClockLeasePrototypeV1.leases,[]);assert.equal(field.state.adventureCatchWindow.revision,11);
-  // The current production movementFence knows nothing about the experimental
-  // clock. It preserves position/catch revisions, but must fail closed for the
-  // new model until the production fence is updated atomically as well.
+  // Mirror the production fence's atomic revision-only handling for a known
+  // experimental clock; no time or ownership changes during recovery.
   const paths=['$.districtPosition.revision','$.interiorPosition.revision','$.adventureCatchWindow.revision'];let expr='state';for(const path of paths)expr=`CASE WHEN json_type(state,'${path}')='integer' AND json_extract(state,'${path}')=revision THEN json_set(${expr},'${path}',revision+1) ELSE ${expr} END`;
+  expr=`CASE WHEN json_extract(state,'$.zaClockLeasePrototypeV1.version')=1 AND json_type(state,'$.zaClockLeasePrototypeV1.revision')='integer' AND json_extract(state,'$.zaClockLeasePrototypeV1.revision')=revision THEN json_set(${expr},'$.zaClockLeasePrototypeV1.revision',revision+1) ELSE ${expr} END`;
   const fence=await db.prepare(`UPDATE worlds SET state=${expr},revision=revision+1,updated_at=? WHERE user_id=? AND revision=?`).bind(130003,'synthetic',11).run();assert.equal(fence.meta.changes,1);
-  const afterFence=await db.prepare('SELECT state,revision FROM worlds WHERE user_id=?').bind('synthetic').first(),uncoordinated=JSON.parse(afterFence.state);
-  assert.equal(uncoordinated.adventureCatchWindow.revision,12);assert.equal(uncoordinated.districtPosition.revision,12);assert.throws(()=>prototypeWorldClock(uncoordinated,12,130003),/uncoordinated world revision/);
-  await assert.rejects(savePrototypeWorldClock(db,'synthetic',12,130003,{type:'open',owner:B}),/uncoordinated world revision/);
+  const afterFence=await db.prepare('SELECT state,revision FROM worlds WHERE user_id=?').bind('synthetic').first(),coordinated=JSON.parse(afterFence.state);
+  assert.equal(coordinated.adventureCatchWindow.revision,12);assert.equal(coordinated.districtPosition.revision,12);assert.equal(coordinated.zaClockLeasePrototypeV1.revision,12);assert.equal(prototypeWorldClock(coordinated,12,130003).paused,false);
+  const after=await savePrototypeWorldClock(db,'synthetic',12,130003,{type:'open',owner:B});assert.equal(after.state.adventureCatchWindow.revision,13);
   assert.deepEqual(original,base());
  }finally{await mf.dispose();}
 });
