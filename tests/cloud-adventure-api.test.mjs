@@ -61,7 +61,7 @@ test('ZA intro battle suppresses reviewed ability without changing saved Pokemon
  try{
   await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(25,50),boxId:id,ability:'static',moves:['튀어오르기'],pp:{},custom:{retained:true}};
   seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,zaIntroStage:'andi'},state.revision+1));await get();await call('introBattle');
-  assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].ability,'noability',JSON.stringify({district:rawWorld().district,expedition:rawWorld().expedition,unionHost:rawWorld().unionHost}));assert.equal(rawMon(id).ability,'static');await get();
+  assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].ability,'noability',JSON.stringify({district:rawWorld().district,expedition:rawWorld().expedition,unionHost:rawWorld().unionHost}));assert.equal(rawWorld().combat.adventureWeatherLockV1,true);assert.equal(rawMon(id).ability,'static');await get();
   await call('battle',{command:{type:'move',move:'튀어오르기'}});await get();assert.equal(rawMon(id).ability,'static');assert.deepEqual(rawMon(id).custom,{retained:true});
  }finally{globalThis.__adventureUser=previous;}
 });
@@ -88,6 +88,14 @@ test('ZA Morpeko retains its mode and Aura Wheel type across API reload',async()
   const {createZAAbilityCombat}=await import('../lib/cloud-adventure/adventure-abilities.mjs');seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,combat:createZAAbilityCombat([player],[foe]),trainer:{id:'morpeko-qa',name:'검사'},encounter:null},state.revision+1));await get();
   await call('battle',{command:{type:'move',move:'방어'}});assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'morpeko');
   await call('battle',{command:{type:'move',move:'오라휠'}});assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'morpekohangry');assert.equal(state.battle.requests[0].moves.find(m=>m.id==='aurawheel').typeKey,'dark');await get();assert.equal(state.battle.teams[0][state.battle.active[0]].battleAppearance,'morpekohangry');assert.equal(rawMon(id).ability,'hungerswitch');
+ }finally{globalThis.__adventureUser=previous;}
+});
+test('ZA battle keeps environmental rain after a weather move and reload',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-weather-lock-qa',displayName:'날씨 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(25,50),boxId:id,moves:['쾌청'],pp:{}},foe={...makeMon(129,50),boxId:'foe',moves:['튀어오르기'],pp:{}};
+  const {createZAAbilityCombat}=await import('../lib/cloud-adventure/adventure-abilities.mjs');seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,combat:createZAAbilityCombat([player],[foe],{weather:'raindance'}),trainer:{id:'weather-qa',name:'검사'},encounter:null},state.revision+1));await get();
+  const pp=state.battle.requests[0].moves[0].pp;await call('battle',{command:{type:'move',move:'쾌청'}});assert.equal(state.battle.weather,'raindance');assert.equal(state.battle.requests[0].moves[0].pp,pp-1);await get();assert.equal(state.battle.weather,'raindance');assert.equal(rawMon(id).moves[0],'쾌청');
  }finally{globalThis.__adventureUser=previous;}
 });
 test('adventure API rejects tera for solo and companion battles without changing saves',async()=>{
