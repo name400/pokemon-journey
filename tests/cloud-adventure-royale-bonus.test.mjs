@@ -148,3 +148,16 @@ test('knockout card placement and replacement preserve the other cards',()=>{
   const cards=royaleBonusCards(s);assert.equal(lumioseRoyaleMap(s)[12][9],'!');assert.equal(fieldDialogue(s).action,'takeRoyaleBonus');assert.equal(takeRoyaleBonus(s,Date.now(),cards[5].id),true);assert.equal(takeRoyaleBonus(s,Date.now(),cards[0].id),true);assert.equal(takeRoyaleBonus(s,Date.now(),cards[1].id),true);assert.equal(takeRoyaleBonus(s,Date.now(),cards[3].id,cards[5].id),true);assert.equal(s.zaRoyaleBonusExtraCards[cards[5].id].discarded,true);assert.equal(activeRoyaleBonusCards(JSON.parse(JSON.stringify(s))).length,3);
  }
 });
+
+test('card completion preserves unknown point and medal balances and never mixes unsettled nights',()=>{
+ const base={district:'lumiose-royale',zaRoyaleRank:'Y',zaRoyaleYPoints:200,zaRoyaleBonusCard:{night:0,rank:'Y',progress:2,completed:false},trainer:{title:'Z-A 로열 배틀'}};
+ const cases=[{zaRoyalePrizeMedals:{version:2,amount:123}},{zaRoyaleYPoints:{version:2,amount:500}},{zaRoyaleMedalNight:{version:2}},{zaRoyaleMedalWins:{version:2}},{zaRoyalePrizeMedals:80,zaRoyaleMedalNight:-1,zaRoyaleMedalWins:3}];
+ for(const extra of cases){const s={...structuredClone(base),...extra},before=structuredClone(s),combat={events:hit,log:[]};assert.equal(recordRoyaleBonus(s,combat,'night',now),false);assert.deepEqual(s,before);assert.match(combat.log[0],/지급하지 못했다/);}
+ // A resolved balance permits the same card to finish, exactly once.
+ const s={...structuredClone(base),zaRoyalePrizeMedals:80,zaRoyaleMedalNight:-1};assert.equal(recordRoyaleBonus(s,{events:hit,log:[]},'night',now),false);s.zaRoyalePrizeMedals=0;assert.equal(recordRoyaleBonus(s,{events:hit,log:[]},'night',now),true);assert.equal(s.zaRoyaleYPoints,1200);assert.equal(s.zaRoyalePrizeMedals,50);assert.equal(s.zaRoyaleBonusCard.completed,true);assert.equal(recordRoyaleBonus(s,{events:hit,log:[]},'night',now),false);
+});
+
+test('trainer battle accounting preserves unrecognized medal records on victory and loss',()=>{
+ const base={district:'lumiose-royale',zaRoyalePrizeMedals:10,zaRoyaleMedalNight:0,zaRoyaleMedalWins:2,zaRoyaleMedalTrainerIds:['old']},trainer={id:'new',title:'Z-A 로열 배틀'};
+ for(const extra of [{zaRoyalePrizeMedals:{version:2}},{zaRoyaleMedalNight:{version:2}},{zaRoyaleMedalWins:{version:2}},{zaRoyaleMedalTrainerIds:{version:2}}])for(const winner of [0,1]){const s={...structuredClone(base),...extra},before=structuredClone(s);recordRoyaleMedalBattle(s,{ended:true,winner,teams:[[],[{}]],log:[]},trainer,now);assert.deepEqual(s,before);}
+});
