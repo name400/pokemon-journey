@@ -12711,3 +12711,15 @@ test('Zone 1 and Rouge wild rooftop defeats return to the center and preserve pr
   }
  }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Mission 20 crystal sewer defeat restores the center without resetting crystals',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom,oldTime=globalThis.__adventureTime;globalThis.__adventureUser={userId:'crystal-sewer-defeat-qa',displayName:'결정 하수도 패배 복귀'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  seedMon(id,{...makeMon(129,1),boxId:id,moves:['튀어오르기'],pp:{},hp:1});
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-crystal-sewer',interior:null,x:3,y:6,facing:'right',zaMission20Stage:9,zaMission20CrystalReturn:'magenta',zaMission20Crystals:['3,4']},state.revision+1));
+  await get();globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});assert.ok(state.battle);globalThis.__adventureRandom=()=>0.5;
+  for(let i=0;i<50&&state.battle;i++)await call('battle',{command:{type:'move',move:'튀어오르기'}});
+  assert.equal(state.battle,null);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.equal(state.world.zaMission20Stage,9);assert.deepEqual(state.world.zaMission20Crystals,['3,4']);assert.equal(state.world.zaMission20CrystalReturn,'magenta');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(rawMon(id).hp,rawMon(id).maxHp);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;globalThis.__adventureTime=oldTime;}
+});
