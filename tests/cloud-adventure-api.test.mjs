@@ -12317,3 +12317,15 @@ test('hotel clock pauses across reconnect and resumes outside without changing p
   now+=50000;await get();assert.equal(state.gameTime.hour,20);assert.equal(state.gameTime.period,'night');assert.deepEqual(state.world.teamIds,team);preserved();assert.equal(state.wallet.coins,coins);
  }finally{Date.now=realNow;globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
 });
+
+test('sewer clock pauses through reload and resumes after returning to Bleu 3',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,realNow=Date.now;let now=19*50000;Date.now=()=>now;globalThis.__adventureUser={userId:'sewer-clock-qa',displayName:'하수도 시계 검사'};globalThis.__adventureTime=null;
+ try{
+  await get();await call('start',{species:152,destination:'lumiose'});const id=state.world.activeId,team=[...state.world.teamIds],coins=state.wallet.coins;
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-bleu3-sewer-approach',interior:null,x:17,y:1,facing:'up',zaBleuSewerOpened:true,zaMission19Stage:12,zaMission19Inspected:['a','b']},state.revision+1));await get();assert.equal(state.gameTime.hour,19);
+  await call('move',{direction:'up'});assert.equal(state.world.district,'lumiose-sewer');assert.equal(rawWorld().zaClockPauseStartedAt,now);const visited=structuredClone(rawWorld().zaMission19Inspected);
+  now+=3*50000;await get();assert.equal(state.gameTime.hour,19);assert.equal(state.gameTime.period,'day');assert.deepEqual(rawWorld().zaMission19Inspected,visited);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
+  await walkTo({x:11,y:15});await call('move',{direction:'down'});await get();assert.equal(state.world.district,'lumiose-bleu3-sewer-approach');assert.equal(state.gameTime.hour,19);assert.equal(rawWorld().zaClockPauseStartedAt,undefined);assert.equal(rawWorld().zaClockPausedMs,3*50000);
+  now+=50000;await get();assert.equal(state.gameTime.hour,20);assert.equal(state.gameTime.period,'night');assert.deepEqual(rawWorld().zaMission19Inspected,visited);assert.equal(state.world.activeId,id);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
+ }finally{Date.now=realNow;globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;}
+});

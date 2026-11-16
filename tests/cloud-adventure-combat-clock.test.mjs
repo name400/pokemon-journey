@@ -25,3 +25,16 @@ test('known building interiors pause across reload, combat and exit without chan
 test('rooftops and unrecognized or non-city interiors do not start an indoor pause',()=>{
  for(const state of [{area:3,interior:'hotelRoof'},{area:3,interior:'future-unknown'},{area:1,interior:'hotel'}]){syncAdventureCombatClock(state,100000);assert.equal(state.zaClockPauseStartedAt,undefined);}
 });
+test('known sewer maps pause as one interval while entrance routes remain outside',()=>{
+ let now=19*hour;const s={area:3,district:'lumiose-bleu3-sewer-approach',interior:null,zaClockOffsetHours:3,zaSewerReturn:'bleu3'};syncAdventureCombatClock(s,now);assert.equal(s.zaClockPauseStartedAt,undefined);
+ s.district='lumiose-sewer';syncAdventureCombatClock(s,now);const initial=adventureGameTime(now,adventureClockOffset(s,now)),spawn=adventureSpawnInterval(now,adventureClockOffset(s,now));
+ now+=2*hour;const saved=JSON.parse(JSON.stringify(s));saved.zaMission19Inner=true;syncAdventureCombatClock(saved,now);saved.combat={};syncAdventureCombatClock(saved,now);now+=hour;delete saved.combat;saved.zaSewerIceBranch=true;syncAdventureCombatClock(saved,now);
+ assert.deepEqual(adventureGameTime(now,adventureClockOffset(saved,now)),initial);assert.equal(adventureSpawnInterval(now,adventureClockOffset(saved,now)),spawn);assert.equal(saved.zaSewerReturn,'bleu3');
+ saved.district='lumiose-crystal-sewer';now+=hour;syncAdventureCombatClock(saved,now);assert.equal(saved.zaClockPauseStartedAt,19*hour);
+ saved.district='lumiose-bleu3-sewer-approach';syncAdventureCombatClock(saved,now);assert.equal(saved.zaClockPauseStartedAt,undefined);assert.equal(saved.zaClockPausedMs,4*hour);assert.equal(saved.zaClockOffsetHours,3);now+=hour;assert.equal(adventureGameTime(now,adventureClockOffset(saved,now)).hour,(initial.hour+1)%24);
+});
+test('old sewer saves begin pausing on the next saved action without inventing elapsed time',()=>{
+ const saved={area:3,district:'lumiose-sewer',interior:null,zaClockOffsetHours:4,zaMission19Stage:12,zaMission19Inspected:['a','b']};
+ assert.equal(adventureClockOffset(saved,200000),4);syncAdventureCombatClock(saved,200000);assert.equal(saved.zaClockPauseStartedAt,200000);assert.equal(saved.zaClockPausedMs,undefined);assert.deepEqual(saved.zaMission19Inspected,['a','b']);assert.equal(saved.zaMission19Stage,12);
+ saved.district='lumiose-bleu3-sewer-approach';syncAdventureCombatClock(saved,250000);assert.equal(saved.zaClockPausedMs,50000);assert.equal(saved.zaClockOffsetHours,4);
+});
