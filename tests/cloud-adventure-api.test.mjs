@@ -12241,3 +12241,14 @@ test('Mission 38 wishes can be made at the zone 20 tower and retain the old plaz
   await call('mission38WishMore');await get();assert.deepEqual(rawWorld().zaMission38WishTried,['harmony','more']);await call('mission38WishMore',{},409);await call('mission38Wish');await get();assert.equal(state.world.zaMission38Complete,true);assert.equal(state.world.zaMission39Started,true);assert.equal(state.world.zaInfiniteRandomGateV2,true);assert.deepEqual(state.world.teamIds,team);assert.deepEqual({...rawMon(id),walkSteps:mon.walkSteps},mon);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawWorld().adventureBalls,{ultraball:4});assert.deepEqual(state.world.zaZone20Items,['south-seed']);await call('mission38Wish',{},409);
  }finally{globalThis.__adventureUser=previous;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Postgame judge can inspect an owned box member without changing the active party or saved IVs',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'postgame-judge-qa',displayName:'능력 평가 검사'};
+ try{
+  await get();await call('start',{species:1});const lead=state.world.activeId,reserve={...makeMon(4,55),boxId:'judge-reserve',ivs:{hp:0,atk:15,def:16,spa:26,spd:30,spe:31},adventureHyperTrained:{def:true}},foreign={...makeMon(7,50),boxId:'judge-foreign'};
+  for(const [m,owner] of [[reserve,globalThis.__adventureUser.userId],[foreign,'judge-other-user']])sql.prepare('INSERT INTO pokemon_box(id,user_id,species_id,data,origin,created_at) VALUES(?,?,?,?,?,?)').run(m.boxId,owner,m.id,JSON.stringify(m),'qa',1);
+  seedWorld(storeAdventurePosition({...rawWorld(),zaMission37Complete:true,zaMission38Started:true},state.revision+1));await get();const before=rawWorld(),pokemon=rawMon(reserve.boxId),wallet=structuredClone(state.wallet),revision=state.revision;
+  const response=await route.GET(new Request('http://adventure.test/api/world?detail=judge-reserve'));assert.equal(response.status,200);const result=await response.json(),loaded=result.box.find(m=>m.boxId===reserve.boxId);assert.deepEqual(loaded.ivs,reserve.ivs);assert.equal(loaded.adventureHyperTrained.def,true);assert.equal(result.world.activeId,lead);assert.equal(result.revision,revision);assert.deepEqual(result.wallet,wallet);assert.deepEqual(rawWorld(),before);assert.deepEqual(rawMon(reserve.boxId),pokemon);
+  const foreignResponse=await route.GET(new Request('http://adventure.test/api/world?detail=judge-foreign'));assert.equal(foreignResponse.status,200);assert.ok(!(await foreignResponse.json()).box.some(m=>m.boxId==='judge-foreign'));assert.deepEqual(rawWorld(),before);
+ }finally{globalThis.__adventureUser=previous;}
+});

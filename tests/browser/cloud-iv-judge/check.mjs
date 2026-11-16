@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {fieldMap,fieldDialogue} from '../../../lib/cloud-adventure/adventure-world.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});
+try{for(const width of [390,1280]){
+ const page=await browser.newPage({viewport:{width,height:844}}),errors=[];page.on('pageerror',e=>errors.push(e.message));let posts=[],details=0;
+ const lead={boxId:'lead',id:1,speciesId:1,name:'이상해씨',types:['풀'],level:55,hp:18,maxHp:20,experience:0,expToNext:20,evolutions:[],moves:['몸통박치기'],ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31}};
+ const reserve={boxId:'reserve',id:4,speciesId:4,name:'파이리',types:['불꽃'],level:55,hp:18,maxHp:20,ivs:{hp:0,atk:15,def:16,spa:26,spd:30,spe:31},adventureHyperTrained:{atk:true}};
+ const world={area:3,district:'lumiose',interior:'hotel',areaInfo:{name:'호텔 Z',biome:'city'},x:11,y:6,facing:'up',teamIds:['lead'],activeId:'lead',badges:[],objective:'호텔에서 나가자',log:[],steps:0,zaMission37Complete:false};
+ const state=()=>{world.map=fieldMap(world);world.interaction=fieldDialogue(world,world.map);return {engine:'cloud',revision:1,world,box:[lead,{...reserve,ivs:undefined,adventureHyperTrained:undefined}],wallet:{coins:100,balls:5,potions:1},inventory:{},fieldShop:[],expeditions:[],gameTime:{period:'day'},battle:null};};
+ await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
+ await page.route('**/api/account',r=>r.fulfill({json:{authenticated:true,profile:{nickname:'격리 검사'},signOut:'#'}}));
+ await page.route('**/api/world**',r=>{const url=new URL(r.request().url());if(url.searchParams.has('engineOnly'))return r.fulfill({json:{engine:'cloud'}});if(r.request().method()==='POST'){const body=r.request().postDataJSON();posts.push(body.action);if(body.action==='movementFence')return r.fulfill({json:{settled:true}});return r.fulfill({json:state()});}if(url.searchParams.has('detail')){details++;return r.fulfill({json:{...state(),box:[lead,reserve]}});}return r.fulfill({json:state()});});
+ await page.goto((process.env.UI_TEST_URL||'http://127.0.0.1:55375')+'/?mode=adventure&tab=adventure');await page.locator('canvas.adv-field').waitFor();await page.getByRole('button',{name:'포켓몬',exact:true}).first().click();assert.equal(await page.getByText('능력 평가',{exact:true}).count(),0);
+ world.zaMission37Complete=true;await page.reload();await page.locator('canvas.adv-field').waitFor();await page.getByRole('button',{name:'포켓몬',exact:true}).first().click();await page.getByText('능력 평가',{exact:true}).click();await page.getByLabel('평가할 포켓몬').selectOption('reserve');await page.getByText('파이리의 능력 평가').waitFor();const dialog=page.getByRole('dialog');assert.match(await dialog.innerText(),/HP: 아쉬움/);assert.match(await dialog.innerText(),/공격: 대단히 단련함/);assert.match(await dialog.innerText(),/스피드: 최고/);assert.equal(details,1);assert.deepEqual(posts.filter(action=>action!=='movementFence'),[]);assert.equal(world.activeId,'lead');assert.deepEqual(errors,[]);await page.close();
+}console.log('IV judge: mobile and desktop unlock, owned box detail, no party mutation (mock API).');}finally{await browser.close();}
