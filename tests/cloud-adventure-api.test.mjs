@@ -12684,3 +12684,15 @@ test('ordinary new Zone 1 grass battle advances the clock across reload while pr
   await call('flee');await get();assert.equal(state.battle,null);assert.equal(state.gameTime.hour,20);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
  }finally{Date.now=realNow;globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
+
+test('Zone 3 south rooftop defeat returns to the center without losing progress',async()=>{
+ const prior=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone3-south-roof-defeat-qa',displayName:'옥상 패배 복귀'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,team=[...state.world.teamIds],wallet=structuredClone(state.wallet);
+  const player={...makeMon(129,1),boxId:id,moves:['튀어오르기'],pp:{},hp:1};seedMon(id,player);
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone3-south-roof',interior:null,x:14,y:4,facing:'right',zaBunnelbyQuest:2,zaZone3StatueAntidote:true},state.revision+1));
+  await get();globalThis.__adventureRandom=()=>0;await call('move',{direction:'right'});assert.equal(state.battle.teams[1][0].speciesId,677);globalThis.__adventureRandom=()=>0.5;
+  for(let i=0;i<50&&state.battle;i++)await call('battle',{command:{type:'move',move:'튀어오르기'}});
+  assert.equal(state.battle,null);await get();assert.deepEqual([state.world.district,state.world.x,state.world.y],['lumiose',3,5]);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.equal(state.world.zaBunnelbyQuest,2);assert.equal(state.world.zaZone3StatueAntidote,true);assert.equal(rawMon(id).hp,rawMon(id).maxHp);
+ }finally{globalThis.__adventureUser=prior;globalThis.__adventureRandom=oldRandom;}
+});

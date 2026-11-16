@@ -28,6 +28,12 @@ test('ZA Mimikyu limits strong hits once and preserves immunity and classic batt
  next=adventurePlayCpu(JSON.parse(JSON.stringify(next)),{type:'move',move:'섀도볼'});assert.ok(next.teams[1][0].hp<foe.hp-Math.floor(foe.maxHp/8));
  const classic=adventurePlayCpu(createCombat([attacker],[foe]),{type:'move',move:'섀도볼'});assert.equal(foe.hp-classic.teams[1][0].hp,Math.floor(foe.maxHp/8));
 });
+test('ZA Mimikyu first-hit cap is followed by uncapped hits in a multi-hit move',()=>{
+ const player={...makeMon(91,80),boxId:'p',ability:'skilllink',moves:['고드름침'],pp:{}},foe={...makeMon(778,80),boxId:'f',ability:'disguise',moves:['튀어오르기'],pp:{}};
+ const battle=createZAAbilityCombat([player],[foe]),next=adventurePlayCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'고드름침'}),log=Battle.fromJSON(next.snapshot).log;
+ const hp=[];for(const line of log){const match=/^\|-damage\|p2a: [^|]+\|(\d+)\//.exec(line);if(match&&Number(match[1])!==hp.at(-1))hp.push(Number(match[1]));}
+ assert.ok(hp.length>=2,JSON.stringify(log));assert.ok(foe.hp-hp[0]>0&&foe.hp-hp[0]<=Math.floor(foe.maxHp/8));assert.ok(hp[1]<hp[0]);assert.equal(next.teams[1][0].battleAppearance,'mimikyubusted');
+});
 test('ZA Mimikyu weak-hit behavior survives multi and triple snapshots',()=>{
  const player={...makeMon(4,5),boxId:'p',ability:'blaze',moves:['불꽃세례'],pp:{}},ally=mon(25,'ally','static'),foe={...makeMon(778,100),boxId:'f',ability:'disguise',moves:['튀어오르기'],pp:{}},other=mon(143,'other','immunity');
  let multi=createMission10DoubleSnapshot([player],[ally],[foe,other]);multi=playMission10MultiTurn(JSON.parse(JSON.stringify(multi)),{type:'move',move:'ember',target:1});
