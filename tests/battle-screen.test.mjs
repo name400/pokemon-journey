@@ -77,3 +77,26 @@ const {v52ControlTop}=await import('../.sites-runtime/tests/battle-panel.mjs');
 assert.equal(v52ControlTop(-200,200,.6765),-92,'Two 44px rows stay inside a 200px arena');
 assert.equal(v52ControlTop(-80,80,.79),-80,'Very small arenas retain the first touch target');
 assert.ok(Math.abs(v52ControlTop(-600,600,.6765)+194.1)<1e-9);
+
+assert.equal(v52ControlTop(-200,200,.4444,184),-184,'Four touch rows fit within the arena');
+const {MoveCard}=await import('../.sites-runtime/tests/battle-panel.mjs');
+for(const multiplier of [0,.25,.5,1,2,4]){
+ const move={id:'test',name:'길이가 긴 테스트 기술',type:'불꽃',typeKey:'fire',pp:7,maxPp:10,category:'special',effectiveness:multiplier};
+ const card=renderToStaticMarkup(React.createElement(MoveCard,{m:move,index:0,locked:false,selected:false,move(){},open:false,onDescription(){}}));
+ assert.ok(card.includes(`×${multiplier}`),`Actual effectiveness ${multiplier} is shown`);
+ assert.ok(card.includes('PP 7/10'));
+ assert.ok(card.includes('불꽃타입'));
+}
+const noPP=renderToStaticMarkup(React.createElement(MoveCard,{m:{id:'empty',name:'PP 없음',typeKey:'normal',pp:0,maxPp:10},index:0,locked:false,selected:false,move(){},open:false,onDescription(){}}));
+assert.match(noPP,/<button[^>]*disabled=""/);
+
+const {v52OverlayGeometry}=await import('../.sites-runtime/tests/battle-panel.mjs');
+for(const [x,y,width,height] of [[-210,-202.5,360,202.5],[0,-80,120,80]]){
+ const g=v52OverlayGeometry(x,y,width,height);
+ for(const name of ['move','sheet']){
+  assert.ok(g[`--v52-${name}-left`]>=x);
+  assert.ok(g[`--v52-${name}-left`]+g[`--v52-${name}-width`]<=x+width+1e-8);
+ }
+ assert.ok(g['--v52-detail-top']>=y);
+ if(height>=48)assert.ok(g['--v52-detail-top']+g['--v52-detail-height']<=y+height+1e-8);
+}

@@ -627,3 +627,7 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-combatant-own{left:var(--v52-anchor-x,30%);top:var(--v52-anchor-y,75.56%)}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-combatant-foe{left:var(--v52-anchor-x,73.89%);top:var(--v52-anchor-y,43.95%)}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true]{overflow:visible}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid{width:var(--v52-move-width);min-width:0;max-width:none;grid-template-columns:minmax(0,1fr);margin:0}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{min-height:44px;height:auto;padding:3px 44px 3px 5px;flex-wrap:wrap}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-effectiveness,.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-compact-pp{display:block;font-size:9px}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info{right:0;bottom:0;width:44px;min-width:44px;height:44px;min-height:44px}

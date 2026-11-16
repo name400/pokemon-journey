@@ -29,6 +29,12 @@ export function battleTransformation(mon:any){return {tera:typeof mon?.terastall
 export function hasDifferentBattleForm(mon:any){if(mon?.rogueSourceId==null||!mon.battleAppearance)return false;if(mon.rogueBaseBattleAppearance)return mon.battleAppearance!==mon.rogueBaseBattleAppearance;return !!(mon.mega||mon.primal||mon.ultra||mon.gigantamax)&&mon.battleAppearance!==mon.rogueBattleSpecies;}
 
 /** Position the two-row v52 controls within the measured arena. */
-export function v52ControlTop(arenaTop:number,arenaHeight:number,fraction:number):number {
-  return arenaTop+Math.max(0,Math.min(arenaHeight*fraction,arenaHeight-92));
+export function v52ControlTop(arenaTop:number,arenaHeight:number,fraction:number,minimumHeight=92):number {
+  return arenaTop+Math.max(0,Math.min(arenaHeight*fraction,arenaHeight-minimumHeight));
+}
+
+/** Coordinates are relative to the console, which can be narrower than the arena. */
+export function v52OverlayGeometry(x:number,y:number,width:number,height:number):Record<string,number>{
+  const detailTop=v52ControlTop(y,height,.4444,184),moveWidth=Math.min(width,Math.max(104,width*.2889)),sheetWidth=Math.min(width,Math.max(200,Math.min(320,width*.6)));
+  return {'--v52-detail-top':detailTop,'--v52-detail-height':Math.max(44,height-(detailTop-y)-4),'--v52-move-left':x+Math.max(0,width-moveWidth-width*.0167),'--v52-move-width':moveWidth,'--v52-sheet-left':x+Math.max(0,width-sheetWidth-width*.0167),'--v52-sheet-width':sheetWidth,'--v52-command-left':x+width*.6111,'--v52-command-width':width*.3556,'--v52-utility-left':x+width*.4083,'--v52-utility-width':width*.1778,'--v52-command-top':v52ControlTop(y,height,.6765),'--v52-utility-top':v52ControlTop(y,height,.79)};
 }

@@ -236,11 +236,32 @@
 .battle-screen[data-v52-single=true] .bs-combatant::before{left:var(--v52-floor-x,50%);bottom:var(--v52-floor-y,0)}
 /* Anchor command controls to the arena, with separate 44px touch targets. */
 .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true]{overflow:visible}
-.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-commands{position:absolute;z-index:12;right:3.33%;width:35.56%;max-width:none;margin:0;top:var(--v52-command-top);gap:2px}
-.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-utilities{position:absolute;z-index:12;left:40.83%;width:17.78%;top:var(--v52-utility-top);display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-commands{position:absolute;z-index:12;left:var(--v52-command-left);right:auto;width:var(--v52-command-width);max-width:none;margin:0;top:var(--v52-command-top);gap:2px}
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-utilities{position:absolute;z-index:12;left:var(--v52-utility-left);width:var(--v52-utility-width);top:var(--v52-utility-top);display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
 .battle-screen[data-v52-single=true] .bs-v52-commands button,.battle-screen[data-v52-single=true] .bs-v52-utilities button{min-width:0;overflow-wrap:anywhere;font-size:clamp(10px,2.8vw,15px);line-height:1.15}
 
 .battle-screen[data-v52-single=true] .bs-hud{box-sizing:border-box;min-width:0;max-width:31.5%}
 .battle-screen[data-v52-single=true] .bs-hud .bs-name b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .battle-screen[data-v52-single=true] .bs-hud .bs-name>span{flex-shrink:0}
 .battle-screen[data-v52-single=true] .bs-hp-inside{font-size:clamp(7px,2vw,9px)}
+/* v52 selection sheets use the arena coordinates; scroll keeps controls usable
+   when the 44px touch rows are taller than the available stage. */
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid,
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-ball-panel,
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-status{position:absolute;z-index:12;top:var(--v52-detail-top);right:auto;box-sizing:border-box;max-height:var(--v52-detail-height);overflow:auto;overscroll-behavior:contain;margin:0}
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid{left:var(--v52-move-left);width:var(--v52-move-width);min-width:0;max-width:none;display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-ball-panel,
+.battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-status{left:var(--v52-sheet-left);width:var(--v52-sheet-width);min-width:0;padding:6px;border:2px solid #a74643;background:#30273c;color:#fff8ed}
+.battle-screen[data-v52-single=true] .bs-ball-panel h3{color:inherit;margin:2px 0 5px}
+.battle-screen[data-v52-single=true] .bs-ball-grid{grid-template-columns:minmax(0,1fr);max-height:none;overflow:visible}
+.battle-screen[data-v52-single=true] .bs-ball-grid>button,.battle-screen[data-v52-single=true] .bs-ball-reselect,.battle-screen[data-v52-single=true] .bs-throw{min-height:44px}
+.battle-screen[data-v52-single=true] .bs-v52-status{grid-template-columns:minmax(0,1fr)}
+.battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{box-sizing:border-box;min-height:44px;height:auto;padding:3px 44px 3px 5px;gap:2px;overflow-wrap:anywhere}
+.battle-screen[data-v52-single=true] .bs-move-name{min-width:0;flex-basis:100%}
+.battle-screen[data-v52-single=true] .bs-move-name b{font-size:11px;line-height:1.15;overflow-wrap:anywhere}
+.battle-screen[data-v52-single=true] .bs-move-name>small,.battle-screen[data-v52-single=true] .bs-move-stats{display:none}
+.battle-screen[data-v52-single=true] .bs-move-compact-pp,.battle-screen[data-v52-single=true] .bs-effectiveness{display:block;font-size:9px;line-height:1.15}
+.battle-screen[data-v52-single=true] .bs-effectiveness{flex-basis:100%}
+.battle-screen[data-v52-single=true] .bs-move-info{box-sizing:border-box;right:0;bottom:0;width:44px;height:44px;min-height:44px}
+.battle-screen[data-v52-single=true] .bs-move-wrap .bs-move-tooltip{position:fixed;top:8px;bottom:auto;left:50%;right:auto;transform:translateX(-50%);max-height:45dvh;overflow:auto;pointer-events:auto}
+.battle-screen[data-v52-single=true] .bs-ball-panel,.battle-screen[data-v52-single=true] .bs-v52-status,.battle-screen[data-v52-single=true] .bs-ball-grid>button{overflow-wrap:anywhere;min-width:0}
