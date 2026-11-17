@@ -747,6 +747,27 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 .rc-shell.is-battle .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:before{border:0;border-radius:1px;background:#1b2d43}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled){color:#182b42}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):before{background:#ffe000}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button{font:400 2.777778cqw/normal Arial,'Noto Sans KR',sans-serif;text-align:left}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-utilities button{font:400 2.5cqw/normal Arial,'Noto Sans KR',sans-serif;text-align:center}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-icon{width:4.444444cqw;font-size:3.611111cqw}
+/* Paint and hit-test each command in its own v52 row without overlap. */
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-commands{left:61.111111%;top:67.654321%;width:36.666667%;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.111111cqw;row-gap:0}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-utilities{left:40.833333%;top:79.012346%;width:17.777778%;gap:0}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button{position:relative;min-width:0;min-height:0;max-height:none;padding:0;border:0;background:transparent;box-shadow:none;line-height:1}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button{height:7.222222cqw}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-utilities button{height:5.555556cqw}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:before{display:none}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) .bs-v52-label{position:absolute;left:0;top:0;display:flex;align-items:center;box-sizing:border-box;width:100%;border-radius:.277778cqw;background:#1b2d43;color:#fff;white-space:nowrap;overflow:hidden;pointer-events:none}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands .bs-v52-label{height:6.111111cqw;padding:.833333cqw 1.388889cqw;text-align:left}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-utilities .bs-v52-label{height:4.722222cqw;justify-content:center;padding:.555556cqw 1.666667cqw;text-align:center}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled) .bs-v52-label{background:#ffe000;color:#182b42}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:is(:hover,:focus-visible) .bs-v52-label{outline:1px solid #fff46b;background:#405573;color:#fff}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):is(:hover,:focus-visible) .bs-v52-label{background:#ffe000;color:#182b42}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-run-dialog{position:absolute;z-index:20;left:36.388889%;top:40.987654%;box-sizing:border-box;width:50%;padding:2.222222cqw;border:1px solid white;background:#f7f7f3;color:#192d45;font:400 2.777778cqw/4.166667cqw Arial,'Noto Sans KR',sans-serif}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-run-dialog p{margin:0 0 2.222222cqw;color:inherit;font:inherit}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-run-dialog button{display:block;width:100%;height:6.111111cqw;min-height:0;margin-top:.833333cqw;padding:.833333cqw 2.222222cqw;border:0;border-radius:.277778cqw;background:#1b2d43;color:#fff;text-align:left;font:400 2.777778cqw/normal Arial,'Noto Sans KR',sans-serif}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-run-dialog button:first-of-type{background:#ffe000;color:#182b42}
+.rc-shell.is-battle .battle-screen[data-v52-single=true]:not([data-playing=true]) .bs-console:has(.bs-v52-run-dialog):not(:has(.bs-log-pending)) .bs-log-lines{opacity:0}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own{top:78.024691%;bottom:auto}
 /* Keep extra battle-state badges visible when they add height to the HUD. */
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own:has(.bs-status,.bs-stat-stages){top:auto;bottom:1%}
