@@ -34,16 +34,16 @@ test('five Zygarde intermediate forms preserve both fusion roles, codec, turn, a
  }
 });
 
-test('Complete Mega item actions preserve 10% versus 50% origin after codec and while fused',async()=>{
+test('Complete Mega battle command preserves 10% versus 50% origin after codec and while fused',async()=>{
  for(const key of ['complete','10-complete'])for(const fused of [false,true]){
   let {doc,state,run}=fixture([zygarde(key),makeReferenceMon(151,50,{boxId:'donor',moves:['Splash']})]);
   if(fused){run=stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}).run;state.slots[0]=run;}
-  run.formItems.primary=['zygardite'];const original=structuredClone(run.party[0]);original.hp=Math.min(23,original.maxHp);run.party[0].hp=original.hp;
-  applyClassicAction(doc,{action:'form',boxId:'primary',item:'zygardite'});assert.equal(run.party[0].rogueZygardeMegaOrigin,key);assert.equal(run.party[0].rogueFormKey,'mega');
-  doc=await decodeGameData(await encodeGameData(doc));state=ensureClassicState(doc);run=state.slots[0];
+  run.formItems.primary=['zygardite'];run.party[0].hp=Math.min(23,run.party[0].maxHp);run.screen='battle';run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[foe()],{system:state.system});run.party=run.combat.teams[0];const original=structuredClone(run.party[0]);assert.equal(original.rogueFormKey,key);assert.ok(run.combat.requests[0].specials.some(o=>o.key==='mega:zygardite'));
+  applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash',special:'mega:zygardite'}});assert.equal(run.party[0].rogueZygardeMegaOrigin,key);assert.equal(run.party[0].rogueFormKey,'mega');
+  const transformedHp=run.party[0].hp,transformedMax=run.party[0].maxHp;assert.equal(transformedHp,original.hp);assert.equal(transformedMax,original.maxHp);doc=await decodeGameData(await encodeGameData(doc));state=ensureClassicState(doc);run=state.slots[0];
   assert.deepEqual(classicFormOptions(run.party[0],run).filter(o=>o.reverse).map(o=>o.formKey),[key]);
-  applyClassicAction(doc,{action:'form',boxId:'primary',item:'reverse:zygardite'});
-  assert.equal(run.party[0].rogueFormKey,key);assert.equal(run.party[0].hp,original.hp);assert.deepEqual(run.party[0].rogueBaseStats,original.rogueBaseStats);
+  run.screen='reward';applyClassicAction(doc,{action:'form',boxId:'primary',item:'reverse:zygardite'});
+  assert.equal(run.party[0].rogueFormKey,key);assert.equal(run.party[0].hp,original.hp,JSON.stringify({key,fused,originalHp:original.hp,originalMax:original.maxHp,transformedHp,transformedMax,afterHp:run.party[0].hp,afterMax:run.party[0].maxHp}));assert.deepEqual(run.party[0].rogueBaseStats,original.rogueBaseStats);
   assert.deepEqual(run.formItems.primary,['zygardite']);if(fused)assert.ok(validatedClassicDnaFusion(run.party[0]));
  }
 });
@@ -56,6 +56,14 @@ test('Power Construct triggers at half HP on entry and preserves increased HP th
   const hp=current.hp;doc=await decodeGameData(await encodeGameData(doc));state=ensureClassicState(doc);run=state.slots[0];
   for(let i=0;i<2;i++){run.combat=playClassicCombat(run,{type:'move',move:'splash'});run.party=run.combat.teams[0];assert.equal(run.party[0].hp,hp);assert.equal(run.party[0].maxHp,calculateStats(run.party[0]).hp);}
   assert.equal(restoreClassicNativeBattle(run.combat,run).p1.active[0].species.id,'zygardecomplete');
+ }
+});
+
+test('Power Construct during a turn updates the Mega command after reconnect',async()=>{
+ for(const key of ['50-pc','10-pc']){
+  const {doc,state,run}=fixture([zygarde(key)]);run.formItems.primary=['zygardite'];run.screen='battle';run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[foe()],{system:state.system});run.party=run.combat.teams[0];assert.ok(!run.combat.requests[0].specials.some(o=>o.key==='mega:zygardite'));
+  const battle=restoreClassicNativeBattle(run.combat,run),active=battle.p1.active[0];active.hp=Math.floor(active.maxhp/2);run.party[0].hp=active.hp;run.combat.snapshot=snapshotClassicNativeBattle(battle);applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash'}});assert.ok(run.combat.requests[0].specials.some(o=>o.key==='mega:zygardite'));
+  const restored=await decodeGameData(await encodeGameData(doc)),resumed=ensureClassicState(restored).slots[0];assert.ok(resumed.combat.requests[0].specials.some(o=>o.key==='mega:zygardite'));applyClassicAction(restored,{action:'turn',command:{type:'move',move:'splash',special:'mega:zygardite'}});assert.equal(resumed.party[0].rogueZygardeMegaOrigin,key==='50-pc'?'complete':'10-complete');assert.equal(resumed.party[0].rogueFormKey,'mega');assert.deepEqual(restored.adventure,{safe:true});
  }
 });
 
