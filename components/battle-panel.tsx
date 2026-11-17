@@ -257,7 +257,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     lastFrame.current=playback.eventKey;
     const next=applyBattleEvent(display,event),actor=battleEventLocation(next,event,'actor'),target=battleEventLocation(next,event,'target');
     if(event.kind==='faint'&&target){const previous=display.teams[target.side]?.[target.index];if(previous&&!previous.fainted)faintAnimation.current={key:playback.eventKey,identity:`${target.side}:${target.index}`};}
-    setDisplay(old=>applyBattleEvent(old,event));if(event.text){setNarration(event.text);setRevealed(lines=>[...lines,event.text!]);}sound(event);
+    setDisplay(old=>applyBattleEvent(old,event));if(event.text){setNarration(event.text);setRevealed(lines=>[...lines,event.text!]);}if(!event.silent)sound(event);
     const nodes:Animation[]=[],scale=Math.min(1,(playback.durationMs||eventDuration(event)/settings.speed)/Math.max(1,eventDuration(event)));
     const animate=(location:BattleEventLocation|null,frames:Keyframe[],duration:number)=>{
       if(!location)return;

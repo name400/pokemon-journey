@@ -6,7 +6,7 @@ export type BattleVisualEvent = {
   targetBoxId?: string; teamIndex?: number; type?: string; category?: string; hit?: boolean;
   move?: string; moveId?: string; text?: string; hp?: number; maxHp?: number; beforeHp?: number;
   amount?: number; status?: string | null; pokemon?: Record<string, any>; cause?: string;
-  critical?: boolean; ball?: string; ballId?: string; shakes?: number; caught?: boolean;
+  critical?: boolean; silent?: boolean; ball?: string; ballId?: string; shakes?: number; caught?: boolean;
   actorSide?: number; actorTeamIndex?: number; actorSlot?: number;
   targetSlot?: number; activeSlot?: number; slot?: number; transformation?: 'zpower';
 };
@@ -84,7 +84,7 @@ export function visibleSwitchLocation(display:BattleDisplay,event:BattleVisualEv
 }
 /** Apply explicit server state only; damage is never inferred from move power. */
 export function applyBattleEvent(display: BattleDisplay, event: BattleVisualEvent): BattleDisplay {
-  if (!['damage', 'heal', 'status', 'switch', 'faint', 'form'].includes(event.kind || '') && !(event.kind === 'effect' && event.pokemon?.boosts)) return display;
+  if (!['damage', 'heal', 'status', 'switch', 'faint', 'form'].includes(event.kind || '') && !(event.kind === 'effect' && (event.pokemon?.boosts || Number.isFinite(event.hp)))) return display;
   const location = battleEventLocation(display, event);
   if (!location) return display;
   const { side, index } = location, team = display.teams[side] || [];
