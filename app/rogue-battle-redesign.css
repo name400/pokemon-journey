@@ -759,3 +759,9 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials{max-height:max(44px,calc(56.25cqw - 88px))}
 .rc-shell.is-battle:has(.battle-screen[data-v52-single=true])::before{content:'';position:fixed;inset:0;z-index:999;background:#071b27c9}
 .rc-shell.is-battle .battle-screen[data-v52-single=true]{width:min(calc(100vw - 8px),calc((100dvh - 8px)*16/9));max-width:none}
+
+/* Keep the information glyph compact while retaining its existing hit area. */
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info{display:grid;place-items:center;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info-icon{display:grid;place-items:center;width:12px;height:12px;border:1px solid #b9cfdf;border-radius:50%;background:#1b2d43;color:#fff;font:700 9px/1 Georgia,serif;pointer-events:none}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button{display:grid;place-items:center;border:0;background:transparent;box-shadow:none}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button span{padding:3px 2px;background:#1b2d43;color:#fff;font:8px/1 Arial,sans-serif;white-space:nowrap}

@@ -579,3 +579,9 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
   .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-combatant-own{translate:0 var(--adventure-own-shift)}
   .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-combatant-foe{translate:0 var(--adventure-foe-shift)}
 }
+
+/* Keep the information glyph compact while retaining its existing hit area. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-info{display:grid;place-items:center;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-info-icon{display:grid;place-items:center;width:min(12px,calc(var(--v52-touch-size,44px) * .7));height:min(12px,calc(var(--v52-touch-size,44px) * .7));border:1px solid #b9cfdf;border-radius:50%;background:#1b2d43;color:#fff;font:700 9px/1 Georgia,serif;pointer-events:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-classic-backbar button{display:grid;place-items:center;border:0;background:transparent;box-shadow:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-classic-backbar button span{padding:1px;background:#1b2d43;color:#fff;font: min(8px,calc(var(--v52-touch-size,44px) / 5.5))/1 Arial,sans-serif;white-space:nowrap}
