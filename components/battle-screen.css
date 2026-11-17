@@ -49,6 +49,7 @@
 @keyframes bs-directed-ball{0%{opacity:1;transform:translate(0,0) rotate(-140deg)}45%{transform:translate(calc(var(--bs-shot-dx) * .5),calc(var(--bs-shot-dy) * .5 - 12cqh)) rotate(60deg)}80%,100%{opacity:1;transform:translate(var(--bs-shot-dx),calc(var(--bs-shot-dy) + 9cqh)) rotate(0)}}
 
 /* A form burst accompanies a server form event; final forms remain visible. */
+.battle-screen .bs-form-effects[data-transforming=true][data-transform-cue^=dynamax-]{transition-duration:var(--bs-transform-duration,780ms)}
 .battle-screen .bs-form-effects[data-transforming=true]>img{animation:bs-form-reveal var(--bs-transform-duration,780ms) ease-out both}
 .battle-screen .bs-form-effects[data-transforming=true] .bs-tera-crown{animation:bs-crown-reveal var(--bs-transform-duration,780ms) cubic-bezier(.15,.7,.2,1) both}
 .battle-screen .bs-transformation-burst{position:absolute;inset:-12% -13% -3%;z-index:6;pointer-events:none;--bs-transform-color:var(--bs-tera-color,#c9f4f5)}

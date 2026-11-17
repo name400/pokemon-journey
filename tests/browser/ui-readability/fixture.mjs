@@ -22,6 +22,12 @@ export function createFixture(scenario='eggs'){
   run.party=[makeReferenceMon(151,50,{boxId:'field-a',moves:[move],ability:'noguard'}),makeReferenceMon(155,50,{boxId:'field-b',moves:['Splash']})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];
   run.combat=createClassicCombat(run,[makeReferenceMon(7,80,{boxId:'field-foe-a',moves:['Splash']}),makeReferenceMon(133,80,{boxId:'field-foe-b',moves:['Splash']})],{doubles:true});run.party=run.combat.teams[0];return doc;
  }
+ if(scenario==='reviewed-dynamax-expire'){
+  const doc=createFixture('reviewed-dynamax');
+  applyClassicAction(doc,{action:'turn',command:{type:'move',move:'quickattack',special:'dynamax'}});
+  applyClassicAction(doc,{action:'turn',command:{type:'move',move:'quickattack'}});
+  return doc;
+ }
  if(['field-playback-rain','field-playback-terrain'].includes(scenario)){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc),move=scenario==='field-playback-rain'?'Rain Dance':'Electric Terrain';
   run.party=[makeReferenceMon(25,50,{boxId:'field-hero',moves:[move]})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];
