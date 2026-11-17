@@ -416,7 +416,8 @@
 html:has(.bs-rogue-v52-party){overflow:hidden}
 .battle-screen .bs-rogue-v52-party h3{position:absolute;left:3.333333cqw;top:1.944444cqw;margin:0;color:#ffe000;font:400 3.333333cqw Arial,'Noto Sans KR',sans-serif}
 .battle-screen .bs-rogue-party-list{position:absolute;left:2.5cqw;top:7.5cqw;width:30.833333cqw;display:grid;gap:.833333cqw}
-.battle-screen .bs-rogue-party-list button{box-sizing:border-box;display:flex;align-items:center;gap:.833333cqw;width:100%;height:6.388889cqw;min-width:0;min-height:0;padding:0 1.111111cqw;border:0;border-radius:.277778cqw;background:#1b2d43;color:white;text-align:left;font:2.5cqw Arial,'Noto Sans KR',sans-serif;overflow:hidden}
+.battle-screen .bs-rogue-party-list button{position:relative;box-sizing:border-box;display:flex;align-items:center;gap:.833333cqw;width:100%;height:6.388889cqw;min-width:0;min-height:0;padding:0 1.111111cqw;border:0;border-radius:.277778cqw;background:#1b2d43;color:white;text-align:left;font:2.5cqw Arial,'Noto Sans KR',sans-serif;overflow:visible;touch-action:manipulation}
+.battle-screen .bs-rogue-party-list button::after{content:'';position:absolute;left:0;right:0;top:-.4cqw;bottom:-.4cqw}
 .battle-screen .bs-rogue-party-list button[aria-pressed=true]{background:#ffe000;color:#182b42}
 .battle-screen .bs-rogue-party-list img{width:6.111111cqw;height:6.111111cqw;object-fit:contain;flex:none}
 .battle-screen .bs-rogue-party-list button span:first-of-type{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -432,3 +433,32 @@ html:has(.bs-rogue-v52-party){overflow:hidden}
 .battle-screen .bs-rogue-party-baton{position:absolute;left:38.333333cqw;bottom:1.111111cqw;font-size:2.5cqw}
 /* Double battles have their own flexible field; expand only the temporary party overlay. */
 .rc-shell.is-battle .battle-screen[data-multi=true]:has(.bs-rogue-v52-party) .bs-scene{position:fixed;inset:auto;left:50%;top:50%;width:min(calc(100vw - 8px),calc((100dvh - 8px)*16/9));height:auto!important;aspect-ratio:16/9;transform:translate(-50%,-50%);z-index:200}
+/* v52 status sheet, populated only from the live Rogue battle state. */
+.battle-screen .bs-rogue-v52-status{position:absolute;inset:0;z-index:50;color:white;font:2.777778cqw/5.277778cqw Arial,'Noto Sans KR',sans-serif}
+.battle-screen .bs-rogue-status-shade{position:absolute;inset:0;background:#1d3049e8}
+.battle-screen .bs-rogue-status-sheet{position:absolute;left:8.055556cqw;top:10cqw;box-sizing:border-box;width:83.888889cqw;max-height:40cqw;overflow:auto;padding:2.777778cqw;border:1px solid #b4c9dc;background:#1b2d43}
+.battle-screen .bs-rogue-status-sheet h3{margin:0;color:#ffe000;font:700 3.333333cqw/5.277778cqw Arial,'Noto Sans KR',sans-serif}
+.battle-screen .bs-rogue-status-sheet p{margin:0;font:inherit}
+.battle-screen .bs-rogue-status-members section{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 1cqw;overflow-wrap:anywhere}
+.battle-screen .bs-rogue-status-members .bs-type-symbols{display:inline-flex;gap:2px}
+.battle-screen .bs-rogue-status-members .bs-type-symbol{width:2.5cqw;height:2.5cqw;min-width:0;overflow:hidden}
+.battle-screen .bs-rogue-status-members .bs-type-symbol img{width:100%;height:100%;object-fit:contain}
+.battle-screen .bs-rogue-status-sheet[data-multiple=true] .bs-rogue-status-members{display:grid;grid-template-columns:1fr 1fr;gap:0 2cqw}
+.battle-screen .bs-rogue-status-sheet[data-multiple=true] .bs-rogue-status-members section{font-size:2.35cqw;line-height:3.5cqw}
+.battle-screen .bs-rogue-status-sheet[data-multiple=true]{padding:1.388889cqw}
+.battle-screen:has(.bs-rogue-v52-status) :is(.bs-console,.bs-header){visibility:hidden}
+html:has(.bs-rogue-v52-status){overflow:hidden}
+.rc-shell.is-battle .battle-screen[data-multi=true]:has(.bs-rogue-v52-status) .bs-scene{position:fixed;inset:auto;left:50%;top:50%;width:min(calc(100vw - 8px),calc((100dvh - 8px)*16/9));height:auto!important;aspect-ratio:16/9;transform:translate(-50%,-50%);z-index:200}
+/* v52 ball list and confirmation use the actual mode inventory and capture target. */
+.battle-screen .bs-rogue-v52-capture{position:absolute;inset:0;z-index:50;color:white;font:2.777778cqw Arial,'Noto Sans KR',sans-serif;pointer-events:none}
+.battle-screen .bs-rogue-v52-capture button{pointer-events:auto}
+.battle-screen .bs-rogue-capture-balls{position:absolute;left:61.666667cqw;top:29.722222cqw;width:36.666667cqw}
+.battle-screen .bs-rogue-capture-balls button{box-sizing:border-box;display:flex;align-items:center;gap:1cqw;width:100%;height:6.666667cqw;min-height:0;margin:0 0 .833333cqw;padding:.555556cqw 1.388889cqw;border:0;background:#1b2d43;color:white;text-align:left;font:2.5cqw Arial,'Noto Sans KR',sans-serif}
+.battle-screen .bs-rogue-capture-balls button:first-child:not(:disabled){background:#ffe000;color:#182b42}
+.battle-screen .bs-rogue-capture-balls img{width:5.277778cqw;height:5.277778cqw;object-fit:contain}
+.battle-screen .bs-rogue-capture-balls span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.battle-screen .bs-rogue-capture-pages{position:absolute;left:42cqw;top:50cqw;width:17cqw;display:flex;justify-content:space-between;align-items:center;background:#1b2d43}
+.battle-screen .bs-rogue-capture-pages button{border:0;background:#1b2d43;color:white;min-width:5cqw;min-height:0;height:4cqw;padding:0}
+.battle-screen:has(.bs-rogue-v52-capture) :is(.bs-console,.bs-header){visibility:hidden}
+html:has(.bs-rogue-v52-capture){overflow:hidden}
+.battle-screen .bs-rogue-capture-confirm:has(p:nth-of-type(2)){top:20cqw;font-size:2.5cqw;line-height:3.7cqw}

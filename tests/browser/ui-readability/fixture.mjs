@@ -16,6 +16,11 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(['rogue-v52-screen-single','rogue-v52-screen-double','rogue-v52-screen-trainer','rogue-v52-screen-empty'].includes(scenario)){
+  const double=scenario.endsWith('double'),trainer=scenario.endsWith('trainer'),doc=createFixture(double?'rogue-v52-party-double':'rogue-v52-party-single'),run=activeClassicRun(doc);run.balls={...run.balls,pokeball:5,greatball:3,ultraball:2};run.encounter=trainer?{kind:'trainer',trainer:{name:'시험 트레이너',title:'트레이너'}}:{kind:'wild'};
+  if(scenario.endsWith('empty'))for(const key of Object.keys(run.balls))run.balls[key]=0;
+  run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'screen-foe-a',moves:['Splash']}),...(double?[makeReferenceMon(143,100,{boxId:'screen-foe-b',moves:['Splash']})]:[])],{doubles:double,trainer});run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='rogue-v52-party-trapped'){
   const doc=createFixture('rogue-v52-party-single'),run=activeClassicRun(doc);run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'party-trapper',moves:['Splash'],ability:'shadowtag'})]);run.party=run.combat.teams[0];return doc;
  }
