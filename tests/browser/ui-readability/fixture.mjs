@@ -16,6 +16,12 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario.startsWith('double-field-status-')){
+  const doc=createFixture('profile-double'),run=activeClassicRun(doc),move=({'double-field-status-burn':'Will-O-Wisp','double-field-status-poison':'Toxic','double-field-status-sleep':'Spore','double-field-status-rain':'Rain Dance','double-field-status-terrain':'Electric Terrain'})[scenario];
+  if(!move)throw new Error('Unknown isolated field/status scenario');
+  run.party=[makeReferenceMon(151,50,{boxId:'field-a',moves:[move],ability:'noguard'}),makeReferenceMon(155,50,{boxId:'field-b',moves:['Splash']})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];
+  run.combat=createClassicCombat(run,[makeReferenceMon(7,80,{boxId:'field-foe-a',moves:['Splash']}),makeReferenceMon(133,80,{boxId:'field-foe-b',moves:['Splash']})],{doubles:true});run.party=run.combat.teams[0];return doc;
+ }
  if(['field-playback-rain','field-playback-terrain'].includes(scenario)){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc),move=scenario==='field-playback-rain'?'Rain Dance':'Electric Terrain';
   run.party=[makeReferenceMon(25,50,{boxId:'field-hero',moves:[move]})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];
