@@ -519,6 +519,9 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-details{position:absolute;left:138px;top:31px;width:210px;font:10px/18px Arial,'Noto Sans KR',sans-serif}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-details h4{margin:0 0 6px;font-size:12px}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-detailrow{margin:4px 0;padding:2px 7px;background:#13243b;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-ability{margin:4px 0;padding:2px 7px;background:#13243b;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-details[data-dense=true]{line-height:14.4px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-details[data-dense=true] :is(.bs-v52-party-detailrow,.bs-v52-party-ability){margin:2px 0;padding:1px 7px}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-confirm{position:absolute;left:131px;top:83px;width:180px;padding:8px;border:1px solid white;background:#f7f7f3;color:#192d45;font:10px/15px Arial,'Noto Sans KR',sans-serif}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-confirm p{margin:0 0 8px;color:inherit}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-confirm button{display:block;width:100%;height:22px;min-height:0;margin-top:3px;padding:3px 8px;border:0;border-radius:1px;background:#1b2d43;color:white;text-align:left;font:10px Arial,'Noto Sans KR',sans-serif}
