@@ -18,6 +18,18 @@ import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
 import {validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
 import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 
+test('legacy named native items can be transferred from the displayed inventory without changing other saves',async()=>{
+ const holder=makeReferenceMon(25,50,{boxId:'holder',item:'Light Ball'}),recipient=makeReferenceMon(1,50,{boxId:'recipient'}),{doc}=persistentFixture([holder,recipient]);
+ doc.collection=[{id:'preserve'}];const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+ try{
+  const before=await(await h.get()).json();assert.ok(before.run.party[0].transferItems.some(item=>item.kind==='native'&&item.id==='lightball'));
+  const original=h.row(),wrong=await h.post({action:'transferModifier',revision:0,fromBoxId:'holder',toBoxId:'recipient',id:'leftovers',kind:'native'});assert.equal(wrong.status,409);assert.deepEqual(h.row(),original);
+  const action={action:'transferModifier',revision:0,fromBoxId:'holder',toBoxId:'recipient',id:'lightball',kind:'native'},response=await h.post(action);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));
+  const after=await storage.decodeGameData(h.row().data),party=after.classic.slots[0].party;assert.equal(party[0].item,'');assert.equal(party[1].item,'Light Ball');assert.deepEqual(after.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(after.adventure,doc.adventure);assert.deepEqual(after.collection,doc.collection);assert.equal(after.coins,doc.coins);
+  const stored=h.row();assert.equal((await h.post(action)).status,409);assert.deepEqual(h.row(),stored);const reloaded=await(await h.get()).json();assert.ok(reloaded.run.party[1].transferItems.some(item=>item.id==='lightball'));
+ }finally{h.sqlite.close();}
+});
+
 test('victory hatches a new shiny variant once and keeps existing payout across API reload',async()=>{
  const doc=createFixture('victory'),run=doc.classic.slots[doc.classic.activeSlot],system=doc.classic.system;
  registerStarterCaught(system,makeReferenceMon(1,5,{boxId:'prior-shiny',shiny:true,variant:0}),{kind:'capture'});
