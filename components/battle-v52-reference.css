@@ -1,0 +1,37 @@
+/* v52 reference HUD: level above name, transparent backing, compact HP bars.
+   The values use the approved 360 x 202.5 stage as their coordinate system. */
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud{position:absolute;display:block;width:30%;max-width:30%;min-width:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:white;text-shadow:1px 1px 1px #152133;overflow:visible}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-foe{left:67.222%;right:auto;top:.494%;bottom:auto}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own{left:4.722%;right:auto;top:80.5%;bottom:auto}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:0 3px;line-height:1.1}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name>span:not(.bs-type-symbols){order:-1;display:block;flex:0 0 100%;width:100%;font-size:clamp(7px,2.5cqw,16px);line-height:1.1}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name b{flex:0 1 auto;min-width:0;max-width:72%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(8px,2.778cqw,18px);line-height:1.1;color:white}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-type-symbols{margin:0;gap:2px}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-health{margin-top:2px}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-row{display:none}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-track{width:10.833cqw;height:1.667cqw;min-height:5px;margin:0;border:1px solid #e0e3d2;border-radius:1px;background:#214a21;overflow:hidden}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-hp-track{width:15cqw;height:3.333cqw;min-height:10px}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-track>i:not(.warning):not(.danger){background:#28d22b}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-party-balls{position:absolute;left:-2.5cqw;top:1px;display:grid;gap:3px;margin:0}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-foe .bs-party-balls{display:none}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-type-symbols{display:inline-flex;flex:none;align-items:center;vertical-align:middle}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-type-symbol{display:inline-grid;place-items:center;width:2.5cqw;height:2.5cqw;min-width:0;max-width:2.5cqw;max-height:2.5cqw;overflow:hidden;line-height:1}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-type-symbol img{display:block;width:100%;height:100%;object-fit:contain}
+/* Shared v52 command palette and original command glyphs; existing hit areas
+   remain separate so adjacent commands do not claim the same touch. */
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button{color:#fff;text-align:left}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:before{background:#1b2d43;border:0;border-radius:1px}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled){color:#182b42}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):before{background:#ffe000}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-v52-icon{display:inline-block;width:1.35em;font-size:1.2em;line-height:1;vertical-align:middle}
+/* Paint at the reference scale; hit rectangles stay at least 44 px. */
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-commands{gap:1.111cqw}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-utilities{gap:.833cqw}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-v52-commands button{height:max(44px,6.111cqw);min-height:44px}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-v52-utilities button{height:max(44px,4.722cqw);min-height:44px}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-v52-commands button:before{height:6.111cqw}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-v52-utilities button:before{height:4.722cqw}
+/* Retain the separate information control while using v52's move palette. */
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{border:0;border-radius:1px;background:#1b2d43;color:#fff;box-shadow:none;text-align:left}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move :is(b,.bs-effectiveness,.bs-move-compact-pp){color:inherit}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-move-wrap:first-child>.bs-move:not(:disabled){background:#ffe000;color:#182b42}

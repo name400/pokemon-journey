@@ -330,3 +330,5 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):before{background:#ffe000}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:is(:hover,:focus-visible):before{outline:1px solid #fff46b;background:#405573}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):is(:hover,:focus-visible){color:#fff}
+
+.cloud-adventure-view .adv-battle-layer>.battle-screen[data-v52-single=true]{width:min(calc(100vw - 8px),calc((100dvh - 8px)*16/9));max-width:none}
