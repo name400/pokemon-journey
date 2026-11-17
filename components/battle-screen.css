@@ -379,6 +379,7 @@
 .battle-screen .bs-reviewed-ice-glow{stroke:#84dfff;stroke-width:.8;filter:drop-shadow(0 0 3px #d2ffff)}
 .battle-screen .bs-reviewed-ice-core{stroke:#efffff;stroke-width:.3}
 .battle-screen .bs-reviewed-attack .bs-reviewed-ice-crystal{fill:#d9fbff;stroke:#73ccec;stroke-width:.18;stroke-dasharray:none;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
+.battle-screen .bs-reviewed-attack .bs-reviewed-ice-impact path{fill:#9ce7fa;stroke:#e2ffff;stroke-width:.15;stroke-dasharray:none;animation:none}
 .battle-screen .bs-reviewed-dragon-purple{stroke:#a853e4;stroke-width:.6;filter:drop-shadow(0 0 2px #c384ff)}
 .battle-screen .bs-reviewed-dragon-teal{stroke:#4ae1d8;stroke-width:.4}
 .battle-screen .bs-reviewed-orb{animation:bs-reviewed-orb-fade var(--bs-fx-duration) linear both,bs-reviewed-orb-travel var(--bs-fx-duration) linear both}
