@@ -9,7 +9,7 @@ import {Battle} from '@pkmn/sim';
 import {battleVisuals} from '../lib/full-battle.mjs';
 
 await fs.mkdir('.sites-runtime/tests',{recursive:true});
-await build({entryPoints:['components/battle-panel.tsx'],outfile:'.sites-runtime/tests/battle-panel.mjs',bundle:true,format:'esm',platform:'node',external:['react','react/jsx-runtime','lucide-react'],loader:{'.css':'empty'}});
+await build({entryPoints:['components/battle-panel.tsx'],outfile:'.sites-runtime/tests/battle-panel.mjs',bundle:true,format:'esm',platform:'node',external:['react','react-dom','react/jsx-runtime','lucide-react'],loader:{'.css':'empty'}});
 await build({entryPoints:['hooks/use-battle-playback.ts'],outfile:'.sites-runtime/tests/battle-display.mjs',bundle:true,format:'esm',platform:'node',external:['react']});
 const {default:BattlePanel}=await import('../.sites-runtime/tests/battle-panel.mjs');
 const {battleDisplay,applyBattleEvent,visibleSwitchLocation}=await import('../.sites-runtime/tests/battle-display.mjs');
@@ -78,8 +78,8 @@ const v52Commands=renderToStaticMarkup(React.createElement(BattlePanel,{approved
 assert.match(v52Commands,/data-v52-single="true"/);
 for(const label of ['싸운다','포켓몬','가방','도망','볼 선택','상태 확인']) assert.ok(v52Commands.includes(label),label);
 const v52Trainer=renderToStaticMarkup(React.createElement(BattlePanel,{approvedV52:true,battle:{...view,events:[],before:undefined,beforeActive:undefined},battleKey:'v52:trainer',title:'트레이너',busy:false,onCommand(){}}));
-assert.match(v52Trainer,/<button disabled=""[^>]*>볼 선택<\/button>/);
-assert.match(v52Trainer,/<button data-roving="command" disabled="">(?:<span[^>]*aria-hidden="true"[^>]*>[^<]*<\/span>)?도망<\/button>/);
+assert.match(v52Trainer,/<button disabled=""[^>]*><span class="bs-v52-label">볼 선택<\/span><\/button>/);
+assert.match(v52Trainer,/<button data-roving="command" disabled=""><span class="bs-v52-label"><span[^>]*aria-hidden="true"[^>]*>[^<]*<\/span>도망<\/span><\/button>/);
 
 const {v52ControlTop}=await import('../.sites-runtime/tests/battle-panel.mjs');
 assert.equal(v52ControlTop(-200,200,.6765),-92,'Two 44px rows stay inside a 200px arena');

@@ -394,3 +394,112 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-v52-status .bs-type-symbol img{width:100%;height:100%;object-fit:contain}
 /* Keep three active HUDs clear of the quick-control touch rectangles. */
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-scene .bs-multi-vitals.is-own{width:39%}
+
+/* Single adventure v52: source 360 x 202.5 coordinates. Hit rectangles fill
+   the spaces between adjacent painted controls rather than overlapping. */
+.cloud-adventure-view .adv-battle-layer:has(>.battle-screen[data-v52-single=true]){padding:0}
+.cloud-adventure-view .adv-battle-layer>.battle-screen[data-v52-single=true]{width:min(100vw,calc(100dvh * 16 / 9));max-width:none;font-family:Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-commands{left:60.555556%;top:66.666667%;width:37.777778%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-utilities{left:40.277778%;top:78.271605%;width:18.888889%;display:grid;grid-template-columns:1fr;gap:0}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button{position:relative;display:block;min-width:0;min-height:0;max-height:none;padding:0;border:0;background:transparent;box-shadow:none;color:#fff;font-weight:400;line-height:1}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button{height:7.222222cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities button{height:5.555556cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:before{display:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) .bs-v52-label{position:absolute;left:.555556cqw;display:flex;align-items:center;width:17.777778cqw;border-radius:.277778cqw;background:#1b2d43;color:#fff;white-space:nowrap;overflow:hidden;pointer-events:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands .bs-v52-label{top:.555556cqw;height:6.111111cqw;padding:.833333cqw 1.388889cqw;font-size:2.777778cqw;text-align:left}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities .bs-v52-label{top:.416667cqw;height:4.722222cqw;justify-content:center;font-size:2.5cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled) .bs-v52-label{background:#ffe000;color:#182b42}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:is(:hover,:focus-visible) .bs-v52-label{outline:1px solid #fff46b;background:#405573;color:white}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-icon{display:inline-block;flex:none;width:4.444444cqw;font-size:3.611111cqw;line-height:1;vertical-align:middle}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own{top:78.024691%;bottom:auto}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-level{display:block;flex:0 0 100%;width:100%;margin:0 0 .555556cqw;line-height:1}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-level>span{display:block;width:8.888889cqw;height:2.777778cqw;line-height:2.777778cqw;text-align:center;border-radius:1.666667cqw;background:#243448e6;color:#fff;font-size:2.5cqw;font-weight:400}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name b{font-size:2.777778cqw;line-height:3.055556cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name{gap:0 .833333cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-health{margin-top:.555556cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-track{min-height:0;border-width:max(1px,.277778cqw)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-hp-inside{justify-content:flex-end;padding-right:.555556cqw;font:400 2.5cqw/1 Arial,'Noto Sans KR',sans-serif;text-shadow:1px 1px #183144}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-party-balls{left:-2.5cqw;top:.555556cqw;gap:.833333cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-party-balls>span{width:1.111111cqw;height:1.111111cqw;border-width:.5px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name b{line-height:3.333333cqw}
+/* Four source-sized move rows. The independent information control sits to
+   the left; row hit areas stop at the midpoint between adjacent rows. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid{left:69.444444%;top:44.444444%;width:28.888889%;min-width:0;max-width:none;max-height:none;display:grid;grid-template-columns:1fr;gap:0;overflow:visible}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-wrap{position:relative;width:100%;height:6.944444cqw;min-height:0}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{position:relative;isolation:isolate;display:grid;grid-template-columns:3.611111cqw minmax(0,1fr) auto;grid-template-rows:2.777778cqw 2.777778cqw;gap:0;width:100%;height:6.944444cqw;min-height:0;max-height:none;margin:0;padding:.277778cqw 1.111111cqw;border:0;border-radius:0;background:transparent;color:white;font-size:2.5cqw;line-height:2.777778cqw;overflow:hidden}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move:before{content:'';position:absolute;z-index:-1;left:0;right:0;top:0;height:6.111111cqw;border-radius:.277778cqw;background:#1b2d43}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-wrap:first-child>.bs-move:not(:disabled){background:transparent;color:#182b42}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-wrap:first-child>.bs-move:not(:disabled):before{background:#ffe000}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-name{grid-column:2;grid-row:1;min-width:0;overflow:hidden}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-name b{font-size:2.5cqw;line-height:2.777778cqw;font-weight:400;white-space:nowrap}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move .bs-type-symbol{grid-column:1;grid-row:1;width:2.777778cqw;height:2.777778cqw;min-width:0;overflow:hidden}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move .bs-type-symbol img{width:100%;height:100%;object-fit:contain}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-compact-pp{grid-column:3;grid-row:1;font-size:2.5cqw;line-height:2.777778cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-effectiveness{grid-column:1/-1;grid-row:2;font-size:2.5cqw;line-height:2.777778cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-info{left:-44px;right:auto;top:0;bottom:auto;width:44px;min-width:44px;height:6.944444cqw;min-height:0;max-height:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:focus-visible{outline:0;outline-offset:0}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):is(:hover,:focus-visible) .bs-v52-label{background:#ffe000;color:#182b42}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move:focus-visible{outline:1px solid #fff46b;outline-offset:-1px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-narration{border:1px solid #b9cfdf;background:#182b42;color:#fff}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-narration p{color:#fff;font-weight:400}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true][data-playing=true] .bs-narration{z-index:18;left:33.333333%;top:78.518519%;width:64.166667%;min-height:8.333333cqw;max-height:21.481481%;padding:1.944444cqw;font-size:2.777778cqw;line-height:3.888889cqw;overflow:auto;pointer-events:auto}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true][data-playing=true] .bs-narration p{font-size:2.777778cqw;line-height:3.888889cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true][data-playing=true] :is(.bs-v52-commands,.bs-v52-utilities){visibility:hidden}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) .bs-v52-label{display:block;font-family:Arial,'Noto Sans KR',sans-serif;font-weight:400;line-height:normal}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-icon{display:inline-block;line-height:normal}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities .bs-v52-label{padding:.555556cqw 1.666667cqw;text-align:center}
+/* Render in the reference's 360 x 202.5 coordinate system, then scale it as
+   one scene. This preserves the reference font rasterization at each size. */
+.cloud-adventure-view .adv-battle-layer>.battle-screen[data-v52-single=true]{position:fixed;left:50%;top:50%;width:360px;height:202.5px;max-width:none;aspect-ratio:auto;transform:translate(-50%,-50%) scale(var(--v52-reference-scale,1));transform-origin:center}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-wrap .bs-move-tooltip{position:fixed;left:2%!important;right:auto!important;top:30%;bottom:auto;width:45%;max-height:45%;transform:none;overflow:auto}
+.cloud-adventure-view .adv-battle-layer>.battle-screen[data-v52-single=true]{left:var(--v52-reference-left,0);top:var(--v52-reference-top,0);transform:scale(var(--v52-reference-scale,1));transform-origin:0 0}
+.cloud-adventure-view .adv-battle-layer>.bs-plus-dialog p{font-size:10px;line-height:1.2;margin:2px 0}
+.cloud-adventure-view .adv-battle-layer>.bs-plus-dialog .bs-compact-grid button{white-space:normal;font-size:10px;line-height:1.2}
+/* Party sheets are portalled outside the scaled scene to retain real touch
+   sizes; repeat the health styles that were scoped to .battle-screen. */
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-health{margin:1px 0 0}
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-hp-row{display:flex;justify-content:space-between;gap:4px;font-size:10px;line-height:1}
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-hp-row small{font-size:10px}
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-hp-track{height:5px;margin-top:2px;border:1px solid #596f60;background:#c6cebc;overflow:hidden}
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-hp-track>i{display:block;width:100%;height:100%;transform-origin:left center;background:#47ac85}
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-hp-track>i.warning{background:#e4b74a}.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-hp-track>i.danger{background:#d36b54}
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-party-grid>button{display:flex;align-items:center;text-align:left;min-width:0}
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-party-grid>button>img{flex:none;object-fit:contain}
+.cloud-adventure-view .adv-battle-layer>.bs-party-panel .bs-party-grid>button>span{flex:1;min-width:0}
+/* Auxiliary controls retain a physical 44px hit target under scene scaling. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-settings summary{width:var(--v52-touch-size,44px);height:var(--v52-touch-size,44px);min-width:var(--v52-touch-size,44px);min-height:var(--v52-touch-size,44px)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-settings>div{top:var(--v52-touch-size,44px)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-classic-backbar,.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-footer{left:var(--v52-touch-size,44px)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-classic-backbar,.bs-footer) button{width:var(--v52-touch-size,44px);min-width:var(--v52-touch-size,44px);max-width:var(--v52-touch-size,44px);height:var(--v52-touch-size,44px);min-height:var(--v52-touch-size,44px)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-info{left:calc(-1 * var(--v52-touch-size,44px));width:var(--v52-touch-size,44px);min-width:var(--v52-touch-size,44px)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-plus-open{top:calc(2 * var(--v52-touch-size,44px));min-height:var(--v52-touch-size,44px)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-panel .bs-specials-drawer{top:var(--v52-touch-size,44px);max-height:calc(100% - var(--v52-touch-size,44px))}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-panel .bs-specials-drawer>summary{min-height:var(--v52-touch-size,44px)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-panel .bs-specials-drawer>summary{box-sizing:border-box;display:flex;align-items:center;height:var(--v52-touch-size,44px);padding:0 4px}
+/* Reference ball list and confirmation use real inventory and the existing
+   server action; list paging retains access to balls beyond the first three. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-ball-panel[data-step=ball]{left:61.666667%;top:52.839506%;width:36.666667%;max-height:none;padding:0;border:0;background:transparent;overflow:visible}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] h3{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid{display:grid;grid-template-columns:1fr;gap:.833333cqw;max-height:none;overflow:visible}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button{display:flex;align-items:center;gap:1cqw;width:100%;height:6.666667cqw;min-height:0;margin:0;padding:.555556cqw 1.388889cqw;border:0;border-radius:.277778cqw;background:#1b2d43;color:white;font:400 2.777778cqw/1 Arial,'Noto Sans KR',sans-serif;text-align:left}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button :is(img,.ball-icon){width:5.277778cqw;height:5.277778cqw;object-fit:contain}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button span{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button b{font:inherit;color:inherit}.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button small{display:none}.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button em{margin-left:auto;font:inherit}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-v52-pages{height:4.166667cqw;min-height:0;font-size:2.5cqw;background:#1b2d43}.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-v52-pages button{height:4.166667cqw;min-height:0;font-size:3.333333cqw}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-ball-panel[data-step=target]{left:36.388889%;top:40.987654%;width:50%;max-height:58%;display:flex;flex-direction:column;gap:.833333cqw;padding:2.222222cqw;border:1px solid white;background:#f7f7f3;color:#192d45;overflow:auto;font:400 2.777778cqw/4.166667cqw Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=target] h3{order:0;margin:0 0 1cqw;color:inherit;font:inherit}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=target] .bs-throw{order:1}.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=target] .bs-ball-reselect{order:2}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=target] :is(.bs-throw,.bs-ball-reselect){width:100%;min-height:6.111111cqw;height:6.111111cqw;padding:.833333cqw 2.222222cqw;border:0;border-radius:.277778cqw;background:#1b2d43;color:white;font:inherit;text-align:left}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=target] .bs-throw{background:#ffe000;color:#182b42}.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=target] .bs-throw svg{display:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button .bs-ball-atlas{width:36px;height:36px;flex:none;transform:scale(.52777778);transform-origin:left center;margin-right:-17px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button svg{width:5.277778cqw;height:5.277778cqw;flex:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-info{padding:0;box-sizing:border-box}
+/* Literal v52 dimensions inside the fixed reference-sized stage. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-commands{left:218px;top:135px;width:136px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-utilities{left:145px;top:158.5px;width:68px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button{height:26px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities button{height:20px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) .bs-v52-label{left:2px;width:64px;border-radius:1px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands .bs-v52-label{top:2px;height:22px;padding:3px 5px;font-size:10px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities .bs-v52-label{top:1.5px;height:17px;padding:2px 6px;font-size:9px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-icon{width:16px;font-size:13px}
