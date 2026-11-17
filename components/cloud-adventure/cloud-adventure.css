@@ -572,3 +572,9 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-scene > .bs-multi-vitals{z-index:8}
 /* Compensate for the console scale to approximate the reference 15px glyph. */
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities .bs-v52-ball-icon{width:16px;height:16px}
+
+/* Leave room for the minimum-height multi-battle HP labels on narrow phones. */
+@container (max-width:381px){
+  .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-combatant-own{translate:0 -7px}
+  .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-combatant-foe{translate:0 7px}
+}
