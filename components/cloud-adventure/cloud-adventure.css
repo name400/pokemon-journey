@@ -503,3 +503,22 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands .bs-v52-label{top:2px;height:22px;padding:3px 5px;font-size:10px}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities .bs-v52-label{top:1.5px;height:17px;padding:2px 6px;font-size:9px}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-icon{width:16px;font-size:13px}
+/* v52 party: the shaded field, six rows and details use the approved 360px coordinates. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-screen{position:absolute;z-index:45;inset:0;color:white;font:10px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-shade{position:absolute;inset:0;background:#1d3049e8}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-screen h3{position:absolute;left:12px;top:7px;margin:0;color:#ffe000;font:400 12px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-list{position:absolute;left:9px;top:27px;width:111px;display:grid;gap:3px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-list button{display:flex;align-items:center;gap:3px;width:111px;height:23px;min-height:0;padding:0 4px;border:0;border-radius:1px;background:#1b2d43;color:white;text-align:left;font:9px Arial,'Noto Sans KR',sans-serif;overflow:hidden}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-list button[aria-pressed=true]{background:#ffe000;color:#182b42}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-list button img{width:22px;height:22px;object-fit:contain;flex:none}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-list button span:first-of-type{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-hp{margin-left:auto;white-space:nowrap}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-details{position:absolute;left:138px;top:31px;width:210px;font:10px/18px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-details h4{margin:0 0 6px;font-size:12px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-detailrow{margin:4px 0;padding:2px 7px;background:#13243b;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-confirm{position:absolute;left:131px;top:83px;width:180px;padding:8px;border:1px solid white;background:#f7f7f3;color:#192d45;font:10px/15px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-confirm p{margin:0 0 8px;color:inherit}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-confirm button{display:block;width:100%;height:22px;min-height:0;margin-top:3px;padding:3px 8px;border:0;border-radius:1px;background:#1b2d43;color:white;text-align:left;font:10px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-confirm button:first-of-type{background:#ffe000;color:#182b42}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-back{position:absolute;right:7px;bottom:2px;height:11px;min-height:0;padding:0 5px;border:0;border-radius:1px;background:#1b2d43;color:white;font:9px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-baton{position:absolute;left:138px;bottom:4px;font-size:9px}
