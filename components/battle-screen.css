@@ -504,3 +504,8 @@ html:has(.bs-rogue-v52-capture){overflow:hidden}
 .battle-screen .bs-form-effects[data-transforming=true][data-transform-cue=terastallize] .bs-tera-crown{animation-name:bs-reviewed-tera-crown}
 @keyframes bs-reviewed-tera-cage{0%,38%{opacity:0;transform:scale(.75)}50%,70%{opacity:.9;transform:scale(1)}82%,100%{opacity:0;transform:scale(1.05)}}
 @keyframes bs-reviewed-tera-crown{0%,68%{opacity:0;transform:translateX(-50%) translateY(18%) scale(.35)}78%{opacity:1;transform:translateX(-50%) translateY(-5%) scale(1.08)}100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+/* Keep rank changes inside the shared status sheet, including double battles. */
+.rc-shell.is-battle .battle-screen .bs-rogue-status-sheet[data-multiple=true] .bs-stat-stages{display:flex;flex-wrap:wrap;gap:.3cqw;margin:0;max-width:100%}
+.rc-shell.is-battle .battle-screen .bs-rogue-status-sheet[data-multiple=true] .bs-stat-stages span{padding:0 .35cqw;border-width:0;border-radius:.4cqw;font-size:1.8cqw;line-height:2.5cqw}
+.rc-shell.is-battle .battle-screen .bs-rogue-status-sheet[data-multiple=true]:has(.bs-stat-stages) .bs-rogue-status-members section{font-size:2.15cqw;line-height:3cqw}
+.rc-shell.is-battle .battle-screen .bs-rogue-status-sheet[data-multiple=true]:has(.bs-stat-stages){top:3cqw;max-height:49cqw}
