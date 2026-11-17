@@ -376,7 +376,8 @@
 .battle-screen .bs-reviewed-attack .bs-reviewed-ice-crystal{fill:#d9fbff;stroke:#73ccec;stroke-width:.55;stroke-dasharray:none;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
 .battle-screen .bs-reviewed-dragon-purple{stroke:#a853e4;stroke-width:2.3;filter:drop-shadow(0 0 2px #c384ff)}
 .battle-screen .bs-reviewed-dragon-teal{stroke:#4ae1d8;stroke-width:1.5}
-.battle-screen .bs-reviewed-orb{animation:bs-reviewed-orb-fade var(--bs-fx-duration) linear both}
+.battle-screen .bs-reviewed-orb{animation:bs-reviewed-orb-fade var(--bs-fx-duration) linear both,bs-reviewed-orb-travel var(--bs-fx-duration) linear both}
+@keyframes bs-reviewed-orb-travel{0%{transform:translate(var(--orb-from-x),var(--orb-from-y))}68%,100%{transform:translate(var(--orb-to-x),var(--orb-to-y))}}
 .battle-screen .bs-reviewed-orb .bs-reviewed-orb-halo{fill:#b67ce966}
 .battle-screen .bs-reviewed-orb .bs-reviewed-orb-core{fill:#49226f;stroke:#bf80ea;stroke-width:.55}
 .battle-screen .bs-reviewed-orb.is-grass .bs-reviewed-orb-halo{fill:#a7ef8b77}
