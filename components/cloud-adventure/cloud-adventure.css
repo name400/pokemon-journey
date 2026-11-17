@@ -230,3 +230,21 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 @media (min-width:900px) and (min-height:680px){
  .cloud-adventure-view .adv-battle-layer>.battle-screen[data-v52-single=true]{width:min(100%,calc((100dvh - 450px) * 16 / 9));max-width:900px}
 }
+/* Paginated party and item choices remain inside the battle viewport. */
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel{position:fixed;z-index:50;left:50%;top:50%;transform:translate(-50%,-50%);box-sizing:border-box;width:min(500px,calc(100vw - 16px));max-height:calc(100dvh - 16px);margin:0;padding:6px;border:2px solid #a74643;background:#30273c;color:#fff8ed;overflow:visible}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel h3{margin:0 0 4px;font-size:13px;line-height:1.2;color:inherit}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel :is(.bs-party-grid,.bs-compact-grid){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;max-height:none;overflow:visible;padding:0}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel :is(.bs-party-grid,.bs-compact-grid)>button{box-sizing:border-box;min-width:0;min-height:64px;height:64px;margin:0;padding:2px 5px;gap:3px;overflow:hidden}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel .bs-party-grid>button>img{width:33px;height:33px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel .bs-party-grid>button>span{min-width:0;overflow:hidden;line-height:1.1}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel :is(.bs-party-grid,.bs-compact-grid) b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel :is(.bs-party-grid,.bs-compact-grid) small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;line-height:1.1}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel .bs-party-grid .bs-health{margin-top:1px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel .bs-party-grid .bs-hp-row{font-size:10px;line-height:1}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel .bs-party-grid .bs-hp-row small{display:inline}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel .bs-party-grid .bs-hp-track{height:5px;margin-top:2px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-grid>button{text-align:left;border:2px solid #839880;background:#fff9e9;color:#142238}
+.cloud-adventure-view .adv-battle-layer .bs-compact-pages{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:4px;margin-top:4px;text-align:center;font-size:11px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel :is(.bs-compact-pages button,.bs-compact-back){min-height:44px;padding:2px 6px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel .bs-compact-back{width:100%;margin-top:4px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel p{margin:4px 0;font-size:12px}
