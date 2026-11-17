@@ -17,3 +17,11 @@ test('cancellation does not prove playback and permits a subsequent replay',asyn
  assert.equal(await playback.play(events,'reload'),true);
  assert.ok(frames.filter(frame=>frame.event).length>=events.length);
 });
+test('event completion evidence excludes skipped, timeout and cancelled frames',async()=>{
+ for(const options of [{reducedMotion:()=>true},{enabled:()=>false},{maxDurationMs:0}]){const evidence=[];const p=new BattlePlaybackController({onFrame(){},onEventCompleted:frame=>evidence.push(frame.index),durationMs:10,...options});await p.play(events,'guard');assert.deepEqual(evidence,[]);}
+ const evidence=[],p=new BattlePlaybackController({onFrame(){},onEventCompleted:frame=>evidence.push(frame.index),durationMs:100});const pending=p.play(events,'skip');p.skipDelays();await pending;assert.ok(!evidence.includes(0));
+ const cancelled=[],q=new BattlePlaybackController({onFrame(){},onEventCompleted:frame=>cancelled.push(frame.index),durationMs:100});const wait=q.play(events,'cancel');q.cancel();await wait;assert.deepEqual(cancelled,[]);
+});
+test('normal completed frames carry the ordered event identity',async()=>{
+ const evidence=[],p=new BattlePlaybackController({onFrame(){},onEventCompleted:frame=>evidence.push(frame),durationMs:20,gapMs:0,maxDurationMs:1000});await p.play(events,'normal');assert.deepEqual(evidence.map(frame=>frame.index),[0,1]);assert.ok(evidence.every(frame=>frame.sourceKey==='normal'&&frame.eventKey.startsWith('normal:')));
+});

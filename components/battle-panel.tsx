@@ -19,6 +19,7 @@ import {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattle
 export {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleMoveForDisplay,battleScenePosition,v52ControlTop,v52OverlayGeometry,v52Page,visibleNumberedMove,impactLabel,battleTransformation,hasDifferentBattleForm} from './battle-logic';
 export type {BattleMoveTarget,BattleMove,BattleActor,BattleTurnAction} from './battle-logic';
 import {applyBattleEvent,battleDisplay,battleEventLocation,visibleSwitchLocation,BattleSubmissionGate,useBattlePlayback,type BattleDisplay,type BattleVisualEvent,type BattleEventLocation} from '@/hooks/use-battle-playback';
+import {PresentationReceipt} from '@/lib/rogue-presentation-receipt.mjs';
 import './battle-screen.css';
 import './battle-polish.css';
 import './battle-compact.css';
@@ -140,7 +141,8 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
   const switchAnimationKey=useRef('');
   const [actorSlot,setActorSlot]=useState(0),[turnDraft,setTurnDraft]=useState<Record<number,BattleTurnAction>>({}),[actorSpecials,setActorSpecials]=useState<Record<number,string>>({}),[pendingMove,setPendingMove]=useState<BattleMove|null>(null);
   const root=useRef<HTMLElement>(null),stage=useRef<HTMLDivElement>(null),logElement=useRef<HTMLDivElement>(null),logPinned=useRef(true),mounted=useRef(false),run=useRef(0),latest=useRef(battle),latestKey=useRef(battleKey),gate=useRef(new BattleSubmissionGate()),lastFrame=useRef(''),faintAnimation=useRef<{key:string;identity:string}|null>(null),hadBusy=useRef(false),audio=useRef<AudioContext|null>(null);latest.current=battle;latestKey.current=battleKey;
-  const playback=useBattlePlayback({enabled:settings.animations,speed:settings.speed,durationMs:eventDuration,gapMs:12,maxDurationMs:2800});
+  const presentationReceipt=useRef<PresentationReceipt|null>(null);
+  const playback=useBattlePlayback({enabled:settings.animations,speed:settings.speed,durationMs:eventDuration,gapMs:12,maxDurationMs:2800,onEventCompleted:frame=>{if(classicLayout&&frame.sourceKey===latestKey.current)presentationReceipt.current?.complete(frame.index,frame.eventKey);},onInterrupted:()=>presentationReceipt.current?.invalidate()});
   const side=battle.side===1?1:0,opponent=1-side,baseReq=battle.requests?.[0]||{kind:'wait',moves:[],switches:[],specials:[]},multiple=hasMultiBattleDTO(battle);
   const actors:BattleActor[]=multiple?baseReq.actors:[],requiredActors=actors.filter(actor=>actor.kind==='move'||actor.kind==='switch'),currentActor=requiredActors.find(actor=>actor.slot===actorSlot)||requiredActors[0];
   const req=multiple?(currentActor||{kind:'wait',moves:[],switches:[],specials:[],active:baseReq.active}):baseReq,currentSpecial=multiple?actorSpecials[currentActor?.slot??0]||'':special;
@@ -166,14 +168,26 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
   useEffect(()=>{
     if(!settingsReady||trainerIntro||presentationPaused)return;
     const token=++run.current,source=battleKey;let settled=false,watchdog:ReturnType<typeof setTimeout>|null=null;
-    const finish=()=>{if(settled||!mounted.current||token!==run.current||latestKey.current!==source)return;settled=true;if(watchdog)clearTimeout(watchdog);setDisplay(battleDisplay(latest.current,false,classicLayout));setFinishedKey(source);setNarration((latest.current.log||[]).at(-1)||'다음 행동을 선택하세요.');setSubmitted('');gate.current.release(source);onPresentationComplete?.(source);};
+    const receipt=classicLayout&&source.startsWith('classic:')&&Array.isArray(battle.events)&&battle.events.length?new PresentationReceipt(source,battle.events.length):null;presentationReceipt.current=receipt;
+    if(receipt)try{sessionStorage.removeItem('rogue-classic:displayed-events:v1');}catch{}
+    const finish=()=>{if(settled||!mounted.current||token!==run.current||latestKey.current!==source)return;settled=true;if(watchdog)clearTimeout(watchdog);const proof=receipt?.snapshot();if(proof?.complete&&document.visibilityState==='visible'&&document.hasFocus())try{sessionStorage.setItem('rogue-classic:displayed-events:v1',JSON.stringify(proof));}catch{}setDisplay(battleDisplay(latest.current,false,classicLayout));setFinishedKey(source);setNarration((latest.current.log||[]).at(-1)||'다음 행동을 선택하세요.');setSubmitted('');gate.current.release(source);onPresentationComplete?.(source);};
     gate.current.reset(source);setSubmitted('');setSpecial('');setActorSpecials({});setTurnDraft({});setPendingMove(null);setActorSlot(requiredActors[0]?.slot||0);setPanel((multiple?requiredActors[0]?.kind:req.kind)==='switch'?'party':classicLayout||approvedV52?'command':'moves');lastFrame.current='';setNarration('');setRevealed([]);
     const replay=!!battle.events?.length&&finishedKey!==source;
     setDisplay(battleDisplay(battle,replay,classicLayout,classicLayout||approvedV52));setFinishedKey(replay?'':source);
-    watchdog=setTimeout(()=>{playback.cancel();finish()},3200);
+    watchdog=setTimeout(()=>{receipt?.invalidate();playback.cancel();finish()},3200);
     if(replay)void playback.play(battle.events||[],source).then(finish,finish);else{playback.cancel();finish()}
-    return()=>{if(watchdog)clearTimeout(watchdog);run.current++;playback.cancel()};
+    return()=>{receipt?.invalidate();if(presentationReceipt.current===receipt)presentationReceipt.current=null;if(watchdog)clearTimeout(watchdog);run.current++;playback.cancel()};
   },[battleKey,settingsReady,trainerIntro,presentationPaused,onPresentationComplete,playback.play,playback.cancel]);
+  useEffect(()=>{if(!classicLayout)return;const invalidate=()=>presentationReceipt.current?.invalidate();const visibility=()=>{if(document.visibilityState!=='visible')invalidate();};document.addEventListener('visibilitychange',visibility);window.addEventListener('blur',invalidate);return()=>{document.removeEventListener('visibilitychange',visibility);window.removeEventListener('blur',invalidate);};},[classicLayout]);
+  useEffect(()=>{
+    if(!classicLayout||!playback.event||playback.sourceKey!==battleKey)return;
+    const receipt=presentationReceipt.current,frameKey=playback.eventKey,index=playback.index;let first=0,second=0;
+    const visible=()=>{const node=root.current,scene=stage.current;if(!node||!scene||document.visibilityState!=='visible'||!document.hasFocus()||node.closest('[hidden]'))return false;const rect=scene.getBoundingClientRect(),x=Math.max(0,Math.min(innerWidth-1,rect.left+rect.width/2)),y=Math.max(0,Math.min(innerHeight-1,rect.top+rect.height/2));return rect.width>0&&rect.height>0&&rect.right>0&&rect.bottom>0&&rect.left<innerWidth&&rect.top<innerHeight&&!!document.elementFromPoint(x,y)&&node.contains(document.elementFromPoint(x,y));};
+    if(!visible()){receipt?.invalidate();return;}
+    const watch=()=>{if(receipt!==presentationReceipt.current||!visible()){receipt?.invalidate();return;}second=requestAnimationFrame(watch);};
+    first=requestAnimationFrame(()=>{second=requestAnimationFrame(()=>{if(receipt===presentationReceipt.current&&visible()){receipt?.paint(index,frameKey);watch();}else receipt?.invalidate();});});
+    return()=>{cancelAnimationFrame(first);cancelAnimationFrame(second);};
+  },[classicLayout,playback.eventKey,battleKey]);
   useEffect(()=>{if(!classicLayout||!logPinned.current)return;const frame=requestAnimationFrame(()=>{const el=logElement.current;if(el)el.scrollTop=el.scrollHeight;});return()=>cancelAnimationFrame(frame);},[classicLayout,battleKey,playing,revealed.length,battle.log?.length]);
   // The user selected the PC layout scaled down for short landscape phones.
   // Restore the original viewport as soon as the battle or orientation changes.

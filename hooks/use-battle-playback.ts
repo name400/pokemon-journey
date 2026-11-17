@@ -118,11 +118,14 @@ export class BattleSubmissionGate {
 
 type PlaybackOptions = {
   onFrame: (frame: BattlePlaybackFrame) => void; reducedMotion?: () => boolean;
+  onEventCompleted?: (frame: BattlePlaybackFrame) => void;
+  onInterrupted?: () => void;
   enabled?: () => boolean; speed?: () => number;
   durationMs?: number | ((event: BattleVisualEvent) => number); gapMs?: number; maxDurationMs?: number;
 };
 export class BattlePlaybackController {
   private generation = 0; private pending = new Set<() => void>();
+  private interruptions = 0;
   private completed = new Set<string>(); private superseded = new Set<string>();
   private active: { key: string; generation: number; promise: Promise<boolean> } | null = null;
   constructor(private options: PlaybackOptions) {}
@@ -136,7 +139,7 @@ export class BattlePlaybackController {
       const timer = setTimeout(finish, ms); this.pending.add(finish);
     });
   }
-  skipDelays(): void { this.emit(idleFrame()); for (const finish of [...this.pending]) finish(); }
+  skipDelays(): void { this.interruptions++; this.options.onInterrupted?.(); this.emit(idleFrame()); for (const finish of [...this.pending]) finish(); }
   /** Manual/unmount cancellation permits StrictMode to replay the same source. */
   cancel(): void { this.generation++; this.active = null; for (const finish of [...this.pending]) finish(); this.emit(idleFrame()); }
   play(events: readonly BattleVisualEvent[], sourceKey: string | number): Promise<boolean> {
@@ -175,15 +178,18 @@ export class BattlePlaybackController {
       if (Date.now() >= deadline) break;
       if (index > 0) { this.emit({ ...idleFrame(), playing: true, sourceKey: key }); if (!await this.wait(Math.min((this.options.gapMs ?? 16) * scale, Math.max(0, deadline - Date.now())), generation)) return false; if (this.options.reducedMotion?.() || this.options.enabled?.() === false) break; }
       const event = events[index];
-      const duration = Math.min(nominal[index] * scale / Math.max(.25, this.options.speed?.() || 1), Math.max(0, deadline - Date.now()));
-      this.emit({ anim: battleAnimationClass(event), eventKey: `${key}:${generation}:${index}`, event, index, playing: true, sourceKey: key, durationMs: duration });
+      const planned=nominal[index] * scale / Math.max(.25, this.options.speed?.() || 1),remaining=Math.max(0, deadline-Date.now());
+      const duration = Math.min(planned,remaining),interruption=this.interruptions,started=performance.now();
+      const frame={ anim: battleAnimationClass(event), eventKey: `${key}:${generation}:${index}`, event, index, playing: true, sourceKey: key, durationMs: duration };
+      this.emit(frame);
       if (!await this.wait(duration, generation)) return false;
+      if (duration>0 && remaining>=planned && interruption===this.interruptions && !this.options.reducedMotion?.() && this.options.enabled?.()!==false && performance.now()-started>=duration-1) this.options.onEventCompleted?.(frame);
     }
     if (generation !== this.generation) return false;
     this.emit(idleFrame()); return true;
   }
 }
-type HookOptions = { durationMs?: number | ((event: BattleVisualEvent) => number); gapMs?: number; enabled?: boolean; speed?: number; maxDurationMs?: number };
+type HookOptions = { durationMs?: number | ((event: BattleVisualEvent) => number); gapMs?: number; enabled?: boolean; speed?: number; maxDurationMs?: number; onEventCompleted?:(frame:BattlePlaybackFrame)=>void;onInterrupted?:()=>void };
 /** A false result means superseded/cancelled/duplicate, so do not apply its delayed response. */
 export function useBattlePlayback(options: HookOptions = {}) {
   const [frame, setFrame] = useState<BattlePlaybackFrame>(idleFrame);
@@ -193,6 +199,7 @@ export function useBattlePlayback(options: HookOptions = {}) {
     reducedMotion: () => reducedMotion.current, enabled: () => currentOptions.current.enabled !== false, speed: () => currentOptions.current.speed || 1,
     durationMs: event => { const duration = currentOptions.current.durationMs; return typeof duration === 'function' ? duration(event) : duration ?? 700; },
     gapMs: options.gapMs, maxDurationMs: options.maxDurationMs, onFrame: next => { if (mounted.current) setFrame(next); },
+    onEventCompleted: frame => {if(mounted.current)currentOptions.current.onEventCompleted?.(frame);},onInterrupted:()=>{if(mounted.current)currentOptions.current.onInterrupted?.();},
   });
   useEffect(() => {
     mounted.current = true;
