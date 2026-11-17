@@ -18,6 +18,16 @@ import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
 import {validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
 import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 
+test('legacy named native item enforces the shared reward cap through API and reconnect',async()=>{
+ const holder=makeReferenceMon(151,50,{boxId:'holder',item:'Scope Lens'}),donor=makeReferenceMon(7,50,{boxId:'donor'}),{doc,run}=persistentFixture([holder,donor]);
+ run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='scopelens'),rewardId:'lens'}];const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+ try{const view=await(await h.get()).json(),reward=view.run.rewards.find(r=>r.id==='lens');assert.equal(reward.targets.find(t=>t.boxId==='holder').eligible,false);
+  const before=h.row(),response=await h.post({action:'reward',revision:0,rewardId:'lens',boxId:'holder'});assert.equal(response.status,409);assert.deepEqual(h.row(),before);
+  const reloaded=await(await h.get()).json();assert.equal(reloaded.run.rewards.find(r=>r.id==='lens').targets.find(t=>t.boxId==='holder').eligible,false);assert.deepEqual(h.row(),before);
+  const stored=await storage.decodeGameData(h.row().data);assert.equal(stored.classic.slots[0].party[0].item,'Scope Lens');assert.deepEqual(stored.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(stored.adventure,doc.adventure);
+ }finally{h.sqlite.close();}
+});
+
 test('legacy named native items can be transferred from the displayed inventory without changing other saves',async()=>{
  const holder=makeReferenceMon(25,50,{boxId:'holder',item:'Light Ball'}),recipient=makeReferenceMon(1,50,{boxId:'recipient'}),{doc}=persistentFixture([holder,recipient]);
  doc.collection=[{id:'preserve'}];const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
