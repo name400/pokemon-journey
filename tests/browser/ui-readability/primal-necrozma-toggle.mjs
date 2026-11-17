@@ -7,7 +7,7 @@ try{
   const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.route('https://**/*',r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
   await page.request.post(base+'/api/test-reset?scenario='+scenario);await page.goto(base+'/?mode=rogue&tab=rogue');await page.getByRole('button',{name:'계속하기',exact:true}).first().click();
-  await page.getByRole('button',{name:'싸운다',exact:true}).click();await page.locator('summary').filter({hasText:'특수 변화'}).click();
+  await page.getByRole('button',{name:'싸운다',exact:true}).click();assert.equal(await page.locator('.bs-v60-mega').count(),0,'Mega mark must not replace the conditional Primal or Necrozma choice');await page.locator('summary').filter({hasText:'특수 변화'}).click();
   const before=await(await page.request.get(base+'/api/test-state')).json(),button=page.getByRole('button',{name:label,exact:true});
   await button.click();assert.equal(await button.getAttribute('aria-pressed'),'true');await button.click();assert.equal(await button.getAttribute('aria-pressed'),'false');
   assert.deepEqual(await(await page.request.get(base+'/api/test-state')).json(),before,'Toggling selection must not change saved state');

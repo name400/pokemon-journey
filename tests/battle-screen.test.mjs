@@ -16,6 +16,7 @@ const {default:BattlePanel,BallIcon}=await import('../.sites-runtime/tests/battl
 const {battleDisplay,applyBattleEvent,visibleSwitchLocation,visibleNewMegaLocation}=await import('../.sites-runtime/tests/battle-display.mjs');
 const approvedBall=await fs.readFile('public/game/v52/items-poke-ball.png');
 assert.equal(createHash('sha256').update(approvedBall).digest('hex'),'a4c7b9e8ff5727d10e6f679bcf16a963a95b2a36480d3bd9156d9808bdf54dff');
+for(const [file,hash] of [['mega-emblem-transparent.png','cdb82556ae375cc7a1f23e95cfe8ea3d1e27e82d614019f25f4907dec5f9f348'],['on-chime.wav','88734c0924b5940e05ee4b7b26d46cb44abd169110bdd7a5ed33a82b7ae86696'],['off-click.wav','bc8fbc050fe95b79ec18cadc274797dbfb6f8f8ffcf979261f58f7ee2b76f544']])assert.equal(createHash('sha256').update(await fs.readFile('public/game/v60/'+file)).digest('hex'),hash,file);
 assert.match(renderToStaticMarkup(React.createElement(BallIcon,{id:'pokeball',reference:true})),/\/game\/v52\/items-poke-ball\.png/);
 assert.doesNotMatch(renderToStaticMarkup(React.createElement(BallIcon,{id:'pokeball'})),/\/game\/v52\//,'Other presentations keep their existing icon');
 assert.doesNotMatch(renderToStaticMarkup(React.createElement(BallIcon,{id:'greatball',reference:true})),/items-poke-ball/,'A different ball must never use the Poké Ball image');
