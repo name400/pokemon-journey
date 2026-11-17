@@ -197,6 +197,12 @@ test('Primal and Necrozma combination commands require their distinct prerequisi
   }finally{h.sqlite.close();}
  }
 });
+test('Primal and Necrozma reject absent and mismatched items without changing saves',async()=>{
+ for(const [id,kind,item,wrongItem,partner] of [[382,'primal','blueorb','redorb',null],[383,'primal','redorb','blueorb',null],[800,'necrozma','nsolarizer','nlunarizer',791],[800,'necrozma','nlunarizer','nsolarizer',792]])for(const owned of [[],[item]]){
+  const {doc,run,state}=persistentFixture([makeReferenceMon(id,100,{boxId:'form-hero',moves:['Splash']})]);run.formItemStateRule='source-v1';run.formItems={'form-hero':owned};run.tools.megaBracelet=true;if(partner)state.system.dex[partner]={...state.system.dex[partner],caught:true};run.screen='battle';run.initialSwitchSlots=[];run.encounter={kind:'wild'};run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'form-foe',moves:['Splash']})],{system:state.system});run.party=run.combat.teams[0];
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{const before=h.row(),view=await(await h.get()).json(),special=kind+':'+(owned.length?wrongItem:item);assert.ok(!view.battle.requests[0].actors[0].specials.some(option=>option.key===special));assert.equal((await h.post({action:'turn',revision:0,command:{type:'move',move:'splash',special}})).status,409);assert.deepEqual(h.row(),before);}finally{h.sqlite.close();}
+ }
+});
 test('new Primal and Necrozma form items remain owned without automatic change',async()=>{
  for(const [id,item,rewardId,partner] of [[382,'blueorb','rareformitem',null],[383,'redorb','rareformitem',null],[800,'nsolarizer','formitem',791],[800,'nlunarizer','formitem',792]]){
   const {doc,run,state}=persistentFixture([makeReferenceMon(id,100,{boxId:'form-reward',moves:['Splash']})]);run.formItemStateRule='source-v1';if(partner)state.system.dex[partner]={...state.system.dex[partner],caught:true};run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(row=>row.id===rewardId),rewardId:'form-reward',boxId:'form-reward',formItem:item}];
