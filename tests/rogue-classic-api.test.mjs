@@ -9,7 +9,8 @@ import * as origin from '../lib/request-origin.mjs';
 import * as game from '../lib/rogue-classic-game.mjs';
 import {createFixture} from './browser/ui-readability/fixture.mjs';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
-import {createClassicCombat} from '../lib/rogue-battle-engine.mjs';
+import {createClassicCombat,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
+import {classicTrainerEncounter} from '../lib/rogue-classic-world.mjs';
 
 // Execute the actual TypeScript route with local SQLite and injected platform
 // bindings. No live credentials, production saves or network calls are used.
@@ -128,6 +129,29 @@ test('real capture API preserves full-party choice through reload and rejects du
   const capture=await h.post({action:'capture',ballId:'masterball',boxId:'capture-foe',revision:0});assert.equal(capture.status,200);const offered=await capture.json();assert.equal(offered.run.screen,'capture');assert.equal(offered.run.balls.masterball,1);assert.equal(offered.run.party.length,6);const caught=offered.run.pendingCapture;assert.ok(caught?.boxId);const before=h.row().data,refreshed=await(await h.get()).json();assert.equal(h.row().data,before);assert.equal(refreshed.run.pendingCapture.boxId,caught.boxId);
   const accept={action:'acceptCapture',replaceBoxId:offered.run.party[0].boxId,revision:1},responses=await Promise.all([h.post(accept),h.post(accept)]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);const accepted=await responses.find(r=>r.status===200).json();assert.equal(accepted.run.party.filter(p=>p.boxId===caught.boxId).length,1);assert.equal(accepted.run.balls.masterball,1);
   const stable=h.row().data,again=await h.post({...accept,revision:2});assert.equal(again.status,409);assert.equal(h.row().data,stable);const reload=await(await h.get()).json();assert.equal(reload.run.party.filter(p=>p.boxId===caught.boxId).length,1);const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.system.dex[150].caughtCount,1);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+ }finally{h.sqlite.close();}
+});
+
+test('trainer Toxic Orb and terastallized type survive real API turns and reload',async()=>{
+ for(const [teraType,expectedStatus,matchup] of [['Water','맹독',1],['Poison',null,2],['Steel',null,.5]]){
+  const doc=createFixture('battle'),run=doc.classic.slots[0];run.id=`toxic-orb-${teraType}`;run.wave=199;run.trainerTraitsRule='source-v1';run.trainerItemsRule='source-v1';run.party=[makeReferenceMon(151,100,{boxId:'trainer-orb-hero',moves:['Protect','Psychic']})];run.initialSwitchSlots=[];run.npcDialogueQueue=[];
+  const encounter=classicTrainerEncounter(run,354,{kind:'champion'}),milotic=encounter.team[5];assert.equal(milotic.rogueSourceId,350);assert.equal(milotic.ability,'marvelscale');assert.equal(milotic.item,'toxicorb');milotic.teraType=teraType;run.encounter=encounter;run.screen='battle';run.combat=createClassicCombat(run,[milotic],{trainer:true});run.party=run.combat.teams[0];doc.classic.slots[1]={id:'untouched-trainer-slot',safe:true};
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+  try{
+   const before=await(await h.get()).json(),enemy=before.battle.teams[1][0];assert.equal(enemy.terastallized,null);assert.equal(enemy.item,'toxicorb');assert.equal(before.battle.requests[0].actors[0].moves.find(m=>m.id==='psychic').effectiveness,1);
+   const response=await h.post({action:'turn',command:{type:'move',move:'protect'},revision:0});assert.equal(response.status,200);const after=await response.json();assert.equal(after.battle.teams[1][0].status,expectedStatus);assert.equal(after.battle.teams[1][0].item,'toxicorb');assert.equal(after.battle.teams[1][0].terastallized,teraType);
+   const savedBytes=h.row().data,reload=await(await h.get()).json();assert.equal(h.row().data,savedBytes);assert.equal(reload.revision,1);assert.equal(reload.battle.teams[1][0].status,expectedStatus);assert.equal(reload.battle.teams[1][0].terastallized,teraType);assert.equal(reload.battle.requests[0].actors[0].moves.find(m=>m.id==='psychic').effectiveness,matchup);
+   const stale=await h.post({action:'turn',command:{type:'move',move:'protect'},revision:0});assert.equal(stale.status,409);assert.equal(h.row().data,savedBytes);const saved=await storage.decodeGameData(savedBytes),native=restoreClassicNativeBattle(saved.classic.slots[0].combat,saved.classic.slots[0]);assert.equal(native.p2.active[0].item,'toxicorb');assert.equal(native.p2.active[0].status,expectedStatus?'tox':'');assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+  }finally{h.sqlite.close();}
+ }
+});
+test('player Tera command uses the owned type and charges only once across API reload',async()=>{
+ const doc=createFixture('battle'),run=doc.classic.slots[0];run.id='player-tera-api';run.party=[{...makeReferenceMon(151,100,{boxId:'tera-hero',moves:['Protect']}),teraType:'Ghost'}];run.tools={...run.tools,teraOrb:true};run.teraCharged=true;run.initialSwitchSlots=[];run.npcDialogueQueue=[];run.encounter={kind:'wild'};run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'tera-foe',moves:['Splash']})]);run.party=run.combat.teams[0];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const before=await(await h.get()).json();assert.equal(before.run.teraCharged,true);assert.ok(before.battle.requests[0].actors[0].specials.some(s=>s.key==='terastallize'));
+  const command={action:'turn',revision:0,command:{type:'move',move:'protect',special:'terastallize'}},response=await h.post(command);assert.equal(response.status,200);const after=await response.json();assert.equal(after.run.teraCharged,false);assert.equal(after.battle.teams[0][0].terastallized,'Ghost');assert.ok(after.battle.events.some(e=>e.kind==='form'&&e.boxId==='tera-hero'&&e.pokemon?.terastallized==='Ghost'));
+  const bytes=h.row().data,stale=await h.post(command);assert.equal(stale.status,409);assert.equal(h.row().data,bytes);const reloaded=await(await h.get()).json();assert.equal(reloaded.run.teraCharged,false);assert.equal(reloaded.battle.teams[0][0].terastallized,'Ghost');assert.equal(reloaded.battle.teams[0][0].teraType,'Ghost');assert.equal(h.row().data,bytes);
+  const saved=await storage.decodeGameData(bytes),native=restoreClassicNativeBattle(saved.classic.slots[0].combat,saved.classic.slots[0]);assert.equal(native.p1.active[0].terastallized,'Ghost');assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
  }finally{h.sqlite.close();}
 });
 test('a real move during pending trainer dialogue is ACTION_FAILED, not a save conflict',async()=>{
