@@ -219,7 +219,7 @@
 .battle-screen[data-v52-single=true] .bs-scene{height:auto;aspect-ratio:16/9}
 .battle-screen[data-v52-single=true] .bs-combatant-own{left:30%;top:75.56%;width:21.4%;max-width:none}
 .battle-screen[data-v52-single=true] .bs-combatant-foe{left:73.89%;top:43.95%;width:15.56%;max-width:none}
-.battle-screen[data-v52-single=true] .bs-hud-foe{left:67.22%;top:.5%;right:auto}
+.battle-screen[data-v52-single=true] .bs-hud-foe{left:auto;right:1%;top:.5%;width:31.5%}
 .battle-screen[data-v52-single=true] .bs-hud-own{left:4.72%;top:auto;right:auto;bottom:1%}
 .battle-screen[data-v52-single=true] .bs-combatant::before{content:'';position:absolute;left:50%;bottom:0;width:70%;height:10%;transform:translateX(-50%);border-radius:50%;background:#17202a55;z-index:-1}
 .battle-screen .bs-v52-commands{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;max-width:260px;margin:8px 0 4px auto}

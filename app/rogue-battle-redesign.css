@@ -634,3 +634,14 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-rows:1fr 1fr;height:44px;min-height:44px;max-height:44px;overflow:hidden;padding:2px 44px 2px 4px;gap:0 2px}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-ball-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:none;overflow:visible}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move .bs-type-symbol{width:14px;height:14px;min-width:14px}
+
+/* Fit the v52 single arena on desktop and keep specials within the viewport. */
+@media(min-width:900px) and (min-height:720px){
+ .rc-shell.is-battle:has(.battle-screen[data-v52-single=true]){max-width:min(100%,calc((100dvh - 450px) * 16 / 9));margin-inline:auto}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-hud{padding:7px 8px 6px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-hud .bs-name{gap:3px}
+}
+@media (orientation:portrait), (min-width:900px) and (min-height:720px){
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-panel{position:relative}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials{position:absolute;bottom:100%;left:0;z-index:20;box-sizing:border-box;max-width:100%;margin:0;background:#30273c}
+}
