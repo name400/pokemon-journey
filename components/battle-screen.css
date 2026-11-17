@@ -275,6 +275,7 @@
 .battle-screen[data-v52-single=true] .bs-hud .bs-name b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .battle-screen[data-v52-single=true] .bs-hud .bs-name>span{flex-shrink:0}
 .battle-screen[data-v52-single=true] .bs-hp-inside{font-size:clamp(7px,2vw,9px)}
+.battle-screen[data-v52-single=true] .bs-hud-own .bs-hp-inside{justify-content:flex-end;padding-right:.555556cqw}
 /* v52 selection sheets use the arena coordinates; scroll keeps controls usable
    when the 44px touch rows are taller than the available stage. */
 .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid,
