@@ -8,7 +8,7 @@ const base=process.env.UI_TEST_URL||'http://127.0.0.1:5262';
 const reference=await readFile(process.env.V52_REFERENCE_HTML||'/workspace/scratch/battle-ui-capture/reference-v52/index.html','utf8');
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
 try{for(const [width,height] of [[320,568],[390,844],[844,390],[1280,800]]){
- const party=[{...makeMon(4,50),boxId:'p0',moves:['화염방사']},{...makeMon(6,50),boxId:'p1',moves:['화염방사']}],foe={...makeMon(1,70),boxId:'foe',moves:['튀어오르기']};
+ const party=[{...makeMon(4,50),boxId:'p0',moves:['화염방사']},{...makeMon(6,50),boxId:'p1',moves:['화염방사']}],foe={...makeMon(1,100),boxId:'foe',moves:['튀어오르기']};
  let fight=createCombat(party,[foe]),revision=7;fight.disableCpuTera=true;fight.events=[{kind:'captureAttempt',text:'이전 저장 이벤트',shakes:3,caught:false}];fight.log=['이전 저장 이벤트'];const batches=[];
  const world={area:3,district:'lumiose-north-boulevard',interior:null,areaInfo:{name:'시험 거리',biome:'city'},x:3,y:8,facing:'up',teamIds:party.map(x=>x.boxId),activeId:'p0',badges:[],objective:'배틀',log:[],steps:0};world.map=fieldMap(world);
  const context=await browser.newContext({viewport:{width,height},hasTouch:true,isMobile:true,reducedMotion:'no-preference'});await context.addCookies([{name:'__sites_local_auth',value:'1',url:base}]);
