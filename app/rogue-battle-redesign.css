@@ -759,12 +759,39 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap .bs-move-tooltip{position:fixed;left:2%!important;right:auto!important;top:30%;bottom:auto;transform:none;width:45%;max-height:45%;overflow:auto}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials{max-height:calc(100% - 44px);overflow:auto}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials{max-height:max(44px,calc(56.25cqw - 88px))}
+/* On narrow portrait screens keep special choices inside the arena. */
+@media(max-width:360px) and (orientation:portrait){
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-grid .bs-v52-pages{width:min(136px,100cqw);margin-left:calc(100% - min(136px,100cqw))}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-panel .bs-specials-drawer[open]{inset:0;width:100%;max-width:none;max-height:100%;overflow:hidden;background:transparent;pointer-events:none}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open]>:is(summary,.bs-specials){pointer-events:auto}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:minmax(60px,1fr);grid-template-rows:44px;align-content:start;gap:2px;box-sizing:border-box;width:100%;max-width:none;max-height:calc(100% - 44px);margin:0;padding:2px 4px;overflow:auto}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials legend{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials button{box-sizing:border-box;min-width:0;min-height:44px;padding:2px 4px;white-space:normal;overflow-wrap:anywhere;font-size:10px;line-height:1.15}
+}
 .rc-shell.is-battle:has(.battle-screen[data-v52-single=true])::before{content:'';position:fixed;inset:0;z-index:999;background:#071b27c9}
 .rc-shell.is-battle .battle-screen[data-v52-single=true]{width:min(calc(100vw - 8px),calc((100dvh - 8px)*16/9));max-width:none}
 
 /* Keep the information glyph compact while retaining its existing hit area. */
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info{display:grid;place-items:center;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info-icon{display:grid;place-items:center;width:12px;height:12px;border:1px solid #b9cfdf;border-radius:50%;background:#1b2d43;color:#fff;font:700 9px/1 Georgia,serif;pointer-events:none}
+/* v52 paints four compact rows; description targets occupy the space to the left. */
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid{left:69.444444%;top:44.444444%;width:28.888889%;min-width:0;max-width:none;max-height:none;grid-template-columns:1fr;gap:0;overflow:visible}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap{position:relative;width:100%;height:6.944444cqw;min-height:0}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{position:relative;isolation:isolate;display:grid;grid-template-columns:3.611111cqw minmax(0,1fr) auto;grid-template-rows:2.777778cqw 2.777778cqw;gap:0;width:100%;height:6.944444cqw;min-height:0;max-height:none;margin:0;padding:.277778cqw 1.111111cqw;border:0;border-radius:0;background:transparent;color:white;font:400 2.5cqw/2.777778cqw Arial,'Noto Sans KR',sans-serif;overflow:hidden}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move:before{content:'';position:absolute;z-index:-1;left:0;right:0;top:0;height:6.111111cqw;border-radius:.277778cqw;background:#1b2d43}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap:first-child>.bs-move:not(:disabled){background:transparent;color:#182b42}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap:first-child>.bs-move:not(:disabled):before{background:#ffe000}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move:is(:hover,:focus-visible):not(:disabled){background:transparent;border:0;box-shadow:none;color:#fff}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move:is(:hover,:focus-visible):not(:disabled):before{background:#405573;outline:1px solid #fff46b}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap:first-child>.bs-move:is(:hover,:focus-visible):not(:disabled){color:#182b42}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap:first-child>.bs-move:is(:hover,:focus-visible):not(:disabled):before{background:#ffe000}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-name{grid-column:2;grid-row:1;min-width:0;overflow:hidden}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-name b{font-size:2.5cqw;line-height:2.777778cqw;font-weight:400;white-space:nowrap}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move .bs-type-symbol{grid-column:1;grid-row:1;width:2.777778cqw;height:2.777778cqw;min-width:0;overflow:hidden}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move .bs-type-symbol img{width:100%;height:100%;object-fit:contain}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-compact-pp{grid-column:3;grid-row:1;font-size:2.5cqw;line-height:2.777778cqw}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-effectiveness{grid-column:1/-1;grid-row:2;font-size:2.5cqw;line-height:2.777778cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info{left:-44px;right:auto;top:0;bottom:auto;width:44px;min-width:44px;height:6.944444cqw;min-height:0;max-height:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button{display:grid;place-items:center;border:0;background:transparent;box-shadow:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button span{padding:3px 2px;background:#1b2d43;color:#fff;font:8px/1 Arial,sans-serif;white-space:nowrap}
 
