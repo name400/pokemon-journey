@@ -50,6 +50,18 @@ export function battleEventLocation(display: BattleDisplay, event: BattleVisualE
   const boxId = actor ? event.actorBoxId || (event.kind === 'move' ? event.boxId : undefined) : event.targetBoxId || (event.kind !== 'move' ? event.boxId : undefined);
   const sideHint = actor ? event.actorSide ?? event.side : event.targetSide ?? event.side;
   const bySide = display.activeBySide || display.active.map(index => [index]);
+  // Legacy capture events identify the wild target in `side`/`boxId`, not the
+  // thrower. Anchor the ball to a living active on the opposing side instead.
+  if (actor && (event.kind === 'capture' || event.kind === 'captureAttempt') && !boxId) {
+    const target = battleEventLocation(display, event, 'target');
+    const side = event.actorSide === 0 || event.actorSide === 1 ? event.actorSide : target ? 1 - target.side : -1;
+    if (side !== 0 && side !== 1) return null;
+    const requested = event.actorSlot;
+    const slot = Number.isInteger(requested) && requested! >= 0 && display.teams[side]?.[bySide[side]?.[requested!]]?.hp > 0 ? requested! : bySide[side]?.findIndex(index => display.teams[side]?.[index]?.hp > 0) ?? -1;
+    const index = bySide[side]?.[slot];
+    if (slot < 0 || !Number.isInteger(index) || !display.teams[side]?.[index]) return null;
+    return { side, index, slot, boxId: display.teams[side][index].boxId };
+  }
   if (boxId !== undefined) {
     for (const side of [sideHint === 1 ? 1 : 0, sideHint === 1 ? 0 : 1]) {
       const index = display.teams[side]?.findIndex(mon => String(mon.boxId) === String(boxId)) ?? -1;

@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdir} from 'node:fs/promises';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
-import {createClassicCombat,continueClassicWild,classicCombatView,playClassicCombat} from '../lib/rogue-battle-engine.mjs';
+import {createClassicCombat,continueClassicWild,classicCombatView,playClassicCombat,captureClassicCombat} from '../lib/rogue-battle-engine.mjs';
 import {makeMon} from '../lib/game.mjs';
 import {createCombat,combatView,playCpu} from '../lib/party-battle.mjs';
-await mkdir('.sites-runtime/tests',{recursive:true});await build({entryPoints:['hooks/use-battle-playback.ts'],outfile:'.sites-runtime/tests/entry-playback.mjs',bundle:true,format:'esm',platform:'node',external:['react']});const {battleDisplay,applyBattleEvent,visibleSwitchLocation}=await import('../.sites-runtime/tests/entry-playback.mjs');
+await mkdir('.sites-runtime/tests',{recursive:true});await build({entryPoints:['hooks/use-battle-playback.ts'],outfile:'.sites-runtime/tests/entry-playback.mjs',bundle:true,format:'esm',platform:'node',external:['react']});const {battleDisplay,applyBattleEvent,visibleSwitchLocation,battleEventLocation}=await import('../.sites-runtime/tests/entry-playback.mjs');
 const mon=(id,boxId)=>makeReferenceMon(id,50,{boxId,moves:['Splash']});
 test('a new Classic battle presents each incoming member only when its switch event arrives',()=>{const run={id:'entry',wave:1,biome:0,rng:42,party:[mon(151,'hero')],tools:{},modifiers:[],encounter:{kind:'wild'}};run.combat=createClassicCombat(run,[mon(915,'foe')]);const view=classicCombatView(run.combat),before=structuredClone(view);let display=battleDisplay(view,true,true);assert.deepEqual(display.activeBySide,[[-1],[-1]]);for(const e of view.events){if(e.kind==='switch')assert.equal(visibleSwitchLocation(display,e),null);display=applyBattleEvent(display,e);if(e.kind==='switch')assert.equal(visibleSwitchLocation(display,e)?.boxId,e.boxId);}assert.deepEqual(display.activeBySide,view.activeBySide);assert.deepEqual(view,before);assert.deepEqual(battleDisplay(view,false,true).activeBySide,view.activeBySide);});
 test('a continued wild encounter keeps the player visible and delays only the new enemy',()=>{const run={id:'next-entry',wave:21,biome:0,rng:42,party:[makeReferenceMon(151,50,{boxId:'hero',moves:['Seismic Toss']})],tools:{},modifiers:[],encounter:{kind:'wild'}};run.combat=createClassicCombat(run,[makeReferenceMon(19,1,{boxId:'first',moves:['Splash'],hp:1})]);run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});run.party=run.combat.teams[0];run.wave++;run.combat=continueClassicWild(run,[mon(915,'next')]);const view=classicCombatView(run.combat);let display=battleDisplay(view,true,true);assert.deepEqual(display.activeBySide,[[0],[-1]]);for(const e of view.events)display=applyBattleEvent(display,e);assert.deepEqual(display.activeBySide,view.activeBySide);});
@@ -37,4 +37,16 @@ test('Classic double entry, switch and spread-hit events preserve order and ally
  const hit=view.events.find(event=>event.kind==='damage'&&event.boxId==='incoming'&&event.moveId==='earthquake');assert.ok(hit);assert.equal(hit.hit,true,'An ally hit by a spread attack gets the same impact cue as an opponent');assert.equal(hit.actorBoxId,'hero');
  for(const event of view.events){const before=current;current=applyBattleEvent(current,event);if(event===hit)assert.ok(current.teams[0][2].hp<before.teams[0][2].hp);}
  assert.deepEqual(current.activeBySide,view.activeBySide);assert.equal(current.teams[0][2].hp,view.teams[0][2].hp);
+});
+test('real Classic capture playback starts from a living ally and targets the selected wild Pokémon',()=>{
+ for(const doubles of [false,true])for(const caught of [false,true]){
+  const make=(id,boxId)=>makeReferenceMon(id,100,{boxId,moves:['Splash']}),run={id:`capture-${doubles}-${caught}`,wave:3,biome:0,rng:42,party:[make(151,'hero'),...(doubles?[make(7,'ally')]:[])],tools:{},modifiers:[],balls:{pokeball:1,masterball:1},encounter:{kind:'wild'}};
+  run.combat=createClassicCombat(run,[make(143,'wild-a'),...(doubles?[make(16,'wild-b')]:[])],{doubles});run.party=run.combat.teams[0];const result=captureClassicCombat(run,caught?'masterball':'pokeball',{targetBoxId:doubles?'wild-b':'wild-a',rng:()=>caught?0:.999999});assert.equal(!!result.caught,caught);
+  const view=classicCombatView(JSON.parse(JSON.stringify(result.combat))),event=view.events.find(e=>e.kind==='capture');assert.ok(event);const before=battleDisplay(view,true,true),actor=battleEventLocation(before,event,'actor'),target=battleEventLocation(before,event,'target');
+  assert.equal(actor?.side,0);assert.equal(actor?.boxId,'hero');assert.equal(target?.side,1);assert.equal(target?.boxId,doubles?'wild-b':'wild-a');assert.equal(event.caught,caught);
+ }
+});
+test('a legacy capture uses the surviving active rather than an empty first slot',()=>{
+ const view={teams:[[{boxId:'down',hp:0},{boxId:'living',hp:20}],[{boxId:'wild',hp:20}]],active:[0,0],activeBySide:[[0,1],[0,-1]]},event={kind:'captureAttempt',side:0,targetSide:1,targetBoxId:'wild'};
+ assert.deepEqual(battleEventLocation(battleDisplay(view),event,'actor'),{side:0,index:1,slot:1,boxId:'living'});
 });
