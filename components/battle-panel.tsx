@@ -159,7 +159,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
   const [actorSlot,setActorSlot]=useState(0),[turnDraft,setTurnDraft]=useState<Record<number,BattleTurnAction>>({}),[actorSpecials,setActorSpecials]=useState<Record<number,string>>({}),[pendingMove,setPendingMove]=useState<BattleMove|null>(null);
   const root=useRef<HTMLElement>(null),stage=useRef<HTMLDivElement>(null),logElement=useRef<HTMLDivElement>(null),logPinned=useRef(true),mounted=useRef(false),run=useRef(0),latest=useRef(battle),latestKey=useRef(battleKey),gate=useRef(new BattleSubmissionGate()),lastFrame=useRef(''),faintAnimation=useRef<{key:string;identity:string}|null>(null),hadBusy=useRef(false),audio=useRef<AudioContext|null>(null);latest.current=battle;latestKey.current=battleKey;
   const presentationReceipt=useRef<PresentationReceipt|null>(null);
-  const playback=useBattlePlayback({enabled:settings.animations,speed:settings.speed,durationMs:eventDuration,gapMs:12,maxDurationMs:2800,onEventCompleted:frame=>{if(classicLayout&&frame.sourceKey===latestKey.current)presentationReceipt.current?.complete(frame.index,frame.eventKey);},onInterrupted:()=>presentationReceipt.current?.invalidate()});
+  const playback=useBattlePlayback({enabled:settings.animations,speed:settings.speed,durationMs:event=>approvedV52&&!multiple&&event.kind==='switch'?1000:eventDuration(event),gapMs:12,maxDurationMs:2800,onEventCompleted:frame=>{if(classicLayout&&frame.sourceKey===latestKey.current)presentationReceipt.current?.complete(frame.index,frame.eventKey);},onInterrupted:()=>presentationReceipt.current?.invalidate()});
   const side=battle.side===1?1:0,opponent=1-side,baseReq=battle.requests?.[0]||{kind:'wait',moves:[],switches:[],specials:[]},multiple=hasMultiBattleDTO(battle);
   const adventureMulti=approvedV52&&multiple&&!classicLayout;
   const actors:BattleActor[]=multiple?baseReq.actors:[],requiredActors=actors.filter(actor=>actor.kind==='move'||actor.kind==='switch'),currentActor=requiredActors.find(actor=>actor.slot===actorSlot)||requiredActors[0];
@@ -313,7 +313,10 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     lastFrame.current=playback.eventKey;
     const next=applyBattleEvent(display,event),actor=battleEventLocation(next,event,'actor'),target=battleEventLocation(next,event,'target');
     if(event.kind==='faint'&&target){const previous=display.teams[target.side]?.[target.index];if(previous&&!previous.fainted)faintAnimation.current={key:playback.eventKey,identity:`${target.side}:${target.index}`};}
-    setDisplay(old=>applyBattleEvent(old,event));if(event.text){setNarration(event.text);setRevealed(lines=>[...lines,event.text!]);}if(!event.silent)sound(event);
+    const stagedSwitch=approvedV52&&!multiple&&event.kind==='switch'&&playback.durationMs>0;
+    let switchApplied=false;const applySwitch=()=>{if(!switchApplied&&mounted.current&&latestKey.current===battleKey){switchApplied=true;setDisplay(old=>applyBattleEvent(old,event));}};
+    const switchTimer=stagedSwitch?window.setTimeout(applySwitch,playback.durationMs*.55):null;
+    if(!stagedSwitch)setDisplay(old=>applyBattleEvent(old,event));if(event.text){setNarration(event.text);setRevealed(lines=>[...lines,event.text!]);}if(!event.silent)sound(event);
     const nodes:Animation[]=[],scale=Math.min(1,(playback.durationMs||eventDuration(event)/settings.speed)/Math.max(1,eventDuration(event)));
     const animate=(location:BattleEventLocation|null,frames:Keyframe[],duration:number)=>{
       if(!location)return;
@@ -322,6 +325,15 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
       const sprite=combatant?.querySelector<HTMLElement>('.bs-sprite');
       if(sprite?.animate)nodes.push(sprite.animate(frames,{duration:duration*scale,easing:'cubic-bezier(.2,.7,.3,1)'}));
     };
+    if(stagedSwitch&&target){
+      const priorIndex=display.activeBySide[target.side]?.[target.slot],prior=display.teams[target.side]?.[priorIndex];
+      if(prior&&prior.hp>0&&priorIndex!==target.index){
+        const location={side:target.side,index:priorIndex,slot:target.slot,boxId:prior.boxId};
+        const combatant=[...(stage.current?.querySelectorAll<HTMLElement>('.bs-combatant')||[])].find(node=>location.boxId!==undefined?node.dataset.battleBoxid===String(location.boxId):Number(node.dataset.battleSide)===location.side&&Number(node.dataset.battleSlot)===location.slot);
+        const sprite=combatant?.querySelector<HTMLElement>('.bs-sprite');
+        if(sprite?.animate)nodes.push(sprite.animate([{opacity:1,transform:'scale(1)',filter:'brightness(1)'},{opacity:1,transform:'scale(1)',filter:'brightness(2) drop-shadow(0 0 8px #ffb2e2)',offset:.35},{opacity:0,transform:'scale(.04)',filter:'brightness(2) drop-shadow(0 0 10px #ffb2e2)'}],{duration:Math.max(1,playback.durationMs*.43),fill:'forwards',easing:'ease-in'}));
+      }
+    }
     if(event.kind==='move'){
       const direction=actor?.side===side?1:-1;
       if(event.category==='physical')animate(actor,[{transform:'translate(0,0)'},{transform:`translate(${direction*26}px,${direction*-12}px) scale(1.06)`,offset:.4},{transform:'translate(0,0)'}],380);
@@ -335,7 +347,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     if(event.kind==='heal')animate(target,[{filter:'brightness(1)'},{filter:'brightness(1.3) drop-shadow(0 0 7px #8de5a1)',offset:.4},{filter:'brightness(1)'}],340);
     if(event.kind==='form')animate(target,[{transform:'translateY(0)'},{transform:'translateY(-3px)',offset:.55},{transform:'translateY(0)'}],700);
     if(event.kind==='faint')animate(target,[{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(30px) scale(.75)'}],350);
-    return()=>nodes.forEach(animation=>animation.cancel());
+    return()=>{if(switchTimer!==null){clearTimeout(switchTimer);applySwitch();}nodes.forEach(animation=>animation.cancel());};
   },[playback.eventKey]);
   // Switch targets are mounted by setDisplay above, so animate after that
   // render rather than searching for the incoming node in the old DOM.
@@ -348,7 +360,9 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     const sprite=node?.querySelector<HTMLElement>('.bs-sprite');if(!sprite?.animate)return;
     switchAnimationKey.current=key;
     const scale=Math.min(1,(playback.durationMs||eventDuration(event)/settings.speed)/Math.max(1,eventDuration(event)));
-    const animation=sprite.animate([{opacity:0,transform:'translateY(12px) scale(.4)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:330*scale,easing:'cubic-bezier(.2,.7,.3,1)'});
+    const frames:Keyframe[]=approvedV52&&!multiple?[{opacity:0,filter:'brightness(0) invert(1)'},{opacity:1,filter:'brightness(0) invert(1)',offset:.35},{opacity:1,filter:'brightness(1)'}]:[{opacity:0,transform:'translateY(12px) scale(.4)'},{opacity:1,transform:'translateY(0) scale(1)'}];
+    const duration=approvedV52&&!multiple?Math.max(1,playback.durationMs*.38):330*scale;
+    const animation=sprite.animate(frames,{duration,easing:'cubic-bezier(.2,.7,.3,1)'});
     return()=>animation.cancel();
   },[playback.eventKey,display,battleKey]);
   useEffect(()=>{if(classicLayout&&!presentationPaused&&!playing&&!busy&&battle.ended&&battle.winner===side&&continueLabel==='보상 선택'&&onContinue)onContinue();},[classicLayout,presentationPaused,playing,busy,battle.ended,battle.winner,side,continueLabel,onContinue]);
