@@ -18,6 +18,20 @@ import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
 import {validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
 import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 
+test('legacy named held items unlock only their matching evolution across API reload',async()=>{
+ for(const [held,target,other] of [['Deep Sea Tooth',367,368],['Deep Sea Scale',368,367]]){
+  const mon=makeReferenceMon(366,50,{boxId:'clamperl',item:held,moves:['Splash']}),{doc,run}=persistentFixture([mon]);run.evolutionItems={linkingcord:1};
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+  try{
+   const view=await(await h.get()).json(),options=view.run.party[0].evolutions,correct=options.find(e=>e.sourceId===target),wrong=options.find(e=>e.sourceId===other);assert.equal(correct.ready,true,held);assert.equal(wrong.ready,false,held);
+   const initial=h.row(),bad=await h.post({action:'evolve',revision:0,boxId:'clamperl',evolutionKey:wrong.key});assert.equal(bad.status,409);assert.deepEqual(h.row(),initial);
+   const command={action:'evolve',revision:0,boxId:'clamperl',evolutionKey:correct.key},response=await h.post(command);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));
+   const saved=await storage.decodeGameData(h.row().data),evolved=saved.classic.slots[0].party[0];assert.equal(evolved.rogueSourceId,target);assert.equal(evolved.item,held);assert.equal(saved.classic.slots[0].evolutionItems.linkingcord,0);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);assert.equal(saved.coins,doc.coins);
+   const after=h.row();assert.equal((await h.post(command)).status,409);assert.deepEqual(h.row(),after);assert.equal((await(await h.get()).json()).run.party[0].rogueSourceId,target);
+  }finally{h.sqlite.close();}
+ }
+});
+
 test('legacy named native item enforces the shared reward cap through API and reconnect',async()=>{
  const holder=makeReferenceMon(151,50,{boxId:'holder',item:'Scope Lens'}),donor=makeReferenceMon(7,50,{boxId:'donor'}),{doc,run}=persistentFixture([holder,donor]);
  run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='scopelens'),rewardId:'lens'}];const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
