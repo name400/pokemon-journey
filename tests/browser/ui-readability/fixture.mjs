@@ -16,6 +16,13 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(['primal-toggle','necrozma-toggle'].includes(scenario)){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc),necrozma=scenario==='necrozma-toggle',item=necrozma?'nsolarizer':'blueorb';
+  run.party=[makeReferenceMon(necrozma?800:382,100,{boxId:'form-ui',moves:['Splash']})];
+  run.tools.megaBracelet=true;run.formItems={'form-ui':[item]};run.formItemStateRule='source-v1';run.formItemStates={'form-ui':{[item]:false}};
+  if(necrozma)doc.classic.system.dex[791]={...doc.classic.system.dex[791],caught:true};
+  run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'form-foe',moves:['Splash']})],{system:doc.classic.system});run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='tera-ogerpon'||scenario==='tera-terapagos'){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.tools.teraOrb=true;run.teraCharged=true;run.party=[makeReferenceMon(scenario==='tera-ogerpon'?1017:1024,100,{boxId:'tera-ui',moves:['Splash']})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'tera-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
  }
