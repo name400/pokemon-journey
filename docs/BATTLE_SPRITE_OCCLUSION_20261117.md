@@ -11,3 +11,13 @@ The isolated Chromium fixture, not a production save, was used for these checks.
 The `cloud-multi-real-silhouettes.mjs` fixture needs `REAL_SPRITES_DIR` containing `back-1.png`, `back-149.png`, `front-3.png` and `front-700.png`, plus the local Vite fixture and Playwright/Chromium. It does not use or change a user save. A first set of parallel browser checks stopped when the Vite process was killed under memory pressure; the above reported cases were rerun sequentially. The separate PokéRogue move fixture was not rerun because its isolated API server was not running.
 
 Not verified: physical devices, every species/form, all dynamic message states and animation frames, PokéRogue double HUD occlusion across all sprites, and complete visual identity with the approved reference. No Sites deployment.
+
+## Responsive effect anchors
+
+The narrow adventure multi-battle layout shifts allied sprites 7px up and opposing sprites 7px down. Attack, damage, status and other scene effects previously continued to use the unshifted scene positions; the switch cue already measured the displayed combatant. The responsive shift now feeds the effect positions and reviewed multi-target attack paths as well. Resize observation recomputes the percentages when the arena changes size. This changes presentation only.
+
+Isolated Chromium checks used the actual engine for the Energy Ball command against each of two opponents, with real species sprite assets, at 320×844 and 390×844. At 320px, both the source offset and each target's offset followed the sprite shift, and the impact point fell inside the target's visible alpha bounding rectangle; at 390px, the original positions remained in effect. An additional synthetic paralysis event tested an allied status burst against the shifted slot. The status event was injected into the fixture response, not produced by the engine.
+
+A separate 320px adventure-double switch test checked the recall orb against the shifted slot, command order and reload during playback. The switch fixture used placeholder images. Adventure single Flamethrower and PokéRogue single Flamethrower passed engine-event and message-order regression with representative sprites. PokéRogue double Dynamax, Terastallization and Z-move commands, selected actor, PP and reload passed with fixture images; switch message visibility passed at 320×568, 390×844, 844×390 and 1280×800 in the fixture's single and double cases.
+
+These checks do not establish exact pixel alignment for every attack type, animation frame, species, resize during playback or alpha silhouette, and do not replace real-device testing or reference-video comparison. No Sites deployment or user-save access.
