@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createAdventureClockTabClient} from '../lib/cloud-adventure/adventure-clock-tab-client.mjs';
+import {prototypeClockFromLegacy,prototypeClockTransition,prototypeClockProject} from '../lib/cloud-adventure/adventure-clock-lease-prototype.mjs';
 const settle=()=>new Promise(resolve=>setTimeout(resolve,0));
 test('rapid reopen releases obsolete owner and hidden tab does not reacquire',async()=>{
  const calls=[];let release,timer,number=0;
@@ -9,3 +10,13 @@ test('rapid reopen releases obsolete owner and hidden tab does not reacquire',as
 });
 test('failed renewal is not retried or reopened',async()=>{const calls=[];let timer;const c=createAdventureClockTabClient({send:async action=>{calls.push(action);return action==='clockLeaseOpen'?{clockLease:{owner:'a',generation:1}}:null;},setTimer:fn=>{timer=fn;return 1;},clearTimer:()=>{timer=null;}});c.setOpen(true);await settle();timer();await settle();assert.equal(timer,null);c.setOpen(true);await settle();assert.deepEqual(calls,['clockLeaseOpen','clockLeaseRenew']);c.dispose();});
 test('only confirmed revision conflicts retry, preserving original open revision',async()=>{const calls=[];let timer,opens=0,renewals=0;const c=createAdventureClockTabClient({send:async(action,extra)=>{calls.push([action,extra]);if(action==='clockLeaseOpen'&&++opens===1)return {clockRevisionConflict:true,issuedRevision:12};if(action==='clockLeaseOpen')return {clockLease:{owner:'one',generation:1}};if(action==='clockLeaseRenew'&&++renewals===1)return {clockRevisionConflict:true,issuedRevision:14};if(action==='clockLeaseRenew')return {clockLease:{owner:'one',generation:1}};return {};},setTimer:fn=>{timer=fn;return 1;},clearTimer:()=>{timer=null;}});c.setOpen(true);await settle();assert.deepEqual(calls[1],['clockLeaseOpen',{sinceRevision:12}]);timer();await settle();assert.deepEqual(calls.slice(2).map(x=>x[0]),['clockLeaseRenew','clockLeaseRenew']);assert.ok(timer);c.dispose();});
+
+test('independent sessions expire safely across suspension, sleep and a lost renewal response',async()=>{
+ let now=0,world=prototypeClockFromLegacy({area:3,district:'lumiose-zone1',teamIds:['keep']},0,now),lost=false;const calls=[],timers=new Map();
+ const create=(id)=>createAdventureClockTabClient({send:async(action,extra)=>{calls.push([id,action]);const type={clockLeaseOpen:'open',clockLeaseRenew:'renew',clockLeaseClose:'close'}[action],owner=extra.owner||id.repeat(16),command={type,owner,...(extra.generation?{generation:extra.generation}:{})};try{world=prototypeClockTransition(world,world.revision,now,command);}catch{return null;}if(lost&&type==='renew'){lost=false;return null;}return {clockLease:type==='close'?null:world.leases.find(l=>l.owner===owner)};},setTimer:fn=>{timers.set(id,fn);return id;},clearTimer:()=>timers.delete(id)});
+ const a=create('a'),b=create('b');a.setOpen(true);await settle();now=5000;b.setOpen(true);await settle();now=10000;b.suspend();await settle();assert.equal(world.leases.length,1);assert.equal(prototypeClockProject(world,10000).pausedMs,10000);
+ // A renewal committed by the server but its response is lost. It must not
+ // be retried; an asleep browser has no opportunity to send further renewals.
+ lost=true;timers.get('a')();await settle();assert.equal(timers.has('a'),false);now=40000;assert.equal(prototypeClockProject(world,now).pausedMs,30000);assert.equal(prototypeClockProject(world,now).paused,false);assert.deepEqual(calls.filter(([id,action])=>id==='a'&&action==='clockLeaseRenew').length,1);
+ b.setOpen(true);await settle();assert.equal(calls.filter(([id,action])=>id==='b'&&action==='clockLeaseOpen').length,1);a.setOpen(false);a.setOpen(true);await settle();assert.equal(prototypeClockProject(world,now).paused,true);assert.equal(prototypeClockProject(world,45000).pausedMs,35000);a.dispose();b.dispose();
+});
