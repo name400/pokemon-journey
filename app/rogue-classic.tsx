@@ -4,6 +4,7 @@ import {classicDisplayPokemonName} from '@/lib/rogue-display-name.mjs';
 import {CLASSIC_BALL_TYPES} from '@/lib/rogue-ball-types.mjs';
 import {classicCanContinueEmptyReward} from '@/lib/rogue-reward-continuation.mjs';
 import {readGameResponse,gameErrorMessage} from '@/lib/game-response.mjs';
+import {isClassicGameResponse} from '@/lib/rogue-response-validation.mjs';
 import {classicBattlePresentationKey,classicDialoguePresentation} from '@/lib/rogue-presentation.mjs';
 import {ArrowLeft,ArrowRight,Box,Coins,Flag,LoaderCircle,MapPin,RefreshCw,Sparkles,Swords,Trophy,Users} from 'lucide-react';
 import RogueMoveLearn from '@/components/rogue-move-learn';
@@ -58,7 +59,7 @@ export default function RogueClassic({initialView='slots',navigationKey=0,onView
  }
  // Save revision does not order independent pickup updates. Only the latest
  // read may apply; starting an action also supersedes reads already in flight.
- async function load({reportError=true}={}){const generation=++readGeneration.current;try{const data=await request();if(!mounted.current||generation!==readGeneration.current)return;if(!Number.isSafeInteger(data.revision)||data.revision<revision.current)throw Error('현재 진행 상태를 확인하지 못했습니다. 다시 불러와 주세요.');accept(data);return data;}catch(e){if(mounted.current&&generation===readGeneration.current&&reportError)setError(gameErrorMessage(e,'도전을 불러오지 못했습니다.'));}}
+ async function load({reportError=true}={}){const generation=++readGeneration.current;try{const data=await request();if(!mounted.current||generation!==readGeneration.current)return;if(!isClassicGameResponse(data,{minimumRevision:Math.max(0,revision.current)}))throw Error('현재 진행 상태를 확인하지 못했습니다. 다시 불러와 주세요.');accept(data);return data;}catch(e){if(mounted.current&&generation===readGeneration.current&&reportError)setError(gameErrorMessage(e,'도전을 불러오지 못했습니다.'));}}
  useEffect(()=>{if(!drawSequence)return;const delay=window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:2200;const timer=window.setTimeout(()=>setDrawSequence(false),delay);return()=>window.clearTimeout(timer);},[drawSequence]);
  useEffect(()=>{if(view!=='eggs')return;let cancelled=false;const controller=new AbortController();const check=async()=>{if(lock.current)return;try{const response=await fetch('/api/rogue-classic?pickupOnly=1',{cache:'no-store',signal:controller.signal});if(!response.ok)return;const data:any=await response.json();if(!cancelled&&!lock.current&&Number.isSafeInteger(data.pickupVersion)&&pickupVersion.current>=0&&data.pickupVersion!==pickupVersion.current)await load();}catch{}};const timer=window.setInterval(()=>void check(),15000);return()=>{cancelled=true;controller.abort();window.clearInterval(timer);};},[view]);
  useEffect(()=>{setView(initialView);},[navigationKey]);
@@ -66,7 +67,7 @@ export default function RogueClassic({initialView='slots',navigationKey=0,onView
  useEffect(()=>{mounted.current=true;void load();const active=controllers.current;return()=>{mounted.current=false;active.forEach(c=>c.abort());};},[]);
  async function act(action:string,extra:any={}){
   if(lock.current)return;lock.current=true;readGeneration.current++;setBusy(true);setError('');if(action==='drawEggs')setDrawNotice('');
-  try{if(recoveryRequired.current){const recovered=await load({reportError:false});if(mounted.current){if(recovered){recoveryRequired.current=false;setError('진행 상태를 다시 불러왔습니다. 행동을 다시 선택해 주세요.');}else setError('진행 상태를 다시 불러오지 못했습니다. 연결을 확인하고 다시 시도해 주세요.');}return;}const result=await request({action,revision:revision.current,...extra});accept(result);if(['start','selectSlot'].includes(action)){setFinished(null);setEvolved(null);setView('game');}if(action==='prepare')setView('game');return result;}
+  try{if(recoveryRequired.current){const recovered=await load({reportError:false});if(mounted.current){if(recovered){recoveryRequired.current=false;setError('진행 상태를 다시 불러왔습니다. 행동을 다시 선택해 주세요.');}else setError('진행 상태를 다시 불러오지 못했습니다. 연결을 확인하고 다시 시도해 주세요.');}return;}const submittedRevision=revision.current,result=await request({action,revision:submittedRevision,...extra});if(!isClassicGameResponse(result,{expectedRevision:submittedRevision+1}))throw Error('서버 응답의 진행 상태를 확인하지 못했습니다.');accept(result);if(['start','selectSlot'].includes(action)){setFinished(null);setEvolved(null);setView('game');}if(action==='prepare')setView('game');return result;}
   catch(e){if(mounted.current){const message=gameErrorMessage(e,'행동 처리 실패');setError(message);const recovered=await load({reportError:false});if(!recovered&&mounted.current){recoveryRequired.current=true;setError(message+' 진행 상태를 다시 불러오지 못했습니다. 새로고침한 뒤 확인해 주세요.');}}}
   finally{lock.current=false;if(mounted.current)setBusy(false);}
  }
