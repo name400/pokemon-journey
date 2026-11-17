@@ -16,6 +16,9 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='tera-ogerpon'||scenario==='tera-terapagos'){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.tools.teraOrb=true;run.teraCharged=true;run.party=[makeReferenceMon(scenario==='tera-ogerpon'?1017:1024,100,{boxId:'tera-ui',moves:['Splash']})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'tera-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='gmax-entry'){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.tools.dynamaxBand=true;run.party=[makeReferenceMon(6,100,{boxId:'gmax-ui',moves:['Splash']})];run.formItems={'gmax-ui':['maxmushrooms']};run.party[0]=applyClassicForm(run.party[0],run,'maxmushrooms');run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'gmax-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
  }
