@@ -747,9 +747,11 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 .rc-shell.is-battle .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:before{border:0;border-radius:1px;background:#1b2d43}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled){color:#182b42}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):before{background:#ffe000}
-.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own{top:auto;bottom:1%}
-.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-exp{width:15cqw;margin-top:1px;gap:2px;line-height:1;font-size:7px}
-.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-exp>i{height:3px}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own{top:78.024691%;bottom:auto}
+/* Keep extra battle-state badges visible when they add height to the HUD. */
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own:has(.bs-status,.bs-stat-stages){top:auto;bottom:1%}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-exp{width:15cqw;margin-top:0;gap:.555556cqw;line-height:1;font-size:1.6cqw}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-exp>i{height:.833333cqw}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-narration .bs-log-open{display:block;position:fixed;left:88px;top:0;width:44px;min-width:44px;height:44px;min-height:44px;pointer-events:auto;z-index:35}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:not(:has(.bs-v52-commands)) .bs-narration .bs-log-open{display:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials{position:static;max-width:100%}
