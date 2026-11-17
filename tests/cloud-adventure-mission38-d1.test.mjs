@@ -31,7 +31,9 @@ test('mission 38 gift keeps full party and rewards exactly once in local D1',asy
  let world=storeAdventurePosition({...JSON.parse(row.state),area:3,district:'lumiose',interior:'hotel202',x:11,y:7,facing:'up',teamIds:team,zaMission37Complete:true,zaMission38Started:true},row.revision+1);
  await db.prepare('UPDATE worlds SET state=?,revision=revision+1 WHERE user_id=?').bind(JSON.stringify(world),userId).run();
  await get();assert.equal(state.world.interaction.action,'claimMission38Lucario');const before=await db.prepare('SELECT data FROM pokemon_box WHERE id=?').bind(id).first(),revision=state.revision;
- await call('claimMission38Lucario');const giftId=state.world.zaMission38AZLucarioId;assert.ok(giftId);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
+ // Two independent tabs submit the same revision concurrently to the real D1 route.
+ const requests=await Promise.all([0,1].map(()=>mf.dispatchFetch('http://adventure.test/api/world',{method:'POST',headers:{'content-type':'application/json',origin:'http://adventure.test'},body:JSON.stringify({action:'claimMission38Lucario',revision})})));
+ assert.deepEqual(requests.map(r=>r.status).sort(),[200,409]);state=await requests.find(r=>r.status===200).json();const giftId=state.world.zaMission38AZLucarioId;assert.ok(giftId);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
  const gift=await db.prepare('SELECT data FROM pokemon_box WHERE id=?').bind(giftId).first();assert.equal(JSON.parse(gift.data).speciesId,448);
  await call('claimMission38Lucario',{revision},409);await get();assert.equal(state.world.zaMission38AZLucarioClaimed,true);assert.deepEqual(state.world.teamIds,team);assert.equal(state.wallet.coins,coins);
  assert.deepEqual(await db.prepare('SELECT data FROM pokemon_box WHERE id=?').bind(id).first(),before);assert.deepEqual(await db.prepare('SELECT data FROM pokemon_box WHERE id=?').bind(giftId).first(),gift);
