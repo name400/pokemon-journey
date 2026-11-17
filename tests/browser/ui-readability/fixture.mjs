@@ -16,6 +16,10 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='profile-single-switch'){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.initialSwitchSlots=[];run.party=run.combat.teams[0];
+  applyClassicAction(doc,{action:'turn',command:{type:'switch',slot:2}});return doc;
+ }
  if(scenario==='profile-double-switch'){
   const doc=createFixture('profile-double'),run=activeClassicRun(doc);run.party.push(makeReferenceMon(133,30,{boxId:'profile-reserve',moves:['Splash']}));run.initialSwitchSlots=[];
   run.combat=createClassicCombat(run,[674,264].map(id=>makeReferenceMon(id,100,{boxId:'profile-foe-'+id,moves:['Splash']})),{trainer:true,doubles:true});run.party=run.combat.teams[0];

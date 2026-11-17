@@ -736,6 +736,8 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-narration .bs-log-lines p{color:#142238}
 /* Keep confirmed playback text in the v52 message area without covering the actor. */
 .rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] .bs-console .bs-narration{z-index:18;left:33.333333%;top:78.518519%;width:64.166667%;height:auto;min-height:0;max-height:21.481481%;padding:1.1cqw 1.944444cqw;overflow:hidden;border:1px solid #b9cfdf;background:#182b42;color:#fff;pointer-events:auto}
+.rc-shell.is-battle .battle-screen[data-v52-single=true][data-classic-switch-cue=true] .bs-console .bs-narration{visibility:hidden}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene .bs-switch-message{min-height:8.333333cqw;padding:1.944444cqw;font:400 2.777778cqw/3.888889cqw Arial,'Noto Sans KR',sans-serif}
 .rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] .bs-narration .bs-log-lines{max-height:12cqw;overflow-y:auto}
 .rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] .bs-narration .bs-log-lines p{color:#fff;font:400 2.777778cqw/3.888889cqw Arial,'Noto Sans KR',sans-serif}
 .rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] .bs-fx-layer[data-kind=form] .bs-effect-text{display:none}
