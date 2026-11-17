@@ -41,6 +41,8 @@
 .battle-screen.bs-no-motion .bs-form-effects,.battle-screen.bs-no-motion .bs-hp-track>i{transition:none}.battle-screen.bs-no-motion .bs-crown-glint{animation:none}
 @media(max-width:600px){.battle-screen .bs-form-effects[data-giant=true]{transform:scale(1.19)}.battle-screen .bs-combatant-foe .bs-form-effects[data-giant=true]{transform:scale(1.12)}.battle-screen .bs-tera-crown{width:58%;bottom:72%;stroke-width:2.8}.battle-screen .bs-dynamax-clouds{width:105%;bottom:82%}}
 @media(prefers-reduced-motion:reduce){.battle-screen .bs-form-effects{transition:none!important}.battle-screen .bs-crown-glint{animation:none!important}}
+/* Apply the approved 1.6× enlargement when the visible sprite anchor is known. */
+.battle-screen[data-v52-single=true] .bs-combatant-own[data-v52-alpha=true] .bs-form-effects[data-giant=true]:not([data-gigantamax=true]){transform:scale(1.6);transform-origin:var(--v52-origin-x) var(--v52-origin-y)}
 
 /* Event coordinates come from the exact server boxId, including ally targets. */
 .battle-screen .bs-scene{container-type:size}

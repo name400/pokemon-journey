@@ -342,10 +342,12 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
         void spriteFloor(src).then(bounds=>{
           if(cancelled||!node.isConnected||(img.currentSrc||img.src)!==src)return;
           const floor=bounds||{x:.5,y:(1+Math.min(1,img.naturalHeight/img.naturalWidth))/2};
+          const measured=!!bounds&&!/^data:/i.test(src)&&!/\.gif(?:[?#]|$)/i.test(src);
+          if(measured){node.dataset.v52Alpha='true';node.style.setProperty('--v52-origin-x',`${floor.x*100}%`);node.style.setProperty('--v52-origin-y',`${floor.y*100}%`);}else{delete node.dataset.v52Alpha;node.style.removeProperty('--v52-origin-x');node.style.removeProperty('--v52-origin-y');}
           const box=scene.getBoundingClientRect(),own=node.classList.contains('bs-combatant-own'),charizard=own&&node.dataset.v52Charizard==='true';
           if(!box.width||!box.height)return;
           // Generated data-URL frames can change every tick; never resize those per frame.
-          if(bounds&&!/^data:/i.test(src)&&!/\.gif(?:[?#]|$)/i.test(src)&&!node.querySelector('[data-giant=true]')){
+          if(bounds&&!/^data:/i.test(src)&&!/\.gif(?:[?#]|$)/i.test(src)&&!node.querySelector('[data-giant=true][data-gigantamax=true]')){
             const maxWidth=own?(charizard?115:77):56,maxHeight=own?(charizard?92:71):52;
             const width=Math.min(box.width*(maxWidth/360)/bounds.width,box.height*(maxHeight/202.5)/bounds.height,box.width*(own?.45:.35));
             node.style.setProperty('--v52-art-width',`${width/box.width*100}%`);
@@ -370,7 +372,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     return()=>{cancelled=true;cancelAnimationFrame(frame);observer?.disconnect();scene.removeEventListener('load',align,true);window.removeEventListener('resize',align);};
   },[approvedV52,multiple,battleKey,settings.animations]);
   // Preserve the measured layout when a new event batch restarts the observer.
-  useEffect(()=>{const scene=stage.current;if(!scene||!approvedV52||multiple)return;return()=>{for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant'))for(const name of ['--v52-anchor-x','--v52-anchor-y','--v52-floor-x','--v52-floor-y','--v52-art-width'])node.style.removeProperty(name);};},[approvedV52,multiple]);
+  useEffect(()=>{const scene=stage.current;if(!scene||!approvedV52||multiple)return;return()=>{for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant')){for(const name of ['--v52-anchor-x','--v52-anchor-y','--v52-floor-x','--v52-floor-y','--v52-art-width','--v52-origin-x','--v52-origin-y'])node.style.removeProperty(name);delete node.dataset.v52Alpha;}};},[approvedV52,multiple]);
   // Place the compact command buttons over the measured arena without assuming
   // the height of trainer headers or optional tool rows.
   useEffect(()=>{
