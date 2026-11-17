@@ -459,6 +459,7 @@ html:has(.bs-rogue-v52-party){overflow:hidden}
 .battle-screen .bs-rogue-party-details h4{margin:0 0 1.666667cqw;font-size:3.333333cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .battle-screen .bs-rogue-party-detailrow{margin:1.111111cqw 0;padding:.555556cqw 1.944444cqw;background:#13243b;font-size:2.777778cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .battle-screen .bs-rogue-party-ability{margin:1.111111cqw 0;padding:.555556cqw 1.944444cqw;background:#13243b;font-size:2.777778cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.battle-screen .bs-rogue-party-ability > span{display:block;overflow:hidden;white-space:nowrap}
 .battle-screen .bs-rogue-party-details[data-dense=true]{line-height:4cqw}
 .battle-screen .bs-rogue-party-details[data-dense=true] :is(.bs-rogue-party-detailrow,.bs-rogue-party-ability){margin:.555556cqw 0;padding:.277778cqw 1.944444cqw}
 .battle-screen .bs-rogue-party-confirm{position:absolute;left:36.388889cqw;top:23.055556cqw;box-sizing:border-box;width:50cqw;padding:2.222222cqw;border:1px solid white;background:#f7f7f3;color:#192d45;font:2.777778cqw/4.166667cqw Arial,'Noto Sans KR',sans-serif}
