@@ -9,6 +9,7 @@ export type BattleVisualEvent = {
   critical?: boolean; silent?: boolean; ball?: string; ballId?: string; shakes?: number; caught?: boolean;
   actorSide?: number; actorTeamIndex?: number; actorSlot?: number;
   targetSlot?: number; activeSlot?: number; slot?: number; transformation?: 'zpower' | 'dynamax-end';
+  weather?: string; terrain?: string;
 };
 export type BattlePlaybackFrame = {
   anim: string; eventKey: string; event: BattleVisualEvent | null; index: number;
@@ -23,7 +24,7 @@ export function battleAnimationClass(event: BattleVisualEvent): string {
   return `event-actor-${side} event-kind-${kind} fx-${type} category-${category}${event.hit === true ? ' event-hit' : ''}`;
 }
 
-export type BattleDisplay = { teams: any[][]; active: number[]; activeBySide: number[][] };
+export type BattleDisplay = { teams: any[][]; active: number[]; activeBySide: number[][]; weather?:string; terrain?:string; weatherLocked?:boolean };
 // Older single-battle snapshots omitted these presentation fields. Recover
 // them only for the same individual and explicitly matching appearance.
 function restoreLegacySpriteFields(mon:any, side:number, battle:any) {
@@ -52,7 +53,7 @@ export function battleDisplay(battle: any, before = false, normalizeFainted = fa
     const id=event.targetBoxId??event.boxId??event.pokemon?.boxId,index=activeBySide[side]?.[slot];
     if(id!=null&&teams?.[side]?.[index]?.boxId!=null&&String(teams[side][index].boxId)===String(id)){activeBySide[side][slot]=-1;if(slot===0)shownActive[side]=-1;}
   }
-  return { teams: (teams || [[], []]).map((team: any[],side:number) => team.map(mon => ({ ...(before ? restoreLegacySpriteFields(mon,side,battle) : mon), ...(normalizeFainted ? { fainted: Number.isFinite(mon.hp) && mon.hp <= 0 } : {}) }))), active: shownActive, activeBySide };
+  return { teams: (teams || [[], []]).map((team: any[],side:number) => team.map(mon => ({ ...(before ? restoreLegacySpriteFields(mon,side,battle) : mon), ...(normalizeFainted ? { fainted: Number.isFinite(mon.hp) && mon.hp <= 0 } : {}) }))), active: shownActive, activeBySide, weather:before&&typeof battle.beforeWeather==='string'?battle.beforeWeather:battle.weather||'',terrain:before&&typeof battle.beforeTerrain==='string'?battle.beforeTerrain:battle.terrain||'',weatherLocked:battle.weather==='fog'&&battle.beforeWeather==='fog' };
 }
 export type BattleEventLocation = { side: number; index: number; slot: number; boxId?: string };
 /** Explicit identity wins over side/slot hints, including friendly fire and switches. */
@@ -104,6 +105,8 @@ export function visibleNewMegaLocation(display:BattleDisplay,event:BattleVisualE
 }
 /** Apply explicit server state only; damage is never inferred from move power. */
 export function applyBattleEvent(display: BattleDisplay, event: BattleVisualEvent): BattleDisplay {
+  if(event.kind==='weather'&&typeof event.weather==='string')return display.weatherLocked?display:{...display,weather:event.weather};
+  if(event.kind==='terrain'&&typeof event.terrain==='string')return {...display,terrain:event.terrain};
   if (!['damage', 'heal', 'status', 'switch', 'faint', 'form'].includes(event.kind || '') && !(event.kind === 'effect' && (event.pokemon?.boosts || Number.isFinite(event.hp)))) return display;
   const location = battleEventLocation(display, event);
   if (!location) return display;
@@ -126,7 +129,7 @@ export function applyBattleEvent(display: BattleDisplay, event: BattleVisualEven
     if (Number.isInteger(slot) && slot! >= 0 && slot! < activeBySide[side].length) activeBySide[side][slot!] = index;
     active[side] = activeBySide[side].find(member => member >= 0) ?? index;
   }
-  return { teams, active, activeBySide };
+  return { ...display, teams, active, activeBySide };
 }
 /** Same-render double input and stale request completion guard. */
 export class BattleSubmissionGate {

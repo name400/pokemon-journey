@@ -16,6 +16,11 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(['field-playback-rain','field-playback-terrain'].includes(scenario)){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc),move=scenario==='field-playback-rain'?'Rain Dance':'Electric Terrain';
+  run.party=[makeReferenceMon(25,50,{boxId:'field-hero',moves:[move]})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];
+  run.combat=createClassicCombat(run,[makeReferenceMon(133,80,{boxId:'field-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='profile-single-switch'){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.initialSwitchSlots=[];run.party=run.combat.teams[0];
   applyClassicAction(doc,{action:'turn',command:{type:'switch',slot:2}});return doc;
