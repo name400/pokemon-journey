@@ -362,8 +362,8 @@
 .battle-screen .bs-reviewed-attack .bs-reviewed-water-outer{stroke:#198bcc;stroke-width:3;stroke-dasharray:none;animation:none;filter:drop-shadow(0 0 2px #4fd6fa)}
 .battle-screen .bs-reviewed-attack .bs-reviewed-water-core{stroke:#e9ffff;stroke-width:.8;stroke-dasharray:none;animation:none}
 .battle-screen .bs-reviewed-water-rings{fill:none;stroke:#a8efff;stroke-width:.5;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
-.battle-screen .bs-reviewed-electric-glow{stroke:#efaa16;stroke-width:2;filter:drop-shadow(0 0 2px #fff14b)}
-.battle-screen .bs-reviewed-electric-core{stroke:#fff36b;stroke-width:.65}
+.battle-screen .bs-reviewed-electric-glow{stroke:#efaa16;stroke-width:.6;filter:drop-shadow(0 0 2px #fff14b)}
+.battle-screen .bs-reviewed-electric-core{stroke:#fff36b;stroke-width:.2}
 @keyframes bs-reviewed-draw{0%{stroke-dashoffset:140}25%,75%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
 @keyframes bs-reviewed-fade{0%{opacity:0}12%,72%{opacity:1}100%{opacity:0}}
 @keyframes bs-reviewed-pulse{0%{opacity:0}25%,70%{opacity:1}100%{opacity:0}}
@@ -371,11 +371,11 @@
 @media(prefers-reduced-motion:reduce){.battle-screen[data-v52=true] .bs-hp-track>i{transition:none!important}}
 .battle-screen.bs-no-motion[data-v52=true] .bs-hp-track>i{transition:none}
 /* Distinct approximations of the supplied grass, ice, ghost and dragon cues. */
-.battle-screen .bs-reviewed-ice-glow{stroke:#84dfff;stroke-width:3.5;filter:drop-shadow(0 0 3px #d2ffff)}
-.battle-screen .bs-reviewed-ice-core{stroke:#efffff;stroke-width:1}
-.battle-screen .bs-reviewed-attack .bs-reviewed-ice-crystal{fill:#d9fbff;stroke:#73ccec;stroke-width:.55;stroke-dasharray:none;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
-.battle-screen .bs-reviewed-dragon-purple{stroke:#a853e4;stroke-width:2.3;filter:drop-shadow(0 0 2px #c384ff)}
-.battle-screen .bs-reviewed-dragon-teal{stroke:#4ae1d8;stroke-width:1.5}
+.battle-screen .bs-reviewed-ice-glow{stroke:#84dfff;stroke-width:.8;filter:drop-shadow(0 0 3px #d2ffff)}
+.battle-screen .bs-reviewed-ice-core{stroke:#efffff;stroke-width:.3}
+.battle-screen .bs-reviewed-attack .bs-reviewed-ice-crystal{fill:#d9fbff;stroke:#73ccec;stroke-width:.18;stroke-dasharray:none;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
+.battle-screen .bs-reviewed-dragon-purple{stroke:#a853e4;stroke-width:.6;filter:drop-shadow(0 0 2px #c384ff)}
+.battle-screen .bs-reviewed-dragon-teal{stroke:#4ae1d8;stroke-width:.4}
 .battle-screen .bs-reviewed-orb{animation:bs-reviewed-orb-fade var(--bs-fx-duration) linear both,bs-reviewed-orb-travel var(--bs-fx-duration) linear both}
 @keyframes bs-reviewed-orb-travel{0%{transform:translate(var(--orb-from-x),var(--orb-from-y))}68%,100%{transform:translate(var(--orb-to-x),var(--orb-to-y))}}
 .battle-screen .bs-reviewed-orb .bs-reviewed-orb-halo{fill:#b67ce966}

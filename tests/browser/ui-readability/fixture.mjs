@@ -47,9 +47,9 @@ export function createFixture(scenario='eggs'){
   run.party=[1,4,7,25,39,52].map((id,index)=>makeReferenceMon(id,50,{boxId:'party-'+index,moves:['Splash']}));run.party[5].hp=0;
   run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'party-foe-a',moves:['Splash']}),...(double?[makeReferenceMon(143,100,{boxId:'party-foe-b',moves:['Splash']})]:[])],{doubles:double});run.party=run.combat.teams[0];return doc;
  }
- if(['double-special-dynamax','double-special-tera','double-special-zmove','double-sprite-attack','double-reviewed-fire','double-reviewed-water','double-reviewed-ghost'].includes(scenario)){
+ if(['double-special-dynamax','double-special-tera','double-special-zmove','double-sprite-attack','double-reviewed-fire','double-reviewed-water','double-reviewed-ghost','double-reviewed-electric','double-reviewed-ice','double-reviewed-dragon'].includes(scenario)){
   const doc=createFixture('profile-double'),run=activeClassicRun(doc),z=scenario==='double-special-zmove';
-  const reviewed=({'double-reviewed-fire':[4,'Flamethrower',1],'double-reviewed-water':[7,'Hydro Pump',1],'double-reviewed-ghost':[94,'Shadow Ball',133]})[scenario];
+  const reviewed=({'double-reviewed-fire':[4,'Flamethrower',1],'double-reviewed-water':[7,'Hydro Pump',1],'double-reviewed-ghost':[94,'Shadow Ball',133],'double-reviewed-electric':[25,'Thunderbolt',27],'double-reviewed-ice':[7,'Ice Beam',27],'double-reviewed-dragon':[149,'Dragon Pulse',700]})[scenario];
   run.party=[makeReferenceMon(reviewed?.[0]||133,50,{boxId:'special-a',moves:[reviewed?.[1]||(scenario==='double-sprite-attack'?'Swift':'Quick Attack')],teraType:'Ghost',...(z?{item:'normaliumz'}:{})}),makeReferenceMon(7,50,{boxId:'special-b',moves:['Splash']})];
   run.tools.dynamaxBand=true;run.tools.teraOrb=true;run.tools.zRing=true;run.teraCharged=true;run.encounter={kind:'wild'};run.initialSwitchSlots=[];
   run.combat=createClassicCombat(run,[makeReferenceMon(reviewed?.[2]||(scenario==='double-sprite-attack'?27:143),100,{boxId:'special-foe-a',moves:['Splash']}),makeReferenceMon(reviewed?27:scenario==='double-sprite-attack'?7:143,100,{boxId:'special-foe-b',moves:['Splash']})],{doubles:true});run.party=run.combat.teams[0];return doc;
