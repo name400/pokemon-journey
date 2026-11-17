@@ -18,7 +18,7 @@ import {classicSpeciesScale} from '@/lib/rogue-battle-scale.mjs';
 import {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleScenePosition,v52ControlTop,v52OverlayGeometry,v52Page,impactLabel,battleTransformation,hasDifferentBattleForm,type BattleMoveTarget,type BattleMove,type BattleActor,type BattleTurnAction} from './battle-logic';
 export {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleScenePosition,v52ControlTop,v52OverlayGeometry,v52Page,impactLabel,battleTransformation,hasDifferentBattleForm} from './battle-logic';
 export type {BattleMoveTarget,BattleMove,BattleActor,BattleTurnAction} from './battle-logic';
-import {applyBattleEvent,battleDisplay,battleEventLocation,BattleSubmissionGate,useBattlePlayback,type BattleDisplay,type BattleVisualEvent,type BattleEventLocation} from '@/hooks/use-battle-playback';
+import {applyBattleEvent,battleDisplay,battleEventLocation,visibleSwitchLocation,BattleSubmissionGate,useBattlePlayback,type BattleDisplay,type BattleVisualEvent,type BattleEventLocation} from '@/hooks/use-battle-playback';
 import './battle-screen.css';
 import './battle-polish.css';
 import './battle-compact.css';
@@ -116,6 +116,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
   useEffect(()=>{setDescribedMove(null);setV52MovePage(0);setV52BallPage(0)},[battleKey]);
   const ivSetting=useIvScannerSetting();
   const [settings,setSettings]=useState<Settings>(defaults),[settingsReady,setSettingsReady]=useState(false),[panel,setPanel]=useState(classicLayout||approvedV52?'command':'moves'),[special,setSpecial]=useState(''),[submitted,setSubmitted]=useState(''),[selectedBall,setSelectedBall]=useState(''),[display,setDisplay]=useState<BattleDisplay>(()=>battleDisplay(battle,!!battle.events?.length,classicLayout)),[narration,setNarration]=useState(''),[finishedKey,setFinishedKey]=useState(''),[commandError,setCommandError]=useState(''),[revealed,setRevealed]=useState<string[]>([]);
+  const switchAnimationKey=useRef('');
   const [actorSlot,setActorSlot]=useState(0),[turnDraft,setTurnDraft]=useState<Record<number,BattleTurnAction>>({}),[actorSpecials,setActorSpecials]=useState<Record<number,string>>({}),[pendingMove,setPendingMove]=useState<BattleMove|null>(null);
   const root=useRef<HTMLElement>(null),stage=useRef<HTMLDivElement>(null),logElement=useRef<HTMLDivElement>(null),logPinned=useRef(true),mounted=useRef(false),run=useRef(0),latest=useRef(battle),latestKey=useRef(battleKey),gate=useRef(new BattleSubmissionGate()),lastFrame=useRef(''),faintAnimation=useRef<{key:string;identity:string}|null>(null),hadBusy=useRef(false),audio=useRef<AudioContext|null>(null);latest.current=battle;latestKey.current=battleKey;
   const playback=useBattlePlayback({enabled:settings.animations,speed:settings.speed,durationMs:eventDuration,gapMs:12,maxDurationMs:2800});
@@ -276,10 +277,23 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     }
     if(event.kind==='heal')animate(target,[{filter:'brightness(1)'},{filter:'brightness(1.3) drop-shadow(0 0 7px #8de5a1)',offset:.4},{filter:'brightness(1)'}],340);
     if(event.kind==='form')animate(target,[{transform:'translateY(0)'},{transform:'translateY(-3px)',offset:.55},{transform:'translateY(0)'}],700);
-    if(event.kind==='switch')animate(target,[{opacity:0,transform:'translateY(12px) scale(.4)'},{opacity:1,transform:'translateY(0) scale(1)'}],330);
     if(event.kind==='faint')animate(target,[{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(30px) scale(.75)'}],350);
     return()=>nodes.forEach(animation=>animation.cancel());
   },[playback.eventKey]);
+  // Switch targets are mounted by setDisplay above, so animate after that
+  // render rather than searching for the incoming node in the old DOM.
+  useEffect(()=>{
+    const event=playback.event,key=playback.eventKey;
+    if(!event||event.kind!=='switch'||!key||playback.sourceKey!==battleKey||switchAnimationKey.current===key)return;
+    const target=visibleSwitchLocation(display,event);if(!target)return;
+    const combatants=[...(stage.current?.querySelectorAll<HTMLElement>('.bs-combatant')||[])];
+    const node=combatants.find(element=>target.boxId!==undefined?element.dataset.battleBoxid===String(target.boxId):Number(element.dataset.battleSide)===target.side&&Number(element.dataset.battleSlot)===target.slot);
+    const sprite=node?.querySelector<HTMLElement>('.bs-sprite');if(!sprite?.animate)return;
+    switchAnimationKey.current=key;
+    const scale=Math.min(1,(playback.durationMs||eventDuration(event)/settings.speed)/Math.max(1,eventDuration(event)));
+    const animation=sprite.animate([{opacity:0,transform:'translateY(12px) scale(.4)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:330*scale,easing:'cubic-bezier(.2,.7,.3,1)'});
+    return()=>animation.cancel();
+  },[playback.eventKey,display,battleKey]);
   useEffect(()=>{if(classicLayout&&!presentationPaused&&!playing&&!busy&&battle.ended&&battle.winner===side&&continueLabel==='보상 선택'&&onContinue)onContinue();},[classicLayout,presentationPaused,playing,busy,battle.ended,battle.winner,side,continueLabel,onContinue]);
   useEffect(()=>{if(playing||busy||battle.ended)return;const active=document.activeElement;if(active===document.body||root.current?.contains(active)){const timer=setTimeout(()=>root.current?.querySelector<HTMLButtonElement>('[data-command-primary]:not([disabled])')?.focus({preventScroll:true}),0);return()=>clearTimeout(timer)}},[battleKey,playing,busy,battle.ended,panel]);
   async function issue(label:string,callback:()=>void|Promise<unknown>){if(locked||!gate.current.enter(battleKey))return;prepareAudio();setSubmitted(label);setCommandError('');try{const result=callback();if(result&&typeof (result as any).then==='function'){await result;if(mounted.current){gate.current.release(battleKey);setSubmitted('')}}}catch(e){if(mounted.current){gate.current.release(battleKey);setSubmitted('');setCommandError(e instanceof Error?e.message:'요청을 처리하지 못했습니다.')}}}

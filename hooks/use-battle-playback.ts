@@ -64,6 +64,12 @@ export function battleEventLocation(display: BattleDisplay, event: BattleVisualE
   if (!Number.isInteger(index) || !display.teams[side]?.[index]) return null;
   return { side, index, slot: bySide[side]?.indexOf(index) ?? -1, boxId: display.teams[side][index].boxId };
 }
+/** An entering sprite exists only after the switch has reached the display state. */
+export function visibleSwitchLocation(display:BattleDisplay,event:BattleVisualEvent):BattleEventLocation|null {
+  if(event.kind!=='switch')return null;
+  const location=battleEventLocation(display,event);
+  return location&&location.slot>=0?location:null;
+}
 /** Apply explicit server state only; damage is never inferred from move power. */
 export function applyBattleEvent(display: BattleDisplay, event: BattleVisualEvent): BattleDisplay {
   if (!['damage', 'heal', 'status', 'switch', 'faint', 'form'].includes(event.kind || '') && !(event.kind === 'effect' && event.pokemon?.boosts)) return display;

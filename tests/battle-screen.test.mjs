@@ -12,7 +12,7 @@ await fs.mkdir('.sites-runtime/tests',{recursive:true});
 await build({entryPoints:['components/battle-panel.tsx'],outfile:'.sites-runtime/tests/battle-panel.mjs',bundle:true,format:'esm',platform:'node',external:['react','react/jsx-runtime','lucide-react'],loader:{'.css':'empty'}});
 await build({entryPoints:['hooks/use-battle-playback.ts'],outfile:'.sites-runtime/tests/battle-display.mjs',bundle:true,format:'esm',platform:'node',external:['react']});
 const {default:BattlePanel}=await import('../.sites-runtime/tests/battle-panel.mjs');
-const {battleDisplay,applyBattleEvent}=await import('../.sites-runtime/tests/battle-display.mjs');
+const {battleDisplay,applyBattleEvent,visibleSwitchLocation}=await import('../.sites-runtime/tests/battle-display.mjs');
 const a={...makeMon(7,5),boxId:'squirtle',moves:['물대포']},b={...makeMon(4,5),boxId:'charmander',moves:['할퀴기']};
 const before=createCombat([a],[b]);
 const after=playDuel(before,[{type:'move',move:'물대포'},{type:'move',move:'할퀴기'}]);
@@ -41,7 +41,9 @@ let switchView=battleDisplay(combatView(switched),true);
 assert.equal(switchView.active[0],switchBefore.requests[0].active);
 const switchedEvent=switched.events.find(event=>event.kind==='switch'&&event.side===0);
 assert.equal(switchedEvent.boxId,'bench');
+assert.equal(visibleSwitchLocation(switchView,switchedEvent),null,'The real incoming sprite is absent before its switch event');
 for(const event of switched.events)switchView=applyBattleEvent(switchView,event);
+assert.equal(visibleSwitchLocation(switchView,switchedEvent)?.boxId,'bench','The real incoming sprite is targetable after the state update');
 assert.equal(switchView.teams[0][switchView.active[0]].boxId,'bench');
 assert.equal(switchView.teams[0][switchView.active[0]].hp,switched.teams[0][switched.requests[0].active].hp);
 
