@@ -23,7 +23,7 @@ try{
  await region.waitFor();
  assert.equal(await region.getAttribute('data-phase'),'intro');
  assert.match(await region.locator('[role=status]').innerText(),/어라.*고라파덕/s);
- const introBox=await region.locator('[role=status]').boundingBox(),stage=await region.locator('.evolution-presentation-stage').boundingBox();assert.ok(Math.abs((introBox.x-stage.x)/stage.width-.2854)<.01);assert.ok(Math.abs(introBox.width/stage.width-.4292)<.01);assert.ok(introBox.y>=stage.y&&introBox.y+introBox.height<=stage.y+stage.height);
+ assert.match(await region.locator('.evolution-presentation-stage').evaluate(node=>getComputedStyle(node).backgroundImage),/evolution-bg\.png/);const introBox=await region.locator('[role=status]').boundingBox(),stage=await region.locator('.evolution-presentation-stage').boundingBox();assert.ok(Math.abs((introBox.x-stage.x)/stage.width-.2854)<.01);assert.ok(Math.abs(introBox.width/stage.width-.4292)<.01);assert.ok(introBox.y>=stage.y&&introBox.y+introBox.height<=stage.y+stage.height);
  if(sprites)await page.screenshot({path:'.sites-runtime/tests/evolution-sequence/intro.png'});
  assert.doesNotMatch(await region.locator('[role=status]').innerText(),/진화했다/);
  const committed=await(await page.request.get(base+'/api/test-state')).json();
