@@ -20,7 +20,7 @@ import {classicSpeciesScale} from '@/lib/rogue-battle-scale.mjs';
 import {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleMoveForDisplay,battleScenePosition,v52ControlTop,v52OverlayGeometry,v52Page,visibleNumberedMove,impactLabel,battleTransformation,battleBurstKind,battleEventHasBurst,hasDifferentBattleForm,type BattleMoveTarget,type BattleMove,type BattleActor,type BattleTurnAction} from './battle-logic';
 export {hasMultiBattleDTO,signedBattleTarget,selectableBattleTargets,buildBattleTurnCommand,battleMoveForSpecial,battleMoveForDisplay,battleScenePosition,v52ControlTop,v52OverlayGeometry,v52Page,visibleNumberedMove,impactLabel,battleTransformation,hasDifferentBattleForm} from './battle-logic';
 export type {BattleMoveTarget,BattleMove,BattleActor,BattleTurnAction} from './battle-logic';
-import {applyBattleEvent,battleDisplay,battleEventLocation,visibleSwitchLocation,BattleSubmissionGate,useBattlePlayback,type BattleDisplay,type BattleVisualEvent,type BattleEventLocation} from '@/hooks/use-battle-playback';
+import {applyBattleEvent,battleDisplay,battleEventLocation,visibleSwitchLocation,visibleNewMegaLocation,BattleSubmissionGate,useBattlePlayback,type BattleDisplay,type BattleVisualEvent,type BattleEventLocation} from '@/hooks/use-battle-playback';
 import {PresentationReceipt} from '@/lib/rogue-presentation-receipt.mjs';
 import './battle-screen.css';
 import './battle-polish.css';
@@ -348,6 +348,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     const next=applyBattleEvent(display,event),actor=battleEventLocation(next,event,'actor'),target=battleEventLocation(next,event,'target');
     if(event.kind==='faint'&&target){const previous=display.teams[target.side]?.[target.index];if(previous&&!previous.fainted)faintAnimation.current={key:playback.eventKey,identity:`${target.side}:${target.index}`};}
     const stagedSwitch=approvedV52&&event.kind==='switch'&&playback.durationMs>0&&!!visibleSwitchLocation(next,event);
+    const stagedMega=approvedV52&&playback.durationMs>0&&!!visibleNewMegaLocation(display,event);
     const priorIndex=target?display.activeBySide[target.side]?.[target.slot]:-1,prior=target?display.teams[target.side]?.[priorIndex]:null;
     const canRecall=!!(prior&&prior.hp>0&&target&&priorIndex!==target.index);
     const cueKey=playback.eventKey,cueTimers:number[]=[];
@@ -361,8 +362,8 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
       cueTimers.push(window.setTimeout(()=>updateCue('reveal',''),playback.durationMs*.70));
     }
     let switchApplied=false;const applySwitch=()=>{if(!switchApplied&&mounted.current&&latestKey.current===battleKey){switchApplied=true;setDisplay(old=>applyBattleEvent(old,event));}};
-    const switchTimer=stagedSwitch?window.setTimeout(applySwitch,playback.durationMs*.70):null;
-    if(!stagedSwitch)setDisplay(old=>applyBattleEvent(old,event));if(event.text){setNarration(event.text);setRevealed(lines=>[...lines,event.text!]);}if(!event.silent)sound(event);
+    const switchTimer=stagedSwitch||stagedMega?window.setTimeout(applySwitch,playback.durationMs*(stagedSwitch ? .70 : .55)):null;
+    if(!stagedSwitch&&!stagedMega)setDisplay(old=>applyBattleEvent(old,event));if(event.text){setNarration(event.text);setRevealed(lines=>[...lines,event.text!]);}if(!event.silent)sound(event);
     const nodes:Animation[]=[],scale=Math.min(1,(playback.durationMs||eventDuration(event)/settings.speed)/Math.max(1,eventDuration(event)));
     const animate=(location:BattleEventLocation|null,frames:Keyframe[],duration:number)=>{
       if(!location)return;

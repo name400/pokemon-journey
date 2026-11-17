@@ -82,6 +82,15 @@ export function visibleSwitchLocation(display:BattleDisplay,event:BattleVisualEv
   const location=battleEventLocation(display,event);
   return location&&location.slot>=0?location:null;
 }
+/** Stage only a confirmed new Mega form of a visible combatant. Legacy or
+ * ambiguous events still apply immediately; this is presentation, not state. */
+export function visibleNewMegaLocation(display:BattleDisplay,event:BattleVisualEvent):BattleEventLocation|null {
+  if(event.kind!=='form'||event.pokemon?.mega!==true)return null;
+  const location=battleEventLocation(display,event);
+  if(!location||location.slot<0)return null;
+  const before=display.teams[location.side]?.[location.index];
+  return before&&before.mega!==true?location:null;
+}
 /** Apply explicit server state only; damage is never inferred from move power. */
 export function applyBattleEvent(display: BattleDisplay, event: BattleVisualEvent): BattleDisplay {
   if (!['damage', 'heal', 'status', 'switch', 'faint', 'form'].includes(event.kind || '') && !(event.kind === 'effect' && (event.pokemon?.boosts || Number.isFinite(event.hp)))) return display;
