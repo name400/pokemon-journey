@@ -79,7 +79,7 @@ assert.match(v52Commands,/data-v52-single="true"/);
 for(const label of ['싸운다','포켓몬','가방','도망','볼 선택','상태 확인']) assert.ok(v52Commands.includes(label),label);
 const v52Trainer=renderToStaticMarkup(React.createElement(BattlePanel,{approvedV52:true,battle:{...view,events:[],before:undefined,beforeActive:undefined},battleKey:'v52:trainer',title:'트레이너',busy:false,onCommand(){}}));
 assert.match(v52Trainer,/<button disabled=""[^>]*>볼 선택<\/button>/);
-assert.match(v52Trainer,/<button data-roving="command" disabled="">도망<\/button>/);
+assert.match(v52Trainer,/<button data-roving="command" disabled="">(?:<span[^>]*aria-hidden="true"[^>]*>[^<]*<\/span>)?도망<\/button>/);
 
 const {v52ControlTop}=await import('../.sites-runtime/tests/battle-panel.mjs');
 assert.equal(v52ControlTop(-200,200,.6765),-92,'Two 44px rows stay inside a 200px arena');
