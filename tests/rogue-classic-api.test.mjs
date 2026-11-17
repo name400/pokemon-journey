@@ -11,6 +11,9 @@ import {createFixture} from './browser/ui-readability/fixture.mjs';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {createClassicCombat,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
 import {classicTrainerEncounter} from '../lib/rogue-classic-world.mjs';
+import {CLASSIC_REWARD_REGISTRY} from '../lib/rogue-classic-rewards.mjs';
+import {fixture as persistentFixture} from './fixtures/dna-persistent.mjs';
+import {applyClassicForm} from '../lib/rogue-transformations.mjs';
 
 // Execute the actual TypeScript route with local SQLite and injected platform
 // bindings. No live credentials, production saves or network calls are used.
@@ -153,6 +156,37 @@ test('player Tera command uses the owned type and charges only once across API r
   const bytes=h.row().data,stale=await h.post(command);assert.equal(stale.status,409);assert.equal(h.row().data,bytes);const reloaded=await(await h.get()).json();assert.equal(reloaded.run.teraCharged,false);assert.equal(reloaded.battle.teams[0][0].terastallized,'Ghost');assert.equal(reloaded.battle.teams[0][0].teraType,'Ghost');assert.equal(h.row().data,bytes);
   const saved=await storage.decodeGameData(bytes),native=restoreClassicNativeBattle(saved.classic.slots[0].combat,saved.classic.slots[0]);assert.equal(native.p1.active[0].terastallized,'Ghost');assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
  }finally{h.sqlite.close();}
+});
+test('Mega Stone reward requires the bracelet and respects tracked or legacy save rules through the API',async()=>{
+ for(const [bracelet,tracked] of [[false,true],[true,true],[true,false]]){
+  const {doc,run}=persistentFixture([makeReferenceMon(6,100,{boxId:'mega-primary',moves:['Splash']})]);run.id=`mega-api-${bracelet}-${tracked}`;run.tools.megaBracelet=bracelet;if(tracked)run.formItemStateRule='source-v1';run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='rareformitem'),rewardId:'stone',boxId:'mega-primary',formItem:'charizarditex'}];
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+   const before=await(await h.get()).json();assert.equal(!!before.run.party[0].mega,false);const bytes=h.row().data,request={action:'reward',rewardId:'stone',boxId:'mega-primary',revision:0};
+   const response=await h.post(request);if(!bracelet){assert.equal(response.status,409);assert.equal(h.row().data,bytes);assert.equal(!!(await(await h.get()).json()).run.party[0].mega,false);continue;}
+   assert.equal(response.status,200);const result=await response.json();assert.equal(!!result.run.party[0].mega,tracked);assert.equal(result.run.party[0].rogueFormKey,tracked?'mega-x':undefined);const committed=h.row().data,reload=await(await h.get()).json();assert.equal(!!reload.run.party[0].mega,tracked);assert.equal(h.row().data,committed);const stale=await h.post(request);assert.equal(stale.status,409);assert.equal(h.row().data,committed);
+   const saved=await storage.decodeGameData(committed),active=saved.classic.slots[0];assert.deepEqual(active.formItems['mega-primary'],['charizarditex']);assert.equal(active.formItemStates?.['mega-primary']?.charizarditex,tracked?true:undefined);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+  }finally{h.sqlite.close();}
+ }
+});
+test('owned Mega Stone activation and reversal preserve HP and state for tracked and legacy saves',async()=>{
+ for(const tracked of [true,false]){
+  const charizard=makeReferenceMon(6,100,{boxId:'mega-owned',moves:['Splash']});charizard.hp=Math.floor(charizard.maxHp/2);const {doc,run}=persistentFixture([charizard]);run.id=`mega-toggle-${tracked}`;run.formItems={'mega-owned':['charizarditex']};if(tracked){run.formItemStateRule='source-v1';run.formItemStates={'mega-owned':{charizarditex:false}};}
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+   const original=h.row().data;assert.equal((await h.post({action:'form',item:'charizarditey',boxId:'mega-owned',revision:0})).status,409);assert.equal(h.row().data,original);
+   const before=await(await h.get()).json();assert.equal(!!before.run.party[0].mega,false);const activate={action:'form',item:'charizarditex',boxId:'mega-owned',revision:0},response=await h.post(activate);assert.equal(response.status,200);const active=await response.json();assert.equal(active.run.party[0].rogueFormKey,'mega-x');assert.equal(active.run.party[0].hp,charizard.hp);
+   const checkpoint=h.row().data,resumed=await(await h.get()).json();assert.equal(resumed.run.party[0].rogueFormKey,'mega-x');assert.equal(resumed.run.party[0].hp,charizard.hp);assert.equal(h.row().data,checkpoint);assert.equal((await h.post(activate)).status,409);assert.equal(h.row().data,checkpoint);
+   const reverse=await h.post({action:'form',item:'reverse:charizarditex',boxId:'mega-owned',revision:1});assert.equal(reverse.status,200);const normal=await reverse.json();assert.equal(!!normal.run.party[0].mega,false);assert.equal(normal.run.party[0].hp,charizard.hp);const final=await storage.decodeGameData(h.row().data);assert.deepEqual(final.classic.slots[0].formItems['mega-owned'],['charizarditex']);assert.equal(final.classic.slots[0].formItemStates?.['mega-owned']?.charizarditex,tracked?false:undefined);assert.deepEqual(final.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(final.adventure,doc.adventure);
+  }finally{h.sqlite.close();}
+ }
+});
+test('already Mega evolved tracked and legacy parties stay intact through a battle and reconnect',async()=>{
+ for(const tracked of [true,false]){
+  const charizard=makeReferenceMon(6,100,{boxId:'mega-combat',moves:['Splash']}),{doc,run,state}=persistentFixture([charizard]);run.id=`mega-combat-${tracked}`;run.formItems={'mega-combat':['charizarditex']};if(tracked){run.formItemStateRule='source-v1';run.formItemStates={'mega-combat':{charizarditex:false}};}run.party[0]=applyClassicForm(run.party[0],run,'charizarditex',state.system);run.screen='battle';run.initialSwitchSlots=[];run.encounter={kind:'wild'};run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'mega-opponent',moves:['Splash']})]);run.party=run.combat.teams[0];
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+   const before=await(await h.get()).json();assert.equal(before.battle.teams[0][0].rogueFormKey,'mega-x');assert.equal(before.battle.teams[0][0].mega,true);const bytes=h.row().data;assert.equal((await h.post({action:'form',item:'reverse:charizarditex',boxId:'mega-combat',revision:0})).status,409);assert.equal(h.row().data,bytes);
+   const response=await h.post({action:'turn',command:{type:'move',move:'splash'},revision:0});assert.equal(response.status,200);const after=await response.json();assert.equal(after.battle.teams[0][0].mega,true);const savedBytes=h.row().data,reloaded=await(await h.get()).json();assert.equal(h.row().data,savedBytes);assert.equal(reloaded.battle.teams[0][0].mega,true);assert.equal(reloaded.battle.teams[0][0].rogueFormKey,'mega-x');const saved=await storage.decodeGameData(savedBytes),native=restoreClassicNativeBattle(saved.classic.slots[0].combat,saved.classic.slots[0]);assert.equal(native.p1.active[0].species.id,'charizardmegax');assert.deepEqual(saved.classic.slots[0].formItems['mega-combat'],['charizarditex']);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+  }finally{h.sqlite.close();}
+ }
 });
 test('a real move during pending trainer dialogue is ACTION_FAILED, not a save conflict',async()=>{
  const h=harness({document:createFixture('trainer'),apply:game.applyClassicAction,view:game.classicGameView}),before=h.row();
