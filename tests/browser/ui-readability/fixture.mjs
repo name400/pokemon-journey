@@ -16,6 +16,11 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='profile-double-switch'){
+  const doc=createFixture('profile-double'),run=activeClassicRun(doc);run.party.push(makeReferenceMon(133,30,{boxId:'profile-reserve',moves:['Splash']}));run.initialSwitchSlots=[];
+  run.combat=createClassicCombat(run,[674,264].map(id=>makeReferenceMon(id,100,{boxId:'profile-foe-'+id,moves:['Splash']})),{trainer:true,doubles:true});run.party=run.combat.teams[0];
+  applyClassicAction(doc,{action:'turn',command:{type:'turn',actions:[{type:'switch',actor:0,slot:3},{type:'move',actor:1,move:'splash'}]}});return doc;
+ }
  if(['rogue-v52-moves-single','rogue-v52-moves-double'].includes(scenario)){
   const double=scenario.endsWith('double'),doc=createFixture(double?'profile-double':'profile-single'),run=activeClassicRun(doc);
   run.party=[makeReferenceMon(6,50,{boxId:'moves-own-a',moves:['Flamethrower','Thunderbolt','Surf','Growl']}),...(double?[makeReferenceMon(25,50,{boxId:'moves-own-b',moves:['Quick Attack']})]:[])];run.encounter={kind:'wild'};run.initialSwitchSlots=[];
