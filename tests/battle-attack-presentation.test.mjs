@@ -5,6 +5,9 @@ const immune={kind:'immune',targetBoxId:'ground',targetSide:1,text:'효과가 �
 assert.equal(reviewedAttackKind(move),'electric-bolt');
 assert.equal(reviewedAttackKind({kind:'move',moveId:'flamethrower'}),'fire-stream');
 assert.equal(reviewedAttackKind({kind:'move',moveId:'hydropump'}),'water-stream');
+for(const [moveId,kind] of [['energyball','grass-orb'],['icebeam','ice-beam'],['shadowball','ghost-orb'],['dragonpulse','dragon-wave']])assert.equal(reviewedAttackKind({kind:'move',moveId}),kind);
+assert.equal(reviewedAttackImmune([{...move,moveId:'shadowball'},immune],0),true);
+assert.equal(reviewedAttackImmune([{...move,moveId:'dragonpulse'},immune],0),true);
 assert.equal(reviewedAttackKind({kind:'move',moveId:'fireblast'}),'');
 assert.equal(reviewedAttackImmune([move,immune],0),true);
 assert.equal(reviewedAttackImmune([move,{...immune,targetSide:0}],0),false,'Same box IDs on different sides must not be confused');

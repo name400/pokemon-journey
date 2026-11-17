@@ -328,3 +328,17 @@
 .battle-screen[data-v52=true] .bs-hp-track>i{transition:transform var(--bs-damage-duration,650ms) ease}
 @media(prefers-reduced-motion:reduce){.battle-screen[data-v52=true] .bs-hp-track>i{transition:none!important}}
 .battle-screen.bs-no-motion[data-v52=true] .bs-hp-track>i{transition:none}
+/* Distinct approximations of the supplied grass, ice, ghost and dragon cues. */
+.battle-screen .bs-reviewed-ice-glow{stroke:#84dfff;stroke-width:3.5;filter:drop-shadow(0 0 3px #d2ffff)}
+.battle-screen .bs-reviewed-ice-core{stroke:#efffff;stroke-width:1}
+.battle-screen .bs-reviewed-attack .bs-reviewed-ice-crystal{fill:#d9fbff;stroke:#73ccec;stroke-width:.55;stroke-dasharray:none;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
+.battle-screen .bs-reviewed-dragon-purple{stroke:#a853e4;stroke-width:2.3;filter:drop-shadow(0 0 2px #c384ff)}
+.battle-screen .bs-reviewed-dragon-teal{stroke:#4ae1d8;stroke-width:1.5}
+.battle-screen .bs-reviewed-orb{animation:bs-reviewed-orb-fade var(--bs-fx-duration) linear both}
+.battle-screen .bs-reviewed-orb .bs-reviewed-orb-halo{fill:#b67ce966}
+.battle-screen .bs-reviewed-orb .bs-reviewed-orb-core{fill:#49226f;stroke:#bf80ea;stroke-width:.55}
+.battle-screen .bs-reviewed-orb.is-grass .bs-reviewed-orb-halo{fill:#a7ef8b77}
+.battle-screen .bs-reviewed-orb.is-grass .bs-reviewed-orb-core{fill:#56c365;stroke:#dbffd1}
+.battle-screen .bs-reviewed-attack .bs-reviewed-leaves path{fill:#8be274;stroke:#d6ffbf;stroke-width:.3;stroke-dasharray:none;animation:none}
+.battle-screen .bs-reviewed-satellites{fill:#d5abff}
+@keyframes bs-reviewed-orb-fade{0%{opacity:0}12%,68%{opacity:1}86%,100%{opacity:0}}

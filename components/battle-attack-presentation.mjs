@@ -1,7 +1,7 @@
 /** Presentation-only adaptations. The server's event objects are never changed. */
 export function reviewedAttackKind(event){
  if(event?.kind!=='move')return '';
- return ({flamethrower:'fire-stream',hydropump:'water-stream',thunderbolt:'electric-bolt'})[event.moveId]||'';
+ return ({flamethrower:'fire-stream',hydropump:'water-stream',thunderbolt:'electric-bolt',energyball:'grass-orb',icebeam:'ice-beam',shadowball:'ghost-orb',dragonpulse:'dragon-wave'})[event.moveId]||'';
 }
 export function reviewedAttackImmune(events,index){
  const move=events[index];if(!reviewedAttackKind(move)||!move.targetBoxId)return false;
