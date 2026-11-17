@@ -479,3 +479,8 @@ html:has(.bs-rogue-v52-status){overflow:hidden}
 .battle-screen:has(.bs-rogue-v52-capture) :is(.bs-console,.bs-header){visibility:hidden}
 html:has(.bs-rogue-v52-capture){overflow:hidden}
 .battle-screen .bs-rogue-capture-confirm:has(p:nth-of-type(2)){top:20cqw;font-size:2.5cqw;line-height:3.7cqw}
+/* The reviewed Tera sequence builds light first, then the cage and crown. */
+.battle-screen .bs-form-effects[data-transforming=true][data-transform-cue=terastallize] .bs-tera-cage{animation-name:bs-reviewed-tera-cage}
+.battle-screen .bs-form-effects[data-transforming=true][data-transform-cue=terastallize] .bs-tera-crown{animation-name:bs-reviewed-tera-crown}
+@keyframes bs-reviewed-tera-cage{0%,38%{opacity:0;transform:scale(.75)}50%,70%{opacity:.9;transform:scale(1)}82%,100%{opacity:0;transform:scale(1.05)}}
+@keyframes bs-reviewed-tera-crown{0%,68%{opacity:0;transform:translateX(-50%) translateY(18%) scale(.35)}78%{opacity:1;transform:translateX(-50%) translateY(-5%) scale(1.08)}100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
