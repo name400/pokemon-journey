@@ -21,8 +21,8 @@ test('the evolution result retains both real names and waits for confirmation',a
  const React=(await import('react')).default;
  const {renderToStaticMarkup}=await import('react-dom/server');
  await mkdir('.sites-runtime/tests',{recursive:true});
- await build({entryPoints:['components/cloud-adventure/adventure-evolution-result.tsx'],outfile:'.sites-runtime/tests/adventure-evolution-result.mjs',bundle:true,format:'esm',platform:'node',alias:{'@':process.cwd()},external:['react','react/jsx-runtime']});
+ await build({entryPoints:['components/cloud-adventure/adventure-evolution-result.tsx'],outfile:'.sites-runtime/tests/adventure-evolution-result.mjs',bundle:true,format:'esm',platform:'node',alias:{'@':process.cwd()},external:['react','react/jsx-runtime'],loader:{'.css':'empty'}});
  const {default:Result}=await import('../.sites-runtime/tests/adventure-evolution-result.mjs');
  const html=renderToStaticMarkup(React.createElement(Result,{result:{before:{id:1,name:'이상해씨'},after:{id:2,name:'이상해풀'}},onClose(){}}));
- assert.match(html,/이상해씨/);assert.match(html,/이상해풀/);assert.match(html,/>확인<\/button>/);
+ assert.match(html,/이상해씨/);assert.doesNotMatch(html,/진화했다/);assert.match(html,/>확인<\/button>/);assert.match(html,/연출 건너뛰기/);
 });
