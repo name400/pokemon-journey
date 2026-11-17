@@ -44,3 +44,9 @@ export function v52Page(count:number,requested:number,size:number){
   const pageSize=Math.max(1,Math.floor(size)),pages=Math.max(1,Math.ceil(Math.max(0,count)/pageSize)),page=Math.max(0,Math.min(Math.floor(requested),pages-1));
   return {page,pages,start:page*pageSize,end:Math.min(count,(page+1)*pageSize)};
 }
+
+/** Number keys refer to the global move numbers printed on the visible cards. */
+export function visibleNumberedMove<T>(moves:readonly T[],number:number,range:{start:number;end:number}):T|undefined {
+  const index=number-1;
+  return Number.isInteger(index)&&index>=range.start&&index<range.end?moves[index]:undefined;
+}

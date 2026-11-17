@@ -103,13 +103,18 @@ for(const [x,y,width,height] of [[-210,-202.5,360,202.5],[0,-80,120,80]]){
  if(height>=48)assert.ok(g['--v52-detail-top']+g['--v52-detail-height']<=y+height+1e-8);
 }
 
-const {v52Page}=await import('../.sites-runtime/tests/battle-panel.mjs');
+const {v52Page,visibleNumberedMove}=await import('../.sites-runtime/tests/battle-panel.mjs');
 for(const [count,size] of [[0,2],[1,2],[5,2],[4,1],[4,2],[4,4]]){
  const actual=[];const first=v52Page(count,0,size);
  for(let page=0;page<first.pages;page++){const range=v52Page(count,page,size);for(let i=range.start;i<range.end;i++)actual.push(i);}
  assert.deepEqual(actual,Array.from({length:count},(_,i)=>i),'Pagination keeps every move or ball in order');
  assert.equal(v52Page(count,999,size).page,first.pages-1);
 }
+const numberedMoves=['one','two','three','four'];
+assert.equal(visibleNumberedMove(numberedMoves,1,v52Page(4,1,2)),undefined,'a hidden move cannot be selected by number');
+assert.equal(visibleNumberedMove(numberedMoves,3,v52Page(4,1,2)),'three');
+assert.equal(visibleNumberedMove(numberedMoves,4,v52Page(4,1,2)),'four');
+assert.equal(visibleNumberedMove(numberedMoves,1,v52Page(4,0,4)),'one');
 const {validatePokemonEdit}=await import('../lib/admin-pokemon.mjs');
 const megaHero={...validatePokemonEdit({species:6,level:50,item:'charizarditex'}),boxId:'mega-hero'},megaEnemy={...makeMon(7,50),boxId:'mega-foe'};
 const megaBefore=createCombat([megaHero],[megaEnemy]);
