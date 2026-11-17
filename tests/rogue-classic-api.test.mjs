@@ -16,6 +16,20 @@ import {fixture as persistentFixture} from './fixtures/dna-persistent.mjs';
 import {applyClassicForm} from '../lib/rogue-transformations.mjs';
 import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
 import {validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
+import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
+
+test('victory hatches a new shiny variant once and keeps existing payout across API reload',async()=>{
+ const doc=createFixture('victory'),run=doc.classic.slots[doc.classic.activeSlot],system=doc.classic.system;
+ registerStarterCaught(system,makeReferenceMon(1,5,{boxId:'prior-shiny',shiny:true,variant:0}),{kind:'capture'});
+ system.eggs=[{id:'new-shiny-variant',remainingWaves:1,productId:'common',paidPrice:12000,pokemon:makeReferenceMon(1,5,{boxId:'new-shiny',shiny:true,variant:1})}];system.pendingHatches=[];
+ const coins=doc.coins,other=structuredClone(doc.classic.slots[1]),h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+ try{const result=await h.post({action:'turn',revision:0,command:{type:'move',move:'seismictoss'}});assert.equal(result.status,200,JSON.stringify(await result.clone().json()));
+  const view=await result.json();assert.equal(view.pendingHatches.length,1);assert.equal(view.pendingHatches[0].duplicate,false);assert.equal(view.pendingHatches[0].refund,3000);
+  const saved=await storage.decodeGameData(h.row().data);assert.ok(saved.coins>=coins+3000,'victory may grant other coins in addition to the hatch refund');assert.equal(saved.classic.system.dex[1].shinyVariantMask&3,3);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],other);
+  const before=h.row();assert.equal((await h.post({action:'turn',revision:0,command:{type:'move',move:'seismictoss'}})).status,409);assert.deepEqual(h.row(),before);
+  const reloaded=await(await h.get()).json();assert.deepEqual(reloaded.pendingHatches,view.pendingHatches);const ack=await h.post({action:'ackHatch',revision:1,eggId:'new-shiny-variant'});assert.equal(ack.status,200);const after=await storage.decodeGameData(h.row().data);assert.equal(after.coins,saved.coins);assert.equal(after.classic.system.pendingHatches.length,0);assert.deepEqual(after.classic.slots[1],other);
+ }finally{h.sqlite.close();}
+});
 
 test('naturally placed double hazards survive reload and resolve on the incoming Pokemon',async()=>{
  for(const variant of ['grounded','boots','flying','poison']){
