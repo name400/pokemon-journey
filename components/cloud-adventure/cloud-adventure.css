@@ -547,3 +547,8 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-status .bs-type-symbols{display:inline-flex;gap:2px}.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-status .bs-type-symbol{width:9px;height:9px;min-width:0;overflow:hidden}.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-status .bs-type-symbol img{width:100%;height:100%;object-fit:contain}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-status{display:block;gap:0}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-status section{background:transparent;color:inherit}
+/* v52's escape confirmation; the server remains authoritative for escape. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-run-dialog{position:absolute;z-index:20;left:131px;top:83px;box-sizing:border-box;width:180px;padding:8px;border:1px solid white;background:#f7f7f3;color:#192d45;font:10px/15px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-run-dialog p{margin:0 0 8px;color:inherit;font:inherit}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-run-dialog button{display:block;width:100%;height:22px;min-height:0;margin-top:3px;padding:3px 8px;border:0;border-radius:1px;background:#1b2d43;color:white;text-align:left;font:10px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-run-dialog button:first-of-type{background:#ffe000;color:#182b42}
