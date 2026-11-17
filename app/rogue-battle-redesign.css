@@ -645,3 +645,25 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-panel{position:relative}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials{position:absolute;bottom:100%;left:0;z-index:20;box-sizing:border-box;max-width:100%;margin:0;background:#30273c}
 }
+/* Short landscape: keep the 16:9 arena alongside, rather than under, controls. */
+@media (orientation:landscape) and (min-width:720px) and (min-height:360px) and (max-height:500px){
+ .rc-shell.is-battle .battle-screen[data-v52-single=true]{grid-template-columns:minmax(0,.85fr) minmax(300px,1.15fr)}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene{align-self:start;width:min(100%,calc((100dvh - 220px) * 16 / 9));max-width:none;height:auto;aspect-ratio:16/9}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-move-panel,.bs-ball-panel,.bs-v52-status){grid-column:2;grid-row:3;overflow:visible;max-height:none}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status){display:flex;flex-direction:column;gap:3px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status) .bs-narration{display:none}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] :is(.bs-v52-commands,.bs-v52-utilities,.bs-move-grid,.bs-ball-panel,.bs-v52-status){position:static;left:auto;top:auto;right:auto;width:100%;max-width:none;max-height:none}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-commands){display:grid;grid-template-columns:2fr 1fr;grid-template-rows:40px 1fr;gap:2px;overflow:visible;max-height:none}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-commands) .bs-narration{grid-column:1/-1;grid-row:1;min-height:0;padding:2px;overflow:hidden}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-commands) .bs-narration .bs-log-lines{display:none}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-commands{grid-column:1;grid-row:2;margin:0;gap:2px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-v52-utilities{grid-column:2;grid-row:2;grid-template-columns:1fr;margin:0;gap:2px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;padding:2px 4px;margin:0}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials button{min-height:44px;padding:1px 3px;font-size:11px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-hud{padding:3px 4px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-hud .bs-name{gap:2px;flex-wrap:wrap;justify-content:flex-start;row-gap:0}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-hud .bs-name b{font-size:10px;flex-basis:100%;line-height:1.05}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-hud .bs-name>span{font-size:9px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-hud .bs-name>.bs-type-symbols{margin-left:0}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-health,.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-party-balls{margin-top:2px}
+}
