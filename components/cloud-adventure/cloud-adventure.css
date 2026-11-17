@@ -586,6 +586,12 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-info-icon{display:grid;place-items:center;width:min(12px,calc(var(--v52-touch-size,44px) * .7));height:min(12px,calc(var(--v52-touch-size,44px) * .7));border:1px solid #b9cfdf;border-radius:50%;background:#1b2d43;color:#fff;font:700 9px/1 Georgia,serif;pointer-events:none}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-classic-backbar button{display:grid;place-items:center;border:0;background:transparent;box-shadow:none}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-classic-backbar button span{padding:1px;background:#1b2d43;color:#fff;font: min(8px,calc(var(--v52-touch-size,44px) / 5.5))/1 Arial,sans-serif;white-space:nowrap}
+/* The approved status sheet has a small bottom-right back label; keep its larger hit area. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status) .bs-classic-backbar{left:auto;right:0;top:auto;bottom:0}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status) .bs-classic-backbar button:first-child{position:relative}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status) .bs-classic-backbar button:first-child span{position:absolute;right:7px;bottom:2px;height:11px;padding:0 5px;font-size:0;line-height:11px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status) .bs-classic-backbar button:first-child span::after{content:'B 뒤로';font:9px/11px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status) .bs-classic-backbar button:nth-child(2){display:none}
 
 /* Keep the first ally's opaque sprite clear of the multi-battle HP panel on medium phones. */
 @container (min-width:381.01px) and (max-width:430px){
