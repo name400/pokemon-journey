@@ -208,6 +208,8 @@
 .battle-screen .bs-scene[data-terrain=electricterrain] .bs-artboard::after{background:linear-gradient(0deg,#f5d64b75,transparent 62%)}
 .battle-screen .bs-scene[data-terrain=mistyterrain] .bs-artboard::after{background:linear-gradient(0deg,#eea4d568,transparent 62%)}
 .battle-screen .bs-scene[data-terrain=psychicterrain] .bs-artboard::after{background:linear-gradient(0deg,#a272dc73,transparent 62%)}
+/* The approved v52 field uses this original image with the same centred cover crop. */
+.battle-screen[data-v52-single=true] .bs-scene[data-biome=meadow] .bs-artboard{background:url('/game/v52/evolution-bg.png') center/cover no-repeat}
 @media(prefers-reduced-motion:reduce){.battle-screen .bs-scene[data-terrain] .bs-artboard::after{transition:none}}
 .battle-screen .bs-scene:is([data-weather=snowscape],[data-weather=snow],[data-weather=hail])::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(#dfefff36,#edf8ff18)}
 .battle-screen .bs-scene[data-weather=sandstorm]::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(#b7834230,#ddb36a20)}
