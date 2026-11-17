@@ -10,13 +10,15 @@ import {createMission37TripleSnapshot,restoreMission37TripleSnapshot,playMission
 import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from '../lib/cloud-adventure/adventure-battle.mjs';
 const mon=(id,boxId,ability,moves=['튀어오르기'])=>({...makeMon(id,50),boxId,ability,moves,pp:{}});
 test('ZA Mimikyu caps the first hit without replacing weak damage with recoil',()=>{
- const attacker={...makeMon(4,5),boxId:'p',ability:'blaze',moves:['불꽃세례'],pp:{}},foe={...makeMon(778,100),boxId:'f',ability:'disguise',moves:['튀어오르기'],pp:{}},original=structuredClone(foe);
+ // Water Gun has no burn chance, so residual status damage cannot contaminate
+ // the first-hit and legacy recoil comparison.
+ const attacker={...makeMon(4,5),boxId:'p',ability:'blaze',moves:['물대포'],pp:{}},foe={...makeMon(778,100),boxId:'f',ability:'disguise',moves:['튀어오르기'],pp:{}},original=structuredClone(foe);
  const start=createZAAbilityCombat([attacker],[foe]);
- const next=adventurePlayCpu(JSON.parse(JSON.stringify(start)),{type:'move',move:'불꽃세례'}),damage=foe.hp-next.teams[1][0].hp;
+ const next=adventurePlayCpu(JSON.parse(JSON.stringify(start)),{type:'move',move:'물대포'}),damage=foe.hp-next.teams[1][0].hp;
  assert.ok(damage>0&&damage<Math.floor(foe.maxHp/8),`weak damage ${damage}, max HP ${foe.maxHp}`);
  assert.equal(next.teams[1][0].battleAppearance,'mimikyubusted');assert.equal(next.teams[1][0].ability,'disguise');assert.deepEqual(foe,original);
  const legacy=structuredClone(start);delete legacy.adventureDisguiseV1;
- const old=adventurePlayCpu(legacy,{type:'move',move:'불꽃세례'});assert.equal(foe.hp-old.teams[1][0].hp,Math.floor(foe.maxHp/8));
+ const old=adventurePlayCpu(legacy,{type:'move',move:'물대포'});assert.equal(foe.hp-old.teams[1][0].hp,Math.floor(foe.maxHp/8));
 });
 test('ZA Mimikyu limits strong hits once and preserves immunity and classic battles',()=>{
  const attacker={...makeMon(150,100),boxId:'p',ability:'pressure',moves:['섀도볼','몸통박치기'],pp:{}},foe=mon(778,'f','disguise');
