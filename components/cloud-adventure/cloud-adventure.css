@@ -441,7 +441,7 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):is(:hover,:focus-visible) .bs-v52-label{background:#ffe000;color:#182b42}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move:focus-visible{outline:1px solid #fff46b;outline-offset:-1px}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-narration{border:1px solid #b9cfdf;background:#182b42;color:#fff}
-.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true]:not([data-playing=true]):has(.bs-v52-commands [data-command-primary]:not(:disabled),.bs-move-grid) .bs-narration:not(:has(.bs-pending-dot)){opacity:0}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true]:not([data-playing=true]):has(.bs-v52-commands [data-command-primary]:not(:disabled),.bs-move-grid,.bs-ball-panel) .bs-narration:not(:has(.bs-pending-dot)){opacity:0}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-narration p{color:#fff;font-weight:400}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true][data-playing=true] .bs-narration{z-index:18;left:33.333333%;top:78.518519%;width:64.166667%;min-height:8.333333cqw;max-height:21.481481%;padding:1.944444cqw;font-size:2.777778cqw;line-height:3.888889cqw;overflow:auto;pointer-events:auto}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true][data-playing=true] .bs-narration p{font-size:2.777778cqw;line-height:3.888889cqw}
