@@ -24,6 +24,17 @@ export function battleAnimationClass(event: BattleVisualEvent): string {
 }
 
 export type BattleDisplay = { teams: any[][]; active: number[]; activeBySide: number[][] };
+// Older single-battle snapshots omitted these presentation fields. Recover
+// them only for the same individual and explicitly matching appearance.
+function restoreLegacySpriteFields(mon:any, side:number, battle:any) {
+  if(mon?.boxId==null||mon?.id==null||!mon?.battleAppearance)return mon;
+  const candidates=(battle.teams?.[side]||[]).filter((current:any)=>current?.boxId!=null&&String(current.boxId)===String(mon.boxId));
+  const current=candidates.length===1?candidates[0]:null;
+  if(!current||current.id!==mon.id||current.battleAppearance!==mon.battleAppearance||!!current.shiny!==!!mon.shiny)return mon;
+  const restored={...mon};
+  for(const key of ['sourceImage','sourceBackImage','sourceShinyImage','sourceShinyBackImage','sourceAppearanceMissing'])if(!Object.prototype.hasOwnProperty.call(mon,key)&&Object.prototype.hasOwnProperty.call(current,key))restored[key]=current[key];
+  return restored;
+}
 export function battleDisplay(battle: any, before = false, normalizeFainted = false, delayEntry = normalizeFainted): BattleDisplay {
   const teams = before && Array.isArray(battle.before) ? battle.before : battle.teams;
   const active = before && Array.isArray(battle.beforeActive) ? battle.beforeActive : battle.active;
@@ -41,7 +52,7 @@ export function battleDisplay(battle: any, before = false, normalizeFainted = fa
     const id=event.targetBoxId??event.boxId??event.pokemon?.boxId,index=activeBySide[side]?.[slot];
     if(id!=null&&teams?.[side]?.[index]?.boxId!=null&&String(teams[side][index].boxId)===String(id)){activeBySide[side][slot]=-1;if(slot===0)shownActive[side]=-1;}
   }
-  return { teams: (teams || [[], []]).map((team: any[]) => team.map(mon => ({ ...mon, ...(normalizeFainted ? { fainted: Number.isFinite(mon.hp) && mon.hp <= 0 } : {}) }))), active: shownActive, activeBySide };
+  return { teams: (teams || [[], []]).map((team: any[],side:number) => team.map(mon => ({ ...(before ? restoreLegacySpriteFields(mon,side,battle) : mon), ...(normalizeFainted ? { fainted: Number.isFinite(mon.hp) && mon.hp <= 0 } : {}) }))), active: shownActive, activeBySide };
 }
 export type BattleEventLocation = { side: number; index: number; slot: number; boxId?: string };
 /** Explicit identity wins over side/slot hints, including friendly fire and switches. */

@@ -47,11 +47,11 @@ export function createFixture(scenario='eggs'){
   run.party=[1,4,7,25,39,52].map((id,index)=>makeReferenceMon(id,50,{boxId:'party-'+index,moves:['Splash']}));run.party[5].hp=0;
   run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'party-foe-a',moves:['Splash']}),...(double?[makeReferenceMon(143,100,{boxId:'party-foe-b',moves:['Splash']})]:[])],{doubles:double});run.party=run.combat.teams[0];return doc;
  }
- if(['double-special-dynamax','double-special-tera','double-special-zmove'].includes(scenario)){
+ if(['double-special-dynamax','double-special-tera','double-special-zmove','double-sprite-attack'].includes(scenario)){
   const doc=createFixture('profile-double'),run=activeClassicRun(doc),z=scenario==='double-special-zmove';
-  run.party=[makeReferenceMon(133,50,{boxId:'special-a',moves:['Quick Attack'],teraType:'Ghost',...(z?{item:'normaliumz'}:{})}),makeReferenceMon(7,50,{boxId:'special-b',moves:['Splash']})];
+  run.party=[makeReferenceMon(133,50,{boxId:'special-a',moves:[scenario==='double-sprite-attack'?'Swift':'Quick Attack'],teraType:'Ghost',...(z?{item:'normaliumz'}:{})}),makeReferenceMon(7,50,{boxId:'special-b',moves:['Splash']})];
   run.tools.dynamaxBand=true;run.tools.teraOrb=true;run.tools.zRing=true;run.teraCharged=true;run.encounter={kind:'wild'};run.initialSwitchSlots=[];
-  run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'special-foe-a',moves:['Splash']}),makeReferenceMon(143,100,{boxId:'special-foe-b',moves:['Splash']})],{doubles:true});run.party=run.combat.teams[0];return doc;
+  run.combat=createClassicCombat(run,[makeReferenceMon(scenario==='double-sprite-attack'?27:143,100,{boxId:'special-foe-a',moves:['Splash']}),makeReferenceMon(scenario==='double-sprite-attack'?7:143,100,{boxId:'special-foe-b',moves:['Splash']})],{doubles:true});run.party=run.combat.teams[0];return doc;
  }
  if(['reviewed-dynamax','reviewed-tera','reviewed-zmove'].includes(scenario)){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc),z=scenario==='reviewed-zmove';

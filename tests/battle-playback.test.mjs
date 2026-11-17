@@ -71,6 +71,12 @@ gate.release('decision:2');
 assert.equal(gate.enter('decision:2'), true);
 
 const sample = { teams: [[{boxId:'a',hp:10,maxHp:30}], [{boxId:'b',hp:4,maxHp:40},{boxId:'c',hp:20,maxHp:40}]], before: [[{boxId:'a',hp:30,maxHp:30}], [{boxId:'b',hp:40,maxHp:40},{boxId:'c',hp:40,maxHp:40}]], active:[0,1], beforeActive:[0,0] };
+const legacySprite={teams:[[{boxId:'p',id:4,battleAppearance:'charmander',sourceBackImage:'back.png',hp:5}],[]],before:[[{boxId:'p',id:4,battleAppearance:'charmander',hp:10}],[]],active:[0,0]};
+assert.equal(battleDisplay(legacySprite,true).teams[0][0].sourceBackImage,'back.png');
+assert.equal(battleDisplay(legacySprite,true).teams[0][0].hp,10,'legacy recovery cannot replace earlier HP');
+for(const changed of [{id:5},{boxId:'other'},{battleAppearance:'charizardmegax'},{shiny:true}]){const different=structuredClone(legacySprite);Object.assign(different.teams[0][0],changed);assert.equal(battleDisplay(different,true).teams[0][0].sourceBackImage,undefined,'do not borrow an image from a different individual or form');}
+const explicit=structuredClone(legacySprite);explicit.before[0][0].sourceBackImage=null;assert.equal(battleDisplay(explicit,true).teams[0][0].sourceBackImage,null,'an explicit earlier image decision wins');
+const ambiguous=structuredClone(legacySprite);ambiguous.teams[0].push({...ambiguous.teams[0][0]});assert.equal(battleDisplay(ambiguous,true).teams[0][0].sourceBackImage,undefined,'duplicate identifiers are ambiguous');
 let display = battleDisplay(sample, true);
 assert.equal(display.teams[1][0].hp, 40, 'The final HP must not leak into the pre-impact view');
 display = applyBattleEvent(display, {side:0,targetSide:1,boxId:'b',kind:'damage',hp:4,maxHp:40,amount:36});

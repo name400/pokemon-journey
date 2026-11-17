@@ -357,8 +357,10 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     });};
     const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(align);observer?.observe(scene);
     scene.addEventListener('load',align,true);window.addEventListener('resize',align);align();
-    return()=>{cancelled=true;cancelAnimationFrame(frame);observer?.disconnect();scene.removeEventListener('load',align,true);window.removeEventListener('resize',align);for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant'))for(const name of ['--v52-anchor-x','--v52-anchor-y','--v52-floor-x','--v52-floor-y','--v52-art-width'])node.style.removeProperty(name);};
+    return()=>{cancelled=true;cancelAnimationFrame(frame);observer?.disconnect();scene.removeEventListener('load',align,true);window.removeEventListener('resize',align);};
   },[approvedV52,multiple,battleKey,settings.animations]);
+  // Preserve the measured layout when a new event batch restarts the observer.
+  useEffect(()=>{const scene=stage.current;if(!scene||!approvedV52||multiple)return;return()=>{for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant'))for(const name of ['--v52-anchor-x','--v52-anchor-y','--v52-floor-x','--v52-floor-y','--v52-art-width'])node.style.removeProperty(name);};},[approvedV52,multiple]);
   // Place the compact command buttons over the measured arena without assuming
   // the height of trainer headers or optional tool rows.
   useEffect(()=>{
