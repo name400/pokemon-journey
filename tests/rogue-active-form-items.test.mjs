@@ -36,6 +36,27 @@ test('Ultra reward and deactivation return to each active base; legacy origin re
   delete f.run.formItemStateRule;assert.equal(applyClassicForm(ultra,f.run,'reverse:ultranecroziumz',f.state.system).rogueFormKey,origin);delete ultra.rogueUltraOrigin;assert.equal(applyClassicForm(ultra,f.run,'reverse:ultranecroziumz',f.state.system).rogueFormKey,'dawn-wings');}
 });
 
+test('Necrozma form changes preserve an owned partner and work from evolution registration alone',async()=>{
+ const {registerStarterCaught}=await import('../lib/rogue-starter-system.mjs');
+ const {activateClassicBattleMega,classicBattleMegaOptions}=await import('../lib/rogue-transformations.mjs');
+ for(const [partnerId,item,form] of [[791,'nsolarizer','dusk-mane'],[792,'nlunarizer','dawn-wings']]){
+  const f=fixture(800,partnerId),partner=structuredClone(f.run.party[1]);delete f.state.system.dex[partnerId];
+  f.run.formItems.primary=[item];f.run.formItemStates={primary:{[item]:false}};
+  assert.ok(!classicBattleMegaOptions(f.run.party[0],f.run,f.state.system).some(o=>o.itemKey===item));
+  registerStarterCaught(f.state.system,partner,{kind:'evolution',increment:false});
+  assert.equal(f.state.system.dex[partnerId].caught,true);
+  f.run.party[0]=activateClassicBattleMega(f.run.party[0],f.run,item,f.state.system);
+  assert.equal(f.run.party[0].rogueFormKey,form);assert.deepEqual(f.run.party[1],partner);
+  let saved=await decodeGameData(await encodeGameData(f.doc)),run=saved.classic.slots[0];
+  assert.deepEqual(run.party[1],partner);assert.equal(run.party[0].rogueFormKey,form);
+  run.party[0]=applyClassicForm(run.party[0],run,'reverse:'+item,saved.classic.system);
+  saved=await decodeGameData(await encodeGameData(saved));run=saved.classic.slots[0];
+  assert.equal(run.party[0].rogueFormIndex,0);assert.deepEqual(run.party[1],partner);
+  assert.deepEqual(run.formItems.primary,[item]);assert.equal(run.formItemStates.primary[item],false);
+  assert.deepEqual(saved.classic.slots[1],{id:'other'});assert.deepEqual(saved.adventure,{safe:true});
+ }
+});
+
 test('ordinary evolution preserves activation without retriggering; Shedinja copies own independent states',async()=>{
  const {classicEvolutionOptions,evolveClassicPokemon}=await import('../lib/rogue-evolution.mjs');const {previewClassicDnaFusion}=await import('../lib/rogue-dna-fusion.mjs');
  for(const mode of ['ordinary','shedinja','fused-shedinja']){const f=fixture(mode==='ordinary'?4:mode==='shedinja'?290:6);if(mode==='fused-shedinja')f.run.party[0]=previewClassicDnaFusion(f.run.party[0],makeReferenceMon(290,50,{boxId:'nincada',moves:['Splash']})).fused;f.run.party=f.run.party.slice(0,1);f.run.balls.pokeball=2;f.run.formItems.primary=['charizarditex'];f.run.formItemStates={primary:{charizarditex:true}};
