@@ -8,6 +8,7 @@ assert.equal(reviewedAttackKind({kind:'move',moveId:'hydropump'}),'water-stream'
 for(const [moveId,kind] of [['energyball','grass-orb'],['icebeam','ice-beam'],['shadowball','ghost-orb'],['dragonpulse','dragon-wave']])assert.equal(reviewedAttackKind({kind:'move',moveId}),kind);
 assert.equal(reviewedAttackImmune([{...move,moveId:'shadowball'},immune],0),true);
 assert.equal(reviewedAttackImmune([{...move,moveId:'dragonpulse'},immune],0),true);
+for(const [moveId,kind] of [['swift','normal-stars'],['brickbreak','fighting-strikes'],['sludgebomb','poison-drops'],['earthquake','ground-cracks'],['airslash','flying-slashes'],['psychic','psychic-rings'],['megahorn','bug-thrust'],['rockslide','rock-fall'],['darkpulse','dark-rings'],['flashcannon','steel-beam'],['moonblast','fairy-orb']])assert.equal(reviewedAttackKind({kind:'move',moveId}),kind);
 assert.equal(reviewedAttackKind({kind:'move',moveId:'fireblast'}),'');
 assert.equal(reviewedAttackImmune([move,immune],0),true);
 assert.equal(reviewedAttackImmune([move,{...immune,targetSide:0}],0),false,'Same box IDs on different sides must not be confused');
