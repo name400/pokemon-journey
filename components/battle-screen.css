@@ -481,6 +481,7 @@ html:has(.bs-rogue-v52-party){overflow:hidden}
 .battle-screen .bs-rogue-status-sheet{position:absolute;left:8.055556cqw;top:10cqw;box-sizing:border-box;width:83.888889cqw;max-height:40cqw;overflow:auto;padding:2.777778cqw;border:1px solid #b4c9dc;background:#1b2d43}
 .battle-screen .bs-rogue-status-sheet h3{margin:0;color:#ffe000;font:700 3.333333cqw/5.277778cqw Arial,'Noto Sans KR',sans-serif}
 .battle-screen .bs-rogue-status-sheet p{margin:0;font:inherit}
+.battle-screen .bs-rogue-status-sheet[data-long-form=true]{top:3cqw;max-height:49cqw;padding:1.388889cqw}
 .battle-screen .bs-rogue-status-members section{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 1cqw;overflow-wrap:anywhere}
 .battle-screen .bs-rogue-status-members .bs-type-symbols{display:inline-flex;gap:2px}
 .battle-screen .bs-rogue-status-members .bs-type-symbol{width:2.5cqw;height:2.5cqw;min-width:0;overflow:hidden}
