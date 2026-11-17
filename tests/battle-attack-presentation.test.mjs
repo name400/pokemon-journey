@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {reviewedAttackKind,reviewedAttackImmune,reviewedAttackTargets,orderReviewedBattleEvents,confirmedZDash} from '../components/battle-attack-presentation.mjs';
+import {reviewedAttackKind,reviewedAttackImmune,reviewedAttackTargets,reviewedAttackHit,orderReviewedBattleEvents,confirmedZDash} from '../components/battle-attack-presentation.mjs';
 const zmove={kind:'move',moveId:'breakneckblitz',side:0,actorBoxId:'hero',targetSide:1,targetBoxId:'foe'};
 const zhit={kind:'damage',moveId:'breakneckblitz',actorBoxId:'hero',targetSide:1,targetBoxId:'foe',hit:true};
 assert.equal(confirmedZDash([zmove,zhit],0),true);
@@ -52,6 +52,12 @@ const spreadEvents=[spread,
  {kind:'move',moveId:'flamethrower',actorBoxId:'foe'},
  {kind:'damage',moveId:'earthquake',hit:true,actorBoxId:'hero',targetSide:1,targetBoxId:'other'}];
 assert.deepEqual(reviewedAttackTargets(spreadEvents,0),[{side:0,boxId:'ally',immune:false},{side:1,boxId:'first',immune:false},{side:1,boxId:'last',immune:true}]);
+assert.equal(reviewedAttackHit(spreadEvents,0,{side:1,boxId:'first'}),true);
+assert.equal(reviewedAttackHit(spreadEvents,0,{side:1,boxId:'last'}),false);
+assert.equal(reviewedAttackHit(spreadEvents,0,{side:0,boxId:'first'}),false);
+assert.equal(reviewedAttackHit([spread,{kind:'miss',actorBoxId:'hero',targetSide:1,targetBoxId:'first'}],0,{side:1,boxId:'first'}),false);
+assert.equal(reviewedAttackHit([spread,{kind:'move'},spreadEvents[2]],0,{side:1,boxId:'first'}),false);
+
 assert.deepEqual(reviewedAttackTargets([{...spread,targetBoxId:'fallback'}],0),[{side:1,boxId:'fallback',immune:false}]);
 assert.deepEqual(reviewedAttackTargets([move,immune],0),[{side:1,boxId:'ground',immune:true}],'Legacy immune events without actor IDs retain their confirmed immunity');
 assert.deepEqual(reviewedAttackTargets([{...spread,targetBoxId:undefined}],0),[]);

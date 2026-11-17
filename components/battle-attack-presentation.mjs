@@ -20,6 +20,15 @@ export function reviewedAttackImmune(events,index){
  }
  return false;
 }
+/** Decorative impact effects require a confirmed hit on this exact target. */
+export function reviewedAttackHit(events,index,target){
+ const move=events[index];if(!reviewedAttackKind(move)||move.actorBoxId==null||target?.boxId==null)return false;
+ for(let i=index+1;i<events.length;i++){
+  const event=events[i];if(['move','switch','faint'].includes(event.kind))break;
+  if(event.kind==='damage'&&event.hit===true&&event.moveId===move.moveId&&event.actorBoxId===move.actorBoxId&&event.targetSide===target.side&&String(event.targetBoxId??event.boxId)===String(target.boxId))return true;
+ }
+ return false;
+}
 /** Collect only confirmed recipients of this action, preserving event order.
  * The simulator's move target can be the last recipient of a spread attack. */
 export function reviewedAttackTargets(events,index){
