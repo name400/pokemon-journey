@@ -653,6 +653,7 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status){display:flex;flex-direction:column;gap:3px}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-status) .bs-narration{display:none}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] :is(.bs-v52-commands,.bs-v52-utilities,.bs-move-grid,.bs-ball-panel,.bs-v52-status){position:static;left:auto;top:auto;right:auto;width:100%;max-width:none;max-height:none}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-commands){display:grid;grid-template-columns:2fr 1fr;grid-template-rows:40px 1fr;gap:2px;overflow:visible;max-height:none}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-commands) .bs-narration{grid-column:1/-1;grid-row:1;min-height:0;padding:2px;overflow:hidden}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v52-commands) .bs-narration .bs-log-lines{display:none}

@@ -239,7 +239,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
       if(!zoomX||!zoomY)return;
       const y=(arena.top-host.top)/zoomY,height=arena.height/zoomY,x=(arena.left-host.left)/zoomX,width=arena.width/zoomX;
       const shortClassicLandscape=classicLayout&&window.matchMedia('(orientation: landscape) and (min-width: 720px) and (min-height: 360px) and (max-height: 500px)').matches;
-      const pageSize=shortClassicLandscape?1:height>=184?4:height>=136?2:1;setV52MovePageSize(previous=>previous===pageSize?previous:pageSize);
+      const pageSize=shortClassicLandscape?4:height>=184?4:height>=136?2:1;setV52MovePageSize(previous=>previous===pageSize?previous:pageSize);
       const positions=v52OverlayGeometry(x,y,width,height);
       for(const [name,value] of Object.entries(positions))consoleEl.style.setProperty(name,`${value}px`);
       consoleEl.dataset.v52OverlayReady='true';
