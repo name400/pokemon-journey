@@ -7,6 +7,10 @@ import {SEWER_BRANCH_ITEMS} from '../lib/cloud-adventure/adventure-mission19.mjs
 test('Mission 19 sewer branch ice bridge preserves both sides and existing save positions',()=>{
  const s={area:3,district:'lumiose-sewer',interior:null,zaMission19Stage:11,teamIds:['kept'],x:3,y:10,facing:'left'};
  assert.equal(fieldDialogue(s).action,'enterSewerIceBranch');
+ assert.equal(fieldDialogue({...s,zaMission19GateScene:0}).action,undefined);
+ assert.equal(fieldDialogue({...s,zaMission19GateScene:1}).action,'enterSewerIceBranch');
+ assert.equal(fieldDialogue({...s,zaMission19GateScene:0,zaMission19Complete:true}).action,'enterSewerIceBranch');
+ assert.equal(fieldDialogue({...s,zaMission19Stage:10})?.action,undefined);
  const branch={...s,zaSewerIceBranch:true,x:21,y:8,facing:'left'},before=fieldMap(branch);
  assert.equal(before[8][13],'i');assert.equal(before[8][4],'o');assert.equal(fieldPath(before,branch,{x:4,y:8}).length,0);
  assert.equal(fieldDialogue({...branch,x:14,y:8}).action,'sewerIceBridge');
@@ -16,6 +20,7 @@ test('Mission 19 sewer branch ice bridge preserves both sides and existing save 
  for(const state of [s,branch,opened]){const copy=restoreAdventurePosition(storeAdventurePosition(state,42),42);assert.deepEqual([copy.district,copy.x,copy.y,copy.teamIds],[state.district,state.x,state.y,['kept']]);assert.equal(!!copy.zaSewerIceBranch,!!state.zaSewerIceBranch);}
  const stale=restoreAdventurePosition(storeAdventurePosition(opened,42),43);assert.equal(stale.district,null);assert.equal(stale.zaSewerIceBranch,undefined);assert.equal(stale.zaSewerIceBridge,true);assert.deepEqual(stale.teamIds,['kept']);
  const back=stepField({...opened,x:21,y:8},'right');assert.deepEqual([back.district,back.x,back.y,back.zaSewerIceBranch],['lumiose-sewer',3,10,false]);
+ const oldBranchState={...opened,zaMission19GateScene:0,x:21,y:8},oldBranch={...oldBranchState,...stepField(oldBranchState,'right')};assert.deepEqual([oldBranch.district,oldBranch.x,oldBranch.y,oldBranch.zaSewerIceBranch,oldBranch.zaSewerIceBridge],['lumiose-sewer',3,10,false,true]);
  assert.equal(canLearnStoryTm({'za-tm025':1},{id:130,speciesId:130,moves:[]},'za-tm025'),true);
  assert.equal(canLearnStoryTm({'za-tm025':1},{id:1,speciesId:1,moves:[]},'za-tm025'),false);
 });
