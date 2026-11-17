@@ -321,3 +321,12 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-plus-dialog .bs-compact-grid button{white-space:normal;font-size:10px;line-height:1.2}
 /* The description control is a sibling, not an overlapping part of the move hit target. */
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{width:calc(100% - 44px);padding-right:4px}
+
+/* v52 approved.css: keep the larger, non-overlapping hit boxes while painting
+   the reference's compact navy controls and yellow initial command. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button{color:#fff}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:before{border:0;border-radius:1px;background:#1b2d43}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled){color:#182b42}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):before{background:#ffe000}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:is(:hover,:focus-visible):before{outline:1px solid #fff46b;background:#405573}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):is(:hover,:focus-visible){color:#fff}
