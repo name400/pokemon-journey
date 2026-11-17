@@ -389,6 +389,8 @@
 .battle-screen .bs-reviewed-attack .bs-reviewed-other path{stroke-dasharray:none;stroke-dashoffset:0;animation:none}
 .battle-screen .bs-reviewed-other{pointer-events:none}
 .battle-screen .bs-reviewed-stars>g,.battle-screen .bs-reviewed-poison>g,.battle-screen .bs-reviewed-rings>g,.battle-screen .bs-reviewed-rock>g,.battle-screen .bs-reviewed-strike{opacity:0;animation:bs-reviewed-other-pulse var(--bs-fx-duration) ease-out both}
+.battle-screen .bs-reviewed-fists>.bs-reviewed-strike{animation-name:bs-reviewed-two-strikes;animation-timing-function:linear}
+@keyframes bs-reviewed-two-strikes{0%,18%,42%,100%{opacity:0}24%,32%{opacity:1}}
 .battle-screen .bs-reviewed-attack .bs-reviewed-stars path{fill:#fff56b;stroke:#f0bb30;stroke-width:.5}
 .battle-screen .bs-reviewed-attack .bs-reviewed-stars .bs-reviewed-star-tail{fill:none;stroke:#fff3af;stroke-width:.65;opacity:.7}
 .battle-screen .bs-reviewed-attack .bs-reviewed-fists path{fill:#eab77f;stroke:#fff4dc;stroke-width:.6}
