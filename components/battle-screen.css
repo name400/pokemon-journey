@@ -366,6 +366,7 @@
 .battle-screen .bs-reviewed-attack .bs-reviewed-water-outer{stroke:#198bcc;stroke-width:3;stroke-dasharray:none;animation:none;filter:drop-shadow(0 0 2px #4fd6fa)}
 .battle-screen .bs-reviewed-attack .bs-reviewed-water-core{stroke:#e9ffff;stroke-width:.8;stroke-dasharray:none;animation:none}
 .battle-screen .bs-reviewed-water-rings{fill:none;stroke:#a8efff;stroke-width:.5;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
+.battle-screen .bs-reviewed-water-impact{fill:#d9fbff;stroke:#80d9f7;stroke-width:.18}
 .battle-screen .bs-reviewed-electric-glow{stroke:#efaa16;stroke-width:.6;filter:drop-shadow(0 0 2px #fff14b)}
 .battle-screen .bs-reviewed-electric-core{stroke:#fff36b;stroke-width:.2}
 @keyframes bs-reviewed-draw{0%{stroke-dashoffset:140}25%,75%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
