@@ -522,3 +522,19 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-confirm button:first-of-type{background:#ffe000;color:#182b42}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-back{position:absolute;right:7px;bottom:2px;height:11px;min-height:0;padding:0 5px;border:0;border-radius:1px;background:#1b2d43;color:white;font:9px Arial,'Noto Sans KR',sans-serif}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-party-baton{position:absolute;left:138px;bottom:4px;font-size:9px}
+/* v52 bag: retain the original party / item / description columns. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-items{position:absolute;left:125px;top:50px;width:117px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-items button{display:block;width:100%;height:25px;min-height:0;margin:0 0 4px;padding:2px 5px;border:0;border-radius:1px;background:#1b2d43;color:white;text-align:left;font:9px Arial,'Noto Sans KR',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-items button[aria-pressed=true]{background:#ffe000;color:#182b42}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-description{position:absolute;left:250px;top:52px;width:103px;font:9px/15px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-confirm{position:absolute;left:242px;top:128px;width:112px;padding:8px;border:1px solid white;background:#f7f7f3}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-confirm button{display:block;width:100%;height:22px;min-height:0;margin-top:3px;padding:3px 8px;border:0;border-radius:1px;background:#1b2d43;color:white;text-align:left;font:10px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-confirm button:first-child{background:#ffe000;color:#182b42}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-pages{position:absolute;left:125px;top:170px;width:117px;display:flex;align-items:center;justify-content:space-between;font-size:9px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-pages button,.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-reselect{min-height:0;border:0;border-radius:1px;background:#1b2d43;color:white;font:9px Arial,'Noto Sans KR',sans-serif}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-pages button{width:32px;height:19px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-reselect{position:absolute;left:250px;top:170px;width:95px;height:19px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-settings>div>button{min-height:44px;padding:4px 8px;border:1px solid #b9cfdf;background:#1b2d43;color:#fff}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-settings>div{max-height:calc(202.5px - var(--v52-touch-size,44px));width:300px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-settings>div>button{min-height:var(--v52-touch-size,44px)}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-settings{width:var(--v52-touch-size,44px);min-width:0;max-width:var(--v52-touch-size,44px)}
