@@ -306,6 +306,13 @@
 
 /* v52 single adventure: the ball and flash follow the server switch event.
    Coordinates are relative to the current target slot, not a species sprite. */
+/* During a real switch, retain the field and actors while hiding controls and HP. */
+.battle-screen[data-v52=true][data-playing=true][data-switch-swap=true] :is(.bs-hud,.bs-v52-commands,.bs-v52-utilities){visibility:hidden}
+/* The recall light belongs to the outgoing slot and ends before the incoming ball. */
+.battle-screen[data-v52=true] .bs-switch-recall-ray{position:absolute;inset:0;width:100%;height:100%;overflow:visible;opacity:0;animation:bs-v52-recall-light var(--bs-fx-duration) linear both}
+.battle-screen[data-v52=true] .bs-switch-recall-ray line{stroke:#ffd2ef;stroke-width:.32;stroke-linecap:round;filter:drop-shadow(0 0 .5cqw #ff87d9)}
+.battle-screen[data-v52=true] .bs-switch-recall-orb{position:absolute;left:var(--bs-target-x);top:var(--bs-target-y);width:7cqw;height:7cqw;border-radius:50%;opacity:0;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff 0%,#fff5 32%,#ffb6e2aa 54%,transparent 72%);animation:bs-v52-recall-light var(--bs-fx-duration) linear both}
+@keyframes bs-v52-recall-light{0%,9%{opacity:0}16%,23%{opacity:1}34%,100%{opacity:0}}
 .battle-screen[data-v52=true] .bs-switch-ball{position:absolute;z-index:5;left:var(--bs-target-x);top:var(--bs-target-y);width:5cqw;height:5cqw;opacity:0;animation:bs-v52-switch-flight var(--bs-fx-duration) linear both}
 .battle-screen[data-v52=true] .bs-switch-ball .bs-ball-atlas{transform:scale(.5);transform-origin:top left}
 .battle-screen[data-v52=true] .bs-fx-layer[data-target=foe] .bs-switch-ball{animation-name:bs-v52-switch-foe-flight}
