@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {classicExpToNext} from '../lib/rogue-classic-growth.mjs';
+import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
+import {applyClassicAction,classicGameView} from '../lib/rogue-classic-game.mjs';
+import {createClassicCombat} from '../lib/rogue-battle-engine.mjs';
+
+const mon=(id,boxId,level,moves)=>makeReferenceMon(id,level,{boxId,moves});
+const player=mon(1,'learner',9,['Seismic Toss','Tackle','Protect','Growl']);
+player.experience=classicExpToNext(player)-1;
+const doc={coins:0,collection:[],adventure:{untouched:true}};
+const state=ensureClassicState(doc);
+const run={id:'learn-battle',seed:'learn-battle',wave:21,biome:1,rng:42,screen:'battle',party:[player,mon(151,'ally',6,['Splash'])],balls:{pokeball:5},money:1000,modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[],rerolls:0};
+state.slots[0]=run;
+const weak=mon(19,'weak',1,['Splash']),survivor=mon(143,'survivor',100,['Splash']);
+weak.hp=1;
+run.combat=createClassicCombat(run,[weak,survivor],{doubles:true});
+run.initialSwitchSlots=[];
+applyClassicAction(doc,{action:'turn',command:{type:'turn',actions:[{actor:0,type:'move',move:'seismictoss',target:1},{actor:1,type:'move',move:'splash'}]}});
+assert.equal(run.screen,'learn');
+assert.equal(run.combat.ended,false);
+assert.equal(run.pendingMoves[0].move,'성장');
+// Serialize both before and after the learning decision: the party and combat
+// descriptors no longer share JavaScript object identity after reconnecting.
+let saved=JSON.parse(JSON.stringify(doc));
+let resumed=ensureClassicState(saved).slots[0];
+applyClassicAction(saved,{action:'learn',boxId:'learner',move:'성장',slot:1});
+assert.equal(resumed.screen,'battle');
+saved=JSON.parse(JSON.stringify(saved));
+resumed=ensureClassicState(saved).slots[0];
+const request=classicGameView(saved).battle.requests[0];
+assert.ok(request.actors[0].moves.some(move=>move.id==='growth'));
+assert.ok(!request.actors[0].moves.some(move=>move.id==='tackle'));
+const ppBefore=resumed.party[0].pp.growth;
+const hpBefore=resumed.party[0].hp;
+applyClassicAction(saved,{action:'turn',command:{type:'turn',actions:[{actor:0,type:'move',move:'growth'},{actor:1,type:'move',move:'splash'}]}});
+assert.equal(resumed.party[0].pp.growth,ppBefore-1);
+assert.equal(resumed.party[0].hp,hpBefore);
+assert.equal(resumed.combat.teams[0][0].moves[1],'성장');
+saved=JSON.parse(JSON.stringify(saved));
+resumed=ensureClassicState(saved).slots[0];
+applyClassicAction(saved,{action:'turn',command:{type:'turn',actions:[{actor:0,type:'move',move:'growth'},{actor:1,type:'move',move:'splash'}]}});
+assert.equal(resumed.party[0].pp.growth,ppBefore-2);
+assert.deepEqual(saved.adventure,{untouched:true});
+console.log('Mid-battle learning survives reconnect, updates the command and consumes PP');
