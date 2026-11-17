@@ -16,6 +16,12 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(['reviewed-dynamax','reviewed-tera','reviewed-zmove'].includes(scenario)){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc),z=scenario==='reviewed-zmove';
+  run.party=[makeReferenceMon(133,50,{boxId:'reviewed-hero',moves:['Quick Attack'],teraType:'Normal',...(z?{item:'normaliumz'}:{})})];
+  run.tools.dynamaxBand=true;run.tools.teraOrb=true;run.tools.zRing=true;run.teraCharged=true;
+  run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'reviewed-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='mega-double-v60'){
   const doc=createFixture('profile-double'),run=activeClassicRun(doc);
   run.party=[makeReferenceMon(6,100,{boxId:'mega-a',moves:['Splash']}),makeReferenceMon(9,100,{boxId:'mega-b',moves:['Splash']})];

@@ -60,6 +60,9 @@
 .battle-screen .bs-transform-ring.ring-two{width:70%;border-width:2px;animation-delay:calc(var(--bs-transform-duration,780ms) * .12)}
 .battle-screen .bs-transform-column{position:absolute;inset:1% 28% -1%;background:linear-gradient(90deg,transparent,#fffceccc,transparent);clip-path:polygon(35% 0,65% 0,100% 100%,0 100%);opacity:0;animation:bs-form-column var(--bs-transform-duration,780ms) ease both;mix-blend-mode:screen}
 .battle-screen .bs-transform-shards{position:absolute;inset:0;width:100%;height:100%;fill:var(--bs-transform-color);stroke:#ffffec;stroke-width:1.6;filter:drop-shadow(0 0 3px var(--bs-transform-color));animation:bs-form-shards var(--bs-transform-duration,780ms) cubic-bezier(.1,.7,.2,1) both}
+.battle-screen .bs-tera-cage{position:absolute;inset:0;width:100%;height:100%;fill:#b8f5ff22;stroke:#eaffff;stroke-width:1.5;filter:drop-shadow(0 0 3px #a7eaff);animation:bs-tera-cage var(--bs-transform-duration,780ms) ease both}
+.battle-screen .bs-form-effects[data-giant=true]::before{content:'';position:absolute;left:0;bottom:0;width:100%;height:9%;border:2px solid #ff9bd3;border-radius:50%;box-shadow:0 0 7px #ff69bc;pointer-events:none}
+@keyframes bs-tera-cage{0%,12%{opacity:0;transform:scale(.75)}40%,65%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.05)}}
 .battle-screen .bs-crystal-sheen{opacity:.43}
 .battle-screen .bs-combatant[data-commanding=true]::after{content:'';position:absolute;left:50%;bottom:3%;width:53%;height:10%;border:2px solid #f9e1a0;border-radius:50%;transform:translateX(-50%);box-shadow:0 0 0 2px #274b4366;z-index:-1}
 @keyframes bs-form-reveal{0%{opacity:.3;filter:brightness(1.6)}22%{opacity:1;filter:brightness(3.1) saturate(.2)}48%{filter:brightness(1.6)}100%{opacity:1}}

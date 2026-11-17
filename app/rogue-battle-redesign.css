@@ -732,6 +732,12 @@ body:has(.rc-shell.is-battle .battle-screen[data-v52-single=true]){overflow:hidd
 .rc-shell.is-battle:has(.battle-screen[data-v52-single=true]){zoom:1}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] :is(.bs-v52-commands,.bs-v52-utilities,.bs-move-grid,.bs-ball-panel,.bs-v52-status){grid-column:auto;grid-row:auto}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-narration .bs-log-lines p{color:#142238}
+/* Keep confirmed playback text in the v52 message area without covering the actor. */
+.rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] .bs-console .bs-narration{z-index:18;left:33.333333%;top:78.518519%;width:64.166667%;height:auto;min-height:0;max-height:21.481481%;padding:1.1cqw 1.944444cqw;overflow:hidden;border:1px solid #b9cfdf;background:#182b42;color:#fff;pointer-events:auto}
+.rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] .bs-narration .bs-log-lines{max-height:12cqw;overflow-y:auto}
+.rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] .bs-narration .bs-log-lines p{color:#fff;font:400 2.777778cqw/3.888889cqw Arial,'Noto Sans KR',sans-serif}
+.rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] .bs-fx-layer[data-kind=form] .bs-effect-text{display:none}
+.rc-shell.is-battle .battle-screen[data-v52-single=true][data-playing=true] :is(.bs-v52-commands,.bs-v52-utilities){visibility:hidden}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button:before{border:0;border-radius:1px;background:#1b2d43}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled){color:#182b42}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-v52-commands button:first-child:not(:disabled):before{background:#ffe000}
