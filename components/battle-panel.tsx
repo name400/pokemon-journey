@@ -349,7 +349,8 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
       const pageSize=shortLandscape?4:height>=170?4:height>=136?2:1;setV52MovePageSize(previous=>previous===pageSize?previous:pageSize);
       const positions=v52OverlayGeometry(x,y,width,height);
       for(const [name,value] of Object.entries(positions))consoleEl.style.setProperty(name,`${value}px`);
-      const hitWidth=44/zoomX,hitHeight=44/zoomY,megaY=Math.max(y,Math.min(y+height-hitHeight,y+height*(157.08/202.5)-hitHeight/2));
+      const formButton=consoleEl.querySelector<HTMLElement>('.bs-v61-form');
+      const hitWidth=Math.max(44/zoomX,formButton?width*(14.625/360):0),hitHeight=Math.max(44/zoomY,formButton?height*(17.71875/202.5):0),megaY=Math.max(y,Math.min(y+height-hitHeight,y+height*(157.08/202.5)-hitHeight/2));
       let minimumX=x;
       for(const control of screen?.querySelectorAll<HTMLElement>('.bs-plus-open,.bs-specials-drawer summary,.bs-classic-backbar button,.bs-settings summary')||[]){const r=control.getBoundingClientRect(),top=(r.top-host.top)/zoomY,bottom=(r.bottom-host.top)/zoomY;if(r.width>0&&r.height>0&&top<megaY+hitHeight&&bottom>megaY)minimumX=Math.max(minimumX,(r.right-host.left)/zoomX);}
       let maximumX=x+width-hitWidth;
@@ -357,11 +358,12 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
       const megaX=Math.max(minimumX,Math.min(x+width*(230.0625/360)-hitWidth/2,maximumX));
       consoleEl.dataset.v60Fits=minimumX<=maximumX?'true':'false';
       for(const [name,value] of Object.entries({'--v60-hit-left':megaX,'--v60-hit-top':megaY,'--v60-hit-width':hitWidth,'--v60-hit-height':hitHeight,'--v60-icon-width':width*(14.625/360),'--v60-icon-height':height*(17.71875/202.5)}))consoleEl.style.setProperty(name,`${value}px`);
+      if(formButton){const rect=formButton.getBoundingClientRect();consoleEl.style.setProperty('--v61-icon-shift-x',`${(arena.left+arena.width*(230.0625/360)-(rect.left+rect.width/2))/zoomX}px`);consoleEl.style.setProperty('--v61-icon-shift-y',`${(arena.top+arena.height*(157.078125/202.5)-(rect.top+rect.height/2))/zoomY}px`);}
       consoleEl.dataset.v52OverlayReady='true';
     });};
     const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(measure);observer?.observe(scene);observer?.observe(consoleEl);
     window.addEventListener('resize',measure);measure();
-    return()=>{cancelAnimationFrame(frame);observer?.disconnect();window.removeEventListener('resize',measure);delete consoleEl.dataset.v52OverlayReady;delete consoleEl.dataset.v60Fits;for(const name of ['--v52-command-top','--v52-utility-top','--v52-detail-top','--v52-detail-height','--v52-move-left','--v52-move-width','--v52-sheet-left','--v52-sheet-width','--v52-command-left','--v52-command-width','--v52-utility-left','--v52-utility-width','--v60-hit-left','--v60-hit-top','--v60-hit-width','--v60-hit-height','--v60-icon-width','--v60-icon-height'])consoleEl.style.removeProperty(name);};
+    return()=>{cancelAnimationFrame(frame);observer?.disconnect();window.removeEventListener('resize',measure);delete consoleEl.dataset.v52OverlayReady;delete consoleEl.dataset.v60Fits;for(const name of ['--v52-command-top','--v52-utility-top','--v52-detail-top','--v52-detail-height','--v52-move-left','--v52-move-width','--v52-sheet-left','--v52-sheet-width','--v52-command-left','--v52-command-width','--v52-utility-left','--v52-utility-width','--v60-hit-left','--v60-hit-top','--v60-hit-width','--v60-hit-height','--v60-icon-width','--v60-icon-height','--v61-icon-shift-x','--v61-icon-shift-y'])consoleEl.style.removeProperty(name);};
   },[approvedV52,multiple,panel,battleKey,classicLayout]);
   useEffect(()=>{if(busy)hadBusy.current=true;else if(hadBusy.current){hadBusy.current=false;gate.current.release(battleKey);setSubmitted('')}},[busy,battleKey]);
   useEffect(()=>{
