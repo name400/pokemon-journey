@@ -20,9 +20,9 @@
 .evolution-presentation[data-phase=changing] .evolution-presentation-message{visibility:hidden}
 .evolution-presentation-actions{display:flex;justify-content:center;gap:8px;padding-top:8px;flex-wrap:wrap}.evolution-presentation-actions button{min-height:44px;padding:8px 16px;cursor:pointer}
 @keyframes evo-shade{0%,15%{opacity:0}35%,70%{opacity:.55}100%{opacity:0}}
-@keyframes evo-before{0%,15%{opacity:1;filter:none}43%,51%{opacity:1;filter:brightness(0) invert(1)}52%,100%{opacity:0;filter:brightness(0) invert(1)}}
-@keyframes evo-after{0%,51%{opacity:0;filter:brightness(0) invert(1)}52%,61%{opacity:1;filter:brightness(0) invert(1)}78%,100%{opacity:1;filter:none}}
-@keyframes evo-light{0%,16%{opacity:0;transform:scale(.3)}48%,55%{opacity:1;transform:scale(3)}80%,100%{opacity:0;transform:scale(1.2)}}
+@keyframes evo-before{0%,15%{opacity:1;filter:none}43%,58%{opacity:1;filter:brightness(0) invert(1)}58.5%,100%{opacity:0;filter:brightness(0) invert(1)}}
+@keyframes evo-after{0%,58%{opacity:0;filter:brightness(0) invert(1)}58.5%,65%{opacity:1;filter:brightness(0) invert(1)}72%,100%{opacity:1;filter:none}}
+@keyframes evo-light{0%,16%{opacity:0;transform:scale(.3)}48%,58.5%{opacity:1;transform:scale(3)}80%,100%{opacity:0;transform:scale(1.2)}}
 @keyframes evo-rays{0%,18%{opacity:0;transform:scale(.5)}48%,55%{opacity:.85;transform:scale(1)}85%,100%{opacity:0;transform:scale(1.08)}}
 @keyframes evo-orbit{0%,20%{opacity:0}43%,65%{opacity:1}90%,100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.evolution-presentation-stage *{animation:none!important}.evolution-presentation-before{opacity:0!important}.evolution-presentation-after{opacity:1!important}}

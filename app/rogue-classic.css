@@ -102,7 +102,7 @@
 .rc-auto-hatch .rc-auto-hatch-dialog[hidden]{display:none}
 .rc-auto-hatch .rc-hatch-egg{animation:rc-reviewed-egg 3.6s linear both}
 .rc-auto-hatch .rc-hatch-mon{animation:rc-reviewed-hatch-mon .5s 3.2s both}
-.rc-auto-hatch .rc-hatch-rays{animation:rc-hatch-rays 1.4s 2.4s ease-out both}
+.rc-auto-hatch .rc-hatch-rays{inset:25%;border:max(1px,.35cqw) dotted #ffe47d;background:none;animation:rc-hatch-rays 1.4s 2.4s ease-out both}
 .rc-auto-hatch .rc-hatch-crack{animation:rc-hatch-crack-flash 1.4s 2.2s ease-out both}
 .rc-auto-hatch .rc-hatch-sparkles{animation:rc-hatch-sparkle 1.1s 3.2s both}
 .rc-auto-hatch-scene[data-hatch-phase=result] .rc-hatch-egg{display:none}
