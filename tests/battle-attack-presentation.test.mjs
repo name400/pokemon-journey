@@ -21,6 +21,19 @@ assert.deepEqual(original,[move,effect,damage,immune],'Server events are not mut
 assert.deepEqual(orderReviewedBattleEvents([move,effect,{...damage,targetSide:0}]),[move,effect,{...damage,targetSide:0}]);
 assert.deepEqual(orderReviewedBattleEvents([move,effect,{...damage,hit:false}]),[move,effect,{...damage,hit:false}]);
 assert.deepEqual(orderReviewedBattleEvents([move,effect,{kind:'critical'},damage]),[move,effect,{kind:'critical'},damage],'Non-adjacent cases retain server order');
+const wide={kind:'move',moveId:'earthquake',actorBoxId:'hero'};
+const allyEffect={kind:'effect',targetSide:0,targetBoxId:'ally',text:'효과가 굉장했다!'};
+const allyHit={kind:'damage',actorBoxId:'hero',moveId:'earthquake',targetSide:0,targetBoxId:'ally',hit:true};
+const foeHit={kind:'damage',actorBoxId:'hero',moveId:'earthquake',targetSide:1,targetBoxId:'foe',hit:true};
+const critical={kind:'critical',targetSide:1,targetBoxId:'foe'};
+const wideOriginal=[wide,allyEffect,critical,allyHit,foeHit];
+assert.deepEqual(orderReviewedBattleEvents(wideOriginal),[wide,critical,allyHit,allyEffect,foeHit]);
+assert.deepEqual(wideOriginal,[wide,allyEffect,critical,allyHit,foeHit]);
+assert.deepEqual(orderReviewedBattleEvents([wide,allyEffect,{kind:'move'},allyHit,foeHit]),[wide,allyEffect,{kind:'move'},allyHit,foeHit]);
+const foeEffect={kind:'effect',targetSide:1,targetBoxId:'foe',text:'효과가 별로다…'};
+assert.deepEqual(orderReviewedBattleEvents([wide,allyEffect,foeEffect,allyHit,foeHit]),[wide,allyHit,allyEffect,foeHit,foeEffect]);
+const otherHit={...allyHit,actorBoxId:'other'};
+assert.deepEqual(orderReviewedBattleEvents([wide,allyEffect,critical,otherHit,foeHit]),[wide,allyEffect,critical,otherHit,foeHit]);
 
 const spread={kind:'move',moveId:'earthquake',actorBoxId:'hero',side:0,targetSide:1,targetBoxId:'last'};
 const spreadEvents=[spread,

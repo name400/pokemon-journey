@@ -28,14 +28,19 @@ export function reviewedAttackTargets(events,index){
  if(!targets.length&&move.targetBoxId!=null&&(move.targetSide===0||move.targetSide===1))targets.push({side:move.targetSide,boxId:String(move.targetBoxId),immune:reviewedAttackImmune(events,index)});
  return targets;
 }
-/** Move an adjacent effectiveness line after its own hit. Other event order is untouched. */
+/** Place effectiveness after its matching hit, including confirmed spread hits. */
 export function orderReviewedBattleEvents(events){
  const ordered=[...events];
- for(let i=0;i<ordered.length-1;i++){
-  const a=ordered[i],b=ordered[i+1];
-  if(a?.kind==='effect'&&['효과가 굉장했다!','효과가 별로다…'].includes(a.text)&&b?.kind==='damage'&&b.hit===true&&a.targetSide===b.targetSide&&a.targetBoxId!=null&&String(a.targetBoxId)===String(b.targetBoxId)){
-   ordered[i]=b;ordered[i+1]=a;i++;
-  }
+ for(let i=0;i<ordered.length-1;){
+  const a=ordered[i];if(a?.kind!=='effect'||!['효과가 굉장했다!','효과가 별로다…'].includes(a.text)||a.targetBoxId==null){i++;continue;}
+  let start=i-1;while(start>=0&&!['move','switch','faint'].includes(ordered[start]?.kind))start--;
+  const action=ordered[start];let end=i+1;while(end<ordered.length&&!['move','switch','faint'].includes(ordered[end]?.kind))end++;
+  const hits=ordered.slice(i+1,end).filter(e=>e.kind==='damage'&&e.hit===true);
+  const match=hits.find(e=>e.targetSide===a.targetSide&&e.targetBoxId!=null&&String(e.targetBoxId)===String(a.targetBoxId));
+  const index=match?ordered.indexOf(match,i+1):-1;
+  const spread=reviewedAttackKind(action)&&action.actorBoxId!=null&&ordered.slice(start+1,end).some(e=>e.kind==='damage'&&e.hit===true&&e.actorBoxId===action.actorBoxId&&e.moveId===action.moveId&&(e.targetSide!==a.targetSide||String(e.targetBoxId)!==String(a.targetBoxId)));
+  if(index===i+1||index>i+1&&spread&&match.actorBoxId===action.actorBoxId&&match.moveId===action.moveId){ordered.splice(i,1);ordered.splice(index,0,a);continue;}
+  i++;
  }
  return ordered;
 }
