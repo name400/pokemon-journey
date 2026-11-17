@@ -8,19 +8,21 @@ import * as storage from '../lib/game-storage.mjs';
 import * as origin from '../lib/request-origin.mjs';
 import * as game from '../lib/rogue-classic-game.mjs';
 import {createFixture} from './browser/ui-readability/fixture.mjs';
+import {makeReferenceMon} from '../lib/rogue-reference.mjs';
+import {createClassicCombat} from '../lib/rogue-battle-engine.mjs';
 
 // Execute the actual TypeScript route with local SQLite and injected platform
 // bindings. No live credentials, production saves or network calls are used.
 function compile(path){return ts.transpileModule(readFileSync(new URL(path,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;}
 const routeSource=compile('../app/api/rogue-classic/route.ts'),rankingSource=compile('../lib/rogue-ranking.ts');
 function harness(options={}){
- const sqlite=new DatabaseSync(':memory:'),logs=[];let beforeWrite=options.beforeWrite;
+ const sqlite=new DatabaseSync(':memory:'),logs=[];let beforeWrite=options.beforeWrite,batchTail=Promise.resolve();
  sqlite.exec('CREATE TABLE saves(user_id TEXT PRIMARY KEY,data TEXT,updated_at INTEGER,revision INTEGER); CREATE TABLE admin_audit(id INTEGER PRIMARY KEY,action TEXT,detail TEXT)');
  if(options.exists!==false)sqlite.prepare('INSERT INTO saves VALUES(?,?,0,0)').run('private-account',JSON.stringify(options.document||{counter:0,adventure:{untouched:true}}));
  const db={prepare(sql){let args=[];return {bind(...values){args=values;return this;},async first(){if(options.readError)throw options.readError;return sqlite.prepare(sql).get(...args);},async run(){
   if(sql.startsWith('UPDATE saves')){if(beforeWrite){const callback=beforeWrite;beforeWrite=null;callback(sqlite);}if(options.writeError)throw options.writeError;}
   const result=sqlite.prepare(sql).run(...args);return {meta:{changes:Number(result.changes)}};
- }};},async batch(statements){sqlite.exec('BEGIN');try{const result=[];for(const statement of statements)result.push(await statement.run());sqlite.exec('COMMIT');return result;}catch(error){sqlite.exec('ROLLBACK');throw error;}}};
+ }};},async batch(statements){const prior=batchTail;let release;batchTail=new Promise(resolve=>{release=resolve;});await prior;try{sqlite.exec('BEGIN');try{const result=[];for(const statement of statements)result.push(await statement.run());sqlite.exec('COMMIT');return result;}catch(error){sqlite.exec('ROLLBACK');throw error;}}finally{release();}}};
  const ranking={};new Function('require','exports',rankingSource)(()=>({env:{DB:db}}),ranking);
  const modules={
   'cloudflare:workers':{env:{DB:db}},'@/app/chatgpt-auth':{getChatGPTUser:async()=>{if(options.authError)throw options.authError;return options.unauthenticated?null:{userId:'private-account'};}},
@@ -105,6 +107,28 @@ test('two otherwise valid battle actions at one revision produce one commit and 
  const success=await responses.find(r=>r.status===200).json(),conflict=await responses.find(r=>r.status===409).json();assert.equal(conflict.code,'REVISION_CONFLICT');assert.equal(success.revision,1);assert.equal(h.logs[0].stage,'write');assert.equal(h.logs[0].saveOutcome,'rejected');
  const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].party[0].pp.disable,19);const restored=await(await h.get()).json();assert.equal(restored.revision,1);
  assert.equal((await h.post({...command,revision:restored.revision})).status,200);assert.equal(h.row().revision,2);h.sqlite.close();
+});
+
+function captureApiFixture({full=false,double=false}={}){
+ const doc=createFixture('battle'),run=doc.classic.slots[0],mon=(id,boxId)=>makeReferenceMon(id,100,{boxId,moves:['Splash']});
+ run.id=`capture-api-${full}-${double}`;run.wave=21;run.rng=123456789;run.party=Array.from({length:full?6:double?2:1},(_,i)=>mon(i%2?7:1,`capture-own-${i}`));run.balls={...run.balls,pokeball:2,masterball:2};run.encounter={kind:'wild'};run.screen='battle';run.initialSwitchSlots=[];run.npcDialogueQueue=[];run.combat=createClassicCombat(run,[mon(150,'capture-foe'),...(double?[mon(143,'capture-other')]:[])],{doubles:double});run.party=run.combat.teams[0];doc.classic.slots[1]={id:'untouched-slot',safe:true};return doc;
+}
+test('real capture API commits one failed ball and one successful double capture across reload and stale requests',async()=>{
+ const doc=captureApiFixture({double:true}),h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+ try{
+  const fail=await h.post({action:'capture',ballId:'pokeball',boxId:'capture-foe',revision:0});assert.equal(fail.status,200);const failed=await fail.json();assert.equal(failed.revision,1);assert.equal(failed.run.balls.pokeball,1);assert.ok(failed.battle.events.some(e=>e.kind==='capture'&&!e.caught));assert.equal(failed.run.party.length,2);
+  const savedFail=h.row().data,failedData=await storage.decodeGameData(savedFail),stale=await h.post({action:'capture',ballId:'pokeball',boxId:'capture-foe',revision:0});assert.equal(failedData.classic.system.dex[150]?.caughtCount||0,0);assert.equal(stale.status,409);assert.equal(h.row().data,savedFail);const refreshed=await(await h.get()).json();assert.equal(refreshed.revision,1);assert.equal(refreshed.run.balls.pokeball,1);assert.equal(refreshed.run.party.length,2);
+  const command={action:'capture',ballId:'masterball',boxId:'capture-foe',revision:1},responses=await Promise.all([h.post(command),h.post(command)]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);const result=await responses.find(r=>r.status===200).json();assert.equal(result.revision,2);assert.equal(result.run.balls.masterball,1);assert.equal(result.run.party.length,3);assert.equal(result.run.party.filter(p=>p.originEnemyBoxId==='capture-foe').length,1);
+  const stable=h.row().data,again=await h.post({...command,revision:2});assert.equal(again.status,409);assert.equal(h.row().data,stable);const reload=await(await h.get()).json();assert.equal(reload.revision,2);assert.equal(reload.run.balls.masterball,1);assert.equal(reload.run.party.filter(p=>p.originEnemyBoxId==='capture-foe').length,1);const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.system.dex[150].caughtCount,1);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+ }finally{h.sqlite.close();}
+});
+test('real capture API preserves full-party choice through reload and rejects duplicate acceptance',async()=>{
+ const doc=captureApiFixture({full:true}),h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+ try{
+  const capture=await h.post({action:'capture',ballId:'masterball',boxId:'capture-foe',revision:0});assert.equal(capture.status,200);const offered=await capture.json();assert.equal(offered.run.screen,'capture');assert.equal(offered.run.balls.masterball,1);assert.equal(offered.run.party.length,6);const caught=offered.run.pendingCapture;assert.ok(caught?.boxId);const before=h.row().data,refreshed=await(await h.get()).json();assert.equal(h.row().data,before);assert.equal(refreshed.run.pendingCapture.boxId,caught.boxId);
+  const accept={action:'acceptCapture',replaceBoxId:offered.run.party[0].boxId,revision:1},responses=await Promise.all([h.post(accept),h.post(accept)]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);const accepted=await responses.find(r=>r.status===200).json();assert.equal(accepted.run.party.filter(p=>p.boxId===caught.boxId).length,1);assert.equal(accepted.run.balls.masterball,1);
+  const stable=h.row().data,again=await h.post({...accept,revision:2});assert.equal(again.status,409);assert.equal(h.row().data,stable);const reload=await(await h.get()).json();assert.equal(reload.run.party.filter(p=>p.boxId===caught.boxId).length,1);const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.system.dex[150].caughtCount,1);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+ }finally{h.sqlite.close();}
 });
 test('a real move during pending trainer dialogue is ACTION_FAILED, not a save conflict',async()=>{
  const h=harness({document:createFixture('trainer'),apply:game.applyClassicAction,view:game.classicGameView}),before=h.row();
