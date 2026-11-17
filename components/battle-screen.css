@@ -362,6 +362,7 @@
 .battle-screen .bs-reviewed-attack .bs-reviewed-fire-outer{fill:#e45b23;filter:drop-shadow(0 0 2px #ff8e42)}
 .battle-screen .bs-reviewed-attack .bs-reviewed-fire-middle{fill:#ffb339}
 .battle-screen .bs-reviewed-attack .bs-reviewed-fire-core{fill:#fff1bb}
+.battle-screen .bs-reviewed-attack .bs-reviewed-fire-fleck{fill:#ffdf79;stroke:none;stroke-dasharray:none;animation:none;opacity:.8}
 .battle-screen .bs-reviewed-attack .bs-reviewed-water-outer{stroke:#198bcc;stroke-width:3;stroke-dasharray:none;animation:none;filter:drop-shadow(0 0 2px #4fd6fa)}
 .battle-screen .bs-reviewed-attack .bs-reviewed-water-core{stroke:#e9ffff;stroke-width:.8;stroke-dasharray:none;animation:none}
 .battle-screen .bs-reviewed-water-rings{fill:none;stroke:#a8efff;stroke-width:.5;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
