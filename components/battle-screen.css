@@ -63,6 +63,21 @@
 .battle-screen .bs-tera-cage{position:absolute;inset:0;width:100%;height:100%;fill:#b8f5ff22;stroke:#eaffff;stroke-width:1.5;filter:drop-shadow(0 0 3px #a7eaff);animation:bs-tera-cage var(--bs-transform-duration,780ms) ease both}
 .battle-screen .bs-form-effects[data-giant=true]::before{content:'';position:absolute;left:0;bottom:0;width:100%;height:9%;border:2px solid #ff9bd3;border-radius:50%;box-shadow:0 0 7px #ff69bc;pointer-events:none}
 @keyframes bs-tera-cage{0%,12%{opacity:0;transform:scale(.75)}40%,65%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.05)}}
+.battle-screen .bs-scene[data-mega-focus=true]>.bs-combatant,.battle-screen .bs-scene[data-mega-focus=true]>.bs-hud{visibility:hidden}
+.battle-screen .bs-mega-focus{position:absolute;inset:0;z-index:20;overflow:hidden;pointer-events:none;background:#12223988;animation:bs-mega-focus-shade var(--bs-mega-duration) ease both}
+.battle-screen .bs-mega-focus-old,.battle-screen .bs-mega-focus-new{position:absolute;left:50%;bottom:25%;width:38%;height:65%;transform:translateX(-50%);display:grid;place-items:end center}
+.battle-screen .bs-mega-focus-old img,.battle-screen .bs-mega-focus-new img{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
+.battle-screen .bs-mega-focus-old{animation:bs-mega-focus-old var(--bs-mega-duration) linear both}
+.battle-screen .bs-mega-focus-new{animation:bs-mega-focus-new var(--bs-mega-duration) linear both}
+.battle-screen .bs-mega-focus-ribbons{position:absolute;left:5%;top:40%;width:45%;height:22%;border-top:3px solid #9ef2d8;border-radius:50%;transform:rotate(-18deg);filter:drop-shadow(0 4px 1px #f7b8ef) drop-shadow(0 -4px 1px #9ccfff);animation:bs-mega-ribbons var(--bs-mega-duration) ease both}
+.battle-screen .bs-mega-focus-flash{position:absolute;left:50%;top:43%;width:22%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff 0,#caffffbb 35%,transparent 70%);transform:translate(-50%,-50%);animation:bs-mega-flash var(--bs-mega-duration) ease both}
+@keyframes bs-mega-focus-shade{0%,100%{background:#12223900}20%,80%{background:#12223988}}
+@keyframes bs-mega-focus-old{0%,32%{opacity:1;filter:none}42%{opacity:1;filter:brightness(0) invert(1)}50%,100%{opacity:0;filter:brightness(0) invert(1)}}
+@keyframes bs-mega-focus-new{0%,49%{opacity:0;filter:brightness(0) invert(1)}55%{opacity:1;filter:brightness(0) invert(1)}70%,100%{opacity:1;filter:none}}
+@keyframes bs-mega-ribbons{0%,12%{opacity:0;transform:rotate(-18deg) scaleX(.1)}30%,55%{opacity:1;transform:rotate(-18deg) scaleX(1)}75%,100%{opacity:0}}
+@keyframes bs-mega-flash{0%,38%{opacity:0}50%{opacity:1}65%,100%{opacity:0}}
+.battle-screen .bs-z-dash-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;fill:none;stroke:#ffe778;stroke-width:.7;stroke-linecap:round;filter:drop-shadow(0 0 2px #fff6a5);animation:bs-z-dash-lines var(--bs-fx-duration) ease both}
+@keyframes bs-z-dash-lines{0%,12%{opacity:0}30%,60%{opacity:.9}85%,100%{opacity:0}}
 .battle-screen .bs-crystal-sheen{opacity:.43}
 .battle-screen .bs-combatant[data-commanding=true]::after{content:'';position:absolute;left:50%;bottom:3%;width:53%;height:10%;border:2px solid #f9e1a0;border-radius:50%;transform:translateX(-50%);box-shadow:0 0 0 2px #274b4366;z-index:-1}
 @keyframes bs-form-reveal{0%{opacity:.3;filter:brightness(1.6)}22%{opacity:1;filter:brightness(3.1) saturate(.2)}48%{filter:brightness(1.6)}100%{opacity:1}}

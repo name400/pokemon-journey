@@ -3,6 +3,15 @@ export function reviewedAttackKind(event){
  if(event?.kind!=='move')return '';
  return ({flamethrower:'fire-stream',hydropump:'water-stream',thunderbolt:'electric-bolt',energyball:'grass-orb',icebeam:'ice-beam',shadowball:'ghost-orb',dragonpulse:'dragon-wave',swift:'normal-stars',brickbreak:'fighting-strikes',sludgebomb:'poison-drops',earthquake:'ground-cracks',airslash:'flying-slashes',psychic:'psychic-rings',megahorn:'bug-thrust',rockslide:'rock-fall',darkpulse:'dark-rings',flashcannon:'steel-beam',moonblast:'fairy-orb'})[event.moveId]||'';
 }
+/** Only animate a Z dash when this action actually hit its declared opponent. */
+export function confirmedZDash(events,index){
+ const move=events[index];if(move?.kind!=='move'||move.moveId!=='breakneckblitz'||move.actorBoxId==null||move.targetBoxId==null||move.side===move.targetSide)return false;
+ for(let i=index+1;i<events.length;i++){
+  const event=events[i];if(['move','switch','faint'].includes(event.kind))break;
+  if(event.kind==='damage'&&event.hit===true&&event.moveId===move.moveId&&event.actorBoxId===move.actorBoxId&&event.targetSide===move.targetSide&&String(event.targetBoxId)===String(move.targetBoxId))return true;
+ }
+ return false;
+}
 export function reviewedAttackImmune(events,index){
  const move=events[index];if(!reviewedAttackKind(move)||!move.targetBoxId)return false;
  for(let i=index+1;i<events.length;i++){

@@ -1,5 +1,12 @@
 import assert from 'node:assert/strict';
-import {reviewedAttackKind,reviewedAttackImmune,reviewedAttackTargets,orderReviewedBattleEvents} from '../components/battle-attack-presentation.mjs';
+import {reviewedAttackKind,reviewedAttackImmune,reviewedAttackTargets,orderReviewedBattleEvents,confirmedZDash} from '../components/battle-attack-presentation.mjs';
+const zmove={kind:'move',moveId:'breakneckblitz',side:0,actorBoxId:'hero',targetSide:1,targetBoxId:'foe'};
+const zhit={kind:'damage',moveId:'breakneckblitz',actorBoxId:'hero',targetSide:1,targetBoxId:'foe',hit:true};
+assert.equal(confirmedZDash([zmove,zhit],0),true);
+assert.equal(confirmedZDash([zmove,{...zhit,hit:false}],0),false);
+assert.equal(confirmedZDash([zmove,{...zhit,targetBoxId:'other'}],0),false);
+assert.equal(confirmedZDash([zmove,{kind:'move'},zhit],0),false);
+assert.equal(confirmedZDash([{...zmove,targetSide:0},zhit],0),false);
 const move={kind:'move',moveId:'thunderbolt',targetBoxId:'ground',targetSide:1};
 const immune={kind:'immune',targetBoxId:'ground',targetSide:1,text:'효과가 없다!'};
 assert.equal(reviewedAttackKind(move),'electric-bolt');

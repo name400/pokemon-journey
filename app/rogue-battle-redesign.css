@@ -727,6 +727,8 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
 
 /* Center the 16:9 battle as one overlay while the classic run remains mounted. */
 body:has(.rc-shell.is-battle .battle-screen[data-v52-single=true]){overflow:hidden}
+/* The fixed v52 stage spans the viewport; the shell navigation must not cover it. */
+main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=true]) .sidebar{visibility:hidden;pointer-events:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true]{position:fixed;z-index:1000;left:50%;top:50%;transform:translate(-50%,-50%)}
 /* The older landscape grid and zoom must not shift the v52 overlay. */
 .rc-shell.is-battle:has(.battle-screen[data-v52-single=true]){zoom:1}
