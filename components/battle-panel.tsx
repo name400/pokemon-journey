@@ -66,12 +66,15 @@ function PartyBalls({party}:{party:any[]}){return <div className="bs-party-balls
 function ReviewedAttackFX({kind,from,to,immune,duration,targetId,targetSide}:{kind:string;from:{x:number;impactY:number};to:{x:number;impactY:number;y:number};immune:boolean;duration:number;targetId:string;targetSide:number}){
  const x1=from.x,y1=from.impactY,x2=to.x,y2=immune&&kind==='electric-bolt'?to.y:to.impactY,dx=x2-x1,dy=y2-y1;
  const line=`M ${x1} ${y1} L ${x2} ${y2}`,bolt=`M ${x1} ${y1} l ${dx*.22} ${dy*.22-4} l ${dx*.12} ${dy*.12+6} l ${dx*.16} ${dy*.16-6} l ${dx*.15} ${dy*.15+5} L ${x2} ${y2}`;
+ const length=Math.hypot(dx,dy)||1,nx=-dy/length,ny=dx/length;
+ const point=(t:number,w:number)=>`${x1+dx*t+nx*w} ${y1+dy*t+ny*w}`;
+ const flame=(width:number)=>`M ${point(0,0)} L ${point(.18,width*.18)} L ${point(.29,width*.44)} L ${point(.37,width*.26)} L ${point(.5,width*.62)} L ${point(.59,width*.4)} L ${point(.73,width*.85)} L ${point(.82,width*.65)} L ${point(1,width)} L ${point(1,-width)} L ${point(.86,-width*.62)} L ${point(.75,-width*.8)} L ${point(.62,-width*.38)} L ${point(.51,-width*.55)} L ${point(.35,-width*.22)} L ${point(.23,-width*.32)} Z`;
  const wave=(n:number)=>`M ${x1} ${y1} Q ${x1+dx*.25} ${y1+dy*.25+n} ${x1+dx*.5} ${y1+dy*.5} T ${x2} ${y2}`;
  const crystals=[.23,.47,.71,.94].map((t,i)=>{const x=x1+dx*t,y=y1+dy*t,r=1.5+i*.35;return <path key={t} className="bs-reviewed-ice-crystal" d={`M ${x} ${y-r*1.4} L ${x+r} ${y} L ${x} ${y+r*1.4} L ${x-r} ${y} Z`}/>});
  const orb=kind==='grass-orb'||kind==='ghost-orb'||kind==='fairy-orb';
  return <svg className="bs-reviewed-attack" data-attack-kind={kind} data-target-boxid={targetId} data-target-side={targetSide} data-immune={immune||undefined} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-  {kind==='fire-stream'?<><path className="bs-reviewed-fire-outer" d={line}/><path className="bs-reviewed-fire-middle" d={line}/><path className="bs-reviewed-fire-core" d={line}/></>:null}
-  {kind==='water-stream'?<><path className="bs-reviewed-water-outer" d={line}/><path className="bs-reviewed-water-core" d={line}/><path className="bs-reviewed-water-rings" d={line}/></>:null}
+  {kind==='fire-stream'?<><path className="bs-reviewed-fire-outer" d={flame(4.5)}/><path className="bs-reviewed-fire-middle" d={flame(2.8)}/><path className="bs-reviewed-fire-core" d={flame(1.1)}/></>:null}
+  {kind==='water-stream'?<><path className="bs-reviewed-water-outer" d={line}/><path className="bs-reviewed-water-core" d={line}/><g className="bs-reviewed-water-rings">{[.12,.24,.36,.48,.6,.72,.84,.96].map(t=><ellipse key={t} cx={x1+dx*t} cy={y1+dy*t} rx="1.05" ry="3" transform={`rotate(${Math.atan2(dy,dx)*180/Math.PI} ${x1+dx*t} ${y1+dy*t})`}/>)}</g></>:null}
   {kind==='electric-bolt'?<><path className="bs-reviewed-electric-glow" d={bolt}/><path className="bs-reviewed-electric-core" d={bolt}/></>:null}
   {kind==='ice-beam'?<><path className="bs-reviewed-ice-glow" d={line}/><path className="bs-reviewed-ice-core" d={line}/>{crystals}</>:null}
   {kind==='dragon-wave'?<><path className="bs-reviewed-dragon-purple" d={wave(9)}/><path className="bs-reviewed-dragon-teal" d={wave(-9)}/></>:null}
