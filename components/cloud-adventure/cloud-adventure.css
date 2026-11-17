@@ -248,3 +248,14 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .bs-compact-panel :is(.bs-compact-pages button,.bs-compact-back){min-height:44px;padding:2px 6px}
 .cloud-adventure-view .adv-battle-layer .bs-compact-panel .bs-compact-back{width:100%;margin-top:4px}
 .cloud-adventure-view .adv-battle-layer .bs-compact-panel p{margin:4px 0;font-size:12px}
+/* The compact choice is fixed above the battle; prevent the long multi-battle
+   content behind it from extending the popup's scrollable viewport. */
+.cloud-adventure-view .adv-battle-layer:has(.bs-compact-panel)>.battle-screen{max-height:calc(100dvh - 8px);overflow:hidden}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel.bs-turn-review .bs-turn-actions{display:grid;gap:4px;margin:0 0 4px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel.bs-turn-review .bs-turn-actions>div{display:flex;align-items:center;gap:4px;min-height:50px;padding:2px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel.bs-turn-review .bs-turn-actions img{width:36px;height:36px;object-fit:contain}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel.bs-turn-review .bs-turn-actions span{flex:1;min-width:0;font-size:11px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel.bs-turn-review .bs-turn-actions small{display:block}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel.bs-turn-review :is(.bs-turn-actions button,.bs-submit-turn){min-height:44px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel.bs-turn-review .bs-submit-turn{width:100%;margin:0;padding:3px}
+.cloud-adventure-view .adv-battle-layer .bs-compact-panel.bs-turn-review .bs-key-help{margin:2px 0;font-size:10px;line-height:1.2}
