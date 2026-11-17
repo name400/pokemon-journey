@@ -103,7 +103,7 @@ for(const [x,y,width,height] of [[-210,-202.5,360,202.5],[0,-80,120,80]]){
  if(height>=48)assert.ok(g['--v52-detail-top']+g['--v52-detail-height']<=y+height+1e-8);
 }
 
-const {v52Page,visibleNumberedMove}=await import('../.sites-runtime/tests/battle-panel.mjs');
+const {v52Page,visibleNumberedMove,battleMoveForDisplay,selectableBattleTargets}=await import('../.sites-runtime/tests/battle-panel.mjs');
 for(const [count,size] of [[0,2],[1,2],[5,2],[4,1],[4,2],[4,4]]){
  const actual=[];const first=v52Page(count,0,size);
  for(let page=0;page<first.pages;page++){const range=v52Page(count,page,size);for(let i=range.start;i<range.end;i++)actual.push(i);}
@@ -115,6 +115,11 @@ assert.equal(visibleNumberedMove(numberedMoves,1,v52Page(4,1,2)),undefined,'a hi
 assert.equal(visibleNumberedMove(numberedMoves,3,v52Page(4,1,2)),'three');
 assert.equal(visibleNumberedMove(numberedMoves,4,v52Page(4,1,2)),'four');
 assert.equal(visibleNumberedMove(numberedMoves,1,v52Page(4,0,4)),'one');
+const variantMove={id:'thunderbolt',name:'10만볼트',pp:10,maxPp:10,target:'normal',targets:[{side:1,slot:0,index:0,name:'상대'}],variants:{dynamax:{name:'다이썬더',target:'allAdjacentFoes',targets:[]},zmove:{disabled:true}},teraPreview:{type:'Electric'}};
+assert.equal(selectableBattleTargets(battleMoveForDisplay(variantMove,'dynamax')).length,0,'number selection must use the displayed spread target');
+assert.equal(battleMoveForDisplay(variantMove,'zmove').disabled,true,'number selection respects the displayed disabled variant');
+assert.equal(battleMoveForDisplay(variantMove,'terastallize').type,'Electric');
+assert.equal(battleMoveForDisplay(variantMove).id,'thunderbolt');
 const {validatePokemonEdit}=await import('../lib/admin-pokemon.mjs');
 const megaHero={...validatePokemonEdit({species:6,level:50,item:'charizarditex'}),boxId:'mega-hero'},megaEnemy={...makeMon(7,50),boxId:'mega-foe'};
 const megaBefore=createCombat([megaHero],[megaEnemy]);
