@@ -24,7 +24,7 @@ export function battleAnimationClass(event: BattleVisualEvent): string {
 }
 
 export type BattleDisplay = { teams: any[][]; active: number[]; activeBySide: number[][] };
-export function battleDisplay(battle: any, before = false, normalizeFainted = false): BattleDisplay {
+export function battleDisplay(battle: any, before = false, normalizeFainted = false, delayEntry = normalizeFainted): BattleDisplay {
   const teams = before && Array.isArray(battle.before) ? battle.before : battle.teams;
   const active = before && Array.isArray(battle.beforeActive) ? battle.beforeActive : battle.active;
   const multiple = before && Array.isArray(battle.beforeActiveBySide) ? battle.beforeActiveBySide : battle.activeBySide;
@@ -34,7 +34,7 @@ export function battleDisplay(battle: any, before = false, normalizeFainted = fa
   // empty until their entry event, instead of showing them once before replay
   // and then making the same Pokémon enter again. Ordinary switches retain the
   // different outgoing member; later move-induced switches are not entry setup.
-  if(before&&normalizeFainted)for(const event of (battle.events||[]) as BattleVisualEvent[]){
+  if(before&&delayEntry)for(const event of (battle.events||[]) as BattleVisualEvent[]){
     if(event.kind==='move')break;if(event.kind!=='switch')continue;
     const side=event.targetSide??event.side,slot=event.targetSlot??event.activeSlot??event.slot??0;
     if(side!==0&&side!==1||!Number.isInteger(slot)||slot<0)continue;

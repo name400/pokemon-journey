@@ -15,6 +15,9 @@ const {default:BattlePanel}=await import('../.sites-runtime/tests/battle-panel.m
 const {battleDisplay,applyBattleEvent,visibleSwitchLocation}=await import('../.sites-runtime/tests/battle-display.mjs');
 const a={...makeMon(7,5),boxId:'squirtle',moves:['물대포']},b={...makeMon(4,5),boxId:'charmander',moves:['할퀴기']};
 const before=createCombat([a],[b]);
+const adventureEntryHTML=renderToStaticMarkup(React.createElement(BattlePanel,{approvedV52:true,battle:combatView(before),battleKey:'adventure:entry',title:'탐험 등장',busy:false,onCommand(){}}));
+assert.ok(adventureEntryHTML.includes('class="battle-screen"'));
+assert.doesNotMatch(adventureEntryHTML,/class="bs-combatant /,'Adventure combatants wait for their actual entry events');
 const after=playDuel(before,[{type:'move',move:'물대포'},{type:'move',move:'할퀴기'}]);
 const view=combatView(after,1);
 assert.ok(view.events.some(event=>event.kind==='damage'&&event.amount>0));

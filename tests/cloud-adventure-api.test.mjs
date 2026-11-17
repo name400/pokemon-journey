@@ -82,7 +82,7 @@ test('new ZA battles require the Mega Ring without changing saved Pokemon',async
  try{
   await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(6,50),boxId:id,item:'charizarditex',moves:['튀어오르기'],pp:{},custom:{retained:true}};
   seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,zaIntroStage:'andi',zaMegaRing:false},state.revision+1));await get();await call('introBattle');
-  assert.equal(rawWorld().combat.adventureMegaPowerV1.playerLocked,true);assert.ok(!state.battle.requests[0].specials.some(x=>x.key==='mega'));
+  assert.deepEqual(state.battle.events.filter(event=>event.kind==='switch').map(event=>event.side).sort(),[0,1]);assert.equal(rawWorld().combat.adventureMegaPowerV1.playerLocked,true);assert.ok(!state.battle.requests[0].specials.some(x=>x.key==='mega'));
   await call('battle',{command:{type:'move',move:'튀어오르기',special:'mega'}},409);await get();assert.equal(rawMon(id).item,'charizarditex');assert.deepEqual(rawMon(id).custom,{retained:true});
   await call('battle',{command:{type:'move',move:'튀어오르기'}});await get();assert.equal(rawWorld().combat.adventureMegaPowerV1.playerLocked,true);assert.ok(!state.battle.requests[0].specials.some(x=>x.key==='mega'));
  }finally{globalThis.__adventureUser=previous;}
