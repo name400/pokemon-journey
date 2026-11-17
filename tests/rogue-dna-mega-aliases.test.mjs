@@ -38,11 +38,12 @@ function prepared(row,role='primary'){
  out.run.tools={megaBracelet:true,dynamaxBand:true,teraOrb:true,zRing:true};out.run.teraCharged=true;out.run.formItems[role]=[row[4]];
  return out;
 }
+function battleMega(doc,run,boxId,item){run.screen='battle';run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'mega-test-foe',moves:['Splash']})]);run.party=run.combat.teams[0];const index=run.party.findIndex(p=>p.boxId===boxId);if(index>0)applyClassicAction(doc,{action:'turn',command:{type:'switch',slot:index+1}});assert.ok(run.combat.requests[0].specials.some(s=>s.key==='mega:'+item),item);applyClassicAction(doc,{action:'turn',command:{type:'move',move:'splash',special:'mega:'+item}});run.screen='reward';}
 test('eight source Mega forms and both Meowstic sexes keep rewards, codec, battle, reverse and consumed donor rules',async()=>{
  for(const row of cases)for(const role of ['primary','donor']){try{
   let {doc,state,run}=prepared(row,role),index=role==='primary'?0:1;const pre=structuredClone(run.party[index]),raw=Dex.species.get(row[3]);assert.equal(!!raw.isMega,false);
-  assert.ok(classicGameView(doc).run.party[index].forms.some(f=>f.key===row[4]));
-  applyClassicAction(doc,{action:'form',boxId:role,item:row[4]});const changed=run.party[index];assert.equal(changed.rogueFormKey,row[2]);assert.equal(changed.rogueBattleSpecies,row[3]);assert.equal(changed.mega,true);
+  assert.ok(!classicGameView(doc).run.party[index].forms.some(f=>f.key===row[4]));
+  battleMega(doc,run,role,row[4]);const changed=run.party[index];assert.equal(changed.rogueFormKey,row[2]);assert.equal(changed.rogueBattleSpecies,row[3]);assert.equal(changed.mega,true);
   const source=sourceSpeciesFor(changed),form=source.formList.find(f=>f.formKey===row[2]);assert.deepEqual(changed.rogueBaseStats,form.baseStats);assert.ok(form.abilities.some(a=>a.key===changed.ability));
   assert.equal(classicChallengeBattleEligibility(changed,[{id:1,value:typeNames.indexOf(form.types[0])+1}]),true);
   run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='dnasplicers'),rewardId:'dna'}];assert.ok(classicGameView(doc).run.rewards[0].fusionPairs.some(p=>p.primaryBoxId==='primary'&&p.donorBoxId==='donor'));
@@ -60,7 +61,7 @@ test('eight source Mega forms and both Meowstic sexes keep rewards, codec, battl
 
 test('all new aliases also transform and reverse while already fused, preserving donor ability and source stats',async()=>{
  for(const row of cases){let {doc,state,run}=prepared(row);const ability=run.party[1].ability;run=stageClassicDnaFusion(run,{primaryBoxId:'primary',donorBoxId:'donor'}).run;state.slots[0]=run;
-  applyClassicAction(doc,{action:'form',boxId:'primary',item:row[4]});assert.ok(validatedClassicDnaFusion(run.party[0]));assert.equal(run.party[0].rogueBattleSpecies,row[3]);assert.equal(run.party[0].ability,ability);
+  battleMega(doc,run,'primary',row[4]);assert.ok(validatedClassicDnaFusion(run.party[0]));assert.equal(run.party[0].rogueBattleSpecies,row[3]);assert.equal(run.party[0].ability,ability);
   doc=await decodeGameData(await encodeGameData(doc));run=ensureClassicState(doc).slots[0];const option=classicFormOptions(run.party[0],run).find(o=>o.reverse);assert.equal(option.formKey,row[1]);applyClassicAction(doc,{action:'form',boxId:'primary',item:option.key});assert.ok(validatedClassicDnaFusion(run.party[0]));assert.equal(run.party[0].rogueFormKey,row[1]);assert.equal(run.party[0].ability,ability);assert.deepEqual(run.formItems.primary,[row[4]]);
  }
 });
@@ -76,10 +77,14 @@ test('missing or contradictory Meowstic gender, wrong native identity and mismat
 });
 
 test('standalone alias Megas preserve classification and pinned ability through native turns and restore',async()=>{
- for(const row of cases){let {doc,state,run}=prepared(row);applyClassicAction(doc,{action:'form',boxId:'primary',item:row[4]});const ability=run.party[0].ability;
+ for(const row of cases){let {doc,state,run}=prepared(row);battleMega(doc,run,'primary',row[4]);const ability=run.party[0].ability;
   run.combat=createClassicCombat(run,[makeReferenceMon(143,50,{boxId:'foe',moves:['Splash']})]);let b=restoreClassicNativeBattle(run.combat,run);assert.equal(b.p1.active[0].baseAbility,ability);assert.equal(b.p1.active[0].species.isMega,true);assert.deepEqual(run.combat.requests[0].actors[0].specials,[]);
   run.combat=playClassicCombat(run,{type:'move',move:'splash'});run.party=run.combat.teams[0];assert.equal(run.party[0].mega,true);doc=await decodeGameData(await encodeGameData(doc));state=ensureClassicState(doc);run=state.slots[0];b=restoreClassicNativeBattle(run.combat,run);assert.equal(b.p1.active[0].species.isMega,true);assert.equal(b.p1.active[0].baseAbility,ability);
  }
+});
+
+test('Mega Meowstic Trace copies the opponent without recursive ability replacement',async()=>{
+ for(const row of [cases[3],cases[4]]){const {doc,run}=prepared(row);battleMega(doc,run,'primary',row[4]);const native=restoreClassicNativeBattle(run.combat,run);assert.equal(native.p1.active[0].baseAbility,'trace');assert.equal(native.p1.active[0].ability,native.p2.active[0].ability);assert.notEqual(native.p1.active[0].ability,'trace');const saved=await decodeGameData(await encodeGameData(doc)),restored=ensureClassicState(saved).slots[0],again=restoreClassicNativeBattle(restored.combat,restored);assert.equal(again.p1.active[0].ability,native.p1.active[0].ability);assert.deepEqual(saved.adventure,{safe:true});}
 });
 
 test('new source Mega abilities retain Levitate immunity, Aura Guard contact reduction and Sharpness damage',()=>{
