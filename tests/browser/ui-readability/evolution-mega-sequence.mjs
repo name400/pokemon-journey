@@ -1,11 +1,17 @@
 import assert from 'node:assert/strict';
+import {mkdir} from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const base=process.env.UI_TEST_URL||'http://127.0.0.1:5224';
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
 const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
 const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
 page.setDefaultTimeout(15000);
-await page.route('https://**/*',r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
+const sprites=process.env.EVOLUTION_SPRITES;
+if(sprites)await mkdir('.sites-runtime/tests/evolution-sequence',{recursive:true});
+await page.route('https://**/*',r=>{
+ const id=r.request().url().match(/\/(54|55)\.png(?:\?|$)/)?.[1];
+ return sprites&&id?r.fulfill({path:`${sprites}/front-${id}.png`,contentType:'image/png'}):r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'});
+});
 try{
  await page.request.post(base+'/api/test-reset?scenario=evolution-psyduck');
  await page.goto(base+'/?mode=rogue&tab=rogue');
@@ -17,12 +23,16 @@ try{
  await region.waitFor();
  assert.equal(await region.getAttribute('data-phase'),'intro');
  assert.match(await region.locator('[role=status]').innerText(),/어라.*고라파덕/s);
+ if(sprites)await page.screenshot({path:'.sites-runtime/tests/evolution-sequence/intro.png'});
  assert.doesNotMatch(await region.locator('[role=status]').innerText(),/진화했다/);
  const committed=await(await page.request.get(base+'/api/test-state')).json();
  await page.waitForFunction(()=>document.querySelector('.evolution-presentation')?.getAttribute('data-phase')==='changing');
  assert.equal(await region.locator('[role=status]').innerText(),'');
+ assert.equal(await region.locator('[role=status]').evaluate(node=>getComputedStyle(node).visibility),'hidden','The empty dialogue box must disappear during the transformation');
+ if(sprites){await page.waitForTimeout(3200);await page.screenshot({path:'.sites-runtime/tests/evolution-sequence/changing.png'});}
  await page.waitForFunction(()=>document.querySelector('.evolution-presentation')?.getAttribute('data-phase')==='result',null,{timeout:13000});
  assert.match(await region.locator('[role=status]').innerText(),/고라파덕.*골덕.*진화했다/s);
+ if(sprites)await page.screenshot({path:'.sites-runtime/tests/evolution-sequence/result.png'});
  assert.deepEqual(await(await page.request.get(base+'/api/test-state')).json(),committed);
  await region.getByRole('button',{name:'확인',exact:true}).click();
  await page.request.post(base+'/api/test-reset?scenario=evolution-psyduck');
@@ -32,6 +42,14 @@ try{
  await page.waitForTimeout(2000);
  assert.equal(await region.getAttribute('data-phase'),'result','An early skip must not restart the animation');
  await region.getByRole('button',{name:'확인',exact:true}).click();
+ // Reload during the already committed presentation, not the pre-evolution decision.
+ await page.request.post(base+'/api/test-reset?scenario=evolution-psyduck');
+ await page.reload();await page.getByRole('button',{name:'계속하기',exact:true}).first().click();
+ await page.getByRole('button',{name:'지금 진화',exact:true}).click();await region.waitFor();
+ const interruptedEvolution=await(await page.request.get(base+'/api/test-state')).json();
+ await page.reload();await page.getByRole('button',{name:'계속하기',exact:true}).first().click();
+ assert.deepEqual(await(await page.request.get(base+'/api/test-state')).json(),interruptedEvolution,'Reload during presentation must not change the committed evolution');
+ assert.equal(await region.count(),0,'Transient presentation should not replay as a new server action');
  await page.request.post(base+'/api/test-reset?scenario=mega-command');
  await page.reload();await page.getByRole('button',{name:'계속하기',exact:true}).first().click();
  await page.getByRole('button',{name:'싸운다',exact:true}).click();
@@ -48,6 +66,12 @@ try{
  assert.ok(samples.some(s=>s.transforming==='true'&&s.mega===null),'Normal form must remain during the opening of the confirmed Mega event');
  const afterMega=await(await page.request.get(base+'/api/test-state')).json(),runAfter=afterMega.classic.slots[afterMega.classic.activeSlot];
  assert.equal(runAfter.party[0].mega,true);assert.equal(runAfter.party[0].hp,hpBefore);
+ assert.equal(await page.locator('.bs-combatant-own .bs-form-effects').getAttribute('data-transforming'),'true','Reload must interrupt the active Mega event');
+ await page.reload();await page.getByRole('button',{name:'계속하기',exact:true}).first().click();
+ await page.locator('.bs-combatant-own .bs-form-effects[data-mega=true]').waitFor({timeout:15000});
+ assert.deepEqual(await(await page.request.get(base+'/api/test-state')).json(),afterMega,'Reload after the confirmed Mega command must preserve the saved state');
+ const restoredHp=await page.locator('.bs-hud-own [role=progressbar]').getAttribute('aria-valuenow');
+ assert.equal(Number(restoredHp),hpBefore,'Restored HUD displays the saved HP');
  assert.deepEqual(errors,[]);
- console.log('Actual isolated evolution and Mega commands: sequence, early skip, form and HP passed.');
+ console.log('Actual isolated evolution and Mega commands: sequence, early skip, reload, saved form and HP passed.');
 }finally{await context.close();await browser.close();}
