@@ -296,11 +296,16 @@
 
 /* v52 single adventure: the ball and flash follow the server switch event.
    Coordinates are relative to the current target slot, not a species sprite. */
-.battle-screen[data-v52-single=true] .bs-switch-ball{position:absolute;z-index:5;left:var(--bs-target-x);top:var(--bs-target-y);width:5cqw;height:5cqw;opacity:0;animation:bs-v52-switch-flight var(--bs-fx-duration) linear both}
-.battle-screen[data-v52-single=true] .bs-switch-ball .bs-ball-atlas{transform:scale(.5);transform-origin:top left}
-.battle-screen[data-v52-single=true] .bs-fx-layer[data-target=foe] .bs-switch-ball{animation-name:bs-v52-switch-foe-flight}
-.battle-screen[data-v52-single=true] .bs-switch-orb{position:absolute;left:var(--bs-target-x);top:var(--bs-target-y);width:8cqw;height:8cqw;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.15);background:radial-gradient(circle,#fff 0%,#fff9 35%,#ffd3ef88 55%,transparent 72%);animation:bs-v52-switch-flash var(--bs-fx-duration) ease-out both}
+.battle-screen[data-v52=true] .bs-switch-ball{position:absolute;z-index:5;left:var(--bs-target-x);top:var(--bs-target-y);width:5cqw;height:5cqw;opacity:0;animation:bs-v52-switch-flight var(--bs-fx-duration) linear both}
+.battle-screen[data-v52=true] .bs-switch-ball .bs-ball-atlas{transform:scale(.5);transform-origin:top left}
+.battle-screen[data-v52=true] .bs-fx-layer[data-target=foe] .bs-switch-ball{animation-name:bs-v52-switch-foe-flight}
+.battle-screen[data-v52=true] .bs-switch-orb{position:absolute;left:var(--bs-target-x);top:var(--bs-target-y);width:8cqw;height:8cqw;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.15);background:radial-gradient(circle,#fff 0%,#fff9 35%,#ffd3ef88 55%,transparent 72%);animation:bs-v52-switch-flash var(--bs-fx-duration) ease-out both}
 .battle-screen[data-v52-single=true] .bs-narration[data-switch-empty=true]{visibility:hidden}
 @keyframes bs-v52-switch-flight{0%,44%{left:5%;top:95%;opacity:0}45%{left:5%;top:95%;opacity:1;transform:translate(-50%,-50%) rotate(0)}57%{left:calc(var(--bs-target-x) - 15%);top:calc(var(--bs-target-y) - 22%);opacity:1}67%{left:var(--bs-target-x);top:var(--bs-target-y);opacity:1;transform:translate(-50%,-50%) rotate(540deg)}69%,100%{left:var(--bs-target-x);top:var(--bs-target-y);opacity:0}}
 @keyframes bs-v52-switch-foe-flight{0%,44%{left:95%;top:75%;opacity:0}45%{left:95%;top:75%;opacity:1;transform:translate(-50%,-50%) rotate(0)}57%{left:calc(var(--bs-target-x) + 10%);top:calc(var(--bs-target-y) - 22%);opacity:1}67%{left:var(--bs-target-x);top:var(--bs-target-y);opacity:1;transform:translate(-50%,-50%) rotate(-540deg)}69%,100%{left:var(--bs-target-x);top:var(--bs-target-y);opacity:0}}
 @keyframes bs-v52-switch-flash{0%,64%{opacity:0;transform:translate(-50%,-50%) scale(.15)}68%{opacity:1;transform:translate(-50%,-50%) scale(1)}75%,100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+
+.battle-screen[data-v52=true] .bs-switch-message{position:absolute;z-index:8;left:33.333%;top:78.5%;width:64.167%;padding:1.4cqw 2cqw;border:1px solid #b9cfdf;background:#182b42;color:#fff;font:400 2.7cqw/1.4 Arial,sans-serif;pointer-events:none}
+/* During playback the visible log must be hit-testable for the receipt check;
+   actions are locked, and the log remains non-interactive in command mode. */
+.battle-screen[data-v52=true][data-playing=true] .bs-log-lines{pointer-events:auto}

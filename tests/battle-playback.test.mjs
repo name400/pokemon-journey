@@ -80,4 +80,10 @@ display = applyBattleEvent(display, {side:1,targetSide:1,boxId:'c',kind:'switch'
 assert.equal(display.active[1],1);
 display = applyBattleEvent(display, {side:1,targetSide:0,boxId:'a',kind:'damage',hp:10,maxHp:30,amount:20});
 assert.equal(display.teams[0][0].hp,10,'Absolute side numbers must remain correct for side=1 viewers');
+const doubles={teams:[[{boxId:'left',hp:30,maxHp:30},{boxId:'right',hp:30,maxHp:30},{boxId:'nextLeft',hp:20,maxHp:20},{boxId:'nextRight',hp:25,maxHp:25}],[{boxId:'foeLeft',hp:30,maxHp:30},{boxId:'foeRight',hp:30,maxHp:30}]],active:[0,0],activeBySide:[[0,1],[0,1]]};
+let shown=battleDisplay(doubles);
+shown=applyBattleEvent(shown,{kind:'switch',side:0,activeSlot:1,boxId:'nextRight',hp:25,maxHp:25});
+assert.deepEqual(shown.activeBySide,[[0,3],[0,1]],'A right-slot switch must leave the other three actors intact');
+shown=applyBattleEvent(shown,{kind:'switch',side:0,activeSlot:0,boxId:'nextLeft',hp:20,maxHp:20});
+assert.deepEqual(shown.activeBySide,[[2,3],[0,1]],'Sequential switch events preserve each side and slot');
 console.log('Battle playback cancellation, revision deduplication, unique FX keys, and reduced motion: passed');
