@@ -1,5 +1,23 @@
 # 배포 검증 실패 기록
 
+## 2026-11-17 — GitHub `04c49986` 배포 검사 결과
+
+- 대상 브랜치 `cloud/pokerogue-continue-20261105`, 검사 시작 시 최신 커밋 `04c49986f9581bc5eb73d33b9d4c749b999a73c5`.
+- 기존 Sites 소스와 병합한 검증 커밋 `61ff253f261dbb49a55755ceaddb9b870c85fbbe`, Node.js v24.22.1.
+- 타입 검사 통과. 전체 테스트 5,121개 중 5,114개 통과·7개 실패 (477.1초). 사용자는 실패 기록 후 배포하도록 지시했다. 배포 결과는 별도로 확인해야 한다.
+
+### 실패 항목
+
+1. `tests/rogue-dna-mega-aliases.test.mjs:41` (58행): `absolmegaz:primary` 단언이 거짓.
+2. 같은 파일 61행 (63행): 합체 중 메가 별칭 변환·복원, `메가진화는 배틀에서 선택하세요.` 오류.
+3. 같은 파일 78행 (79행): 독립 메가 별칭 전투·복원, 같은 오류.
+4. `tests/rogue-dna-persistent-forms.test.mjs:9` (10행): 합체·도구 보존, 같은 오류.
+5. `tests/rogue-dna-transient-dynamax.test.mjs:41` (42행): 합체 해제·임시 HP 처리, 같은 오류.
+6. `tests/rogue-species-form-fusion.test.mjs:18`: 파트너 합체 폼 기대 `dusk-mane`, 실제 undefined.
+7. `tests/rogue-zygarde-forms.test.mjs:37` (42행): 지가르데 10%·50% 출처 및 합체 메가 도구 처리, 같은 메가진화 선택 오류.
+
+전투 밖 메가진화를 막는 현재 규칙과 이전 테스트의 기대를 대조하고, 합체 폼 표시·저장과 실제 전투 후 상태를 확인해야 한다. 이 로그만으로 게임 로직 결함인지 오래된 테스트 기대값인지 확정할 수 없다.
+
 ## 2026-11-17 — 개발본 폼 회귀 검사
 
 - `cf38073b` 기반 폼·연출 관련 38검사 중 37개 통과, `tests/rogue-zygarde-forms.test.mjs`의 `Complete Mega item actions preserve 10% versus 50% origin after codec and while fused` 실패. 해당 검사는 현재 차단된 파티 메뉴 메가진화 명령을 호출해 `메가진화는 배틀에서 선택하세요.` 오류가 발생했다. 실제 전투 명령을 통한 같은 지가르데 폼 경계는 별도 확인 전 미검증으로 유지한다.
