@@ -569,3 +569,5 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-screen:not([data-step=target]):not([data-locked=true]) .bs-v52-party-list button:disabled{opacity:1;filter:none}
 /* Multi-battle vitals stay above attack effects, as do single-battle HUDs. */
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-scene > .bs-multi-vitals{z-index:8}
+/* Compensate for the console scale to approximate the reference 15px glyph. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities .bs-v52-ball-icon{width:16px;height:16px}

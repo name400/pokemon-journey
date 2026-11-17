@@ -35,3 +35,6 @@
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{border:0;border-radius:1px;background:#1b2d43;color:#fff;box-shadow:none;text-align:left}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move :is(b,.bs-effectiveness,.bs-move-compact-pp){color:inherit}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-move-wrap:first-child>.bs-move:not(:disabled){background:#ffe000;color:#182b42}
+
+/* The quick-capture glyph is the verified original; the button keeps its separate hit area. */
+.battle-screen .bs-v52-utilities .bs-v52-ball-icon{width:1.666667em;height:1.666667em;object-fit:contain;vertical-align:middle}
