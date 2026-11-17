@@ -55,6 +55,7 @@
 .battle-screen .bs-transformation-burst[data-transformation=gmax],.battle-screen .bs-transformation-burst[data-transformation=dynamax]{--bs-transform-color:#ff98c3}
 .battle-screen .bs-transformation-burst[data-transformation=mega]{--bs-transform-color:#a5f1e4}
 .battle-screen .bs-transformation-burst[data-transformation=primal],.battle-screen .bs-transformation-burst[data-transformation=ultra]{--bs-transform-color:#ffe3a0}
+.battle-screen .bs-transformation-burst[data-transformation=zpower]{--bs-transform-color:#ffd75f}
 .battle-screen .bs-transform-ring{position:absolute;left:50%;top:57%;width:92%;aspect-ratio:1;border:3px solid var(--bs-transform-color);border-radius:50%;box-shadow:0 0 10px #fff7cf88,inset 0 0 5px var(--bs-transform-color);opacity:0;animation:bs-form-ring var(--bs-transform-duration,780ms) ease-out both}
 .battle-screen .bs-transform-ring.ring-two{width:70%;border-width:2px;animation-delay:calc(var(--bs-transform-duration,780ms) * .12)}
 .battle-screen .bs-transform-column{position:absolute;inset:1% 28% -1%;background:linear-gradient(90deg,transparent,#fffceccc,transparent);clip-path:polygon(35% 0,65% 0,100% 100%,0 100%);opacity:0;animation:bs-form-column var(--bs-transform-duration,780ms) ease both;mix-blend-mode:screen}
