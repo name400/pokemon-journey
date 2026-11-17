@@ -1,8 +1,13 @@
 import assert from 'node:assert/strict';
-import {reviewedAttackKind,reviewedAttackImmune,reviewedAttackTargets,reviewedAttackHit,orderReviewedBattleEvents,confirmedZDash,reviewedBattleMessage} from '../components/battle-attack-presentation.mjs';
+import {reviewedAttackKind,reviewedAttackImmune,reviewedAttackTargets,reviewedAttackHit,orderReviewedBattleEvents,confirmedZDash,confirmedZImpact,reviewedBattleMessage} from '../components/battle-attack-presentation.mjs';
 const zmove={kind:'move',moveId:'breakneckblitz',side:0,actorBoxId:'hero',targetSide:1,targetBoxId:'foe'};
 const zhit={kind:'damage',moveId:'breakneckblitz',actorBoxId:'hero',targetSide:1,targetBoxId:'foe',hit:true};
 assert.equal(confirmedZDash([zmove,zhit],0),true);
+assert.equal(confirmedZImpact([zmove,zhit],1),true);
+assert.equal(confirmedZImpact([zmove,{...zhit,hit:false}],1),false);
+assert.equal(confirmedZImpact([zmove,{...zhit,targetBoxId:'other'}],1),false);
+assert.equal(confirmedZImpact([zmove,{kind:'move'},zhit],2),false);
+assert.equal(confirmedZImpact([{...zmove,targetSide:0},zhit],1),false);
 assert.equal(confirmedZDash([zmove,{...zhit,hit:false}],0),false);
 assert.equal(confirmedZDash([zmove,{...zhit,targetBoxId:'other'}],0),false);
 assert.equal(confirmedZDash([zmove,{kind:'move'},zhit],0),false);

@@ -219,6 +219,8 @@
 .battle-screen .bs-scene[data-terrain=psychicterrain] .bs-artboard::after{background:linear-gradient(0deg,#a272dc73,transparent 62%)}
 /* The approved v52 field uses this original image with the same centred cover crop. */
 .battle-screen[data-v52-single=true] .bs-scene[data-biome=meadow] .bs-artboard{background:url('/game/v52/evolution-bg.png') center/cover no-repeat}
+/* The classic shell also defines a biome background; preserve the reviewed meadow in v52 single battles. */
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-scene[data-biome=meadow] .bs-artboard{background:url('/game/v52/evolution-bg.png') center/cover no-repeat}
 @media(prefers-reduced-motion:reduce){.battle-screen .bs-scene[data-terrain] .bs-artboard::after{transition:none}}
 .battle-screen .bs-scene:is([data-weather=snowscape],[data-weather=snow],[data-weather=hail])::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(#dfefff36,#edf8ff18)}
 .battle-screen .bs-scene[data-weather=sandstorm]::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(#b7834230,#ddb36a20)}
@@ -509,3 +511,6 @@ html:has(.bs-rogue-v52-capture){overflow:hidden}
 .rc-shell.is-battle .battle-screen .bs-rogue-status-sheet[data-multiple=true] .bs-stat-stages span{padding:0 .35cqw;border-width:0;border-radius:.4cqw;font-size:1.8cqw;line-height:2.5cqw}
 .rc-shell.is-battle .battle-screen .bs-rogue-status-sheet[data-multiple=true]:has(.bs-stat-stages) .bs-rogue-status-members section{font-size:2.15cqw;line-height:3cqw}
 .rc-shell.is-battle .battle-screen .bs-rogue-status-sheet[data-multiple=true]:has(.bs-stat-stages){top:3cqw;max-height:49cqw}
+
+/* The reviewed Breakneck Blitz impact is a bright local star on the hit target. */
+.battle-screen .bs-z-impact-star{display:block;width:100%;height:100%;background:#fffde0;clip-path:polygon(50% 0%,61% 33%,96% 27%,72% 51%,88% 83%,50% 68%,12% 83%,28% 51%,4% 27%,39% 33%);filter:drop-shadow(0 0 5px #ffe876)}

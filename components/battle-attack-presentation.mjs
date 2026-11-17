@@ -19,6 +19,15 @@ export function confirmedZDash(events,index){
  }
  return false;
 }
+/** Associate the impact with the same confirmed Z action and target. */
+export function confirmedZImpact(events,index){
+ const hit=events[index];if(hit?.kind!=='damage'||hit.hit!==true||hit.moveId!=='breakneckblitz'||hit.actorBoxId==null||hit.targetBoxId==null)return false;
+ for(let i=index-1;i>=0;i--){
+  const move=events[i];if(['switch','faint'].includes(move.kind))break;
+  if(move.kind==='move')return confirmedZDash(events,i)&&move.actorBoxId===hit.actorBoxId&&move.targetSide===hit.targetSide&&String(move.targetBoxId)===String(hit.targetBoxId);
+ }
+ return false;
+}
 export function reviewedAttackImmune(events,index){
  const move=events[index];if(!reviewedAttackKind(move)||!move.targetBoxId)return false;
  for(let i=index+1;i<events.length;i++){
