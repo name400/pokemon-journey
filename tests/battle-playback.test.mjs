@@ -54,6 +54,12 @@ remount.cancel();
 assert.equal(await interruptedMount, false);
 assert.equal(await remount.play([], 'strict-mode'), true, 'StrictMode cancellation must not poison the source key');
 
+const dynamicFrames = [];
+const dynamic = new BattlePlaybackController({onFrame:frame=>dynamicFrames.push(frame),durationMs:20,gapMs:0,maxDurationMs:events=>events.some(item=>item.kind==='switch')?60:5});
+assert.equal(await dynamic.play([{side:0,kind:'switch'},event],'dynamic:1'),true);
+assert.equal(dynamicFrames.filter(frame=>frame.event).length,2,'A switch-specific budget preserves subsequent events in order');
+assert.ok(dynamicFrames.find(frame=>frame.event?.kind==='switch').durationMs>5,'Switch event is not compressed to the default budget');
+
 const gate = new BattleSubmissionGate();
 assert.equal(gate.enter('decision:1'), true);
 assert.equal(gate.enter('decision:1'), false, 'Same-render double commands are blocked');

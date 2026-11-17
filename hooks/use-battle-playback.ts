@@ -121,7 +121,7 @@ type PlaybackOptions = {
   onEventCompleted?: (frame: BattlePlaybackFrame) => void;
   onInterrupted?: () => void;
   enabled?: () => boolean; speed?: () => number;
-  durationMs?: number | ((event: BattleVisualEvent) => number); gapMs?: number; maxDurationMs?: number;
+  durationMs?: number | ((event: BattleVisualEvent) => number); gapMs?: number; maxDurationMs?: number | ((events: readonly BattleVisualEvent[]) => number);
 };
 export class BattlePlaybackController {
   private generation = 0; private pending = new Set<() => void>();
@@ -166,7 +166,8 @@ export class BattlePlaybackController {
     return promise;
   }
   private async run(events: readonly BattleVisualEvent[], key: string, generation: number): Promise<boolean> {
-    const budget = Math.max(0, this.options.maxDurationMs ?? 2800), deadline = Date.now() + budget;
+    const limit = this.options.maxDurationMs;
+    const budget = Math.max(0, (typeof limit === 'function' ? limit(events) : limit) ?? 2800), deadline = Date.now() + budget;
     const nominal = events.map(event => Math.max(0, typeof this.options.durationMs === 'function' ? this.options.durationMs(event) : this.options.durationMs ?? 700));
     const initialSpeed = Math.max(.25, this.options.speed?.() || 1);
     const total = nominal.reduce((sum, duration) => sum + duration / initialSpeed, 0) + Math.max(0, events.length - 1) * (this.options.gapMs ?? 16);
@@ -189,7 +190,7 @@ export class BattlePlaybackController {
     this.emit(idleFrame()); return true;
   }
 }
-type HookOptions = { durationMs?: number | ((event: BattleVisualEvent) => number); gapMs?: number; enabled?: boolean; speed?: number; maxDurationMs?: number; onEventCompleted?:(frame:BattlePlaybackFrame)=>void;onInterrupted?:()=>void };
+type HookOptions = { durationMs?: number | ((event: BattleVisualEvent) => number); gapMs?: number; enabled?: boolean; speed?: number; maxDurationMs?: number | ((events: readonly BattleVisualEvent[]) => number); onEventCompleted?:(frame:BattlePlaybackFrame)=>void;onInterrupted?:()=>void };
 /** A false result means superseded/cancelled/duplicate, so do not apply its delayed response. */
 export function useBattlePlayback(options: HookOptions = {}) {
   const [frame, setFrame] = useState<BattlePlaybackFrame>(idleFrame);
@@ -198,7 +199,7 @@ export function useBattlePlayback(options: HookOptions = {}) {
   if (!controller.current) controller.current = new BattlePlaybackController({
     reducedMotion: () => reducedMotion.current, enabled: () => currentOptions.current.enabled !== false, speed: () => currentOptions.current.speed || 1,
     durationMs: event => { const duration = currentOptions.current.durationMs; return typeof duration === 'function' ? duration(event) : duration ?? 700; },
-    gapMs: options.gapMs, maxDurationMs: options.maxDurationMs, onFrame: next => { if (mounted.current) setFrame(next); },
+    gapMs: options.gapMs, maxDurationMs: events => {const limit=currentOptions.current.maxDurationMs;return typeof limit==='function'?limit(events):limit??2800;}, onFrame: next => { if (mounted.current) setFrame(next); },
     onEventCompleted: frame => {if(mounted.current)currentOptions.current.onEventCompleted?.(frame);},onInterrupted:()=>{if(mounted.current)currentOptions.current.onInterrupted?.();},
   });
   useEffect(() => {
