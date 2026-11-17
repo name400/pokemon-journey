@@ -405,7 +405,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
         {approvedV52&&!multiple&&panel==='status'&&<div className="bs-v52-status" tabIndex={0} aria-label="배틀 상태">{[own,foe].map((mon:any,index:number)=><section key={index}><h3>{index?'상대':'아군'} · {mon.name}</h3><p>Lv.{mon.level} · HP {mon.hp} / {mon.maxHp} · {mon.status?statusLabel(mon.status):'정상'}</p><PokemonTypeBadge mon={mon}/><StatStages mon={mon}/></section>)}</div>}
         {panel==='history'&&<div className="bs-history" role="log" aria-label="전투 기록">{visibleBattleLog.map((line:string,index:number)=><p key={index}>{line}</p>)}</div>}
       </>}
-      <footer className="bs-footer"><span>{playing?'전투 연출이 끝나면 다음 행동을 선택할 수 있습니다.':req.kind==='switch'?'기절 후 교체는 턴을 소비하지 않습니다.':'교체와 도구 사용은 전투 규칙에 따라 처리됩니다.'}</span><div>{onFlee&&!classicLayout&&!battle.ended&&<button disabled={locked} onClick={()=>void issue('도망가기',onFlee)}><LogOut size={15} aria-hidden="true"/>도망가기</button>}{onForfeit&&!battle.ended&&<button disabled={forfeitBusy??busy} onClick={()=>void onForfeit()}>기권 / 도전 종료</button>}</div></footer>
+      <footer className="bs-footer"><span>{playing?'전투 연출이 끝나면 다음 행동을 선택할 수 있습니다.':req.kind==='switch'?'기절 후 교체는 턴을 소비하지 않습니다.':'교체와 도구 사용은 전투 규칙에 따라 처리됩니다.'}</span><div>{onFlee&&!classicLayout&&!battle.ended&&(!approvedV52||multiple)&&<button disabled={locked} onClick={()=>void issue('도망가기',onFlee)}><LogOut size={15} aria-hidden="true"/>도망가기</button>}{onForfeit&&!battle.ended&&<button disabled={forfeitBusy??busy} onClick={()=>void onForfeit()}>기권 / 도전 종료</button>}</div></footer>
     </div>
   </section>;
 }
