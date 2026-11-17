@@ -205,3 +205,28 @@
 .adv-evolution-result[data-motion-skipped=true] .adv-evolve-after{animation:none}
 @keyframes adv-evolution-reveal{0%{opacity:.15;filter:brightness(3)}55%{opacity:1;filter:brightness(2)}100%{opacity:1;filter:none}}
 @media(prefers-reduced-motion:reduce){.adv-evolution-art .adv-evolve-after{animation:none}}
+/* Keep an active battle above the field without unmounting the field state. */
+html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view .adv-battle-layer){overflow:hidden}
+.cloud-adventure-view .adv-battle-layer{position:fixed;inset:0;z-index:100;display:grid;place-items:safe center;overflow:auto;overscroll-behavior:contain;padding:4px;background:#101e24e8}
+.cloud-adventure-view .adv-battle-layer>.battle-screen{width:min(100%,calc((100dvh - 200px) * 16 / 9));max-width:900px;margin:0}
+@media (orientation:landscape) and (min-width:650px) and (max-height:500px){
+ .cloud-adventure-view .adv-battle-layer>.battle-screen[data-v52-single=true]{width:min(100%,900px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-content:start}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-header{grid-column:1/-1;padding:3px 8px;min-height:40px}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-header h2{font-size:14px;line-height:1.1;margin:0}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-eyebrow{display:none}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-trainer{grid-column:1/-1;padding:2px 8px}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene{grid-column:1;grid-row:3;align-self:start;width:100%;height:auto;aspect-ratio:16/9}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console{grid-column:2;grid-row:3;border:0;padding:3px;display:block;overflow:visible}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-narration{min-height:44px;padding:3px 6px}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-narration p{font-size:12px;line-height:1.2;min-height:0}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-footer{display:flex;align-items:center;justify-content:space-between;gap:3px;margin:2px 0 0;padding:2px 0 0;font-size:10px;line-height:1.1}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-footer>div{display:flex;gap:2px}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-footer button{min-height:44px;padding:2px 4px;font-size:10px}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] :is(.bs-v52-commands,.bs-v52-utilities,.bs-move-grid,.bs-ball-panel,.bs-v52-status){position:static;left:auto;top:auto;width:100%;max-width:none;max-height:none;margin:0}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-console[data-v52-overlay-ready=true] .bs-move-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-commands{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-utilities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (min-width:900px) and (min-height:680px){
+ .cloud-adventure-view .adv-battle-layer>.battle-screen[data-v52-single=true]{width:min(100%,calc((100dvh - 450px) * 16 / 9));max-width:900px}
+}
