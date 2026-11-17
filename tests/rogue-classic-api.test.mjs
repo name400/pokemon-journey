@@ -14,6 +14,8 @@ import {classicTrainerEncounter} from '../lib/rogue-classic-world.mjs';
 import {CLASSIC_REWARD_REGISTRY} from '../lib/rogue-classic-rewards.mjs';
 import {fixture as persistentFixture} from './fixtures/dna-persistent.mjs';
 import {applyClassicForm} from '../lib/rogue-transformations.mjs';
+import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
+import {validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
 
 // Execute the actual TypeScript route with local SQLite and injected platform
 // bindings. No live credentials, production saves or network calls are used.
@@ -382,5 +384,15 @@ test('double special commands preserve actor, events, PP and native state across
    const before=h.row(),reloaded=await(await h.get()).json();assert.deepEqual(h.row(),before);assert.deepEqual(reloaded.battle.teams,result.battle.teams);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
    assert.equal((await h.post(payload)).status,409);assert.deepEqual(h.row(),before);
   }finally{h.sqlite.close();}
+ }
+});
+
+test('fused second actor keeps its donor and item through a double form command and API reload',async()=>{
+ for(const [species,item,kind,partner,form] of [[6,'charizarditex','mega',null,'mega-x'],[382,'blueorb','primal',null,'primal'],[800,'nsolarizer','necrozma',791,'dusk-mane']]){
+  const primary=makeReferenceMon(species,100,{boxId:'primary',moves:['Quick Attack']}),donor=makeReferenceMon(151,100,{boxId:'donor',moves:['Splash']}),ally=makeReferenceMon(7,100,{boxId:'ally',moves:['Splash']}),setup=persistentFixture([primary,donor,ally]);let {doc,state}=setup,run=stageClassicDnaFusion(setup.run,{primaryBoxId:'primary',donorBoxId:'donor'}).run;state.slots[0]=run;
+  const fused=run.party.find(m=>m.boxId==='primary'),other=run.party.find(m=>m.boxId==='ally');run.party=[other,fused];run.formItemStateRule='source-v1';run.formItems.primary=[item];run.formItemStates={primary:{[item]:false}};run.tools.megaBracelet=true;if(partner)state.system.dex[partner]={...state.system.dex[partner],caught:true};run.screen='battle';run.initialSwitchSlots=[];run.encounter={kind:'wild'};
+  run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe-a',moves:['Splash']}),makeReferenceMon(143,100,{boxId:'foe-b',moves:['Splash']})],{doubles:true,system:state.system});run.party=run.combat.teams[0];const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+  try{const initial=await(await h.get()).json(),actors=initial.battle.requests[0].actors,key=kind+':'+item;assert.ok(actors[1].specials.some(s=>s.key===key),key);const payload={action:'turn',revision:0,command:{type:'turn',actions:[{type:'move',actor:actors[0].slot,move:'splash'},{type:'move',actor:actors[1].slot,move:'quickattack',target:1,special:key}]}};const response=await h.post(payload);assert.equal(response.status,200,`${key}: ${JSON.stringify(await response.clone().json())}`);const result=await response.json(),saved=await storage.decodeGameData(h.row().data),next=saved.classic.slots[0],actual=next.party.find(m=>m.boxId==='primary');assert.ok(validatedClassicDnaFusion(actual),key);assert.deepEqual(actual.rogueFusion.donor,fused.rogueFusion.donor);assert.equal(actual.rogueFormKey,form);assert.equal(actual.pp.quickattack,initial.battle.teams[0][1].pp.quickattack-1);assert.deepEqual(next.formItems.primary,[item]);assert.equal(next.formItemStates.primary[item],true);const before=h.row(),reloaded=await(await h.get()).json();assert.deepEqual(reloaded.battle.teams,result.battle.teams);assert.deepEqual(h.row(),before);assert.equal((await h.post(payload)).status,409);assert.deepEqual(h.row(),before);const nextActors=reloaded.battle.requests[0].actors;const follow=await h.post({action:'turn',revision:1,command:{type:'turn',actions:[{type:'move',actor:nextActors[0].slot,move:'splash'},{type:'move',actor:nextActors[1].slot,move:'quickattack',target:1}]}});assert.equal(follow.status,200);const after=await storage.decodeGameData(h.row().data),afterMon=after.classic.slots[0].party.find(m=>m.boxId==='primary');assert.ok(validatedClassicDnaFusion(afterMon));assert.equal(afterMon.rogueFormKey,form);assert.deepEqual(afterMon.rogueFusion.donor,fused.rogueFusion.donor);assert.equal(afterMon.pp.quickattack,actual.pp.quickattack-1);assert.deepEqual(after.adventure,doc.adventure);assert.deepEqual(after.classic.slots[1],doc.classic.slots[1]);}
+  finally{h.sqlite.close();}
  }
 });
