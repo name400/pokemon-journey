@@ -394,8 +394,8 @@
 .battle-screen .bs-reviewed-attack .bs-reviewed-fists path{fill:#eab77f;stroke:#fff4dc;stroke-width:.6}
 .battle-screen .bs-reviewed-fists ellipse{fill:none;stroke:#ffefc0;stroke-width:.8}
 .battle-screen .bs-reviewed-poison ellipse{fill:#a447af;stroke:#e6a9ec;stroke-width:.6}
-.battle-screen .bs-reviewed-attack .bs-reviewed-ground path{fill:none;stroke:#85522f;stroke-width:1.3;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
-.battle-screen .bs-reviewed-ground ellipse{fill:none;stroke:#ad7c4b;stroke-width:.8;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
+.battle-screen .bs-reviewed-attack .bs-reviewed-ground path{fill:none;stroke:#85522f;stroke-width:.45;stroke-dasharray:100;stroke-dashoffset:100;animation:bs-ground-crack var(--bs-fx-duration) linear both}
+@keyframes bs-ground-crack{0%,10%{stroke-dashoffset:100;opacity:0}35%,75%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
 .battle-screen .bs-reviewed-attack .bs-reviewed-slashes path{fill:none;stroke:#c6fbff;stroke-width:1.6;stroke-linecap:round;filter:drop-shadow(0 0 2px #82d9ff);animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
 .battle-screen .bs-reviewed-rings ellipse{fill:none;stroke:#2d1832;stroke-width:.65}
 .battle-screen .bs-reviewed-rings .bs-reviewed-dark-inner{stroke:#845278;stroke-width:.3}
@@ -406,9 +406,10 @@
 .battle-screen .bs-reviewed-attack .bs-reviewed-impact.is-fairy path{fill:#fff0fb;stroke:#ffa9db;stroke-width:.25;stroke-dasharray:none;animation:none}
 .battle-screen .bs-reviewed-attack .bs-reviewed-thrust path{fill:#b4ef6d;stroke:#efffc2;stroke-width:.55;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
 .battle-screen .bs-reviewed-attack .bs-reviewed-rock path{fill:#9b6d49;stroke:#e0b784;stroke-width:.5}
-.battle-screen .bs-reviewed-steel-outer{stroke:#aabdd1;stroke-width:4.5;filter:drop-shadow(0 0 2px #f3fbff)}
-.battle-screen .bs-reviewed-steel-core{stroke:#fff;stroke-width:1.5}
-.battle-screen .bs-reviewed-steel-nodes{stroke:#e4f8ff;stroke-width:6;stroke-dasharray:2 7!important;stroke-dashoffset:0!important;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both!important}
+.battle-screen .bs-reviewed-steel-outer{stroke:#aabdd1;stroke-width:.9;filter:drop-shadow(0 0 2px #f3fbff)}
+.battle-screen .bs-reviewed-steel-core{stroke:#fff;stroke-width:.4}
+.battle-screen .bs-reviewed-attack .bs-reviewed-steel-nodes path{stroke:#e4f8ff;stroke-width:.7;stroke-dasharray:none;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
+.battle-screen .bs-reviewed-attack .bs-reviewed-impact.is-steel path{fill:none;stroke:#f4ffff;stroke-width:.3;stroke-dasharray:none;animation:none}
 .battle-screen .bs-reviewed-orb.is-fairy .bs-reviewed-orb-halo{fill:#ffc7e588}
 .battle-screen .bs-reviewed-orb.is-fairy .bs-reviewed-orb-core{fill:#ffb4d8;stroke:#fff3fa}
 .battle-screen .bs-reviewed-orb.is-fairy .bs-reviewed-satellites{fill:#fff5fc}
