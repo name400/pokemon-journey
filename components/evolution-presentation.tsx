@@ -17,7 +17,7 @@ export default function EvolutionPresentation({before,after,beforeName,afterName
  },[]);
  return <section className="evolution-presentation" data-phase={phase} aria-label="진화 결과">
   <div className="evolution-presentation-stage" aria-hidden="true">
-   <div className="evolution-presentation-shade"/><span className="evolution-presentation-orbit"/><span className="evolution-presentation-light"/>
+   <div className="evolution-presentation-shade"/><span className="evolution-presentation-rays"/><span className="evolution-presentation-orbit"/><span className="evolution-presentation-light"/>
    <PokemonImage className="evolution-presentation-before" mon={before} alt="" eager/>
    <PokemonImage className="evolution-presentation-after" mon={after} alt="" eager/>
    <span className="evolution-presentation-sparks">✦ · ✧ · ✦</span>

@@ -28,6 +28,7 @@ try{
  const committed=await(await page.request.get(base+'/api/test-state')).json();
  await page.waitForFunction(()=>document.querySelector('.evolution-presentation')?.getAttribute('data-phase')==='changing');
  assert.equal(await region.locator('[role=status]').innerText(),'');
+ const rays=region.locator('.evolution-presentation-rays');assert.equal(await rays.count(),1);assert.equal(await rays.evaluate(node=>getComputedStyle(node).animationName),'evo-rays');
  assert.equal(await region.locator('[role=status]').evaluate(node=>getComputedStyle(node).visibility),'hidden','The empty dialogue box must disappear during the transformation');
  if(sprites){await page.waitForTimeout(3200);await page.screenshot({path:'.sites-runtime/tests/evolution-sequence/changing.png'});}
  await page.waitForFunction(()=>document.querySelector('.evolution-presentation')?.getAttribute('data-phase')==='result',null,{timeout:13000});
