@@ -94,6 +94,10 @@ for(const multiplier of [0,.25,.5,1,2,4]){
  assert.ok(card.includes(`×${multiplier}`),`Actual effectiveness ${multiplier} is shown`);
  assert.ok(card.includes('PP 7/10'));
  assert.ok(card.includes('불꽃타입'));
+ const reference=renderToStaticMarkup(React.createElement(MoveCard,{m:move,index:0,locked:false,selected:false,move(){},open:false,onDescription(){},referenceSingle:true}));
+ const expected={0:'효과 없음',0.25:'효과 매우 별로',0.5:'효과 별로',1:'효과 보통',2:'효과 굉장',4:'효과 매우 굉장'}[multiplier];
+ assert.ok(reference.includes(`<span>${expected}</span><span>×${multiplier}</span>`));
+ assert.match(reference,/class="bs-move-compact-pp">7\/10<\/span>/);
 }
 const noPP=renderToStaticMarkup(React.createElement(MoveCard,{m:{id:'empty',name:'PP 없음',typeKey:'normal',pp:0,maxPp:10},index:0,locked:false,selected:false,move(){},open:false,onDescription(){}}));
 assert.match(noPP,/<button[^>]*disabled=""/);
