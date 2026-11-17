@@ -16,6 +16,12 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='mega-double-v60'){
+  const doc=createFixture('profile-double'),run=activeClassicRun(doc);
+  run.party=[makeReferenceMon(6,100,{boxId:'mega-a',moves:['Splash']}),makeReferenceMon(9,100,{boxId:'mega-b',moves:['Splash']})];
+  run.tools.megaBracelet=true;run.formItems={'mega-a':['charizarditex'],'mega-b':['blastoisinite']};run.formItemStateRule='source-v1';run.formItemStates={'mega-a':{charizarditex:false},'mega-b':{blastoisinite:false}};
+  run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe-a',moves:['Splash']}),makeReferenceMon(143,100,{boxId:'foe-b',moves:['Splash']})],{doubles:true});run.party=run.combat.teams[0];return doc;
+ }
  if(['primal-toggle','necrozma-toggle'].includes(scenario)){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc),necrozma=scenario==='necrozma-toggle',item=necrozma?'nsolarizer':'blueorb';
   run.party=[makeReferenceMon(necrozma?800:382,100,{boxId:'form-ui',moves:['Splash']})];
