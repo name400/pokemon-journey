@@ -5984,6 +5984,16 @@ test('Zone 19 waits for a player to leave a spent encounter position',async()=>{
  }finally{Date.now=oldNow;globalThis.__adventureUser=oldUser;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
 });
 
+test('Zone 6 Meditite uses ZA base attack through capture and reconnect',async()=>{
+ const previous=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone6-meditite-za-attack-qa',displayName:'요가랑 공격'};globalThis.__adventureTime={period:'day',hour:12};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const id=state.world.activeId,leader=structuredClone(rawMon(id));
+  seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone6',interior:null,x:15,y:6,facing:'up',zaRoyaleRank:'F',zaZone6Layer:'ground',adventureBalls:{masterball:1},combat:null,encounter:null},state.revision+1));await get();await call('zone6Wild-meditite');
+  const combat=rawWorld().combat,native=Battle.fromJSON(combat.snapshot),foe=native.p2.active[0];assert.equal(combat.adventureZAFormAttackV1,true);assert.equal(foe.species.id,'meditite');assert.equal(foe.storedStats.atk,native.statModify({...foe.species.baseStats,atk:56},foe.set,'atk'));const ability=state.battle.teams[1][0].ability;await get();assert.equal(Battle.fromJSON(rawWorld().combat.snapshot).p2.active[0].storedStats.atk,foe.storedStats.atk);
+  globalThis.__adventureRandom=()=>0;await call('ball',{ball:'masterball'});await get();const caught=state.box.find(m=>m.speciesId===307);assert.ok(caught);assert.equal(rawMon(caught.boxId).ability,ability);assert.equal(rawMon(id).ability,leader.ability);await get();assert.equal(rawMon(caught.boxId).ability,ability);
+ }finally{globalThis.__adventureUser=previous;globalThis.__adventureTime=oldTime;globalThis.__adventureRandom=oldRandom;}
+});
+
 test('Zone 6 Meditite follows day and night without changing an active battle',async()=>{
  const oldUser=globalThis.__adventureUser,oldTime=globalThis.__adventureTime,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone6-court-time-qa',displayName:'낮 배틀코트'};
  try{

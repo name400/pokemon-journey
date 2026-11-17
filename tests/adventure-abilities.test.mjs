@@ -5,6 +5,7 @@ import {makeMon} from '../lib/game.mjs';
 import {createCombat} from '../lib/party-battle.mjs';
 import {adventurePlayCpu,adventureCombatView} from '../lib/adventure-tera-policy.mjs';
 import {createZAAbilityCombat,adventureNativeTeamSet,zaZygardeFieldHp} from '../lib/cloud-adventure/adventure-abilities.mjs';
+import {installAdventureAbilityRules} from '../lib/cloud-adventure/adventure-ability-rules.mjs';
 import {createMission10DoubleSnapshot,playMission10MultiTurn,mission10MultiView} from '../lib/cloud-adventure/adventure-mission10-double.mjs';
 import {createMission37TripleSnapshot,restoreMission37TripleSnapshot,playMission37TriplePrototype,mission37TripleView} from '../lib/cloud-adventure/adventure-mission37-triple.mjs';
 import {adventureBattleBase,adventureBattleBaseFor,restoreAdventurePokemon} from '../lib/cloud-adventure/adventure-battle.mjs';
@@ -113,4 +114,40 @@ test('ZA Morpeko mode changes on Aura Wheel in companion and triple battles',()=
  const triple=createMission37TripleSnapshot([player],[ally],[mon(129,'b','swiftswim')],[foe,other]);
  let result=playMission37TriplePrototype(JSON.parse(JSON.stringify(triple)),{type:'move',move:'aurawheel',target:1});assert.equal(result.teams[0][0].battleAppearance,'morpekohangry');assert.equal(mission37TripleView(result).requests[0].actors[0].moves.find(m=>m.id==='aurawheel').typeKey,'dark');
  result=playMission37TriplePrototype(JSON.parse(JSON.stringify(result)),{type:'move',move:'aurawheel',target:1});assert.equal(result.events.find(e=>e.kind==='move'&&e.moveId==='aurawheel'&&e.actorBoxId==='p').type,'dark');
+});
+
+test('ZA Meditite and Medicham use species Attack bases in new snapshots, not a doubled ability',()=>{
+ for(const [id,base] of [[307,56],[308,84]]){
+  const own={...mon(id,'p','purepower',['몸통박치기']),nature:'adamant',evs:{hp:0,atk:172,def:0,spa:0,spd:0,spe:0}},foe=mon(143,'f','immunity'),source=structuredClone(own),battle=createZAAbilityCombat([own],[foe]),native=Battle.fromJSON(battle.snapshot),p=native.p1.active[0];
+  assert.equal(p.ability,'noability');assert.equal(p.storedStats.atk,native.statModify({...p.species.baseStats,atk:base},p.set,'atk'));assert.equal(battle.adventureZAFormAttackV1,true);
+  const next=adventurePlayCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'몸통박치기'}),resumed=Battle.fromJSON(next.snapshot);assert.equal(resumed.p1.active[0].storedStats.atk,p.storedStats.atk);assert.equal(next.teams[0][0].ability,'purepower');assert.deepEqual(own,source);
+  const legacy=createCombat([own],[foe]);const old=Battle.fromJSON(legacy.snapshot);assert.equal(old.p1.active[0].storedStats.atk,old.statModify(old.p1.active[0].species.baseStats,old.p1.active[0].set,'atk'));assert.equal(old.p1.active[0].ability,'purepower');
+ }
+});
+test('ZA Medicham Mega updates only a versioned battle and keeps stats after restore',()=>{
+ const own={...mon(308,'p','purepower',['몸통박치기']),item:'medichamite'},foe=mon(143,'f','immunity');foe.level=100;
+ const battle=createZAAbilityCombat([own],[foe]),next=adventurePlayCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'몸통박치기',special:'mega'}),native=Battle.fromJSON(next.snapshot),p=native.p1.active[0];
+ assert.equal(p.species.id,'medichammega');assert.equal(p.storedStats.atk,native.statModify({...p.species.baseStats,atk:140},p.set,'atk'));assert.equal(next.teams[0][0].ability,'purepower');
+ const resumed=adventurePlayCpu(JSON.parse(JSON.stringify(next)),{type:'move',move:'몸통박치기'});assert.equal(Battle.fromJSON(resumed.snapshot).p1.active[0].storedStats.atk,p.storedStats.atk);
+ const legacy=createZAAbilityCombat([own],[foe]);delete legacy.adventureZAFormAttackV1;const old=adventurePlayCpu(legacy,{type:'move',move:'몸통박치기',special:'mega'}),oldNative=Battle.fromJSON(old.snapshot),oldP=oldNative.p1.active[0];assert.equal(oldP.storedStats.atk,oldNative.statModify(oldP.species.baseStats,oldP.set,'atk'));
+});
+test('ZA Attack bases follow player and opposing Medicham in companion and triple saves',()=>{
+ const p=mon(308,'p','purepower',['방어']),ally=mon(307,'ally','purepower'),foe=mon(308,'f','purepower'),other=mon(143,'other','immunity'),expected=(b,x,base)=>b.statModify({...x.species.baseStats,atk:base},x.set,'atk');
+ const multi=createMission10DoubleSnapshot([p],[ally],[foe,other]),native=Battle.fromJSON(multi.snapshot);for(const [side,base] of [[0,84],[1,84],[2,56]])assert.equal(native.sides[side].active[0].storedStats.atk,expected(native,native.sides[side].active[0],base));
+ const m=playMission10MultiTurn(JSON.parse(JSON.stringify(multi)),{type:'move',move:'protect'}),restored=Battle.fromJSON(m.snapshot);assert.equal(restored.p1.active[0].storedStats.atk,expected(restored,restored.p1.active[0],84));assert.equal(m.teams[0][0].ability,'purepower');
+ const triple=createMission37TripleSnapshot([p],[ally],[mon(1,'third','overgrow')],[foe,other]),n=restoreMission37TripleSnapshot(JSON.parse(JSON.stringify(triple)));assert.equal(n.p1.active[0].storedStats.atk,expected(n,n.p1.active[0],84));assert.equal(n.p2.active[0].storedStats.atk,expected(n,n.p2.active[0],84));
+ const t=playMission37TriplePrototype(JSON.parse(JSON.stringify(triple)),{type:'move',move:'protect'}),rt=restoreMission37TripleSnapshot(t);assert.equal(rt.p1.active[0].storedStats.atk,expected(rt,rt.p1.active[0],84));
+});
+test('ZA versioned attack does not reset changed battle stats during reconnect or affect legacy snapshots',()=>{
+ const player=mon(308,'p','purepower',['방어']),foe=mon(143,'f','immunity'),battle=createZAAbilityCombat([player],[foe]),native=Battle.fromJSON(battle.snapshot),p=native.p1.active[0];p.storedStats.atk=37;battle.snapshot=native.toJSON();
+ const next=adventurePlayCpu(JSON.parse(JSON.stringify(battle)),{type:'move',move:'방어'});assert.equal(Battle.fromJSON(next.snapshot).p1.active[0].storedStats.atk,37);
+ const legacy=createCombat([player],[foe]);legacy.adventureNoAbilitiesV2=true;const before=Battle.fromJSON(legacy.snapshot).p1.active[0].storedStats.atk,after=adventurePlayCpu(JSON.parse(JSON.stringify(legacy)),{type:'move',move:'방어'});assert.equal(Battle.fromJSON(after.snapshot).p1.active[0].storedStats.atk,before);assert.equal(after.adventureZAFormAttackV1,undefined);
+});
+test('ZA Mega Mawile and Mega Starmie use their native ZA Attack bases without Huge Power',()=>{
+ for(const [species,item,form,base] of [[303,'mawilite','mawilemega',147],[121,'starminite','starmiemega',140]]){
+  const own={...mon(species,'p','intimidate',['몸통박치기']),item},foe=mon(143,'f','immunity');foe.level=100;
+  const start=createZAAbilityCombat([own],[foe]),next=adventurePlayCpu(JSON.parse(JSON.stringify(start)),{type:'move',move:'몸통박치기',special:'mega'}),battle=Battle.fromJSON(next.snapshot),p=battle.p1.active[0];
+  assert.equal(p.species.id,form);assert.equal(p.storedStats.atk,battle.statModify({...p.species.baseStats,atk:base},p.set,'atk'));assert.equal(next.teams[0][0].ability,'intimidate');assert.equal(installAdventureAbilityRules(battle,true,false,false,true).p1.active[0].ignoringAbility(),true);
+  const resumed=adventurePlayCpu(JSON.parse(JSON.stringify(next)),{type:'move',move:'몸통박치기'});assert.equal(Battle.fromJSON(resumed.snapshot).p1.active[0].storedStats.atk,p.storedStats.atk);
+ }
 });
