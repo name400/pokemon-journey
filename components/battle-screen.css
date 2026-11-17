@@ -364,3 +364,7 @@
 .battle-screen .bs-reviewed-orb.is-fairy .bs-reviewed-orb-core{fill:#ffb4d8;stroke:#fff3fa}
 .battle-screen .bs-reviewed-orb.is-fairy .bs-reviewed-satellites{fill:#fff5fc}
 @keyframes bs-reviewed-other-pulse{0%{opacity:0}12%,66%{opacity:1}86%,100%{opacity:0}}
+/* Keep the arena visible through the final event; the result is already saved
+   and is revealed when presentation finishes. */
+.battle-screen[data-v52=true][data-playing=true] .bs-result{visibility:hidden;pointer-events:none}
+.battle-screen[data-v52=true] .bs-scene > .bs-hud,.battle-screen[data-v52=true] .bs-scene > .bs-multi-vitals{z-index:8}

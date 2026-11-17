@@ -11,6 +11,23 @@ export function reviewedAttackImmune(events,index){
  }
  return false;
 }
+/** Collect only confirmed recipients of this action, preserving event order.
+ * The simulator's move target can be the last recipient of a spread attack. */
+export function reviewedAttackTargets(events,index){
+ const move=events[index];if(!reviewedAttackKind(move))return [];
+ const targets=[];
+ for(let i=index+1;i<events.length;i++){
+  const event=events[i];if(event.kind==='move'||event.kind==='switch')break;
+  const direct=event.kind==='damage'&&event.hit===true&&event.moveId===move.moveId||event.kind==='immune'||event.kind==='miss';
+  const id=event.targetBoxId??event.boxId,side=event.targetSide;
+  if(!direct||event.actorBoxId!==move.actorBoxId||id==null||(side!==0&&side!==1))continue;
+  const prior=targets.find(target=>target.side===side&&target.boxId===String(id));
+  if(prior){if(event.kind==='immune')prior.immune=true;continue;}
+  targets.push({side,boxId:String(id),immune:event.kind==='immune'});
+ }
+ if(!targets.length&&move.targetBoxId!=null&&(move.targetSide===0||move.targetSide===1))targets.push({side:move.targetSide,boxId:String(move.targetBoxId),immune:reviewedAttackImmune(events,index)});
+ return targets;
+}
 /** Move an adjacent effectiveness line after its own hit. Other event order is untouched. */
 export function orderReviewedBattleEvents(events){
  const ordered=[...events];

@@ -566,3 +566,5 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-ball-panel[data-step=ball] .bs-ball-grid>button>span:not(.bs-ball-atlas){flex:0 1 auto}
 /* The source keeps party colors visible while an item is selected; interaction remains disabled. */
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-bag-screen:not([data-step=target]):not([data-locked=true]) .bs-v52-party-list button:disabled{opacity:1;filter:none}
+/* Multi-battle vitals stay above attack effects, as do single-battle HUDs. */
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-multi=true] .bs-scene > .bs-multi-vitals{z-index:8}
