@@ -330,7 +330,11 @@
 .battle-screen[data-v52=true] .bs-switch-recall-ray{position:absolute;inset:0;width:100%;height:100%;overflow:visible;opacity:0;animation:bs-v52-recall-light var(--bs-fx-duration) linear both}
 .battle-screen[data-v52=true] .bs-switch-recall-ray line{stroke:#ffd2ef;stroke-width:.32;stroke-linecap:round;filter:drop-shadow(0 0 .5cqw #ff87d9)}
 .battle-screen[data-v52=true] .bs-switch-recall-orb{position:absolute;left:var(--bs-target-x);top:var(--bs-target-y);width:7cqw;height:7cqw;border-radius:50%;opacity:0;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff 0%,#fff5 32%,#ffb6e2aa 54%,transparent 72%);animation:bs-v52-recall-light var(--bs-fx-duration) linear both}
+.battle-screen[data-v52=true] .bs-switch-recall-spark{position:absolute;left:var(--bs-target-x);top:var(--bs-target-y);width:1.5cqw;height:1.5cqw;border-radius:50%;opacity:0;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff 0%,#ffc9ed 35%,transparent 72%);filter:drop-shadow(0 0 .4cqw #ff87d9);animation:bs-v52-recall-spark var(--bs-fx-duration) ease-in both}
+.battle-screen[data-v52=true] .bs-fx-layer[data-target=foe] .bs-switch-recall-spark{animation-name:bs-v52-recall-foe-spark}
 @keyframes bs-v52-recall-light{0%,9%{opacity:0}16%,23%{opacity:1}34%,100%{opacity:0}}
+@keyframes bs-v52-recall-spark{0%,22%{left:var(--bs-target-x);top:var(--bs-target-y);opacity:0}26%{opacity:1}40%{left:5%;top:95%;opacity:0}100%{left:5%;top:95%;opacity:0}}
+@keyframes bs-v52-recall-foe-spark{0%,22%{left:var(--bs-target-x);top:var(--bs-target-y);opacity:0}26%{opacity:1}40%{left:95%;top:75%;opacity:0}100%{left:95%;top:75%;opacity:0}}
 .battle-screen[data-v52=true] .bs-switch-ball{position:absolute;z-index:5;left:var(--bs-target-x);top:var(--bs-target-y);width:5cqw;height:5cqw;opacity:0;animation:bs-v52-switch-flight var(--bs-fx-duration) linear both}
 .battle-screen[data-v52=true] .bs-switch-ball .bs-ball-atlas{transform:scale(.5);transform-origin:top left}
 .battle-screen[data-v52=true] .bs-fx-layer[data-target=foe] .bs-switch-ball{animation-name:bs-v52-switch-foe-flight}
