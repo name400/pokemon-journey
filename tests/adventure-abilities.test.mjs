@@ -151,3 +151,11 @@ test('ZA Mega Mawile and Mega Starmie use their native ZA Attack bases without H
   const resumed=adventurePlayCpu(JSON.parse(JSON.stringify(next)),{type:'move',move:'몸통박치기'});assert.equal(Battle.fromJSON(resumed.snapshot).p1.active[0].storedStats.atk,p.storedStats.atk);
  }
 });
+test('ZA field Attack projection matches the new battle with no stored Pokemon edits',async()=>{
+ const {zaFieldAttack}=await import('../lib/cloud-adventure/adventure-abilities.mjs');
+ for(const id of [307,308,10054,10052,10280])for(const [level,nature,iv,ev,hyper] of [[5,'hardy',0,0,false],[47,'adamant',17,252,false],[100,'modest',1,68,true]]){
+  const own={...mon(id,'p','noability',['튀어오르기']),level,nature,ivs:{hp:31,atk:iv,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:ev,def:0,spa:0,spd:0,spe:0},...(hyper?{adventureHyperTrained:{atk:true}}:{})},before=structuredClone(own),foe=mon(143,'f','immunity'),b=Battle.fromJSON(createZAAbilityCombat([own],[foe]).snapshot);
+  assert.equal(zaFieldAttack(own),b.p1.active[0].storedStats.atk,JSON.stringify({id,level,nature,iv,ev,hyper}));assert.deepEqual(own,before);
+ }
+ assert.equal(zaFieldAttack(mon(25,'p','static')),null);assert.equal(zaFieldAttack({...mon(307,'p','purepower'),level:'unknown'}),null);
+});

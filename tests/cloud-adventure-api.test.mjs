@@ -87,6 +87,17 @@ test('new ZA battles require the Mega Ring without changing saved Pokemon',async
   await call('battle',{command:{type:'move',move:'튀어오르기'}});await get();assert.equal(rawWorld().combat.adventureMegaPowerV1.playerLocked,true);assert.ok(!state.battle.requests[0].specials.some(x=>x.key==='mega'));
  }finally{globalThis.__adventureUser=previous;}
 });
+test('ZA field attack matches new combat and preserves stored and legacy stats',async()=>{
+ const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-za-field-stats-qa',displayName:'능력치 검사'};
+ try{
+  await get();await call('start',{species:1});const id=state.world.activeId,player={...makeMon(308,50),boxId:id,ability:'purepower',moves:['튀어오르기'],pp:{},custom:{retained:true}};
+  seedMon(id,player);seedWorld(storeAdventurePosition({...rawWorld(),area:3,district:'lumiose-zone1',interior:null,x:11,y:8,zaIntroStage:'andi'},state.revision+1));
+  await get();const saved=rawMon(id),shown=state.box.find(m=>m.boxId===id);assert.notEqual(shown.zaFieldAttack,shown.stats.atk);assert.deepEqual(rawMon(id),saved);
+  await call('introBattle');const actual=Battle.fromJSON(rawWorld().combat.snapshot).p1.active[0].storedStats.atk;assert.equal(shown.zaFieldAttack,actual);await get();assert.equal(state.box.find(m=>m.boxId===id).zaFieldAttack,actual);assert.deepEqual(rawMon(id),saved);
+  const foe={...makeMon(129,10),boxId:'legacy-foe'};seedWorld({combat:createCombat([player],[foe]),trainer:null,encounter:foe});await get();assert.equal(state.box.find(m=>m.boxId===id).zaFieldAttack,null);assert.deepEqual(rawMon(id),saved);
+  seedWorld({combat:null,encounter:null,district:null,area:0});await get();assert.equal(state.box.find(m=>m.boxId===id).zaFieldAttack,null);assert.deepEqual(rawMon(id),saved);
+ }finally{globalThis.__adventureUser=previous;}
+});
 test('ZA intro battle suppresses reviewed ability without changing saved Pokemon',async()=>{
  const previous=globalThis.__adventureUser;globalThis.__adventureUser={userId:'adventure-ability-qa',displayName:'특성 검사'};
  try{
