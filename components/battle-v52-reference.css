@@ -5,6 +5,8 @@
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own{left:4.722%;right:auto;top:80.5%;bottom:auto}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:0 3px;line-height:1.1}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name>span:not(.bs-type-symbols){order:-1;display:block;flex:0 0 100%;width:100%;font-size:clamp(7px,2.5cqw,16px);line-height:1.1}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-level{margin:0 0 .555556cqw;line-height:1}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-level>span{display:block;width:8.888889cqw;height:2.777778cqw;line-height:2.777778cqw;text-align:center;border-radius:1.666667cqw;background:#243448e6;color:#fff;font:400 2.5cqw/2.777778cqw Arial,'Noto Sans KR',sans-serif}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name b{flex:0 1 auto;min-width:0;max-width:72%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(8px,2.778cqw,18px);line-height:1.1;color:white}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-type-symbols{margin:0;gap:2px}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-health{margin-top:2px}
