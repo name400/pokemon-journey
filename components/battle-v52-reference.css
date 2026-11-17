@@ -43,3 +43,7 @@
 
 /* The quick-capture glyph is the verified original; the button keeps its separate hit area. */
 .battle-screen .bs-v52-utilities .bs-v52-ball-icon{width:1.666667em;height:1.666667em;object-fit:contain;vertical-align:middle}
+/* Keep the effectiveness label left and the actual multiplier right, as in v52. */
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move .bs-effectiveness{display:flex;justify-content:space-between;gap:.555556cqw;padding-left:.277778cqw}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move .bs-effectiveness>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move .bs-effectiveness>span:last-child{flex:none}
