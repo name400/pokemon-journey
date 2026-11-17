@@ -765,3 +765,7 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info-icon{display:grid;place-items:center;width:12px;height:12px;border:1px solid #b9cfdf;border-radius:50%;background:#1b2d43;color:#fff;font:700 9px/1 Georgia,serif;pointer-events:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button{display:grid;place-items:center;border:0;background:transparent;box-shadow:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button span{padding:3px 2px;background:#1b2d43;color:#fff;font:8px/1 Arial,sans-serif;white-space:nowrap}
+
+/* During approved battle playback show only the current event; the full log remains available in history. */
+.rc-shell.is-battle .battle-screen[data-v52=true][data-playing=true] .bs-narration .bs-log-lines p:not(:last-child),
+.rc-shell.is-battle .battle-screen[data-v52=true][data-playing=true][data-playback-silent=true] .bs-narration .bs-log-lines p{display:none}
