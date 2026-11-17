@@ -668,3 +668,11 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-hud .bs-name>.bs-type-symbols{margin-left:0}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-health,.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-party-balls{margin-top:2px}
 }
+
+/* The battle shell is scaled to 88% on these phones. Counter that scale for
+   move and description targets so their rendered touch height remains 44px. */
+@media (max-width:360px) and (max-height:650px) and (orientation:portrait), (orientation:landscape) and (max-height:500px) and (min-width:481px){
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] :is(.bs-v52-commands,.bs-v52-utilities) button{min-height:50px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-wrap>.bs-move{height:50px;min-height:50px;max-height:50px;padding-right:50px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info{width:50px;min-width:50px;height:50px;min-height:50px}
+}
