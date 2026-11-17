@@ -15,6 +15,9 @@ import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemon.mjs';
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='mega-command'){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.party=[makeReferenceMon(6,100,{boxId:'mega-ui',moves:['Splash']})];run.tools.megaBracelet=true;run.formItems={'mega-ui':['charizarditex','charizarditey']};run.formItemStateRule='source-v1';run.formItemStates={'mega-ui':{charizarditex:false,charizarditey:false}};run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'mega-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='active-unequal-pp-double-separated-review')return doubleUnequalAliasFixture({boxId:'alias',targetSlot:1,separated:true});
  if(scenario==='active-unequal-pp-event-double-review')return eventDoubleUnequalAliasFixture('clowning-around',{boxId:'alias'});
  if(['active-unequal-pp-event-review','active-switched-sketch-event-review'].includes(scenario)){const doc=wildEventReviewFixture('berries',{activeSlot:0,sketch:scenario.includes('sketch'),reserveId:'alias'}),run=doc.classic.slots[0];applyClassicAction(doc,{action:'turn',command:{type:'move',move:'tackle'}});for(const id of ['fighter','alias']){const choice=run.combat.requests[0].actors[0].switches.find(s=>run.party[s.index].boxId===id);applyClassicAction(doc,{action:'turn',command:{type:'switch',slot:choice.slot}});}return doc;}

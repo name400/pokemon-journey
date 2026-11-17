@@ -190,6 +190,13 @@ test('battle Mega commands require both bracelet and matching owned stone',async
   const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{const bytes=h.row().data,view=await(await h.get()).json();assert.ok(!view.battle.requests[0].actors[0].specials.some(s=>s.key.startsWith('mega:')));assert.equal((await h.post({action:'turn',revision:0,command:{type:'move',move:'splash',special:'mega:charizarditex'}})).status,409);assert.equal(h.row().data,bytes);}finally{h.sqlite.close();}
  }
 });
+test('Mega form persists after a victory, reload, and a subsequent battle',async()=>{
+ const {doc,run}=persistentFixture([makeReferenceMon(6,100,{boxId:'mega-victor',moves:['Seismic Toss']})]);run.formItemStateRule='source-v1';run.formItems={'mega-victor':['charizarditex']};run.formItemStates={'mega-victor':{charizarditex:false}};run.screen='battle';run.initialSwitchSlots=[];run.encounter={kind:'wild'};const foe=makeReferenceMon(143,1,{boxId:'weak-enemy',moves:['Splash']});foe.hp=1;run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const response=await h.post({action:'turn',revision:0,command:{type:'move',move:'seismictoss',special:'mega:charizarditex'}});assert.equal(response.status,200);const result=await response.json();assert.equal(result.finishedBattle.winner,0);const committed=h.row().data,saved=await storage.decodeGameData(committed),restored=saved.classic.slots[0];assert.equal(restored.party[0].rogueFormKey,'mega-x');assert.equal(restored.party[0].mega,true);assert.deepEqual(restored.formItems['mega-victor'],['charizarditex']);assert.equal(restored.formItemStates['mega-victor'].charizarditex,true);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.equal((await(await h.get()).json()).run.party[0].rogueFormKey,'mega-x');assert.equal(h.row().data,committed);
+  const next=createClassicCombat(restored,[makeReferenceMon(143,100,{boxId:'next-enemy',moves:['Splash']})]);assert.equal(next.teams[0][0].rogueFormKey,'mega-x');assert.equal(restoreClassicNativeBattle(next,restored).p1.active[0].species.id,'charizardmegax');
+ }finally{h.sqlite.close();}
+});
 test('party menu cannot trigger Mega evolution and preserves the save',async()=>{
  for(const tracked of [true,false]){
   const {doc,run}=persistentFixture([makeReferenceMon(6,100,{boxId:'mega-owned',moves:['Splash']})]);run.formItems={'mega-owned':['charizarditex']};if(tracked){run.formItemStateRule='source-v1';run.formItemStates={'mega-owned':{charizarditex:false}};}
