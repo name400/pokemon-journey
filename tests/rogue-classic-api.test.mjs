@@ -17,6 +17,12 @@ import {applyClassicForm} from '../lib/rogue-transformations.mjs';
 import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
 import {validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
 import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
+import {classicExpToNext} from '../lib/rogue-classic-growth.mjs';
+
+test('real victory learning an owned move alias preserves PP and other saves through API reload',async()=>{
+ const hero=makeReferenceMon(1,3,{boxId:'hero',moves:['Vine Whip','Seismic Toss'],pp:{vinewhip:2,seismictoss:19}}),{doc,run}=persistentFixture([hero]);hero.experience=classicExpToNext(hero)-1;run.wave=21;run.screen='battle';run.encounter={kind:'wild'};const foe=makeReferenceMon(19,1,{boxId:'foe',moves:['Splash']});foe.hp=1;run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];run.initialSwitchSlots=[];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{const command={action:'turn',revision:0,command:{type:'move',move:'seismictoss'}},response=await h.post(command);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));const saved=await storage.decodeGameData(h.row().data),after=saved.classic.slots[0],mon=after.party[0];assert.equal(mon.level,4);assert.equal(mon.moves.filter(move=>['Vine Whip','덩굴채찍'].includes(move)).length,1);assert.equal(mon.pp.vinewhip,2);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);const before=h.row();assert.equal((await h.post(command)).status,409);assert.deepEqual(h.row(),before);const view=await(await h.get()).json();assert.deepEqual(view.run.party[0].moves,mon.moves);assert.equal(view.run.party[0].pp.vinewhip,2);}finally{h.sqlite.close();}
+});
 
 test('legacy named held items unlock only their matching evolution across API reload',async()=>{
  for(const [held,target,other] of [['Deep Sea Tooth',367,368],['Deep Sea Scale',368,367]]){
