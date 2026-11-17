@@ -419,6 +419,7 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-health{margin-top:.555556cqw}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-track{min-height:0;border-width:max(1px,.277778cqw)}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-hp-inside{justify-content:flex-end;padding-right:.555556cqw;font:400 2.5cqw/1 Arial,'Noto Sans KR',sans-serif;text-shadow:1px 1px #183144}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-hp-inside[data-long=true]{font-size:1.7cqw}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-party-balls{left:-2.5cqw;top:.555556cqw;gap:.833333cqw}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-party-balls>span{width:1.111111cqw;height:1.111111cqw;border-width:.5px}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-name b{line-height:3.333333cqw}
