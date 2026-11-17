@@ -16,6 +16,12 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(['double-special-dynamax','double-special-tera','double-special-zmove'].includes(scenario)){
+  const doc=createFixture('profile-double'),run=activeClassicRun(doc),z=scenario==='double-special-zmove';
+  run.party=[makeReferenceMon(133,50,{boxId:'special-a',moves:['Quick Attack'],teraType:'Ghost',...(z?{item:'normaliumz'}:{})}),makeReferenceMon(7,50,{boxId:'special-b',moves:['Splash']})];
+  run.tools.dynamaxBand=true;run.tools.teraOrb=true;run.tools.zRing=true;run.teraCharged=true;run.encounter={kind:'wild'};run.initialSwitchSlots=[];
+  run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'special-foe-a',moves:['Splash']}),makeReferenceMon(143,100,{boxId:'special-foe-b',moves:['Splash']})],{doubles:true});run.party=run.combat.teams[0];return doc;
+ }
  if(['reviewed-dynamax','reviewed-tera','reviewed-zmove'].includes(scenario)){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc),z=scenario==='reviewed-zmove';
   run.party=[makeReferenceMon(133,50,{boxId:'reviewed-hero',moves:['Quick Attack'],teraType:'Normal',...(z?{item:'normaliumz'}:{})})];
@@ -28,12 +34,14 @@ export function createFixture(scenario='eggs'){
   run.tools.megaBracelet=true;run.formItems={'mega-a':['charizarditex'],'mega-b':['blastoisinite']};run.formItemStateRule='source-v1';run.formItemStates={'mega-a':{charizarditex:false},'mega-b':{blastoisinite:false}};
   run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe-a',moves:['Splash']}),makeReferenceMon(143,100,{boxId:'foe-b',moves:['Splash']})],{doubles:true});run.party=run.combat.teams[0];return doc;
  }
- if(['primal-toggle','necrozma-toggle'].includes(scenario)){
-  const doc=createFixture('profile-single'),run=activeClassicRun(doc),necrozma=scenario==='necrozma-toggle',item=necrozma?'nsolarizer':'blueorb';
+ if(['primal-toggle','necrozma-toggle','primal-double-toggle','necrozma-double-toggle','primal-unavailable','necrozma-unavailable'].includes(scenario)){
+  const double=scenario.includes('-double-'),doc=createFixture(double?'profile-double':'profile-single'),run=activeClassicRun(doc),necrozma=scenario.startsWith('necrozma'),item=necrozma?'nsolarizer':'blueorb';
   run.party=[makeReferenceMon(necrozma?800:382,100,{boxId:'form-ui',moves:['Splash']})];
+  if(double)run.party.push(makeReferenceMon(7,100,{boxId:'form-ally',moves:['Splash']}));
   run.tools.megaBracelet=true;run.formItems={'form-ui':[item]};run.formItemStateRule='source-v1';run.formItemStates={'form-ui':{[item]:false}};
+  if(scenario.endsWith('-unavailable')){run.formItems={'form-ui':[]};run.formItemStates={'form-ui':{}};}
   if(necrozma)doc.classic.system.dex[791]={...doc.classic.system.dex[791],caught:true};
-  run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'form-foe',moves:['Splash']})],{system:doc.classic.system});run.party=run.combat.teams[0];return doc;
+  run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'form-foe',moves:['Splash']}),...(double?[makeReferenceMon(143,100,{boxId:'form-foe-2',moves:['Splash']})]:[])],{system:doc.classic.system,doubles:double});run.party=run.combat.teams[0];return doc;
  }
  if(scenario==='tera-ogerpon'||scenario==='tera-terapagos'){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.tools.teraOrb=true;run.teraCharged=true;run.party=[makeReferenceMon(scenario==='tera-ogerpon'?1017:1024,100,{boxId:'tera-ui',moves:['Splash']})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'tera-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
