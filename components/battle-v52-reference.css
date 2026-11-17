@@ -11,8 +11,9 @@
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-type-symbols{margin:0;gap:2px}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-health{margin-top:2px}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-row{display:none}
-:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-track{width:10.833cqw;height:1.667cqw;min-height:5px;margin:0;border:1px solid #e0e3d2;border-radius:1px;background:#214a21;overflow:hidden}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-track{width:10.833cqw;height:1.667cqw;min-height:5px;margin:0;border:max(1px,.277778cqw) solid #e0e3d2;border-radius:1px;background:#214a21;overflow:hidden}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-hp-track{width:15cqw;height:3.333cqw;min-height:10px}
+:is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-track>i{width:calc(100% - .555556cqw);height:calc(100% - .555556cqw);margin:.277778cqw;box-shadow:none}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud .bs-hp-track>i:not(.warning):not(.danger){background:#28d22b}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-own .bs-party-balls{position:absolute;left:-2.5cqw;top:1px;display:grid;gap:3px;margin:0}
 :is(.cloud-adventure-view .adv-battle-layer,.rc-shell.is-battle) .battle-screen[data-v52-single=true] .bs-scene .bs-hud-foe .bs-party-balls{display:none}
