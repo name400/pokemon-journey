@@ -14,7 +14,11 @@ import {applyClassicAction,activeClassicRun} from '../../../lib/rogue-classic-ga
 import {recordClassicLevelGrowth} from '../../../lib/rogue-classic-growth.mjs';
 import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemon.mjs';
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
+import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='gmax-entry'){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.tools.dynamaxBand=true;run.party=[makeReferenceMon(6,100,{boxId:'gmax-ui',moves:['Splash']})];run.formItems={'gmax-ui':['maxmushrooms']};run.party[0]=applyClassicForm(run.party[0],run,'maxmushrooms');run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'gmax-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='mega-command'||scenario==='mega-command-many'){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc),moves=scenario==='mega-command-many'?['Splash','Protect','Growl','Tackle']:['Splash'];run.party=[makeReferenceMon(6,100,{boxId:'mega-ui',moves})];run.tools.megaBracelet=true;run.balls.pokeball=5;run.balls.greatball=2;run.formItems={'mega-ui':['charizarditex','charizarditey']};run.formItemStateRule='source-v1';run.formItemStates={'mega-ui':{charizarditex:false,charizarditey:false}};run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'mega-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
  }

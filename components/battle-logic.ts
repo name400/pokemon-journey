@@ -29,6 +29,9 @@ export function impactLabel(m:any){if(String(m.category||'').toLowerCase()==='st
 
 export function battleTransformation(mon:any){return {tera:typeof mon?.terastallized==='string'?mon.terastallized.toLowerCase():null,giant:mon?.dynamaxed===true||mon?.gigantamax===true,gmax:mon?.gigantamax===true,mega:mon?.mega===true,primal:mon?.primal===true,ultra:mon?.ultra===true};}
 export function battleBurstKind(mon:any,cue?:string){const form=battleTransformation(mon);return cue==='zpower'?'zpower':form.tera?'tera':form.giant?'dynamax':form.mega?'mega':form.primal?'primal':form.ultra?'ultra':'form';}
+/** A stored Gigantamax form enters already transformed, so its switch event
+ * is the only actual battle event on which to play the shared giant cue. */
+export function battleEventHasBurst(event:any):boolean{return event?.kind==='form'||event?.kind==='switch'&&event?.pokemon?.gigantamax===true;}
 
 export function hasDifferentBattleForm(mon:any){if(mon?.rogueSourceId==null||!mon.battleAppearance)return false;if(mon.rogueBaseBattleAppearance)return mon.battleAppearance!==mon.rogueBaseBattleAppearance;return !!(mon.mega||mon.primal||mon.ultra||mon.gigantamax)&&mon.battleAppearance!==mon.rogueBattleSpecies;}
 
