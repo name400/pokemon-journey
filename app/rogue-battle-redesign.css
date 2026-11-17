@@ -769,3 +769,7 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 /* During approved battle playback show only the current event; the full log remains available in history. */
 .rc-shell.is-battle .battle-screen[data-v52=true][data-playing=true] .bs-narration .bs-log-lines p:not(:last-child),
 .rc-shell.is-battle .battle-screen[data-v52=true][data-playing=true][data-playback-silent=true] .bs-narration .bs-log-lines p{display:none}
+/* Keep the double-battle history panel within short mobile and desktop viewports. */
+@media (min-height:501px){
+ .rc-shell.is-battle .battle-screen[data-v52=true][data-multi=true] .bs-history{box-sizing:border-box;max-height:min(240px,19dvh)}
+}
