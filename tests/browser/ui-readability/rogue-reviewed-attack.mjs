@@ -3,7 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {makeMon} from '../../../lib/game.mjs';
 import {createCombat,combatView,playCpu} from '../../../lib/party-battle.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright'),base=process.env.UI_TEST_URL||'http://127.0.0.1:5263';
-const test=process.env.REVIEWED_CASE==='ground'?{id:27,foe:25,move:'지진',kind:'ground-cracks'}:process.env.REVIEWED_CASE==='grass'?{id:1,foe:7,move:'에너지볼',kind:'grass-orb'}:{id:4,foe:1,move:'화염방사',kind:'fire-stream'};
+const test=process.env.REVIEWED_CASE==='poison'?{id:3,foe:700,move:'오물폭탄',kind:'poison-drops'}:process.env.REVIEWED_CASE==='ground'?{id:27,foe:25,move:'지진',kind:'ground-cracks'}:process.env.REVIEWED_CASE==='grass'?{id:1,foe:7,move:'에너지볼',kind:'grass-orb'}:{id:4,foe:1,move:'화염방사',kind:'fire-stream'};
 const party=[{...makeMon(test.id,65),boxId:'hero',moves:[test.move]}],foe={...makeMon(test.foe,65),boxId:'foe',moves:['튀어오르기']};let initial,result;const real=process.env.ATTACK_REAL_SPRITES==='1',served=new Set(),spriteRoot=process.env.ATTACK_SPRITE_DIR||'/workspace/scratch/battle-ui-capture/attack-real-sprites';
 for(let i=0;i<30;i++){initial=createCombat(party,[foe]);initial.disableCpuTera=true;result=playCpu(initial,{type:'move',move:test.move});if(result.events.some((e,i)=>e.kind==='effect'&&e.text?.includes('굉장')&&result.events[i+1]?.kind==='damage'&&result.events[i+1]?.hit))break;}
 assert.ok(result.events.some((e,i)=>e.kind==='effect'&&e.text?.includes('굉장')&&result.events[i+1]?.kind==='damage'&&result.events[i+1]?.hit));let view=null,acted=false;
