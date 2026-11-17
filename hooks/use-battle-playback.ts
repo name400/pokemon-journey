@@ -8,7 +8,7 @@ export type BattleVisualEvent = {
   amount?: number; status?: string | null; pokemon?: Record<string, any>; cause?: string;
   critical?: boolean; silent?: boolean; ball?: string; ballId?: string; shakes?: number; caught?: boolean;
   actorSide?: number; actorTeamIndex?: number; actorSlot?: number;
-  targetSlot?: number; activeSlot?: number; slot?: number; transformation?: 'zpower';
+  targetSlot?: number; activeSlot?: number; slot?: number; transformation?: 'zpower' | 'dynamax-end';
 };
 export type BattlePlaybackFrame = {
   anim: string; eventKey: string; event: BattleVisualEvent | null; index: number;
