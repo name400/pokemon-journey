@@ -338,8 +338,8 @@
 .battle-screen .bs-reviewed-water-outer{stroke:#198bcc;stroke-width:3;filter:drop-shadow(0 0 2px #4fd6fa)}
 .battle-screen .bs-reviewed-water-core{stroke:#e9ffff;stroke-width:.8}
 .battle-screen .bs-reviewed-water-rings{fill:none;stroke:#a8efff;stroke-width:.5;animation:bs-reviewed-pulse var(--bs-fx-duration) linear both}
-.battle-screen .bs-reviewed-electric-glow{stroke:#efaa16;stroke-width:4;filter:drop-shadow(0 0 3px #fff14b)}
-.battle-screen .bs-reviewed-electric-core{stroke:#fff36b;stroke-width:1.8}
+.battle-screen .bs-reviewed-electric-glow{stroke:#efaa16;stroke-width:2;filter:drop-shadow(0 0 2px #fff14b)}
+.battle-screen .bs-reviewed-electric-core{stroke:#fff36b;stroke-width:.65}
 @keyframes bs-reviewed-draw{0%{stroke-dashoffset:140}25%,75%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
 @keyframes bs-reviewed-fade{0%{opacity:0}12%,72%{opacity:1}100%{opacity:0}}
 @keyframes bs-reviewed-pulse{0%{opacity:0}25%,70%{opacity:1}100%{opacity:0}}
