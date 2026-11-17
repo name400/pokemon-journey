@@ -128,13 +128,13 @@ const serverReducedMotion=()=>true;
 function directBattleSpriteSources(mon:any,facing:'front'|'back'):string[]{const direct=hasDifferentBattleForm(mon)?null:mon?.rogueSourceId!=null&&mon.shiny?(facing==='back'?mon.sourceShinyBackImage:mon.sourceShinyImage):(facing==='back'?mon?.sourceBackImage:mon?.sourceImage);const sprite=String(mon?.battleSprite||'').toLowerCase();if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(sprite))return mon?.rogueSourceId!=null&&direct?[direct]:[];const shiny=mon?.shiny?'-shiny':'';return [...new Set([...(direct?[direct]:[]),`https://play.pokemonshowdown.com/sprites/ani${facing==='back'?'-back':''}${shiny}/${sprite}.gif`,`https://play.pokemonshowdown.com/sprites/ani${shiny}/${sprite}.gif`])];}
 // Measure a separate CORS-enabled image so a failed pixel read never breaks the
 // image the player sees. The first frame is an approximation for animated GIFs.
-type SpriteFloor={x:number;y:number};
+type SpriteFloor={x:number;y:number;width:number;height:number};
 const spriteFloorCache=new Map<string,Promise<SpriteFloor|null>>();
 function spriteFloor(src:string):Promise<SpriteFloor|null>{
  // Image display does not require CORS; Showdown does not permit canvas pixel inspection.
  if(src.toLowerCase().startsWith('https://play.pokemonshowdown.com/')||src.toLowerCase().startsWith('http://play.pokemonshowdown.com/'))return Promise.resolve(null);
  const prior=spriteFloorCache.get(src);if(prior)return prior;
- const task=new Promise<SpriteFloor|null>(resolve=>{const image=new Image();image.crossOrigin='anonymous';image.onerror=()=>resolve(null);image.onload=()=>{try{const canvas=document.createElement('canvas');canvas.width=96;canvas.height=96;const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx){resolve(null);return;}const fit=Math.min(96/image.naturalWidth,96/image.naturalHeight),width=image.naturalWidth*fit,height=image.naturalHeight*fit;ctx.drawImage(image,(96-width)/2,(96-height)/2,width,height);const data=ctx.getImageData(0,0,96,96).data;let left=96,right=-1,bottom=-1;for(let y=0;y<96;y++)for(let x=0;x<96;x++)if(data[(y*96+x)*4+3]>16){left=Math.min(left,x);right=Math.max(right,x);bottom=Math.max(bottom,y);}resolve(right<left?null:{x:(left+right+1)/192,y:(bottom+1)/96});}catch{resolve(null);}};image.src=src;});spriteFloorCache.set(src,task);return task;
+ const task=new Promise<SpriteFloor|null>(resolve=>{const image=new Image();image.crossOrigin='anonymous';image.onerror=()=>resolve(null);image.onload=()=>{try{const canvas=document.createElement('canvas');canvas.width=96;canvas.height=96;const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx){resolve(null);return;}const fit=Math.min(96/image.naturalWidth,96/image.naturalHeight),width=image.naturalWidth*fit,height=image.naturalHeight*fit;ctx.drawImage(image,(96-width)/2,(96-height)/2,width,height);const data=ctx.getImageData(0,0,96,96).data;let left=96,right=-1,top=96,bottom=-1;for(let y=0;y<96;y++)for(let x=0;x<96;x++)if(data[(y*96+x)*4+3]>16){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}resolve(right<left?null:{x:(left+right+1)/192,y:(bottom+1)/96,width:(right-left+1)/96,height:(bottom-top+1)/96});}catch{resolve(null);}};image.src=src;});spriteFloorCache.set(src,task);return task;
 }
 function BattleSprite({mon,facing,animations}:{mon:any;facing:'front'|'back';animations:boolean}){
   const reduced=useSyncExternalStore(subscribeReducedMotion,reducedMotionSnapshot,serverReducedMotion),sources=directBattleSpriteSources(mon,facing),key=sources.join('|');
@@ -304,14 +304,22 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
         void spriteFloor(src).then(bounds=>{
           if(cancelled||!node.isConnected||(img.currentSrc||img.src)!==src)return;
           const floor=bounds||{x:.5,y:(1+Math.min(1,img.naturalHeight/img.naturalWidth))/2};
-          const rect=img.getBoundingClientRect(),box=scene.getBoundingClientRect(),nodeRect=node.getBoundingClientRect();
+          const box=scene.getBoundingClientRect(),own=node.classList.contains('bs-combatant-own'),charizard=own&&node.dataset.v52Charizard==='true';
+          if(!box.width||!box.height)return;
+          // Generated data-URL frames can change every tick; never resize those per frame.
+          if(bounds&&!/^data:/i.test(src)&&!/\.gif(?:[?#]|$)/i.test(src)&&!node.querySelector('[data-giant=true]')){
+            const maxWidth=own?(charizard?115:77):56,maxHeight=own?(charizard?92:71):52;
+            const width=Math.min(box.width*(maxWidth/360)/bounds.width,box.height*(maxHeight/202.5)/bounds.height,box.width*(own?.45:.35));
+            node.style.setProperty('--v52-art-width',`${width/box.width*100}%`);
+          }else node.style.removeProperty('--v52-art-width');
+          const rect=img.getBoundingClientRect(),nodeRect=node.getBoundingClientRect();
           if(!box.width||!box.height||!node.offsetWidth||!node.offsetHeight)return;
           const scaleX=nodeRect.width/node.offsetWidth,scaleY=nodeRect.height/node.offsetHeight;
           if(!scaleX||!scaleY)return;
           const current=getComputedStyle(node),left=parseFloat(current.left),top=parseFloat(current.top);
           if(!Number.isFinite(left)||!Number.isFinite(top))return;
-          const floorX=rect.left+floor.x*rect.width,floorY=rect.top+floor.y*rect.height,own=node.classList.contains('bs-combatant-own');
-          const goalX=box.left+(own?.30:.7389)*box.width,goalY=box.top+(own?.7556:.4395)*box.height;
+          const floorX=rect.left+floor.x*rect.width,floorY=rect.top+floor.y*rect.height;
+          const goalX=box.left+(own?(charizard?.275:.30):.7389)*box.width,goalY=box.top+(own?.7556:.4395)*box.height;
           node.style.setProperty('--v52-anchor-x',`${left+(goalX-floorX)/scaleX}px`);
           node.style.setProperty('--v52-anchor-y',`${top+(goalY-floorY)/scaleY}px`);
           node.style.setProperty('--v52-floor-x',`${(floorX-nodeRect.left)/scaleX}px`);
@@ -321,8 +329,8 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
     });};
     const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(align);observer?.observe(scene);
     scene.addEventListener('load',align,true);window.addEventListener('resize',align);align();
-    return()=>{cancelled=true;cancelAnimationFrame(frame);observer?.disconnect();scene.removeEventListener('load',align,true);window.removeEventListener('resize',align);for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant'))for(const name of ['--v52-anchor-x','--v52-anchor-y','--v52-floor-x','--v52-floor-y'])node.style.removeProperty(name);};
-  },[approvedV52,multiple,battleKey,playing,settings.animations]);
+    return()=>{cancelled=true;cancelAnimationFrame(frame);observer?.disconnect();scene.removeEventListener('load',align,true);window.removeEventListener('resize',align);for(const node of scene.querySelectorAll<HTMLElement>('.bs-combatant'))for(const name of ['--v52-anchor-x','--v52-anchor-y','--v52-floor-x','--v52-floor-y','--v52-art-width'])node.style.removeProperty(name);};
+  },[approvedV52,multiple,battleKey,settings.animations]);
   // Place the compact command buttons over the measured arena without assuming
   // the height of trainer headers or optional tool rows.
   useEffect(()=>{
@@ -475,7 +483,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
       {[opponent,side].flatMap(viewSide=>(shownActive[viewSide]||[]).map((index,slot)=>{
         const mon=teams[viewSide]?.[index];if(!mon)return null;const targeted=isEventTarget(viewSide,index,slot),faintAnimating=classicLayout&&playing&&event?.kind==='faint'&&targeted&&(!mon.fainted||(faintAnimation.current?.key===playback.eventKey&&faintAnimation.current.identity===`${viewSide}:${index}`));if(mon.hp<=0&&(classicLayout?(!playing||mon.fainted&&!faintAnimating):!playing))return null;const ownSide=viewSide===side,point=battleScenePosition(ownSide,slot,multiple,shownActive[viewSide]?.length||0,approvedV52),formKey=battleEventHasBurst(event)&&targeted?playback.eventKey:'';
         const hidden=viewSide===opponent&&!playing&&(battle.actionResult==='escape'||captured&&battle.ended&&(caughtBoxId?String(mon.boxId)===String(caughtBoxId):!multiple));
-        return <div key={mon.boxId||`${viewSide}:${slot}`} className={`bs-combatant ${ownSide?'bs-combatant-own':'bs-combatant-foe'}`} data-battle-side={viewSide} data-battle-slot={slot} data-battle-index={index} data-battle-boxid={String(mon.boxId??'')} data-hidden={hidden} data-capturing={!!captureEvent&&targeted} data-escaping={battle.actionResult==='escape'&&viewSide===opponent||undefined} data-fainted={mon.hp<=0&&(!playing||mon.fainted)&&!faintAnimating} data-commanding={multiple&&ownSide&&!playing&&currentActor?.active===index||undefined} style={multiple?{left:`${point.x}%`,top:`${point.y}%`,width:(shownActive[viewSide]?.length||0)>=3?(ownSide?'20%':'18%'):(ownSide?'25%':'21%'),zIndex:ownSide?slot===0?4:3:slot===0?3:2}:undefined}><div className="bs-sprite"><BattlePokemon mon={mon} facing={ownSide?'back':'front'} animations={settings.animations} transformKey={formKey} transformCue={formKey?event?.transformation:undefined} transformMon={formKey?event?.pokemon:undefined} duration={playback.durationMs||780} classicScale={classicLayout?classicSpeciesScale(mon,battleHeights):1}/></div></div>;
+        return <div key={mon.boxId||`${viewSide}:${slot}`} className={`bs-combatant ${ownSide?'bs-combatant-own':'bs-combatant-foe'}`} data-battle-side={viewSide} data-battle-slot={slot} data-battle-index={index} data-battle-boxid={String(mon.boxId??'')} data-v52-charizard={Number(mon.id)===6||undefined} data-hidden={hidden} data-capturing={!!captureEvent&&targeted} data-escaping={battle.actionResult==='escape'&&viewSide===opponent||undefined} data-fainted={mon.hp<=0&&(!playing||mon.fainted)&&!faintAnimating} data-commanding={multiple&&ownSide&&!playing&&currentActor?.active===index||undefined} style={multiple?{left:`${point.x}%`,top:`${point.y}%`,width:(shownActive[viewSide]?.length||0)>=3?(ownSide?'20%':'18%'):(ownSide?'25%':'21%'),zIndex:ownSide?slot===0?4:3:slot===0?3:2}:undefined}><div className="bs-sprite"><BattlePokemon mon={mon} facing={ownSide?'back':'front'} animations={settings.animations} transformKey={formKey} transformCue={formKey?event?.transformation:undefined} transformMon={formKey?event?.pokemon:undefined} duration={playback.durationMs||780} classicScale={classicLayout?classicSpeciesScale(mon,battleHeights):1}/></div></div>;
       }))}
       {!multiple&&(own.hp>0||playing&&!own.fainted)&&<div className="bs-hud bs-hud-own"><div className="bs-name"><b>{classicLayout?classicDisplayPokemonName(own):own.name}</b>{(classicLayout||approvedV52)&&<PokemonTypeBadge mon={own}/>}{approvedV52&&!classicLayout?<span className="bs-level"><span>Lv.{own.level}</span></span>:<span>Lv.{own.level}</span>}</div><HP p={own} inside={approvedV52}/>{classicLayout&&<ExperienceBar mon={own}/>}{classicLayout&&<StatStages mon={own}/>}{own.status&&<span className="bs-status">{statusLabel(own.status)}</span>}<PartyBalls party={teams[side]||[]}/></div>}
       {classicLayout&&currentSwitchCue?.text&&<div className="bs-switch-message" role="status">{currentSwitchCue.text}</div>}

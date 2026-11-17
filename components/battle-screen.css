@@ -218,8 +218,8 @@
 
 /* v52 single-battle layout: the arena shares a fixed 16:9 coordinate space. */
 .battle-screen[data-v52-single=true] .bs-scene{height:auto;aspect-ratio:16/9}
-.battle-screen[data-v52-single=true] .bs-combatant-own{left:30%;top:75.56%;width:21.4%;max-width:none}
-.battle-screen[data-v52-single=true] .bs-combatant-foe{left:73.89%;top:43.95%;width:15.56%;max-width:none}
+.battle-screen[data-v52-single=true] .bs-combatant-own{left:30%;top:75.56%;width:var(--v52-art-width,21.4%);max-width:none}
+.battle-screen[data-v52-single=true] .bs-combatant-foe{left:73.89%;top:43.95%;width:var(--v52-art-width,15.56%);max-width:none}
 .battle-screen[data-v52-single=true] .bs-hud-foe{left:auto;right:1%;top:.5%;width:31.5%}
 .battle-screen[data-v52-single=true] .bs-hud-own{left:4.72%;top:auto;right:auto;bottom:1%}
 .battle-screen[data-v52-single=true] .bs-combatant::before{content:'';position:absolute;left:50%;bottom:0;width:70%;height:10%;transform:translateX(-50%);border-radius:50%;background:#17202a55;z-index:-1}
