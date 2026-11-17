@@ -7,7 +7,7 @@ import {wildEventReviewFixture} from '../../fixtures/wild-event-alias.mjs';
 import {CLASSIC_REWARD_REGISTRY} from '../../../lib/rogue-classic-rewards.mjs';
 import {fixture} from '../../fixtures/dna-persistent.mjs';
 import {makeReferenceMon} from '../../../lib/rogue-reference.mjs';
-import {createClassicCombat} from '../../../lib/rogue-battle-engine.mjs';
+import {createClassicCombat,playClassicCombat} from '../../../lib/rogue-battle-engine.mjs';
 import {ensureClassicState} from '../../../lib/rogue-classic-state.mjs';
 import {starterCatalog} from '../../../lib/rogue-starter-system.mjs';
 import {applyClassicAction,activeClassicRun} from '../../../lib/rogue-classic-game.mjs';
@@ -16,6 +16,12 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='recover-ended'){
+  const doc=createFixture('victory'),run=activeClassicRun(doc);run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});run.party=run.combat.teams[0];run.screen='battle';return doc;
+ }
+ if(scenario==='recover-fainted'){
+  const doc=createFixture('victory'),run=activeClassicRun(doc);run.combat.teams[0][0].hp=0;run.combat.snapshot.sides[0].pokemon[0].hp=0;run.combat.snapshot.sides[0].pokemon[0].fainted=true;run.party=run.combat.teams[0];return doc;
+ }
  if(scenario.startsWith('double-field-status-')){
   const doc=createFixture('profile-double'),run=activeClassicRun(doc),move=({'double-field-status-burn':'Will-O-Wisp','double-field-status-poison':'Toxic','double-field-status-sleep':'Spore','double-field-status-rain':'Rain Dance','double-field-status-terrain':'Electric Terrain'})[scenario];
   if(!move)throw new Error('Unknown isolated field/status scenario');
