@@ -34,6 +34,8 @@ test('Zone 10 canal path reaches both entrances and preserves floor saves',()=>{
  assert.ok(fieldPath(map,{x:1,y:6},{x:21,y:6}).length);
  assert.equal(stepField({...s,x:1,y:6},'left').district,'lumiose-south-boulevard');
  assert.equal(stepField({...s,x:21,y:6},'right').district,'lumiose-espace-vide');
+ for(const key of ['zaZone10Upper','zaZone10LowerBank','zaEspaceLower']){const future={...s,x:21,y:6,[key]:{version:2}},before=structuredClone(future);assert.equal(stepField(future,'right').blocked,true,key);assert.deepEqual(future,before,key);}
+ for(const key of ['zaZone10Upper','zaZone10LowerBank','zaEspaceLower'])assert.equal(stepField({...s,x:21,y:6,[key]:null},'right').district,'lumiose-espace-vide',key);
  assert.equal(map[8][11],'c');assert.equal(map[4][17],'l');
 });
 test('zone ten canal, rooftop, gate and saved positions',()=>{
@@ -165,4 +167,16 @@ test('Zone 10 lower canal connects both districts through shallow water',()=>{
  assert.equal(stepField({...zone,x:1,y:6,zaZone10Upper:{version:2}},'left').blocked,true);
  assert.equal(stepField({...zone,x:21,y:6},'right').district,'lumiose-espace-vide');
  const old=stepField({...zone,x:1,y:6,zaZone10LowerBank:false},'left');assert.deepEqual([old.district,old.x,old.y],['lumiose-south-boulevard',11,1]);
+});
+
+// Future layer formats must not be silently reset by either surface entrance.
+test('Zone 10 surface entrances and exits preserve unknown layer records',()=>{
+ const base={area:3,interior:null,zaRoyaleRank:'F'},routes=[
+  [{...base,district:'lumiose-south-boulevard',x:11,y:1},'up'],
+  [{...base,district:'lumiose-estival-approach',x:1,y:8},'left'],
+  [{...base,district:'lumiose-zone10',x:11,y:1},'up'],
+  [{...base,district:'lumiose-zone10',x:1,y:6},'left'],
+ ];
+ for(const [s,direction] of routes)for(const key of ['zaZone10Upper','zaZone10LowerBank']){const future={...s,[key]:{version:2}},before=structuredClone(future);assert.equal(stepField(future,direction).blocked,true,`${s.district} ${key}`);assert.deepEqual(future,before);}
+ for(const [s,direction] of routes)for(const key of ['zaZone10Upper','zaZone10LowerBank'])assert.equal(stepField({...s,[key]:null},direction).transitioned,true,`${s.district} ${key}`);
 });

@@ -12404,6 +12404,16 @@ test('Espace underground and Zone 10 lower bank stay on the same level across re
   assert.equal(rawWorld().zaMission20Stage,7);assert.deepEqual(rawWorld().zaColorfulScrewsFound,['future-screw']);await call('move',{direction:'right'});await get();assert.deepEqual([state.world.district,state.world.x,state.world.y,state.world.zaEspaceLower],['lumiose-espace-vide',1,8,true]);
   assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);const after=rawMon(team[0]);assert.equal(after.walkSteps,lead.walkSteps+2);delete after.walkSteps;delete lead.walkSteps;assert.deepEqual(after,lead);
   seedWorld(storeAdventurePosition({...lower,zaZone10LowerBank:{version:2}},state.revision+1));await get();await call('move',{direction:'left'},409);assert.deepEqual(rawWorld().zaZone10LowerBank,{version:2});
+  for(const key of ['zaZone10Upper','zaZone10LowerBank','zaEspaceLower']){const zone={...rawWorld(),area:3,district:'lumiose-zone10',interior:null,x:21,y:6,facing:'right',zaZone10Upper:false,zaZone10LowerBank:true,zaEspaceLower:true,[key]:{version:2}};seedWorld(storeAdventurePosition(zone,state.revision+1));await get();const before=structuredClone(rawWorld());await call('move',{direction:'right'},409);assert.deepEqual(rawWorld(),before,key);await get();assert.deepEqual(rawWorld()[key],{version:2},key);assert.equal(state.world.district,'lumiose-zone10');assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);}
+ }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
+});
+
+test('Zone 10 surface transitions reject unknown layer records without changing saves',async()=>{
+ const oldUser=globalThis.__adventureUser,oldRandom=globalThis.__adventureRandom;globalThis.__adventureUser={userId:'zone10-surface-layer-qa',displayName:'구역 10 층 기록'};globalThis.__adventureRandom=()=>.999;
+ try{
+  await get();await call('start',{species:152});const team=[...state.world.teamIds],wallet=structuredClone(state.wallet),lead=structuredClone(rawMon(team[0]));
+  const routes=[['lumiose-south-boulevard',11,1,'up'],['lumiose-estival-approach',1,8,'left'],['lumiose-zone10',11,1,'up'],['lumiose-zone10',1,6,'left']];
+  for(const [district,x,y,direction] of routes)for(const key of ['zaZone10Upper','zaZone10LowerBank']){const save={...rawWorld(),area:3,district,interior:null,x,y,facing:direction,zaRoyaleRank:'F',zaZone10Upper:false,zaZone10LowerBank:false,zaColorfulScrewsFound:['future-screw'],[key]:{version:2}};seedWorld(storeAdventurePosition(save,state.revision+1));await get();const before=structuredClone(rawWorld());await call('move',{direction},409);assert.deepEqual(rawWorld(),before,`${district} ${key}`);await get();assert.deepEqual(rawWorld()[key],{version:2});assert.equal(state.world.district,district);assert.deepEqual(state.world.teamIds,team);assert.deepEqual(state.wallet,wallet);assert.deepEqual(rawMon(team[0]),lead);}
  }finally{globalThis.__adventureUser=oldUser;globalThis.__adventureRandom=oldRandom;}
 });
 
