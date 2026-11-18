@@ -74,6 +74,19 @@ test('legacy named native items can be transferred from the displayed inventory 
  }finally{h.sqlite.close();}
 });
 
+test('rival encounter, victory dialogue and reward transition survive API reload once',async()=>{
+ const doc=createFixture('victory'),run=doc.classic.slots[doc.classic.activeSlot];run.wave=7;run.screen='advance';run.encounter={kind:'wild'};run.npcDialogueQueue=[];const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+ try{
+  let revision=0;const step=async payload=>{const response=await h.post({...payload,revision});assert.equal(response.status,200,JSON.stringify(await response.clone().json()));revision++;return storage.decodeGameData(h.row().data);};
+  let saved=await step({action:'next'}),current=saved.classic.slots[saved.classic.activeSlot];assert.equal(current.wave,8);assert.equal(current.encounter.kind,'rival');const rivalChoices=structuredClone(current.rivalChoices);assert.ok(current.npcDialogueQueue.length);
+  while(current.npcDialogueQueue?.length){const line=current.npcDialogueQueue[0];saved=await step({action:'npcDialogueSkip',dialogueId:line.id,index:line.index});current=saved.classic.slots[saved.classic.activeSlot];}
+  for(let turn=0;turn<20&&current.screen==='battle';turn++){saved=await step({action:'turn',command:{type:'move',move:'seismictoss'}});current=saved.classic.slots[saved.classic.activeSlot];}
+  assert.equal(current.screen,'reward');assert.equal(current.combat.ended,true);assert.ok(current.npcDialogueQueue?.length);assert.deepEqual(current.rivalChoices,rivalChoices);const rewardSaved=h.row(),reloaded=await(await h.get()).json();assert.equal(reloaded.run.screen,'reward');assert.deepEqual(h.row(),rewardSaved);assert.equal((await h.post({action:'skipReward',revision})).status,409);assert.deepEqual(h.row(),rewardSaved);
+  while(current.npcDialogueQueue?.length){const line=current.npcDialogueQueue[0];saved=await step({action:'npcDialogueSkip',dialogueId:line.id,index:line.index});current=saved.classic.slots[saved.classic.activeSlot];}
+  const beforeNext=revision;saved=await step({action:'skipReward'});current=saved.classic.slots[saved.classic.activeSlot];assert.equal(current.wave,9);assert.deepEqual(current.rivalChoices,rivalChoices);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);const after=h.row();assert.equal((await h.post({action:'skipReward',revision:beforeNext})).status,409);assert.deepEqual(h.row(),after);assert.equal((await(await h.get()).json()).run.wave,9);
+ }finally{h.sqlite.close();}
+});
+
 test('trainer voucher draw and accelerated hatch survive API reload without repeated awards',async()=>{
  const doc=createFixture('victory'),run=doc.classic.slots[doc.classic.activeSlot];
  run.encounter=classicTrainerEncounter(run,222,{kind:'gym'});run.combat=createClassicCombat(run,[makeReferenceMon(19,1,{boxId:'test-foe',moves:['Splash'],hp:1})],{trainer:true});run.party=run.combat.teams[0];run.initialSwitchSlots=[];
