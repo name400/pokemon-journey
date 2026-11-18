@@ -26,3 +26,10 @@ test('heartbeat requires same-origin authentication and updates only its user',a
  const h=fixture();try{h.setUser('friend');assert.equal((await h.presence.POST(request('https://other.test'))).status,403);h.setUser(null);assert.equal((await h.presence.POST(request('https://game.test'))).status,401);assert.equal(h.sql.prepare('SELECT last_seen FROM players WHERE user_id=?').get('friend').last_seen,0);
  }finally{h.sql.close();}
 });
+test('friend request, acceptance and removal preserve presence privacy',async()=>{
+ const h=fixture(),post=payload=>h.friends.POST(new Request('https://game.test/api/friends',{method:'POST',headers:{origin:'https://game.test','content-type':'application/json'},body:JSON.stringify(payload)}));try{
+  h.sql.prepare('UPDATE profiles SET friend_code=? WHERE user_id=?').run('ABCDEF1234','outsider');let response=await post({action:'request',code:'ABCDEF1234'});assert.equal(response.status,200);let view=await response.json(),pending=view.items.find(x=>x.nickname==='outsider');assert.equal(pending.status,'pending');assert.equal('online' in pending,false);
+  h.setUser('outsider');response=await post({action:'accept',id:pending.id});assert.equal(response.status,200);view=await response.json();assert.equal(view.items.find(x=>x.nickname==='self').status,'accepted');assert.equal(typeof view.items.find(x=>x.nickname==='self').online,'boolean');
+  h.setUser('self');response=await post({action:'remove',id:pending.id});assert.equal(response.status,200);assert.equal((await response.json()).items.some(x=>x.nickname==='outsider'),false);assert.equal(h.sql.prepare('SELECT last_seen FROM players WHERE user_id=?').get('outsider').last_seen,0);
+ }finally{h.sql.close();}
+});
