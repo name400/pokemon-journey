@@ -1,0 +1,7 @@
+# Milk Drink and Substitute
+
+In the pinned source Milk Drink is `USER_OR_NEAR_ALLY` with a target-directed HealAttr and does not ignore Substitute. `hitsSubstitute` exempts user-only and field targets, but not `USER_OR_NEAR_ALLY`; therefore a Substitute on the user also blocks the target effect unless Infiltrator is active. See https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L488 and https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L10064. This describes the pinned source, not every Pokémon game.
+
+The native simulator heals the user behind Substitute. The new-run `milkDrinkSubstituteRule: source-v1`, when the existing source target rule is also enabled, makes that particular healing amount zero while retaining successful move handling and PP consumption. It does not apply to Z/Max effects, old runs, or attacks, and the flag is carried in combat state. The existing simulator already blocks a substituted ally without Infiltrator.
+
+Isolated actual player turn and codec tests cover single and double self-target, ally target, normal and passive Infiltrator, suppression, enemy use, Metronome-called Milk Drink, a healing charm, legacy state and new starts. Existing Z, multi-lens, called and Instruct tests are included: 45 passed sequentially. The source runtime, every caller/ability/item combination, browser and real devices remain unverified. Existing user data and servers were not used; Sites was not deployed.
