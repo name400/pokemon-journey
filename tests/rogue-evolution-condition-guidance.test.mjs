@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
-import {classicEvolutionOptions} from '../lib/rogue-evolution.mjs';
+import {classicEvolutionOptions,classicEvolutionItemCandidates} from '../lib/rogue-evolution.mjs';
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
 import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
 import {classicGameView} from '../lib/rogue-classic-game.mjs';
@@ -26,4 +26,13 @@ test('party view exposes the specific guidance after save recovery',async()=>{
  state.slots[0]={id:'view-guidance',seed:'view-guidance',wave:21,biome:1,weather:'sunnyday',rng:42,screen:'reward',party:[mon],balls:{pokeball:5},money:1000,modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[],rerolls:0};
  const restored=await decodeGameData(await encodeGameData(doc)),option=classicGameView(restored).run.party[0].evolutions.find(e=>e.sourceId===706);
  assert.deepEqual(option.conditions.find(c=>c.label.startsWith('날씨:')),{met:false,label:'날씨: 비 · 안개 · 큰비'});assert.deepEqual(restored.adventure,{keep:true});
+});
+
+test('evolution items show their Korean names while retaining their saved IDs',async()=>{
+ for(const [species,item,label] of [[64,'linkingcord','연결의끈'],[891,'scrollofwaters','물의 족자'],[891,'scrollofdarkness','악의 족자']]){
+  const mon=makeReferenceMon(species,50,{boxId:`mon-${item}`}),run={id:'item-guidance',wave:50,biome:1,screen:'reward',party:[mon],modifiers:[],evolutionItems:{}};
+  const option=()=>classicEvolutionOptions(mon,run,{}).find(e=>e.item===item);assert.ok(option(),item);assert.deepEqual(option().conditions.find(c=>c.label.endsWith(' 1개')),{met:false,label:`${label} 1개`});
+  assert.ok(classicEvolutionItemCandidates(run,{}, {rare:option().sourceItem>=51}).some(c=>c.item===item&&c.name===label));run.evolutionItems[item]=1;assert.equal(option().conditions.find(c=>c.label===`${label} 1개`).met,true);
+  const restored=await decodeGameData(await encodeGameData({run,other:{keep:true}}));assert.equal(restored.run.evolutionItems[item],1);assert.deepEqual(restored.other,{keep:true});
+ }
 });

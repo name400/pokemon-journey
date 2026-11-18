@@ -165,6 +165,10 @@ export function createFixture(scenario='eggs'){
   const {doc,run}=fixture([makeReferenceMon(54,33,{boxId:'evolving-duck',moves:['Splash']})]);
   Object.assign(run.party[0],{battleAppearance:'psyduck',battleArtId:54,battleSprite:'psyduck',rogueBaseBattleAppearance:'psyduck'});recordClassicLevelGrowth(run,run.party[0],[33],[]);return doc;
  }
+ if(scenario==='evolution-guidance'){
+  const {doc,run}=fixture([makeReferenceMon(705,50,{boxId:'weather-guidance',moves:['Splash']}),makeReferenceMon(868,50,{boxId:'biome-guidance',moves:['Splash']}),makeReferenceMon(64,50,{boxId:'item-guidance',moves:['Splash']})]);
+  run.biome=1;run.weather='sunnyday';return doc;
+ }
  if(scenario==='evolution'||scenario==='evolution-prompt'){
   const {doc,run}=fixture([makeReferenceMon(10,9,{boxId:'evolving',moves:['Tackle','String Shot','Protect','Growl']})]);
   if(scenario==='evolution-prompt')recordClassicLevelGrowth(run,run.party[0],[7,8,9],[]);
