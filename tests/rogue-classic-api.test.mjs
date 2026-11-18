@@ -23,6 +23,18 @@ import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 import {classicExpToNext} from '../lib/rogue-classic-growth.mjs';
 import {classicServices} from '../lib/rogue-classic-services.mjs';
 
+test('fire fallback prefers a verified fire type and preserves the choice through API reload',async()=>{
+ const mon=(id,boxId,ability)=>makeReferenceMon(id,20,{boxId,moves:['Tackle'],...(ability?{ability}:{})});
+ const fused=previewClassicDnaFusion(mon(10,'primary'),mon(7,'donor'),{random:()=>0}).fused,{doc,run}=persistentFixture([mon(143,'snorlax','thickfat'),mon(58,'fire'),fused]);
+ Object.assign(run,{wave:42,biome:18,screen:'mystery',encounter:{kind:'mystery',key:'fiery-fallout'},mystery:{type:'fiery-fallout',stage:'choose',selection:null},mysteryRule:'part-timer-v19',mysteryGuideFireRule:'source-subset-v2',mysteryFireMixedRule:'source-subset-v1',challengeEligibilityRule:'source-subset-v1',challenges:[{id:1,value:11,severity:0}]});
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const before=h.row(),initial=await(await h.get()).json();assert.deepEqual(initial.run.mystery.fireCalmers,['fire']);
+  const denied=await h.post({action:'mysterySelect',job:'calm',boxId:'snorlax',revision:0});assert.equal(denied.status,409);assert.deepEqual(h.row(),before);
+  const selected=await h.post({action:'mysterySelect',job:'calm',boxId:'fire',revision:0});assert.equal(selected.status,200);const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].mystery.selection.boxId,'fire');assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+  const confirmed=await h.post({action:'mysteryConfirm',revision:1});assert.equal(confirmed.status,200);const result=await storage.decodeGameData(h.row().data);assert.equal(result.classic.slots[0].screen,'reward');assert.ok(result.classic.slots[0].expNotices.some(e=>e.boxId==='fire'));
+ }finally{h.sqlite.close();}
+});
+
 test('challenge-illegal fire-resistant ability cannot alone select calm through API',async()=>{
  const mon=(id,boxId,ability)=>makeReferenceMon(id,20,{boxId,moves:['Tackle'],...(ability?{ability}:{})});
  const fused=previewClassicDnaFusion(mon(10,'primary'),mon(7,'donor'),{random:()=>0}).fused,{doc,run}=persistentFixture([mon(143,'snorlax','thickfat'),fused]);
