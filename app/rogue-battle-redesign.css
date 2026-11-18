@@ -813,6 +813,11 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-compact-pp{grid-column:3;grid-row:1;font-size:2.5cqw;line-height:2.777778cqw}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-effectiveness{grid-column:1/-1;grid-row:2;font-size:2.5cqw;line-height:2.777778cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-info{left:-56px;right:auto;top:0;bottom:auto;width:56px;min-width:56px;height:6.944444cqw;min-height:0;max-height:none}
+/* Use otherwise empty horizontal space only when there is no special control. */
+@media(max-width:390px){
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-panel:not(:has(.bs-v60-mega,.bs-specials-drawer,.bs-plus-open)) .bs-move-info{left:-96px;width:96px;min-width:96px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-panel:not(:has(.bs-v60-mega,.bs-specials-drawer,.bs-plus-open)) .bs-move-info-icon{transform:translateX(20px)}
+}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button{display:grid;place-items:center;border:0;background:transparent;box-shadow:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button span{padding:3px 2px;background:#1b2d43;color:#fff;font:8px/1 Arial,sans-serif;white-space:nowrap}
 
