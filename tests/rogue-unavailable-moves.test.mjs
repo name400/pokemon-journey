@@ -35,3 +35,11 @@ test('PP recovery restores the same visible card and legal command in a continuo
  run.combat=continueClassicWild(run,[makeReferenceMon(143,100,{boxId:'next',moves:['Splash']})]);run.party=run.combat.teams[0];
  const req=view(run),card=req.displayMoves.find(m=>m.id==='extremespeed');assert.equal(card.slot,4);assert.equal(card.pp,5);assert.ok(!card.disabled);assert.ok(req.moves.some(m=>m.id==='extremespeed'));play(run,{type:'move',move:'extremespeed'});assert.equal(run.party[0].pp.extremespeed,4);assert.deepEqual(run.party[0].moves,moveNames);
 });
+test('doubles keeps the exhausted move on its original actor and slot after reload',async()=>{
+ let run=fixture();run.party=[makeReferenceMon(813,9,{boxId:'bunny',moves:[...moveNames]}),makeReferenceMon(7,9,{boxId:'ally',moves:['Splash']})];
+ run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe1',moves:['Splash']}),makeReferenceMon(143,100,{boxId:'foe2',moves:['Splash']})],{trainer:true,doubles:true});run.party=run.combat.teams[0];
+ for(let i=0;i<5;i++){play(run,{type:'turn',actions:[{actor:0,type:'move',move:'extremespeed',target:1},{actor:1,type:'move',move:'splash'}]});run=await decodeGameData(await encodeGameData(run));}
+ const actors=view(run).actors,first=actors.find(a=>a.slot===0),second=actors.find(a=>a.slot===1),card=first.displayMoves.find(m=>m.id==='extremespeed');
+ assert.deepEqual(run.party[0].moves,moveNames);assert.equal(run.party[0].pp.extremespeed,0);assert.equal(card.slot,4);assert.equal(card.pp,0);assert.equal(card.disabled,true);assert.equal(card.disabledReason,'PP가 없습니다.');assert.equal(first.moves.some(m=>m.id==='extremespeed'),false);assert.equal(second.displayMoves.some(m=>m.id==='extremespeed'),false);
+ const before=JSON.stringify(run);assert.throws(()=>playClassicCombat(run,{type:'turn',actions:[{actor:0,type:'move',move:'extremespeed',target:1},{actor:1,type:'move',move:'splash'}]}));assert.equal(JSON.stringify(run),before);
+});
