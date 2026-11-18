@@ -1,0 +1,7 @@
+# Taunt and Me First
+
+The pinned source Taunt restricts every Status-category move; its Me First definition is Status and is itself marked unimplemented. These are two distinct facts: this change implements only the Taunt selection restriction for the locally playable Me First, not the source Me First execution. Source: https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/battler-tags.ts#L3229 and https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L10694.
+
+Before the change, an isolated native battle exposed Me First as selectable under Taunt. New runs use `tauntMeFirstRule: source-v1`: the move is disabled in the request and interrupted if the opponent Taunts first after selection. The flag is stored in the combat snapshot; old runs retain prior behavior. Damage moves and save data are not rewritten.
+
+Isolated tests cover both timing paths, no PP spent on interruption, a rejected actual engine command, save codec and an unrelated field, doubles target isolation, legacy runs, and creation of new runs. The existing native Dynamax request behavior is unchanged; its full correctness with Taunt is not established. Related called-move and Max move tests ran sequentially, 22 passed. Browser, device, all special transformations, opponent AI and all status combinations are not verified. No Sites deployment or production data used.
