@@ -521,3 +521,6 @@ html:has(.bs-rogue-v52-capture){overflow:hidden}
 
 /* Keep the special menu available after the move description is closed. */
 .battle-screen[data-v52-single=true] .bs-specials-drawer[hidden]{display:none!important}
+
+/* When the approved icon is the sole special entry, do not show a duplicate closed menu. */
+.battle-screen[data-v52-single=true] .bs-specials-drawer[data-icon-only=true]:not([open])>summary{display:none!important}

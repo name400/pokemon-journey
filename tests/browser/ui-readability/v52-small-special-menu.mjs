@@ -17,3 +17,18 @@ try{
   console.log(`${width}x${height}: all special choices visible, selection and fourth move passed`);await context.close();
  }
 }finally{await browser.close();}
+
+// Only Mega X/Y: the approved icon replaces the closed duplicate menu.
+const megaOnlyBrowser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+try {for(const [width,height] of [[280,568],[390,844],[844,390],[1280,800]]){
+ const page=await megaOnlyBrowser.newPage({viewport:{width,height},hasTouch:true,reducedMotion:'reduce'}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('https://**/*',r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));
+ await page.request.post(base+'/api/test-reset?scenario=mega-only-two');await page.goto(base+'/?mode=rogue&tab=rogue');await page.getByRole('button',{name:'계속하기',exact:true}).first().click();await page.waitForFunction(()=>document.querySelector('.bs-console[data-v52-overlay-ready=true]')&&!document.querySelector('.battle-screen[data-playing=true]'));
+ const before=await(await page.request.get(base+'/api/test-state')).json();await page.getByRole('button',{name:'싸운다',exact:true}).tap();const icon=page.getByRole('button',{name:'메가진화',exact:true}),drawer=page.locator('.bs-specials-drawer'),summary=drawer.locator('summary');
+ assert.equal(await icon.isVisible(),true);assert.equal(await summary.isVisible(),false,'closed menu should not cover the battlefield');const closedBox=await drawer.boundingBox();assert.ok(!closedBox||closedBox.height<1,JSON.stringify({width,height,closedBox}));
+ if(width===1280){await icon.focus();await page.keyboard.press('Enter');assert.equal(await summary.isVisible(),true);await summary.focus();await page.keyboard.press('Enter');assert.equal(await summary.isVisible(),false);}
+ const info=page.locator('.bs-move-info').first();await info.tap();assert.equal(await info.getAttribute('aria-expanded'),'true');await info.tap();assert.equal(await summary.isVisible(),false);
+ await icon.tap();assert.equal(await summary.isVisible(),true);const x=drawer.getByRole('button',{name:'메가진화 · 리자몽나이트X'});await x.tap();assert.equal(await icon.getAttribute('aria-pressed'),'true');await summary.tap();assert.equal(await summary.isVisible(),false);await icon.tap();assert.equal(await icon.getAttribute('aria-pressed'),'false');
+ await icon.tap();const y=drawer.getByRole('button',{name:'메가진화 · 리자몽나이트Y'});await y.tap();await summary.tap();assert.equal(await icon.getAttribute('aria-pressed'),'true');assert.deepEqual(await(await page.request.get(base+'/api/test-state')).json(),before);
+ const pending=page.waitForResponse(r=>r.url().includes('/api/rogue-classic')&&r.request().method()==='POST');await page.locator('.bs-move-wrap>.bs-move').last().tap();const response=await pending;assert.equal(response.status(),200);assert.equal(response.request().postDataJSON().command.special,'mega:charizarditey');assert.deepEqual(errors,[]);console.log(`${width}x${height}: icon-only entry, X/Y, cancel and actual move passed`);await page.close();
+}}finally{await megaOnlyBrowser.close()}
