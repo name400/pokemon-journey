@@ -7,6 +7,8 @@ import * as errors from '../lib/rogue-api-errors.mjs';
 import * as storage from '../lib/game-storage.mjs';
 import * as origin from '../lib/request-origin.mjs';
 import * as game from '../lib/rogue-classic-game.mjs';
+import * as presentationLedger from '../lib/rogue-presentation-ledger.mjs';
+import {acknowledgeStoredPresentation} from '../lib/rogue-presentation-store.mjs';
 import {createFixture} from './browser/ui-readability/fixture.mjs';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
@@ -183,10 +185,10 @@ function harness(options={}){
   'cloudflare:workers':{env:{DB:db}},'@/app/chatgpt-auth':{getChatGPTUser:async()=>{if(options.authError)throw options.authError;return options.unauthenticated?null:{userId:'private-account'};}},
   '@/lib/request-origin.mjs':origin,'@/lib/game-storage.mjs':{...storage,...options.storage},
   '@/lib/rogue-classic-game.mjs':{applyClassicAction:options.apply||((doc)=>{doc.counter++;return {};}),classicGameView:options.view||((doc)=>({counter:doc.counter}))},
-  '@/lib/rogue-pickup-config':{getRoguePickup:async()=>{if(options.pickupError)throw options.pickupError;return {sourceId:null,version:0};}},'@/lib/rogue-ranking':ranking,'@/lib/rogue-api-errors.mjs':errors,
+  '@/lib/rogue-pickup-config':{getRoguePickup:async()=>{if(options.pickupError)throw options.pickupError;return {sourceId:null,version:0};}},'@/lib/rogue-ranking':ranking,'@/lib/rogue-api-errors.mjs':errors,'@/lib/rogue-presentation-ledger.mjs':presentationLedger,
  },route={};
  new Function('require','exports','console',routeSource)(name=>{assert.ok(modules[name],name);return modules[name];},route,{error:(...args)=>{try{logs.push(JSON.parse(args[0]));}catch{logs.push({raw:args});}}});
- return {sqlite,logs,get:(query='')=>route.GET(new Request('http://localhost/api/rogue-classic'+query)),row:()=>sqlite.prepare('SELECT data,revision FROM saves').get(),post:(body={action:'turn',revision:0})=>route.POST(new Request('http://localhost/api/rogue-classic',{method:'POST',headers:{origin:'http://localhost','content-type':'application/json'},body:typeof body==='string'?body:JSON.stringify(body)}))};
+ return {sqlite,db,logs,get:(query='')=>route.GET(new Request('http://localhost/api/rogue-classic'+query)),row:()=>sqlite.prepare('SELECT data,revision FROM saves').get(),post:(body={action:'turn',revision:0})=>route.POST(new Request('http://localhost/api/rogue-classic',{method:'POST',headers:{origin:'http://localhost','content-type':'application/json'},body:typeof body==='string'?body:JSON.stringify(body)}))};
 }
 async function failure(h,body,status,code){const response=await h.post(body),data=await response.json();assert.equal(response.status,status);assert.equal(data.code,code);assert.match(data.requestId,/^[0-9a-f-]{36}$/);assert.equal(response.headers.get('x-request-id'),data.requestId);assert.equal(h.logs.at(-1).requestId,data.requestId);return data;}
 
@@ -266,8 +268,8 @@ test('two otherwise valid battle actions at one revision produce one commit and 
  const command={action:'turn',command:{type:'move',move:'disable'},revision:0};
  const responses=await Promise.all([h.post(command),h.post(command)]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);
  const success=await responses.find(r=>r.status===200).json(),conflict=await responses.find(r=>r.status===409).json();assert.equal(conflict.code,'REVISION_CONFLICT');assert.equal(success.revision,1);assert.equal(h.logs[0].stage,'write');assert.equal(h.logs[0].saveOutcome,'rejected');
- const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].party[0].pp.disable,19);const restored=await(await h.get()).json();assert.equal(restored.revision,1);
- assert.equal((await h.post({...command,revision:restored.revision})).status,200);assert.equal(h.row().revision,2);h.sqlite.close();
+ const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].party[0].pp.disable,19);const restored=await(await h.get()).json();assert.equal(restored.revision,1);assert.equal(restored.battle.presentationBatch.batchId,success.battle.presentationBatch.batchId);
+ const next=await h.post({...command,revision:restored.revision});assert.equal(next.status,200);assert.notEqual((await next.json()).battle.presentationBatch.batchId,restored.battle.presentationBatch.batchId);assert.equal(h.row().revision,2);h.sqlite.close();
 });
 
 function captureApiFixture({full=false,double=false}={}){
@@ -589,4 +591,21 @@ test('fused second actor keeps its donor and item through a double form command 
   try{const initial=await(await h.get()).json(),actors=initial.battle.requests[0].actors,key=kind+':'+item;assert.ok(actors[1].specials.some(s=>s.key===key),key);const payload={action:'turn',revision:0,command:{type:'turn',actions:[{type:'move',actor:actors[0].slot,move:'splash'},{type:'move',actor:actors[1].slot,move:'quickattack',target:1,special:key}]}};const response=await h.post(payload);assert.equal(response.status,200,`${key}: ${JSON.stringify(await response.clone().json())}`);const result=await response.json(),saved=await storage.decodeGameData(h.row().data),next=saved.classic.slots[0],actual=next.party.find(m=>m.boxId==='primary');assert.ok(validatedClassicDnaFusion(actual),key);assert.deepEqual(actual.rogueFusion.donor,fused.rogueFusion.donor);assert.equal(actual.rogueFormKey,form);assert.equal(actual.pp.quickattack,initial.battle.teams[0][1].pp.quickattack-1);assert.deepEqual(next.formItems.primary,[item]);assert.equal(next.formItemStates.primary[item],true);const before=h.row(),reloaded=await(await h.get()).json();assert.deepEqual(reloaded.battle.teams,result.battle.teams);assert.deepEqual(h.row(),before);assert.equal((await h.post(payload)).status,409);assert.deepEqual(h.row(),before);const nextActors=reloaded.battle.requests[0].actors;const follow=await h.post({action:'turn',revision:1,command:{type:'turn',actions:[{type:'move',actor:nextActors[0].slot,move:'splash'},{type:'move',actor:nextActors[1].slot,move:'quickattack',target:1}]}});assert.equal(follow.status,200);const after=await storage.decodeGameData(h.row().data),afterMon=after.classic.slots[0].party.find(m=>m.boxId==='primary');assert.ok(validatedClassicDnaFusion(afterMon));assert.equal(afterMon.rogueFormKey,form);assert.deepEqual(afterMon.rogueFusion.donor,fused.rogueFusion.donor);assert.equal(afterMon.pp.quickattack,actual.pp.quickattack-1);assert.deepEqual(after.adventure,doc.adventure);assert.deepEqual(after.classic.slots[1],doc.classic.slots[1]);}
   finally{h.sqlite.close();}
  }
+});
+
+test('real victory stores finalized presentation IDs and returns them without changing legacy on read',async()=>{
+ const doc=createFixture('victory'),h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const before=h.row(),old=await(await h.get()).json();assert.equal(old.battle.presentationBatch,undefined);assert.deepEqual(h.row(),before);
+  const response=await h.post({action:'turn',revision:0,command:{type:'move',move:'seismictoss'}});assert.equal(response.status,200);const view=await response.json(),saved=await storage.decodeGameData(h.row().data),combat=saved.classic.slots[saved.classic.activeSlot].combat,batch=combat.presentationBatch;
+  assert.ok(batch?.events.length);assert.deepEqual(batch.events.map(e=>e.event),combat.events);assert.equal(view.finishedBattle.presentationBatch.batchId,batch.batchId);assert.deepEqual(view.finishedBattle.presentationBatch.eventIds,batch.events.map(e=>e.id));
+  const reloaded=await(await h.get()).json();if(reloaded.battle)assert.equal(reloaded.battle.presentationBatch.batchId,batch.batchId);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+ }finally{h.sqlite.close();}
+});
+
+test('capture finalizes the prepended event and confirms it without changing combat save',async()=>{
+ const doc=captureApiFixture({double:true}),h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const response=await h.post({action:'capture',ballId:'masterball',boxId:'capture-foe',revision:0});assert.equal(response.status,200);const result=await response.json(),stored=await storage.decodeGameData(h.row().data),combat=stored.classic.slots[0].combat,batch=combat.presentationBatch;
+  assert.equal(combat.events[0].kind,'capture');assert.deepEqual(batch.events.map(e=>e.event),combat.events);assert.equal(result.finishedBattle.presentationBatch.batchId,batch.batchId);
+  const before=h.row(),payload={revision:1,batchId:batch.batchId,viewerId:'33333333-3333-4333-8333-333333333333',eventIds:[batch.events[0].id],confirmed:true};assert.deepEqual(await acknowledgeStoredPresentation(h.db,'private-account',payload),{confirmed:1});assert.deepEqual(h.row(),before);assert.equal(h.sqlite.prepare('SELECT COUNT(*) AS n FROM rogue_presentation_ack').get().n,1);assert.deepEqual(stored.classic.slots[1],doc.classic.slots[1]);
+ }finally{h.sqlite.close();}
 });

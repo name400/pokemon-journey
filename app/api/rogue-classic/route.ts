@@ -6,6 +6,7 @@ import {applyClassicAction,classicGameView} from '@/lib/rogue-classic-game.mjs';
 import {getRoguePickup} from '@/lib/rogue-pickup-config';
 import {bestClearedWave,ensureRogueRanking,rankingUpdate} from '@/lib/rogue-ranking';
 import {ClassicRequestError,classicGetFailure,classicPostFailure} from '@/lib/rogue-api-errors.mjs';
+import {classicPresentationBefore,finalizeClassicPresentation,classicPresentationBatchView} from '@/lib/rogue-presentation-ledger.mjs';
 export const dynamic='force-dynamic';
 async function read(id:string){const row=await env.DB!.prepare('SELECT data,revision FROM saves WHERE user_id=?').bind(id).first<any>();const data=row?await decodeGameData(row.data):{};data.__classicOwnerSeed=id;return {data,revision:row?.revision||0,exists:!!row};}
 export async function GET(req:Request){
@@ -32,7 +33,9 @@ export async function POST(req:Request){
   context.stage='read';const saved=await read(user.userId);context.storedRevision=saved.revision;
   if(payload.revision!==saved.revision)throw new ClassicRequestError('REVISION_CONFLICT','다른 화면에서 저장이 변경됐습니다. 다시 불러오세요.');
   context.stage='pickup';const pickup=await getRoguePickup(env.DB!);
-  context.stage='action';const previousBest=bestClearedWave(saved.data),extra=applyClassicAction(saved.data,payload,{pickupSourceId:pickup.sourceId}),bestWave=Math.max(previousBest,bestClearedWave(saved.data)),synced=Number.isInteger(saved.data.classic?.rankingSyncedBest)?saved.data.classic.rankingSyncedBest:0,updateRanking=bestWave>0&&bestWave>synced;
+  context.stage='action';const beforePresentation=classicPresentationBefore(saved.data),previousBest=bestClearedWave(saved.data),extra=applyClassicAction(saved.data,payload,{pickupSourceId:pickup.sourceId}),bestWave=Math.max(previousBest,bestClearedWave(saved.data)),synced=Number.isInteger(saved.data.classic?.rankingSyncedBest)?saved.data.classic.rankingSyncedBest:0,updateRanking=bestWave>0&&bestWave>synced;
+  const presentationBatch=finalizeClassicPresentation(saved.data,beforePresentation,payload.action);
+  if(presentationBatch&&extra.finishedBattle&&JSON.stringify(extra.finishedBattle.events)===JSON.stringify(presentationBatch.events.map((entry:any)=>entry.event)))extra.finishedBattle.presentationBatch=classicPresentationBatchView({events:extra.finishedBattle.events,presentationBatch});
   if(updateRanking)saved.data.classic.rankingSyncedBest=bestWave;
   context.stage='encode';const encoded=await encodeGameData(saved.data),now=Date.now();
   // Build/serialize the response before persistence: a DTO failure must not save
