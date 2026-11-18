@@ -30,6 +30,15 @@ test('review may be declined and next battle starts without consuming the item',
  assert.equal(run.evolutionItemReview,undefined);assert.equal(run.evolutionItems.firestone,1);assert.equal(run.party[0].rogueSourceId,133);assert.equal(run.screen,'battle');
 });
 
+for(const slot of [null,0])test(`evolution move ${slot===null?'declined':'learned'} returns to review after recovery`,async()=>{
+ let {doc,run}=setup();run.party[0].moves=['Tackle','Growl','Quick Attack','Bite'];applyClassicAction(doc,{action:'reward',rewardId:'stone',boxId:'eevee'});
+ const option=classicGameView(doc).run.party[0].evolutions.find(e=>e.item==='firestone');applyClassicAction(doc,{action:'evolve',boxId:'eevee',evolutionKey:option.key});assert.equal(run.screen,'learn');
+ doc=await decodeGameData(await encodeGameData(doc));run=ensureClassicState(doc).slots[0];const pending=run.pendingMoves[0];applyClassicAction(doc,{action:'learn',boxId:pending.boxId,move:pending.move,slot});
+ assert.equal(run.screen,'advance');assert.equal(run.wave,21);assert.equal(run.evolutionItemReview,true);assert.equal(run.party[0].moves.includes(pending.move),slot!==null);
+ doc=await decodeGameData(await encodeGameData(doc));run=ensureClassicState(doc).slots[0];assert.equal(run.screen,'advance');assert.equal(run.evolutionItemReview,true);applyClassicAction(doc,{action:'next'});
+ assert.equal(run.screen,'battle');assert.equal(run.wave,22);assert.equal(run.evolutionItemReview,undefined);assert.equal(run.evolutionItems.firestone,0);assert.deepEqual(doc.adventure,{safe:true});
+});
+
 test('ordinary rewards still proceed directly to the next battle',()=>{
  const {doc,run}=setup();run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='pokeball'),rewardId:'balls'}];
  applyClassicAction(doc,{action:'reward',rewardId:'balls'});assert.equal(run.evolutionItemReview,undefined);assert.equal(run.screen,'battle');assert.ok(run.balls.pokeball>0);

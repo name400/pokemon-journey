@@ -183,8 +183,8 @@ export function createFixture(scenario='eggs'){
   const hero=makeReferenceMon(151,50,{boxId:'end-hero',moves:['Seismic Toss']}),ally=makeReferenceMon(7,20,{boxId:'end-ally',moves:['Splash']}),first=makeReferenceMon(19,1,{boxId:'end-uncaught',moves:['Splash']}),second=makeReferenceMon(16,100,{boxId:'end-caught',moves:['Splash']}),{doc,state,run}=fixture([hero,ally]);
   run.wave=180;run.biome=50;run.screen='battle';run.encounter={kind:'wild',trainer:null};run.initialSwitchSlots=[];run.balls={masterball:1};first.hp=1;starterDexEntry(state.system,16).caught=true;run.combat=createClassicCombat(run,[first,second],{doubles:true});run.combat=playClassicCombat(run,{type:'turn',actions:[{actor:0,type:'move',move:'seismictoss',target:1},{actor:1,type:'move',move:'splash'}]});run.party=run.combat.teams[0];return doc;
  }
- if(scenario==='evolution-item-review'){
-  const {doc,run}=fixture([makeReferenceMon(133,20,{boxId:'eevee-review',moves:['Tackle']})]);
+ if(scenario==='evolution-item-review'||scenario==='evolution-item-review-full'){
+  const {doc,run}=fixture([makeReferenceMon(133,20,{boxId:'eevee-review',moves:scenario.endsWith('-full')?['Tackle','Growl','Quick Attack','Bite']:['Tackle']})]);
   run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='evolutionitem'),rewardId:'review-stone',boxId:'eevee-review',evolutionItem:'firestone',name:'불꽃의돌'}];return doc;
  }
  if(scenario==='evolution'||scenario==='evolution-prompt'){
