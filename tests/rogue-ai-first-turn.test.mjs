@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {PRNG} from '@pkmn/sim';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {createClassicCombat,restoreClassicNativeBattle,snapshotClassicNativeBattle,playClassicCombat} from '../lib/rogue-battle-engine.mjs';
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
@@ -25,7 +26,11 @@ test('switching out and back restores first-turn eligibility across a save',asyn
  assert.equal(b.choose('p1','move splash'),true);assert.equal(b.choose('p2','move fakeout'),true);
  assert.equal(b.choose('p1','move splash'),true);assert.equal(b.choose('p2','switch 2'),true);
  assert.equal(b.choose('p1','move splash'),true);assert.equal(b.choose('p2','switch 2'),true);
- assert.equal(b.p2.active[0].activeMoveActions,0);b.p1.active[0].hp=1;run.party[0].hp=1;run.combat.snapshot=snapshotClassicNativeBattle(b);
+ assert.equal(b.p2.active[0].activeMoveActions,0);b.p1.active[0].hp=1;run.party[0].hp=1;
+ // Ranked AI can intentionally choose a lower-ranked move. Pin the battle PRNG
+ // after the manual switches so the assertion tests eligibility, not that roll.
+ b.prng=new PRNG([1,2,3,4]);run.combat.snapshot=snapshotClassicNativeBattle(b);
+ const restored=restoreClassicNativeBattle(run.combat,run);assert.equal(restored.p2.active[0].activeMoveActions,0);assert.equal(restored.p2.activeRequest.active[0].moves.find(m=>m.id==='fakeout').disabled,false);
  const after=await act(run);assert.ok(after.log.slice(-20).some(s=>s.includes('|Fake Out|')));assert.equal(after.p1.pokemon[0].hp,0);
 });
 test('a Dynamaxed user can use the corresponding Max Move after its first action',async()=>{

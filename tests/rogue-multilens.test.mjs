@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {PRNG} from '@pkmn/sim';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {createClassicCombat,playClassicCombat,restoreClassicNativeBattle} from '../lib/rogue-battle-engine.mjs';
 const mon=(id,boxId,level,moves)=>makeReferenceMon(id,level,{boxId,moves});
@@ -14,8 +15,8 @@ console.log('Multi Lens hit splitting, fixed damage, restrictions and restore pa
 {const run=fixture('Tackle',1);run.party[0].ability='parentalbond';const foe=mon(242,'foe',100,['Splash']);run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];run.combat=playClassicCombat(run,{type:'move',move:'tackle'});const raw=run.combat.snapshot.log||[];assert.ok(raw.some(x=>String(x).includes('|-hitcount|')&&String(x).endsWith('|3')),raw.slice(-20).join('\n'));}
 // Protected and immune targets take no damage or extra hits.
 {const run=fixture('Tackle',2);const foe=mon(94,'foe',100,['Splash']);run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];const before=run.combat.teams[1][0].hp;run.combat=playClassicCombat(run,{type:'move',move:'tackle'});assert.equal(run.combat.teams[1][0].hp,before);}
-// Real per-hit damage reflects 75%/25% or 50%/25%/25% splitting.
-for(const count of [1,2]){const run=fixture('Tackle',count),b=restoreClassicNativeBattle(run.combat,run),damage=[];b.onEvent('Damage',b.format,{priority:-100},function(value,target,source,move){if(source?.side===this.p1&&move?.id==='tackle')damage.push(value);});assert.ok(b.choose('p1','move 1'));assert.ok(b.choose('p2','move 1'));assert.equal(damage.length,count+1);const ratio=damage[0]/damage[1];assert.ok(count===1?ratio>2.4&&ratio<3.7:ratio>1.5&&ratio<2.5,JSON.stringify(damage));}
+// Compare non-critical hits; a critical extra hit legitimately changes the ratio.
+for(const count of [1,2]){const run=fixture('Tackle',count),b=restoreClassicNativeBattle(run.combat,run),damage=[];b.prng=new PRNG([2,2,3,4]);b.onEvent('Damage',b.format,{priority:-100},function(value,target,source,move){if(source?.side===this.p1&&move?.id==='tackle')damage.push(value);});assert.ok(b.choose('p1','move 1'));assert.ok(b.choose('p2','move 1'));assert.equal(damage.length,count+1);assert.equal(b.log.some(line=>line.startsWith('|-crit|')),false);const ratio=damage[0]/damage[1];assert.ok(count===1?ratio>2.4&&ratio<3.7:ratio>1.5&&ratio<2.5,JSON.stringify(damage));}
 // New reward rules can roll Multi Lens; older challenges retain their previous pool.
 {const {generateClassicRewardsWithTiers}=await import('../lib/rogue-classic-rewards.mjs');let found=false;for(let i=1;i<=500&&!found;i++){const run=fixture('Tackle',0);run.rng=i*1234567>>>0;run.multiLensRule='source-subset-v1';run.rerolls=0;generateClassicRewardsWithTiers(run,[4]);if(run.rewards[0].id==='multilens')found=true;}assert.ok(found);for(let i=1;i<=200;i++){const run=fixture('Tackle',0);run.rng=i*1234567>>>0;run.rerolls=0;generateClassicRewardsWithTiers(run,[4]);assert.notEqual(run.rewards[0].id,'multilens');}}
 // Ordinary inventory transfer preserves count and enforces the two-item owner cap.
