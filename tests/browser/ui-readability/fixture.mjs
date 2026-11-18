@@ -67,6 +67,10 @@ export function createFixture(scenario='eggs'){
   run.combat=createClassicCombat(run,[674,264].map(id=>makeReferenceMon(id,100,{boxId:'profile-foe-'+id,moves:['Splash']})),{trainer:true,doubles:true});run.party=run.combat.teams[0];
   applyClassicAction(doc,{action:'turn',command:{type:'turn',actions:[{type:'switch',actor:0,slot:3},{type:'move',actor:1,move:'splash'}]}});return doc;
  }
+ if(scenario==='rogue-v52-moves-double-empty-pp'){
+  const doc=createFixture('rogue-v52-moves-double'),run=activeClassicRun(doc);run.party[0].pp.thunderbolt=0;
+  run.combat=createClassicCombat(run,run.combat.teams[1],{trainer:false,doubles:true});run.party=run.combat.teams[0];return doc;
+ }
  if(['rogue-v52-moves-single','rogue-v52-moves-double'].includes(scenario)){
   const double=scenario.endsWith('double'),doc=createFixture(double?'profile-double':'profile-single'),run=activeClassicRun(doc);
   run.party=[makeReferenceMon(6,50,{boxId:'moves-own-a',moves:['Flamethrower','Thunderbolt','Surf','Growl']}),...(double?[makeReferenceMon(25,50,{boxId:'moves-own-b',moves:['Quick Attack']})]:[])];run.encounter={kind:'wild'};run.initialSwitchSlots=[];
