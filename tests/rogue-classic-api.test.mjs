@@ -323,6 +323,17 @@ function captureApiFixture({full=false,double=false}={}){
  const doc=createFixture('battle'),run=doc.classic.slots[0],mon=(id,boxId)=>makeReferenceMon(id,100,{boxId,moves:['Splash']});
  run.id=`capture-api-${full}-${double}`;run.wave=21;run.rng=123456789;run.party=Array.from({length:full?6:double?2:1},(_,i)=>mon(i%2?7:1,`capture-own-${i}`));run.balls={...run.balls,pokeball:2,masterball:2};run.encounter={kind:'wild'};run.screen='battle';run.initialSwitchSlots=[];run.npcDialogueQueue=[];run.combat=createClassicCombat(run,[mon(150,'capture-foe'),...(double?[mon(143,'capture-other')]:[])],{doubles:double});run.party=run.combat.teams[0];doc.classic.slots[1]={id:'untouched-slot',safe:true};return doc;
 }
+test('captured double-battle member cannot use Tera without an Orb after API reload',async()=>{
+ const doc=captureApiFixture({double:true}),run=doc.classic.slots[0];run.tools.teraOrb=false;run.teraCharged=true;
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const capture=await h.post({action:'capture',ballId:'masterball',boxId:'capture-foe',revision:0});assert.equal(capture.status,200);const captured=await capture.json();assert.equal(captured.run.party.length,3);
+  const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].tools.teraOrb,false);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+  const reload=await(await h.get()).json(),actors=reload.battle.requests[0].actors,first=actors.find(a=>a.slot===0),second=actors.find(a=>a.slot===1),candidate=first.switches.find(s=>s.index===2);assert.ok(candidate);assert.ok(second.moves.some(m=>m.id==='splash'));
+  const switched=await h.post({action:'turn',revision:1,command:{type:'turn',actions:[{type:'switch',actor:first.slot,slot:candidate.slot},{type:'move',actor:second.slot,move:'splash'}]}});assert.equal(switched.status,200,JSON.stringify(await switched.clone().json()));
+  const after=await(await h.get()).json(),nextActors=after.battle.requests[0].actors,nextFirst=nextActors.find(a=>a.slot===0),nextSecond=nextActors.find(a=>a.slot===1);assert.equal(nextFirst.specials.some(s=>s.key==='terastallize'),false);assert.equal(after.battle.teams[0][2].terastallized,null);
+  const before=h.row(),rejected=await h.post({action:'turn',revision:2,command:{type:'turn',actions:[{type:'move',actor:nextFirst.slot,move:'splash',special:'terastallize'},{type:'move',actor:nextSecond.slot,move:'splash'}]}});assert.equal(rejected.status,409);assert.deepEqual(h.row(),before);const restored=await storage.decodeGameData(before.data);assert.equal(restored.classic.slots[0].party[2].terastallized,null);assert.deepEqual(restored.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(restored.adventure,doc.adventure);
+ }finally{h.sqlite.close();}
+});
 test('real capture API commits one failed ball and one successful double capture across reload and stale requests',async()=>{
  const doc=captureApiFixture({double:true}),h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
  try{
