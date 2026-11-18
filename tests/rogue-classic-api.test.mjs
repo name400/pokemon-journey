@@ -260,6 +260,17 @@ test('trainer Toxic Orb and terastallized type survive real API turns and reload
   }finally{h.sqlite.close();}
  }
 });
+test('Extreme Speed remains visible after five actual uses and API reloads',async()=>{
+ const names=['Tackle','Quick Attack','Ember','Extreme Speed'],hero=makeReferenceMon(813,9,{boxId:'bunny',moves:names}),{doc,run}=persistentFixture([hero]);run.screen='battle';run.initialSwitchSlots=[];run.encounter={kind:'trainer'};run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})],{trainer:true});run.party=run.combat.teams[0];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  for(let i=0;i<5;i++){
+   const response=await h.post({action:'turn',revision:i,command:{type:'move',move:'extremespeed'}});assert.equal(response.status,200,JSON.stringify(await response.clone().json()));
+   const view=await(await h.get()).json();assert.equal(view.run.party[0].pp.extremespeed,4-i);assert.deepEqual(view.run.party[0].moves,names);
+  }
+  const before=h.row(),view=await(await h.get()).json(),actor=view.battle.requests[0].actors[0],card=actor.displayMoves.find(m=>m.id==='extremespeed');assert.equal(card.slot,4);assert.equal(card.pp,0);assert.equal(card.disabled,true);assert.equal(card.disabledReason,'PP가 없습니다.');assert.equal(actor.moves.some(m=>m.id==='extremespeed'),false);
+  assert.equal((await h.post({action:'turn',revision:5,command:{type:'move',move:'extremespeed'}})).status,409);assert.deepEqual(h.row(),before);const saved=await storage.decodeGameData(before.data);assert.deepEqual(saved.classic.slots[0].party[0].moves,names);assert.equal(saved.classic.slots[0].party[0].pp.extremespeed,0);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+ }finally{h.sqlite.close();}
+});
 test('Tera Orb reward grants a charged Orb once and survives API reload',async()=>{
  const {doc,run}=persistentFixture([makeReferenceMon(151,50,{boxId:'hero',moves:['Splash']})]);run.tools.teraOrb=false;run.teraCharged=false;run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='teraorb'),rewardId:'orb'}];
  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{

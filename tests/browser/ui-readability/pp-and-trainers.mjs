@@ -9,12 +9,12 @@ try{
   const context=await browser.newContext({viewport,hasTouch:viewport.width<900}),page=await context.newPage(),errors=[],posts=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST'&&r.url().endsWith('/api/rogue-classic'))posts.push(JSON.parse(r.postData()));});
   await page.route('https://**/*',r=>r.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><circle cx="48" cy="48" r="30" fill="#b298c6"/></svg>'}));
   for(const scenario of process.env.UI_FOCUS==='trainers'?[]:['pp-empty','pp-all-empty','pp-restored']){
-   await open(page,scenario);await page.getByRole('button',{name:'싸운다',exact:true}).click();const cards=page.locator('.bs-move'),extreme=cards.nth(3);assert.equal(await cards.count(),scenario==='pp-all-empty'?5:4);assert.match(await extreme.textContent(),/신속/);
+   await open(page,scenario);await page.getByRole('button',{name:'싸운다',exact:true}).click();const cards=page.locator('.bs-move'),extreme=cards.nth(3);assert.equal(await cards.count(),4);assert.match(await extreme.textContent(),/신속/);
    const before=await state(page),count=posts.length;
    if(scenario!=='pp-restored'){
     assert.equal(await extreme.isDisabled(),true);assert.match(await extreme.getAttribute('aria-label'),/PP 0\/5.*PP가 없습니다/);await page.getByRole('button',{name:'신속 기술 설명',exact:true}).click();assert.match(await page.locator('#bs-move-description-extremespeed-4').textContent(),/PP가 없습니다/);
     await page.locator('.bs-move-info').nth(3).focus();await page.keyboard.press('4');await page.waitForTimeout(100);assert.equal(posts.length,count);assert.deepEqual(await state(page),before);
-    if(scenario==='pp-all-empty'){for(let i=0;i<4;i++)assert.ok(await cards.nth(i).isDisabled());assert.ok(await cards.nth(4).isEnabled());await cards.nth(4).click();await page.waitForFunction(()=>!document.querySelector('.battle-screen[data-playing=true]'));assert.equal(posts.at(-1).command.move,'struggle');}
+    if(scenario==='pp-all-empty'){for(let i=0;i<4;i++)assert.ok(await cards.nth(i).isDisabled());const next=page.getByRole('button',{name:'다음 기술',exact:true});await next.click();assert.equal(await cards.count(),1);assert.match(await cards.first().textContent(),/발버둥/);assert.ok(await cards.first().isEnabled());await page.getByRole('button',{name:'이전 기술',exact:true}).click();assert.equal(await cards.count(),4);assert.match(await cards.nth(3).textContent(),/신속/);await next.click();await cards.first().click();await page.waitForFunction(()=>!document.querySelector('.battle-screen[data-playing=true]'));assert.equal(posts.at(-1).command.move,'struggle');}
    }else{assert.ok(await extreme.isEnabled());await extreme.click();await page.waitForTimeout(100);assert.equal(posts.at(-1).command.move,'extremespeed');}
    await page.screenshot({path:out+'/'+viewport.width+'-'+scenario+'.png',fullPage:true});results.push({viewport,scenario});
   }
