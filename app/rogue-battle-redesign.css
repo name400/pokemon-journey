@@ -817,6 +817,9 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
 @media(max-width:390px){
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-panel:not(:has(.bs-v60-mega,.bs-specials-drawer,.bs-plus-open)) .bs-move-info{left:-96px;width:96px;min-width:96px}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-move-panel:not(:has(.bs-v60-mega,.bs-specials-drawer,.bs-plus-open)) .bs-move-info-icon{transform:translateX(20px)}
+ /* The first row clears the closed special controls; keep the other rows clear of the Mega hit area. */
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v60-mega) .bs-move-panel:not(:has(.bs-specials-drawer[open],.bs-plus-open)) .bs-move-wrap:first-child .bs-move-info{left:-76px;width:76px;min-width:76px}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-console:has(.bs-v60-mega) .bs-move-panel:not(:has(.bs-specials-drawer[open],.bs-plus-open)) .bs-move-wrap:first-child .bs-move-info-icon{transform:translateX(10px)}
 }
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button{display:grid;place-items:center;border:0;background:transparent;box-shadow:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-classic-backbar button span{padding:3px 2px;background:#1b2d43;color:#fff;font:8px/1 Arial,sans-serif;white-space:nowrap}
