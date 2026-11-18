@@ -183,6 +183,9 @@ export function createFixture(scenario='eggs'){
   const hero=makeReferenceMon(151,50,{boxId:'end-hero',moves:['Seismic Toss']}),ally=makeReferenceMon(7,20,{boxId:'end-ally',moves:['Splash']}),first=makeReferenceMon(19,1,{boxId:'end-uncaught',moves:['Splash']}),second=makeReferenceMon(16,100,{boxId:'end-caught',moves:['Splash']}),{doc,state,run}=fixture([hero,ally]);
   run.wave=180;run.biome=50;run.screen='battle';run.encounter={kind:'wild',trainer:null};run.initialSwitchSlots=[];run.balls={masterball:1};first.hp=1;starterDexEntry(state.system,16).caught=true;run.combat=createClassicCombat(run,[first,second],{doubles:true});run.combat=playClassicCombat(run,{type:'turn',actions:[{actor:0,type:'move',move:'seismictoss',target:1},{actor:1,type:'move',move:'splash'}]});run.party=run.combat.teams[0];return doc;
  }
+ if(scenario==='candy-fainted'){
+  const down=makeReferenceMon(4,20,{boxId:'fainted-candy',moves:['Tackle'],friendship:50}),other=makeReferenceMon(7,20,{boxId:'candy-ally',moves:['Tackle']}),{doc,run}=fixture([down,other]);down.hp=0;run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='rarecandy'),rewardId:'fainted-candy-reward'}];return doc;
+ }
  if(scenario==='candy-soothe-target'||scenario==='candy-soothe-party'){
   const first=makeReferenceMon(1,20,{boxId:'candy-first',moves:['Tackle'],friendship:50}),second=makeReferenceMon(4,20,{boxId:'candy-second',moves:['Tackle'],friendship:50}),{doc,run}=fixture([first,second]);
   run.modifiers=[{id:'soothebell',boxId:first.boxId,count:1},{id:'soothebell',boxId:second.boxId,count:2}];run.screen='reward';run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id===(scenario==='candy-soothe-target'?'rarecandy':'rarercandy')),rewardId:'soothe-candy'}];return doc;

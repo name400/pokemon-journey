@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright'),base=process.env.UI_TEST_URL,owner=process.env.UI_FIXTURE_OWNER_TOKEN;
+if(!base||!owner)throw Error('UI_TEST_URL and UI_FIXTURE_OWNER_TOKEN are required for an owned fixture server');
+const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});
+try{for(const viewport of [{width:390,height:844},{width:1280,height:800}]){
+ const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
+ try{await page.route('https://**/*',r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"/>'}));const ownership=await page.request.get(base+'/api/test-owner',{headers:{'x-fixture-owner':owner}});assert.ok(ownership.ok()&&(await ownership.json()).owned);assert.ok((await page.request.post(base+'/api/test-reset?scenario=candy-fainted')).ok());
+ await page.goto(base+'/?mode=rogue&tab=rogue',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'계속하기',exact:true}).first().click();await page.locator('.rcr-choice[data-rcr-id=fainted-candy-reward]').click();const detail=page.locator('.rcr-detail');await detail.waitFor();const target=detail.locator('.rcr-target').first();assert.ok(await target.isEnabled());await target.click();const response=page.waitForResponse(r=>r.url().includes('/api/rogue-classic')&&r.request().method()==='POST');await detail.locator('.rcr-confirm>button').click();assert.ok((await response).ok());
+ const saved=await(await page.request.get(base+'/api/test-state')).json();assert.equal(saved.classic.slots[0].party[0].hp,0);assert.equal(saved.classic.slots[0].party[0].level,21);assert.equal(saved.classic.slots[0].party[1].level,20);assert.deepEqual(saved.adventure,{safe:true});assert.equal(saved.classic.slots[1].id,'other');await page.reload({waitUntil:'domcontentloaded'});assert.deepEqual(await(await page.request.get(base+'/api/test-state')).json(),saved);assert.deepEqual(errors,[]);console.log(`${viewport.width}x${viewport.height}: fainted-target rare candy, HP and saved state passed`);
+ }finally{await context.close();}
+}}finally{await browser.close();}
