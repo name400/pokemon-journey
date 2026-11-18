@@ -161,8 +161,9 @@ export function createFixture(scenario='eggs'){
   const {doc,run}=fixture([makeReferenceMon(150,30,{boxId:'hero',moves:['Splash']}),makeReferenceMon(130,30,{boxId:'gyara',moves:['Splash']}),makeReferenceMon(925,30,{boxId:'maushold',moves:['Splash']})]);
   run.party[1].name='갸라도스 · Normal';run.party[2].name='파밀리쥐 · Family of Four';run.wave=38;run.screen='battle';run.encounter={kind:'wild'};run.combat=createClassicCombat(run,[makeReferenceMon(674,50,{boxId:'foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
  }
- if(scenario==='evolution-psyduck'){
+ if(scenario==='evolution-psyduck'||scenario==='evolution-psyduck-nickname'){
   const {doc,run}=fixture([makeReferenceMon(54,33,{boxId:'evolving-duck',moves:['Splash']})]);
+  if(scenario==='evolution-psyduck-nickname')run.party[0].name='별명 · Normal';
   Object.assign(run.party[0],{battleAppearance:'psyduck',battleArtId:54,battleSprite:'psyduck',rogueBaseBattleAppearance:'psyduck'});recordClassicLevelGrowth(run,run.party[0],[33],[]);return doc;
  }
  if(scenario==='evolution-guidance'){
