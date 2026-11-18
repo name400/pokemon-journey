@@ -4,7 +4,7 @@ import {activeLeadAliasFixture} from '../../fixtures/active-lead-alias.mjs';
 import {randomizedFusionAliasFixture} from '../../fixtures/randomized-fusion-alias.mjs';
 import {randomizedAliasFixture} from '../../fixtures/randomized-alias.mjs';
 import {wildEventReviewFixture} from '../../fixtures/wild-event-alias.mjs';
-import {CLASSIC_REWARD_REGISTRY} from '../../../lib/rogue-classic-rewards.mjs';
+import {CLASSIC_REWARD_REGISTRY,generateClassicRewardsWithTiers} from '../../../lib/rogue-classic-rewards.mjs';
 import {fixture} from '../../fixtures/dna-persistent.mjs';
 import {makeReferenceMon,rogueSpecies} from '../../../lib/rogue-reference.mjs';
 import {applyClassicEggForm} from '../../../lib/rogue-egg-forms.mjs';
@@ -182,6 +182,10 @@ export function createFixture(scenario='eggs'){
  if(scenario==='end-capture-fainted'){
   const hero=makeReferenceMon(151,50,{boxId:'end-hero',moves:['Seismic Toss']}),ally=makeReferenceMon(7,20,{boxId:'end-ally',moves:['Splash']}),first=makeReferenceMon(19,1,{boxId:'end-uncaught',moves:['Splash']}),second=makeReferenceMon(16,100,{boxId:'end-caught',moves:['Splash']}),{doc,state,run}=fixture([hero,ally]);
   run.wave=180;run.biome=50;run.screen='battle';run.encounter={kind:'wild',trainer:null};run.initialSwitchSlots=[];run.balls={masterball:1};first.hp=1;starterDexEntry(state.system,16).caught=true;run.combat=createClassicCombat(run,[first,second],{doubles:true});run.combat=playClassicCombat(run,{type:'turn',actions:[{actor:0,type:'move',move:'seismictoss',target:1},{actor:1,type:'move',move:'splash'}]});run.party=run.combat.teams[0];return doc;
+ }
+ if(scenario==='caught-evolution-reward'){
+  const {doc,state,run}=fixture([makeReferenceMon(588,20,{boxId:'caught-bug',moves:['Tackle']})]);starterDexEntry(state.system,616).caught=true;
+  for(let i=0;i<200;i++){const reward=generateClassicRewardsWithTiers(run,[1],state.system)[0];if(reward.id==='evolutionitem'&&reward.evolutionItem==='linkingcord')return doc;}throw Error('Isolated fixture did not generate the evolution item');
  }
  if(scenario==='evolution-item-review'||scenario==='evolution-item-review-full'){
   const {doc,run}=fixture([makeReferenceMon(133,20,{boxId:'eevee-review',moves:scenario.endsWith('-full')?['Tackle','Growl','Quick Attack','Bite']:['Tackle']})]);
