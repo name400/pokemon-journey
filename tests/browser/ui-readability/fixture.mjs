@@ -18,6 +18,7 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='advance-retry'){const {doc,run}=fixture([makeReferenceMon(151,40,{boxId:'advance-hero',moves:['Splash']})]);run.wave=21;run.screen='advance';run.combat=null;run.npcDialogueQueue=[];return doc;}
  if(scenario==='mystery-nickname-fun'){
   const hero=makeReferenceMon(151,40,{boxId:'nickname-hero',moves:['Splash']}),ally=makeReferenceMon(7,40,{boxId:'nickname-ally',moves:['Splash']}),{doc,run}=fixture([hero,ally]);
   hero.nickname='내 친구';run.wave=22;run.biome=4;run.screen='mystery';run.mysteryRule='part-timer-v17';run.encounter={kind:'mystery',key:'fun-and-games'};run.mystery={type:'fun-and-games',stage:'choose'};return doc;
