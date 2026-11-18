@@ -4,7 +4,7 @@ import {activeLeadAliasFixture} from '../../fixtures/active-lead-alias.mjs';
 import {randomizedFusionAliasFixture} from '../../fixtures/randomized-fusion-alias.mjs';
 import {randomizedAliasFixture} from '../../fixtures/randomized-alias.mjs';
 import {wildEventReviewFixture} from '../../fixtures/wild-event-alias.mjs';
-import {CLASSIC_REWARD_REGISTRY,generateClassicRewardsWithTiers} from '../../../lib/rogue-classic-rewards.mjs';
+import {CLASSIC_REWARD_REGISTRY,generateClassicRewardsWithTiers,chooseClassicReward} from '../../../lib/rogue-classic-rewards.mjs';
 import {fixture} from '../../fixtures/dna-persistent.mjs';
 import {makeReferenceMon,rogueSpecies} from '../../../lib/rogue-reference.mjs';
 import {applyClassicEggForm} from '../../../lib/rogue-egg-forms.mjs';
@@ -182,6 +182,11 @@ export function createFixture(scenario='eggs'){
  if(scenario==='end-capture-fainted'){
   const hero=makeReferenceMon(151,50,{boxId:'end-hero',moves:['Seismic Toss']}),ally=makeReferenceMon(7,20,{boxId:'end-ally',moves:['Splash']}),first=makeReferenceMon(19,1,{boxId:'end-uncaught',moves:['Splash']}),second=makeReferenceMon(16,100,{boxId:'end-caught',moves:['Splash']}),{doc,state,run}=fixture([hero,ally]);
   run.wave=180;run.biome=50;run.screen='battle';run.encounter={kind:'wild',trainer:null};run.initialSwitchSlots=[];run.balls={masterball:1};first.hp=1;starterDexEntry(state.system,16).caught=true;run.combat=createClassicCombat(run,[first,second],{doubles:true});run.combat=playClassicCombat(run,{type:'turn',actions:[{actor:0,type:'move',move:'seismictoss',target:1},{actor:1,type:'move',move:'splash'}]});run.party=run.combat.teams[0];return doc;
+ }
+ if(scenario==='held-metadata-reward'||scenario==='held-metadata-transfer'){
+  const {doc,state,run}=fixture([makeReferenceMon(1,20,{boxId:'held-first',moves:['Tackle']}),makeReferenceMon(7,20,{boxId:'held-second',moves:['Tackle']})]);
+  run.modifiers=[{id:'soothebell',boxId:'held-first',count:1,transferable:false}];run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='soothebell'),rewardId:'held-bell'}];
+  if(scenario==='held-metadata-transfer'){chooseClassicReward(run,{rewardId:'held-bell',boxId:'held-first'},state.system);run.screen='reward';run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='rarecandy'),rewardId:'next-reward'}];}return doc;
  }
  if(scenario==='candy-fainted'){
   const down=makeReferenceMon(4,20,{boxId:'fainted-candy',moves:['Tackle'],friendship:50}),other=makeReferenceMon(7,20,{boxId:'candy-ally',moves:['Tackle']}),{doc,run}=fixture([down,other]);down.hp=0;run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='rarecandy'),rewardId:'fainted-candy-reward'}];return doc;
