@@ -74,6 +74,23 @@ test('legacy named native items can be transferred from the displayed inventory 
  }finally{h.sqlite.close();}
 });
 
+test('trainer voucher draw and accelerated hatch survive API reload without repeated awards',async()=>{
+ const doc=createFixture('victory'),run=doc.classic.slots[doc.classic.activeSlot];
+ run.encounter=classicTrainerEncounter(run,222,{kind:'gym'});run.combat=createClassicCombat(run,[makeReferenceMon(19,1,{boxId:'test-foe',moves:['Splash'],hp:1})],{trainer:true});run.party=run.combat.teams[0];run.initialSwitchSlots=[];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const win={action:'turn',revision:0,command:{type:'move',move:'seismictoss'}},victory=await h.post(win);assert.equal(victory.status,200,JSON.stringify(await victory.clone().json()));
+  let saved=await storage.decodeGameData(h.row().data),system=saved.classic.system;assert.equal(system.vouchers.plus,1);assert.equal((system.eggs||[]).length,0);const winner=h.row();assert.equal((await h.post(win)).status,409);assert.deepEqual(h.row(),winner);
+  let revision=1;while(saved.classic.slots[saved.classic.activeSlot].npcDialogueQueue?.length){const dialogue=saved.classic.slots[saved.classic.activeSlot].npcDialogueQueue[0],response=await h.post({action:'npcDialogueSkip',revision,dialogueId:dialogue.id,index:dialogue.index});assert.equal(response.status,200,JSON.stringify(await response.clone().json()));revision++;saved=await storage.decodeGameData(h.row().data);}
+  const skip=await h.post({action:'skipReward',revision});assert.equal(skip.status,200,JSON.stringify(await skip.clone().json()));revision++;
+  const draw={action:'drawEggs',revision,machineId:'move',voucherType:'plus',quantity:1},result=await h.post(draw);assert.equal(result.status,200,JSON.stringify(await result.clone().json()));revision++;
+  saved=await storage.decodeGameData(h.row().data);system=saved.classic.system;assert.equal(system.vouchers.plus,0);assert.equal(system.eggs.length,5);const ids=system.eggs.map(e=>e.id);assert.equal(new Set(ids).size,5);const drawn=h.row();assert.equal((await h.post(draw)).status,409);assert.deepEqual(h.row(),drawn);assert.equal((await h.post({...draw,revision})).status,409);assert.deepEqual(h.row(),drawn);assert.equal((await(await h.get()).json()).eggShop.eggs.length,5);
+  // Accelerate the natural draws and set up a second isolated battle; no egg contents are replaced.
+  for(const egg of system.eggs)egg.remainingWaves=1;const next=saved.classic.slots[saved.classic.activeSlot];next.encounter={kind:'wild'};next.screen='battle';next.initialSwitchSlots=[];next.combat=createClassicCombat(next,[makeReferenceMon(19,1,{boxId:'hatch-foe',moves:['Splash'],hp:1})]);next.party=next.combat.teams[0];h.sqlite.prepare('UPDATE saves SET data=? WHERE user_id=?').run(await storage.encodeGameData(saved),'private-account');
+  const hatchTurn={action:'turn',revision,command:{type:'move',move:'seismictoss'}},hatched=await h.post(hatchTurn);assert.equal(hatched.status,200,JSON.stringify(await hatched.clone().json()));revision++;let view=await hatched.json();assert.deepEqual(view.pendingHatches.map(e=>e.id),ids);saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.system.eggs.length,0);assert.deepEqual(saved.classic.system.pendingHatches.map(e=>e.id),ids);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+  const after=h.row();assert.equal((await h.post(hatchTurn)).status,409);assert.deepEqual(h.row(),after);view=await(await h.get()).json();assert.deepEqual(view.pendingHatches.map(e=>e.id),ids);const ack=await h.post({action:'ackHatches',revision,eggIds:ids});assert.equal(ack.status,200,JSON.stringify(await ack.clone().json()));const final=await storage.decodeGameData(h.row().data);assert.equal(final.classic.system.pendingHatches.length,0);assert.equal(final.coins,saved.coins);assert.deepEqual(final.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(final.adventure,doc.adventure);const acknowledged=h.row();assert.equal((await h.post({action:'ackHatches',revision:revision+1,eggIds:ids})).status,409);assert.deepEqual(h.row(),acknowledged);
+ }finally{h.sqlite.close();}
+});
+
 test('victory hatches a new shiny variant once and keeps existing payout across API reload',async()=>{
  const doc=createFixture('victory'),run=doc.classic.slots[doc.classic.activeSlot],system=doc.classic.system;
  registerStarterCaught(system,makeReferenceMon(1,5,{boxId:'prior-shiny',shiny:true,variant:0}),{kind:'capture'});
