@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {rogueSpecies,makeReferenceMon} from '../lib/rogue-reference.mjs';
 import {applyClassicEggForm} from '../lib/rogue-egg-forms.mjs';
 import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
-import {lapseClassicEggs,acknowledgeClassicHatch} from '../lib/rogue-egg-shop.mjs';
+import {lapseClassicEggs,acknowledgeClassicHatch,classicHatchResultView} from '../lib/rogue-egg-shop.mjs';
 import {classicSourceFormAtlas} from '../components/rogue-source-form-images.mjs';
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
 
@@ -17,6 +17,11 @@ test('hatched alternate form retains the identity needed by the result image aft
 test('legacy white flower identity is recoverable from matching source, form and id without changing the record',()=>{
  const legacy={id:30106,artId:669,rogueSourceId:669,rogueFormIndex:4,shiny:false},before=structuredClone(legacy),forms=rogueSpecies.get(legacy.rogueSourceId).formList.filter(form=>form.formIndex===legacy.rogueFormIndex&&form.pokemonId===legacy.id);
  assert.equal(forms.length,1);assert.equal(forms[0].formKey,'white');assert.equal(forms[0].genderDiffs,false);assert.equal(classicSourceFormAtlas(legacy),null);assert.equal(classicSourceFormAtlas({...legacy,rogueFormKey:forms[0].formKey})?.key,'669-white');assert.deepEqual(legacy,before);
+});
+
+test('legacy hatch display fills only verified white flower identity and never mutates stored data',()=>{
+ const result={id:'legacy',pokemon:{id:30106,artId:669,rogueSourceId:669,rogueFormIndex:4,shiny:false},refund:3000},original=structuredClone(result),view=classicHatchResultView(result);assert.notEqual(view,result);assert.equal(classicSourceFormAtlas(view.pokemon)?.key,'669-white');assert.deepEqual(result,original);
+ for(const patch of [{id:1},{artId:1},{rogueSourceId:670},{rogueFormIndex:3},{rogueFormKey:'red'},{rogueFormKey:null},{rogueBattleSpecies:'flabebeblue'},{battleAppearance:'flabebeblue'},{gender:'F',fusionSpecies:1},{mega:true},{sourceAppearanceMissing:true}]){const bad={...result,pokemon:{...result.pokemon,...patch}},before=structuredClone(bad);assert.equal(classicHatchResultView(bad),bad);assert.deepEqual(bad,before);}
 });
 
 test('new hatch results preserve Indeedee gender-dependent form, alternate species and shiny flag',async()=>{
