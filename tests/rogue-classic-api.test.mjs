@@ -408,13 +408,13 @@ test('player Tera command uses the owned type and charges only once across API r
  }finally{h.sqlite.close();}
 });
 test('Mega Stone reward requires the bracelet and respects tracked or legacy save rules through the API',async()=>{
- for(const [bracelet,tracked] of [[false,true],[true,true],[true,false]]){
-  const {doc,run}=persistentFixture([makeReferenceMon(6,100,{boxId:'mega-primary',moves:['Splash']})]);run.id=`mega-api-${bracelet}-${tracked}`;run.tools.megaBracelet=bracelet;if(tracked)run.formItemStateRule='source-v1';run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='rareformitem'),rewardId:'stone',boxId:'mega-primary',formItem:'charizarditex'}];
+ for(const [species,stone] of [[6,'charizarditex'],[3,'venusaurite']])for(const [bracelet,tracked] of [[false,true],[true,true],[true,false]]){
+  const {doc,run}=persistentFixture([makeReferenceMon(species,100,{boxId:'mega-primary',moves:['Splash']})]);run.id=`mega-api-${species}-${bracelet}-${tracked}`;run.tools.megaBracelet=bracelet;if(tracked)run.formItemStateRule='source-v1';run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='rareformitem'),rewardId:'stone',boxId:'mega-primary',formItem:stone}];
   const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
    const before=await(await h.get()).json();assert.equal(!!before.run.party[0].mega,false);const bytes=h.row().data,request={action:'reward',rewardId:'stone',boxId:'mega-primary',revision:0};
    const response=await h.post(request);if(!bracelet){assert.equal(response.status,409);assert.equal(h.row().data,bytes);assert.equal(!!(await(await h.get()).json()).run.party[0].mega,false);continue;}
    assert.equal(response.status,200);const result=await response.json();assert.equal(!!result.run.party[0].mega,false);const committed=h.row().data,reload=await(await h.get()).json();assert.equal(!!reload.run.party[0].mega,false);assert.equal(h.row().data,committed);const stale=await h.post(request);assert.equal(stale.status,409);assert.equal(h.row().data,committed);
-   const saved=await storage.decodeGameData(committed),active=saved.classic.slots[0];assert.deepEqual(active.formItems['mega-primary'],['charizarditex']);assert.equal(active.formItemStates?.['mega-primary']?.charizarditex,tracked?false:undefined);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+   const saved=await storage.decodeGameData(committed),active=saved.classic.slots[0];assert.deepEqual(active.formItems['mega-primary'],[stone]);assert.equal(active.formItemStates?.['mega-primary']?.[stone],tracked?false:undefined);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
   }finally{h.sqlite.close();}
  }
 });
