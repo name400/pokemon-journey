@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {createFixture} from './fixture.mjs';
 import {applyClassicAction,classicGameView} from '../../../lib/rogue-classic-game.mjs';
 import {encodeGameData,decodeGameData} from '../../../lib/game-storage.mjs';
-const root=process.cwd(),profileArt=process.env.PROFILE_ART_ROOT,fixtureGeneration=Date.now();let doc=createFixture(),revision=0;
+const root=process.cwd(),profileArt=process.env.PROFILE_ART_ROOT,fixtureOwner=process.env.UI_FIXTURE_OWNER_TOKEN,fixtureGeneration=Date.now();let doc=createFixture(),revision=0;
 function profileSprites(view){
  if(!profileArt)return view;
  view=structuredClone(view);
@@ -17,6 +17,7 @@ function configureFixtures(server){server.middlewares.use(async(req,res,next)=>{
  if(profileArt&&/^\/profile-art\/\d+-(?:front|back)\.gif$/.test(req.url||'')){try{const body=await readFile(resolve(profileArt,req.url.split('/').at(-1)));res.setHeader('Content-Type','image/gif');res.setHeader('Cache-Control','public, max-age=31536000, immutable');res.end(body);}catch{res.statusCode=404;res.end();}return;}
  if(!req.url?.startsWith('/api/'))return next();res.setHeader('Content-Type','application/json');try{
   const url=new URL(req.url,'http://localhost');
+  if(url.pathname==='/api/test-owner'){if(!fixtureOwner||req.headers['x-fixture-owner']!==fixtureOwner){res.statusCode=404;res.end('{}');return;}res.end(JSON.stringify({owned:true}));return;}
   if(url.pathname==='/api/account'){res.end(JSON.stringify({authenticated:true,profile:{nickname:'화면 격리 검증'},signOut:'#'}));return;}
   if(url.pathname==='/api/test-reset'){doc=createFixture(url.searchParams.get('scenario')||'eggs');revision=0;res.end('{}');return;}
   if(url.pathname==='/api/test-state'){res.end(JSON.stringify(doc));return;}
