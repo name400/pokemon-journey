@@ -18,3 +18,9 @@ test('legacy white flower identity is recoverable from matching source, form and
  const legacy={id:30106,artId:669,rogueSourceId:669,rogueFormIndex:4,shiny:false},before=structuredClone(legacy),forms=rogueSpecies.get(legacy.rogueSourceId).formList.filter(form=>form.formIndex===legacy.rogueFormIndex&&form.pokemonId===legacy.id);
  assert.equal(forms.length,1);assert.equal(forms[0].formKey,'white');assert.equal(forms[0].genderDiffs,false);assert.equal(classicSourceFormAtlas(legacy),null);assert.equal(classicSourceFormAtlas({...legacy,rogueFormKey:forms[0].formKey})?.key,'669-white');assert.deepEqual(legacy,before);
 });
+
+test('new hatch results preserve Indeedee gender-dependent form, alternate species and shiny flag',async()=>{
+ for(const [id,gender,roll,key,atlas,shiny] of [[876,'F',.5,'female','876-female',false],[876,'M',.5,undefined,undefined,false],[172,'F',0,'spiky','172-spiky',false],[669,'F',.99,'white','669-white',true]]){
+  const doc={coins:0},system=ensureClassicState(doc,{initialStarterId:1}).system,mon=applyClassicEggForm(makeReferenceMon(id,5,{boxId:'egg-mon',gender,shiny,variant:0}),rogueSpecies.get(id),()=>roll);system.eggs=[{id:'egg',productId:'common',paidPrice:0,remainingWaves:1,pokemon:mon}];lapseClassicEggs(doc,{wave:5});const saved=await decodeGameData(await encodeGameData(doc)),result=saved.classic.system.pendingHatches[0].pokemon;assert.equal(result.gender,gender);assert.equal(result.shiny,shiny);assert.equal(result.rogueFormKey,key);assert.equal(classicSourceFormAtlas(result)?.key,atlas);assert.deepEqual(classicSourceFormAtlas(result),classicSourceFormAtlas(mon));
+ }
+});
