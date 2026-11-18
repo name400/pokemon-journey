@@ -18,6 +18,10 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='mystery-nickname-fun'){
+  const hero=makeReferenceMon(151,40,{boxId:'nickname-hero',moves:['Splash']}),ally=makeReferenceMon(7,40,{boxId:'nickname-ally',moves:['Splash']}),{doc,run}=fixture([hero,ally]);
+  hero.nickname='내 친구';run.wave=22;run.biome=4;run.screen='mystery';run.mysteryRule='part-timer-v17';run.encounter={kind:'mystery',key:'fun-and-games'};run.mystery={type:'fun-and-games',stage:'choose'};return doc;
+ }
  if(scenario==='reward-nickname-legacy-source'){const doc=createFixture('reward-nickname-targets');delete activeClassicRun(doc).party[0].baseName;return doc;}
  if(scenario==='egg-trainer-block'){const {doc,run}=fixture([makeReferenceMon(151,50,{boxId:'egg-block-hero',moves:['Splash']})]);run.wave=122;run.screen='mystery';run.encounter={kind:'mystery'};run.mystery={type:'a-trainers-test',stage:'choose',trainerId:121};ensureClassicState(doc).system.vouchers={regular:1,plus:0,premium:0,golden:0};return doc;}
  if(scenario==='sleep-talk-target'){const doc=createFixture('profile-double'),run=activeClassicRun(doc);run.party=[makeReferenceMon(151,50,{boxId:'sleep-hero',moves:['Sleep Talk','Tackle'],ability:'comatose'}),makeReferenceMon(143,50,{boxId:'sleep-ally',moves:['Splash']})];run.calledMoveRule='source-pool-v1';run.sleepTalkTargetRule='source-v1';run.sleepTalkPressureRule='source-v1';run.encounter={kind:'trainer'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(242,100,{boxId:'sleep-foe-1',moves:['Splash'],ability:'runaway'}),makeReferenceMon(242,100,{boxId:'sleep-foe-2',moves:['Splash'],ability:'pressure'})],{trainer:true,doubles:true});run.party=run.combat.teams[0];return doc;}
