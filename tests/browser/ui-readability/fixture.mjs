@@ -170,8 +170,8 @@ export function createFixture(scenario='eggs'){
   run.biome=1;run.weather='sunnyday';return doc;
  }
  if(scenario==='form-label-guidance'){
-  const {doc,run}=fixture([makeReferenceMon(492,50,{boxId:'shaymin-guidance',moves:['Splash']})]);
-  run.party[0].nickname='별 · Blue';run.formItems={'shaymin-guidance':['gracidea']};return doc;
+  const {doc,run}=fixture([makeReferenceMon(492,50,{boxId:'shaymin-guidance',moves:['Splash']}),makeReferenceMon(492,50,{boxId:'legacy-nickname-guidance',moves:['Splash']})]);
+  run.party[0].nickname='별 · Blue';Object.assign(run.party[1],{name:'별명 · Normal',baseName:'쉐이미',formName:'Normal'});run.formItems={'shaymin-guidance':['gracidea']};return doc;
  }
  if(scenario==='evolution'||scenario==='evolution-prompt'){
   const {doc,run}=fixture([makeReferenceMon(10,9,{boxId:'evolving',moves:['Tackle','String Shot','Protect','Growl']})]);
