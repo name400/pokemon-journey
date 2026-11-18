@@ -8,6 +8,7 @@ import * as storage from '../lib/game-storage.mjs';
 import * as origin from '../lib/request-origin.mjs';
 import * as game from '../lib/rogue-classic-game.mjs';
 import * as presentationLedger from '../lib/rogue-presentation-ledger.mjs';
+import {classicBattlePresentationKey} from '../lib/rogue-presentation.mjs';
 import {acknowledgeStoredPresentation} from '../lib/rogue-presentation-store.mjs';
 import {createFixture} from './browser/ui-readability/fixture.mjs';
 import {makeReferenceMon} from '../lib/rogue-reference.mjs';
@@ -268,7 +269,7 @@ test('two otherwise valid battle actions at one revision produce one commit and 
  const command={action:'turn',command:{type:'move',move:'disable'},revision:0};
  const responses=await Promise.all([h.post(command),h.post(command)]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);
  const success=await responses.find(r=>r.status===200).json(),conflict=await responses.find(r=>r.status===409).json();assert.equal(conflict.code,'REVISION_CONFLICT');assert.equal(success.revision,1);assert.equal(h.logs[0].stage,'write');assert.equal(h.logs[0].saveOutcome,'rejected');
- const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].party[0].pp.disable,19);const restored=await(await h.get()).json();assert.equal(restored.revision,1);assert.equal(restored.battle.presentationBatch.batchId,success.battle.presentationBatch.batchId);
+ const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].party[0].pp.disable,19);const restored=await(await h.get()).json();assert.equal(restored.revision,1);assert.equal(restored.battle.presentationBatch.batchId,success.battle.presentationBatch.batchId);assert.equal(classicBattlePresentationKey(restored.run,restored.battle),classicBattlePresentationKey(success.run,success.battle));
  const next=await h.post({...command,revision:restored.revision});assert.equal(next.status,200);assert.notEqual((await next.json()).battle.presentationBatch.batchId,restored.battle.presentationBatch.batchId);assert.equal(h.row().revision,2);h.sqlite.close();
 });
 
@@ -598,7 +599,7 @@ test('real victory stores finalized presentation IDs and returns them without ch
   const before=h.row(),old=await(await h.get()).json();assert.equal(old.battle.presentationBatch,undefined);assert.deepEqual(h.row(),before);
   const response=await h.post({action:'turn',revision:0,command:{type:'move',move:'seismictoss'}});assert.equal(response.status,200);const view=await response.json(),saved=await storage.decodeGameData(h.row().data),combat=saved.classic.slots[saved.classic.activeSlot].combat,batch=combat.presentationBatch;
   assert.ok(batch?.events.length);assert.deepEqual(batch.events.map(e=>e.event),combat.events);assert.equal(view.finishedBattle.presentationBatch.batchId,batch.batchId);assert.deepEqual(view.finishedBattle.presentationBatch.eventIds,batch.events.map(e=>e.id));
-  const reloaded=await(await h.get()).json();if(reloaded.battle)assert.equal(reloaded.battle.presentationBatch.batchId,batch.batchId);assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+  const reloaded=await(await h.get()).json();if(reloaded.battle){assert.equal(reloaded.battle.presentationBatch.batchId,batch.batchId);assert.equal(classicBattlePresentationKey(reloaded.run,reloaded.battle),classicBattlePresentationKey(view.run,view.finishedBattle));}assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
  }finally{h.sqlite.close();}
 });
 
