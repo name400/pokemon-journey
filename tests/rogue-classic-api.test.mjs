@@ -104,6 +104,11 @@ test('trainer voucher draw and accelerated hatch survive API reload without repe
  }finally{h.sqlite.close();}
 });
 
+test('victory hatch exposes alternate form appearance after API reload',async()=>{
+ const {rogueSpecies}=await import('../lib/rogue-reference.mjs'),{applyClassicEggForm}=await import('../lib/rogue-egg-forms.mjs'),{classicSourceFormAtlas}=await import('../components/rogue-source-form-images.mjs');const doc=createFixture('victory'),mon=applyClassicEggForm(makeReferenceMon(669,5,{boxId:'flower',gender:'F'}),rogueSpecies.get(669),()=>.99);doc.classic.system.eggs=[{id:'flower-egg',productId:'common',paidPrice:0,remainingWaves:1,pokemon:mon}];doc.classic.system.pendingHatches=[];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{const response=await h.post({action:'turn',revision:0,command:{type:'move',move:'seismictoss'}});assert.equal(response.status,200,JSON.stringify(await response.clone().json()));const view=await response.json(),result=view.pendingHatches[0];assert.equal(result.pokemon.rogueFormKey,'white');assert.equal(classicSourceFormAtlas(result.pokemon)?.key,'669-white');const before=h.row(),again=await(await h.get()).json();assert.deepEqual(again.pendingHatches,view.pendingHatches);assert.equal(classicSourceFormAtlas(again.pendingHatches[0].pokemon)?.key,'669-white');assert.deepEqual(h.row(),before);const ack=await h.post({action:'ackHatch',revision:1,eggId:'flower-egg'});assert.equal(ack.status,200);const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.system.hatchHistory[0].pokemon.rogueFormKey,'white');assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);}finally{h.sqlite.close();}
+});
+
 test('victory hatches a new shiny variant once and keeps existing payout across API reload',async()=>{
  const doc=createFixture('victory'),run=doc.classic.slots[doc.classic.activeSlot],system=doc.classic.system;
  registerStarterCaught(system,makeReferenceMon(1,5,{boxId:'prior-shiny',shiny:true,variant:0}),{kind:'capture'});
