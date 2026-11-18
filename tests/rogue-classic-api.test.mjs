@@ -182,6 +182,12 @@ test('pickup CAS failure cannot consume eggs or claim a revision-only conflict',
  const h=harness({beforeWrite(db){db.prepare('INSERT INTO admin_audit VALUES(1,?,?)').run('setRoguePickup','{}');}}),before=h.row();
  await failure(h,{action:'drawEggs',revision:0},409,'SAVE_OR_PICKUP_CONFLICT');assert.deepEqual(h.row(),before);h.sqlite.close();
 });
+test('battle victory updates the personal best once and survives API reload',async()=>{
+ const doc=createFixture('victory'),h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const command={action:'turn',revision:0,command:{type:'move',move:'seismictoss'}},response=await h.post(command);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));const row=h.row(),saved=await storage.decodeGameData(row.data),ranking=h.sqlite.prepare('SELECT best_wave,achieved_at FROM rogue_rankings WHERE user_id=?').get('private-account');assert.equal(ranking.best_wave,5);assert.equal(saved.classic.rankingSyncedBest,5);assert.ok(saved.classic.slots[0].coinRewards.includes(5));assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+  assert.equal((await h.post(command)).status,409);await h.get();assert.deepEqual(h.row(),row);assert.deepEqual(h.sqlite.prepare('SELECT best_wave,achieved_at FROM rogue_rankings WHERE user_id=?').get('private-account'),ranking);
+ }finally{h.sqlite.close();}
+});
 test('ranking SQL guard follows actual save CAS success in the SQLite batch',async()=>{
  for(const conflict of [false,true]){
   const h=harness({document:{classic:{slots:[{coinRewards:[5]}]}},apply(){return {};},beforeWrite:conflict?db=>db.prepare('UPDATE saves SET revision=1').run():undefined});
