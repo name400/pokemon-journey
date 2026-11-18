@@ -22,6 +22,20 @@ import {previewClassicDnaFusion,validatedClassicDnaFusion} from '../lib/rogue-dn
 import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 import {classicExpToNext} from '../lib/rogue-classic-growth.mjs';
 import {classicServices} from '../lib/rogue-classic-services.mjs';
+import {classicWaveMoney} from '../lib/rogue-classic-rules.mjs';
+
+test('Wobbuffet event selection and three turns persist through API reloads',async()=>{
+ for(const envelope of [false,true]){
+  const hero=makeReferenceMon(151,40,{boxId:'fun-hero',moves:['Splash']}),ally=makeReferenceMon(7,40,{boxId:'fun-ally',moves:['Splash']}),{doc,run}=persistentFixture([hero,ally]);Object.assign(run,{wave:22,biome:4,money:100000,screen:'mystery',mysteryRule:'part-timer-v17',encounter:{kind:'mystery',key:'fun-and-games'},mystery:{type:'fun-and-games',stage:'choose'}});
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+   const select={action:'mysterySelect',job:'play',boxId:'fun-hero'},chosen=await h.post({...select,revision:0});assert.equal(chosen.status,200);let view=await(await h.get()).json();assert.equal(view.run.mystery.selection.boxId,'fun-hero');assert.equal(view.run.mystery.stage,'confirm');
+   assert.equal((await h.post({action:'mysteryCancel',revision:1})).status,200);assert.equal((await h.post({...select,revision:2})).status,200);const confirmed=await h.post({action:'mysteryConfirm',revision:3});assert.equal(confirmed.status,200,JSON.stringify(await confirmed.clone().json()));view=await(await h.get()).json();assert.equal(view.run.screen,'battle');assert.equal(view.run.money,100000-classicWaveMoney(22,1.5));
+   const before=h.row(),bad=await h.post({action:'turn',revision:4,command:{type:'switch',slot:2}});assert.equal(bad.status,409);assert.deepEqual(h.row(),before);
+   for(let turn=0;turn<3;turn++){const command=envelope?{type:'turn',actions:[{actor:0,type:'move',move:'splash'}]}:{type:'move',move:'splash'},response=await h.post({action:'turn',revision:4+turn,command});assert.equal(response.status,200,JSON.stringify(await response.clone().json()));view=await(await h.get()).json();assert.equal(view.run.mystery.turns,turn+1);}
+   assert.equal(view.run.screen,'reward');assert.equal(view.run.mystery.stage,'resolved');const final=h.row(),saved=await storage.decodeGameData(final.data);assert.equal(saved.classic.slots[0].mystery.turns,3);assert.equal(saved.classic.slots[0].money,100000-classicWaveMoney(22,1.5));assert.equal((await h.post({action:'turn',revision:6,command:{type:'move',move:'splash'}})).status,409);assert.deepEqual(h.row(),final);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+  }finally{h.sqlite.close();}
+ }
+});
 
 test('fire fallback prefers a verified fire type and preserves the choice through API reload',async()=>{
  const mon=(id,boxId,ability)=>makeReferenceMon(id,20,{boxId,moves:['Tackle'],...(ability?{ability}:{})});
