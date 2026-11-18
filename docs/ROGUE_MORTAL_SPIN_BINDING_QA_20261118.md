@@ -1,0 +1,7 @@
+# Mortal Spin binding cleanup (2026-11-18)
+
+The pinned source uses a self-targeted post-apply removal for the seeded and partial-trapping tags, independently of Sheer Force: [move definition](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L11799), [removal attribute](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L6274). The embedded simulator previously skipped both removals with Sheer Force, even on a successful hit.
+
+New runs opt into `mortalSpinBindingRule: source-v1`; existing runs and in-progress combats without it retain their prior behavior. The rule removes only the user's seed and partial-trapping volatile after a successful ordinary Mortal Spin hit; it does not make protected or immune hits successful. In doubles the removal follows the first target's damage before the second target's damage. The source also handles Substitute, including with Sheer Force.
+
+Isolated engine and serialized-save tests cover ordinary and passive Sheer Force, single and double battles, a Substitute, Multi Lens, Protect, immunity, target order, PP, another stored value and legacy rules. The broader targeted spread/parental/binding suite passed 86 tests, and the added actual-turn/save test passed in the 15-test Mortal Spin suite. These are engine tests; browser UI, every trapping move and all possible ability combinations were not verified. No operating server or user save was used.
