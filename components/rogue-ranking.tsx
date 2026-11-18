@@ -3,10 +3,11 @@ import {useCallback,useEffect,useState} from 'react';
 import {Flag,RefreshCw,Trophy,Users} from 'lucide-react';
 import './rogue-ranking.css';
 type RankingData={leaders:{nickname:string;best_wave:number;is_self?:number}[];own:{bestWave:number;rank:number|null;needsNickname:boolean}|null};
+async function fetchRanking(signal?:AbortSignal):Promise<RankingData>{const response=await fetch('/api/rogue-ranking',{cache:'no-store',signal}),result=await response.json() as RankingData&{error?:string};if(!response.ok)throw Error(result.error||'랭킹을 불러오지 못했습니다.');return result;}
 export default function RogueRanking(){
- const [data,setData]=useState<RankingData|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(false);
- const load=useCallback(async(signal?:AbortSignal)=>{setLoading(true);setError('');try{const response=await fetch('/api/rogue-ranking',{cache:'no-store',signal});const result:any=await response.json();if(!response.ok)throw Error(result.error||'랭킹을 불러오지 못했습니다.');if(!signal?.aborted)setData(result);}catch(cause){if(!signal?.aborted)setError(cause instanceof Error?cause.message:'랭킹을 불러오지 못했습니다.');}finally{if(!signal?.aborted)setLoading(false);}},[]);
- useEffect(()=>{const controller=new AbortController();void load(controller.signal);return()=>controller.abort();},[load]);
+ const [data,setData]=useState<RankingData|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true);
+ const load=useCallback(async()=>{setLoading(true);setError('');try{setData(await fetchRanking());}catch(cause){setError(cause instanceof Error?cause.message:'랭킹을 불러오지 못했습니다.');}finally{setLoading(false);}},[]);
+ useEffect(()=>{const controller=new AbortController();void fetchRanking(controller.signal).then(result=>{if(!controller.signal.aborted)setData(result);},cause=>{if(!controller.signal.aborted)setError(cause instanceof Error?cause.message:'랭킹을 불러오지 못했습니다.');}).finally(()=>{if(!controller.signal.aborted)setLoading(false);});return()=>controller.abort();},[]);
  return <section className="rogue-ranking" aria-label="포켓로그 랭킹" aria-busy={loading}>
   <header className="rr-heading"><div><span>CLASSIC / LEADERBOARD</span><h2><Trophy size={24} aria-hidden="true"/>포켓로그 랭킹</h2><p>전체 기간 · 완료한 최고 웨이브 · 동률은 기록 등록 순</p></div><button type="button" disabled={loading} onClick={()=>void load()}><RefreshCw size={16} aria-hidden="true"/>새로고침</button></header>
   <div className="rr-content"><section className="rr-personal" aria-label="개인 최고 기록"><span className="rr-icon"><Flag size={23} aria-hidden="true"/></span><div><small>PERSONAL BEST</small><h3>나의 최고 기록</h3><b>{data?.own?`${data.own.bestWave} 웨이브`:'아직 기록이 없습니다'}</b><p>{data?.own?.needsNickname?'닉네임을 설정하면 글로벌 랭킹에 표시됩니다.':data?.own?.rank?`글로벌 ${data.own.rank}위`:'완료한 웨이브가 여기에 기록됩니다.'}</p></div></section>
