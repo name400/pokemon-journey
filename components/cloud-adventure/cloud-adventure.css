@@ -591,6 +591,11 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 /* Enlarge the information glyph and its separate horizontal hit area. */
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-info{display:grid;place-items:center;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-info-icon{display:grid;place-items:center;width:min(16px,6cqw);height:min(16px,6cqw);border:1px solid #b9cfdf;border-radius:50%;background:#1b2d43;color:#fff;font:700 min(12px,4.5cqw)/1 Georgia,serif;pointer-events:none}
+/* Expand the separate target only when no special control needs that space. */
+@media(max-width:390px){
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-panel:not(:has(.bs-v60-mega,.bs-specials-drawer,.bs-plus-open)) .bs-move-info{left:calc(-96px / var(--v52-reference-scale,1));width:calc(96px / var(--v52-reference-scale,1));min-width:calc(96px / var(--v52-reference-scale,1))}
+ .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move-panel:not(:has(.bs-v60-mega,.bs-specials-drawer,.bs-plus-open)) .bs-move-info-icon{transform:translateX(calc((52px - 12px * var(--v52-reference-scale,1)) / (2 * var(--v52-reference-scale,1))))}
+}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-classic-backbar button{display:grid;place-items:center;border:0;background:transparent;box-shadow:none}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-classic-backbar button span{padding:1px;background:#1b2d43;color:#fff;font: min(8px,calc(var(--v52-touch-size,44px) / 5.5))/1 Arial,sans-serif;white-space:nowrap}
 /* The approved status sheet has a small bottom-right back label; keep its larger hit area. */
