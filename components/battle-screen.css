@@ -518,3 +518,6 @@ html:has(.bs-rogue-v52-capture){overflow:hidden}
 
 /* The reviewed Breakneck Blitz impact is a bright local star on the hit target. */
 .battle-screen .bs-z-impact-star{display:block;width:100%;height:100%;background:#fffde0;clip-path:polygon(50% 0%,61% 33%,96% 27%,72% 51%,88% 83%,50% 68%,12% 83%,28% 51%,4% 27%,39% 33%);filter:drop-shadow(0 0 5px #ffe876)}
+
+/* Keep the special menu available after the move description is closed. */
+.battle-screen[data-v52-single=true] .bs-specials-drawer[hidden]{display:none!important}
