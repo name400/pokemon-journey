@@ -260,6 +260,25 @@ test('trainer Toxic Orb and terastallized type survive real API turns and reload
   }finally{h.sqlite.close();}
  }
 });
+test('Tera Orb reward grants a charged Orb once and survives API reload',async()=>{
+ const {doc,run}=persistentFixture([makeReferenceMon(151,50,{boxId:'hero',moves:['Splash']})]);run.tools.teraOrb=false;run.teraCharged=false;run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='teraorb'),rewardId:'orb'}];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const command={action:'reward',revision:0,rewardId:'orb'},response=await h.post(command);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));
+  const row=h.row(),saved=await storage.decodeGameData(row.data);assert.equal(saved.classic.slots[0].tools.teraOrb,true);assert.equal(saved.classic.slots[0].teraCharged,true);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+  const reloaded=await(await h.get()).json();assert.equal(reloaded.run.teraCharged,true);assert.equal((await h.post(command)).status,409);assert.deepEqual(h.row(),row);
+ }finally{h.sqlite.close();}
+});
+test('Tera requests without both an Orb and charge cannot alter saved battle data',async()=>{
+ for(const [orb,charged] of [[false,false],[false,true],[true,false]]){
+  const {doc,run}=persistentFixture([makeReferenceMon(151,100,{boxId:'tera-hero',moves:['Protect']})]);run.screen='battle';run.tools={...run.tools,teraOrb:orb};run.teraCharged=charged;run.initialSwitchSlots=[];run.encounter={kind:'wild'};run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'foe',moves:['Splash']})]);run.party=run.combat.teams[0];
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+   const before=await(await h.get()).json();assert.equal(before.battle.requests[0].actors[0].specials.some(s=>s.key==='terastallize'),false);
+   const row=h.row(),command={action:'turn',revision:0,command:{type:'move',move:'protect',special:'terastallize'}};assert.equal((await h.post(command)).status,409);assert.deepEqual(h.row(),row);
+   const again=await(await h.get()).json();assert.equal(again.battle.requests[0].actors[0].specials.some(s=>s.key==='terastallize'),false);assert.deepEqual(h.row(),row);
+   const saved=await storage.decodeGameData(row.data);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);assert.equal(saved.classic.slots[0].teraCharged,charged);
+  }finally{h.sqlite.close();}
+ }
+});
 test('player Tera command uses the owned type and charges only once across API reload',async()=>{
  const doc=createFixture('battle'),run=doc.classic.slots[0];run.id='player-tera-api';run.party=[{...makeReferenceMon(151,100,{boxId:'tera-hero',moves:['Protect']}),teraType:'Ghost'}];run.tools={...run.tools,teraOrb:true};run.teraCharged=true;run.initialSwitchSlots=[];run.npcDialogueQueue=[];run.encounter={kind:'wild'};run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'tera-foe',moves:['Splash']})]);run.party=run.combat.teams[0];
  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
