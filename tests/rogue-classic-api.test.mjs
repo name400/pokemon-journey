@@ -23,6 +23,17 @@ import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 import {classicExpToNext} from '../lib/rogue-classic-growth.mjs';
 import {classicServices} from '../lib/rogue-classic-services.mjs';
 
+test('challenge-illegal fire-resistant ability cannot alone select calm through API',async()=>{
+ const mon=(id,boxId,ability)=>makeReferenceMon(id,20,{boxId,moves:['Tackle'],...(ability?{ability}:{})});
+ const fused=previewClassicDnaFusion(mon(10,'primary'),mon(7,'donor'),{random:()=>0}).fused,{doc,run}=persistentFixture([mon(143,'snorlax','thickfat'),fused]);
+ Object.assign(run,{wave:42,biome:18,screen:'mystery',encounter:{kind:'mystery',key:'fiery-fallout'},mystery:{type:'fiery-fallout',stage:'choose',selection:null},mysteryRule:'part-timer-v19',mysteryGuideFireRule:'source-subset-v2',mysteryFireMixedRule:'source-subset-v1',challengeEligibilityRule:'source-subset-v1',challenges:[{id:1,value:11,severity:0}]});
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const before=h.row(),initial=await(await h.get()).json();assert.deepEqual(initial.run.mystery.fireCalmers,[]);assert.deepEqual(h.row(),before);
+  const blocked=await h.post({action:'mysterySelect',job:'calm',boxId:'snorlax',revision:0});assert.equal(blocked.status,409);assert.deepEqual(h.row(),before);
+  const saved=await storage.decodeGameData(h.row().data);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+ }finally{h.sqlite.close();}
+});
+
 test('challenge-illegal fusion alone cannot enable a sea guide through the API',async()=>{
  const primary=makeReferenceMon(10,20,{boxId:'primary',moves:['Tackle']}),donor=makeReferenceMon(7,20,{boxId:'donor',moves:['Tackle']}),legal=makeReferenceMon(4,20,{boxId:'legal',moves:['Tackle']}),fused=previewClassicDnaFusion(primary,donor,{random:()=>0}).fused;
  const {doc,run}=persistentFixture([fused,legal]);Object.assign(run,{wave:22,biome:6,screen:'mystery',encounter:{kind:'mystery',key:'lost-at-sea'},mystery:{type:'lost-at-sea',stage:'choose',selection:null},mysteryRule:'part-timer-v19',mysteryGuideFireRule:'source-subset-v2',mysteryGuideMixedRule:'source-subset-v1',challengeEligibilityRule:'source-subset-v1',challenges:[{id:1,value:10,severity:0}]});
