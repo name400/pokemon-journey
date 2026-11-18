@@ -51,3 +51,9 @@ The six unresolved identities remain protected: Marshadow Zenith is source-unobt
 6. Additional interaction coverage remains possible even for implemented forms: arbitrary randomized main/passive combinations, all doubles targeting and every suppression/Transform ordering. Representative tests above define the verified boundary; do not report full original-engine equivalence.
 
 Ogerpon non-Tera mask acquisition and active mask-item transfer are separate from the implemented Tera-state correction. This unit permits validated existing source mask identities; it does not claim to have completed the broader active-item acquisition workflow.
+
+## 2026-11-18 오거폰 테라 후면 표시 확인
+
+격리 포켓로그 전투에서 벽록의가면 오거폰의 실제 테라스탈 명령을 보내고 테라 폼 4의 후면 아틀라스 `/game/pokerogue/pokemon/back/1017-teal-mask-tera.png`가 HTTP 200으로 로드돼 화면의 이미지로 나타나는지 확인했다. 움직임 줄이기를 켠 뒤의 표시 프레임이 새로고침 후에도 동일하고 저장된 폼 및 테라 충전 소모가 유지됐다. 1280×800은 자동 회귀 검사, 390×844는 같은 경로를 별도 격리 스크립트로 검사했다. 기본 폼의 외부 이미지 요청은 테스트에서 대체했으므로 기본 모습의 실제 픽셀 비교는 아니다. 최초 검사는 아틀라스 대기 시간 초과 뒤 격리 서버가 메모리 부족으로 종료됐고, 별도 서버에서 순차 재검증했다.
+
+테라파고스의 390×844 실제 명령·단일 효과·폼 상태 복원 회귀도 통과했지만 이 검사에서 테라파고스의 실제 이미지 픽셀은 검사하지 않았다. 다른 오거폰 가면·융합·이로치·실기기 및 승인 영상 전체 일치는 미검증이다. 실제 사용자 데이터와 Sites는 사용하지 않았다.
