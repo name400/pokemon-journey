@@ -4,7 +4,8 @@ import {activeLeadAliasFixture} from '../../fixtures/active-lead-alias.mjs';
 import {randomizedFusionAliasFixture} from '../../fixtures/randomized-fusion-alias.mjs';
 import {randomizedAliasFixture} from '../../fixtures/randomized-alias.mjs';
 import {wildEventReviewFixture} from '../../fixtures/wild-event-alias.mjs';
-import {CLASSIC_REWARD_REGISTRY,generateClassicRewardsWithTiers,chooseClassicReward} from '../../../lib/rogue-classic-rewards.mjs';
+import {CLASSIC_REWARD_REGISTRY,generateClassicRewards,generateClassicRewardsWithTiers,chooseClassicReward} from '../../../lib/rogue-classic-rewards.mjs';
+import {classicServices} from '../../../lib/rogue-classic-services.mjs';
 import {fixture} from '../../fixtures/dna-persistent.mjs';
 import {makeReferenceMon,rogueSpecies} from '../../../lib/rogue-reference.mjs';
 import {applyClassicEggForm} from '../../../lib/rogue-egg-forms.mjs';
@@ -18,6 +19,7 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='reward-all-blocked-after-service'){const {doc,run,state}=fixture([makeReferenceMon(10,1,{boxId:'blocked-reward-hero',moves:['Splash']})]);run.party[0].hp=1;run.rng=831056492;generateClassicRewards(run,state.system);if(!run.rewards.every(r=>r.id==='potion'))throw Error('Expected naturally generated potion rewards');run.money=classicServices(run,{system:state.system}).find(s=>s.id==='potion').price;return doc;}
  if(scenario==='reward-capped-ball'){const {doc,run}=fixture([makeReferenceMon(151,40,{boxId:'ball-reward-hero',moves:['Splash']})]);run.balls={pokeball:99,greatball:0};run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='pokeball'),rewardId:'capped-ball'},{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='greatball'),rewardId:'available-ball'}];return doc;}
  if(scenario==='advance-retry'){const {doc,run}=fixture([makeReferenceMon(151,40,{boxId:'advance-hero',moves:['Splash']})]);run.wave=21;run.screen='advance';run.combat=null;run.npcDialogueQueue=[];return doc;}
  if(scenario==='mystery-nickname-fun'){
