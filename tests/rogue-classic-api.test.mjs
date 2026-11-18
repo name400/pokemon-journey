@@ -37,6 +37,16 @@ test('Wobbuffet event selection and three turns persist through API reloads',asy
  }
 });
 
+test('Z Move use and one-use gate persist through API reload',async()=>{
+ const hero=makeReferenceMon(133,50,{boxId:'z-hero',moves:['Quick Attack'],item:'normaliumz'}),{doc,run}=persistentFixture([hero]);run.screen='battle';run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.tools.zRing=true;run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'z-foe',moves:['Splash']})]);run.party=run.combat.teams[0];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const initial=await(await h.get()).json(),actor=initial.battle.requests[0].actors[0],move=actor.moves.find(m=>m.id==='quickattack'),basePp=move.pp;assert.ok(actor.specials.some(s=>s.key==='zmove'));assert.ok(move.variants.zmove&&!move.variants.zmove.disabled);
+  const first={action:'turn',revision:0,command:{type:'move',move:'quickattack',special:'zmove'}},response=await h.post(first);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));const result=await response.json();assert.ok(result.battle.events.some(e=>e.kind==='form'&&e.transformation==='zpower'));
+  const after=h.row(),saved=await storage.decodeGameData(after.data),native=restoreClassicNativeBattle(saved.classic.slots[0].combat,saved.classic.slots[0]),reload=await(await h.get()).json();assert.equal(native.p1.zMoveUsed,true);assert.equal(native.p1.active[0].item,'normaliumz');assert.equal(native.p1.active[0].moveSlots.find(m=>m.id==='quickattack').pp,basePp-1);assert.equal(reload.battle.requests[0].actors[0].specials.some(s=>s.key==='zmove'),false);assert.deepEqual(h.row(),after);
+  const blocked=await h.post({...first,revision:1});assert.equal(blocked.status,409);assert.deepEqual(h.row(),after);const ordinary=await h.post({action:'turn',revision:1,command:{type:'move',move:'quickattack'}});assert.equal(ordinary.status,200);const final=await storage.decodeGameData(h.row().data),finalNative=restoreClassicNativeBattle(final.classic.slots[0].combat,final.classic.slots[0]);assert.equal(finalNative.p1.zMoveUsed,true);assert.equal(finalNative.p1.active[0].moveSlots.find(m=>m.id==='quickattack').pp,basePp-2);assert.deepEqual(final.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(final.adventure,doc.adventure);
+ }finally{h.sqlite.close();}
+});
+
 test('Dynamax band gate, three turns and expiration persist through API reloads',async()=>{
  for(const band of [false,true]){
   const hero=makeReferenceMon(133,50,{boxId:'dynamax-hero',moves:['Quick Attack']}),{doc,run}=persistentFixture([hero]);run.screen='battle';run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.tools.dynamaxBand=band;run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'dynamax-foe',moves:['Splash']})]);run.party=run.combat.teams[0];
