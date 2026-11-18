@@ -1,0 +1,7 @@
+# Party status cures
+
+The pinned source `PartyStatusCureAttr` iterates the user's party: the user and non-field party members are cured regardless of ability, while other field members are skipped only for the move's specified ability (Soundproof for Heal Bell, Sap Sipper for Aromatherapy). It does not exclude Good as Gold or an ally behind Substitute. Source: https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L2620.
+
+In isolated doubles, the native simulator left a burned Good as Gold ally uncured for both moves; it also left an ally behind Substitute uncured by Aromatherapy. New runs use `partyStatusCureRule: source-v1` to apply the source's party checks in a battle-local move override; earlier runs retain native behavior. The rule is copied into combat state. It does not modify existing saved parties. Removed/captured engine entries are excluded, and no attempt is made to rewrite ambiguous fainted or historical statuses.
+
+Tests cover actual command and save codec, both moves, both battle sides, Good as Gold, Substitute, the matching active and passive immunities, suppressed ability, a reserve with matching ability, the user with matching ability, unrelated HP and confusion, new and legacy runs. Related calling and Dynamax/fusion regressions ran sequentially: 46 passed. Actual source runtime, every ability and status combination, full API/browser and real devices remain unverified. No server, production data or Sites deployment was used.
