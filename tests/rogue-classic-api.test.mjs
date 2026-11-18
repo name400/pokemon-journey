@@ -172,6 +172,18 @@ test('rival encounter, victory dialogue and reward transition survive API reload
  }finally{h.sqlite.close();}
 });
 
+test('each voucher draw persists once and rejects duplicate or depleted requests',async()=>{
+ for(const [voucherType,pulls] of [['regular',1],['plus',5],['premium',10],['golden',25]]){
+  const doc=createFixture('victory');doc.classic.system.vouchers={regular:0,plus:0,premium:0,golden:0,[voucherType]:1};doc.classic.system.eggs=[];
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+   const request={action:'drawEggs',revision:0,machineId:'move',voucherType,quantity:1},response=await h.post(request);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));
+   const saved=await storage.decodeGameData(h.row().data),eggs=saved.classic.system.eggs,ids=eggs.map(egg=>egg.id);assert.equal(saved.classic.system.vouchers[voucherType],0);assert.equal(eggs.length,pulls);assert.equal(new Set(ids).size,pulls);assert.equal(saved.coins,doc.coins);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+   const after=h.row(),view=await(await h.get()).json();assert.deepEqual(view.eggShop.eggs.map(egg=>egg.id),ids);assert.equal(view.eggShop.vouchers[voucherType],0);assert.deepEqual(h.row(),after);
+   assert.equal((await h.post(request)).status,409);assert.deepEqual(h.row(),after);assert.equal((await h.post({...request,revision:1})).status,409);assert.deepEqual(h.row(),after);
+  }finally{h.sqlite.close();}
+ }
+});
+
 test('trainer voucher draw and accelerated hatch survive API reload without repeated awards',async()=>{
  const doc=createFixture('victory'),run=doc.classic.slots[doc.classic.activeSlot];
  run.encounter=classicTrainerEncounter(run,222,{kind:'gym'});run.combat=createClassicCombat(run,[makeReferenceMon(19,1,{boxId:'test-foe',moves:['Splash'],hp:1})],{trainer:true});run.party=run.combat.teams[0];run.initialSwitchSlots=[];
