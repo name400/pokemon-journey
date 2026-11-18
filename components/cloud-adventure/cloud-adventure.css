@@ -208,6 +208,8 @@
 /* Keep an active battle above the field without unmounting the field state. */
 html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view .adv-battle-layer){overflow:hidden}
 .cloud-adventure-view .adv-battle-layer{position:fixed;inset:0;z-index:100;display:grid;place-items:safe center;overflow:auto;overscroll-behavior:contain;padding:4px;background:#101e24e8}
+/* The approved single battle uses an opaque dark viewport around its stage. */
+.cloud-adventure-view .adv-battle-layer:has(.battle-screen[data-v52-single=true]){background:#0e1725}
 .cloud-adventure-view .adv-battle-layer>.battle-screen{width:min(100%,calc((100dvh - 200px) * 16 / 9));max-width:900px;margin:0}
 @media (orientation:landscape) and (min-width:650px) and (max-height:500px){
  .cloud-adventure-view .adv-battle-layer>.battle-screen[data-v52-single=true]{width:min(100%,900px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-content:start}

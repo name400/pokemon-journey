@@ -789,7 +789,7 @@ main[data-mode="rogue"]:has(.rc-shell.is-battle .battle-screen[data-v52-single=t
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials legend{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-specials-drawer[open] .bs-specials button{box-sizing:border-box;min-width:0;min-height:44px;padding:2px 4px;white-space:normal;overflow-wrap:anywhere;font-size:10px;line-height:1.15}
 }
-.rc-shell.is-battle:has(.battle-screen[data-v52-single=true])::before{content:'';position:fixed;inset:0;z-index:999;background:#071b27c9}
+.rc-shell.is-battle:has(.battle-screen[data-v52-single=true])::before{content:'';position:fixed;inset:0;z-index:999;background:#0e1725}
 .rc-shell.is-battle .battle-screen[data-v52-single=true]{width:min(calc(100vw - 8px),calc((100dvh - 8px)*16/9));max-width:none}
 
 /* Enlarge the information glyph and its separate horizontal hit area. */
