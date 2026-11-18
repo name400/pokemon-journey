@@ -169,6 +169,10 @@ export function createFixture(scenario='eggs'){
   const {doc,run}=fixture([makeReferenceMon(705,50,{boxId:'weather-guidance',moves:['Splash']}),makeReferenceMon(868,50,{boxId:'biome-guidance',moves:['Splash']}),makeReferenceMon(64,50,{boxId:'item-guidance',moves:['Splash']})]);
   run.biome=1;run.weather='sunnyday';return doc;
  }
+ if(scenario==='form-label-guidance'){
+  const {doc,run}=fixture([makeReferenceMon(492,50,{boxId:'shaymin-guidance',moves:['Splash']})]);
+  run.party[0].nickname='별 · Blue';run.formItems={'shaymin-guidance':['gracidea']};return doc;
+ }
  if(scenario==='evolution'||scenario==='evolution-prompt'){
   const {doc,run}=fixture([makeReferenceMon(10,9,{boxId:'evolving',moves:['Tackle','String Shot','Protect','Growl']})]);
   if(scenario==='evolution-prompt')recordClassicLevelGrowth(run,run.party[0],[7,8,9],[]);

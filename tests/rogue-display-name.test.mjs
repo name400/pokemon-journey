@@ -1,4 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {classicDisplayPokemonName as name,classicHudPokemonName as hudName} from '../lib/rogue-display-name.mjs';
+import {classicFormLabel} from '../lib/rogue-form-label.mjs';
+test('party and HUD honor an explicit nickname even when the stored name contains a form',()=>{const mon={name:'쉐이미 · Sky',baseName:'쉐이미',formName:'Sky',nickname:'별 · Blue'};const original=structuredClone(mon);assert.equal(name(mon),'별 · Blue');assert.equal(hudName(mon),'별 · Blue');assert.deepEqual(mon,original);});
+test('form controls translate known identifiers without exposing unknown ones',()=>{assert.equal(classicFormLabel('sky'),'스카이폼');assert.equal(classicFormLabel('dusk-mane'),'황혼의갈기');assert.equal(classicFormLabel('unrecognized-form'),'');});
 test('base form names are hidden and form suffixes are hidden without mutating a save',()=>{for(const [mon,expected] of [[{name:'갸라도스 · Normal',rogueFormIndex:0},'갸라도스'],[{name:'파밀리쥐 · Family of Four',rogueFormIndex:0},'파밀리쥐'],[{name:'폼포켓몬 · Unknown Form',baseName:'폼포켓몬',rogueFormIndex:2},'폼포켓몬'],[{name:'파밀리쥐 · 네 식구',rogueFormIndex:0},'파밀리쥐'],[{name:'별명 · 내 친구',rogueFormIndex:0},'별명 · 내 친구']]){const before=structuredClone(mon);assert.equal(name(mon),expected);assert.deepEqual(mon,before);}});
 
 test('base name identifies a translated form suffix without changing saved name',()=>{const mon={name:'마휘핑 · 루비크림',baseName:'마휘핑'};assert.equal(name(mon),'마휘핑');assert.equal(mon.name,'마휘핑 · 루비크림');});
