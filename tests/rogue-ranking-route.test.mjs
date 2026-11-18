@@ -37,3 +37,12 @@ test('top 50 and personal rank exclude accounts without a profile',async()=>{
   h.setUser('hidden');view=await(await h.route.GET()).json();assert.equal(view.own.bestWave,200);assert.equal(view.own.rank,null);assert.equal(view.own.needsNickname,true);assert.equal(view.leaders.length,50);assert.ok(view.leaders.every(row=>row.best_wave===100));
  }finally{h.sqlite.close();}
 });
+test('isolated accounts preserve tie order, update only the owner and expose no account identifiers',async()=>{
+ const h=fixture();try{
+  await h.ranking.ensureRogueRanking(h.db);const {sqlite}=h,save=wave=>JSON.stringify({classic:{slots:[{coinRewards:[wave]}]},adventure:{safe:true}});
+  for(const [id,nick] of [['alpha-private','가'],['beta-private','나']]){sqlite.prepare('INSERT INTO profiles VALUES(?,?)').run(id,nick);sqlite.prepare('INSERT INTO saves VALUES(?,?,?)').run(id,save(50),1);sqlite.prepare('INSERT INTO rogue_rankings VALUES(?,?,?)').run(id,50,100);}
+  h.setUser('alpha-private');let response=await h.route.GET(),view=await response.json();assert.equal(response.status,200);assert.deepEqual(view.leaders.map(x=>x.nickname),['가','나']);assert.equal(view.own.rank,1);assert.ok(!JSON.stringify(view).includes('alpha-private'));assert.ok(!JSON.stringify(view).includes('beta-private'));
+  const betaBefore=sqlite.prepare('SELECT * FROM rogue_rankings WHERE user_id=?').get('beta-private');sqlite.prepare('UPDATE saves SET data=?,revision=2 WHERE user_id=?').run(save(60),'alpha-private');view=await(await h.route.GET()).json();assert.equal(view.own.bestWave,60);assert.equal(view.own.rank,1);assert.equal(view.leaders[0].best_wave,60);assert.deepEqual(sqlite.prepare('SELECT * FROM rogue_rankings WHERE user_id=?').get('beta-private'),betaBefore);
+  h.setUser('beta-private');view=await(await h.route.GET()).json();assert.equal(view.own.bestWave,50);assert.equal(view.own.rank,2);assert.deepEqual(sqlite.prepare('SELECT * FROM rogue_rankings WHERE user_id=?').get('beta-private'),betaBefore);assert.equal(JSON.parse(sqlite.prepare('SELECT data FROM saves WHERE user_id=?').get('alpha-private').data).adventure.safe,true);
+ }finally{h.sqlite.close();}
+});
