@@ -323,6 +323,16 @@ function captureApiFixture({full=false,double=false}={}){
  const doc=createFixture('battle'),run=doc.classic.slots[0],mon=(id,boxId)=>makeReferenceMon(id,100,{boxId,moves:['Splash']});
  run.id=`capture-api-${full}-${double}`;run.wave=21;run.rng=123456789;run.party=Array.from({length:full?6:double?2:1},(_,i)=>mon(i%2?7:1,`capture-own-${i}`));run.balls={...run.balls,pokeball:2,masterball:2};run.encounter={kind:'wild'};run.screen='battle';run.initialSwitchSlots=[];run.npcDialogueQueue=[];run.combat=createClassicCombat(run,[mon(150,'capture-foe'),...(double?[mon(143,'capture-other')]:[])],{doubles:double});run.party=run.combat.teams[0];doc.classic.slots[1]={id:'untouched-slot',safe:true};return doc;
 }
+test('evolution item reward updates readiness and permits evolution through API reload',async()=>{
+ const {doc,run}=persistentFixture([makeReferenceMon(64,30,{boxId:'evolution-target',moves:['Splash']})]);run.evolutionItems={};run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='evolutionitem'),rewardId:'cord',boxId:'evolution-target',evolutionItem:'linkingcord',name:'연결의끈'}];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const initial=await(await h.get()).json(),option=initial.run.party[0].evolutions.find(e=>e.item==='linkingcord');assert.ok(option);assert.equal(option.ready,false);
+  const before=h.row(),denied=await h.post({action:'evolve',boxId:'evolution-target',evolutionKey:option.key,revision:0});assert.equal(denied.status,409);assert.deepEqual(h.row(),before);
+  const reward=await h.post({action:'reward',rewardId:'cord',boxId:'evolution-target',revision:0});assert.equal(reward.status,200,JSON.stringify(await reward.clone().json()));const obtained=await(await h.get()).json(),ready=obtained.run.party[0].evolutions.find(e=>e.key===option.key);assert.equal(ready.ready,true);assert.equal(obtained.run.evolutionItems.linkingcord,1);assert.equal(obtained.run.evolutionItemReview,true);
+  const restored=await storage.decodeGameData(h.row().data);assert.equal(restored.classic.slots[0].evolutionItems.linkingcord,1);assert.deepEqual(restored.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(restored.adventure,doc.adventure);
+  const evolve=await h.post({action:'evolve',boxId:'evolution-target',evolutionKey:option.key,revision:1});assert.equal(evolve.status,200,JSON.stringify(await evolve.clone().json()));const finalRow=h.row(),after=await storage.decodeGameData(finalRow.data),view=await(await h.get()).json();assert.equal(after.classic.slots[0].party[0].rogueSourceId,65);assert.equal(after.classic.slots[0].evolutionItems.linkingcord,0);assert.equal(view.run.party[0].rogueSourceId,65);assert.equal((await h.post({action:'evolve',boxId:'evolution-target',evolutionKey:option.key,revision:1})).status,409);assert.deepEqual(h.row(),finalRow);assert.deepEqual(after.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(after.adventure,doc.adventure);
+ }finally{h.sqlite.close();}
+});
 test('captured double-battle member cannot use Tera without an Orb after API reload',async()=>{
  const doc=captureApiFixture({double:true}),run=doc.classic.slots[0];run.tools.teraOrb=false;run.teraCharged=true;
  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
