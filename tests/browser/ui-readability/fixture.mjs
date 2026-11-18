@@ -192,6 +192,10 @@ export function createFixture(scenario='eggs'){
  if(scenario==='hardcore-fainted-form'){
   const down=makeReferenceMon(492,50,{boxId:'form-dead',moves:['Splash']}),live=makeReferenceMon(492,50,{boxId:'form-live',moves:['Splash']}),{doc,run}=fixture([down,live]);down.hp=0;run.challenges=[{id:9,value:1}];run.formItems={'form-dead':['gracidea'],'form-live':['gracidea']};return doc;
  }
+ if(scenario==='hardcore-fainted-unsplice'){
+  const fused=(id,donor)=>previewClassicDnaFusion(makeReferenceMon(1,30,{boxId:id,moves:['Tackle']}),makeReferenceMon(4,30,{boxId:donor,moves:['Tackle']}),{random:()=>0}).fused;
+  const down=fused('fusion-dead','donor-dead'),live=fused('fusion-live','donor-live'),{doc,run}=fixture([down,live]);down.hp=0;run.challenges=[{id:9,value:1}];return doc;
+ }
  if(scenario==='held-metadata-reward'||scenario==='held-metadata-transfer'){
   const {doc,state,run}=fixture([makeReferenceMon(1,20,{boxId:'held-first',moves:['Tackle']}),makeReferenceMon(7,20,{boxId:'held-second',moves:['Tackle']})]);
   run.modifiers=[{id:'soothebell',boxId:'held-first',count:1,transferable:false}];run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='soothebell'),rewardId:'held-bell'}];
