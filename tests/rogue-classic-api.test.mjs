@@ -342,7 +342,7 @@ test('real capture API preserves full-party choice through reload and rejects du
 });
 
 test('trainer Toxic Orb and terastallized type survive real API turns and reload',async()=>{
- for(const [teraType,expectedStatus,matchup] of [['Water','맹독',1],['Poison',null,2],['Steel',null,.5]]){
+ for(const [teraType,expectedStatus,matchup] of [['Water','맹독',1],['Poison',null,2],['Steel',null,.5],['Dark','맹독',0]]){
   const doc=createFixture('battle'),run=doc.classic.slots[0];run.id=`toxic-orb-${teraType}`;run.wave=199;run.trainerTraitsRule='source-v1';run.trainerItemsRule='source-v1';run.party=[makeReferenceMon(151,100,{boxId:'trainer-orb-hero',moves:['Protect','Psychic']})];run.initialSwitchSlots=[];run.npcDialogueQueue=[];
   const encounter=classicTrainerEncounter(run,354,{kind:'champion'}),milotic=encounter.team[5];assert.equal(milotic.rogueSourceId,350);assert.equal(milotic.ability,'marvelscale');assert.equal(milotic.item,'toxicorb');milotic.teraType=teraType;run.encounter=encounter;run.screen='battle';run.combat=createClassicCombat(run,[milotic],{trainer:true});run.party=run.combat.teams[0];doc.classic.slots[1]={id:'untouched-trainer-slot',safe:true};
   const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
@@ -351,6 +351,9 @@ test('trainer Toxic Orb and terastallized type survive real API turns and reload
    const response=await h.post({action:'turn',command:{type:'move',move:'protect'},revision:0});assert.equal(response.status,200);const after=await response.json();assert.equal(after.battle.teams[1][0].status,expectedStatus);assert.equal(after.battle.teams[1][0].item,'toxicorb');assert.equal(after.battle.teams[1][0].terastallized,teraType);
    const savedBytes=h.row().data,reload=await(await h.get()).json();assert.equal(h.row().data,savedBytes);assert.equal(reload.revision,1);assert.equal(reload.battle.teams[1][0].status,expectedStatus);assert.equal(reload.battle.teams[1][0].terastallized,teraType);assert.equal(reload.battle.requests[0].actors[0].moves.find(m=>m.id==='psychic').effectiveness,matchup);
    const stale=await h.post({action:'turn',command:{type:'move',move:'protect'},revision:0});assert.equal(stale.status,409);assert.equal(h.row().data,savedBytes);const saved=await storage.decodeGameData(savedBytes),native=restoreClassicNativeBattle(saved.classic.slots[0].combat,saved.classic.slots[0]);assert.equal(native.p2.active[0].item,'toxicorb');assert.equal(native.p2.active[0].status,expectedStatus?'tox':'');assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+   if(teraType==='Dark'){
+    const pp=reload.battle.requests[0].actors[0].moves.find(m=>m.id==='psychic').pp,attack=await h.post({action:'turn',command:{type:'move',move:'psychic'},revision:1});assert.equal(attack.status,200);const afterAttack=await storage.decodeGameData(h.row().data),battle=restoreClassicNativeBattle(afterAttack.classic.slots[0].combat,afterAttack.classic.slots[0]);assert.ok(battle.log.some(line=>line.startsWith('|-immune|p2a:')),JSON.stringify(battle.log));assert.equal(battle.p1.pokemon[0].moveSlots.find(m=>m.id==='psychic').pp,pp-1);assert.equal(battle.p2.active[0].terastallized,'Dark');assert.deepEqual(afterAttack.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(afterAttack.adventure,doc.adventure);
+   }
   }finally{h.sqlite.close();}
  }
 });
