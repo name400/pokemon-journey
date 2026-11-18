@@ -6,7 +6,9 @@ import {randomizedAliasFixture} from '../../fixtures/randomized-alias.mjs';
 import {wildEventReviewFixture} from '../../fixtures/wild-event-alias.mjs';
 import {CLASSIC_REWARD_REGISTRY} from '../../../lib/rogue-classic-rewards.mjs';
 import {fixture} from '../../fixtures/dna-persistent.mjs';
-import {makeReferenceMon} from '../../../lib/rogue-reference.mjs';
+import {makeReferenceMon,rogueSpecies} from '../../../lib/rogue-reference.mjs';
+import {applyClassicEggForm} from '../../../lib/rogue-egg-forms.mjs';
+import {lapseClassicEggs} from '../../../lib/rogue-egg-shop.mjs';
 import {createClassicCombat,playClassicCombat} from '../../../lib/rogue-battle-engine.mjs';
 import {ensureClassicState} from '../../../lib/rogue-classic-state.mjs';
 import {starterCatalog} from '../../../lib/rogue-starter-system.mjs';
@@ -193,6 +195,7 @@ export function createFixture(scenario='eggs'){
  if(scenario==='rewards'){run.wave=7;run.money=987654;const fainted=makeReferenceMon(4,5,{boxId:'fainted',moves:['Splash']});fainted.hp=0;run.party.push(fainted);run.rewards=['pokeball','berryleppa','beastball'].map((id,index)=>({...CLASSIC_REWARD_REGISTRY.find(r=>r.id===id),rewardId:'readability-'+index,description:(CLASSIC_REWARD_REGISTRY.find(r=>r.id===id)?.description||'')+' 포켓몬의 상태와 사용 가능한 기술을 확인한 다음 선택합니다. '+ '줄바꿈없는긴설명문구를표시해도카드안에서모든내용과등급이보여야합니다.'}));}
  else if(scenario==='beast-capture'){run.wave=21;run.balls.beastball=1;run.screen='battle';const target=makeReferenceMon(803,5,{boxId:'ultra-beast',moves:['Splash'],status:'slp'});target.hp=1;run.combat=createClassicCombat(run,[target]);}
  else if(scenario==='battle'){run.screen='battle';run.combat=createClassicCombat(run,[makeReferenceMon(915,2,{boxId:'foe',moves:['Tackle','Tail Whip']})]);}
+ else if(scenario==='white-flower-hatch'){const mon=applyClassicEggForm(makeReferenceMon(669,5,{boxId:'flower',gender:'F'}),rogueSpecies.get(669),()=>.99);state.system.eggs=[{id:'white-flower',productId:'common',paidPrice:0,remainingWaves:1,pokemon:mon}];state.system.pendingHatches=[];lapseClassicEggs(doc,run);}
  else if(scenario==='new-shiny-hatch')state.system.pendingHatches=[{id:'hatch-new',productId:'common',pokemon:makeReferenceMon(1,5,{boxId:'new-shiny',shiny:true,variant:1}),duplicate:false,refund:3000,candies:20,eggMove:null},{id:'hatch-other',productId:'common',pokemon:makeReferenceMon(4,5,{boxId:'other-hatch'}),duplicate:false,refund:0,candies:2,eggMove:null}];
  else state.system.pendingHatches=Array.from({length:18},(_,index)=>({id:'hatch-'+index,productId:'common',pokemon:makeReferenceMon([1,4,7,25,133,150][index%6],5,{boxId:'egg-mon-'+index,shiny:index%7===0}),duplicate:index%2===0,refund:index%2===0?50:0,candies:1,eggMove:index%3===0?'용의파동':null}));
  return doc;

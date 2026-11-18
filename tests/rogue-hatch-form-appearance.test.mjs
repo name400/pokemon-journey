@@ -13,3 +13,8 @@ test('hatched alternate form retains the identity needed by the result image aft
  lapseClassicEggs(doc,{wave:5});let result=state.system.pendingHatches[0];assert.equal(result.pokemon.rogueFormKey,mon.rogueFormKey);assert.equal(result.pokemon.gender,mon.gender);assert.deepEqual(classicSourceFormAtlas(result.pokemon),classicSourceFormAtlas(mon));
  const saved=await decodeGameData(await encodeGameData(doc));result=saved.classic.system.pendingHatches[0];assert.equal(classicSourceFormAtlas(result.pokemon)?.key,'669-white');assert.equal(saved.classic.system.hatchHistory[0].pokemon.rogueFormKey,'white');assert.deepEqual(saved.classic.slots[1],{id:'other',safe:true});assert.deepEqual(saved.adventure,{safe:true});const coins=saved.coins;acknowledgeClassicHatch(saved,'flower-egg');assert.equal(saved.coins,coins);assert.equal(saved.classic.system.pendingHatches.length,0);
 });
+
+test('legacy white flower identity is recoverable from matching source, form and id without changing the record',()=>{
+ const legacy={id:30106,artId:669,rogueSourceId:669,rogueFormIndex:4,shiny:false},before=structuredClone(legacy),forms=rogueSpecies.get(legacy.rogueSourceId).formList.filter(form=>form.formIndex===legacy.rogueFormIndex&&form.pokemonId===legacy.id);
+ assert.equal(forms.length,1);assert.equal(forms[0].formKey,'white');assert.equal(forms[0].genderDiffs,false);assert.equal(classicSourceFormAtlas(legacy),null);assert.equal(classicSourceFormAtlas({...legacy,rogueFormKey:forms[0].formKey})?.key,'669-white');assert.deepEqual(legacy,before);
+});
