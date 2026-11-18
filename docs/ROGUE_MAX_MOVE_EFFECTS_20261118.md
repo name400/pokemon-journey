@@ -1,0 +1,7 @@
+# Max move effects and activation — isolated check
+
+The user's requested Dynamax gameplay is supported locally. The pinned Pagefault Games source labels its ordinary Max Move entries unused and unimplemented, so those entries are not evidence that weather/stat effects should be removed or what their exact behavior should be. See https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L11987. This is not an original-game equivalence determination.
+
+The local gameplay command was tested in isolated in-memory battles. Flamethrower, Water Gun and Ice Beam with Dynamax became Max Flare, Max Geyser and Max Hailstorm and respectively set sun, rain and hail; each deducted one PP from its base move and weather, PP and Dynamax survived encode/decode. Max Strike lowered its target's Speed and preserved that state after encode/decode. Protect became Max Guard, blocked Tackle and consumed one base PP. A combined sequential run with existing fused Dynamax lifecycle and Incinerate tests passed 30 tests. No new gameplay defect was established or changed in these cases.
+
+The checks do not cover every Max/G-Max move, doubles target interactions, immunities, Protect interactions other than the tested Max Guard, PP depletion, all special conditions, browser, real devices or production saves. No existing user data or servers were used. Sites was not deployed.
