@@ -18,6 +18,20 @@ import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
 import {validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
 import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 import {classicExpToNext} from '../lib/rogue-classic-growth.mjs';
+import {classicServices} from '../lib/rogue-classic-services.mjs';
+
+test('known move aliases cannot reset PP through memory or TM rewards and shop API',async()=>{
+ for(const kind of ['memory-reward','memory-shop','tm']){
+  const hero=makeReferenceMon(1,30,{boxId:'hero',moves:['Tackle','Growl','Protect','Vine Whip']}),{doc,run}=persistentFixture([hero]);hero.rogueMoveHistory=['몸통박치기','성장'];hero.pp={tackle:1,growl:3,protect:2,vinewhip:4};hero.roguePPUps={tackle:2};run.wave=81;
+  if(kind==='memory-reward')run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(x=>x.id==='memorymushroom'),rewardId:'memory'}];
+  if(kind==='tm'){hero.level=10;hero.pp.protect=1;run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(x=>x.id==='tm0'),rewardId:'tm',moveName:'방어'}];}
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+   const original=h.row();const command=kind==='memory-shop'?{action:'buyService',revision:0,itemId:'memorymushroom',boxId:'hero',moveName:'몸통박치기',replaceIndex:1,expectedPrice:classicServices(run).find(x=>x.id==='memorymushroom').price}:kind==='tm'?{action:'reward',revision:0,rewardId:'tm',boxId:'hero',replaceIndex:1}:{action:'reward',revision:0,rewardId:'memory',boxId:'hero',moveName:'몸통박치기',replaceIndex:1};
+   const response=await h.post(command);assert.equal(response.status,409,kind);assert.deepEqual(h.row(),original,kind);const reloaded=await(await h.get()).json();assert.equal(reloaded.run.party[0].pp.tackle,1);assert.deepEqual(reloaded.run.party[0].moves,hero.moves);const stored=await storage.decodeGameData(h.row().data);assert.deepEqual(stored.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(stored.adventure,doc.adventure);
+   if(kind==='memory-shop'){const valid=await h.post({...command,moveName:'성장'});assert.equal(valid.status,200,JSON.stringify(await valid.clone().json()));const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].party[0].pp.tackle,1);assert.equal(saved.classic.slots[0].party[0].roguePPUps.tackle,2);assert.ok(saved.classic.slots[0].party[0].moves.includes('성장'));assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);}
+  }finally{h.sqlite.close();}
+ }
+});
 
 test('real victory learning an owned move alias preserves PP and other saves through API reload',async()=>{
  const hero=makeReferenceMon(1,3,{boxId:'hero',moves:['Vine Whip','Seismic Toss'],pp:{vinewhip:2,seismictoss:19}}),{doc,run}=persistentFixture([hero]);hero.experience=classicExpToNext(hero)-1;run.wave=21;run.screen='battle';run.encounter={kind:'wild'};const foe=makeReferenceMon(19,1,{boxId:'foe',moves:['Splash']});foe.hp=1;run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];run.initialSwitchSlots=[];
