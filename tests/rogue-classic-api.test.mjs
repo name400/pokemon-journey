@@ -431,6 +431,17 @@ test('real capture API preserves full-party choice through reload and rejects du
  }finally{h.sqlite.close();}
 });
 
+test('full-party capture rejects invalid replacement and releases once across API reloads',async()=>{
+ const doc=captureApiFixture({full:true}),h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});
+ try{
+  const initial=await(await h.get()).json(),original=initial.run.party.map(mon=>mon.boxId),capture={action:'capture',ballId:'masterball',boxId:'capture-foe',revision:0};
+  const result=await h.post(capture);assert.equal(result.status,200);const offered=await result.json();assert.equal(offered.run.screen,'capture');assert.equal(offered.run.balls.masterball,1);assert.ok(offered.run.pendingCapture?.boxId);
+  const before=h.row(),invalid=await h.post({action:'acceptCapture',replaceBoxId:'missing',revision:1});assert.equal(invalid.status,409);assert.deepEqual(h.row(),before);const reload=await(await h.get()).json();assert.equal(reload.run.pendingCapture.boxId,offered.run.pendingCapture.boxId);assert.deepEqual(reload.run.party.map(mon=>mon.boxId),original);
+  const release={action:'acceptCapture',release:true,revision:1},responses=await Promise.all([h.post(release),h.post(release)]);assert.deepEqual(responses.map(response=>response.status).sort(),[200,409]);const stored=await storage.decodeGameData(h.row().data),run=stored.classic.slots[0];assert.deepEqual(run.party.map(mon=>mon.boxId),original);assert.equal(run.pendingCapture,null);assert.equal(run.balls.masterball,1);assert.equal(stored.classic.system.dex[150].caughtCount,1);assert.deepEqual(stored.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(stored.adventure,doc.adventure);
+  const stable=h.row(),reloaded=await(await h.get()).json();assert.deepEqual(reloaded.run.party.map(mon=>mon.boxId),original);assert.equal((await h.post({...release,revision:2})).status,409);assert.deepEqual(h.row(),stable);
+ }finally{h.sqlite.close();}
+});
+
 test('trainer Toxic Orb and terastallized type survive real API turns and reload',async()=>{
  for(const [teraType,expectedStatus,matchup] of [['Water','맹독',1],['Poison',null,2],['Steel',null,.5],['Dark','맹독',0]]){
   const doc=createFixture('battle'),run=doc.classic.slots[0];run.id=`toxic-orb-${teraType}`;run.wave=199;run.trainerTraitsRule='source-v1';run.trainerItemsRule='source-v1';run.party=[makeReferenceMon(151,100,{boxId:'trainer-orb-hero',moves:['Protect','Psychic']})];run.initialSwitchSlots=[];run.npcDialogueQueue=[];
