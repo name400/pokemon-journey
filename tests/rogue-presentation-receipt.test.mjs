@@ -10,3 +10,9 @@ test('hidden, timeout, cancellation or skip invalidates the whole attempt',()=>{
 test('empty and out of range frames cannot produce a receipt',()=>{
  const r=new PresentationReceipt('empty',0);r.paint(0,'a');r.complete(0,'a');assert.equal(r.snapshot().complete,false);assert.deepEqual(r.snapshot().events,[]);
 });
+test('missing frame identity cannot count as a painted and completed event',()=>{
+ const r=new PresentationReceipt('run:turn',1);r.complete(0,undefined);assert.equal(r.snapshot().complete,false);assert.deepEqual(r.snapshot().events,[]);
+});
+test('a replacement frame must itself complete before an event is confirmed',()=>{
+ const r=new PresentationReceipt('run:turn',1);r.paint(0,'a');r.complete(0,'a');r.paint(0,'b');assert.equal(r.snapshot().complete,false);r.complete(0,'a');assert.equal(r.snapshot().complete,false);r.complete(0,'b');assert.equal(r.snapshot().complete,true);
+});
