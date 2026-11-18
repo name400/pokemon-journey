@@ -219,7 +219,7 @@ export default function BattlePanel({approvedV52=false,presentationPaused=false,
   useEffect(()=>{setDescribedMove(null);setV52MovePage(0);setV52BallPage(0);setAdventurePartyPage(0)},[battleKey]);
   const ivSetting=useIvScannerSetting();
   const [settings,setSettings]=useState<Settings>(defaults),[settingsReady,setSettingsReady]=useState(false),[panel,setPanel]=useState(classicLayout||approvedV52?'command':'moves'),[special,setSpecial]=useState(''),[submitted,setSubmitted]=useState(''),[selectedBall,setSelectedBall]=useState(''),[display,setDisplay]=useState<BattleDisplay>(()=>battleDisplay(battle,!!battle.events?.length,classicLayout,classicLayout||approvedV52)),[narration,setNarration]=useState(''),[finishedKey,setFinishedKey]=useState(''),[commandError,setCommandError]=useState(''),[revealed,setRevealed]=useState<string[]>([]);
-  useEffect(()=>{if(panel!=='moves')setAdventurePlusOpen(false)},[panel]);
+  useEffect(()=>{if(panel!=='moves'){setAdventurePlusOpen(false);setDescribedMove(null)}},[panel]);
   const switchAnimationKey=useRef('');
   const [switchCue,setSwitchCue]=useState<{key:string;text:string;phase:string;hasOutgoing:boolean;x?:number;y?:number}|null>(null);
   const [megaCue,setMegaCue]=useState<{key:string;before:any;after:any;duration:number}|null>(null);
