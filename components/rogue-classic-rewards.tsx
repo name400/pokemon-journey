@@ -13,13 +13,13 @@ type Selection = { kind: 'reward' | 'service'; id: string };
 const TIERS = ['일반', '슈퍼', '하이퍼', '로그', '마스터'];
 const TM_TYPE_IDS:Record<string,number>={노말:1,격투:2,비행:3,독:4,땅:5,바위:6,벌레:7,고스트:8,강철:9,불꽃:10,물:11,풀:12,전기:13,에스퍼:14,얼음:15,드래곤:16,악:17,페어리:18};
 function RewardImage({ image, name, large = false,moveType }: { image: string; name: string; large?: boolean;moveType?:string }) {
-  if(moveType&&TM_TYPE_IDS[moveType])image='/game/tm-icons/'+TM_TYPE_IDS[moveType]+'.svg';
+  const resolvedImage = moveType&&TM_TYPE_IDS[moveType] ? '/game/tm-icons/'+TM_TYPE_IDS[moveType]+'.svg' : image;
   const [failed, setFailed] = useState('');
-  return failed === image
+  return failed === resolvedImage
     ? <span className={`rcr-item-image rcr-image-fallback ${large ? 'is-large' : ''}`} aria-label={name}><Package size={large ? 40 : 25} aria-hidden="true"/></span>
     // Raw, tiny item sprites retain their pixel grid without an image proxy.
     // eslint-disable-next-line @next/next/no-img-element
-    : <img className={`rcr-item-image ${large ? 'is-large' : ''}`} src={image} width={large ? 96 : 48} height={large ? 96 : 48} alt={name} decoding="async" loading={large ? 'eager' : 'lazy'} onError={() => setFailed(image)}/>;
+    : <img className={`rcr-item-image ${large ? 'is-large' : ''}`} src={resolvedImage} width={large ? 96 : 48} height={large ? 96 : 48} alt={name} decoding="async" loading={large ? 'eager' : 'lazy'} onError={() => setFailed(resolvedImage)}/>;
 }
 
 export default function RogueClassicRewards(props: RogueClassicRewardsProps) {
@@ -32,8 +32,8 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
   const [targetId, setTargetId] = useState<string | undefined>();
   const [donorId, setDonorId] = useState('');
   const [fusionConfirmed, setFusionConfirmed] = useState(false);
-  const [moveIndex, setMoveIndex] = useState<number | undefined>();
-  const [replaceIndex, setReplaceIndex] = useState<number | undefined>();
+  const [moveSelection, setMoveSelection] = useState<{index:number;name:string} | undefined>();
+  const [replaceSelection, setReplaceSelection] = useState<{index:number;name:string} | undefined>();
   const [newMoveName, setNewMoveName] = useState('');
   const [servicesOpen, setServicesOpen] = useState(true);
   const [pending, setPending] = useState('');
@@ -48,16 +48,19 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
   const targets = active?.targets || [];
   const selectedTarget = targets.find(target => target.boxId === targetId) || targets.find(target => target.boxId === automaticRewardTarget(targets));
   const ppMoves = eligibleRewardMoves(selectedTarget,active);
-  const selectedMoveIndex = moveIndex ?? (ppMoves.length === 1 ? ppMoves[0].index : undefined);
+  const selectedMoveIndex = moveSelection && ppMoves.some(move => move.index === moveSelection.index && move.name === moveSelection.name) ? moveSelection.index : undefined;
+  const replaceIndex = replaceSelection && selectedTarget?.moves?.some(move => move.index === replaceSelection.index && move.name === replaceSelection.name) ? replaceSelection.index : undefined;
+  const replacementChanged = !!replaceSelection && replaceIndex === undefined;
+  const replacementSlot = replacementChanged ? undefined : emptyMoveSlot(selectedTarget) ?? replaceIndex;
   const configuration: Configuration = {
     ...(active && requiresRewardTarget(active) && selectedTarget ? { boxId: selectedTarget.boxId } : {}),
     ...(active && 'requiresFusion' in active && active.requiresFusion ? {donorBoxId:donorId,confirmFusion:fusionConfirmed} : {}),
     ...(active?.requiresMove && selectedMoveIndex !== undefined ? { moveIndex: selectedMoveIndex } : {}),
-    ...(active && requiresReplacement(active) && (emptyMoveSlot(selectedTarget) ?? replaceIndex) !== undefined ? { replaceIndex: emptyMoveSlot(selectedTarget) ?? replaceIndex } : {}),
+    ...(active && requiresReplacement(active) && replacementSlot !== undefined ? { replaceIndex: replacementSlot } : {}),
     ...(active?.requiresNewMove && newMoveName ? { moveName: newMoveName } : {}),
   };
   const activeService = selection?.kind === 'service' ? services.find(service => service.id === selection.id) : undefined;
-  const confirmationError = active ? (activeService ? servicePurchaseError(activeService, money) : rewardTargetBlockReason(active)) || rewardActionError(active, configuration) : null;
+  const confirmationError = active ? (activeService ? servicePurchaseError(activeService, money) : rewardTargetBlockReason(active)) || (replacementChanged ? '선택한 기술이 바뀌었습니다. 다시 선택하세요.' : null) || rewardActionError(active, configuration) : null;
   const rerollShortfall = Math.max(0, rerollCost - money);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   useEffect(() => {
@@ -72,7 +75,7 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
     catch (cause) { if (mounted.current) setLocalError(cause instanceof Error ? cause.message : '처리하지 못했습니다. 다시 선택해 주세요.'); }
     finally { lock.current = false; if (mounted.current) setPending(''); }
   }
-  function clearConfiguration() { setDonorId(''); setFusionConfirmed(false); setTargetId(undefined); setMoveIndex(undefined); setReplaceIndex(undefined); setNewMoveName(''); setLocalError(''); }
+  function clearConfiguration() { setDonorId(''); setFusionConfirmed(false); setTargetId(undefined); setMoveSelection(undefined); setReplaceSelection(undefined); setNewMoveName(''); setLocalError(''); }
   function dismissDetail() {
     const previous = selection;
     setSelection(null); clearConfiguration();
@@ -81,21 +84,25 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
       (previousButton || screen.current?.querySelector<HTMLButtonElement>('.rcr-services-toggle, .rcr-reroll-action button:not(:disabled), .rcr-party-button:not(:disabled)'))?.focus();
     });
   }
+  function defaultMoveSelection(choice: RewardChoice | ServiceChoice, target?: ClassicRewardTarget) {
+    const options = choice.requiresMove ? eligibleRewardMoves(target, choice) : [];
+    return options.length === 1 ? {index:options[0].index,name:options[0].name} : undefined;
+  }
   function pickReward(choice: RewardChoice) {
     if (locked || lock.current) return;
     const reason = rewardTargetBlockReason(choice);
     if (reason) { setLocalError(reason); return; }
-    clearConfiguration();if(!requiresRewardTarget(choice)){void request(`reward:${choice.id}`, () => onChoose({ rewardId: choice.id }));return;}setSelection({ kind: 'reward', id: choice.id });setTargetId(automaticRewardTarget(choice.targets));
+    clearConfiguration();if(!requiresRewardTarget(choice)){void request(`reward:${choice.id}`, () => onChoose({ rewardId: choice.id }));return;}setSelection({ kind: 'reward', id: choice.id });const target = automaticRewardTarget(choice.targets);setTargetId(target);setMoveSelection(defaultMoveSelection(choice,choice.targets?.find(entry=>entry.boxId===target)));
   }
   function pickService(service: ServiceChoice) {
     if (locked || lock.current) return;
     const reason = servicePurchaseError(service, money);
     if (reason) { setLocalError(reason); return; }
-    clearConfiguration();if(!requiresRewardTarget(service)){void request(`service:${service.id}`, () => onService({ itemId: service.id, expectedPrice: service.price }));return;}setSelection({ kind: 'service', id: service.id });setTargetId(automaticRewardTarget(service.targets));
+    clearConfiguration();if(!requiresRewardTarget(service)){void request(`service:${service.id}`, () => onService({ itemId: service.id, expectedPrice: service.price }));return;}setSelection({ kind: 'service', id: service.id });const target = automaticRewardTarget(service.targets);setTargetId(target);setMoveSelection(defaultMoveSelection(service,service.targets?.find(entry=>entry.boxId===target)));
   }
   function confirm() {
     if (!active || !selection || locked || lock.current) return;
-    const reason = (activeService ? servicePurchaseError(activeService, money) : rewardTargetBlockReason(active)) || rewardActionError(active, configuration);
+    const reason = (activeService ? servicePurchaseError(activeService, money) : rewardTargetBlockReason(active)) || (replacementChanged ? '선택한 기술이 바뀌었습니다. 다시 선택하세요.' : null) || rewardActionError(active, configuration);
     if (reason) { setLocalError(reason); return; }
     if (selection.kind === 'reward') void request(`reward:${active.id}`, () => onChoose({ rewardId: active.id, ...configuration }));
     else if (activeService) void request(`service:${active.id}`, () => onService({ itemId: active.id, expectedPrice: activeService.price, ...configuration }));
@@ -106,7 +113,7 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
   }
   function chooseTarget(target: ClassicRewardTarget) {
     if (!target.eligible || locked) return;
-    setTargetId(target.boxId); setDonorId(''); setFusionConfirmed(false); setMoveIndex(undefined); setReplaceIndex(undefined); setNewMoveName(''); setLocalError('');
+    setTargetId(target.boxId); setDonorId(''); setFusionConfirmed(false); setMoveSelection(active ? defaultMoveSelection(active,target) : undefined); setReplaceSelection(undefined); setNewMoveName(''); setLocalError('');
   }
   function focusWithin(event: KeyboardEvent<HTMLElement>, selector: string) {
     if (event.altKey || event.ctrlKey || event.metaKey || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
@@ -140,12 +147,13 @@ function ClassicRewardScreen({ wave, party, money, choices, services, rerollCost
         return <button key={target.boxId} className={`rcr-target ${isSelected ? 'is-selected' : ''}`} disabled={locked || !target.eligible} aria-pressed={isSelected} aria-label={`${classicDisplayPokemonName(target)}, HP ${target.hp}/${target.maxHp}${!target.eligible ? `, ${target.reason || '사용 불가'}` : ''}`} onClick={() => chooseTarget(target)}><PokemonImage mon={mon || null} variant="sprite" alt=""/><span className="rcr-target-data"><b>{classicDisplayPokemonName(target)}{isSelected && <Check size={15} aria-hidden="true"/>}</b><span className="rcr-target-hp">HP {target.hp} / {target.maxHp}</span><span className="rcr-target-bar" aria-hidden="true"><i style={{ transform: `scaleX(${Math.min(1, Math.max(0, target.hp / Math.max(1, target.maxHp)))})` }}/></span>{!target.eligible && <small>{target.reason || '사용할 수 없는 대상'}</small>}</span></button>;
       })}</div>{!targets.length && <p className="rcr-inline-reason">사용할 대상 정보가 없습니다.</p>}</div>}
       {'requiresFusion' in active && active.requiresFusion && selectedTarget && <div className="rcr-move-section rcr-learn-section"><div className="rcr-section-heading"><h4>두 번째 포켓몬 선택</h4></div><label className="rcr-learn-field" htmlFor={`${uniqueId}-donor`}><span>융합에 소모할 포켓몬</span><select id={`${uniqueId}-donor`} value={donorId} disabled={locked} onChange={event=>{setDonorId(event.target.value);setFusionConfirmed(false);}}><option value="">두 번째 포켓몬 선택</option>{targets.filter(target=>active.fusionPairs?.some(pair=>pair.primaryBoxId===selectedTarget.boxId&&pair.donorBoxId===target.boxId)).map(target=><option key={target.boxId} value={target.boxId}>{classicDisplayPokemonName(target)}</option>)}</select></label><p>두 번째 포켓몬은 융합할 때 파티에서 사라지며, 나중에 분리해도 돌아오지 않습니다. 첫 번째 포켓몬만 남습니다. 두 번째 포켓몬의 일부 조건부·특수 폼 진화는 아직 지원하지 않습니다.</p><label><input type="checkbox" checked={fusionConfirmed} disabled={locked||!donorId} onChange={event=>setFusionConfirmed(event.target.checked)}/> 내용을 확인했고 두 번째 포켓몬 소모에 동의합니다.</label></div>}
-      {active.requiresNewMove && selectedTarget && <div className="rcr-move-section rcr-learn-section"><div className="rcr-section-heading"><h4>다시 배울 기술</h4><span>기술을 고른 뒤 아래에서 배울 자리를 선택하세요.</span></div><label className="rcr-learn-field" htmlFor={`${uniqueId}-new-move`}><span>배울 기술</span><select id={`${uniqueId}-new-move`} value={newMoveName} disabled={locked || !selectedTarget.eligible || !selectedTarget.learnableMoves?.length} onChange={event => { setNewMoveName(event.target.value); setReplaceIndex(undefined); setLocalError(''); }}><option value="">기억할 기술을 선택하세요</option>{[...new Set(selectedTarget.learnableMoves || [])].map(move => <option key={move} value={move}>{move}</option>)}</select></label>{!selectedTarget.learnableMoves?.length && <p className="rcr-inline-reason">이 포켓몬이 다시 배울 수 있는 기술이 없습니다.</p>}</div>}
-      {active.requiresMove && selectedTarget && <div className="rcr-move-section"><div className="rcr-section-heading"><h4>{'moveSelectionMode' in active && active.moveSelectionMode==='ppup'?'최대 PP를 늘릴 기술':'PP를 회복할 기술'}</h4><span>{'moveSelectionMode' in active && active.moveSelectionMode==='ppup'?'최대 PP를 늘릴 수 있는 기술을 선택하세요.':'PP가 줄어든 기술만 선택할 수 있습니다.'}</span></div><div className="rcr-moves" onKeyDown={event => focusWithin(event, '.rcr-move')}>{(selectedTarget.moves || []).map(move => <button key={move.index} className={`rcr-move ${selectedMoveIndex === move.index ? 'is-selected' : ''}`} disabled={locked || !selectedTarget.eligible || !ppMoves.some(candidate=>candidate.index===move.index)} aria-pressed={selectedMoveIndex === move.index} onClick={() => setMoveIndex(move.index)}><span><small>0{move.index + 1}</small><b>{move.name}</b></span><span>PP <b>{move.pp}</b> / {move.maxPp}{!ppMoves.some(candidate=>candidate.index===move.index) && <small>{'moveSelectionMode' in active && active.moveSelectionMode==='ppup'?'최대 PP 증가 불가':'회복할 PP 없음'}</small>}</span></button>)}</div>{!selectedTarget.moves?.length && <p className="rcr-inline-reason">선택 가능한 기술 정보가 없습니다.</p>}</div>}
+      {active.requiresNewMove && selectedTarget && <div className="rcr-move-section rcr-learn-section"><div className="rcr-section-heading"><h4>다시 배울 기술</h4><span>기술을 고른 뒤 아래에서 배울 자리를 선택하세요.</span></div><label className="rcr-learn-field" htmlFor={`${uniqueId}-new-move`}><span>배울 기술</span><select id={`${uniqueId}-new-move`} value={newMoveName} disabled={locked || !selectedTarget.eligible || !selectedTarget.learnableMoves?.length} onChange={event => { setNewMoveName(event.target.value); setReplaceSelection(undefined); setLocalError(''); }}><option value="">기억할 기술을 선택하세요</option>{[...new Set(selectedTarget.learnableMoves || [])].map(move => <option key={move} value={move}>{move}</option>)}</select></label>{!selectedTarget.learnableMoves?.length && <p className="rcr-inline-reason">이 포켓몬이 다시 배울 수 있는 기술이 없습니다.</p>}</div>}
+      {active.requiresMove && selectedTarget && <div className="rcr-move-section"><div className="rcr-section-heading"><h4>{'moveSelectionMode' in active && active.moveSelectionMode==='ppup'?'최대 PP를 늘릴 기술':'PP를 회복할 기술'}</h4><span>{'moveSelectionMode' in active && active.moveSelectionMode==='ppup'?'최대 PP를 늘릴 수 있는 기술을 선택하세요.':'PP가 줄어든 기술만 선택할 수 있습니다.'}</span></div><div className="rcr-moves" onKeyDown={event => focusWithin(event, '.rcr-move')}>{(selectedTarget.moves || []).map(move => <button key={move.index} className={`rcr-move ${selectedMoveIndex === move.index ? 'is-selected' : ''}`} disabled={locked || !selectedTarget.eligible || !ppMoves.some(candidate=>candidate.index===move.index)} aria-pressed={selectedMoveIndex === move.index} onClick={() => setMoveSelection({index:move.index,name:move.name})}><span><small>0{move.index + 1}</small><b>{move.name}</b></span><span>PP <b>{move.pp}</b> / {move.maxPp}{!ppMoves.some(candidate=>candidate.index===move.index) && <small>{'moveSelectionMode' in active && active.moveSelectionMode==='ppup'?'최대 PP 증가 불가':'회복할 PP 없음'}</small>}</span></button>)}</div>{!selectedTarget.moves?.length && <p className="rcr-inline-reason">선택 가능한 기술 정보가 없습니다.</p>}</div>}
       {requiresReplacement(active) && selectedTarget && emptyMoveSlot(selectedTarget)===undefined && <div className="rcr-move-section"><div className="rcr-section-heading"><h4>잊을 기술 선택</h4><span>새 기술을 배우기 위해 기존 기술 하나를 고르세요.</span></div><div className="rcr-moves rcr-replace-moves" onKeyDown={event => focusWithin(event, '.rcr-move')}>{[0, 1, 2, 3].map(index => {
         const current = selectedTarget.moves?.find(move => move.index === index);
-        return <button key={index} className={`rcr-move ${replaceIndex === index ? 'is-selected' : ''} ${!current ? 'is-empty-slot' : ''}`} disabled={locked || !selectedTarget.eligible} aria-pressed={replaceIndex === index} onClick={() => setReplaceIndex(index)}><span><small>0{index + 1}</small><b>{current?.name || '빈 자리'}</b></span><span>{current ? '이 기술과 교체' : '이 자리에 배우기'}<ChevronRight size={15} aria-hidden="true"/></span></button>;
+        return <button key={index} className={`rcr-move ${replaceIndex === index ? 'is-selected' : ''} ${!current ? 'is-empty-slot' : ''}`} disabled={locked || !selectedTarget.eligible} aria-pressed={replaceIndex === index} onClick={() => current && setReplaceSelection({index,name:current.name})}><span><small>0{index + 1}</small><b>{current?.name || '빈 자리'}</b></span><span>{current ? '이 기술과 교체' : '이 자리에 배우기'}<ChevronRight size={15} aria-hidden="true"/></span></button>;
       })}</div>{replaceIndex !== undefined && selectedTarget.moves?.find(move => move.index === replaceIndex) && <div className="rcr-current-description" aria-live="polite"><b>{selectedTarget.moves.find(move => move.index === replaceIndex)?.name} 효과</b><p>{selectedTarget.moves.find(move => move.index === replaceIndex)?.description || '이 기술의 효과 설명을 확인할 수 없습니다.'}</p></div>}</div>}
+      {requiresReplacement(active) && selectedTarget && replacementChanged && <p className="rcr-inline-reason" role="status">선택한 기술이 바뀌었습니다. 다시 선택하세요. <button type="button" disabled={locked} onClick={()=>setReplaceSelection(undefined)}>선택 초기화</button></p>}
       {requiresReplacement(active) && selectedTarget && emptyMoveSlot(selectedTarget)!==undefined && <p className="rcr-inline-reason">빈 기술 자리에 자동으로 배웁니다.</p>}
       {(error||localError)&&<p className="rcr-error rcr-dialog-error" role="alert">{error||localError}</p>}
       <div className="rcr-confirm"><div>{confirmationError ? <p className="rcr-inline-reason">{confirmationError}</p> : <p>{selection.kind === 'service' ? '구매 즉시 선택한 대상에게 사용합니다.' : '이 보상을 받고 다음 층으로 출발합니다.'}</p>}{activeService && <span>사용 후 소지금 {moneyText(Math.max(0, money - activeService.price))}원</span>}</div><button className="rcr-button rcr-button-primary" disabled={locked || !!confirmationError} onClick={confirm}>{pending ? <LoaderCircle className="rcr-spin" size={18} aria-hidden="true"/> : selection.kind === 'service' ? <HeartPulse size={18} aria-hidden="true"/> : <Check size={18} aria-hidden="true"/>}{selection.kind === 'service' ? `${moneyText(activeService?.price || 0)}원 · 바로 사용` : '이 보상으로 결정'}<ArrowRight size={18} aria-hidden="true"/></button></div>

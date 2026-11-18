@@ -246,6 +246,14 @@ export function createFixture(scenario='eggs'){
   const primary=makeReferenceMon(151,20,{boxId:'fusion-memory',moves:['Tackle','Growl','Quick Attack','Bite']}),donor=makeReferenceMon(7,20,{boxId:'donor-memory',moves:['Tackle']});primary.pp={tackle:1};const {doc,state,run}=fixture([previewClassicDnaFusion(primary,donor,{random:()=>0}).fused]);
   for(let i=0;i<300;i++){const reward=generateClassicRewardsWithTiers(run,[1],state.system)[0];if(reward.id==='memorymushroom')return doc;}throw Error('Isolated fixture did not generate the memory mushroom');
  }
+ if(scenario==='reward-stale-replacement'){
+  const doc=createFixture('egg-memory-reward'),state=ensureClassicState(doc),run=activeClassicRun(doc);run.wave=81;run.money=1000000;
+  for(let i=0;i<1000;i++){const reward=generateClassicRewardsWithTiers(run,[1],state.system)[0];if(reward.id==='tm1'&&reward.moveName!=='거수참'){reward.rewardId='stale-tm';return doc;}}throw Error('Isolated fixture did not generate an eligible TM');
+ }
+ if(scenario==='reward-stale-move-selection'){
+  const doc=createFixture('egg-memory-reward'),run=activeClassicRun(doc);run.wave=81;run.money=1000000;
+  run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='ppup'),rewardId:'stale-ppup'}];return doc;
+ }
  if(scenario==='egg-memory-reward'){
   const {doc,state,run}=fixture([makeReferenceMon(227,5,{boxId:'memory-bird'})]),mon=run.party[0];mon.moves=starterLegalMoves(state.system,227);mon.origin='starter';mon.rogueMetBiome=-1;mon.pp={peck:1};starterProgress(state.system,227).eggMask=2;
   for(let i=0;i<300;i++){const reward=generateClassicRewardsWithTiers(run,[1],state.system)[0];if(reward.id==='memorymushroom')return doc;}throw Error('Isolated fixture did not generate the memory mushroom');
