@@ -687,6 +687,11 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-header-state{display:block}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings summary{width:44px;height:44px;min-width:44px;min-height:44px;padding:0;background:#142238cc;color:#fff;border:1px solid #fff8}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings summary span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:680px){
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings summary{position:relative;background:transparent;border:0}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings summary::before{content:'';position:absolute;left:50%;top:50%;width:22px;height:22px;box-sizing:border-box;transform:translate(-50%,-50%);border:1px solid #fff8;border-radius:3px;background:#142238cc;pointer-events:none}
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings summary>svg{position:relative;z-index:1}
+}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings>div{position:absolute;left:0;top:44px;width:min(300px,calc(100vw - 16px));max-height:calc(100dvh - 60px);overflow:auto;display:flex;padding:8px;background:#142238f5;color:#fff;border:1px solid #fff8}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer{position:absolute;z-index:15;top:0;left:90px;max-width:35%;max-height:40px;overflow:hidden;padding:1px 3px;border:0;background:#142238bb;color:white;font-size:9px}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer img{width:25px;height:25px}.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer>div:nth-child(2){display:block;min-width:0}.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer b{font-size:10px}.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer span{font-size:9px;color:inherit}.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer .bs-party-balls{display:none}
