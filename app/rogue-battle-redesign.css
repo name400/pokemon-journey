@@ -693,6 +693,9 @@ html.poke-classic-landscape-pc:fullscreen main[data-mode=rogue] .rc-shell.is-bat
  .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings summary>svg{position:relative;z-index:1}
 }
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings>div{position:absolute;left:0;top:44px;width:min(300px,calc(100vw - 16px));max-height:calc(100dvh - 60px);overflow:auto;display:flex;padding:8px;background:#142238f5;color:#fff;border:1px solid #fff8}
+@media(max-width:680px){
+ .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-settings>div{box-sizing:border-box;max-height:calc(56.25cqw - 44px);overscroll-behavior:contain}
+}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer{position:absolute;z-index:15;top:0;left:90px;max-width:35%;max-height:40px;overflow:hidden;padding:1px 3px;border:0;background:#142238bb;color:white;font-size:9px}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer img{width:25px;height:25px}.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer>div:nth-child(2){display:block;min-width:0}.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer b{font-size:10px}.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer span{font-size:9px;color:inherit}.rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-trainer .bs-party-balls{display:none}
 .rc-shell.is-battle .battle-screen[data-v52-single=true] .bs-narration{position:absolute;left:1%;top:25%;width:46%;min-height:0;max-height:none;overflow:visible;padding:3px 5px;border:2px solid #142238;outline:0;box-shadow:none;border-radius:0;background:#fff9e9eF;pointer-events:none}
