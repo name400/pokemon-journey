@@ -1,0 +1,7 @@
+# Pollen Puff and an ally's Substitute
+
+In the pinned source, Pollen Puff's HealOnAllyAttr is target-directed; its damage routine does no damage to that ally, and the move effect phase skips target effects when the move hits a Substitute. Pollen Puff itself does not have the ignore-Substitute flag. Infiltrator can bypass the Substitute. See https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L2600 and https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/phases/move-effect-phase.ts#L582.
+
+The native simulator instead sets `infiltrates` for an allied Pollen Puff and heals the substituted ally. For new runs, `pollenSubstituteRule: source-v1` prevents that healing unless the user has active Infiltrator. It does not damage or remove the ally's Substitute. Enemy-targeted damage and older run rules remain unchanged; the flag is persisted with combat. This follows pinned source behavior, not a claim about all Pokémon games.
+
+An isolated real player command and codec restore confirmed HP, PP and Substitute; tests also covered normal/passive Infiltrator, suppression, the opponent side, enemy Substitute damage, old saves and new starts. Pollen Puff healing, Heal Block and AI regressions and prior party healing and Sleep Talk suites ran sequentially: 49 passed. Full source runtime, browser, real device, all abilities, Protect, Z/Max and every called-move target interaction remain unverified. No existing server, production data or Sites deployment was used.
