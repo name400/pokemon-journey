@@ -183,6 +183,10 @@ export function createFixture(scenario='eggs'){
   const hero=makeReferenceMon(151,50,{boxId:'end-hero',moves:['Seismic Toss']}),ally=makeReferenceMon(7,20,{boxId:'end-ally',moves:['Splash']}),first=makeReferenceMon(19,1,{boxId:'end-uncaught',moves:['Splash']}),second=makeReferenceMon(16,100,{boxId:'end-caught',moves:['Splash']}),{doc,state,run}=fixture([hero,ally]);
   run.wave=180;run.biome=50;run.screen='battle';run.encounter={kind:'wild',trainer:null};run.initialSwitchSlots=[];run.balls={masterball:1};first.hp=1;starterDexEntry(state.system,16).caught=true;run.combat=createClassicCombat(run,[first,second],{doubles:true});run.combat=playClassicCombat(run,{type:'turn',actions:[{actor:0,type:'move',move:'seismictoss',target:1},{actor:1,type:'move',move:'splash'}]});run.party=run.combat.teams[0];return doc;
  }
+ if(scenario==='fusion-donor-tm'){
+  const primary=makeReferenceMon(19,20,{boxId:'fusion-tm',moves:['Tackle','Growl','Quick Attack','Bite']}),donor=makeReferenceMon(7,20,{boxId:'donor-tm',moves:['Tackle']});primary.pp={tackle:1};const {doc,state,run}=fixture([previewClassicDnaFusion(primary,donor,{random:()=>0}).fused]);
+  for(let i=0;i<1000;i++){const reward=generateClassicRewardsWithTiers(run,[2],state.system)[0];if(reward.id==='tm2'&&reward.moveName==='파도타기')return doc;}throw Error('Isolated fixture did not generate the donor TM');
+ }
  if(scenario==='fusion-level-move'){
   const primary=makeReferenceMon(151,6,{boxId:'fusion-level',moves:['Tackle','Growl','Quick Attack','Bite']}),donor=makeReferenceMon(7,6,{boxId:'donor-level',moves:['Tackle']});primary.pp={tackle:1};const {doc,run}=fixture([previewClassicDnaFusion(primary,donor,{random:()=>0}).fused]);
   run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='rarecandy'),rewardId:'fusion-level-candy'}];return doc;
