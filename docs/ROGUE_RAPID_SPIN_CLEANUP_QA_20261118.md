@@ -1,0 +1,7 @@
+# Rapid Spin cleanup — 2026-11-18
+
+The pinned source gives Rapid Spin a self-targeted removal of seeded and partial-trapping tags and removes the user's entry hazards before damage: [move definition](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L9475), [hazard attribute](https://github.com/pagefaultgames/pokerogue/blob/7c0881255af5cd51992e513ff93c2f71adbe40e0/src/data/moves/move.ts#L6523). The embedded simulator skips the cleanup under Sheer Force. An isolated engine test reproduced the retained seed before this fix.
+
+New runs enable `rapidSpinCleanupRule: source-v1`; existing runs and in-progress battles lacking the rule retain the previous behavior. The rule clears the source's four supported entry hazards on a successful hit before damage and seed/partial trapping after damage, including Substitute. Protect and immunity do not trigger cleanup. The native speed boost behavior is unchanged.
+
+Isolated engine tests covered single and double battles, normal and passive Sheer Force, Multi Lens, Substitute, immunity, Protect, damage ordering, PP and actual turn/save restore, another slot, and legacy saves. The Rapid Spin suite passed 10 tests; the preceding related regression run passed 53 tests. Browser play, every trapping move, all ability combinations and actual devices were not verified. No existing server or operating save was used.
