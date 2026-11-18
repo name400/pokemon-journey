@@ -37,6 +37,18 @@ test('Wobbuffet event selection and three turns persist through API reloads',asy
  }
 });
 
+test('Dynamax band gate, three turns and expiration persist through API reloads',async()=>{
+ for(const band of [false,true]){
+  const hero=makeReferenceMon(133,50,{boxId:'dynamax-hero',moves:['Quick Attack']}),{doc,run}=persistentFixture([hero]);run.screen='battle';run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.tools.dynamaxBand=band;run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'dynamax-foe',moves:['Splash']})]);run.party=run.combat.teams[0];
+  const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+   const initial=await(await h.get()).json(),actor=initial.battle.requests[0].actors[0],baseHp=initial.battle.teams[0][0].maxHp,basePp=actor.moves.find(m=>m.id==='quickattack').pp;assert.equal(actor.specials.some(s=>s.key==='dynamax'),band);
+   const first={action:'turn',revision:0,command:{type:'move',move:'quickattack',special:'dynamax'}};if(!band){const before=h.row();assert.equal((await h.post(first)).status,409);assert.deepEqual(h.row(),before);continue;}
+   for(let turn=0;turn<3;turn++){const command={type:'move',move:'quickattack',...(turn===0?{special:'dynamax'}:{})},response=await h.post({action:'turn',revision:turn,command});assert.equal(response.status,200,JSON.stringify(await response.clone().json()));const saved=await storage.decodeGameData(h.row().data),restored=saved.classic.slots[0],native=restoreClassicNativeBattle(restored.combat,restored),view=await(await h.get()).json();assert.equal(view.battle.teams[0][0].dynamaxed,turn<2);assert.equal(native.p1.active[0].maxhp,baseHp*(turn<2?2:1));assert.equal(native.p1.active[0].hp,native.p1.active[0].maxhp);assert.equal(native.p1.active[0].moveSlots.find(m=>m.id==='quickattack').pp,basePp-turn-1);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);}
+   const final=h.row(),view=await(await h.get()).json();assert.equal(view.battle.requests[0].actors[0].specials.some(s=>s.key==='dynamax'),false);assert.equal((await h.post(first)).status,409);assert.deepEqual(h.row(),final);
+  }finally{h.sqlite.close();}
+ }
+});
+
 test('fire fallback prefers a verified fire type and preserves the choice through API reload',async()=>{
  const mon=(id,boxId,ability)=>makeReferenceMon(id,20,{boxId,moves:['Tackle'],...(ability?{ability}:{})});
  const fused=previewClassicDnaFusion(mon(10,'primary'),mon(7,'donor'),{random:()=>0}).fused,{doc,run}=persistentFixture([mon(143,'snorlax','thickfat'),mon(58,'fire'),fused]);
