@@ -96,6 +96,7 @@ export function eligibleRewardMoves(target?: ClassicRewardTarget, choice?: Actio
   return (target?.moves || []).filter(move => choice && 'moveSelectionMode' in choice && choice.moveSelectionMode === 'ppup' ? !!move.canBoostPP : move.pp < move.maxPp);
 }
 export function rewardTargetBlockReason(choice: ActionChoice): string | null {
+  if (choice.disabledReason) return choice.disabledReason;
   if (!requiresRewardTarget(choice)) return null;
   if (!choice.targets?.length) return '적용할 대상 정보가 없습니다.';
   if (!choice.targets.some(target => target.eligible)) return choice.targets.find(target => target.reason)?.reason || '현재 적용할 수 있는 포켓몬이 없습니다.';

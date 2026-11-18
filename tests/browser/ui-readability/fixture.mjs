@@ -18,6 +18,7 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(scenario==='reward-capped-ball'){const {doc,run}=fixture([makeReferenceMon(151,40,{boxId:'ball-reward-hero',moves:['Splash']})]);run.balls={pokeball:99,greatball:0};run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='pokeball'),rewardId:'capped-ball'},{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='greatball'),rewardId:'available-ball'}];return doc;}
  if(scenario==='advance-retry'){const {doc,run}=fixture([makeReferenceMon(151,40,{boxId:'advance-hero',moves:['Splash']})]);run.wave=21;run.screen='advance';run.combat=null;run.npcDialogueQueue=[];return doc;}
  if(scenario==='mystery-nickname-fun'){
   const hero=makeReferenceMon(151,40,{boxId:'nickname-hero',moves:['Splash']}),ally=makeReferenceMon(7,40,{boxId:'nickname-ally',moves:['Splash']}),{doc,run}=fixture([hero,ally]);
