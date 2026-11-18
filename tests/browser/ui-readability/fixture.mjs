@@ -98,6 +98,12 @@ export function createFixture(scenario='eggs'){
   if(necrozma)doc.classic.system.dex[791]={...doc.classic.system.dex[791],caught:true};
   run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'form-foe',moves:['Splash']}),...(double?[makeReferenceMon(143,100,{boxId:'form-foe-2',moves:['Splash']})]:[])],{system:doc.classic.system,doubles:double});run.party=run.combat.teams[0];return doc;
  }
+ if(scenario==='dual-type-transform'){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.party=[makeReferenceMon(132,100,{boxId:'dual-type-ui',moves:['Transform']})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(6,100,{boxId:'type-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
+ if(scenario==='dual-type-tera'){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.tools.teraOrb=true;run.teraCharged=true;run.party=[makeReferenceMon(6,100,{boxId:'dual-type-ui',moves:['Splash'],teraType:'Ghost'})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'type-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='tera-ogerpon'||scenario==='tera-terapagos'){
   const doc=createFixture('profile-single'),run=activeClassicRun(doc);run.tools.teraOrb=true;run.teraCharged=true;run.party=[makeReferenceMon(scenario==='tera-ogerpon'?1017:1024,100,{boxId:'tera-ui',moves:['Splash']})];run.encounter={kind:'wild'};run.initialSwitchSlots=[];run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'tera-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
  }
