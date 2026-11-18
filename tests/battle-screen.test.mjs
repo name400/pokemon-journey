@@ -79,7 +79,7 @@ console.log('Inline RPG battle screen, side-1 facing, pre-impact HP, switch time
 const classicOwned=renderToStaticMarkup(React.createElement(BattlePanel,{classicLayout:true,classicTools:{zRing:true},classicItems:[{key:'native:normaliumz:hero',name:'노말Z',count:1,owner:'꼬부기'}],battle:view,battleKey:'classic:items',title:'도구 표시',busy:false,onCommand(){}}));assert.match(classicOwned,/Z링/);assert.match(classicOwned,/노말Z/);assert.match(classicOwned,/꼬부기 보유/);
 const approvedHP=renderToStaticMarkup(React.createElement(BattlePanel,{approvedV52:true,battle:{...view,events:[],before:undefined,beforeActive:undefined},battleKey:'v52:hp',title:'HP 표시',busy:false,onCommand(){}}));
 assert.match(approvedHP,/data-v52="true"/);
-assert.match(approvedHP,/class="bs-hp-inside" aria-hidden="true">\d+ \/ \d+<\/span>/);
+assert.match(approvedHP,/class="bs-hp-inside" aria-hidden="true">\d+\/\d+<\/span>/);
 assert.match(approvedHP,/role="progressbar" aria-label="[^"]+ HP"/);
 const v52Commands=renderToStaticMarkup(React.createElement(BattlePanel,{approvedV52:true,battle:{...view,events:[],before:undefined,beforeActive:undefined},battleKey:'v52:commands',title:'命令',busy:false,onCommand(){},onItem(){},onBall(){},onFlee(){}}));
 assert.match(v52Commands,/data-v52-single="true"/);
