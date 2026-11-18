@@ -561,7 +561,7 @@ html:has(.cloud-adventure-view .adv-battle-layer),body:has(.cloud-adventure-view
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-run-dialog button{display:block;width:100%;height:22px;min-height:0;margin-top:3px;padding:3px 8px;border:0;border-radius:1px;background:#1b2d43;color:white;text-align:left;font:10px Arial,'Noto Sans KR',sans-serif}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-v52-run-dialog button:first-of-type{background:#ffe000;color:#182b42}
 /* v52 move effects place the engine-provided multiplier at the row's right edge. */
-.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move .bs-effectiveness{display:flex;justify-content:space-between;gap:2px}
+.cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move .bs-effectiveness{display:flex;justify-content:space-between;gap:.555556cqw;padding-left:.277778cqw}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move .bs-effectiveness>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .cloud-adventure-view .adv-battle-layer .battle-screen[data-v52-single=true] .bs-move .bs-effectiveness>span:last-child{flex:none}
 /* Match the original ball's inline icon, name and count; keep real inventory. */
