@@ -20,11 +20,11 @@ try{
   }
   if(process.env.UI_FOCUS==='types'){assert.deepEqual(errors,[]);await context.close();continue;}
   for(const reducedMotion of ['no-preference','reduce']){
-   await page.emulateMedia({reducedMotion});await page.request.post(base+'/api/test-reset?scenario=evolution-prompt');await page.goto(base+'/?mode=rogue&tab=rogue');await page.getByRole('button',{name:'계속하기',exact:true}).first().click();await page.getByRole('button',{name:'지금 진화',exact:true}).click();
-   const result=page.getByRole('region',{name:'진화 결과'});await result.waitFor();await result.getByRole('status').waitFor();assert.match(await result.textContent(),/캐터피.*단데기/);
+   await page.emulateMedia({reducedMotion});await page.request.post(base+'/api/test-reset?scenario=evolution-prompt');await page.goto(base+'/?mode=rogue&tab=rogue');await page.getByRole('button',{name:'계속하기',exact:true}).first().click();await page.getByRole('heading',{name:'캐터피이(가) 진화하려고 합니다!'}).waitFor();assert.match(await page.locator('.rc-decision').first().innerText(),/단데기.*진화할 수 있습니다/s);await page.getByRole('button',{name:'지금 진화',exact:true}).click();
+   const result=page.getByRole('region',{name:'진화 결과'});await result.waitFor();await result.getByRole('status').waitFor();
    const before=await(await page.request.get(base+'/api/test-state')).json(),count=posts.length;
-   if(reducedMotion==='no-preference'){await result.getByRole('button',{name:'연출 건너뛰기'}).click();assert.equal(await result.getAttribute('data-motion-skipped'),'true');}else assert.equal(await result.locator('.rc-evolution-skip').isVisible(),false);
-   assert.equal(await result.locator('.rc-evolve-after').evaluate(n=>getComputedStyle(n).animationName),'none');
+   if(reducedMotion==='no-preference'){assert.match(await result.getByRole('status').innerText(),/어라.*캐터피/s);await result.getByRole('button',{name:'연출 건너뛰기'}).click();}else await page.waitForFunction(()=>document.querySelector('.evolution-presentation')?.dataset.phase==='result');
+   assert.equal(await result.getAttribute('data-phase'),'result');assert.match(await result.getByRole('status').innerText(),/캐터피.*단데기.*진화했다/s);assert.equal(await result.getByRole('button',{name:'연출 건너뛰기'}).count(),0);assert.equal(await result.locator('.evolution-presentation-after').evaluate(n=>getComputedStyle(n).animationName),'none');
    await page.screenshot({path:out+'/'+viewport.width+'-evolution-'+reducedMotion+'.png',fullPage:true});await result.getByRole('button',{name:'확인',exact:true}).click();assert.equal(await result.count(),0);assert.equal(posts.length,count);assert.deepEqual(await(await page.request.get(base+'/api/test-state')).json(),before);
    results.push({viewport,reducedMotion,mode:'evolution',noSaveOnSkipOrClose:true});
    if(reducedMotion==='reduce')results.push(await slotBoundary(page,viewport));
