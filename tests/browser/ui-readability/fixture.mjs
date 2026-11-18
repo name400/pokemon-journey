@@ -18,6 +18,11 @@ import {applyClassicPokemonChallenges} from '../../../lib/rogue-challenge-pokemo
 import {previewClassicDnaFusion} from '../../../lib/rogue-dna-fusion.mjs';
 import {applyClassicForm} from '../../../lib/rogue-transformations.mjs';
 export function createFixture(scenario='eggs'){
+ if(['xerneas-active-display','xerneas-fusion-active-display'].includes(scenario)){
+  const doc=createFixture('profile-single'),run=activeClassicRun(doc),x=makeReferenceMon(716,50,{boxId:'xerneas-hero',moves:['Splash']}),donor=makeReferenceMon(151,50,{boxId:'xerneas-donor',moves:['Splash']});
+  run.party=[scenario.includes('fusion')?previewClassicDnaFusion(x,donor,{allowDonorForm:true,random:()=>0}).fused:x];run.encounter={kind:'wild'};run.initialSwitchSlots=[];
+  run.combat=createClassicCombat(run,[makeReferenceMon(143,100,{boxId:'xerneas-foe',moves:['Splash']})]);run.party=run.combat.teams[0];return doc;
+ }
  if(scenario==='recover-ended'){
   const doc=createFixture('victory'),run=activeClassicRun(doc);run.combat=playClassicCombat(run,{type:'move',move:'seismictoss'});run.party=run.combat.teams[0];run.screen='battle';return doc;
  }
