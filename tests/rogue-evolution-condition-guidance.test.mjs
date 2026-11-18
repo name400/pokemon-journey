@@ -5,6 +5,7 @@ import {classicEvolutionOptions,classicEvolutionItemCandidates} from '../lib/rog
 import {encodeGameData,decodeGameData} from '../lib/game-storage.mjs';
 import {ensureClassicState} from '../lib/rogue-classic-state.mjs';
 import {classicGameView} from '../lib/rogue-classic-game.mjs';
+import {classicEvolutionOptionName} from '../lib/rogue-form-label.mjs';
 
 test('weather evolution explains all accepted weather without changing eligibility or saved data',async()=>{
  const mon=makeReferenceMon(705,50,{boxId:'weather-guidance'}),run={id:'weather-guidance',wave:100,biome:1,weather:'sunnyday',screen:'reward',party:[mon],modifiers:[],evolutionItems:{}};
@@ -35,4 +36,10 @@ test('evolution items show their Korean names while retaining their saved IDs',a
   assert.ok(classicEvolutionItemCandidates(run,{}, {rare:option().sourceItem>=51}).some(c=>c.item===item&&c.name===label));run.evolutionItems[item]=1;assert.equal(option().conditions.find(c=>c.label===`${label} 1개`).met,true);
   const restored=await decodeGameData(await encodeGameData({run,other:{keep:true}}));assert.equal(restored.run.evolutionItems[item],1);assert.deepEqual(restored.other,{keep:true});
  }
+});
+
+test('evolution choice names are localized for display without changing evolution options or the save',async()=>{
+ const mon=makeReferenceMon(868,50,{boxId:'cream-guidance'}),run={id:'cream-guidance',wave:50,biome:1,screen:'reward',party:[mon],modifiers:[],evolutionItems:{}};
+ const before=JSON.stringify(run),options=classicEvolutionOptions(mon,run,{}).filter(e=>e.sourceId===869),ruby=options.find(e=>e.name==='마휘핑 · Ruby Cream');assert.ok(ruby);assert.equal(classicEvolutionOptionName(ruby.name),'마휘핑 · 루비크림');assert.equal(classicEvolutionOptionName('마휘핑 · Ruby Cream (두 번째)'),'마휘핑 · 루비크림 (두 번째)');assert.equal(classicEvolutionOptionName('별명 · Ruby Cream 친구'),'별명 · Ruby Cream 친구');assert.equal(JSON.stringify(run),before);
+ const restored=await decodeGameData(await encodeGameData({run,other:{keep:true}}));assert.equal(classicEvolutionOptions(restored.run.party[0],restored.run,{}).find(e=>e.key===ruby.key).name,ruby.name);assert.deepEqual(restored.other,{keep:true});
 });
