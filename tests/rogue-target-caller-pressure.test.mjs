@@ -18,6 +18,12 @@ test('spread Nature Power pays only for the selected target in doubles after sav
  }
 });
 
+test('double Mirror Move charges only selected Pressure and keeps the result after recovery',async()=>{
+ for(const selectedPressure of [false,true]){
+  const user=makeReferenceMon(151,50,{boxId:'caller',moves:['Mirror Move'],ability:'runaway'}),ally=makeReferenceMon(7,50,{boxId:'ally',moves:['Splash'],ability:'runaway'}),foes=[makeReferenceMon(242,100,{boxId:'foe1',moves:['Tackle'],ability:selectedPressure?'pressure':'runaway'}),makeReferenceMon(242,100,{boxId:'foe2',moves:['Splash'],ability:selectedPressure?'runaway':'pressure'})],run={id:'mirror-pressure-double',rng:42,wave:21,biome:1,party:[user,ally],modifiers:[],tools:{},encounter:{kind:'trainer'},calledMoveRule:'source-pool-v1',calledTargetPressureRule:'source-v1'};run.combat=createClassicCombat(run,foes,{trainer:true,doubles:true});run.party=run.combat.teams[0];let b=restoreClassicNativeBattle(run.combat,run),p=b.p1.active[0],before=p.moveSlots[0].pp;b.makeChoices('move mirrormove 1,move splash','move tackle 1,move splash');assert.ok(b.log.some(line=>line.includes('|Tackle|')&&line.includes('[from] move: Mirror Move')));assert.equal(p.moveSlots[0].pp,before-(selectedPressure?2:1));run.combat.teams=syncNativeTeams(b,run.combat.teams);run.party=run.combat.teams[0];run.combat.snapshot=snapshotClassicNativeBattle(b);const saved=(await decodeGameData(await encodeGameData({run,other:{safe:true}}))).run;b=restoreClassicNativeBattle(saved.combat,saved);assert.equal(b.p1.active[0].moveSlots[0].pp,before-(selectedPressure?2:1));
+ }
+});
+
 test('new runs enable the targeted caller rule without changing other slots',async()=>{
  const {ensureClassicState,startClassicRun}=await import('../lib/rogue-classic-state.mjs'),{starterCatalog}=await import('../lib/rogue-starter-system.mjs'),doc={},state=ensureClassicState(doc,{initialStarterId:1}),entry=starterCatalog(state.system).find(p=>p.id===1);state.slots[1]={keep:true};const run=startClassicRun(doc,[{id:1,ability:entry.abilities[0].key,nature:entry.natures[0].key,gender:entry.genders[0],shiny:false,moves:entry.defaultMoves}],{id:'target-caller-pressure'});assert.equal(run.calledTargetPressureRule,'source-v1');assert.deepEqual(state.slots[1],{keep:true});
 });
