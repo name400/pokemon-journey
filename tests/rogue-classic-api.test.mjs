@@ -367,6 +367,27 @@ test('two otherwise valid battle actions at one revision produce one commit and 
  const next=await h.post({...command,revision:restored.revision});assert.equal(next.status,200);assert.notEqual((await next.json()).battle.presentationBatch.batchId,restored.battle.presentationBatch.batchId);assert.equal(h.row().revision,2);h.sqlite.close();
 });
 
+test('Beast Ball reward persists through API reload and rejects replay',async()=>{
+ const hero=makeReferenceMon(151,40,{boxId:'beast-reward-hero',moves:['Splash']}),{doc,run}=persistentFixture([hero]);
+ run.balls={pokeball:4,ultraball:3};run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(reward=>reward.id==='beastball'),rewardId:'beast-reward'}];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const action={action:'reward',rewardId:'beast-reward',revision:0},response=await h.post(action);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));
+  const saved=await storage.decodeGameData(h.row().data);assert.equal(saved.classic.slots[0].balls.beastball,1);assert.equal(saved.classic.slots[0].balls.ultraball,3);assert.equal(saved.classic.slots[0].balls.pokeball,4);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+  const after=h.row(),reloaded=await(await h.get()).json();assert.equal(reloaded.run.balls.beastball,1);assert.equal((await h.post(action)).status,409);assert.deepEqual(h.row(),after);
+ }finally{h.sqlite.close();}
+});
+
+test('Beast Ball capture consumes stock and persists its origin through API reload',async()=>{
+ const hero=makeReferenceMon(151,50,{boxId:'beast-hero',moves:['Splash']}),{doc,run}=persistentFixture([hero]);
+ const foe=makeReferenceMon(793,50,{boxId:'beast-foe',moves:['Splash'],status:'slp'});foe.hp=1;
+ Object.assign(run,{screen:'battle',biome:0,balls:{pokeball:4,ultraball:3,beastball:1},initialSwitchSlots:[],encounter:{kind:'wild'}});run.combat=createClassicCombat(run,[foe]);run.party=run.combat.teams[0];
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const action={action:'capture',ballId:'beastball',boxId:'beast-foe',revision:0},response=await h.post(action);assert.equal(response.status,200,JSON.stringify(await response.clone().json()));
+  const saved=await storage.decodeGameData(h.row().data),stored=saved.classic.slots[0];assert.equal(stored.balls.beastball,0);assert.equal(stored.balls.ultraball,3);assert.equal(stored.balls.pokeball,4);assert.ok(stored.party.some(mon=>mon.rogueSourceId===793&&mon.originBall==='beastball'));assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);assert.deepEqual(saved.adventure,doc.adventure);
+  const after=h.row(),reloaded=await(await h.get()).json();assert.equal(reloaded.run.balls.beastball,0);assert.ok(reloaded.run.party.some(mon=>mon.rogueSourceId===793&&mon.originBall==='beastball'));assert.equal((await h.post(action)).status,409);assert.deepEqual(h.row(),after);
+ }finally{h.sqlite.close();}
+});
+
 function captureApiFixture({full=false,double=false}={}){
  const doc=createFixture('battle'),run=doc.classic.slots[0],mon=(id,boxId)=>makeReferenceMon(id,100,{boxId,moves:['Splash']});
  run.id=`capture-api-${full}-${double}`;run.wave=21;run.rng=123456789;run.party=Array.from({length:full?6:double?2:1},(_,i)=>mon(i%2?7:1,`capture-own-${i}`));run.balls={...run.balls,pokeball:2,masterball:2};run.encounter={kind:'wild'};run.screen='battle';run.initialSwitchSlots=[];run.npcDialogueQueue=[];run.combat=createClassicCombat(run,[mon(150,'capture-foe'),...(double?[mon(143,'capture-other')]:[])],{doubles:double});run.party=run.combat.teams[0];doc.classic.slots[1]={id:'untouched-slot',safe:true};return doc;
