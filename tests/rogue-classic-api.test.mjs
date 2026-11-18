@@ -18,10 +18,23 @@ import {CLASSIC_REWARD_REGISTRY} from '../lib/rogue-classic-rewards.mjs';
 import {fixture as persistentFixture} from './fixtures/dna-persistent.mjs';
 import {applyClassicForm} from '../lib/rogue-transformations.mjs';
 import {stageClassicDnaFusion} from '../lib/rogue-dna-fusion-stage.mjs';
-import {validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
+import {previewClassicDnaFusion,validatedClassicDnaFusion} from '../lib/rogue-dna-fusion.mjs';
 import {registerStarterCaught} from '../lib/rogue-starter-system.mjs';
 import {classicExpToNext} from '../lib/rogue-classic-growth.mjs';
 import {classicServices} from '../lib/rogue-classic-services.mjs';
+
+test('validated fusion donor guides the sea encounter through API save and reload',async()=>{
+ const primary=makeReferenceMon(10,20,{boxId:'primary',moves:['Tackle']}),donor=makeReferenceMon(7,20,{boxId:'donor',moves:['Tackle']}),fused=previewClassicDnaFusion(primary,donor,{random:()=>0}).fused;
+ const {doc,run}=persistentFixture([fused]);Object.assign(run,{wave:22,biome:6,screen:'mystery',encounter:{kind:'mystery',key:'lost-at-sea'},mystery:{type:'lost-at-sea',stage:'choose',selection:null},mysteryRule:'part-timer-v19',mysteryGuideFireRule:'source-subset-v2',mysteryGuideMixedRule:'source-subset-v1'});
+ const h=harness({document:doc,apply:game.applyClassicAction,view:game.classicGameView});try{
+  const initial=await(await h.get()).json();assert.deepEqual(initial.run.mystery.choices.find(choice=>choice.job==='surf').eligible,['primary']);
+  const selected=await h.post({action:'mysterySelect',job:'surf',boxId:'primary',revision:0});assert.equal(selected.status,200);const before=h.row();
+  const reloaded=await(await h.get()).json();assert.equal(reloaded.run.mystery.selection.boxId,'primary');assert.deepEqual(h.row(),before);
+  const confirmed=await h.post({action:'mysteryConfirm',revision:1});assert.equal(confirmed.status,200);const saved=await storage.decodeGameData(h.row().data),result=saved.classic.slots[0];
+  assert.equal(result.screen,'mysteryResult');assert.ok(result.expNotices.some(entry=>entry.boxId==='primary'));assert.ok(validatedClassicDnaFusion(result.party[0]));assert.deepEqual(saved.adventure,doc.adventure);assert.deepEqual(saved.classic.slots[1],doc.classic.slots[1]);
+  const done=h.row();assert.equal((await h.post({action:'mysteryConfirm',revision:1})).status,409);assert.deepEqual(h.row(),done);
+ }finally{h.sqlite.close();}
+});
 
 test('known move aliases cannot reset PP through memory or TM rewards and shop API',async()=>{
  for(const kind of ['memory-reward','memory-shop','tm']){
