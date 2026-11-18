@@ -174,6 +174,11 @@ export function createFixture(scenario='eggs'){
   const {doc,run}=fixture([makeReferenceMon(492,50,{boxId:'shaymin-guidance',moves:['Splash']}),makeReferenceMon(492,50,{boxId:'legacy-nickname-guidance',moves:['Splash']})]);
   run.party[0].nickname='별 · Blue';Object.assign(run.party[1],{name:'별명 · Normal',baseName:'쉐이미',formName:'Normal'});run.formItems={'shaymin-guidance':['gracidea']};return doc;
  }
+ if(scenario==='reward-nickname-targets'){
+  const a=makeReferenceMon(54,20,{boxId:'nickname-a',moves:['Tackle']}),b=makeReferenceMon(54,20,{boxId:'nickname-b',moves:['Tackle']});
+  Object.assign(a,{name:'별명 · Normal',baseName:'고라파덕',formName:'Normal'});b.nickname='별명 · Blue';a.hp=1;b.hp=1;
+  const {doc,run}=fixture([a,b]);run.wave=21;run.money=10000;run.screen='reward';run.rewards=[{...CLASSIC_REWARD_REGISTRY.find(r=>r.id==='rarecandy'),rewardId:'nickname-candy'}];return doc;
+ }
  if(scenario==='evolution'||scenario==='evolution-prompt'){
   const {doc,run}=fixture([makeReferenceMon(10,9,{boxId:'evolving',moves:['Tackle','String Shot','Protect','Growl']})]);
   if(scenario==='evolution-prompt')recordClassicLevelGrowth(run,run.party[0],[7,8,9],[]);

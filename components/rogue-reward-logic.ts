@@ -2,6 +2,9 @@ export type ClassicRewardMove = { index: number; name: string; pp: number; maxPp
 export type ClassicRewardTarget = {
   boxId: string;
   name: string;
+  baseName?: string;
+  formName?: string;
+  nickname?: string;
   hp: number;
   maxHp: number;
   eligible: boolean;
