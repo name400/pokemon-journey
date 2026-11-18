@@ -173,7 +173,8 @@ export function createFixture(scenario='eggs'){
   Object.assign(run.party[0],{battleAppearance:'psyduck',battleArtId:54,battleSprite:'psyduck',rogueBaseBattleAppearance:'psyduck'});recordClassicLevelGrowth(run,run.party[0],[33],[]);return doc;
  }
  if(scenario==='evolution-guidance'){
-  const {doc,run}=fixture([makeReferenceMon(705,50,{boxId:'weather-guidance',moves:['Splash']}),makeReferenceMon(868,50,{boxId:'biome-guidance',moves:['Splash']}),makeReferenceMon(64,50,{boxId:'item-guidance',moves:['Splash']})]);
+  const toxel=makeReferenceMon(848,30,{boxId:'nature-guidance',moves:['Splash']});Object.assign(toxel,{nature:'timid',rogueNatureOverride:'adamant'});
+  const {doc,run}=fixture([makeReferenceMon(705,50,{boxId:'weather-guidance',moves:['Splash']}),makeReferenceMon(868,50,{boxId:'biome-guidance',moves:['Splash']}),makeReferenceMon(64,50,{boxId:'item-guidance',moves:['Splash']}),toxel]);
   run.biome=1;run.weather='sunnyday';return doc;
  }
  if(scenario==='form-label-guidance'){

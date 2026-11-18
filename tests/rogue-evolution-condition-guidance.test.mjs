@@ -29,6 +29,16 @@ test('party view exposes the specific guidance after save recovery',async()=>{
  assert.deepEqual(option.conditions.find(c=>c.label.startsWith('날씨:')),{met:false,label:'날씨: 비 · 안개 · 큰비'});assert.deepEqual(restored.adventure,{keep:true});
 });
 
+test('nature-dependent evolution guidance identifies the original nature even after a mint and save recovery',async()=>{
+ for(const [nature,mint,label,met] of [['timid','adamant','겁쟁이',true],['adamant','timid','고집',false]]){
+  const doc={coins:0,collection:[],adventure:{keep:true}},state=ensureClassicState(doc),mon={...makeReferenceMon(848,30,{boxId:'nature-guidance'}),nature,rogueNatureOverride:mint};
+  state.slots[0]={id:'nature-guidance',seed:'nature-guidance',wave:30,biome:1,weather:'',rng:42,screen:'reward',party:[mon],balls:{pokeball:5},money:1000,modifiers:[],tools:{},encounter:{kind:'wild'},participants:[],awardedFoes:[],expNotices:[],pendingMoves:[],rewards:[],rerolls:0};
+  const before=JSON.stringify(doc),decoded=await decodeGameData(await encodeGameData(doc)),option=classicGameView(decoded).run.party[0].evolutions.find(e=>e.sourceId===849&&e.formIndex===1);
+  assert.deepEqual(option.conditions.find(c=>c.label.startsWith('진화 폼에 맞는 원래 성격')),{met,label:`진화 폼에 맞는 원래 성격 (현재: ${label})`});
+  assert.equal(JSON.stringify(doc),before);assert.equal(decoded.classic.slots[0].party[0].nature,nature);assert.equal(decoded.classic.slots[0].party[0].rogueNatureOverride,mint);assert.deepEqual(decoded.adventure,{keep:true});
+ }
+});
+
 test('evolution items show their Korean names while retaining their saved IDs',async()=>{
  for(const [species,item,label] of [[64,'linkingcord','연결의끈'],[891,'scrollofwaters','물의 족자'],[891,'scrollofdarkness','악의 족자']]){
   const mon=makeReferenceMon(species,50,{boxId:`mon-${item}`}),run={id:'item-guidance',wave:50,biome:1,screen:'reward',party:[mon],modifiers:[],evolutionItems:{}};
